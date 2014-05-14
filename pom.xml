@@ -28,16 +28,31 @@
                 <scope>provided</scope>
             </dependency>
             <dependency>
-                <groupId>android</groupId>
-                <artifactId>android-test</artifactId>
-                <version>${platform.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>4.11</version>
                 <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>cos_sdk</groupId>
+                <artifactId>cos_sdk</artifactId>
+                <version>1</version>
+                <scope>compile</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>mta-sdk</groupId>
+                <artifactId>mta-sdk</artifactId>
+                <version>1</version>
+                <scope>compile</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>dns</groupId>
+                <artifactId>dns</artifactId>
+                <version>1</version>
+                <scope>compile</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

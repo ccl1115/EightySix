@@ -21,10 +21,10 @@
 
         <meta-data
                 android:name="TA_APPKEY"
-                android:value="MTA_APPKEY"/>
+                android:value="AF9DB3HH9A3B"/>
         <meta-data
                 android:name="InstallChannel"
-                android:value="CHANNAL"/>
+                android:value="debug"/>
 
         <activity android:name=".HelloAndroidActivity">
             <intent-filter>
