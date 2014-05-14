@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import com.tencent.stat.StatConfig;
+import com.tencent.stat.StatService;
 
 public class HelloAndroidActivity extends Activity {
 
