@@ -1,5 +1,7 @@
 # EightySix android project README
 
+***项目代号： EightySix，纪念1886年5月1号。***
+
 ## Requirements
 * [Maven 3.1.1 or later](http://maven.apache.org)
 * Android Sdk r21 or later
@@ -67,8 +69,6 @@ Maven本身是没有任何功能的，它基于插件来实现一切功能，包
 #### EightySix - it
 
 集成测试项目，基于Android的测试框架的测试项目
-
-----
 
 ## Changelog
 
