@@ -1,32 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.utree.eightysix"
-          android:versionCode="1"
-          android:versionName="1.0-SNAPSHOT">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0-SNAPSHOT" package="com.utree.eightysix">
 
-    <uses-sdk
-            android:minSdkVersion="8"
-            android:targetSdkVersion="19"/>
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="19"/>
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
-    <application
-            android:allowBackup="true"
-            android:icon="@drawable/ic_launcher"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme">
+    <application android:allowBackup="true" android:debuggable="true" android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:theme="@style/AppTheme">
 
-        <meta-data
-                android:name="TA_APPKEY"
-                android:value="AF9DB3HH9A3B"/>
-        <meta-data
-                android:name="InstallChannel"
-                android:value="debug"/>
+        <meta-data android:name="TA_APPKEY" android:value="AF9DB3HH9A3B"/>
+        <meta-data android:name="InstallChannel" android:value="debug"/>
 
-        <activity android:name=".HelloAndroidActivity">
+        <activity android:name=".HelloAndroidActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

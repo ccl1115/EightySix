@@ -9,7 +9,6 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.utree.eightysix</groupId>
 	<artifactId>EightySix-it</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>apk</packaging>
@@ -21,21 +20,28 @@
 			<artifactId>android</artifactId>
 			<scope>provided</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>com.utree.eightysix</groupId>
 			<artifactId>EightySix</artifactId>
 			<type>apk</type>
 			<version>1.0-SNAPSHOT</version>
-			<scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
 		</dependency>
-		<dependency>
-			<groupId>com.utree.eightysix</groupId>
-			<artifactId>EightySix</artifactId>
-			<type>jar</type>
-			<version>1.0-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
+
+        <dependency>
+            <groupId>com.utree.eightysix</groupId>
+            <artifactId>EightySix</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>jar</type>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<finalName>${project.artifactId}</finalName>
@@ -45,25 +51,45 @@
 				<artifactId>android-maven-plugin</artifactId>
 				<configuration>
 					<test>
-						<!--<skip>true|false|auto</skip> -->
-						<!--<instrumentationPackage>packageName</instrumentationPackage> -->
-						`
+						<!--<skip>true</skip>-->
+						<!--<instrumentationPackage>packageName</instrumentationPackage>-->
 						<!--<instrumentationRunner>className</instrumentationRunner> -->
-						<!--<debug>true|false</debug> -->
+						<!--<debug>true</debug>-->
 						<!--<coverage>true|false</coverage> -->
 						<!--<logonly>true|false</logonly> avd -->
 						<!--<testsize>small|medium|large</testsize> -->
 						<createReport>true</createReport>
-						<!--<classes> -->
-						<!--<class>your.package.name.YourTestClass</class> -->
-						<!--</classes> -->
-						<!--<packages> -->
-						<!--<package>your.package.name</package> -->
-						<!--</packages> -->
+						<!--<classes>-->
+                            <!--<class>com.utree.eightysix.HelloAndroidActivitytest</class>-->
+						<!--</classes>-->
+						<!--<packages>-->
+                            <!--<package>com.utree.eightysix.test</package>-->
+						<!--</packages>-->
 					</test>
+                    <undeployBeforeDeploy>true</undeployBeforeDeploy>
 				</configuration>
 				<extensions>true</extensions>
 			</plugin>
 		</plugins>
 	</build>
+
+    <profiles>
+        <profile>
+            <id>skip-test</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                        <artifactId>android-maven-plugin</artifactId>
+                        <configuration>
+                            <test>
+                                <skip>true</skip>
+                            </test>
+                        </configuration>
+                        <extensions>true</extensions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

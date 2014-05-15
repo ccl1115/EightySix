@@ -10,12 +10,12 @@ public class BaseActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        U.getStatistics().onResume();
+        U.getAnalyser().onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        U.getStatistics().onPause();
+        U.getAnalyser().onPause(this);
     }
 }

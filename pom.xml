@@ -16,7 +16,7 @@
 
     <properties>
         <platform.version>4.4.2_r3</platform.version>
-        <android.plugin.version>3.9.0-rc.1</android.plugin.version>
+        <android.plugin.version>3.8.2</android.plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -27,6 +27,7 @@
                 <version>${platform.version}</version>
                 <scope>provided</scope>
             </dependency>
+
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
@@ -38,37 +39,41 @@
                 <groupId>cos_sdk</groupId>
                 <artifactId>cos_sdk</artifactId>
                 <version>1</version>
-                <scope>compile</scope>
             </dependency>
 
             <dependency>
                 <groupId>mta-sdk</groupId>
                 <artifactId>mta-sdk</artifactId>
                 <version>1</version>
-                <scope>compile</scope>
             </dependency>
 
             <dependency>
                 <groupId>dns</groupId>
                 <artifactId>dns</artifactId>
                 <version>1</version>
-                <scope>compile</scope>
             </dependency>
 
+            <dependency>
+                <groupId>android.support</groupId>
+                <artifactId>compatibility-v4</artifactId>
+                <version>19.1.0</version>
+                <type>jar</type>
+            </dependency>
 
-            <!-- Using dagger for dependency injection -->
-            <!-- See http://square.github.io/dagger/ -->
             <dependency>
-                <groupId>com.squareup.dagger</groupId>
-                <artifactId>dagger</artifactId>
-                <version>1.2.1</version>
+                <groupId>android.support</groupId>
+                <artifactId>compatibility-v7-appcompat</artifactId>
+                <version>19.1.0</version>
+                <type>apklib</type>
             </dependency>
+
             <dependency>
-                <groupId>com.squareup.dagger</groupId>
-                <artifactId>dagger-compiler</artifactId>
-                <version>1.2.1</version>
-                <optional>true</optional>
+                <groupId>android.support</groupId>
+                <artifactId>compatibility-v7-appcompat</artifactId>
+                <version>19.1.0</version>
+                <type>jar</type>
             </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -88,6 +93,11 @@
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>com.pyx4me</groupId>
+                    <artifactId>proguard-maven-plugin</artifactId>
+                    <version>2.0.4</version>
                 </plugin>
             </plugins>
         </pluginManagement>

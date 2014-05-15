@@ -1,7 +1,7 @@
 package com.utree.eightysix.test;
 
 import android.test.ActivityInstrumentationTestCase2;
-import com.utree.eightysix.*;
+import com.utree.eightysix.HelloAndroidActivity;
 
 public class HelloAndroidActivityTest extends ActivityInstrumentationTestCase2<HelloAndroidActivity> {
 

@@ -9,7 +9,6 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.utree.eightysix</groupId>
 	<artifactId>EightySix</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>apk</packaging>
@@ -39,28 +38,81 @@
         </dependency>
 
         <dependency>
-            <groupId>com.squareup.dagger</groupId>
-            <artifactId>dagger</artifactId>
+            <groupId>android.support</groupId>
+            <artifactId>compatibility-v4</artifactId>
+            <type>jar</type>
         </dependency>
+
         <dependency>
-            <groupId>com.squareup.dagger</groupId>
-            <artifactId>dagger-compiler</artifactId>
+            <groupId>android.support</groupId>
+            <artifactId>compatibility-v7-appcompat</artifactId>
+            <type>apklib</type>
         </dependency>
+
         <dependency>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-compiler-api</artifactId>
-            <version>2.2</version>
+            <groupId>android.support</groupId>
+            <artifactId>compatibility-v7-appcompat</artifactId>
+            <type>jar</type>
         </dependency>
+
     </dependencies>
 
 	<build>
-		<finalName>${project.artifactId}</finalName>
+		<finalName>${project.artifactId}-${project.version}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 				<artifactId>android-maven-plugin</artifactId>
 				<extensions>true</extensions>
+                <configuration>
+                    <manifest>
+                        <debuggable>true</debuggable>
+                    </manifest>
+                    <undeployBeforeDeploy>true</undeployBeforeDeploy>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>manifestUpdate</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>manifest-update</goal>
+                        </goals>
+                    </execution>
+                </executions>
 			</plugin>
 		</plugins>
 	</build>
+
+    <profiles>
+        <profile>
+            <id>proguard</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.pyx4me</groupId>
+                        <artifactId>proguard-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>process-classes</phase>
+                                <goals>
+                                    <goal>proguard</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <proguardVersion>4.7</proguardVersion>
+                            <injar>android-classes</injar>
+                            <libs>
+                                <lib>${java.home}/lib/rt.jar</lib>
+                            </libs>
+                            <obfuscate>true</obfuscate>
+                            <options>
+                                <option>@proguard.cfg</option>
+                            </options>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

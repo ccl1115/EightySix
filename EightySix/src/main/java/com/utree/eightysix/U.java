@@ -1,18 +1,18 @@
 package com.utree.eightysix;
 
-import com.utree.eightysix.statistics.MtaImpl;
-import com.utree.eightysix.statistics.Statistics;
+import com.utree.eightysix.statistics.Analyser;
+import com.utree.eightysix.statistics.MtaAnalyserImpl;
 
 /**
  * Most helpful methods and singleton instances
  */
 public class U {
 
-    private static Statistics sStatistics;
+    private static Analyser sStatistics;
 
-    public static Statistics getStatistics() {
+    public static Analyser getAnalyser() {
         if (sStatistics == null) {
-            sStatistics = new MtaImpl();
+            sStatistics = new MtaAnalyserImpl();
         }
         return sStatistics;
     }
