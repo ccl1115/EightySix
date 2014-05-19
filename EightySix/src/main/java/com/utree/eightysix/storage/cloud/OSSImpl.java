@@ -37,7 +37,18 @@ public class OSSImpl implements Storage {
 
     @Override
     public Result<OSSObject> put(String bucket, String path, String key, File file) {
-        Result<OSSObject> result = new Result<OSSObject>();
+        final Result<OSSObject> result = new Result<OSSObject>();
+        if (prePut(bucket, path, key, file, result)) {
+            doPut(bucket, path, key, file, result);
+        }
+        return result;
+    }
+
+    private boolean prePut(String bucket, String path, String key, File file, Result result) {
+        return mPathValidator.validate(bucket, path, key) && file.exists();
+    }
+
+    private void doPut(String bucket, String path, String key, File file, Result result) {
         try {
             ObjectMetadata metadata = new ObjectMetadata();
             FileInputStream input = new FileInputStream(file);
@@ -56,12 +67,23 @@ public class OSSImpl implements Storage {
             result.error = ERROR_GENERAL_EXCEPTION;
             result.msg = ERROR_GENERAL_EXCEPTION_MSG;
         }
-        return result;
     }
 
     @Override
     public void aPut(final String bucket, final String path, final String key, final File file, final OnResult onResult) {
         new AsyncTask<Void, Void, Result<OSSObject>>() {
+
+            final Result<OSSObject> mResult = new Result<OSSObject>();
+
+            @Override
+            protected void onPreExecute() {
+                if (!prePut(bucket, path, key, file, mResult)) {
+                    cancel(true);
+                    if (onResult != null) {
+                        onResult.onResult(mResult);
+                    }
+                }
+            }
 
             @Override
             protected Result<OSSObject> doInBackground(Void... params) {
@@ -205,7 +227,7 @@ public class OSSImpl implements Storage {
 
     @Override
     public Result createBucket(String bucket) {
-        final Result result = new Result();
+        final Result<Bucket> result = new Result<Bucket>();
 
         if (preCreateBucket(bucket, result)) {
             doCreateBucket(bucket, result);
@@ -223,19 +245,22 @@ public class OSSImpl implements Storage {
         return bool;
     }
 
-    private void doCreateBucket(String bucket, Result result) {
+    private Bucket doCreateBucket(String bucket, Result<Bucket> result) {
         Bucket b = mOSSClient.createBucket(bucket);
-        if (b == null) {
+        if (b != null) {
+            result.object = b;
+        } else {
             result.error = ERROR_CREATE_BUCKET_FAILED;
             result.msg = ERROR_CREATE_BUCKET_FAILED_MSG + bucket;
         }
+        return b;
     }
 
     @Override
     public void aCreateBucket(final String bucket, final OnResult onResult) {
         new AsyncTask<Void, Void, Void>() {
 
-            private final Result mResult = new Result();
+            private final Result<Bucket> mResult = new Result<Bucket>();
 
             @Override
             protected void onPreExecute() {
@@ -285,6 +310,8 @@ public class OSSImpl implements Storage {
             mOSSClient.deleteBucket(bucket);
         } catch (OSSException e) {
             handleException(e, "delete bucket failed");
+            result.error = ERROR_REMOTE_ERROR;
+            result.msg = ERROR_REMOTE_ERROR_MSG;
         }
     }
 
