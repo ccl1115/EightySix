@@ -28,6 +28,12 @@
         </dependency>
 
         <dependency>
+            <groupId>locSDK</groupId>
+            <artifactId>locSDK</artifactId>
+            <version>4.1</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.aliyun.openservices</groupId>
             <artifactId>aliyun-openservices</artifactId>
         </dependency>
@@ -45,21 +51,6 @@
 				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 				<artifactId>android-maven-plugin</artifactId>
 				<extensions>true</extensions>
-                <configuration>
-                    <manifest>
-                        <debuggable>true</debuggable>
-                    </manifest>
-                    <undeployBeforeDeploy>true</undeployBeforeDeploy>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>manifestUpdate</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>manifest-update</goal>
-                        </goals>
-                    </execution>
-                </executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -90,6 +81,77 @@
                                 <option>@proguard.cfg</option>
                             </options>
                         </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>debug</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                        <artifactId>android-maven-plugin</artifactId>
+                        <configuration>
+                            <manifestDebuggable>true</manifestDebuggable>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>manifestUpdate</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>manifest-update</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                        <artifactId>android-maven-plugin</artifactId>
+                        <inherited>true</inherited>
+                        <configuration>
+                            <sign>
+                                <debug>false</debug>
+                            </sign>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jarsigner-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>signing</id>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <inherited>true</inherited>
+                                <configuration>
+                                    <includes>
+                                        <include>target/*.apk</include>
+                                    </includes>
+                                    <keystore>keystore.ks</keystore>
+                                    <storepass>0612053</storepass>
+                                    <alias>sign-apk</alias>
+                                    <keypass>0612053</keypass>
+                                    <arguments>
+                                        <argument>-sigalg</argument>
+                                        <argument>MD5withRSA</argument>
+                                        <argument>-digestalg</argument>
+                                        <argument>SHA1</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
