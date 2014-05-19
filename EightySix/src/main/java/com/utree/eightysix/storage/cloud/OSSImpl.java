@@ -19,20 +19,24 @@ import java.util.regex.Pattern;
 import org.apache.commons.codec.digest.DigestUtils;
 
 /**
- * Aliyun OSS Implementation
+ * 阿里云存储服务实现
  */
 public class OSSImpl implements Storage {
 
     private static final String TAG = "OSSImpl";
 
     private static final String ACCESS_KEY_ID = "tUDRZZW0ErGfob0D";
-
     private static final String ACCESS_KEY_SECRET = "JY9qIePwsObqq6MWzh2TXLiSylP55F";
+
     private final PathValidator mPathValidator = new PathValidator();
     private OSSClient mOSSClient;
 
     public OSSImpl() {
         mOSSClient = new OSSClient(ACCESS_KEY_ID, ACCESS_KEY_SECRET);
+    }
+
+    public OSSImpl(String accessKeyId, String accessKeySecret) {
+        mOSSClient = new OSSClient(accessKeyId, accessKeySecret);
     }
 
     @Override

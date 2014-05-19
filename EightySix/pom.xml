@@ -30,7 +30,6 @@
         <dependency>
             <groupId>locSDK</groupId>
             <artifactId>locSDK</artifactId>
-            <version>4.1</version>
         </dependency>
 
         <dependency>
@@ -58,6 +57,12 @@
     <profiles>
         <profile>
             <id>proguard</id>
+            <activation>
+                <property>
+                    <name>environment</name>
+                    <value>production</value>
+                </property>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
@@ -88,6 +93,12 @@
 
         <profile>
             <id>debug</id>
+            <activation>
+                <property>
+                    <name>environment</name>
+                    <value>development</value>
+                </property>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
@@ -112,6 +123,12 @@
 
         <profile>
             <id>release</id>
+            <activation>
+                <property>
+                    <name>environment</name>
+                    <value>production</value>
+                </property>
+            </activation>
             <build>
                 <plugins>
                     <plugin>

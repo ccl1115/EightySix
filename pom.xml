@@ -17,13 +17,26 @@
     <properties>
         <platform.version>4.4.2_r3</platform.version>
         <android.plugin.version>3.8.2</android.plugin.version>
+        <environment>development</environment>
     </properties>
 
     <repositories>
         <repository>
-            <id>utree</id>
-            <name>UTree repository</name>
-            <url>http://dustr.info:8081/nexus</url>
+            <id>utree 3rd party</id>
+            <name>UTree 3rd party repository</name>
+            <url>http://dustr.info:8081/nexus/content/repositories/thirdparty</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>utree android</id>
+            <name>UTree Android repository</name>
+            <url>http://dustr.info:8081/nexus/content/repositories/android</url>
             <releases>
                 <enabled>true</enabled>
             </releases>

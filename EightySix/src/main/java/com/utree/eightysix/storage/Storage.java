@@ -3,7 +3,7 @@ package com.utree.eightysix.storage;
 import java.io.File;
 
 /**
- * An interface to manipulate storage
+ * An interface to manipulate cloud or local storage
  * <p/>
  * All methods start with letter 'a' is in async.
  */
