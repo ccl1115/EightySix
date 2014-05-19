@@ -5,6 +5,7 @@ import com.utree.eightysix.storage.Storage;
 import com.utree.eightysix.storage.cloud.OSSImpl;
 
 /**
+ * Test cases for OSSImpl
  */
 public class OSSImplTestCase extends AndroidTestCase {
 
