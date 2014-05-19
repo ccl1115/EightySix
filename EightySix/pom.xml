@@ -23,38 +23,19 @@
 		</dependency>
 
         <dependency>
-            <groupId>cos_sdk</groupId>
-            <artifactId>cos_sdk</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>mta-sdk</groupId>
             <artifactId>mta-sdk</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>dns</groupId>
-            <artifactId>dns</artifactId>
+            <groupId>com.aliyun.openservices</groupId>
+            <artifactId>aliyun-openservices</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>android.support</groupId>
-            <artifactId>compatibility-v4</artifactId>
-            <type>jar</type>
+            <groupId>de.akquinet.android.androlog</groupId>
+            <artifactId>androlog</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>android.support</groupId>
-            <artifactId>compatibility-v7-appcompat</artifactId>
-            <type>apklib</type>
-        </dependency>
-
-        <dependency>
-            <groupId>android.support</groupId>
-            <artifactId>compatibility-v7-appcompat</artifactId>
-            <type>jar</type>
-        </dependency>
-
     </dependencies>
 
 	<build>
