@@ -78,4 +78,7 @@ public interface Storage {
 
     void aCreateBucket(String bucket, OnResult onResult);
 
+    Result deleteBucket(String bucket);
+
+    void aDeleteBucket(String bucket, OnResult onResult);
 }

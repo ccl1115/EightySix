@@ -3,7 +3,6 @@ package com.utree.eightysix.storage.cloud;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import com.aliyun.openservices.oss.OSSClient;
-import com.aliyun.openservices.oss.OSSErrorCode;
 import com.aliyun.openservices.oss.OSSException;
 import com.aliyun.openservices.oss.model.Bucket;
 import com.aliyun.openservices.oss.model.OSSObject;
@@ -11,7 +10,6 @@ import com.aliyun.openservices.oss.model.ObjectMetadata;
 import com.aliyun.openservices.oss.model.PutObjectResult;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.storage.Storage;
-import com.utree.eightysix.storage.StorageConfig;
 import de.akquinet.android.androlog.Log;
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,10 +28,8 @@ public class OSSImpl implements Storage {
     private static final String ACCESS_KEY_ID = "tUDRZZW0ErGfob0D";
 
     private static final String ACCESS_KEY_SECRET = "JY9qIePwsObqq6MWzh2TXLiSylP55F";
-
-    private OSSClient mOSSClient;
-
     private final PathValidator mPathValidator = new PathValidator();
+    private OSSClient mOSSClient;
 
     public OSSImpl() {
         mOSSClient = new OSSClient(ACCESS_KEY_ID, ACCESS_KEY_SECRET);
@@ -166,7 +162,7 @@ public class OSSImpl implements Storage {
         return bool;
     }
 
-    private Result doDelete(String bucket, String path, String key, Result result) {
+    private void doDelete(String bucket, String path, String key, Result result) {
         try {
             mOSSClient.deleteObject(bucket, path + key);
         } catch (OSSException e) {
@@ -174,33 +170,33 @@ public class OSSImpl implements Storage {
             result.error = ERROR_REMOTE_ERROR;
             result.msg = ERROR_REMOTE_ERROR_MSG + e.getMessage();
         }
-        return result;
     }
 
     @Override
     public void aDelete(final String bucket, final String path, final String key, final OnResult onResult) {
-        new AsyncTask<Void, Void, Result>() {
-            final Result<Void> result = new Result<Void>();
+        new AsyncTask<Void, Void, Void>() {
+            final Result<Void> mResult = new Result<Void>();
 
             @Override
             protected void onPreExecute() {
-                if (!preDelete(bucket, path, key, result)) {
+                if (!preDelete(bucket, path, key, mResult)) {
                     cancel(true);
                     if (onResult != null) {
-                        onResult.onResult(result);
+                        onResult.onResult(mResult);
                     }
                 }
             }
 
             @Override
-            protected Result doInBackground(Void... params) {
-                return doDelete(bucket, path, key, result);
+            protected Void doInBackground(Void... params) {
+                doDelete(bucket, path, key, mResult);
+                return null;
             }
 
             @Override
-            protected void onPostExecute(Result result) {
+            protected void onPostExecute(Void v) {
                 if (onResult != null) {
-                    onResult.onResult(result);
+                    onResult.onResult(mResult);
                 }
             }
         }.execute();
@@ -266,6 +262,64 @@ public class OSSImpl implements Storage {
         }.execute();
     }
 
+    @Override
+    public Result deleteBucket(String bucket) {
+        final Result result = new Result();
+        if (preDeleteBucket(bucket, result)) {
+            doDeleteBucket(bucket, result);
+        }
+        return result;
+    }
+
+    private boolean preDeleteBucket(String bucket, Result result) {
+        boolean bool = mPathValidator.validateBucketName(bucket);
+        if (!bool) {
+            result.error = ERROR_VALIDATING_FAILED;
+            result.msg = ERROR_VALIDATING_FAILED_MSG;
+        }
+        return bool;
+    }
+
+    private void doDeleteBucket(String bucket, Result result) {
+        try {
+            mOSSClient.deleteBucket(bucket);
+        } catch (OSSException e) {
+            handleException(e, "delete bucket failed");
+        }
+    }
+
+    @Override
+    public void aDeleteBucket(final String bucket, final OnResult onResult) {
+        new AsyncTask<Void, Void, Void>() {
+
+            final Result mResult = new Result();
+
+            @Override
+            protected void onPreExecute() {
+                if (preCreateBucket(bucket, mResult)) {
+                    cancel(true);
+                    if (onResult != null) {
+                        onResult.onResult(mResult);
+                    }
+                }
+            }
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                doDeleteBucket(bucket, mResult);
+                return null;
+            }
+
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                if (onResult != null) {
+                    onResult.onResult(mResult);
+                }
+            }
+        }.execute();
+    }
+
     private void handleException(OSSException e, String action) {
         Log.d(TAG, action + ": " + e.getErrorCode());
         if (BuildConfig.DEBUG) {
@@ -310,7 +364,8 @@ public class OSSImpl implements Storage {
         }
 
         boolean validate(String bucket, String path, String key) {
-            return ((bucket + path + key).length() < MAX_PATH_KEY_LENGTH) && validateBucketName(bucket) && validatePathKey(path, key);
+            return ((bucket + path + key).length() < MAX_PATH_KEY_LENGTH) &&
+                    validateBucketName(bucket) && validatePathKey(path, key);
         }
     }
 
