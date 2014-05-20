@@ -48,6 +48,7 @@
 
     <dependencyManagement>
         <dependencies>
+
             <dependency>
                 <groupId>android</groupId>
                 <artifactId>android</artifactId>
@@ -108,15 +109,15 @@
             </dependency>
 
             <dependency>
-                <groupId>com.aliyun.openservices</groupId>
-                <artifactId>aliyun-openservices</artifactId>
-                <version>1.2.2</version>
-            </dependency>
-
-            <dependency>
                 <groupId>de.akquinet.android.androlog</groupId>
                 <artifactId>androlog</artifactId>
                 <version>1.0.6</version>
+            </dependency>
+
+            <dependency>
+                <groupId>aliyunsdk</groupId>
+                <artifactId>osssdk</artifactId>
+                <version>1</version>
             </dependency>
 
         </dependencies>

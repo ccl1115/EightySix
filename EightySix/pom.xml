@@ -15,6 +15,7 @@
 	<name>EightySix - Application</name>
 
 	<dependencies>
+
 		<dependency>
 			<groupId>android</groupId>
 			<artifactId>android</artifactId>
@@ -33,8 +34,8 @@
         </dependency>
 
         <dependency>
-            <groupId>com.aliyun.openservices</groupId>
-            <artifactId>aliyun-openservices</artifactId>
+            <groupId>aliyunsdk</groupId>
+            <artifactId>osssdk</artifactId>
         </dependency>
 
         <dependency>

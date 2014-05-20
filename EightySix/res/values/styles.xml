@@ -10,11 +10,20 @@
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
         -->
+        <item name="android:windowActionBar">false</item>
     </style>
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:windowNoTitle">true</item>
+        <item name="topBarStyle">@style/Widget.TopBar</item>
+    </style>
+
+    <style name="Widget"/>
+
+    <style name="Widget.TopBar">
+        <item name="android:background">#33333333</item>
     </style>
 
 </resources>

@@ -2,12 +2,10 @@ package com.utree.eightysix.storage.cloud;
 
 import android.os.AsyncTask;
 import android.text.TextUtils;
-import com.aliyun.openservices.oss.OSSClient;
-import com.aliyun.openservices.oss.OSSException;
-import com.aliyun.openservices.oss.model.Bucket;
-import com.aliyun.openservices.oss.model.OSSObject;
-import com.aliyun.openservices.oss.model.ObjectMetadata;
-import com.aliyun.openservices.oss.model.PutObjectResult;
+import com.aliyun.android.oss.OSSClient;
+import com.aliyun.android.oss.OSSException;
+import com.aliyun.android.oss.model.Bucket;
+import com.aliyun.android.oss.model.OSSObject;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.storage.Storage;
 import de.akquinet.android.androlog.Log;
@@ -15,8 +13,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.regex.Pattern;
-import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  * 阿里云存储服务实现
@@ -32,11 +31,15 @@ public class OSSImpl implements Storage {
     private OSSClient mOSSClient;
 
     public OSSImpl() {
-        mOSSClient = new OSSClient(ACCESS_KEY_ID, ACCESS_KEY_SECRET);
+        mOSSClient = new OSSClient();
+        mOSSClient.setAccessId(ACCESS_KEY_ID);
+        mOSSClient.setAccessKey(ACCESS_KEY_SECRET);
     }
 
     public OSSImpl(String accessKeyId, String accessKeySecret) {
-        mOSSClient = new OSSClient(accessKeyId, accessKeySecret);
+        mOSSClient = new OSSClient();
+        mOSSClient.setAccessId(accessKeyId);
+        mOSSClient.setAccessKey(accessKeySecret);
     }
 
     @Override
@@ -54,13 +57,17 @@ public class OSSImpl implements Storage {
 
     private void doPut(String bucket, String path, String key, File file, Result result) {
         try {
-            ObjectMetadata metadata = new ObjectMetadata();
-            FileInputStream input = new FileInputStream(file);
-            metadata.setContentLength(file.length());
-            String md5 = DigestUtils.md5Hex(input);
-            PutObjectResult putObjectResult = mOSSClient.putObject(bucket, path + key, input, metadata);
+            FileInputStream fis = new FileInputStream(file);
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+            byte[] buffer = new byte[1024 * 1024];
+            int n;
+            while ((n = fis.read(buffer)) != -1) {
+                digest.update(buffer, 0, n);
+            }
+            String md5 = new String(digest.digest());
+            String etag = mOSSClient.uploadObject(bucket, path + key, file.getAbsolutePath());
 
-            if (!putObjectResult.getETag().equals(md5)) {
+            if (!etag.toLowerCase().equals(md5.toLowerCase())) {
                 result.error = ERROR_CHECKSUM;
                 result.msg = ERROR_CHECKSUM_MSG;
             }
@@ -68,6 +75,9 @@ public class OSSImpl implements Storage {
             result.error = ERROR_GENERAL_EXCEPTION;
             result.msg = ERROR_GENERAL_EXCEPTION_MSG;
         } catch (IOException e) {
+            result.error = ERROR_GENERAL_EXCEPTION;
+            result.msg = ERROR_GENERAL_EXCEPTION_MSG;
+        } catch (NoSuchAlgorithmException e) {
             result.error = ERROR_GENERAL_EXCEPTION;
             result.msg = ERROR_GENERAL_EXCEPTION_MSG;
         }
@@ -249,22 +259,19 @@ public class OSSImpl implements Storage {
         return bool;
     }
 
-    private Bucket doCreateBucket(String bucket, Result<Bucket> result) {
-        Bucket b = mOSSClient.createBucket(bucket);
-        if (b != null) {
-            result.object = b;
-        } else {
+    private void doCreateBucket(String bucket, Result<Bucket> result) {
+        mOSSClient.createBucket(bucket);
+        if (!mOSSClient.createBucket(bucket)) {
             result.error = ERROR_CREATE_BUCKET_FAILED;
             result.msg = ERROR_CREATE_BUCKET_FAILED_MSG + bucket;
         }
-        return b;
     }
 
     @Override
     public void aCreateBucket(final String bucket, final OnResult onResult) {
         new AsyncTask<Void, Void, Void>() {
 
-            private final Result<Bucket> mResult = new Result<Bucket>();
+            private final Result mResult = new Result();
 
             @Override
             protected void onPreExecute() {
