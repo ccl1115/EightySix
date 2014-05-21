@@ -18,6 +18,33 @@ public class ViewMapping {
         int value();
     }
 
+    public static <T> void map(View view, T target) {
+        Field[] fields = target.getClass().getDeclaredFields();
+
+        for (Field f : fields) {
+            ViewId id = f.getAnnotation(ViewId.class);
+            if (id == null) {
+                continue;
+            }
+
+            View child = view.findViewById(id.value());
+
+            if (child == null) {
+                return;
+            }
+
+            try {
+                f.set(target, f.getType().cast(child));
+            } catch (IllegalAccessException e) {
+                if (BuildConfig.DEBUG) e.printStackTrace();
+                return;
+            } catch (ClassCastException e) {
+                if (BuildConfig.DEBUG) e.printStackTrace();
+                return;
+            }
+        }
+    }
+
     public static <T> T map(View view, Class<T> holderClass) {
         Field[] fields = holderClass.getDeclaredFields();
 

@@ -2,6 +2,7 @@ package com.utree.eightysix;
 
 import android.content.Context;
 import android.view.View;
+import android.view.ViewParent;
 import com.utree.eightysix.app.BaseApplication;
 import com.utree.eightysix.location.BdLocationImpl;
 import com.utree.eightysix.location.Location;
@@ -44,5 +45,9 @@ public class U {
 
     public static <T> T viewMapping(View view, Class<T> holderClass) {
         return ViewMapping.map(view, holderClass);
+    }
+
+    public static <T> void viewMapping(View view, T target) {
+        ViewMapping.map(view, target);
     }
 }
