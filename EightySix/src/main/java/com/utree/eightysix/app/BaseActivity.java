@@ -97,4 +97,12 @@ public class BaseActivity extends Activity {
     protected String getTopTitle() {
         return mTopBar.getTitle();
     }
+
+    protected void showProgressBar() {
+        mTopBar.showProgressBar();
+    }
+
+    protected void hideProgressBar() {
+        mTopBar.hideProgressBar();
+    }
 }

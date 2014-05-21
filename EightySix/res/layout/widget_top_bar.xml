@@ -9,4 +9,11 @@
             android:layout_marginLeft="8dp"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"/>
+
+    <ProgressBar
+            android:id="@+id/top_bar_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_centerVertical="true"/>
 </merge>

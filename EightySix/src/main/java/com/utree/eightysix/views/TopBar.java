@@ -3,15 +3,22 @@ package com.utree.eightysix.views;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.utree.eightysix.R;
+import com.utree.eightysix.utils.ViewMapping;
 
 /**
  */
 public class TopBar extends RelativeLayout {
 
-    private TextView mTitle;
+
+    @ViewMapping.ViewId(R.id.top_bar_title)
+    public TextView mTitle;
+
+    @ViewMapping.ViewId(R.id.top_bar_progress)
+    public ProgressBar mProgressBar;
 
     public TopBar(Context context) {
         this(context, null);
@@ -26,7 +33,9 @@ public class TopBar extends RelativeLayout {
 
         View.inflate(context, R.layout.widget_top_bar, this);
 
-        mTitle = (TextView) findViewById(R.id.top_bar_title);
+        ViewMapping.map(this, this);
+
+        mProgressBar.setVisibility(GONE);
     }
 
     public void setTitle(String title) {
@@ -40,5 +49,17 @@ public class TopBar extends RelativeLayout {
             return mTitle.getText().toString();
         }
         return null;
+    }
+
+    public void showProgressBar() {
+        if (mProgressBar != null) {
+            mProgressBar.setVisibility(VISIBLE);
+        }
+    }
+
+    public void hideProgressBar() {
+        if (mProgressBar != null) {
+            mProgressBar.setVisibility(GONE);
+        }
     }
 }
