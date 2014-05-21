@@ -10,7 +10,7 @@ import java.lang.reflect.Field;
 
 /**
  */
-public class ViewMapping {
+public class ViewBinding {
 
     @Target(ElementType.FIELD)
     @Retention(RetentionPolicy.RUNTIME)
@@ -18,7 +18,7 @@ public class ViewMapping {
         int value();
     }
 
-    public static <T> void map(View view, T target) {
+    public static <T> void bind(View view, T target) {
         Field[] fields = target.getClass().getDeclaredFields();
 
         for (Field f : fields) {
@@ -45,7 +45,7 @@ public class ViewMapping {
         }
     }
 
-    public static <T> T map(View view, Class<T> holderClass) {
+    public static <T> T bind(View view, Class<T> holderClass) {
         Field[] fields = holderClass.getDeclaredFields();
 
         T holder;

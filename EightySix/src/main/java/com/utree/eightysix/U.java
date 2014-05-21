@@ -2,13 +2,12 @@ package com.utree.eightysix;
 
 import android.content.Context;
 import android.view.View;
-import android.view.ViewParent;
 import com.utree.eightysix.app.BaseApplication;
 import com.utree.eightysix.location.BdLocationImpl;
 import com.utree.eightysix.location.Location;
 import com.utree.eightysix.statistics.Analyser;
 import com.utree.eightysix.statistics.MtaAnalyserImpl;
-import com.utree.eightysix.utils.ViewMapping;
+import com.utree.eightysix.utils.ViewBinding;
 
 /**
  * Most helpful methods and singleton instances
@@ -44,10 +43,10 @@ public class U {
     }
 
     public static <T> T viewMapping(View view, Class<T> holderClass) {
-        return ViewMapping.map(view, holderClass);
+        return ViewBinding.bind(view, holderClass);
     }
 
     public static <T> void viewMapping(View view, T target) {
-        ViewMapping.map(view, target);
+        ViewBinding.bind(view, target);
     }
 }

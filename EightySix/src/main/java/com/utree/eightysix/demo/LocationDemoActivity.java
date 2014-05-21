@@ -6,7 +6,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.location.Location;
-import com.utree.eightysix.utils.ViewMapping;
+import com.utree.eightysix.utils.ViewBinding;
 
 /**
  */
@@ -62,19 +62,19 @@ public class LocationDemoActivity extends BaseActivity implements Location.OnRes
 
     public static class ViewHolder {
 
-        @ViewMapping.ViewId(R.id.address)
+        @ViewBinding.ViewId(R.id.address)
         public TextView mAddress;
 
-        @ViewMapping.ViewId(R.id.city)
+        @ViewBinding.ViewId(R.id.city)
         public TextView mCity;
 
-        @ViewMapping.ViewId(R.id.longitude)
+        @ViewBinding.ViewId(R.id.longitude)
         public TextView mLongitude;
 
-        @ViewMapping.ViewId(R.id.latitude)
+        @ViewBinding.ViewId(R.id.latitude)
         public TextView mLatitude;
 
-        @ViewMapping.ViewId(R.id.poi)
+        @ViewBinding.ViewId(R.id.poi)
         public TextView mPoi;
     }
 

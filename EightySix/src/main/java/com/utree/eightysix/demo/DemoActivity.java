@@ -6,25 +6,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 
 /**
  */
 public class DemoActivity extends BaseActivity {
 
-    private LinearLayout mLinearLayout;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTopTitle("Main internal demos");
+        setTopTitle("测试界面");
 
-        mLinearLayout = new LinearLayout(this);
-        mLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
 
-        mLinearLayout.addView(buildItem("地图定位测试", LocationDemoActivity.class));
-        setContentView(mLinearLayout);
+        linearLayout.addView(buildItem(getString(R.string.title_location_demo_activity), LocationDemoActivity.class));
+        linearLayout.addView(buildItem(getString(R.string.title_oss_demo_activity), OSSDemoActivity.class));
+        setContentView(linearLayout);
     }
 
     private TextView buildItem(String text, final Class<?> clazz) {

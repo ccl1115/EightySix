@@ -2,4 +2,5 @@
 <resources>
     <string name="title_location_demo_activity">定位测试界面</string>
     <string name="title_demo_activity">测试界面</string>
+    <string name="title_oss_demo_activity">阿里云存储服务</string>
 </resources>
