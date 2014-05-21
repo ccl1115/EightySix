@@ -20,7 +20,7 @@ public class LocationDemoActivity extends BaseActivity implements Location.OnRes
 
         setContentView(R.layout.activity_location_demo);
 
-        mViewHolder = U.viewMapping(findViewById(android.R.id.content), ViewHolder.class);
+        mViewHolder = U.viewBinding(findViewById(android.R.id.content), ViewHolder.class);
 
         setTopTitle(getString(R.string.title_location_demo_activity));
     }

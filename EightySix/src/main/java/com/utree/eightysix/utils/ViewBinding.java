@@ -18,36 +18,33 @@ public class ViewBinding {
         int value();
     }
 
-    public static <T> void bind(View view, T target) {
+    @Target(ElementType.FIELD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface OnClick {
+    }
+
+    public <T> void bind(View view, T target) {
         Field[] fields = target.getClass().getDeclaredFields();
 
         for (Field f : fields) {
             ViewId id = f.getAnnotation(ViewId.class);
-            if (id == null) {
-                continue;
+            if (id != null) {
+                View child = view.findViewById(id.value());
+                if (child != null) {
+                    bindId(f, child, target);
+
+                    OnClick onClick = f.getAnnotation(OnClick.class);
+                    if (onClick != null && target instanceof View.OnClickListener) {
+                        bindOnClick(child, target);
+                    }
+                }
             }
 
-            View child = view.findViewById(id.value());
-
-            if (child == null) {
-                return;
-            }
-
-            try {
-                f.set(target, f.getType().cast(child));
-            } catch (IllegalAccessException e) {
-                if (BuildConfig.DEBUG) e.printStackTrace();
-                return;
-            } catch (ClassCastException e) {
-                if (BuildConfig.DEBUG) e.printStackTrace();
-                return;
-            }
         }
+
     }
 
-    public static <T> T bind(View view, Class<T> holderClass) {
-        Field[] fields = holderClass.getDeclaredFields();
-
+    public <T> T bind(View view, Class<T> holderClass) {
         T holder;
         try {
             holder = holderClass.newInstance();
@@ -59,29 +56,24 @@ public class ViewBinding {
             return null;
         }
 
-        for (Field f : fields) {
-            ViewId id = f.getAnnotation(ViewId.class);
-            if (id == null) {
-                continue;
-            }
-
-            View child = view.findViewById(id.value());
-
-            if (child == null) {
-                return null;
-            }
-
-            try {
-                f.set(holder, f.getType().cast(child));
-            } catch (IllegalAccessException e) {
-                if (BuildConfig.DEBUG) e.printStackTrace();
-                return null;
-            } catch (ClassCastException e) {
-                if (BuildConfig.DEBUG) e.printStackTrace();
-                return null;
-            }
-        }
+        bind(view, holder);
 
         return holder;
+    }
+
+    private void bindId(Field f, View child, Object target) {
+        if (child != null) {
+            try {
+                f.set(target, f.getType().cast(child));
+            } catch (IllegalAccessException e) {
+                if (BuildConfig.DEBUG) e.printStackTrace();
+            } catch (ClassCastException e) {
+                if (BuildConfig.DEBUG) e.printStackTrace();
+            }
+        }
+    }
+
+    private void bindOnClick(View child, Object target) {
+        child.setOnClickListener((View.OnClickListener) target);
     }
 }

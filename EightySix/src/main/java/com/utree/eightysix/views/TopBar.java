@@ -8,6 +8,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.utils.ViewBinding;
 
 /**
@@ -33,7 +34,7 @@ public class TopBar extends RelativeLayout {
         super(context, attrs, defStyle);
 
         View.inflate(context, R.layout.widget_top_bar, this);
-        ViewBinding.bind(this, this);
+        U.viewBinding(this, this);
 
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.TopBar);
 

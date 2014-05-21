@@ -52,19 +52,18 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="File"
-                android:id="@+id/textView3"
-                android:layout_column="1"/>
-
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Choose file"
                 android:id="@+id/button_choose_file"
                 android:layout_column="2"/>
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create bucket"
+                android:id="@+id/button_create_bucket"
+                android:layout_column="3"/>
     </TableRow>
 </TableLayout>

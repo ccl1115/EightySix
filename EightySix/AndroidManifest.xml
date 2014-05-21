@@ -64,6 +64,7 @@
             </intent-filter>
         </activity>
 
+        <!-- Demonstrations -->
         <activity
                 android:name=".demo.DemoActivity"
                 android:label="@string/title_demo_activity">
@@ -77,6 +78,8 @@
                 android:name=".demo.LocationDemoActivity"
                 android:label="@string/title_location_demo_activity"/>
 
+        <activity android:name=".demo.OSSDemoActivity"
+                  android:label="@string/title_oss_demo_activity"/>
 
         <service
                 android:name="com.baidu.location.f"
