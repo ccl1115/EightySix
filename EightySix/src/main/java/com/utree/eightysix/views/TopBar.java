@@ -1,6 +1,7 @@
 package com.utree.eightysix.views;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -32,8 +33,11 @@ public class TopBar extends RelativeLayout {
         super(context, attrs, defStyle);
 
         View.inflate(context, R.layout.widget_top_bar, this);
-
         ViewMapping.map(this, this);
+
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.TopBar);
+
+        mTitle.setTextColor(ta.getColor(R.styleable.TopBar_titleColor, 0xFFFFFFFF));
 
         mProgressBar.setVisibility(GONE);
     }

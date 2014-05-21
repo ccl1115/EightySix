@@ -23,7 +23,8 @@
     <style name="Widget"/>
 
     <style name="Widget.TopBar">
-        <item name="android:background">#33333333</item>
+        <item name="android:background">#FF333333</item>
+        <item name="titleColor">#FFFFFFFF</item>
     </style>
 
 </resources>
