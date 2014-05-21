@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Hello Maven</string>
+    <string name="app_name">1886</string>
     <string name="hello">Hello EightySix!</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>

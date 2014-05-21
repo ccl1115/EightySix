@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0-SNAPSHOT" package="com.utree.eightysix">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          android:versionCode="1"
+          android:versionName="1.0-SNAPSHOT"
+          package="com.utree.eightysix">
 
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="19"/>
+    <uses-sdk
+            android:minSdkVersion="8"
+            android:targetSdkVersion="19"/>
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -30,25 +35,53 @@
     <!-- 允许应用读取低级别的系统日志文件-->
     <uses-permission android:name="android.permission.READ_LOGS"/>
 
-    <application android:allowBackup="true" android:debuggable="true" android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:theme="@style/AppTheme">
+    <application
+            android:allowBackup="true"
+            android:name=".app.BaseApplication"
+            android:debuggable="true"
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme">
 
-        <meta-data android:name="TA_APPKEY" android:value="AF9DB3HH9A3B"/>
-        <meta-data android:name="InstallChannel" android:value="@string/channel"/>
+        <meta-data
+                android:name="TA_APPKEY"
+                android:value="AF9DB3HH9A3B"/>
+        <meta-data
+                android:name="InstallChannel"
+                android:value="@string/channel"/>
 
-        <meta-data android:name="com.baidu.lbsapi.API_KEY" android:value="Z6S9LBSSdPUi96GkdLS6zO0L"/>
+        <meta-data
+                android:name="com.baidu.lbsapi.API_KEY"
+                android:value="Z6S9LBSSdPUi96GkdLS6zO0L"/>
 
-        <activity android:name=".HelloAndroidActivity" android:exported="true" android:theme="@style/AppTheme">
+        <activity
+                android:name=".HelloAndroidActivity"
+                android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity
+                android:name=".demo.DemoActivity"
+                android:label="@string/title_demo_activity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
         <activity
                 android:name=".demo.LocationDemoActivity"
-                android:label="定位测试界面"/>
+                android:label="@string/title_location_demo_activity"/>
 
-        <service android:name="com.baidu.location.f" android:enabled="true" android:process=":remote"/>
+
+        <service
+                android:name="com.baidu.location.f"
+                android:enabled="true"
+                android:process=":remote"/>
     </application>
 
 </manifest>

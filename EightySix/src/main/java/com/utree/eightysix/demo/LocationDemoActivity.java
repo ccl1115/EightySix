@@ -1,7 +1,6 @@
 package com.utree.eightysix.demo;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -13,6 +12,7 @@ import com.utree.eightysix.utils.ViewMapping;
  */
 public class LocationDemoActivity extends BaseActivity implements Location.OnResult {
 
+    public static final int REQUEST_LOCATION_DELAY_MILLIS = 1000;
     private ViewHolder mViewHolder;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -21,6 +21,8 @@ public class LocationDemoActivity extends BaseActivity implements Location.OnRes
         setContentView(R.layout.activity_location_demo);
 
         mViewHolder = U.viewMapping(findViewById(android.R.id.content), ViewHolder.class);
+
+        setTopTitle(getString(R.string.title_location_demo_activity));
     }
 
     @Override
@@ -33,7 +35,7 @@ public class LocationDemoActivity extends BaseActivity implements Location.OnRes
             public void run() {
                 U.getLocation().requestLocation();
             }
-        }, 2000);
+        }, REQUEST_LOCATION_DELAY_MILLIS);
     }
 
     @Override
@@ -50,10 +52,12 @@ public class LocationDemoActivity extends BaseActivity implements Location.OnRes
             mViewHolder.mLatitude.setText(String.valueOf(result.latitude));
             mViewHolder.mLongitude.setText(String.valueOf(result.longitude));
             mViewHolder.mPoi.setText(result.poi);
+        } else {
+            setTopTitle(getString(R.string.title_location_demo_activity) + " - 获取位置失败");
         }
     }
 
-    private static class ViewHolder {
+    public static class ViewHolder {
 
         @ViewMapping.ViewId(R.id.address)
         public TextView mAddress;

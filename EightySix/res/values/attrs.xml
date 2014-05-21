@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="TopBar">
-        <attr name="topBarStyle" format="reference"/>
-    </declare-styleable>
+    <attr name="topBarStyle" format="reference"/>
 </resources>
