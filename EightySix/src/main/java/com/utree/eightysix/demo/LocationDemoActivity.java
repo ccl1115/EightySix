@@ -36,6 +36,8 @@ public class LocationDemoActivity extends BaseActivity implements Location.OnRes
                 U.getLocation().requestLocation();
             }
         }, REQUEST_LOCATION_DELAY_MILLIS);
+
+        showProgressBar();
     }
 
     @Override
@@ -55,6 +57,7 @@ public class LocationDemoActivity extends BaseActivity implements Location.OnRes
         } else {
             setTopTitle(getString(R.string.title_location_demo_activity) + " - 获取位置失败");
         }
+        hideProgressBar();
     }
 
     public static class ViewHolder {
