@@ -5,8 +5,6 @@
 ## Requirements
 * [Maven 3.1.1 or later](http://maven.apache.org)
 * Android Sdk r21 or later
-* [maven-android-sdk-deployer](https://github.com/mosabua/maven-android-sdk-deployer)
-* [git](http://git-scm.com)
 
 ## Getting started
 
@@ -15,48 +13,22 @@
 #### 安装Maven，下载[最新3.2.1版本](http://apache.fayea.com/apache-mirror/maven/maven-3/3.2.1/binaries/apache-maven-3.2.1-bin.tar.gz)
 #### 安装Git
 #### 安装Android SDK
-#### Clone maven-android-sdk-deployer
-```git clone https://github.com/mosabua/maven-android-sdk-deployer```
 
-#### 使用maven-android-sdk-deployer搭建提供Maven使用的Android SDK环境
+## 非官方的Maven Repository
 
-因为在Maven的官方中心库中中并没有最新的Android平台，例如4.4的Android不能在中心库中下载到。而maven-android-sdk-deployer解决了这个问题，它从Google官方库中将所需要的Android依赖下载到Maven的本地缓存中（~/.m2/repositories），从而使得我们可以使用到最近的Android SDK。
+为了使用一些不存在于官方Maven Repository的库和最新的Android SDK，我们搭建了一个Maven服务器用于提供这些库。
 
-maven-android-sdk-deployer本身就是一个使用Maven管理的项目。当我们clone这个项目之后执行如下操作进行Android依赖安装：
+[Dustr Repository](http://dustr.info:8081/nexus/)
 
-```
-$ cd maven-andorid-sdk-deployer
-$ mvn install
-```
+## 编译项目
 
-等待下载完成，我们就得到了所有的Android SDK依赖，从1.5到4.4的。这是个漫长的过程，如果我们只想要安装某一个版本：
-
-```
-$ mvn install -P 4.4
-```
-上面的命令只会安装4.4的Android SDK。
-
-
-#### 在项目中定义一个Android SDK依赖
-
-```
-<dependency>
-  <groupId>android</groupId>
-  <artifactId>android</artifactId>
-  <version>3.0_r2</version>
-  <scope>provided</scope>
-</dependency>
-```
-
-#### 编译项目
-
-在EightySix根目录下执行```mvn install```，如果没有任何错误，就可以完成编译并安装应用到连接的手机设备中。
+在EightySix根目录下执行```mvn install```，如果没有任何错误，就可以完成编译和集成并安装应用到连接的手机设备中，同时执行测试用例。
 
 ***maven是一个依赖于网络的工具，需要在有网络链接的情况下才能正常使用***
 
 ## Project Structure
 
-Maven本身是没有任何功能的，它基于插件来实现一切功能，包括编译java代码都是插件来负责的。为了支持Android环境的编译，我们使用了**maven-android-plugin**，它能方便的帮助我们编译Android项目，已经丰富的自定义能力。
+Maven本身是没有任何功能的，它基于插件来实现一切功能，包括编译java代码都是插件来负责的。
 
 #### EightySix - parent
 
