@@ -40,7 +40,6 @@ public class BaseActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(this, "getTheme() = " + getTheme());
 
         mBaseView = (ViewGroup) View.inflate(this, R.layout.activity_base, null);
         mTopBar = (TopBar) mBaseView.findViewById(R.id.top_bar);

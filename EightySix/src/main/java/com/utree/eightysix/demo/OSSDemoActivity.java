@@ -13,6 +13,7 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.storage.Storage;
 import com.utree.eightysix.utils.ViewBinding;
 import de.akquinet.android.androlog.Log;
+
 import java.io.File;
 
 /**
@@ -61,14 +62,20 @@ public class OSSDemoActivity extends BaseActivity implements View.OnClickListene
                     Uri uri = data.getData();
                     if (uri != null) {
                         Log.d(this, uri.toString());
+                        Log.d(this, uri.getPath());
+                        Log.d(this, uri.getLastPathSegment());
 
-                        U.getCloudStorage().aPut(mBucket.getText().toString(), mPath.getText().toString(), uri.getLastPathSegment(), new File(uri.getPath()), new Storage.OnResult() {
-
-                            @Override
-                            public void onResult(Storage.Result result) {
-                                Log.d(OSSDemoActivity.this, result.msg);
-                            }
-                        });
+                        U.getCloudStorage().aPut(mBucket.getText().toString(),
+                                mPath.getText().toString(),
+                                uri.getLastPathSegment(),
+                                new File(uri.getPath()),
+                                new Storage.OnResult() {
+                                    @Override
+                                    public void onResult(Storage.Result result) {
+                                        Log.d(OSSDemoActivity.this, "  " + result.msg);
+                                    }
+                                }
+                        );
                     }
                 }
             }

@@ -6,7 +6,6 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
-import com.sun.corba.se.spi.activation.LocatorOperations;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import de.akquinet.android.androlog.Log;

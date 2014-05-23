@@ -6,6 +6,7 @@ import com.aliyun.android.oss.OSSClient;
 import com.aliyun.android.oss.OSSException;
 import com.aliyun.android.oss.model.Bucket;
 import com.aliyun.android.oss.model.OSSObject;
+import com.aliyun.android.oss.task.Task;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.storage.Storage;
 import de.akquinet.android.androlog.Log;
@@ -34,6 +35,9 @@ public class OSSImpl implements Storage {
         mOSSClient = new OSSClient();
         mOSSClient.setAccessId(ACCESS_KEY_ID);
         mOSSClient.setAccessKey(ACCESS_KEY_SECRET);
+
+        Task.OSS_END_POINT = "http://oss.aliyuncs.com";
+        Task.OSS_HOST = "oss.aliyuncs.com";
     }
 
     public OSSImpl(String accessKeyId, String accessKeySecret) {
@@ -365,11 +369,23 @@ public class OSSImpl implements Storage {
         }
     }
 
+    /**
+     * Bucket命名规范：
+     * 1. 只能包含小写字母，数字和短横线
+     * 2. 必须以小写字母和数字开头
+     * 3. bucket的长度限制在3-63之间
+     *
+     * 文件夹命名规范：
+     * 1. 只能包含字母，数字，中文，下划线（_）和短横线（-）,小数点（.）
+     * 2. 只能以字母、数字或者中文开头
+     * 3. 文件夹的长度限制在1-254之间
+     * 4. Object总长度必须在1-1023之间
+     */
     private static class PathValidator {
 
         private static final int MAX_PATH_KEY_LENGTH = 1023;
+        private final Pattern mBucketPattern = Pattern.compile("[0-9a-z][0-9a-z\\-]{2,62}");
 
-        private final Pattern mBucketPattern = Pattern.compile("[0-9a-z][0-9a-z_]{2,62}");
         private final Pattern mPathPattern = Pattern.compile("[0-9a-zA-Z][0-9a-zA-Z_\\-\\.]{0,253}");
 
 
