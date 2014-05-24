@@ -8,7 +8,7 @@ import com.utree.eightysix.location.Location;
 import com.utree.eightysix.statistics.Analyser;
 import com.utree.eightysix.statistics.MtaAnalyserImpl;
 import com.utree.eightysix.storage.Storage;
-import com.utree.eightysix.storage.cloud.OSSImpl;
+import com.utree.eightysix.storage.oss.OSSImpl;
 import com.utree.eightysix.utils.ViewBinding;
 
 /**

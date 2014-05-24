@@ -2,12 +2,12 @@ package com.utree.eightysix.test.storage;
 
 import android.test.AndroidTestCase;
 import com.utree.eightysix.storage.Storage;
-import com.utree.eightysix.storage.cloud.OSSImpl;
+import com.utree.eightysix.storage.oss.OSSImpl;
 
 /**
  * Test cases for OSSImpl
  *
- * @see com.utree.eightysix.storage.cloud.OSSImpl
+ * @see com.utree.eightysix.storage.oss.OSSImpl
  */
 public class OSSImplTestCase extends AndroidTestCase {
 

@@ -1,4 +1,4 @@
-package com.utree.eightysix.storage.cloud;
+package com.utree.eightysix.storage.oss;
 
 import android.os.AsyncTask;
 import android.text.TextUtils;
@@ -35,9 +35,6 @@ public class OSSImpl implements Storage {
         mOSSClient = new OSSClient();
         mOSSClient.setAccessId(ACCESS_KEY_ID);
         mOSSClient.setAccessKey(ACCESS_KEY_SECRET);
-
-        Task.OSS_END_POINT = "http://oss.aliyuncs.com";
-        Task.OSS_HOST = "oss.aliyuncs.com";
     }
 
     public OSSImpl(String accessKeyId, String accessKeySecret) {
@@ -390,15 +387,16 @@ public class OSSImpl implements Storage {
 
 
         boolean validateBucketName(String name) {
-            return mBucketPattern.matcher(name).matches();
+            boolean matches = mBucketPattern.matcher(name).matches();
+            if (!matches) {
+                Log.d(this, "validate bucket name failed");
+            }
+            return matches;
         }
 
         boolean validatePathKey(String path, String key) {
-            if (!TextUtils.isEmpty(key)) {
-                if (!mPathPattern.matcher(key).matches()) {
-                    return false;
-                }
-            } else {
+            if (TextUtils.isEmpty(key) || !mPathPattern.matcher(key).matches()) {
+                Log.d(this, "validate key failed");
                 return false;
             }
 
@@ -409,6 +407,7 @@ public class OSSImpl implements Storage {
                 String[] ps = path.split(File.separator);
                 for (String p : ps) {
                     if (!mPathPattern.matcher(p).matches()) {
+                        Log.d(this, "validate path failed");
                         return false;
                     }
                 }

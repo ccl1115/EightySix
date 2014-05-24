@@ -39,6 +39,11 @@
         </dependency>
 
         <dependency>
+            <groupId>pushservice</groupId>
+            <artifactId>pushservice</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>de.akquinet.android.androlog</groupId>
             <artifactId>androlog</artifactId>
         </dependency>

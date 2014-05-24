@@ -1,11 +1,14 @@
 package com.utree.eightysix.demo;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -50,7 +53,7 @@ public class OSSDemoActivity extends BaseActivity implements View.OnClickListene
             case R.id.button_choose_file:
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("file/*");
-                startActivityForResult(intent, REQUEST_CODE_PICKFILE);
+                startActivityForResult(Intent.createChooser(intent, "Pick a file"), REQUEST_CODE_PICKFILE);
         }
     }
 
@@ -61,21 +64,30 @@ public class OSSDemoActivity extends BaseActivity implements View.OnClickListene
                 if (BuildConfig.DEBUG) {
                     Uri uri = data.getData();
                     if (uri != null) {
-                        Log.d(this, uri.toString());
-                        Log.d(this, uri.getPath());
-                        Log.d(this, uri.getLastPathSegment());
+                        String[] columns = {MediaStore.Files.FileColumns.DATA, MediaStore.Files.FileColumns.DISPLAY_NAME};
 
-                        U.getCloudStorage().aPut(mBucket.getText().toString(),
-                                mPath.getText().toString(),
-                                uri.getLastPathSegment(),
-                                new File(uri.getPath()),
-                                new Storage.OnResult() {
-                                    @Override
-                                    public void onResult(Storage.Result result) {
-                                        Log.d(OSSDemoActivity.this, "  " + result.msg);
+                        Cursor cursor = getContentResolver().query(uri, columns, null, null, null);
+                        if (cursor.moveToFirst()) {
+                            final String path = cursor.getString(cursor.getColumnIndex(columns[0]));
+                            final String name = cursor.getString(cursor.getColumnIndex(columns[1]));
+                            Log.d(this, path);
+                            Log.d(this, name);
+                            U.getCloudStorage().aPut(mBucket.getText().toString(),
+                                    mBucket.getText().toString(),
+                                    name,
+                                    new File(path),
+                                    new Storage.OnResult() {
+                                        @Override
+                                        public void onResult(Storage.Result result) {
+                                            Log.d(OSSDemoActivity.this, "  " + result.msg);
+                                        }
                                     }
-                                }
-                        );
+                            );
+                        } else {
+                            Toast.makeText(this, "Failed to upload file", Toast.LENGTH_LONG).show();
+                        }
+
+
                     }
                 }
             }
