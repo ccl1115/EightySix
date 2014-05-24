@@ -25,7 +25,7 @@ public class OSSImpl implements Storage {
     private static final String TAG = "OSSImpl";
 
     private static final String ACCESS_KEY_ID = "tUDRZZW0ErGfob0D";
-    private static final String ACCESS_KEY_SECRET = "JY9qIePwsObqq6MWzh2TXLiSylP55F";
+    private static final String ACCESS_KEY_SECRET = "THPrVUnQiAv2wgdp2rSd8MHdUJyMW9";
 
     private final PathValidator mPathValidator = new PathValidator();
     private OSSClient mOSSClient;
@@ -260,7 +260,6 @@ public class OSSImpl implements Storage {
     }
 
     private void doCreateBucket(String bucket, Result<Bucket> result) {
-        mOSSClient.createBucket(bucket);
         if (!mOSSClient.createBucket(bucket)) {
             result.error = ERROR_CREATE_BUCKET_FAILED;
             result.msg = ERROR_CREATE_BUCKET_FAILED_MSG + bucket;
@@ -334,7 +333,7 @@ public class OSSImpl implements Storage {
 
             @Override
             protected void onPreExecute() {
-                if (preCreateBucket(bucket, mResult)) {
+                if (!preDeleteBucket(bucket, mResult)) {
                     cancel(true);
                     if (onResult != null) {
                         onResult.onResult(mResult);

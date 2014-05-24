@@ -62,15 +62,13 @@ public class PutBucketTask extends Task {
      */
     @Override
     protected HttpUriRequest generateHttpRequest() {
-        String resource = httpTool.generateCanonicalizedResource("/"
-                + bucketName);
-        HttpPut httpPut = new HttpPut(OSS_END_POINT + resource);
+        HttpPut httpPut = new HttpPut("http://" + bucketName + "." + OSS_END_POINT);
 
-        // 构造httpPut TODO 将PUT改成用httpMethod.toString()
+        String resource = httpTool.generateCanonicalizedResource("/" + bucketName + "/");
+
         String dateStr = Helper.getGMTDate();
-        String content = "PUT\n\n\n" + dateStr + "\n" + resource;
         String authorization = OSSHttpTool.generateAuthorization(accessId,
-                accessKey, content);
+                accessKey, httpPut.getMethod(), "", "", dateStr, "", resource);
         httpPut.setHeader("Authorization", authorization);
         httpPut.setHeader("Date", dateStr);
         httpPut.setHeader("Host", bucketName + "." + OSS_HOST);

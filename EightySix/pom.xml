@@ -52,37 +52,37 @@
 				<artifactId>android-maven-plugin</artifactId>
 				<extensions>true</extensions>
 			</plugin>
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-jarsigner-plugin</artifactId>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>signing</id>-->
-                        <!--<goals>-->
-                            <!--<goal>sign</goal>-->
-                        <!--</goals>-->
-                        <!--<phase>package</phase>-->
-                        <!--<inherited>true</inherited>-->
-                        <!--<configuration>-->
-                            <!--<removeExistingSignatures>true</removeExistingSignatures>-->
-                            <!--<archiveDirectory/>-->
-                            <!--<includes>-->
-                                <!--<include>target/*.apk</include>-->
-                            <!--</includes>-->
-                            <!--<keystore>../keystore.ks</keystore>-->
-                            <!--<storepass>0612053</storepass>-->
-                            <!--<alias>sign-apk</alias>-->
-                            <!--<keypass>0612053</keypass>-->
-                            <!--<arguments>-->
-                                <!--<argument>-sigalg</argument>-->
-                                <!--<argument>MD5withRSA</argument>-->
-                                <!--<argument>-digestalg</argument>-->
-                                <!--<argument>SHA1</argument>-->
-                            <!--</arguments>-->
-                        <!--</configuration>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jarsigner-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>signing</id>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <inherited>true</inherited>
+                        <configuration>
+                            <removeExistingSignatures>true</removeExistingSignatures>
+                            <archiveDirectory/>
+                            <includes>
+                                <include>target/*.apk</include>
+                            </includes>
+                            <keystore>../keystore.ks</keystore>
+                            <storepass>0612053</storepass>
+                            <alias>sign-apk</alias>
+                            <keypass>0612053</keypass>
+                            <arguments>
+                                <argument>-sigalg</argument>
+                                <argument>MD5withRSA</argument>
+                                <argument>-digestalg</argument>
+                                <argument>SHA1</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
 	</build>
 

@@ -13,7 +13,7 @@ import de.akquinet.android.androlog.Log;
 
 /**
  */
-public class BaseActivity extends Activity {
+public class BaseActivity extends Activity implements View.OnClickListener {
 
     private final Handler mHandler = new Handler();
 
@@ -59,6 +59,8 @@ public class BaseActivity extends Activity {
                 new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
                         ViewGroup.LayoutParams.FILL_PARENT, 1.0f)
         );
+
+        U.viewBinding(findViewById(R.id.content), this);
     }
 
     @Override
@@ -103,5 +105,10 @@ public class BaseActivity extends Activity {
 
     protected void hideProgressBar() {
         mTopBar.hideProgressBar();
+    }
+
+    @Override
+    public void onClick(View v) {
+        Log.d(this, getResources().getResourceName(v.getId()));
     }
 }

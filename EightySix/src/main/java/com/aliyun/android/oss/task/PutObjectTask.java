@@ -112,9 +112,9 @@ public class PutObjectTask extends Task {
     protected HttpUriRequest generateHttpRequest() {
         // 生成Http请求
         String resource = httpTool.generateCanonicalizedResource("/"
-                + bucketName + "/" + objectKey);
-        String requestUri = OSS_END_POINT + resource;
-        HttpPut httpPut = new HttpPut(requestUri);
+                + bucketName + "/" + objectKey + "/");
+
+        HttpPut httpPut = new HttpPut("http://" + bucketName + "." + OSS_END_POINT);
 
         // 构造HttpPut
         String dateStr = Helper.getGMTDate();

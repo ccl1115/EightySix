@@ -50,24 +50,20 @@ public class DeleteBucketTask extends Task {
         try {
             this.execute();
             return true;
-        } catch (OSSException osse) {
-            throw osse;
         } finally {
             this.releaseHttpClient();
         }
     }
 
-    /* (non-Javadoc) * @see com.aliyun.android.oss.task.Task#generateHttpRequest() */
     @Override
     protected HttpUriRequest generateHttpRequest() {
         String resource = httpTool.generateCanonicalizedResource("/"
-                + bucketName);
-        HttpDelete httpDelete = new HttpDelete(OSS_END_POINT + resource);
+                + bucketName + "/");
+        HttpDelete httpDelete = new HttpDelete("http://" + bucketName + "." + OSS_END_POINT + "/" + resource);
 
         String dateStr = Helper.getGMTDate();
-        String content = "DELETE\n\n\n" + dateStr + "\n" + resource;
         String authorization = OSSHttpTool.generateAuthorization(accessId,
-                accessKey, content);
+                accessKey, "DELETE", "", "", dateStr, "", resource);
         httpDelete.setHeader("Authorization", authorization);
         httpDelete.setHeader("Date", dateStr);
         httpDelete.setHeader("Host", OSS_HOST);

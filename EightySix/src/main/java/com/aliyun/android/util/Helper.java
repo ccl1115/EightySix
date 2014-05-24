@@ -5,6 +5,7 @@
  */
 package com.aliyun.android.util;
 
+import de.akquinet.android.androlog.Log;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.security.InvalidKeyException;
@@ -45,6 +46,7 @@ public class Helper {
                 "E, dd MMM yyyy HH:mm:ss 'GMT'", Locale.ENGLISH);
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         String dateStr = dateFormat.format(date);
+        Log.d("Helper", dateStr);
         return dateStr;
     }
 
@@ -75,17 +77,14 @@ public class Helper {
         mac.init(signingKey);
 
         byte[] rawHmac = mac.doFinal(value.getBytes());
-        return new String(Base64.encode(rawHmac));
+        return Base64.encode(rawHmac);
     }
 
     /**
      * 判断是否为空字符串
      */
     public static boolean isEmptyString(String str) {
-        if (str == null || str.equals("")) {
-            return true;
-        }
-        return false;
+        return str == null || str.equals("");
     }
 
     /**

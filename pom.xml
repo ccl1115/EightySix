@@ -22,6 +22,18 @@
 
     <repositories>
         <repository>
+            <id>maven central</id>
+            <name>Maven Central</name>
+            <url>http://repo.maven.apache.org/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
             <id>utree 3rd party</id>
             <name>UTree 3rd party repository</name>
             <url>http://dustr.info:8081/nexus/content/repositories/thirdparty</url>
@@ -44,6 +56,7 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+
     </repositories>
 
     <dependencyManagement>
@@ -124,6 +137,12 @@
                 <groupId>pushservice</groupId>
                 <artifactId>pushservice</artifactId>
                 <version>4.0.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jayway.android.robotium</groupId>
+                <artifactId>robotium-solo</artifactId>
+                <version>5.1</version>
             </dependency>
 
         </dependencies>
