@@ -34,11 +34,6 @@
         </dependency>
 
         <dependency>
-            <groupId>aliyunsdk</groupId>
-            <artifactId>osssdk</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>pushservice</groupId>
             <artifactId>pushservice</artifactId>
         </dependency>

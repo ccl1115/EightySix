@@ -6,7 +6,6 @@ import com.aliyun.android.oss.OSSClient;
 import com.aliyun.android.oss.OSSException;
 import com.aliyun.android.oss.model.Bucket;
 import com.aliyun.android.oss.model.OSSObject;
-import com.aliyun.android.oss.task.Task;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.storage.Storage;
 import de.akquinet.android.androlog.Log;

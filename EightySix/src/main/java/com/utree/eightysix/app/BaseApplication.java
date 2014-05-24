@@ -18,7 +18,8 @@ public class BaseApplication extends Application {
         super.onCreate();
         sContext = this;
 
-        StatConfig.setDebugEnable(BuildConfig.DEBUG);
+        //StatConfig.setDebugEnable(BuildConfig.DEBUG);
+
         Log.init(this);
         Log.activateLogging();
         Log.setDefaultLogLevel(Constants.VERBOSE);
