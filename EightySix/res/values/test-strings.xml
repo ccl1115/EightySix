@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="title_demo_activity">测试界面</string>
-    <string name="title_location_demo_activity">定位测面</string>
+    <string name="title_location_demo_activity">定位测试</string>
     <string name="title_oss_demo_activity">阿里云存储服务</string>
 </resources>

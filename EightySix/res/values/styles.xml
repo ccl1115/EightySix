@@ -23,8 +23,10 @@
     <style name="Widget"/>
 
     <style name="Widget.TopBar">
-        <item name="android:background">#FF333333</item>
+        <item name="android:background">#ff31677a</item>
+
         <item name="titleColor">#FFFFFFFF</item>
+        <item name="actionBgSelector">@drawable/top_bar_action_bg_slct</item>
     </style>
 
 </resources>

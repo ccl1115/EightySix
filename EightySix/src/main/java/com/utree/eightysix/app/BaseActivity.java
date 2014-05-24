@@ -20,7 +20,6 @@ public class BaseActivity extends Activity implements View.OnClickListener {
     private ViewGroup mBaseView;
     private TopBar mTopBar;
 
-
     protected final Handler getHandler() {
         return mHandler;
     }
@@ -43,6 +42,8 @@ public class BaseActivity extends Activity implements View.OnClickListener {
 
         mBaseView = (ViewGroup) View.inflate(this, R.layout.activity_base, null);
         mTopBar = (TopBar) mBaseView.findViewById(R.id.top_bar);
+
+        mTopBar.setOnActionOverflowClickListener(this);
 
         super.setContentView(mBaseView);
     }
@@ -110,5 +111,11 @@ public class BaseActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         Log.d(this, getResources().getResourceName(v.getId()));
+
+        switch (v.getId()) {
+            case R.id.top_bar_action_overflow:
+                openOptionsMenu();
+                break;
+        }
     }
 }

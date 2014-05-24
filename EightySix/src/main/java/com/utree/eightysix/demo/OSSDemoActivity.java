@@ -64,7 +64,7 @@ public class OSSDemoActivity extends BaseActivity {
 
         setContentView(R.layout.activity_oss_demo);
 
-        setTitle(getString(R.string.title_oss_demo_activity));
+        setTopTitle(getString(R.string.title_oss_demo_activity));
     }
 
     @Override

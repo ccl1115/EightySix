@@ -3,6 +3,7 @@
 
     <declare-styleable name="TopBar">
         <attr name="titleColor" format="reference|color"/>
+        <attr name="actionBgSelector" format="reference"/>
     </declare-styleable>
 
     <attr name="topBarStyle" format="reference"/>
