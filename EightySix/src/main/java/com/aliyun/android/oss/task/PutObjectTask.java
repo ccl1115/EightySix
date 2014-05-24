@@ -6,6 +6,7 @@
 package com.aliyun.android.oss.task;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,6 +23,7 @@ import com.aliyun.android.oss.http.HttpMethod;
 import com.aliyun.android.oss.http.OSSHttpTool;
 import com.aliyun.android.oss.model.ObjectMetaData;
 import com.aliyun.android.util.Helper;
+import org.apache.http.entity.InputStreamEntity;
 
 /**
  * 上传Object任务
@@ -54,36 +56,40 @@ public class PutObjectTask extends Task {
      */
     private byte[] data;
 
+    /**
+     * 上传文件的流
+     */
+    private InputStream inputStream;
+
+    /**
+     *
+     */
+    private long length;
+
     public PutObjectTask(String bucketName, String objectKey, String contentType) {
         super(HttpMethod.PUT);
         this.objectKey = objectKey;
         this.bucketName = bucketName;
-        objectMetaData = new ObjectMetaData();
-        objectMetaData.setContentType(contentType);
+        this.objectMetaData = new ObjectMetaData();
+        this.objectMetaData.setContentType(contentType);
     }
 
-    public PutObjectTask(String bucketName, String objectKey,
-            String contentType, byte[] data) {
+    public PutObjectTask(String bucketName, String objectKey, String contentType, byte[] data) {
         this(bucketName, objectKey, contentType);
         this.data = data;
     }
 
-    public PutObjectTask(String bucketName, String objectKey,
-            String contentType, String path) throws OSSException {
+    public PutObjectTask(String bucketName, String objectKey, String contentType, InputStream inputStream, long length) {
         this(bucketName, objectKey, contentType);
-        byte[] bytes = null;
-        try {
-            InputStream in = new FileInputStream(path);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
-            bytes = new byte[1024];
-            int n;
-            while ((n = in.read(bytes)) != -1) {
-                baos.write(bytes, 0, n);
-            }
-            in.close();
-            this.data = baos.toByteArray();
-            baos.close();
+        this.inputStream = inputStream;
+        this.length = length;
+    }
 
+    public PutObjectTask(String bucketName, String objectKey, String contentType, String path) throws OSSException {
+        this(bucketName, objectKey, contentType);
+        try {
+            this.inputStream = new FileInputStream(path);
+            this.length = new File(path).length();
         } catch (IOException e) {
             throw new OSSException(e);
         }
@@ -112,9 +118,9 @@ public class PutObjectTask extends Task {
     protected HttpUriRequest generateHttpRequest() {
         // 生成Http请求
         String resource = httpTool.generateCanonicalizedResource("/"
-                + bucketName + "/" + objectKey + "/");
+                + bucketName + "/" + objectKey);
 
-        HttpPut httpPut = new HttpPut("http://" + bucketName + "." + OSS_END_POINT);
+        HttpPut httpPut = new HttpPut("http://" + bucketName + "." + OSS_END_POINT + "/" + resource);
 
         // 构造HttpPut
         String dateStr = Helper.getGMTDate();
@@ -141,12 +147,13 @@ public class PutObjectTask extends Task {
 
         // 加入用户自定义header
         for (Entry<String, String> entry: objectMetaData.getAttrs().entrySet()) {
-            OSSHttpTool.addHttpRequestHeader(httpPut, entry.getKey(),
-                    entry.getValue());
+            OSSHttpTool.addHttpRequestHeader(httpPut, entry.getKey(), entry.getValue());
         }
 
         if (this.data != null && this.data.length > 0) {
             httpPut.setEntity(new ByteArrayEntity(this.data));
+        } else if (this.inputStream != null) {
+            httpPut.setEntity(new InputStreamEntity(inputStream, length));
         }
 
         return httpPut;

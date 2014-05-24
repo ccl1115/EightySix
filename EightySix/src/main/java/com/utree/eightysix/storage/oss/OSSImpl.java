@@ -57,29 +57,9 @@ public class OSSImpl implements Storage {
 
     private void doPut(String bucket, String path, String key, File file, Result result) {
         try {
-            FileInputStream fis = new FileInputStream(file);
-            MessageDigest digest = MessageDigest.getInstance("MD5");
-            byte[] buffer = new byte[1024 * 1024];
-            int n;
-            while ((n = fis.read(buffer)) != -1) {
-                digest.update(buffer, 0, n);
-            }
-            String md5 = new String(digest.digest());
-            String etag = mOSSClient.uploadObject(bucket, path + key, file.getAbsolutePath());
-
-            if (!etag.toLowerCase().equals(md5.toLowerCase())) {
-                result.error = ERROR_CHECKSUM;
-                result.msg = ERROR_CHECKSUM_MSG;
-            }
-        } catch (FileNotFoundException e) {
-            result.error = ERROR_GENERAL_EXCEPTION;
-            result.msg = ERROR_GENERAL_EXCEPTION_MSG;
-        } catch (IOException e) {
-            result.error = ERROR_GENERAL_EXCEPTION;
-            result.msg = ERROR_GENERAL_EXCEPTION_MSG;
-        } catch (NoSuchAlgorithmException e) {
-            result.error = ERROR_GENERAL_EXCEPTION;
-            result.msg = ERROR_GENERAL_EXCEPTION_MSG;
+            mOSSClient.uploadObject(bucket, path + key, file.getAbsolutePath());
+        } catch (OSSException e) {
+            result.msg = e.getErrorCode();
         }
     }
 

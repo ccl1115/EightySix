@@ -21,6 +21,7 @@ import com.aliyun.android.util.Helper;
 import com.aliyun.android.util.MultipartUploadMission;
 import com.aliyun.android.util.Pagination;
 import com.aliyun.android.oss.task.*;
+import javax.activation.MimeType;
 
 /**
  * OSS请求客户端
@@ -321,8 +322,7 @@ public class OSSClient {
             String localPath) {
         try {
             PutObjectTask tsk = new PutObjectTask(bucketName, objectKey,
-                    HttpContentType.DIR.toString());
-            tsk.setUploadFilePath(localPath);
+                    HttpContentType.TXT.toString(), localPath);
             setAuthorization(tsk);
             return tsk.getResult();
         } catch (OSSException e) {

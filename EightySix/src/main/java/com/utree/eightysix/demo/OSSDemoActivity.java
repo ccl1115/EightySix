@@ -51,6 +51,12 @@ public class OSSDemoActivity extends BaseActivity {
     @OnClick
     public Button mDeleteFile;
 
+    @ViewId(R.id.button_upload_file)
+    @OnClick
+    public Button mUploadFile;
+
+
+    private String mFileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +105,19 @@ public class OSSDemoActivity extends BaseActivity {
                     }
                 });
                 break;
+            case R.id.button_upload_file:
+                U.getCloudStorage().aPut(mBucket.getText().toString(),
+                        mPath.getText().toString(),
+                        mFileName,
+                        new File(mFile.getText().toString()),
+                        new Storage.OnResult() {
+                            @Override
+                            public void onResult(Storage.Result result) {
+                                Log.d(OSSDemoActivity.this, "  " + result.msg);
+                            }
+                        }
+                );
+                break;
         }
     }
 
@@ -112,26 +131,19 @@ public class OSSDemoActivity extends BaseActivity {
                         String[] columns = {MediaStore.Files.FileColumns.DATA, MediaStore.Files.FileColumns.DISPLAY_NAME};
 
                         Cursor cursor = getContentResolver().query(uri, columns, null, null, null);
-                        if (cursor.moveToFirst()) {
-                            final String path = cursor.getString(cursor.getColumnIndex(columns[0]));
-                            final String name = cursor.getString(cursor.getColumnIndex(columns[1]));
-                            Log.d(this, path);
-                            Log.d(this, name);
-                            U.getCloudStorage().aPut(mBucket.getText().toString(),
-                                    mBucket.getText().toString(),
-                                    name,
-                                    new File(path),
-                                    new Storage.OnResult() {
-                                        @Override
-                                        public void onResult(Storage.Result result) {
-                                            Log.d(OSSDemoActivity.this, "  " + result.msg);
-                                        }
-                                    }
-                            );
-                        } else {
-                            Toast.makeText(this, "Failed to upload file", Toast.LENGTH_LONG).show();
+                        if (cursor != null) {
+                            if (cursor.moveToFirst()) {
+                                final String path = cursor.getString(cursor.getColumnIndex(columns[0]));
+                                final String name = cursor.getString(cursor.getColumnIndex(columns[1]));
+                                Log.d(this, path);
+                                Log.d(this, name);
+                                mFile.setText(path);
+                                mFileName = name;
+                            } else {
+                                Toast.makeText(this, "Failed to upload file", Toast.LENGTH_LONG).show();
+                            }
+                            cursor.close();
                         }
-
 
                     }
                 }

@@ -108,4 +108,16 @@
 
     </TableRow>
 
+    <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Upload file"
+                android:id="@+id/button_upload_file"
+                android:layout_column="2"/>
+    </TableRow>
+
 </TableLayout>
