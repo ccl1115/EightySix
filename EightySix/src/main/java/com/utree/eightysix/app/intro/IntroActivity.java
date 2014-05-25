@@ -1,10 +1,13 @@
 package com.utree.eightysix.app.intro;
 
 import android.os.Bundle;
+import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.utree.eightysix.R;
@@ -27,6 +30,9 @@ public class IntroActivity extends BaseActivity {
     @ViewBinding.ViewId(R.id.intro_url)
     public TextView mIntroUrl;
 
+    @ViewBinding.ViewId(R.id.second_layout)
+    public LinearLayout mSecondLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,17 +44,42 @@ public class IntroActivity extends BaseActivity {
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
         animatorSet.playTogether(
-                ObjectAnimator.ofFloat(mBigLogo, "translationY", 0, -400),
+                ObjectAnimator.ofFloat(mBigLogo, "translationY", 0, -600),
                 ObjectAnimator.ofFloat(mBigLogo, "alpha", 1, 0),
 
                 ObjectAnimator.ofFloat(mAppTitle, "translationY", 0, -400),
 
-                ObjectAnimator.ofFloat(mIntroText, "translationY", 0, -400),
-                ObjectAnimator.ofFloat(mIntroText, "alpha", 1, 0)
+                ObjectAnimator.ofFloat(mIntroText, "translationY", 0, -200),
+                ObjectAnimator.ofFloat(mIntroText, "alpha", 1, 0.2f, 0),
+
+                ObjectAnimator.ofFloat(mIntroUrl, "translationY", 0, 200)
         );
-        animatorSet.setDuration(2000);
-        animatorSet.setStartDelay(2000);
+        animatorSet.setDuration(1500);
+        animatorSet.setStartDelay(1500);
         animatorSet.start();
+        animatorSet.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                mIntroText.setVisibility(View.GONE);
+                mIntroUrl.setVisibility(View.GONE);
+                mSecondLayout.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
     }
 
 }
