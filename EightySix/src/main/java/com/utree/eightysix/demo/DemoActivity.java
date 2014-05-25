@@ -16,6 +16,11 @@ import com.utree.eightysix.views.TopBar;
  */
 public class DemoActivity extends BaseActivity {
 
+    private static final int[] ACTION_ICONS = {
+            R.drawable.ic_action_email,
+            R.drawable.ic_action_help
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +43,7 @@ public class DemoActivity extends BaseActivity {
 
             @Override
             public Drawable getIcon(int position) {
-                return getResources().getDrawable(R.drawable.bpush_gray_logo);
+                return getResources().getDrawable(ACTION_ICONS[position]);
             }
 
             @Override

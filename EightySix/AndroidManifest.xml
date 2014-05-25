@@ -55,7 +55,7 @@
                 android:value="Z6S9LBSSdPUi96GkdLS6zO0L"/>
 
         <activity
-                android:name=".HelloAndroidActivity"
+                android:name=".app.intro.IntroActivity"
                 android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

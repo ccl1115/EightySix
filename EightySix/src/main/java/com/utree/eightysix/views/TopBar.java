@@ -35,6 +35,10 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     @ViewBinding.OnClick
     public ImageView mActionOverFlow;
 
+    @ViewBinding.ViewId(R.id.top_bar_left_action)
+    @ViewBinding.OnClick
+    public ImageView mActionLeft;
+
     public OnClickListener mOnActionOverflowClickListener;
     private ActionAdapter mActionAdapter;
     private int mCurCount;
@@ -156,6 +160,10 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
         int widthLeft = widthSize;
 
+        measureChild(mActionLeft, heightSize + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
+
+        widthLeft -= mActionLeft.getMeasuredWidth();
+
         // keep actions as square
         if (mActionAdapter != null) {
             if (mCurCount != mActionAdapter.getCount()) {
@@ -168,22 +176,21 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
                 widthLeft -= mActionOverFlow.getMeasuredWidth();
 
                 for (View view : mActionViews) {
-                    view.measure(heightSize + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
-                    widthLeft -= view.getMeasuredWidth();
-
-                    if (widthLeft < mMinimiumTitleWidth) {
-                        break;
+                    if (widthLeft < heightSize) {
+                        view.measure(MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
+                    } else {
+                        view.measure(heightSize + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
                     }
+                    widthLeft -= view.getMeasuredWidth();
                 }
             }
         }
 
-        if (mProgressBar.getVisibility() == GONE) {
+        if (mProgressBar.getVisibility() == GONE || widthLeft < heightSize) {
             mProgressBar.measure(MeasureSpec.EXACTLY, MeasureSpec.EXACTLY);
         } else {
             mProgressBar.measure(heightSize + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
         }
-
         widthLeft -= mProgressBar.getMeasuredWidth();
 
         mTitle.measure(widthLeft + MeasureSpec.AT_MOST, heightSize + MeasureSpec.EXACTLY);
@@ -195,10 +202,10 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
 
         int right = r;
-        final int height = b - t;
 
-        mTitle.layout(0, (height - mTitle.getMeasuredHeight()) >> 1,
-                mTitle.getMeasuredWidth(), (height + mTitle.getMeasuredHeight()) >> 1);
+        mActionLeft.layout(0, 0, mActionLeft.getMeasuredWidth(), b);
+
+        mTitle.layout(mActionLeft.getRight(), 0, mActionLeft.getRight() + mTitle.getMeasuredWidth(), b);
 
         mActionOverFlow.layout(right - mActionOverFlow.getMeasuredWidth(), 0, right, b);
 

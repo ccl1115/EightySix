@@ -6,10 +6,20 @@
        android:layout_width="wrap_content"
        android:layout_height="wrap_content">
 
+    <ImageView
+            android:id="@+id/top_bar_left_action"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:src="@drawable/ic_drawer"
+            android:scaleType="centerInside"
+            android:contentDescription="@string/cd_action_left"/>
+
     <TextView
             android:id="@+id/top_bar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
             android:gravity="center_vertical"/>
 
     <ProgressBar
@@ -23,5 +33,6 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:src="@drawable/ic_action_overflow"
-            android:contentDescription="@string/action_overflow"/>
+            android:scaleType="centerInside"
+            android:contentDescription="@string/cd_action_overflow"/>
 </merge>

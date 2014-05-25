@@ -92,6 +92,14 @@ public class BaseActivity extends Activity implements View.OnClickListener {
         throw new RuntimeException("Call setContentView.");
     }
 
+    protected void hideTopBar(boolean animate) {
+        mTopBar.setVisibility(View.GONE);
+    }
+
+    protected void showTopBar(boolean animate) {
+        mTopBar.setVisibility(View.VISIBLE);
+    }
+
     protected String getTopTitle() {
         return mTopBar.getTitle();
     }
