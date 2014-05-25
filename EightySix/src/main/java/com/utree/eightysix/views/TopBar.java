@@ -3,20 +3,27 @@ package com.utree.eightysix.views;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.utils.ViewBinding;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  */
 public class TopBar extends ViewGroup implements View.OnClickListener {
+
+    private static final int MINIMIUM_TITLE_WIDTH = 60;
+
+    private final int mMinimiumTitleWidth;
+    private final List<View> mActionViews = new ArrayList<View>();
 
     @ViewBinding.ViewId(R.id.top_bar_title)
     public TextView mTitle;
@@ -27,7 +34,11 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     @ViewBinding.ViewId(R.id.top_bar_action_overflow)
     @ViewBinding.OnClick
     public ImageView mActionOverFlow;
+
     public OnClickListener mOnActionOverflowClickListener;
+    private ActionAdapter mActionAdapter;
+    private int mCurCount;
+    private int mActionBgDrawableId;
 
     public TopBar(Context context) {
         this(context, null);
@@ -40,6 +51,10 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     public TopBar(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
+        final float density = getResources().getDisplayMetrics().density;
+
+        mMinimiumTitleWidth = (int) (MINIMIUM_TITLE_WIDTH * density + 0.5f);
+
         View.inflate(context, R.layout.widget_top_bar, this);
         U.viewBinding(this, this);
 
@@ -47,7 +62,8 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
         mTitle.setTextColor(ta.getColor(R.styleable.TopBar_titleColor, Color.GRAY));
 
-        mActionOverFlow.setBackgroundDrawable(ta.getDrawable(R.styleable.TopBar_actionBgSelector));
+        mActionBgDrawableId = ta.getResourceId(R.styleable.TopBar_actionBgSelector, 0);
+        mActionOverFlow.setBackgroundDrawable(getResources().getDrawable(mActionBgDrawableId));
         mActionOverFlow.setOnClickListener(this);
 
         mProgressBar.setVisibility(GONE);
@@ -78,12 +94,34 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
         }
     }
 
+    public void setActionAdapter(ActionAdapter actionAdapter) {
+        mActionAdapter = actionAdapter;
+        mCurCount = mActionAdapter == null ? 0 : mActionAdapter.getCount();
+        if (mCurCount < 0) throw new IllegalArgumentException("Count less than 0");
+
+        for (View v : mActionViews) {
+            v.setOnClickListener(null);
+            v.setBackgroundDrawable(null);
+            removeView(v);
+        }
+        mActionViews.clear();
+
+        for (int i = 0; i < mCurCount; i++) {
+            View view = buildActionItemView(i, mActionAdapter.getIcon(i));
+            addView(view, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            mActionViews.add(view);
+        }
+        requestLayout();
+        invalidate();
+    }
+
     public void setOnActionOverflowClickListener(OnClickListener onClickListener) {
         mOnActionOverflowClickListener = onClickListener;
     }
 
     @Override
     public void onClick(View v) {
+
         final int id = v.getId();
 
         switch (id) {
@@ -92,7 +130,18 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
                     mOnActionOverflowClickListener.onClick(v);
                 }
                 break;
+            default:
+                for (int i = 0; i < mActionViews.size(); i++) {
+                    View view = mActionViews.get(i);
+
+                    if (view.equals(v)) {
+                        mActionAdapter.onClick(view, i);
+                        break;
+                    }
+                }
+                break;
         }
+
     }
 
     @SuppressWarnings("SuspiciousNameCombination")
@@ -107,16 +156,37 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
         int widthLeft = widthSize;
 
-        // keep it as a square
-        measureChild(mActionOverFlow, heightSize + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
+        // keep actions as square
+        if (mActionAdapter != null) {
+            if (mCurCount != mActionAdapter.getCount()) {
+                throw new IllegalStateException("Adapter count updates");
+            }
+            if (mCurCount == 0) {
+                mActionOverFlow.measure(MeasureSpec.EXACTLY, MeasureSpec.EXACTLY);
+            } else {
+                mActionOverFlow.measure(heightSize + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
+                widthLeft -= mActionOverFlow.getMeasuredWidth();
 
-        widthLeft -= mActionOverFlow.getMeasuredWidth();
+                for (View view : mActionViews) {
+                    view.measure(heightSize + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
+                    widthLeft -= view.getMeasuredWidth();
 
-        measureChild(mProgressBar, heightSize + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
+                    if (widthLeft < mMinimiumTitleWidth) {
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (mProgressBar.getVisibility() == GONE) {
+            mProgressBar.measure(MeasureSpec.EXACTLY, MeasureSpec.EXACTLY);
+        } else {
+            mProgressBar.measure(heightSize + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
+        }
 
         widthLeft -= mProgressBar.getMeasuredWidth();
 
-        measureChild(mTitle, widthLeft + MeasureSpec.AT_MOST, heightSize + MeasureSpec.EXACTLY);
+        mTitle.measure(widthLeft + MeasureSpec.AT_MOST, heightSize + MeasureSpec.EXACTLY);
 
         setMeasuredDimension(widthSize, heightSize);
     }
@@ -135,6 +205,38 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
         right -= mActionOverFlow.getMeasuredWidth();
 
         mProgressBar.layout(right - mProgressBar.getMeasuredWidth(), 0, right, b);
+
+        right -= mProgressBar.getMeasuredWidth();
+
+        if (mCurCount != 0) {
+            for (View child : mActionViews) {
+                child.layout(right - child.getMeasuredWidth(), 0, right, b);
+                right -= child.getMeasuredWidth();
+            }
+        }
+    }
+
+    private View buildActionItemView(final int position, Drawable drawable) {
+        if (drawable == null) return null;
+
+        final ImageView imageView = new ImageView(getContext());
+        imageView.setImageDrawable(drawable);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        imageView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        imageView.setBackgroundDrawable(getResources().getDrawable(mActionBgDrawableId));
+        imageView.setOnClickListener(this);
+
+        return imageView;
+    }
+
+    public interface ActionAdapter {
+        String getTitle(int position);
+
+        Drawable getIcon(int position);
+
+        void onClick(View view, int position);
+
+        int getCount();
     }
 
 }

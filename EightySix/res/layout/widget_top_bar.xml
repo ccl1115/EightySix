@@ -15,7 +15,8 @@
     <ProgressBar
             android:id="@+id/top_bar_progress"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
 
     <ImageView
             android:id="@+id/top_bar_action_overflow"

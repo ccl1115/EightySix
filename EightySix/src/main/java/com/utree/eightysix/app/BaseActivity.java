@@ -92,12 +92,12 @@ public class BaseActivity extends Activity implements View.OnClickListener {
         throw new RuntimeException("Call setContentView.");
     }
 
-    protected void setTopTitle(String title) {
-        mTopBar.setTitle(title);
-    }
-
     protected String getTopTitle() {
         return mTopBar.getTitle();
+    }
+
+    protected void setTopTitle(String title) {
+        mTopBar.setTitle(title);
     }
 
     protected void showProgressBar() {
@@ -106,6 +106,10 @@ public class BaseActivity extends Activity implements View.OnClickListener {
 
     protected void hideProgressBar() {
         mTopBar.hideProgressBar();
+    }
+
+    protected TopBar getTopBar() {
+        return mTopBar;
     }
 
     @Override
@@ -118,4 +122,5 @@ public class BaseActivity extends Activity implements View.OnClickListener {
                 break;
         }
     }
+
 }

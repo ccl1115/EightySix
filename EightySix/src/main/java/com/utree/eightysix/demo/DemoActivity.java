@@ -1,6 +1,7 @@
 package com.utree.eightysix.demo;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.views.TopBar;
 
 /**
  */
@@ -26,6 +28,29 @@ public class DemoActivity extends BaseActivity {
         linearLayout.addView(buildItem(getString(R.string.title_location_demo_activity), LocationDemoActivity.class));
         linearLayout.addView(buildItem(getString(R.string.title_oss_demo_activity), OSSDemoActivity.class));
         setContentView(linearLayout);
+
+        getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
+
+            @Override
+            public String getTitle(int position) {
+                return null;
+            }
+
+            @Override
+            public Drawable getIcon(int position) {
+                return getResources().getDrawable(R.drawable.bpush_gray_logo);
+            }
+
+            @Override
+            public void onClick(View view, int position) {
+
+            }
+
+            @Override
+            public int getCount() {
+                return 2;
+            }
+        });
     }
 
     private TextView buildItem(String text, final Class<?> clazz) {
