@@ -64,6 +64,8 @@ public class LockPatternView_v14 extends LockPatternView {
                 case MotionEvent.ACTION_HOVER_EXIT:
                     event.setAction(MotionEvent.ACTION_UP);
                     break;
+                default:
+                    break;
             }
             onTouchEvent(event);
             event.setAction(action);

@@ -152,10 +152,8 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
-        final int heightMode = heightMeasureSpec & (0x3 << 30);
         final int heightSize = heightMeasureSpec & ~(0x3 << 30);
 
-        final int widthMode = widthMeasureSpec & (0x3 << 30);
         final int widthSize = widthMeasureSpec & ~(0x3 << 30);
 
         int widthLeft = widthSize;

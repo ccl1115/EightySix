@@ -382,7 +382,7 @@ public class OSSImpl implements Storage {
                 if (path.endsWith(File.separator)) {
                     path = TextUtils.substring(path, 0, path.length() - 1);
                 }
-                String[] ps = path.split(File.separator);
+                String[] ps = path.split(File.separatorChar);
                 for (String p : ps) {
                     if (!mPathPattern.matcher(p).matches()) {
                         Log.d(this, "validate path failed");

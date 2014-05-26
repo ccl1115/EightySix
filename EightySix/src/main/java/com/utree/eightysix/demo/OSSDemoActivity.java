@@ -118,6 +118,8 @@ public class OSSDemoActivity extends BaseActivity {
                         }
                 );
                 break;
+            default:
+                break;
         }
     }
 
