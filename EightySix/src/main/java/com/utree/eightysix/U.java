@@ -84,14 +84,22 @@ public class U {
             synchronized (lock) {
                 if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
                     try {
-                        sApiCache = DiskLruCache.open(Environment.getExternalStorageDirectory(),
+                        sApiCache = DiskLruCache.open(U.getContext().getExternalFilesDir(null),
                                 U.getConfigInt(C.CONFIG_KEY.CACHE_VERSION),
                                 U.getConfigInt(C.CONFIG_KEY.CACHE_COUNT),
                                 U.getConfigInt(C.CONFIG_KEY.CACHE_SIZE));
                     } catch (IOException e) {
                         U.getAnalyser().reportException(U.getContext(), e);
                     }
-
+                } else {
+                    try {
+                        sApiCache = DiskLruCache.open(U.getContext().getFilesDir(),
+                                U.getConfigInt(C.CONFIG_KEY.CACHE_VERSION),
+                                U.getConfigInt(C.CONFIG_KEY.CACHE_COUNT),
+                                U.getConfigInt(C.CONFIG_KEY.CACHE_SIZE));
+                    } catch (IOException e) {
+                        U.getAnalyser().reportException(U.getContext(), e);
+                    }
                 }
             }
         }
