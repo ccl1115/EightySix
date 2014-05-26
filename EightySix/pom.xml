@@ -52,6 +52,11 @@
             <groupId>com.loopj.android</groupId>
             <artifactId>android-async-http</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.jakewharton</groupId>
+            <artifactId>disklrucache</artifactId>
+        </dependency>
     </dependencies>
 
 	<build>

@@ -26,9 +26,9 @@
     <string name="cd_action_overflow">action_overflow</string>
     <string name="cd_action_left">action_left</string>
 
+
     <!-- IntroActivity -->
     <string name="intro_1">劳动者自己的匿名工友圈</string>
-
 
     <!-- RegisterActivity -->
     <string name="register_phone_intro">手机号仅用来识别你厂里认识的人</string>

@@ -4,6 +4,8 @@ import android.content.Context;
 import com.tencent.stat.StatConfig;
 import com.tencent.stat.StatService;
 import com.utree.eightysix.BuildConfig;
+import com.utree.eightysix.C;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseApplication;
 import java.util.Properties;
 
@@ -16,6 +18,7 @@ public class MtaAnalyserImpl implements Analyser {
 
     public MtaAnalyserImpl() {
         StatConfig.setDebugEnable(BuildConfig.DEBUG);
+        StatConfig.setInstallChannel(U.getConfig(C.CONFIG_KEY.CHANNEL));
     }
 
     @Override
