@@ -80,6 +80,8 @@
 
         <activity android:name=".demo.OSSDemoActivity"
                   android:label="@string/title_oss_demo_activity"/>
+        <activity android:name=".app.account.RegisterActivity"/>
+        <activity android:name=".app.account.ForgetPwdActivity"/>
 
         <service
                 android:name="com.baidu.location.f"

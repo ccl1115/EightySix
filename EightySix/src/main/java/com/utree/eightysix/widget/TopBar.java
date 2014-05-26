@@ -1,4 +1,4 @@
-package com.utree.eightysix.views;
+package com.utree.eightysix.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;

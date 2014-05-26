@@ -5,7 +5,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <com.utree.eightysix.views.TopBar
+    <com.utree.eightysix.widget.TopBar
             android:id="@+id/top_bar"
             android:layout_width="fill_parent"
             android:layout_height="48dp"

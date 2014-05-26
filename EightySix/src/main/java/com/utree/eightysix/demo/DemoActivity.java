@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
-import com.utree.eightysix.views.TopBar;
+import com.utree.eightysix.widget.TopBar;
 
 /**
  */

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="alp_pattern_path_light">@android:color/white</color>
+    <color name="alp_pattern_path_dark">#999999</color>
+
+    <color name="major_head_color">#ff31677a</color>
+    <color name="major_head_color_pressed">#ff1c3d47</color>
+
+    <color name="minor_head_color">#ffff2e61</color>
+    <color name="minor_head_color_pressed">#ff831832</color>
+
+</resources>

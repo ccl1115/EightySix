@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.views.TopBar;
+import com.utree.eightysix.widget.TopBar;
 import de.akquinet.android.androlog.Log;
 
 /**

@@ -47,6 +47,11 @@
             <groupId>com.nineoldandroids</groupId>
             <artifactId>library</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.loopj.android</groupId>
+            <artifactId>android-async-http</artifactId>
+        </dependency>
     </dependencies>
 
 	<build>

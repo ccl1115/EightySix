@@ -70,6 +70,12 @@
             android:visibility="gone"
             android:id="@+id/second_layout">
 
+        <view
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                class="com.utree.eightysix.widget.lockpattern.LockPatternView"
+                android:id="@+id/view"/>
+
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
@@ -93,5 +99,7 @@
                     android:gravity="center"
                     android:padding="5dp"/>
         </LinearLayout>
+
     </LinearLayout>
+
 </RelativeLayout>

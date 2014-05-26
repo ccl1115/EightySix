@@ -4,15 +4,41 @@
     <string name="app_name">1886</string>
     <string name="app_url"><a href="http://1886.me">1886.me</a></string>
 
-    <string name="hello">Hello EightySix!</string>
-    <string name="hello_world">Hello world!</string>
 
+    <!-- AndroidLockPattern -->
+    <string name="alp_lockscreen_access_pattern_cell_added">Cell added</string>
+    <string name="alp_lockscreen_access_pattern_cleared">Pattern cleared</string>
+    <string name="alp_lockscreen_access_pattern_detected">Pattern completed</string>
+    <string name="alp_lockscreen_access_pattern_start">Pattern started</string>
+
+    <!-- General -->
+    <string name="phone_number">手机号码</string>
+    <string name="password">密码</string>
+    <string name="okay">确定</string>
+    <string name="cancel">取消</string>
+    <string name="done">完成</string>
+
+    <!-- Action -->
     <string name="action_settings">Settings</string>
 
+
+    <!-- ContentDescription -->
     <string name="cd_action_overflow">action_overflow</string>
     <string name="cd_action_left">action_left</string>
 
-    <!-- intro activity -->
+    <!-- IntroActivity -->
     <string name="intro_1">劳动者自己的匿名工友圈</string>
+
+
+    <!-- RegisterActivity -->
+    <string name="register_phone_intro">手机号仅用来识别你厂里认识的人</string>
+    <string name="register">注册</string>
+
+    <!-- ForgetPwdActivity -->
+    <string name="receiving_captcha">你的手机%d会收到一条4位数字的验证码的短信</string>
+    <string name="resend">重新发送验证码</string>
+    <string name="find_password">找回密码</string>
+    <string name="captcha">数字验证码</string>
+    <string name="set_password">设置新密码</string>
 
 </resources>
