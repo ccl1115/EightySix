@@ -33,5 +33,11 @@ public class C {
      */
     public static class TAG {
         public static final String AH = "AsyncHttp";
+
+        /**
+         * Tag for RESTRequest
+         */
+
+        public static final String RR = "RESTRequest";
     }
 }

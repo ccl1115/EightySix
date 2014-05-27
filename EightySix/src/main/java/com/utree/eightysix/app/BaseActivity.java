@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import com.aliyun.android.util.MD5Util;
 import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
+import com.utree.eightysix.C;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.request.RESTRequester;
@@ -179,7 +180,7 @@ public class BaseActivity extends Activity implements View.OnClickListener {
     }
 
     private String genCacheKey(String api, RequestParams params) {
-        return MD5Util.getMD5String((api + params.toString()).getBytes());
+        return MD5Util.getMD5String((api + params.toString()).getBytes()).toLowerCase();
     }
 
     /**
@@ -205,7 +206,7 @@ public class BaseActivity extends Activity implements View.OnClickListener {
                     U.getAnalyser().reportException(U.getContext(), e);
                 }
             }
-
+            Log.d(C.TAG.RR, "response: " + rawResponse);
             mHandler.onSuccess(statusCode, headers, rawResponse, response);
         }
 

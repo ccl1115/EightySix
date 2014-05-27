@@ -9,10 +9,15 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import com.utree.eightysix.C;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.request.LoginRequest;
+import com.utree.eightysix.utils.JsonHttpResponseHandler;
 import com.utree.eightysix.utils.ViewBinding;
+import de.akquinet.android.androlog.Log;
+import org.apache.http.Header;
 
 /**
  */
@@ -99,8 +104,8 @@ public class LoginActivity extends BaseActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_GO) {
-                    if (mEtPhoneNumber.length() == 11 && mEtPwd.length() >= 6) {
-                        return true;
+                    if (mCorrectPhoneNumber && mCorrectPwd) {
+                        requestLogin();
                     }
                 }
                 return false;
@@ -117,10 +122,34 @@ public class LoginActivity extends BaseActivity {
 
         switch (id) {
             case R.id.btn_login:
+                requestLogin();
                 break;
             default:
                 break;
         }
     }
 
+    private void requestLogin() {
+        request(new LoginRequest("18478737847", "test-password"), new JsonHttpResponseHandler<Object>() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String rawResponse, Object response) {
+                finish();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable e, String rawData, Object errorResponse) {
+                mBtnLogin.setEnabled(true);
+            }
+
+            @Override
+            public void onFinish() {
+            }
+
+            @Override
+            public Object parseResponse(String responseBody) throws Throwable {
+                return null;
+            }
+        });
+        mBtnLogin.setEnabled(false);
+    }
 }

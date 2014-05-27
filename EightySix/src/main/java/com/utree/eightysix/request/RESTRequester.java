@@ -7,6 +7,7 @@ import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.ResponseHandlerInterface;
 import com.utree.eightysix.C;
 import com.utree.eightysix.U;
+import de.akquinet.android.androlog.Log;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,13 +44,17 @@ public class RESTRequester {
     }
 
     private RequestHandle get(String api, Header[] headers, RequestParams params, ResponseHandlerInterface handler) {
+        Log.d(C.TAG.AH, "   get: " + mHost + api);
+        Log.d(C.TAG.AH, "params: " + params.toString());
         putBaseParams(params);
-        return mAsyncHttpClient.get(U.getContext(), mHost + C.API.get(api), headers, params, handler);
+        return mAsyncHttpClient.get(U.getContext(), mHost + api, headers, params, handler);
     }
 
     private RequestHandle post(String api, Header[] headers, RequestParams params, String contentType, ResponseHandlerInterface handler) {
+        Log.d(C.TAG.AH, "  post: " + mHost + api);
+        Log.d(C.TAG.AH, "params: " + params.toString());
         putBaseParams(params);
-        return mAsyncHttpClient.post(U.getContext(), mHost + C.API.get(api), headers, params, contentType, handler);
+        return mAsyncHttpClient.post(U.getContext(), mHost + api, headers, params, contentType, handler);
     }
 
     public RequestHandle request(Object request, ResponseHandlerInterface handler) {
