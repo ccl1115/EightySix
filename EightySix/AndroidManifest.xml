@@ -75,10 +75,18 @@
                 android:name=".demo.LocationDemoActivity"
                 android:label="@string/title_location_demo_activity"/>
 
-        <activity android:name=".demo.OSSDemoActivity"
-                  android:label="@string/title_oss_demo_activity"/>
+        <activity
+                android:name=".demo.OSSDemoActivity"
+                android:label="@string/title_oss_demo_activity"/>
+
         <activity android:name=".app.account.RegisterActivity"/>
+
         <activity android:name=".app.account.ForgetPwdActivity"/>
+
+        <activity
+                android:name=".app.account.LoginActivity"
+                android:exported="true"
+                android:windowSoftInputMode="stateVisible"/>
 
         <service
                 android:name="com.baidu.location.f"

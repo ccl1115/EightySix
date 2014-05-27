@@ -1,7 +1,6 @@
 package com.utree.eightysix;
 
 import android.content.Context;
-import android.os.Environment;
 import android.view.View;
 import com.jakewharton.disklrucache.DiskLruCache;
 import com.utree.eightysix.app.BaseApplication;
@@ -11,7 +10,7 @@ import com.utree.eightysix.statistics.Analyser;
 import com.utree.eightysix.statistics.MtaAnalyserImpl;
 import com.utree.eightysix.storage.Storage;
 import com.utree.eightysix.storage.oss.OSSImpl;
-import com.utree.eightysix.utils.RESTRequester;
+import com.utree.eightysix.request.RESTRequester;
 import com.utree.eightysix.utils.ViewBinding;
 import java.io.IOException;
 import java.util.Properties;
@@ -27,7 +26,7 @@ public class U {
     private static Location sLocation;
     private static Storage sCloudStorage;
     private static RESTRequester sRESTRequester;
-    private static DiskLruCache sApiCache;
+    private static CacheUtils sCacheUtils;
 
     private static Properties sConfiguration;
 
@@ -73,37 +72,23 @@ public class U {
     public static RESTRequester getRESTRequester() {
         if (sRESTRequester == null) {
             synchronized (lock) {
-                sRESTRequester = new RESTRequester(C.HOST);
+                sRESTRequester = new RESTRequester(getConfig("api.host"));
             }
         }
         return sRESTRequester;
     }
 
-    public static DiskLruCache getCache() {
-        if (sApiCache == null) {
+    private static CacheUtils getCacheUtils() {
+        if (sCacheUtils == null) {
             synchronized (lock) {
-                if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-                    try {
-                        sApiCache = DiskLruCache.open(U.getContext().getExternalFilesDir(null),
-                                U.getConfigInt(C.CONFIG_KEY.CACHE_VERSION),
-                                U.getConfigInt(C.CONFIG_KEY.CACHE_COUNT),
-                                U.getConfigInt(C.CONFIG_KEY.CACHE_SIZE));
-                    } catch (IOException e) {
-                        U.getAnalyser().reportException(U.getContext(), e);
-                    }
-                } else {
-                    try {
-                        sApiCache = DiskLruCache.open(U.getContext().getFilesDir(),
-                                U.getConfigInt(C.CONFIG_KEY.CACHE_VERSION),
-                                U.getConfigInt(C.CONFIG_KEY.CACHE_COUNT),
-                                U.getConfigInt(C.CONFIG_KEY.CACHE_SIZE));
-                    } catch (IOException e) {
-                        U.getAnalyser().reportException(U.getContext(), e);
-                    }
-                }
+                sCacheUtils = CacheUtils.inst();
             }
         }
-        return sApiCache;
+        return sCacheUtils;
+    }
+
+    public static DiskLruCache getApiCache() {
+        return getCacheUtils().getApiCache();
     }
 
     public static String getConfig(String key) {

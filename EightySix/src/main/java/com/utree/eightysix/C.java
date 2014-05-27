@@ -10,8 +10,6 @@ import java.util.Map;
  */
 public class C {
 
-    public static final String HOST = "http://127.0.0.1";
-
     /**
      * Registered API
      */
@@ -20,7 +18,7 @@ public class C {
     public static final String API_LOGIN = "api_login";
 
     static {
-        API.put(API_LOGIN, "/login");
+        API.put(API_LOGIN, "/login/login.do");
     }
 
     public static String IMEI = "";
@@ -35,15 +33,5 @@ public class C {
      */
     public static class TAG {
         public static final String AH = "AsyncHttp";
-    }
-
-    public static class CONFIG_KEY {
-        public static final String CHANNEL = "app.channel";
-
-        public static final String CACHE_VERSION = "app.cache_version";
-
-        public static final String CACHE_COUNT = "app.cache_count";
-
-        public static final String CACHE_SIZE = "app.cache_size";
     }
 }

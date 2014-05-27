@@ -7,11 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import com.aliyun.android.util.MD5Util;
-import com.loopj.android.http.BaseJsonHttpResponseHandler;
 import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.request.RESTRequester;
 import com.utree.eightysix.utils.JsonHttpResponseHandler;
 import com.utree.eightysix.widget.TopBar;
 import de.akquinet.android.androlog.Log;
@@ -149,28 +149,13 @@ public class BaseActivity extends Activity implements View.OnClickListener {
         return mTopBar;
     }
 
-    protected final <T> void get(String api, RequestParams params, JsonHttpResponseHandler<T> handler) {
-        if (isRequesting(api)) return;
+    protected final <T> void request(Object request, JsonHttpResponseHandler<T> handler) {
+        RESTRequester.RequestData data = U.getRESTRequester().convert(request);
+        if (isRequesting(data.api)) return;
 
-        try {
-            RequestHandle handle = U.getRESTRequester().get(api, null, params,
-                    new HandlerWrapper<T>(genCacheKey(api, params), handler));
-            mRequestHandles.put(api, handle);
-        } catch (Throwable t) {
-            U.getAnalyser().reportException(this, t);
-        }
-    }
-
-    protected final <T> void post(String api, RequestParams params, JsonHttpResponseHandler<T> handler) {
-        if (isRequesting(api)) return;
-
-        try {
-            RequestHandle handle = U.getRESTRequester().post(api, null, params, null,
-                    new HandlerWrapper<T>(genCacheKey(api, params), handler));
-            mRequestHandles.put(api, handle);
-        } catch (Throwable t) {
-            U.getAnalyser().reportException(this, t);
-        }
+        RequestHandle handle = U.getRESTRequester().request(request,
+                new HandlerWrapper<T>(genCacheKey(data.api, data.params), handler));
+        mRequestHandles.put(data.api, handle);
     }
 
     protected final void cancel(String api) {
@@ -215,7 +200,7 @@ public class BaseActivity extends Activity implements View.OnClickListener {
         public void onSuccess(int statusCode, Header[] headers, String rawResponse, T response) {
             if (rawResponse != null) {
                 try {
-                    U.getCache().edit(mKey).set(0, rawResponse);
+                    U.getApiCache().edit(mKey).set(0, rawResponse);
                 } catch (IOException e) {
                     U.getAnalyser().reportException(U.getContext(), e);
                 }

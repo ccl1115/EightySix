@@ -17,8 +17,8 @@ import java.util.Properties;
 public class MtaAnalyserImpl implements Analyser {
 
     public MtaAnalyserImpl() {
-        StatConfig.setDebugEnable(BuildConfig.DEBUG);
-        StatConfig.setInstallChannel(U.getConfig(C.CONFIG_KEY.CHANNEL));
+        //StatConfig.setDebugEnable(BuildConfig.DEBUG);
+        StatConfig.setInstallChannel(U.getConfig("app.channel"));
     }
 
     @Override
