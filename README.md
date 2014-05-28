@@ -28,8 +28,6 @@
 
 ## Project Structure
 
-Maven本身是没有任何功能的，它基于插件来实现一切功能，包括编译java代码都是插件来负责的。
-
 #### EightySix - parent
 
 这是EightySix的根项目，它作为实际的EightySix项目和集成测试项目的容器。
@@ -42,7 +40,110 @@ Maven本身是没有任何功能的，它基于插件来实现一切功能，包
 
 集成测试项目，基于Android的测试框架的测试项目
 
+## Dependencies
+
+我们依赖的开源项目
+
+* Gson 用于序列化和反序列化JSON对象的工具库
+* android-async-http 异步的Http网络库，针对Android平台和移动网络做了优化
+* nineoldandroid 使得低版本的Android版本可以高版本Android动画库 Animator
+* androlog 一个增强的Android日志工具
+* DiskLruCache 文件LRU缓存
+* Robotium 增强的Android平台测试框架
+* oss-android 开源的阿里云OSS存储服务SDK
+
+我们依赖的闭源项目
+
+* PushService 百度云推送SDK
+* locSDK 百度定位SDK
+* mta-sdk 腾讯统计SDK
+
+## Architecture
+
+这里指的是为了使得**开发本应用更加方便**而设计的框架，它尽量不违背Android平台应用开发本身的特性。
+              j
+
+#### 自动化简单的工作
+
+对于业务层，重复的工作会导致开发量的增加，而复杂的框架往往会使得开发量增加得更多，所以我们把那些认为是重复并且
+足够简单得事情交给框架来做。
+
+**我们如何鉴定什么工作是重复并且简单的**
+
+1. 重复2次并不算是重复。
+2. 如果不够简单，那么也不算重复。
+3. 如果不是原子操作，同样不算重复。
+
+**下面是框架做的一些自动化的工作**
+
+1. 使用Gson的对象映射方式来解析JSON对象，避免大量编写用于解析JSON的代码
+2. 使用注解的方式避免大量的通过findViewById()调用来寻找View对象的代码。本框架会大量使用注解来处理类似的问题，例如使用Layout注解标示
+当前activity需要套用的布局，从而自动的调用setContentView()方法。
+3. 统一的标题栏，避免每个界面构造自己的标题栏，不使用ActionBar的原因是我们目前还没有使用Android兼容包。
+当然在设计上，我们应该对业务层隐藏实现，所以它们并不需要关心自己到底是使用的系统的ActionBar还是框架自己实现的标题栏。
+
+#### 可测试化
+
+保证各个功能模块是可测试的，尽量做到方便于编写TestCase的。
+
+#### 外部配置
+
+该应用有一个外部配置文件，位于 ```res/raw/configuration.properties```
+
+它使用标准的Java Properties实现。这些属性可以被业务层使用，也可是是框架本身的配置。
+
+#### 业务层应该和第三方库做到无耦合
+
+业务层可以说是所有继承自BaseActivity的Activity，它们不允许直接调用任何第三方的库，
+但是这取决于业务层代码自己，而不是架构本身能限制的。除非我们将框架层作为另外一个
+项目，将依赖库对外部隐藏。但基于本框架本身就是只为这个应用服务的，所以暂时不使用
+这种方式。
+
+#### REST调用
+
+通过BaseActivity#request()方法来发起对REST服务器的接口请求。传入一个POJO对象，
+我们仍然通过注解来决定我们要调用那个API，以及需要的参数。
+
+下面是一个请求对象的定义：
+
+```
+@Request("hello/world")
+@Method(METHOD.GET)
+public class SampleRequest {
+    
+    @Param("pwd")
+    public String pwd;
+    
+    public SampleRequest(String pwd) {
+        this.pwd = pwd;
+    }
+}
+```
+
+当调用request()方法并传入一个SampleRequest对象的时候：
+
+```
+public class SampleActivity extends BaseActivity {
+    
+    public void onCreate() {
+        request(new SampleRequest("test"), response);
+    }
+}
+```
+
+以上我们就做了一个请求，host是预先配置好的，path＝/hello/wolrd，http method是GET，
+而params是pwd=test。
+
+**另外还有一些需要注意的地方：**
+
+1. 重复的请求会被抛弃。我们根据path和params.toString()加起来的md5值来判断一个请求是不是重复的。
+2. Activity在onDestroy的时候会自动取消所有的请求，也可以通过cancelAll()方法来暂停。
+
 ## Changelog
+
+**2014/05/28**
+
+增加Dependencies和Architecture
 
 **2014/05/14**
 
