@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+     android:interpolator="@android:interpolator/decelerate_cubic"
+     android:duration="@integer/activity_transition_duration"
+     android:startOffset="@integer/activity_transition_delay">
+    <translate
+            android:fromXDelta="120%p"
+            android:toXDelta="0"/>
+
+    <scale
+        android:fromXScale="0.75"
+        android:toXScale="1"
+        android:fromYScale="0.75"
+        android:toYScale="1"
+        android:pivotX="50%"
+        android:pivotY="50%"/>
+</set>

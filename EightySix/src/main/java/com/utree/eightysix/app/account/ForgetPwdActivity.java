@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
@@ -36,6 +37,9 @@ public class ForgetPwdActivity extends BaseActivity {
 
     @ViewId(R.id.page_2)
     public LinearLayout mPage2;
+
+    @ViewId(R.id.tv_notice)
+    public TextView mTVNotice;
 
     @ViewId(R.id.et_captcha)
     public EditText mEtCaptcha;

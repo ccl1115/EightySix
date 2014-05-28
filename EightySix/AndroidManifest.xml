@@ -93,7 +93,14 @@
                 android:name=".app.account.LoginActivity"
                 android:exported="true"
                 android:windowSoftInputMode="stateVisible"/>
-        <activity android:name=".app.account.ImportContactActivity"/>
+
+        <activity
+                android:name=".app.account.ImportContactActivity"
+                android:exported="true"/>
+
+        <activity
+                android:name=".app.account.GetLockpatternActivity"
+                android:exported="true"/>
 
         <service
                 android:name="com.baidu.location.f"

@@ -34,6 +34,8 @@ public class BaseActivity extends Activity implements View.OnClickListener {
     private TopBar mTopBar;
     private float mDensity;
 
+    private boolean mResumed;
+
     @Override
     public void onClick(View v) {
         Log.d(this, getResources().getResourceName(v.getId()));
@@ -73,6 +75,12 @@ public class BaseActivity extends Activity implements View.OnClickListener {
     protected void onResume() {
         super.onResume();
         U.getAnalyser().onResume(this);
+        if (mResumed) {
+            overridePendingTransition(R.anim.activity_exit_in, R.anim.activity_exit_out);
+        } else {
+            overridePendingTransition(R.anim.activity_enter_in, R.anim.activity_enter_out);
+        }
+        mResumed = true;
     }
 
     @Override
