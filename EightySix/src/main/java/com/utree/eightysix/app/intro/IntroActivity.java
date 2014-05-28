@@ -44,15 +44,14 @@ public class IntroActivity extends BaseActivity {
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
         animatorSet.playTogether(
-                ObjectAnimator.ofFloat(mBigLogo, "translationY", 0, -600),
+                ObjectAnimator.ofFloat(mBigLogo, "translationY", 0, -dp2px(200)),
                 ObjectAnimator.ofFloat(mBigLogo, "alpha", 1, 0),
 
-                ObjectAnimator.ofFloat(mAppTitle, "translationY", 0, -400),
+                ObjectAnimator.ofFloat(mAppTitle, "translationY", 0, -dp2px(130)),
 
-                ObjectAnimator.ofFloat(mIntroText, "translationY", 0, -200),
                 ObjectAnimator.ofFloat(mIntroText, "alpha", 1, 0.2f, 0),
 
-                ObjectAnimator.ofFloat(mIntroUrl, "translationY", 0, 200)
+                ObjectAnimator.ofFloat(mIntroUrl, "translationY", 0, dp2px(70))
         );
         animatorSet.setDuration(1500);
         animatorSet.setStartDelay(1500);

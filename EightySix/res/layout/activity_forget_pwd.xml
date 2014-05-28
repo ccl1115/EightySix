@@ -13,14 +13,15 @@
             android:id="@+id/page_1"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
         <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="phone"
                 android:ems="10"
-                android:id="@+id/editText"
+                android:id="@+id/et_phone_number"
                 android:layout_gravity="center_horizontal"
                 android:phoneNumber="true"
                 android:hint="@string/phone_number"/>
@@ -29,7 +30,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/find_password"
-                android:id="@+id/button"
+                android:id="@+id/btn_ok_1"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="15dp"/>
     </LinearLayout>
@@ -52,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:ems="10"
-                android:id="@+id/editText2"
+                android:id="@+id/et_captcha"
                 android:hint="@string/captcha"
                 android:layout_marginTop="15dp"/>
 
@@ -60,7 +61,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/okay"
-                android:id="@+id/button2"
+                android:id="@+id/btn_ok_2"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="15dp"/>
 
@@ -71,21 +72,21 @@
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:visibility="gone">
+            android:visibility="visible">
 
         <EditText
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:ems="10"
-                android:id="@+id/editText3"
+                android:id="@+id/et_new_pwd"
                 android:hint="@string/set_password"/>
 
         <Button
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/done"
-                android:id="@+id/button3"
+                android:id="@+id/btn_done"
                 android:layout_marginTop="15dp"/>
     </LinearLayout>
 </FrameLayout>

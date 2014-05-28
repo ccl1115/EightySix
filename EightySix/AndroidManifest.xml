@@ -79,14 +79,21 @@
                 android:name=".demo.OSSDemoActivity"
                 android:label="@string/title_oss_demo_activity"/>
 
-        <activity android:name=".app.account.RegisterActivity"/>
+        <activity
+                android:name=".app.account.RegisterActivity"
+                android:exported="true"
+                android:windowSoftInputMode="stateVisible"/>
 
-        <activity android:name=".app.account.ForgetPwdActivity"/>
+        <activity
+                android:name=".app.account.ForgetPwdActivity"
+                android:exported="true"
+                android:windowSoftInputMode="stateVisible"/>
 
         <activity
                 android:name=".app.account.LoginActivity"
                 android:exported="true"
                 android:windowSoftInputMode="stateVisible"/>
+        <activity android:name=".app.account.ImportContactActivity"/>
 
         <service
                 android:name="com.baidu.location.f"

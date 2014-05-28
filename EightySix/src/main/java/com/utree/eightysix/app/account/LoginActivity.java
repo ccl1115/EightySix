@@ -9,18 +9,20 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import com.utree.eightysix.C;
+import android.widget.Toast;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.request.LoginRequest;
-import com.utree.eightysix.utils.JsonHttpResponseHandler;
+import com.utree.eightysix.response.Response;
+import com.utree.eightysix.response.User;
+import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.utils.ViewBinding;
-import de.akquinet.android.androlog.Log;
-import org.apache.http.Header;
 
 /**
  */
+@Layout(R.layout.activity_login)
 public class LoginActivity extends BaseActivity {
 
     @ViewBinding.ViewId(R.id.btn_login)
@@ -39,10 +41,24 @@ public class LoginActivity extends BaseActivity {
 
     private int mPhoneNumberLength = U.getConfigInt("account.phone.length");
 
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+
+        final int id = v.getId();
+
+        switch (id) {
+            case R.id.btn_login:
+                requestLogin();
+                break;
+            default:
+                break;
+        }
+    }
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_login);
 
         setTopTitle(getString(R.string.login) + getString(R.string.app_name));
 
@@ -57,14 +73,16 @@ public class LoginActivity extends BaseActivity {
                 if (s.length() > mPhoneNumberLength) {
                     mEtPhoneNumber.setText(s.subSequence(0, mPhoneNumberLength));
                     mEtPhoneNumber.setSelection(11);
-                } else if (s.length() < 11) {
-                    mCorrectPhoneNumber = false;
-                    mBtnLogin.setEnabled(false);
-                } else {
+                }
+
+                if (InputValidator.phoneNumber(s)) {
                     mCorrectPhoneNumber = true;
                     if (mCorrectPwd) {
                         mBtnLogin.setEnabled(true);
                     }
+                } else {
+                    mCorrectPhoneNumber = false;
+                    mBtnLogin.setEnabled(false);
                 }
             }
 
@@ -82,8 +100,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() >= U.getConfigInt("account.pwd.length.min")
-                        && s.length() <= U.getConfigInt("account.pwd.length.max")) {
+                if (InputValidator.pwd(s)) {
                     mCorrectPwd = true;
                     if (mCorrectPhoneNumber) {
                         mBtnLogin.setEnabled(true);
@@ -114,42 +131,17 @@ public class LoginActivity extends BaseActivity {
 
     }
 
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
-
-        final int id = v.getId();
-
-        switch (id) {
-            case R.id.btn_login:
-                requestLogin();
-                break;
-            default:
-                break;
-        }
-    }
-
     private void requestLogin() {
-        request(new LoginRequest("18478737847", "test-password"), new JsonHttpResponseHandler<Object>() {
+        request(new LoginRequest("18478737847", "test-password"), new Response<User>() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, String rawResponse, Object response) {
-                finish();
+            public void onResponse(User response) {
+                if (response == null) {
+                    Toast.makeText(LoginActivity.this, R.string.login_failed, Toast.LENGTH_SHORT).show();
+                } else {
+                    finish();
+                }
             }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable e, String rawData, Object errorResponse) {
-                mBtnLogin.setEnabled(true);
-            }
-
-            @Override
-            public void onFinish() {
-            }
-
-            @Override
-            public Object parseResponse(String responseBody) throws Throwable {
-                return null;
-            }
-        });
+        }, User.class);
         mBtnLogin.setEnabled(false);
     }
 }

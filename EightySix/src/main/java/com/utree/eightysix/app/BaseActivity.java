@@ -13,6 +13,7 @@ import com.utree.eightysix.C;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.request.RESTRequester;
+import com.utree.eightysix.response.Response;
 import com.utree.eightysix.utils.JsonHttpResponseHandler;
 import com.utree.eightysix.widget.TopBar;
 import de.akquinet.android.androlog.Log;
@@ -31,6 +32,7 @@ public class BaseActivity extends Activity implements View.OnClickListener {
 
     private ViewGroup mBaseView;
     private TopBar mTopBar;
+    private float mDensity;
 
     @Override
     public void onClick(View v) {
@@ -51,12 +53,20 @@ public class BaseActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mDensity = getResources().getDisplayMetrics().density;
+
         mBaseView = (ViewGroup) View.inflate(this, R.layout.activity_base, null);
         mTopBar = (TopBar) mBaseView.findViewById(R.id.top_bar);
 
         mTopBar.setOnActionOverflowClickListener(this);
 
         super.setContentView(mBaseView);
+
+        Layout layout = getClass().getAnnotation(Layout.class);
+
+        if (layout != null) {
+            setContentView(layout.value());
+        }
     }
 
     @Override
@@ -92,6 +102,12 @@ public class BaseActivity extends Activity implements View.OnClickListener {
         );
 
         U.viewBinding(findViewById(R.id.content), this);
+
+        TopTitle topTitle = getClass().getAnnotation(TopTitle.class);
+
+        if (topTitle != null) {
+            setTopTitle(getString(topTitle.value()));
+        }
     }
 
     @Override
@@ -150,12 +166,12 @@ public class BaseActivity extends Activity implements View.OnClickListener {
         return mTopBar;
     }
 
-    protected final <T> void request(Object request, JsonHttpResponseHandler<T> handler) {
+    protected final <T> void request(Object request, Response<T> response, Class<T> tClass) {
         RESTRequester.RequestData data = U.getRESTRequester().convert(request);
         if (isRequesting(data.api)) return;
 
         RequestHandle handle = U.getRESTRequester().request(request,
-                new HandlerWrapper<T>(genCacheKey(data.api, data.params), handler));
+                new HandlerWrapper<T>(genCacheKey(data.api, data.params), response, tClass));
         mRequestHandles.put(data.api, handle);
     }
 
@@ -174,6 +190,10 @@ public class BaseActivity extends Activity implements View.OnClickListener {
         mRequestHandles.clear();
     }
 
+    protected final int dp2px(int dp) {
+        return (int) (mDensity * dp + 0.5f);
+    }
+
     private boolean isRequesting(String api) {
         RequestHandle executed = mRequestHandles.get(api);
         return executed != null && !executed.isCancelled() && !executed.isFinished();
@@ -185,39 +205,44 @@ public class BaseActivity extends Activity implements View.OnClickListener {
 
     /**
      * Wrapper class use to cache response data automatically
+     *
      * @param <T> the type of json object
      */
     private static class HandlerWrapper<T> extends JsonHttpResponseHandler<T> {
 
         private String mKey;
-        private JsonHttpResponseHandler<T> mHandler;
+        private Response<T> mResponse;
+        private Class<T> mTClass;
 
-        public HandlerWrapper(String key, JsonHttpResponseHandler<T> handler) {
+        public HandlerWrapper(String key, Response<T> response, Class<T> tClass) {
             mKey = key;
-            mHandler = handler;
+            mResponse = response;
+            mTClass = tClass;
         }
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, String rawResponse, T response) {
-            if (rawResponse != null) {
+            Log.d(C.TAG.RR, "response: " + rawResponse);
+            if (response != null) {
                 try {
                     U.getApiCache().edit(mKey).set(0, rawResponse);
                 } catch (IOException e) {
                     U.getAnalyser().reportException(U.getContext(), e);
                 }
+                mResponse.onResponse(response);
+            } else {
+                mResponse.onResponse(null);
             }
-            Log.d(C.TAG.RR, "response: " + rawResponse);
-            mHandler.onSuccess(statusCode, headers, rawResponse, response);
         }
 
         @Override
         public void onFailure(int statusCode, Header[] headers, Throwable e, String rawData, T errorResponse) {
-            mHandler.onFailure(statusCode, headers, e, rawData, errorResponse);
+            mResponse.onResponse(null);
         }
 
         @Override
         public T parseResponse(String responseBody) throws Throwable {
-            return mHandler.parseResponse(responseBody);
+            return U.getGson().fromJson(responseBody, mTClass);
         }
     }
 }

@@ -2,6 +2,8 @@ package com.utree.eightysix;
 
 import android.content.Context;
 import android.view.View;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.jakewharton.disklrucache.DiskLruCache;
 import com.utree.eightysix.app.BaseApplication;
 import com.utree.eightysix.location.BdLocationImpl;
@@ -28,7 +30,13 @@ public class U {
     private static RESTRequester sRESTRequester;
     private static CacheUtils sCacheUtils;
 
+    private static Gson sGson = new GsonBuilder().create();
+
     private static Properties sConfiguration;
+
+    public static Gson getGson() {
+        return sGson;
+    }
 
     public static Analyser getAnalyser() {
         if (sStatistics == null) {
