@@ -106,6 +106,7 @@
         <activity
                 android:name=".demo.ContactsSyncDemoActivity"
                 android:exported="true"/>
+        <activity android:name=".app.feed.FeedActivity"/>
 
         <service
                 android:name="com.baidu.location.f"

@@ -7,12 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import com.aliyun.android.util.MD5Util;
+import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
 import com.utree.eightysix.C;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.request.RESTRequester;
+import com.utree.eightysix.response.OnResponse;
 import com.utree.eightysix.response.Response;
 import com.utree.eightysix.utils.JsonHttpResponseHandler;
 import com.utree.eightysix.widget.TopBar;
@@ -174,12 +176,12 @@ public class BaseActivity extends Activity implements View.OnClickListener {
         return mTopBar;
     }
 
-    protected final <T> void request(Object request, Response<T> response, Class<T> tClass) {
+    protected final <T> void request(Object request, OnResponse<Response<T>> onResponse) {
         RESTRequester.RequestData data = U.getRESTRequester().convert(request);
         if (isRequesting(data.api)) return;
 
         RequestHandle handle = U.getRESTRequester().request(request,
-                new HandlerWrapper<T>(genCacheKey(data.api, data.params), response, tClass));
+                new HandlerWrapper<T>(genCacheKey(data.api, data.params), onResponse));
         mRequestHandles.put(data.api, handle);
     }
 
@@ -214,22 +216,19 @@ public class BaseActivity extends Activity implements View.OnClickListener {
     /**
      * Wrapper class use to cache response data automatically
      *
-     * @param <T> the type of json object
      */
-    private static class HandlerWrapper<T> extends JsonHttpResponseHandler<T> {
+    private static class HandlerWrapper<T> extends JsonHttpResponseHandler<Response<T>> {
 
         private String mKey;
-        private Response<T> mResponse;
-        private Class<T> mTClass;
+        private OnResponse<Response<T>> mOnResponse;
 
-        public HandlerWrapper(String key, Response<T> response, Class<T> tClass) {
+        public HandlerWrapper(String key, OnResponse<Response<T>> onResponse) {
             mKey = key;
-            mResponse = response;
-            mTClass = tClass;
+            mOnResponse = onResponse;
         }
 
         @Override
-        public void onSuccess(int statusCode, Header[] headers, String rawResponse, T response) {
+        public void onSuccess(int statusCode, Header[] headers, String rawResponse, Response<T> response) {
             Log.d(C.TAG.RR, "response: " + rawResponse);
             if (response != null) {
                 try {
@@ -237,20 +236,20 @@ public class BaseActivity extends Activity implements View.OnClickListener {
                 } catch (IOException e) {
                     U.getAnalyser().reportException(U.getContext(), e);
                 }
-                mResponse.onResponse(response);
+                mOnResponse.onResponse(response);
             } else {
-                mResponse.onResponse(null);
+                mOnResponse.onResponse(null);
             }
         }
 
         @Override
-        public void onFailure(int statusCode, Header[] headers, Throwable e, String rawData, T errorResponse) {
-            mResponse.onResponse(null);
+        public void onFailure(int statusCode, Header[] headers, Throwable e, String rawData, Response<T> errorResponse) {
+            mOnResponse.onResponse(null);
         }
 
         @Override
-        public T parseResponse(String responseBody) throws Throwable {
-            return U.getGson().fromJson(responseBody, mTClass);
+        public Response<T> parseResponse(String responseBody) throws Throwable {
+            return U.getGson().fromJson(responseBody, new TypeToken<Response<T>>() {}.getType());
         }
     }
 }

@@ -12,7 +12,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.request.RegisterRequest;
-import com.utree.eightysix.response.Response;
+import com.utree.eightysix.response.OnResponse;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.utils.ViewBinding;
 
@@ -106,7 +106,7 @@ public class RegisterActivity extends BaseActivity {
 
     private void requestRegister() {
         request(new RegisterRequest(mEtPhoneNumber.getText().toString(), mEtPwd.getText().toString()),
-                new Response<User>() {
+                new OnResponse<User>() {
                     @Override
                     public void onResponse(User response) {
                         if (response == null) {

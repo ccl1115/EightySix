@@ -15,6 +15,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.request.LoginRequest;
+import com.utree.eightysix.response.OnResponse;
 import com.utree.eightysix.response.Response;
 import com.utree.eightysix.response.User;
 import com.utree.eightysix.utils.InputValidator;
@@ -132,16 +133,16 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void requestLogin() {
-        request(new LoginRequest("18478737847", "test-password"), new Response<User>() {
+        request(new LoginRequest("18478737847", "test-password"), new OnResponse<Response<User>>() {
             @Override
-            public void onResponse(User response) {
-                if (response == null) {
-                    Toast.makeText(LoginActivity.this, R.string.login_failed, Toast.LENGTH_SHORT).show();
-                } else {
+            public void onResponse(Response<User> response) {
+                if (response.code == 0) {
                     finish();
+                } else {
+                    Toast.makeText(LoginActivity.this, response.message, Toast.LENGTH_LONG).show();
                 }
             }
-        }, User.class);
+        });
         mBtnLogin.setEnabled(false);
     }
 }
