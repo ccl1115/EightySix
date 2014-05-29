@@ -32,6 +32,7 @@ public class DemoActivity extends BaseActivity {
 
         linearLayout.addView(buildItem(getString(R.string.title_location_demo_activity), LocationDemoActivity.class));
         linearLayout.addView(buildItem(getString(R.string.title_oss_demo_activity), OSSDemoActivity.class));
+        linearLayout.addView(buildItem(getString(R.string.title_contacts_sync_demo_activity), ContactsSyncDemoActivity.class));
         setContentView(linearLayout);
 
         getTopBar().setActionAdapter(new TopBar.ActionAdapter() {

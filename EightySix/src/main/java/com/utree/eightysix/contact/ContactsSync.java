@@ -26,7 +26,7 @@ public class ContactsSync {
         return mContacts;
     }
 
-    @Subscribe public void onContactsSync(ContactSyncEvent event) {
+    @Subscribe public void onContactsSync(ContactsSyncEvent event) {
         mContacts = event.getContacts();
     }
 }

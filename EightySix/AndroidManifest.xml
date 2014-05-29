@@ -103,10 +103,18 @@
                 android:name=".app.account.GetLockpatternActivity"
                 android:exported="true"/>
 
+        <activity
+                android:name=".demo.ContactsSyncDemoActivity"
+                android:exported="true"/>
+
         <service
                 android:name="com.baidu.location.f"
                 android:enabled="true"
                 android:process=":remote"/>
+
+        <service
+                android:name=".contact.ContactsSyncService"
+                android:enabled="true"/>
     </application>
 
 </manifest>

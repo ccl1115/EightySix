@@ -1,0 +1,115 @@
+package com.utree.eightysix.demo;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+import com.squareup.otto.Subscribe;
+import com.utree.eightysix.R;
+import com.utree.eightysix.U;
+import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.contact.Contact;
+import com.utree.eightysix.contact.ContactsSyncEvent;
+import com.utree.eightysix.contact.ContactsSyncService;
+import com.utree.eightysix.utils.ViewBinding;
+import java.util.List;
+
+/**
+ */
+@Layout(R.layout.activity_contacts_sync_demo)
+@TopTitle(R.string.title_contacts_sync_demo_activity)
+public class ContactsSyncDemoActivity extends BaseActivity {
+
+    @ViewBinding.ViewId(R.id.btn_cached)
+    @ViewBinding.OnClick
+    public Button mBtnCached;
+
+    @ViewBinding.ViewId(R.id.btn_phone)
+    @ViewBinding.OnClick
+    public Button mPhone;
+
+    @ViewBinding.ViewId(R.id.btn_sync)
+    @ViewBinding.OnClick
+    public Button mSync;
+
+    @ViewBinding.ViewId(R.id.lv_contacts)
+    public ListView mLvContacts;
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        U.getBus().register(this);
+    }
+
+    @Subscribe public void onContactsSync(ContactsSyncEvent event) {
+        mLvContacts.setAdapter(new ContactAdapter(event.getContacts()));
+    }
+
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+
+        final int id = v.getId();
+
+        switch (id) {
+            case R.id.btn_cached:
+                break;
+            case R.id.btn_phone:
+                break;
+            case R.id.btn_sync:
+                startService(new Intent(this, ContactsSyncService.class));
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        U.getBus().unregister(this);
+        super.onDestroy();
+    }
+
+    private static class ContactAdapter extends BaseAdapter {
+
+        private List<Contact> mContacts;
+
+        ContactAdapter(List<Contact> contacts) {
+            mContacts = contacts;
+        }
+
+        @Override
+        public int getCount() {
+            return mContacts.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mContacts.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = View.inflate(parent.getContext(), R.layout.item_contact, null);
+            }
+
+            Contact contact = mContacts.get(position);
+            ((TextView) convertView.findViewById(R.id.tv_id)).setText(String.valueOf(contact.contactId));
+            ((TextView) convertView.findViewById(R.id.tv_name)).setText(contact.name);
+            ((TextView) convertView.findViewById(R.id.tv_phone)).setText(contact.phoneNumber);
+            return convertView;
+        }
+    }
+}

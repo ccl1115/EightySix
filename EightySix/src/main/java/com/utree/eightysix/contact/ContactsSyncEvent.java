@@ -4,11 +4,11 @@ import java.util.List;
 
 /**
  */
-public class ContactSyncEvent {
+public class ContactsSyncEvent {
 
     private List<Contact> mContacts;
 
-    public ContactSyncEvent(List<Contact> contacts) {
+    public ContactsSyncEvent(List<Contact> contacts) {
         mContacts = contacts;
     }
 
