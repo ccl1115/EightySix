@@ -5,16 +5,21 @@ import android.view.View;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.disklrucache.DiskLruCache;
+import com.squareup.otto.Bus;
+import com.squareup.otto.ThreadEnforcer;
 import com.utree.eightysix.app.BaseApplication;
 import com.utree.eightysix.location.BdLocationImpl;
 import com.utree.eightysix.location.Location;
+import com.utree.eightysix.request.RESTRequester;
 import com.utree.eightysix.statistics.Analyser;
 import com.utree.eightysix.statistics.MtaAnalyserImpl;
 import com.utree.eightysix.storage.Storage;
 import com.utree.eightysix.storage.oss.OSSImpl;
-import com.utree.eightysix.request.RESTRequester;
 import com.utree.eightysix.utils.ViewBinding;
 import java.io.IOException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -29,6 +34,7 @@ public class U {
     private static Storage sCloudStorage;
     private static RESTRequester sRESTRequester;
     private static CacheUtils sCacheUtils;
+    private static Bus sBus;
 
     private static Gson sGson = new GsonBuilder().create();
 
@@ -96,19 +102,33 @@ public class U {
     }
 
     public static DiskLruCache getApiCache() {
-        return getCacheUtils().getApiCache();
+        return getCacheUtils().getCache(U.getConfig("cache.api.dir"),
+                U.getConfigInt("cache.api.version"),
+                U.getConfigInt("cache.api.count"),
+                U.getConfigLong("cache.api.size"));
+    }
+
+    public static DiskLruCache getContactsCache() {
+        return getCacheUtils().getCache(U.getConfig("cache.contacts.dir"),
+                U.getConfigInt("cache.contacts.version"),
+                U.getConfigInt("cache.contacts.count"),
+                U.getConfigLong("cache.contacts.size"));
     }
 
     public static String getConfig(String key) {
         if (sConfiguration == null) {
-            sConfiguration = new Properties();
-            try {
-                sConfiguration.load(U.getContext().getResources().openRawResource(R.raw.configuration));
-            } catch (IOException e) {
-                U.getAnalyser().reportException(U.getContext(), e);
-            }
+            loadConfig();
         }
         return sConfiguration.getProperty(key);
+    }
+
+    private static void loadConfig() {
+        sConfiguration = new Properties();
+        try {
+            sConfiguration.load(U.getContext().getResources().openRawResource(R.raw.configuration));
+        } catch (IOException e) {
+            U.getAnalyser().reportException(U.getContext(), e);
+        }
     }
 
     public static int getConfigInt(String key) {
@@ -120,7 +140,23 @@ public class U {
         }
     }
 
+    public static long getConfigLong(String key) {
+        try {
+            return Long.parseLong(getConfig(key));
+        } catch (NumberFormatException e) {
+            U.getAnalyser().reportException(U.getContext(), e);
+            return 0L;
+        }
+    }
+
     public static boolean getConfigBoolean(String key) {
         return Boolean.parseBoolean(getConfig(key));
+    }
+
+    public static Bus getBus() {
+        if (sBus == null) {
+            sBus = new Bus(ThreadEnforcer.MAIN);
+        }
+        return sBus;
     }
 }

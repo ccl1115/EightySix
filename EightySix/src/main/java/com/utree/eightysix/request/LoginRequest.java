@@ -2,7 +2,7 @@ package com.utree.eightysix.request;
 
 /**
  */
-@Request("login/login.do")
+@Request("/login/login.do")
 public class LoginRequest {
 
     @Param("phone")

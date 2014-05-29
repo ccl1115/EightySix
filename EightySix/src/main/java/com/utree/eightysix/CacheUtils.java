@@ -4,6 +4,8 @@ import android.os.Environment;
 import com.jakewharton.disklrucache.DiskLruCache;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Get cache instance from U
@@ -14,9 +16,7 @@ class CacheUtils {
 
     private static CacheUtils sInst;
 
-    private DiskLruCache mDiskLruCache;
-
-    private File mApiCacheDir;
+    private Map<String, DiskLruCache> mDiskLruCache = new HashMap<String, DiskLruCache>();
 
     static CacheUtils inst() {
         if (sInst == null) {
@@ -27,26 +27,25 @@ class CacheUtils {
 
     private CacheUtils() {}
 
-    DiskLruCache getApiCache() {
-        if (mDiskLruCache == null) {
+    DiskLruCache getCache(String dir, int version, int count, long size) {
+        DiskLruCache cache = mDiskLruCache.get(dir);
+        if (cache == null) {
             try {
-                mDiskLruCache = DiskLruCache.open(getOrCreateApiCacheDir(),
-                        U.getConfigInt("cache.api.version"),
-                        U.getConfigInt("cache.api.count"),
-                        U.getConfigInt("cache.api.size"));
+                cache = DiskLruCache.open(getOrCreateCacheDir(dir), version, count, size);
+                mDiskLruCache.put(dir, cache);
             } catch (IOException e) {
                 U.getAnalyser().reportException(U.getContext(), e);
             }
         }
-        return mDiskLruCache;
+        return cache;
     }
 
-    private File getOrCreateApiCacheDir() {
+    private File getOrCreateCacheDir(String key) {
         final String path;
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            path = U.getContext().getExternalFilesDir(null).getAbsolutePath() + File.separator + U.getConfig("cache.api.dir");
+            path = U.getContext().getExternalFilesDir(null).getAbsolutePath() + File.separator + key;
         } else {
-            path = U.getContext().getFilesDir().getAbsolutePath() + File.separator + U.getConfig("cache.api.dir");
+            path = U.getContext().getFilesDir().getAbsolutePath() + File.separator + key;
         }
 
         File file = new File(path);
