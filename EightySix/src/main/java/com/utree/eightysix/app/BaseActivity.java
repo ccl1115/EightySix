@@ -34,7 +34,6 @@ public class BaseActivity extends Activity implements View.OnClickListener {
 
     private ViewGroup mBaseView;
     private TopBar mTopBar;
-    private float mDensity;
 
     private boolean mResumed;
 
@@ -56,8 +55,6 @@ public class BaseActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mDensity = getResources().getDisplayMetrics().density;
 
         mBaseView = (ViewGroup) View.inflate(this, R.layout.activity_base, null);
         mTopBar = (TopBar) mBaseView.findViewById(R.id.top_bar);
@@ -201,7 +198,7 @@ public class BaseActivity extends Activity implements View.OnClickListener {
     }
 
     protected final int dp2px(int dp) {
-        return (int) (mDensity * dp + 0.5f);
+        return U.dp2px(dp);
     }
 
     private boolean isRequesting(String api) {
