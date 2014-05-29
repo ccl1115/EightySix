@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -48,7 +49,12 @@ public class ContactsSyncDemoActivity extends BaseActivity {
     }
 
     @Subscribe public void onContactsSync(ContactsSyncEvent event) {
-        mLvContacts.setAdapter(new ContactAdapter(event.getContacts()));
+        if (event.isSucceed()) {
+            Toast.makeText(this, "sync succeed", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "sync failed", Toast.LENGTH_LONG).show();
+        }
+        mSync.setEnabled(true);
     }
 
     @Override
@@ -64,6 +70,7 @@ public class ContactsSyncDemoActivity extends BaseActivity {
                 break;
             case R.id.btn_sync:
                 startService(new Intent(this, ContactsSyncService.class));
+                mSync.setEnabled(false);
                 break;
             default:
                 break;

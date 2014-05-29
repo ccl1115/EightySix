@@ -14,7 +14,7 @@ import com.google.gson.stream.JsonWriter;
 import com.jakewharton.disklrucache.DiskLruCache;
 import com.utree.eightysix.U;
 import com.utree.eightysix.utils.InputValidator;
-import de.akquinet.android.androlog.Log;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * The workflow of syncing:
+ * The workflow of syncing contacts:
  * <p/>
  * 0. fetch phone contacts
  * 1. if cache is null, then update cache and upload to server.
@@ -72,11 +72,13 @@ public class ContactsSyncService extends IntentService {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
+                U.getBus().post(new ContactsSyncEvent(true));
             }
         });
     }
 
-    private void uploadContact(List<Contact> phone) {}
+    private void uploadContact(List<Contact> phone) {
+    }
 
     private List<Contact> getContactsFromCache() {
         List<Contact> contacts = new ArrayList<Contact>();
@@ -88,7 +90,8 @@ public class ContactsSyncService extends IntentService {
             }
             contacts = U.getGson().fromJson(new InputStreamReader(snapshot.getInputStream(0)),
                     new TypeToken<ArrayList<Contact>>() {
-                    }.getType());
+                    }.getType()
+            );
         } catch (IOException e) {
             U.getAnalyser().reportException(this, e);
         } finally {
@@ -111,22 +114,29 @@ public class ContactsSyncService extends IntentService {
 
     private void cacheContacts(List<Contact> phone) {
         OutputStream stream = null;
+        OutputStreamWriter out = null;
+        JsonWriter writer = null;
         try {
             DiskLruCache.Editor editor = U.getContactsCache().edit("contacts");
             stream = editor.newOutputStream(0);
-            U.getGson().toJson(phone, new TypeToken<ArrayList<Contact>>() {
-                    }.getType(),
-                    new JsonWriter(new OutputStreamWriter(stream))
-            );
+            out = new OutputStreamWriter(stream);
+            writer = new JsonWriter(out);
+            U.getGson().toJson(phone, new TypeToken<ArrayList<Contact>>() {}.getType(), writer);
             editor.commit();
         } catch (IOException e) {
             U.getAnalyser().reportException(this, new Exception("Failed to invalidate cache", e));
         } finally {
-            if (stream != null) {
-                try {
-                    stream.close();
-                } catch (IOException ignored) {
-                }
+            closeQuietly(writer);
+            closeQuietly(out);
+            closeQuietly(stream);
+        }
+    }
+
+    private void closeQuietly(Closeable closable) {
+        if (closable != null) {
+            try {
+                closable.close();
+            } catch (IOException ignored) {
             }
         }
     }

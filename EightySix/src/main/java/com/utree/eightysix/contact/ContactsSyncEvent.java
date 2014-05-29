@@ -1,19 +1,17 @@
 package com.utree.eightysix.contact;
 
-import java.util.List;
-
 /**
  */
 public class ContactsSyncEvent {
 
-    private List<Contact> mContacts;
 
-    public ContactsSyncEvent(List<Contact> contacts) {
-        mContacts = contacts;
+    private boolean mSucceed;
+
+    public ContactsSyncEvent(boolean succeed) {
+        mSucceed = succeed;
     }
 
-    public List<Contact> getContacts() {
-        return mContacts;
+    public boolean isSucceed() {
+        return mSucceed;
     }
-
 }
