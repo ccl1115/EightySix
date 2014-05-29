@@ -1,0 +1,38 @@
+package com.utree.eightysix.response;
+
+import com.google.gson.annotations.SerializedName;
+
+/**
+ */
+public class Post {
+
+    @SerializedName("bgUrl")
+    public String bgUrl;
+
+    @SerializedName("content")
+    public String content;
+
+    @SerializedName("countComment")
+    public int comments;
+
+    @SerializedName("countPraise")
+    public int count;
+
+    @SerializedName("id")
+    public int id;
+
+    @SerializedName("myPraiseCount")
+    public int myPraiseCount;
+
+    @SerializedName("postSource")
+    public String source;
+
+    @SerializedName("readed")
+    public boolean read;
+
+    @SerializedName("viewComment")
+    public Comment comment;
+
+    @SerializedName("whoAtMe")
+    public String whoAtMe;
+}

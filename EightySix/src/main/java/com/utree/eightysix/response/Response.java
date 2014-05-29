@@ -1,10 +1,17 @@
 package com.utree.eightysix.response;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  */
-public abstract class Response<T> {
+public class Response<T> {
 
-    public void onResponse(T response) {
+    @SerializedName("code")
+    public int code;
 
-    }
+    @SerializedName("message")
+    public String message;
+
+    @SerializedName("object")
+    public T object;
 }
