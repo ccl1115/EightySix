@@ -160,8 +160,12 @@ public class U {
     }
 
     private static void checkThread() {
-        if (Looper.myLooper() == Looper.getMainLooper()) {
+        if (Looper.myLooper() != Looper.getMainLooper()) {
             throw new IllegalThreadStateException("This static method in U class must be invoked in main thread");
         }
+    }
+
+    public static int dp2px(int dp) {
+        return (int) (U.getContext().getResources().getDisplayMetrics().density * dp + 0.5f);
     }
 }
