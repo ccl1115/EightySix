@@ -1,6 +1,7 @@
 package com.utree.eightysix;
 
 import android.content.Context;
+import android.os.Looper;
 import android.view.View;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -24,10 +25,11 @@ import java.util.Properties;
 
 /**
  * Most helpful methods and singleton instances
+ *
+ * <b>Most of these methods must be invoked in main thread.</b>
  */
 public class U {
 
-    private static final Object lock = new Object();
     private static Analyser sStatistics;
     private static ViewBinding sViewBinding = new ViewBinding();
     private static Location sLocation;
@@ -45,19 +47,17 @@ public class U {
     }
 
     public static Analyser getAnalyser() {
+        checkThread();
         if (sStatistics == null) {
-            synchronized (lock) {
-                sStatistics = new MtaAnalyserImpl();
-            }
+            sStatistics = new MtaAnalyserImpl();
         }
         return sStatistics;
     }
 
     public static Location getLocation() {
+        checkThread();
         if (sLocation == null) {
-            synchronized (lock) {
-                sLocation = new BdLocationImpl();
-            }
+            sLocation = new BdLocationImpl();
         }
         return sLocation;
     }
@@ -67,10 +67,9 @@ public class U {
     }
 
     public static Storage getCloudStorage() {
+        checkThread();
         if (sCloudStorage == null) {
-            synchronized (lock) {
-                sCloudStorage = new OSSImpl();
-            }
+            sCloudStorage = new OSSImpl();
         }
         return sCloudStorage;
     }
@@ -84,19 +83,17 @@ public class U {
     }
 
     public static RESTRequester getRESTRequester() {
+        checkThread();
         if (sRESTRequester == null) {
-            synchronized (lock) {
-                sRESTRequester = new RESTRequester(getConfig("api.host"));
-            }
+            sRESTRequester = new RESTRequester(getConfig("api.host"));
         }
         return sRESTRequester;
     }
 
     private static CacheUtils getCacheUtils() {
+        checkThread();
         if (sCacheUtils == null) {
-            synchronized (lock) {
-                sCacheUtils = CacheUtils.inst();
-            }
+            sCacheUtils = CacheUtils.inst();
         }
         return sCacheUtils;
     }
@@ -123,6 +120,7 @@ public class U {
     }
 
     private static void loadConfig() {
+        checkThread();
         sConfiguration = new Properties();
         try {
             sConfiguration.load(U.getContext().getResources().openRawResource(R.raw.configuration));
@@ -154,9 +152,16 @@ public class U {
     }
 
     public static Bus getBus() {
+        checkThread();
         if (sBus == null) {
             sBus = new Bus(ThreadEnforcer.MAIN);
         }
         return sBus;
+    }
+
+    private static void checkThread() {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            throw new IllegalThreadStateException("This static method in U class must be invoked in main thread");
+        }
     }
 }
