@@ -5,7 +5,7 @@ package com.utree.eightysix.request;
 
 import com.utree.eightysix.C;
 
-@API(C.API_REG)
+@Api(C.API_REG)
 @Method(Method.METHOD.POST)
 public class RegisterRequest {
 

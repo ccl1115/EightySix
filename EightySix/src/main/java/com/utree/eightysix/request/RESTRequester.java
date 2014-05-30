@@ -86,7 +86,7 @@ public class RESTRequester {
         List<Header> headers = new ArrayList<Header>();
 
         try {
-            data.api = clz.getAnnotation(API.class).value();
+            data.api = clz.getAnnotation(Api.class).value();
             data.params = new RequestParams();
 
             Token token = clz.getAnnotation(Token.class);

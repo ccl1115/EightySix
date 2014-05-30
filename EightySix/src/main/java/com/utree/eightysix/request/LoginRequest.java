@@ -4,7 +4,7 @@ import com.utree.eightysix.C;
 
 /**
  */
-@API(C.API_LOGIN)
+@Api(C.API_LOGIN)
 @Method(Method.METHOD.POST)
 public class LoginRequest {
 
