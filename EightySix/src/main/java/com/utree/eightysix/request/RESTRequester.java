@@ -5,6 +5,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.ResponseHandlerInterface;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.C;
 import com.utree.eightysix.U;
 import de.akquinet.android.androlog.Log;
@@ -85,8 +86,15 @@ public class RESTRequester {
         List<Header> headers = new ArrayList<Header>();
 
         try {
-            data.api = clz.getAnnotation(Request.class).value();
+            data.api = clz.getAnnotation(API.class).value();
             data.params = new RequestParams();
+
+            Token token = clz.getAnnotation(Token.class);
+
+            if (token != null && Account.inst().isLogin()) {
+                data.params.add("token", Account.inst().getToken());
+                data.params.add("userId", Account.inst().getUserId());
+            }
 
             Method method = clz.getAnnotation(Method.class);
             if (method != null) {

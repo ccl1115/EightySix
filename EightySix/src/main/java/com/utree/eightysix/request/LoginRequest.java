@@ -1,8 +1,10 @@
 package com.utree.eightysix.request;
 
+import com.utree.eightysix.C;
+
 /**
  */
-@Request("/login/login.do")
+@API(C.API_LOGIN)
 @Method(Method.METHOD.POST)
 public class LoginRequest {
 

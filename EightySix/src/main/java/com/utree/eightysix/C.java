@@ -15,11 +15,15 @@ public class C {
      */
     public static final Map<String, String> API = new HashMap<String, String>();
 
-    public static final String API_LOGIN = "api_login";
-
-    static {
-        API.put(API_LOGIN, "/login/login.do");
-    }
+    public static final String API_LOGIN = "/login/login.do";
+    public static final String API_REG = "/login/reg.do";
+    public static final String API_SHOW_INFO = "/login/showInfo.do";
+    public static final String API_INFO_BY_FRIEND = "/login/infoByFriend.do";
+    public static final String API_FIND_FRIEND_INFO = "/login/infoFriendInfo.do";
+    public static final String API_FIND_PWD_1 = "/login/step1.do";
+    public static final String API_FIND_PWD_2 = "/login/step2.do";
+    public static final String API_FIND_PWD_3 = "/login/step3.do";
+    public static final String API_LOGOUT = "/login/logout.do";
 
     public static String IMEI = "";
 

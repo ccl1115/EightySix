@@ -18,7 +18,7 @@ import com.utree.eightysix.request.LoginRequest;
 import com.utree.eightysix.response.OnResponse;
 import com.utree.eightysix.response.Response;
 import com.utree.eightysix.response.User;
-import com.utree.eightysix.utils.EnvUtils;
+import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.utils.OnClick;
 import com.utree.eightysix.utils.ViewId;
@@ -147,7 +147,7 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
-        if (EnvUtils.isPatternLocked()) {
+        if (Env.isPatternLocked()) {
             mTvRegister.setVisibility(View.GONE);
         } else {
             mTvRegister.setVisibility(View.VISIBLE);

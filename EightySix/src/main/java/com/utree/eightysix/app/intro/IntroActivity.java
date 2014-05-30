@@ -14,8 +14,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.account.GetLockpatternActivity;
 import com.utree.eightysix.app.account.LoginActivity;
-import com.utree.eightysix.app.account.RegisterActivity;
-import com.utree.eightysix.utils.EnvUtils;
+import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.OnClick;
 import com.utree.eightysix.utils.ViewId;
 import com.utree.eightysix.widget.guide.GuideBuilder;
@@ -82,13 +81,13 @@ public class IntroActivity extends BaseActivity {
 
         hideTopBar(false);
 
-        if (EnvUtils.isPatternLocked()) {
+        if (Env.isPatternLocked()) {
             animateToLockPattern();
         } else {
             getHandler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if (EnvUtils.firstRun()) {
+                    if (Env.firstRun()) {
                         startActivity(new Intent(IntroActivity.this, GuideActivity.class));
                     } else {
                         startActivity(new Intent(IntroActivity.this, LoginActivity.class));
@@ -117,8 +116,8 @@ public class IntroActivity extends BaseActivity {
             @Override
             public void onPatternDetected(List<LockPatternView.Cell> pattern) {
                 if (mPatternHelper.check(pattern)) {
-                    EnvUtils.setPatternLock(false);
-                    if (EnvUtils.firstRun()) {
+                    Env.setPatternLock(false);
+                    if (Env.firstRun()) {
                         startActivity(new Intent(IntroActivity.this, GuideActivity.class));
                     } else {
                         startActivity(new Intent(IntroActivity.this, LoginActivity.class));

@@ -6,7 +6,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.RegisterActivity;
-import com.utree.eightysix.utils.EnvUtils;
+import com.utree.eightysix.utils.Env;
 
 /**
  */
@@ -21,7 +21,7 @@ public class GuideActivity extends BaseActivity {
             public void run() {
                 startActivity(new Intent(GuideActivity.this, RegisterActivity.class));
                 finish();
-                EnvUtils.setFirstRun(false);
+                Env.setFirstRun(false);
             }
         }, 2000);
     }

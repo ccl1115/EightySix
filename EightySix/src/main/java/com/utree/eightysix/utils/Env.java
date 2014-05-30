@@ -7,7 +7,7 @@ import com.utree.eightysix.U;
 
 /**
  */
-public class EnvUtils {
+public class Env {
 
     public static boolean firstRun() {
         SharedPreferences preferences = U.getContext().getSharedPreferences("env", Context.MODE_PRIVATE);
