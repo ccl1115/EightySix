@@ -43,12 +43,6 @@ public class ContactsSyncDemoActivity extends BaseActivity {
     @ViewId(R.id.lv_contacts)
     public ListView mLvContacts;
 
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        U.getBus().register(this);
-    }
-
     @Subscribe public void onContactsSync(ContactsSyncEvent event) {
         if (event.isSucceed()) {
             Toast.makeText(this, "sync succeed", Toast.LENGTH_LONG).show();
@@ -76,12 +70,6 @@ public class ContactsSyncDemoActivity extends BaseActivity {
             default:
                 break;
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        U.getBus().unregister(this);
-        super.onDestroy();
     }
 
     private static class ContactAdapter extends BaseAdapter {

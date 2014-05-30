@@ -1,8 +1,10 @@
 package com.utree.eightysix;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
+import com.utree.eightysix.app.account.LoginActivity;
 
 /**
  */
@@ -82,6 +84,12 @@ public class Account {
 
     public static class LogoutEvent {
 
+        /**
+         * When fire this event, start the login activity.
+         */
+        public LogoutEvent() {
+            U.getContext().startActivity(new Intent(U.getContext(), LoginActivity.class));
+        }
     }
 
 }

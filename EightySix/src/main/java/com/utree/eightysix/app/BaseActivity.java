@@ -10,8 +10,11 @@ import android.widget.Toast;
 import com.aliyun.android.util.MD5Util;
 import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
+import com.squareup.otto.Subscribe;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.account.LoginActivity;
 import com.utree.eightysix.request.HandlerWrapper;
 import com.utree.eightysix.request.RESTRequester;
 import com.utree.eightysix.response.OnResponse;
@@ -83,6 +86,8 @@ public class BaseActivity extends Activity implements View.OnClickListener {
         if (layout != null) {
             setContentView(layout.value());
         }
+
+        U.getBus().register(this);
     }
 
     @Override
@@ -108,6 +113,8 @@ public class BaseActivity extends Activity implements View.OnClickListener {
         cancelAll();
 
         if (mToast != null) mToast.cancel();
+
+        U.getBus().unregister(this);
 
         super.onDestroy();
     }
@@ -225,6 +232,16 @@ public class BaseActivity extends Activity implements View.OnClickListener {
 
     private String genCacheKey(String api, RequestParams params) {
         return MD5Util.getMD5String((api + params.toString()).getBytes()).toLowerCase();
+    }
+
+    /**
+     * When LogoutEvent fired, finish all activities, except the login activity
+     * @param event the logout event
+     */
+    @Subscribe public void onLogout(Account.LogoutEvent event) {
+        if (!(this instanceof LoginActivity)) {
+            finish();
+        }
     }
 
 }
