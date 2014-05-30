@@ -1,11 +1,13 @@
 package com.utree.eightysix.app.account;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import com.aliyun.android.oss.model.User;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -15,6 +17,7 @@ import com.utree.eightysix.request.RegisterRequest;
 import com.utree.eightysix.response.OnResponse;
 import com.utree.eightysix.response.Response;
 import com.utree.eightysix.utils.InputValidator;
+import com.utree.eightysix.utils.OnClick;
 import com.utree.eightysix.utils.ViewId;
 
 /**
@@ -29,7 +32,12 @@ public class RegisterActivity extends BaseActivity {
     public EditText mEtPwd;
 
     @ViewId(R.id.btn_register)
+    @OnClick
     public Button mBtnRegister;
+
+    @ViewId(R.id.tv_login)
+    @OnClick
+    public TextView mTvLogin;
 
     private boolean mCorrectPhoneNumber;
     private boolean mCorrectPwd;
@@ -43,6 +51,11 @@ public class RegisterActivity extends BaseActivity {
         switch (id) {
             case R.id.btn_register:
                 requestRegister();
+                break;
+            case R.id.tv_login:
+                startActivity(new Intent(this, LoginActivity.class));
+                break;
+            default:
                 break;
         }
     }

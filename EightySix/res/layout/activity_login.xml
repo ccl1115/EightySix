@@ -55,4 +55,14 @@
             android:layout_marginTop="15dp"
             android:textColor="@android:color/secondary_text_dark"
             android:layout_marginRight="15dp"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_forget_pwd"
+            android:layout_gravity="right"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
+            android:text="@string/forget_pwd"
+            android:textColor="@android:color/secondary_text_dark"/>
 </LinearLayout>

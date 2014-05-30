@@ -88,7 +88,11 @@ public class IntroActivity extends BaseActivity {
             getHandler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    startActivity(new Intent(IntroActivity.this, LoginActivity.class));
+                    if (EnvUtils.firstRun()) {
+                        startActivity(new Intent(IntroActivity.this, GuideActivity.class));
+                    } else {
+                        startActivity(new Intent(IntroActivity.this, LoginActivity.class));
+                    }
                     finish();
                 }
             }, 2000);
@@ -114,7 +118,11 @@ public class IntroActivity extends BaseActivity {
             public void onPatternDetected(List<LockPatternView.Cell> pattern) {
                 if (mPatternHelper.check(pattern)) {
                     EnvUtils.setPatternLock(false);
-                    startActivity(new Intent(IntroActivity.this, RegisterActivity.class));
+                    if (EnvUtils.firstRun()) {
+                        startActivity(new Intent(IntroActivity.this, GuideActivity.class));
+                    } else {
+                        startActivity(new Intent(IntroActivity.this, LoginActivity.class));
+                    }
                     finish();
                 } else {
                     mLockPatternView.setDisplayMode(LockPatternView.DisplayMode.Wrong);

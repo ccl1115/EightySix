@@ -18,6 +18,7 @@ import com.utree.eightysix.request.LoginRequest;
 import com.utree.eightysix.response.OnResponse;
 import com.utree.eightysix.response.Response;
 import com.utree.eightysix.response.User;
+import com.utree.eightysix.utils.EnvUtils;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.utils.OnClick;
 import com.utree.eightysix.utils.ViewId;
@@ -39,7 +40,11 @@ public class LoginActivity extends BaseActivity {
 
     @ViewId(R.id.tv_register)
     @OnClick
-    public TextView mBtnRegister;
+    public TextView mTvRegister;
+
+    @ViewId(R.id.tv_forget_pwd)
+    @OnClick
+    public TextView mTvForgetPwd;
 
     private boolean mCorrectPhoneNumber;
 
@@ -59,6 +64,9 @@ public class LoginActivity extends BaseActivity {
                 break;
             case R.id.tv_register:
                 startActivity(new Intent(this, RegisterActivity.class));
+                break;
+            case R.id.tv_forget_pwd:
+                startActivity(new Intent(this, ForgetPwdActivity.class));
                 break;
             default:
                 break;
@@ -139,6 +147,11 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
+        if (EnvUtils.isPatternLocked()) {
+            mTvRegister.setVisibility(View.GONE);
+        } else {
+            mTvRegister.setVisibility(View.VISIBLE);
+        }
     }
 
     private void requestLogin() {

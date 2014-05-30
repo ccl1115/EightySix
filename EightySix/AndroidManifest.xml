@@ -83,6 +83,7 @@
         <activity
                 android:name=".app.account.RegisterActivity"
                 android:exported="true"
+                android:launchMode="singleInstance"
                 android:windowSoftInputMode="stateVisible"/>
 
         <activity
@@ -93,6 +94,7 @@
         <activity
                 android:name=".app.account.LoginActivity"
                 android:exported="true"
+                android:launchMode="singleInstance"
                 android:windowSoftInputMode="stateVisible"/>
 
         <activity
@@ -108,6 +110,9 @@
                 android:exported="true"/>
 
         <activity android:name=".app.feed.FeedActivity"
+                android:exported="true"/>
+
+        <activity android:name=".app.intro.GuideActivity"
                 android:exported="true"/>
 
         <service
