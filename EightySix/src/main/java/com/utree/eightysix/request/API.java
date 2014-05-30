@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface API {
+public @interface Api {
     String value();
 }
