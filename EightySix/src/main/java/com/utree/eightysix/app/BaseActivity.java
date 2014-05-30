@@ -25,6 +25,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Provides many base functionality to derived class
+ *
+ * <ul>
+ *     <li>To show toast using {@link #showToast}</li>
+ *     <li>To make api request using {@link #request}</li>
+ *     <li>Auto bind views and OnClickListener to annotated fields using annotation
+ *     {@link com.utree.eightysix.utils.ViewId} and {@link com.utree.eightysix.utils.OnClick}</li>
+ *     <li>Automatically set content view when annotated with {@link com.utree.eightysix.app.Layout}</li>
+ *     <li>An independent TopBar acts like the Android's ActionBar</li>
+ *     <li>Auto register and unregister to Otto's event bus</li>
+ *     <li>Automatically finish when LogoutEventFired, override onLogout() to prevent this</li>
+ * </ul>
  */
 public class BaseActivity extends Activity implements View.OnClickListener {
 
@@ -48,6 +60,16 @@ public class BaseActivity extends Activity implements View.OnClickListener {
                 openOptionsMenu();
                 break;
         }
+    }
+
+    /**
+     * When LogoutEvent fired, finish all activities, except the login activity
+     *
+     * @param event the logout event
+     */
+    @Subscribe
+    public void onLogout(Account.LogoutEvent event) {
+        finish();
     }
 
     protected void showToast(int res) {
@@ -199,15 +221,15 @@ public class BaseActivity extends Activity implements View.OnClickListener {
 
     protected final <T> void request(Object request, OnResponse<Response<T>> onResponse) {
         RESTRequester.RequestData data = U.getRESTRequester().convert(request);
-        if (isRequesting(data.api)) return;
+        if (isRequesting(data.api, data.params)) return;
 
         RequestHandle handle = U.getRESTRequester().request(request,
-                new HandlerWrapper<T>(genCacheKey(data.api, data.params), onResponse));
+                new HandlerWrapper<T>(genKey(data.api, data.params), onResponse));
         mRequestHandles.put(data.api, handle);
     }
 
-    protected final void cancel(String api) {
-        RequestHandle handle = mRequestHandles.get(api);
+    protected final void cancel(String api, RequestParams params) {
+        RequestHandle handle = mRequestHandles.get(genKey(api, params));
         if (handle != null) {
             handle.cancel(true);
             mRequestHandles.remove(api);
@@ -225,23 +247,13 @@ public class BaseActivity extends Activity implements View.OnClickListener {
         return U.dp2px(dp);
     }
 
-    private boolean isRequesting(String api) {
-        RequestHandle executed = mRequestHandles.get(api);
+    private boolean isRequesting(String api, RequestParams params) {
+        RequestHandle executed = mRequestHandles.get(genKey(api, params));
         return executed != null && !executed.isCancelled() && !executed.isFinished();
     }
 
-    private String genCacheKey(String api, RequestParams params) {
+    private String genKey(String api, RequestParams params) {
         return MD5Util.getMD5String((api + params.toString()).getBytes()).toLowerCase();
-    }
-
-    /**
-     * When LogoutEvent fired, finish all activities, except the login activity
-     * @param event the logout event
-     */
-    @Subscribe public void onLogout(Account.LogoutEvent event) {
-        if (!(this instanceof LoginActivity)) {
-            finish();
-        }
     }
 
 }

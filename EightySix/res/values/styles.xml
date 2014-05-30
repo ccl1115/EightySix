@@ -32,7 +32,7 @@
     <style name="Widget.TopBar">
         <item name="android:background">@color/major_head_color</item>
 
-        <item name="titleColor">#FFFFFFFF</item>
+        <item name="titleColor">@android:color/white</item>
         <item name="actionBgSelector">@drawable/top_bar_action_bg_slct</item>
     </style>
 

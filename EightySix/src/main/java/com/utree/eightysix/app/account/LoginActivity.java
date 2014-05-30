@@ -10,6 +10,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import com.squareup.otto.Subscribe;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
@@ -173,5 +175,14 @@ public class LoginActivity extends BaseActivity {
                     }
                 });
         mBtnLogin.setEnabled(false);
+    }
+
+    /**
+     * Do nothing because I'm the login activity
+     * @param event the logout event
+     */
+    @Override
+    @Subscribe
+    public void onLogout(Account.LogoutEvent event) {
     }
 }
