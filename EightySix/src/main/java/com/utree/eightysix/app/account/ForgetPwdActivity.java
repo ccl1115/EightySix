@@ -15,9 +15,8 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.utils.InputValidator;
-import com.utree.eightysix.utils.ViewBinding;
-import static com.utree.eightysix.utils.ViewBinding.OnClick;
-import static com.utree.eightysix.utils.ViewBinding.ViewId;
+import com.utree.eightysix.utils.OnClick;
+import com.utree.eightysix.utils.ViewId;
 
 /**
  */

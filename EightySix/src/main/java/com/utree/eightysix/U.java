@@ -16,11 +16,9 @@ import com.utree.eightysix.statistics.Analyser;
 import com.utree.eightysix.statistics.MtaAnalyserImpl;
 import com.utree.eightysix.storage.Storage;
 import com.utree.eightysix.storage.oss.OSSImpl;
+import com.utree.eightysix.utils.CacheUtils;
 import com.utree.eightysix.utils.ViewBinding;
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -91,7 +89,6 @@ public class U {
     }
 
     private static CacheUtils getCacheUtils() {
-        checkThread();
         if (sCacheUtils == null) {
             sCacheUtils = CacheUtils.inst();
         }

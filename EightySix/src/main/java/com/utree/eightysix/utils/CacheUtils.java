@@ -1,7 +1,8 @@
-package com.utree.eightysix;
+package com.utree.eightysix.utils;
 
 import android.os.Environment;
 import com.jakewharton.disklrucache.DiskLruCache;
+import com.utree.eightysix.U;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -12,13 +13,13 @@ import java.util.Map;
  *
  * @see com.utree.eightysix.U#getApiCache()
  */
-class CacheUtils {
+public class CacheUtils {
 
     private static CacheUtils sInst;
 
     private Map<String, DiskLruCache> mDiskLruCache = new HashMap<String, DiskLruCache>();
 
-    static CacheUtils inst() {
+    public static CacheUtils inst() {
         if (sInst == null) {
             sInst = new CacheUtils();
         }
@@ -27,7 +28,7 @@ class CacheUtils {
 
     private CacheUtils() {}
 
-    DiskLruCache getCache(String dir, int version, int count, long size) {
+    public DiskLruCache getCache(String dir, int version, int count, long size) {
         DiskLruCache cache = mDiskLruCache.get(dir);
         if (cache == null) {
             try {

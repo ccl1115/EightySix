@@ -14,8 +14,8 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.storage.Storage;
-import static com.utree.eightysix.utils.ViewBinding.OnClick;
-import static com.utree.eightysix.utils.ViewBinding.ViewId;
+import com.utree.eightysix.utils.OnClick;
+import com.utree.eightysix.utils.ViewId;
 import de.akquinet.android.androlog.Log;
 
 import java.io.File;

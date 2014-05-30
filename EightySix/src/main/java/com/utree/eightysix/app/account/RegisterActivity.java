@@ -15,20 +15,20 @@ import com.utree.eightysix.request.RegisterRequest;
 import com.utree.eightysix.response.OnResponse;
 import com.utree.eightysix.response.Response;
 import com.utree.eightysix.utils.InputValidator;
-import com.utree.eightysix.utils.ViewBinding;
+import com.utree.eightysix.utils.ViewId;
 
 /**
  */
 @Layout(R.layout.activity_register)
 public class RegisterActivity extends BaseActivity {
 
-    @ViewBinding.ViewId(R.id.et_phone_number)
+    @ViewId(R.id.et_phone_number)
     public EditText mEtPhoneNumber;
 
-    @ViewBinding.ViewId(R.id.et_pwd)
+    @ViewId(R.id.et_pwd)
     public EditText mEtPwd;
 
-    @ViewBinding.ViewId(R.id.btn_register)
+    @ViewId(R.id.btn_register)
     public Button mBtnRegister;
 
     private boolean mCorrectPhoneNumber;

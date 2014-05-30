@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.feed;
 
-import android.os.Build;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.ViewGroup;

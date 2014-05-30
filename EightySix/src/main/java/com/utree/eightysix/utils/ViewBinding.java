@@ -2,26 +2,11 @@ package com.utree.eightysix.utils;
 
 import android.view.View;
 import com.utree.eightysix.BuildConfig;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 
 /**
  */
 public class ViewBinding {
-
-    @Target(ElementType.FIELD)
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface ViewId {
-        int value();
-    }
-
-    @Target(ElementType.FIELD)
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface OnClick {
-    }
 
     public <T> void bind(View view, T target) {
         Field[] fields = target.getClass().getDeclaredFields();

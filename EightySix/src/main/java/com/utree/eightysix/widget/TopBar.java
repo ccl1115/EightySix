@@ -12,7 +12,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.utils.ViewBinding;
+import com.utree.eightysix.utils.OnClick;
+import com.utree.eightysix.utils.ViewId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,18 +26,18 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     private final int mMinimiumTitleWidth;
     private final List<View> mActionViews = new ArrayList<View>();
 
-    @ViewBinding.ViewId(R.id.top_bar_title)
+    @ViewId(R.id.top_bar_title)
     public TextView mTitle;
 
-    @ViewBinding.ViewId(R.id.top_bar_progress)
+    @ViewId(R.id.top_bar_progress)
     public ProgressBar mProgressBar;
 
-    @ViewBinding.ViewId(R.id.top_bar_action_overflow)
-    @ViewBinding.OnClick
+    @ViewId(R.id.top_bar_action_overflow)
+    @OnClick
     public ImageView mActionOverFlow;
 
-    @ViewBinding.ViewId(R.id.top_bar_left_action)
-    @ViewBinding.OnClick
+    @ViewId(R.id.top_bar_left_action)
+    @OnClick
     public ImageView mActionLeft;
 
     public OnClickListener mOnActionOverflowClickListener;

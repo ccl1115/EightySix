@@ -19,21 +19,22 @@ import com.utree.eightysix.response.OnResponse;
 import com.utree.eightysix.response.Response;
 import com.utree.eightysix.response.User;
 import com.utree.eightysix.utils.InputValidator;
-import com.utree.eightysix.utils.ViewBinding;
+import com.utree.eightysix.utils.OnClick;
+import com.utree.eightysix.utils.ViewId;
 
 /**
  */
 @Layout(R.layout.activity_login)
 public class LoginActivity extends BaseActivity {
 
-    @ViewBinding.ViewId(R.id.btn_login)
-    @ViewBinding.OnClick
+    @ViewId(R.id.btn_login)
+    @OnClick
     public Button mBtnLogin;
 
-    @ViewBinding.ViewId(R.id.et_pwd)
+    @ViewId(R.id.et_pwd)
     public EditText mEtPwd;
 
-    @ViewBinding.ViewId(R.id.et_phone_number)
+    @ViewId(R.id.et_phone_number)
     public EditText mEtPhoneNumber;
 
     private boolean mCorrectPhoneNumber;

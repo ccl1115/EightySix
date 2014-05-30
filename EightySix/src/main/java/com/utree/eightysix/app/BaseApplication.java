@@ -25,8 +25,6 @@ public class BaseApplication extends Application {
         super.onCreate();
         sContext = this;
 
-        //StatConfig.setDebugEnable(BuildConfig.DEBUG);
-
         initIMEI();
 
         Log.init(this);

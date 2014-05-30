@@ -5,14 +5,14 @@ import android.widget.ListView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.utils.ViewBinding;
+import com.utree.eightysix.utils.ViewId;
 
 /**
  */
 @Layout(R.layout.activity_feed)
 public class FeedActivity extends BaseActivity {
 
-    @ViewBinding.ViewId(R.id.lv_feed)
+    @ViewId(R.id.lv_feed)
     public ListView mLvFeed;
 
     @Override

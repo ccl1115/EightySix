@@ -3,7 +3,6 @@ package com.utree.eightysix.app.intro;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Interpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -12,25 +11,25 @@ import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
-import com.utree.eightysix.utils.ViewBinding;
+import com.utree.eightysix.utils.ViewId;
 
 /**
  */
 public class IntroActivity extends BaseActivity {
 
-    @ViewBinding.ViewId(R.id.big_logo)
+    @ViewId(R.id.big_logo)
     public ImageView mBigLogo;
 
-    @ViewBinding.ViewId(R.id.app_title)
+    @ViewId(R.id.app_title)
     public TextView mAppTitle;
 
-    @ViewBinding.ViewId(R.id.intro_text)
+    @ViewId(R.id.intro_text)
     public TextView mIntroText;
 
-    @ViewBinding.ViewId(R.id.intro_url)
+    @ViewId(R.id.intro_url)
     public TextView mIntroUrl;
 
-    @ViewBinding.ViewId(R.id.second_layout)
+    @ViewId(R.id.second_layout)
     public LinearLayout mSecondLayout;
 
     @Override

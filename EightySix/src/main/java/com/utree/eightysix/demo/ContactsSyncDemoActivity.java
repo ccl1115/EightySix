@@ -18,7 +18,8 @@ import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.contact.Contact;
 import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
-import com.utree.eightysix.utils.ViewBinding;
+import com.utree.eightysix.utils.OnClick;
+import com.utree.eightysix.utils.ViewId;
 import java.util.List;
 
 /**
@@ -27,19 +28,19 @@ import java.util.List;
 @TopTitle(R.string.title_contacts_sync_demo_activity)
 public class ContactsSyncDemoActivity extends BaseActivity {
 
-    @ViewBinding.ViewId(R.id.btn_cached)
-    @ViewBinding.OnClick
+    @ViewId(R.id.btn_cached)
+    @OnClick
     public Button mBtnCached;
 
-    @ViewBinding.ViewId(R.id.btn_phone)
-    @ViewBinding.OnClick
+    @ViewId(R.id.btn_phone)
+    @OnClick
     public Button mPhone;
 
-    @ViewBinding.ViewId(R.id.btn_sync)
-    @ViewBinding.OnClick
+    @ViewId(R.id.btn_sync)
+    @OnClick
     public Button mSync;
 
-    @ViewBinding.ViewId(R.id.lv_contacts)
+    @ViewId(R.id.lv_contacts)
     public ListView mLvContacts;
 
     public void onCreate(Bundle savedInstanceState) {

@@ -7,7 +7,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
-import com.utree.eightysix.utils.ViewBinding;
+import com.utree.eightysix.utils.ViewId;
 
 /**
  */
@@ -15,7 +15,7 @@ import com.utree.eightysix.utils.ViewBinding;
 @TopTitle(R.string.get_lock_pattern)
 public class GetLockpatternActivity extends BaseActivity {
 
-    @ViewBinding.ViewId(R.id.btn_start_find)
+    @ViewId(R.id.btn_start_find)
     public Button mBtnStartFind;
 
     public void onCreate(Bundle savedInstanceState) {
