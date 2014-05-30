@@ -70,11 +70,18 @@
             android:visibility="gone"
             android:id="@+id/second_layout">
 
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/intro_2"/>
+
         <view
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 class="com.utree.eightysix.widget.lockpattern.LockPatternView"
-                android:id="@+id/view"
+                android:id="@+id/lock_pattern"
                 android:layout_margin="16dp"/>
 
         <LinearLayout
@@ -85,8 +92,8 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="获取手势密码"
-                    android:id="@+id/textView"
+                    android:text="@string/get_pattern"
+                    android:id="@+id/tv_get_pattern"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:padding="5dp"/>
@@ -94,8 +101,8 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="其他账号登录"
-                    android:id="@+id/textView2"
+                    android:text="@string/other_login"
+                    android:id="@+id/tv_login"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:padding="5dp"/>

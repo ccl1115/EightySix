@@ -3,6 +3,7 @@ package com.utree.eightysix.request;
 /**
  */
 @Request("/login/login.do")
+@Method(Method.METHOD.POST)
 public class LoginRequest {
 
     @Param("phone")

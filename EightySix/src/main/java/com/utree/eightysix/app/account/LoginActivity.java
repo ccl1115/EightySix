@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.account;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,7 +10,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
@@ -37,6 +37,10 @@ public class LoginActivity extends BaseActivity {
     @ViewId(R.id.et_phone_number)
     public EditText mEtPhoneNumber;
 
+    @ViewId(R.id.tv_register)
+    @OnClick
+    public TextView mBtnRegister;
+
     private boolean mCorrectPhoneNumber;
 
     private boolean mCorrectPwd;
@@ -52,6 +56,9 @@ public class LoginActivity extends BaseActivity {
         switch (id) {
             case R.id.btn_login:
                 requestLogin();
+                break;
+            case R.id.tv_register:
+                startActivity(new Intent(this, RegisterActivity.class));
                 break;
             default:
                 break;
@@ -73,7 +80,8 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > mPhoneNumberLength) {
-                    mEtPhoneNumber.setText(s.subSequence(0, mPhoneNumberLength));
+                    s = s.subSequence(0, mPhoneNumberLength);
+                    mEtPhoneNumber.setText(s);
                     mEtPhoneNumber.setSelection(11);
                 }
 
@@ -134,16 +142,23 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void requestLogin() {
-        request(new LoginRequest("18478737847", "test-password"), new OnResponse<Response<User>>() {
-            @Override
-            public void onResponse(Response<User> response) {
-                if (response.code == 0) {
-                    finish();
-                } else {
-                    Toast.makeText(LoginActivity.this, response.message, Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+        request(new LoginRequest(mEtPhoneNumber.getText().toString(), mEtPwd.getText().toString()),
+                new OnResponse<Response<User>>() {
+                    @Override
+                    public void onResponse(Response<User> response) {
+                        if (response != null) {
+                            if (response.code == 0) {
+                                finish();
+                            } else {
+                                showToast(response.message);
+                                mBtnLogin.setEnabled(true);
+                            }
+                        } else {
+                            showToast(R.string.server_error);
+                            mBtnLogin.setEnabled(true);
+                        }
+                    }
+                });
         mBtnLogin.setEnabled(false);
     }
 }

@@ -37,7 +37,6 @@ public class C {
         /**
          * Tag for RESTRequest
          */
-
         public static final String RR = "RESTRequest";
     }
 }

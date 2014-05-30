@@ -6,23 +6,20 @@ import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import com.aliyun.android.util.MD5Util;
-import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
-import com.utree.eightysix.C;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.request.HandlerWrapper;
 import com.utree.eightysix.request.RESTRequester;
 import com.utree.eightysix.response.OnResponse;
 import com.utree.eightysix.response.Response;
-import com.utree.eightysix.utils.JsonHttpResponseHandler;
 import com.utree.eightysix.widget.TopBar;
 import de.akquinet.android.androlog.Log;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.http.Header;
 
 /**
  */
@@ -35,6 +32,8 @@ public class BaseActivity extends Activity implements View.OnClickListener {
     private ViewGroup mBaseView;
     private TopBar mTopBar;
 
+    private Toast mToast;
+
     private boolean mResumed;
 
     @Override
@@ -46,6 +45,22 @@ public class BaseActivity extends Activity implements View.OnClickListener {
                 openOptionsMenu();
                 break;
         }
+    }
+
+    protected void showToast(int res) {
+        if (mToast != null) {
+            mToast.cancel();
+        }
+        mToast = Toast.makeText(this, res, Toast.LENGTH_SHORT);
+        mToast.show();
+    }
+
+    protected void showToast(String string) {
+        if (mToast != null) {
+            mToast.cancel();
+        }
+        mToast = Toast.makeText(this, string, Toast.LENGTH_SHORT);
+        mToast.show();
     }
 
     protected final Handler getHandler() {
@@ -92,6 +107,8 @@ public class BaseActivity extends Activity implements View.OnClickListener {
     protected void onDestroy() {
         cancelAll();
 
+        if (mToast != null) mToast.cancel();
+
         super.onDestroy();
     }
 
@@ -104,8 +121,8 @@ public class BaseActivity extends Activity implements View.OnClickListener {
         View inflate = View.inflate(this, layoutResID, null);
         inflate.setId(R.id.content);
         mBaseView.addView(inflate,
-                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
-                        ViewGroup.LayoutParams.FILL_PARENT, 1.0f)
+                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT, 1.0f)
         );
 
         U.viewBinding(findViewById(R.id.content), this);
@@ -210,43 +227,4 @@ public class BaseActivity extends Activity implements View.OnClickListener {
         return MD5Util.getMD5String((api + params.toString()).getBytes()).toLowerCase();
     }
 
-    /**
-     * Wrapper class use to cache response data automatically
-     *
-     */
-    private static class HandlerWrapper<T> extends JsonHttpResponseHandler<Response<T>> {
-
-        private String mKey;
-        private OnResponse<Response<T>> mOnResponse;
-
-        public HandlerWrapper(String key, OnResponse<Response<T>> onResponse) {
-            mKey = key;
-            mOnResponse = onResponse;
-        }
-
-        @Override
-        public void onSuccess(int statusCode, Header[] headers, String rawResponse, Response<T> response) {
-            Log.d(C.TAG.RR, "response: " + rawResponse);
-            if (response != null) {
-                try {
-                    U.getApiCache().edit(mKey).set(0, rawResponse);
-                } catch (IOException e) {
-                    U.getAnalyser().reportException(U.getContext(), e);
-                }
-                mOnResponse.onResponse(response);
-            } else {
-                mOnResponse.onResponse(null);
-            }
-        }
-
-        @Override
-        public void onFailure(int statusCode, Header[] headers, Throwable e, String rawData, Response<T> errorResponse) {
-            mOnResponse.onResponse(null);
-        }
-
-        @Override
-        public Response<T> parseResponse(String responseBody) throws Throwable {
-            return U.getGson().fromJson(responseBody, new TypeToken<Response<T>>() {}.getType());
-        }
-    }
 }

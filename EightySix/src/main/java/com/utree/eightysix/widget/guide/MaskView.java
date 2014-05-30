@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Region;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -215,9 +216,7 @@ class MaskView extends ViewGroup {
 		final long drawingTime = getDrawingTime();
 		canvas.save();
 		// FIXME
-		// if (!mOverlayTarget) {
-		// canvas.clipRect(mTargetRect, Region.Op.DIFFERENCE);
-		// }
+        canvas.clipRect(mTargetRect, Region.Op.DIFFERENCE);
 		canvas.drawRect(mFullingRect, mFullingPaint);
 		canvas.restore();
 

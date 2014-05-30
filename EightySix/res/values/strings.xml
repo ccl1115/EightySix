@@ -17,9 +17,10 @@
     <string name="cancel">取消</string>
     <string name="done">完成</string>
     <string name="settings">设置</string>
+    <string name="server_error">服务器错误</string>
 
     <!-- Action -->
-    <string name="action_settings">@string/action_settings</string>
+    <string name="action_settings">@string/settings</string>
 
 
     <!-- ContentDescription -->
@@ -29,6 +30,10 @@
 
     <!-- IntroActivity -->
     <string name="intro_1">劳动者自己的匿名工友圈</string>
+    <string name="intro_2">介绍人发给你的手势密码</string>
+    <string name="get_pattern">获取手势密码</string>
+    <string name="other_login">其他账号登录</string>
+    <string name="wrong_pattern">解锁手势输入错误</string>
 
 
     <!-- RegisterActivity -->
