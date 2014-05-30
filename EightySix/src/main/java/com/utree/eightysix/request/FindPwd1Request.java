@@ -10,4 +10,8 @@ public class FindPwd1Request {
 
     @Param("phone")
     public String phone;
+
+    public FindPwd1Request(String phone) {
+        this.phone = phone;
+    }
 }

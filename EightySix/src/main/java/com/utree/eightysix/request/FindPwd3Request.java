@@ -9,4 +9,8 @@ public class FindPwd3Request {
 
     @Param("new_password")
     public String newPassword;
+
+    public FindPwd3Request(String newPassword) {
+        this.newPassword = newPassword;
+    }
 }

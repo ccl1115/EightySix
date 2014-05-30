@@ -10,4 +10,8 @@ public class FindPwd2Request {
 
     @Param("validateCode")
     public String validateCode;
+
+    public FindPwd2Request(String validateCode) {
+        this.validateCode = validateCode;
+    }
 }
