@@ -210,7 +210,7 @@ public class BaseActivity extends Activity implements View.OnClickListener {
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    mTopBar.setVisibility(View.GONE);
+                    mTopBar.setVisibility(View.INVISIBLE);
                 }
 
                 @Override
@@ -226,7 +226,7 @@ public class BaseActivity extends Activity implements View.OnClickListener {
             animator.setDuration(500);
             animator.start();
         } else {
-            mTopBar.setVisibility(View.GONE);
+            mTopBar.setVisibility(View.INVISIBLE);
         }
     }
 
