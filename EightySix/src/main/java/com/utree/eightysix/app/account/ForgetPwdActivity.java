@@ -30,10 +30,6 @@ public class ForgetPwdActivity extends BaseActivity {
     @ViewId(R.id.et_phone_number)
     public EditText mEtPhoneNumber;
 
-    @ViewId(R.id.btn_ok_1)
-    @OnClick
-    public Button mBtnOk1;
-
     @ViewId(R.id.page_2)
     public LinearLayout mPage2;
 
@@ -75,9 +71,9 @@ public class ForgetPwdActivity extends BaseActivity {
                 }
 
                 if (InputValidator.phoneNumber(s)) {
-                    mBtnOk1.setEnabled(true);
+                    mBtnOk2.setEnabled(true);
                 } else {
-                    mBtnOk1.setEnabled(false);
+                    mBtnOk2.setEnabled(false);
                 }
             }
 
@@ -155,8 +151,6 @@ public class ForgetPwdActivity extends BaseActivity {
         final int id = v.getId();
 
         switch (id) {
-            case R.id.btn_ok_1:
-                break;
             case R.id.btn_ok_2:
                 break;
             case R.id.btn_done:

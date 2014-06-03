@@ -29,10 +29,10 @@
             android:singleLine="true"
             android:numeric="integer"
             android:minLines="1"
-            android:text="3333"
             android:imeOptions="actionGo"/>
 
     <Button
+            style="@style/Widget.Button.Small.AppTheme"
             android:id="@+id/btn_send"
             android:layout_gravity="center_vertical"
             android:layout_alignParentRight="true"
