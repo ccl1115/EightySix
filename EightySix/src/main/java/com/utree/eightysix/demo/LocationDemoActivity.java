@@ -33,11 +33,11 @@ public class LocationDemoActivity extends BaseActivity implements Location.OnRes
         getHandler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                showProgressBar();
                 U.getLocation().requestLocation();
             }
         }, REQUEST_LOCATION_DELAY_MILLIS);
 
-        showProgressBar();
     }
 
     @Override

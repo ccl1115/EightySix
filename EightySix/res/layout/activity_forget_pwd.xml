@@ -4,16 +4,16 @@
              android:orientation="vertical"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             android:paddingLeft="@dimen/activity_horizontal_margin"
-             android:paddingRight="@dimen/activity_horizontal_margin"
-        >
+             android:paddingLeft="16dp"
+             android:paddingRight="16dp"
+             android:paddingTop="39dp">
 
     <LinearLayout
             android:id="@+id/page_1"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
         <include layout="@layout/widget_phone_number"/>
 
@@ -32,15 +32,18 @@
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:visibility="visible">
+            android:visibility="gone">
 
-        <include layout="@layout/widget_pwd"/>
+        <include layout="@layout/widget_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"/>
 
         <Button
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/done"
-                android:id="@+id/btn_ok_2"
+                android:id="@+id/btn_done"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="25dp"/>
 

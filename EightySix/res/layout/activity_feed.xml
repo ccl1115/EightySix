@@ -10,7 +10,9 @@
             android:id="@+id/lv_feed"
             android:dividerHeight="25dp"
             android:divider="@null"
+            android:fadingEdge="none"
             android:drawSelectorOnTop="false"
+            android:listSelector="@android:color/transparent"
             android:smoothScrollbar="true"/>
 
     <ImageButton

@@ -14,28 +14,27 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/get_lockpattern_1"
-            android:id="@+id/textView"
+            android:textColor="@android:color/white"
             android:layout_gravity="center_horizontal"
-            android:background="@android:color/darker_gray"
-            android:paddingLeft="15dp"
-            android:paddingTop="30dp"
-            android:paddingRight="15dp"
-            android:paddingBottom="30dp"/>
+            android:background="@color/apptheme_secondary_light_color"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingTop="35dp"
+            android:paddingBottom="60dp"/>
 
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/get_lockpattern_2"
-            android:id="@+id/textView2"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="50dp"/>
+            android:layout_marginTop="25dp"/>
 
     <Button
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/start_find"
             android:id="@+id/btn_start_find"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="15dp"
-            android:singleLine="false"/>
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="15dp"/>
 </LinearLayout>

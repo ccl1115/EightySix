@@ -1,13 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <com.utree.eightysix.widget.TopBar
             android:id="@+id/top_bar"
             android:layout_width="fill_parent"
-            android:layout_height="48dp"
+            android:layout_height="@dimen/activity_top_bar_height"
             android:layout_gravity="center_horizontal"/>
-</LinearLayout>
+
+    <FrameLayout
+            android:id="@+id/progress_bar"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/apptheme_progress_loading_bg">
+
+        <FrameLayout
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="55dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+        </FrameLayout>
+    </FrameLayout>
+</RelativeLayout>

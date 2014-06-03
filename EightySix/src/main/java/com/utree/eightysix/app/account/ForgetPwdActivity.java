@@ -30,28 +30,22 @@ public class ForgetPwdActivity extends BaseActivity {
     @ViewId(R.id.et_phone_number)
     public EditText mEtPhoneNumber;
 
-    @ViewId(R.id.page_2)
-    public LinearLayout mPage2;
-
-    @ViewId(R.id.tv_notice)
-    public TextView mTVNotice;
-
     @ViewId(R.id.et_captcha)
     public EditText mEtCaptcha;
 
-    @ViewId(R.id.btn_ok_2)
-    @OnClick
-    public Button mBtnOk2;
+    @ViewId(R.id.page_2)
+    public LinearLayout mPage2;
 
-    @ViewId(R.id.page_3)
-    public LinearLayout mPage3;
+    @ViewId(R.id.btn_send)
+    public Button mSendCaptcha;
 
-    @ViewId(R.id.et_new_pwd)
+    @ViewId(R.id.et_pwd)
     public EditText mEtNewPwd;
 
     @ViewId(R.id.btn_done)
     @OnClick
     public Button mBtnDone;
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,9 +65,9 @@ public class ForgetPwdActivity extends BaseActivity {
                 }
 
                 if (InputValidator.phoneNumber(s)) {
-                    mBtnOk2.setEnabled(true);
+                    mBtnDone.setEnabled(true);
                 } else {
-                    mBtnOk2.setEnabled(false);
+                    mBtnDone.setEnabled(false);
                 }
             }
 
@@ -92,9 +86,9 @@ public class ForgetPwdActivity extends BaseActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (TextUtils.isEmpty(s)) {
-                    mBtnOk2.setEnabled(false);
+                    mBtnDone.setEnabled(false);
                 } else {
-                    mBtnOk2.setEnabled(true);
+                    mBtnDone.setEnabled(true);
                 }
             }
 
@@ -129,19 +123,11 @@ public class ForgetPwdActivity extends BaseActivity {
     private void showPage1() {
         mPage1.setVisibility(View.VISIBLE);
         mPage2.setVisibility(View.GONE);
-        mPage3.setVisibility(View.GONE);
     }
 
     private void showPage2() {
         mPage1.setVisibility(View.GONE);
         mPage2.setVisibility(View.VISIBLE);
-        mPage3.setVisibility(View.GONE);
-    }
-
-    private void showPage3() {
-        mPage1.setVisibility(View.GONE);
-        mPage2.setVisibility(View.GONE);
-        mPage3.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -151,7 +137,7 @@ public class ForgetPwdActivity extends BaseActivity {
         final int id = v.getId();
 
         switch (id) {
-            case R.id.btn_ok_2:
+            case R.id.btn_ok_1:
                 break;
             case R.id.btn_done:
                 break;

@@ -5,22 +5,26 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.aliyun.android.util.MD5Util;
 import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.app.account.LoginActivity;
 import com.utree.eightysix.request.HandlerWrapper;
 import com.utree.eightysix.request.RESTRequester;
 import com.utree.eightysix.response.OnResponse;
 import com.utree.eightysix.response.Response;
 import com.utree.eightysix.widget.TopBar;
 import de.akquinet.android.androlog.Log;
+import java.awt.Frame;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,6 +50,7 @@ public class BaseActivity extends Activity implements View.OnClickListener {
 
     private ViewGroup mBaseView;
     private TopBar mTopBar;
+    private FrameLayout mProgressBar;
 
     private Toast mToast;
 
@@ -97,11 +102,12 @@ public class BaseActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
 
         mBaseView = (ViewGroup) View.inflate(this, R.layout.activity_base, null);
-        mTopBar = (TopBar) mBaseView.findViewById(R.id.top_bar);
+        super.setContentView(mBaseView);
 
+        mTopBar = (TopBar) mBaseView.findViewById(R.id.top_bar);
         mTopBar.setOnActionOverflowClickListener(this);
 
-        super.setContentView(mBaseView);
+        mProgressBar = (FrameLayout) mBaseView.findViewById(R.id.progress_bar);
 
         Layout layout = getClass().getAnnotation(Layout.class);
 
@@ -149,10 +155,12 @@ public class BaseActivity extends Activity implements View.OnClickListener {
         }
         View inflate = View.inflate(this, layoutResID, null);
         inflate.setId(R.id.content);
-        mBaseView.addView(inflate,
-                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT, 1.0f)
-        );
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+
+        params.topMargin = getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
+
+        mBaseView.addView(inflate, params);
 
         U.viewBinding(findViewById(R.id.content), this);
 
@@ -170,10 +178,10 @@ public class BaseActivity extends Activity implements View.OnClickListener {
             mBaseView.removeView(content);
         }
         contentView.setId(R.id.content);
-        mBaseView.addView(contentView,
-                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
-                        ViewGroup.LayoutParams.FILL_PARENT, 1.0f)
-        );
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        params.topMargin = getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
+        mBaseView.addView(contentView, params);
     }
 
     @Override
@@ -192,11 +200,44 @@ public class BaseActivity extends Activity implements View.OnClickListener {
     }
 
     protected final void hideTopBar(boolean animate) {
-        mTopBar.setVisibility(View.GONE);
+        if (animate) {
+            ObjectAnimator animator = ObjectAnimator.ofFloat(mTopBar, "translationY", 0, -mTopBar.getMeasuredHeight());
+            animator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mTopBar.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+            animator.setDuration(500);
+            animator.start();
+        } else {
+            mTopBar.setVisibility(View.GONE);
+        }
     }
 
     protected final void showTopBar(boolean animate) {
         mTopBar.setVisibility(View.VISIBLE);
+        if (animate) {
+            ObjectAnimator animator =
+                    ObjectAnimator.ofFloat(mTopBar, "translationY", -mTopBar.getMeasuredHeight(), 0f);
+            animator.setDuration(500);
+            animator.start();
+        }
     }
 
     protected final String getTopTitle() {
@@ -216,11 +257,39 @@ public class BaseActivity extends Activity implements View.OnClickListener {
     }
 
     protected final void showProgressBar() {
-        mTopBar.showProgressBar();
+        mProgressBar.setVisibility(View.VISIBLE);
+        ObjectAnimator animator =
+                ObjectAnimator.ofFloat(mProgressBar, "translationY", mProgressBar.getMeasuredHeight(), 0);
+        animator.setDuration(500);
+        animator.start();
     }
 
     protected final void hideProgressBar() {
-        mTopBar.hideProgressBar();
+        ObjectAnimator animator =
+                ObjectAnimator.ofFloat(mProgressBar, "translationY", 0, mProgressBar.getMeasuredHeight());
+        animator.setDuration(500);
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mProgressBar.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        animator.start();
     }
 
     protected final TopBar getTopBar() {

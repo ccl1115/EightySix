@@ -26,6 +26,7 @@
         <item name="android:editTextStyle">@style/Widget.EditText.AppTheme</item>
         <item name="android:checkboxStyle">@style/Widget.CheckBox.AppTheme</item>
         <item name="android:radioButtonStyle">@style/Widget.RadioButton.AppTheme</item>
+        <item name="android:progressBarStyle">@style/Widget.ProgressBar.AppTheme</item>
 
         <item name="alp_drawable_btn_code_lock_default_holo">@drawable/alp_btn_default_dot</item>
         <item name="alp_drawable_btn_code_lock_touched_holo">@drawable/alp_btn_touch_dot</item>
