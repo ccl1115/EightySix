@@ -16,7 +16,7 @@ public class Post {
     public int comments;
 
     @SerializedName("countPraise")
-    public int count;
+    public int praise;
 
     @SerializedName("id")
     public int id;

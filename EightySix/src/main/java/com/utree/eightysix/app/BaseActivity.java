@@ -207,6 +207,14 @@ public class BaseActivity extends Activity implements View.OnClickListener {
         mTopBar.setTitle(title);
     }
 
+    protected final String getTopSubTitle() {
+        return mTopBar.getSubTitle();
+    }
+
+    protected final void setTopSubTitle(String title) {
+        mTopBar.setSubTitle(title);
+    }
+
     protected final void showProgressBar() {
         mTopBar.showProgressBar();
     }

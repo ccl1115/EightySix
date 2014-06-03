@@ -3,5 +3,4 @@
     <drawable name="transparent">@android:color/transparent</drawable>
 
     <drawable name="top_bar_action_bg">@drawable/transparent</drawable>
-    <drawable name="top_bar_action_bg_pressed">@color/major_head_color_pressed</drawable>
 </resources>

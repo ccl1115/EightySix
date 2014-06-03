@@ -20,4 +20,5 @@ public class Comment {
 
     @SerializedName("userAvatar")
     public String avatar;
+
 }

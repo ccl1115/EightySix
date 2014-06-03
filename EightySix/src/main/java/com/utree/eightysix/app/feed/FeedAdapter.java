@@ -7,8 +7,8 @@ import android.widget.BaseAdapter;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
-import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.widget.PostView;
 
 /**
  */

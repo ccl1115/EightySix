@@ -16,23 +16,10 @@
             android:orientation="vertical"
             android:visibility="visible">
 
-        <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="phone"
-                android:ems="10"
-                android:id="@+id/et_phone_number"
-                android:layout_gravity="center_horizontal"
-                android:phoneNumber="true"
-                android:hint="@string/phone_number"/>
+        <include layout="@layout/widget_phone_number"/>
 
-        <Button
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/find_password"
-                android:id="@+id/btn_ok_1"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="15dp"/>
+        <include layout="@layout/widget_captcha"/>
+
     </LinearLayout>
 
     <LinearLayout

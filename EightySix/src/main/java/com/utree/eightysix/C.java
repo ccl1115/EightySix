@@ -10,11 +10,6 @@ import java.util.Map;
  */
 public class C {
 
-    /**
-     * Registered API
-     */
-    public static final Map<String, String> API = new HashMap<String, String>();
-
     public static final String API_LOGIN = "/login/login.do";
     public static final String API_REG = "/login/reg.do";
     public static final String API_SHOW_INFO = "/login/showInfo.do";

@@ -8,7 +8,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -23,14 +22,13 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     private static final int MINIMIUM_TITLE_WIDTH = 60;
 
-    private final int mMinimiumTitleWidth;
     private final List<View> mActionViews = new ArrayList<View>();
 
     @ViewId(R.id.top_bar_title)
     public TextView mTitle;
 
-    @ViewId(R.id.top_bar_progress)
-    public ProgressBar mProgressBar;
+    @ViewId(R.id.top_bar_sub_title)
+    public TextView mSubTitle;
 
     @ViewId(R.id.top_bar_action_overflow)
     @OnClick
@@ -58,7 +56,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
         final float density = getResources().getDisplayMetrics().density;
 
-        mMinimiumTitleWidth = (int) (MINIMIUM_TITLE_WIDTH * density + 0.5f);
+        int minimumTitleWidth = (int) (MINIMIUM_TITLE_WIDTH * density + 0.5f);
 
         View.inflate(context, R.layout.widget_top_bar, this);
         U.viewBinding(this, this);
@@ -68,10 +66,11 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
         mTitle.setTextColor(ta.getColor(R.styleable.TopBar_titleColor, Color.GRAY));
 
         mActionBgDrawableId = ta.getResourceId(R.styleable.TopBar_actionBgSelector, 0);
-        mActionOverFlow.setBackgroundDrawable(getResources().getDrawable(mActionBgDrawableId));
+        if (mActionBgDrawableId != 0) {
+            mActionOverFlow.setBackgroundDrawable(getResources().getDrawable(mActionBgDrawableId));
+        }
         mActionOverFlow.setOnClickListener(this);
 
-        mProgressBar.setVisibility(GONE);
     }
 
     public String getTitle() {
@@ -87,16 +86,18 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
         }
     }
 
+    public String getSubTitle() {
+        return mSubTitle.getText().toString();
+    }
+
+    public void setSubTitle(String subTitle) {
+        mSubTitle.setText(subTitle);
+    }
+
     public void showProgressBar() {
-        if (mProgressBar != null) {
-            mProgressBar.setVisibility(VISIBLE);
-        }
     }
 
     public void hideProgressBar() {
-        if (mProgressBar != null) {
-            mProgressBar.setVisibility(GONE);
-        }
     }
 
     public void setActionAdapter(ActionAdapter actionAdapter) {
@@ -185,12 +186,6 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
             }
         }
 
-        if (mProgressBar.getVisibility() == GONE || widthLeft < heightSize) {
-            mProgressBar.measure(MeasureSpec.EXACTLY, MeasureSpec.EXACTLY);
-        } else {
-            mProgressBar.measure(heightSize + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
-        }
-        widthLeft -= mProgressBar.getMeasuredWidth();
 
         mTitle.measure(widthLeft + MeasureSpec.AT_MOST, heightSize + MeasureSpec.EXACTLY);
 
@@ -210,10 +205,6 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
         right -= mActionOverFlow.getMeasuredWidth();
 
-        mProgressBar.layout(right - mProgressBar.getMeasuredWidth(), 0, right, b);
-
-        right -= mProgressBar.getMeasuredWidth();
-
         if (mCurCount != 0) {
             for (View child : mActionViews) {
                 child.layout(right - child.getMeasuredWidth(), 0, right, b);
@@ -229,7 +220,9 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
         imageView.setImageDrawable(drawable);
         imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         imageView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        imageView.setBackgroundDrawable(getResources().getDrawable(mActionBgDrawableId));
+        if (mActionBgDrawableId != 0) {
+            imageView.setBackgroundDrawable(getResources().getDrawable(mActionBgDrawableId));
+        }
         imageView.setOnClickListener(this);
 
         return imageView;
