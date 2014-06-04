@@ -19,7 +19,7 @@
                 android:text="a你好你啊好你好你啊好你好你啊好你好你啊好你好你啊好你好你啊好你好你啊好你好你啊好你好你啊好你好你啊好你好你啊好你好你啊好"
                 android:textSize="22sp"
                 android:padding="45dp"
-                android:background="@drawable/apptheme_btn_light"/>
+                android:background="@drawable/bpush_top_bg"/>
 
         <LinearLayout
                 android:orientation="horizontal"

@@ -22,7 +22,7 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <item name="android:windowNoTitle">true</item>
         <item name="topBarStyle">@style/Widget.TopBar.AppTheme</item>
-        <item name="roundedButtonStyle">@style/Widget.RoundedButton</item>
+        <item name="roundedButtonStyle">@style/Widget.RoundedButton.Apptheme</item>
         <item name="android:editTextStyle">@style/Widget.EditText.AppTheme</item>
         <item name="android:checkboxStyle">@style/Widget.CheckBox.AppTheme</item>
         <item name="android:radioButtonStyle">@style/Widget.RadioButton.AppTheme</item>

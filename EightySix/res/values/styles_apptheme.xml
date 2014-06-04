@@ -13,11 +13,9 @@
     </style>
 
     <style name="Widget.CheckBox.AppTheme" parent="android:Widget.CompoundButton.CheckBox">
-        <item name="android:button">@drawable/apptheme_btn_check_holo_light</item>
     </style>
 
     <style name="Widget.RadioButton.AppTheme" parent="android:Widget.CompoundButton.RadioButton">
-        <item name="android:button">@drawable/apptheme_btn_radio_holo_light</item>
     </style>
 
     <style name="Widget.TopBar"/>
@@ -27,8 +25,8 @@
         <item name="titleColor">@android:color/white</item>
     </style>
 
-    <style name="Widget.Button.Small.AppTheme" parent="android:Widget.Button.Small">
-        <item name="android:background">#FFF7F7F7</item>
+    <style name="Widget.RoundedButton.Apptheme.Small">
+        <item name="background">#FFF7F7F7</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/apptheme_primary_text_light</item>
         <item name="android:minWidth">110dp</item>
@@ -39,11 +37,14 @@
 
     <style name="Widget.ProgressBar.AppTheme" parent="android:Widget.ProgressBar"/>
 
-    <style name="Widget.RoundedButton">
+    <style name="Widget.RoundedButton"/>
+
+    <style name="Widget.RoundedButton.Apptheme">
         <item name="android:gravity">center</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">16sp</item>
         <item name="android:minHeight">48dp</item>
         <item name="android:clickable">true</item>
     </style>
+
 </resources>

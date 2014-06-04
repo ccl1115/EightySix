@@ -39,7 +39,10 @@ public final class RoundedButton extends TextView {
 
         mBackgroundPaint.setAntiAlias(true);
         mBackgroundPaint.setDither(true);
-        mBackgroundPaint.setColor(mColorStateList.getColorForState(getDrawableState(), 0));
+
+        if (mColorStateList != null) {
+            mBackgroundPaint.setColor(mColorStateList.getColorForState(getDrawableState(), 0));
+        }
     }
 
     @Override
