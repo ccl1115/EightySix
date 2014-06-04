@@ -34,11 +34,13 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     @OnClick
     public ImageView mActionOverFlow;
 
-    @ViewId(R.id.top_bar_left_action)
+    @ViewId(R.id.top_bar_action_left)
     @OnClick
     public ImageView mActionLeft;
 
-    public OnClickListener mOnActionOverflowClickListener;
+    private OnClickListener mOnActionOverflowClickListener;
+    private OnClickListener mOnActionLeftClickListener;
+
     private ActionAdapter mActionAdapter;
     private int mCurCount;
     private int mActionBgDrawableId;
@@ -71,6 +73,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
         }
         mActionOverFlow.setOnClickListener(this);
 
+        mActionLeft.setOnClickListener(this);
     }
 
     public String getTitle() {
@@ -125,6 +128,10 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
         mOnActionOverflowClickListener = onClickListener;
     }
 
+    public void setOnActionLeftClickListener(OnClickListener onClickListener) {
+        mOnActionLeftClickListener = onClickListener;
+    }
+
     @Override
     public void onClick(View v) {
 
@@ -136,6 +143,10 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
                     mOnActionOverflowClickListener.onClick(v);
                 }
                 break;
+            case R.id.top_bar_action_left:
+                if (mOnActionLeftClickListener != null) {
+                    mOnActionLeftClickListener.onClick(v);
+                }
             default:
                 for (int i = 0; i < mActionViews.size(); i++) {
                     View view = mActionViews.get(i);

@@ -19,6 +19,7 @@
     <string name="done">完成</string>
     <string name="settings">设置</string>
     <string name="server_error">服务器错误</string>
+    <string name="more">更多</string>
 
     <!-- Action -->
     <string name="action_settings">@string/settings</string>

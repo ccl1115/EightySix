@@ -28,7 +28,7 @@
             android:id="@+id/tv_register"
             android:layout_gravity="right"
             android:layout_marginTop="15dp"
-            android:textColor="@color/apptheme_primary_green_text_light"
+            android:textColor="@color/apptheme_primary_btn_light"
             android:layout_marginRight="2dp"/>
 
     <TextView
@@ -38,6 +38,6 @@
             android:layout_gravity="right"
             android:layout_marginTop="15dp"
             android:text="@string/forget_pwd"
-            android:textColor="@color/apptheme_primary_green_text_light"
+            android:textColor="@color/apptheme_primary_btn_light"
             android:layout_marginRight="2dp"/>
 </LinearLayout>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
@@ -32,7 +33,9 @@
             android:layout_marginTop="25dp"
             android:textSize="12sp"/>
 
-    <Button
+    <com.utree.eightysix.widget.RoundedButton
+            app:radius="2dp"
+            app:background="@color/apptheme_primary_btn_light"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/find_friend"

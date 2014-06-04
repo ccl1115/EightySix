@@ -6,7 +6,7 @@
         android:layout_height="wrap_content">
 
     <ImageView
-            android:id="@+id/top_bar_left_action"
+            android:id="@+id/top_bar_action_left"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:src="@drawable/ic_drawer"

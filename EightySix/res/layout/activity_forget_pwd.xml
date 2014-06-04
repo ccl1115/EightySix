@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
              android:orientation="vertical"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
@@ -17,14 +18,22 @@
 
         <include layout="@layout/widget_phone_number"/>
 
-        <include layout="@layout/widget_captcha"/>
+        <include
+                layout="@layout/widget_captcha"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"/>
 
-        <Button
+        <com.utree.eightysix.widget.RoundedButton
                 android:id="@+id/btn_ok_1"
                 android:text="@string/okay"
                 android:layout_marginTop="25dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                app:radius="2dp"
+                app:background="@color/apptheme_primary_btn_light"/>
     </LinearLayout>
 
     <LinearLayout
@@ -34,7 +43,8 @@
             android:layout_height="fill_parent"
             android:visibility="gone">
 
-        <include layout="@layout/widget_pwd"
+        <include
+                layout="@layout/widget_pwd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"/>
