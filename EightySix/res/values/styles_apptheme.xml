@@ -47,4 +47,13 @@
         <item name="android:clickable">true</item>
     </style>
 
+    <style name="Widget.PostEditText"/>
+
+    <style name="Widget.PostEditText.Apptheme" parent="android:Widget.EditText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@android:color/white</item>
+    </style>
+
+
 </resources>

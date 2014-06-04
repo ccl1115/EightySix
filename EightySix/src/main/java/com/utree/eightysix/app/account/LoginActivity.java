@@ -24,6 +24,7 @@ import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.utils.OnClick;
 import com.utree.eightysix.utils.ViewId;
+import com.utree.eightysix.widget.RoundedButton;
 
 /**
  */
@@ -32,7 +33,7 @@ public class LoginActivity extends BaseActivity {
 
     @ViewId(R.id.btn_login)
     @OnClick
-    public Button mBtnLogin;
+    public RoundedButton mBtnLogin;
 
     @ViewId(R.id.et_pwd)
     public EditText mEtPwd;

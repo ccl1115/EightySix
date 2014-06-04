@@ -67,6 +67,12 @@
             <groupId>com.squareup</groupId>
             <artifactId>otto</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.michaelevans.colorart</groupId>
+            <artifactId>library</artifactId>
+            <type>aar</type>
+        </dependency>
     </dependencies>
 
 	<build>

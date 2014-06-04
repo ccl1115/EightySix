@@ -19,6 +19,7 @@ import com.utree.eightysix.response.Response;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.utils.OnClick;
 import com.utree.eightysix.utils.ViewId;
+import com.utree.eightysix.widget.RoundedButton;
 
 /**
  */
@@ -33,7 +34,7 @@ public class RegisterActivity extends BaseActivity {
 
     @ViewId(R.id.btn_register)
     @OnClick
-    public Button mBtnRegister;
+    public RoundedButton mBtnRegister;
 
     @ViewId(R.id.tv_login)
     @OnClick
