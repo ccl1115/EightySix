@@ -3,9 +3,9 @@ package com.utree.eightysix.app.publish;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -41,6 +41,7 @@ public class PostActivity extends BaseActivity {
     public PostEditText mPostEditText;
 
     @ViewId(R.id.tv_bottom)
+    @OnClick
     public TextView mTvBottom;
 
     @ViewId(R.id.iv_camera)
@@ -51,7 +52,9 @@ public class PostActivity extends BaseActivity {
     @OnClick
     public ImageView mIvShuffle;
 
-    private Dialog mDialog;
+    private Dialog mCameraDialog;
+
+    private Dialog mDescriptionDialog;
 
     private File mOutputFile;
 
@@ -65,11 +68,13 @@ public class PostActivity extends BaseActivity {
 
         switch (id) {
             case R.id.iv_camera:
-                mDialog.show();
+                mCameraDialog.show();
                 break;
             case R.id.iv_shuffle:
                 mPostEditText.setBackgroundColor(new Random().nextInt());
                 break;
+            case R.id.tv_bottom:
+                mDescriptionDialog.show();
             default:
                 break;
         }
@@ -119,7 +124,21 @@ public class PostActivity extends BaseActivity {
             }
         });
 
-        mDialog = builder.create();
+        mCameraDialog = builder.create();
+
+        builder = new AlertDialog.Builder(this);
+
+        builder.setTitle(R.string.who_will_see_this_secret).setMessage(R.string.post_description)
+                .setPositiveButton(getString(R.string.got_it), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == Dialog.BUTTON_POSITIVE) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+
+        mDescriptionDialog = builder.create();
     }
 
     @Override
@@ -128,6 +147,18 @@ public class PostActivity extends BaseActivity {
 
         switch (requestCode) {
             case REQUEST_CODE_ALBUM:
+                if (data != null) {
+                    Uri uri = data.getData();
+
+                    Cursor cursor = getContentResolver()
+                            .query(uri, new String[]{MediaStore.MediaColumns.DATA}, null, null, null);
+
+                    if (cursor.moveToFirst()) {
+                        String p = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
+                        mOutputFile = new File(p);
+                        startCrop();
+                    }
+                }
                 break;
             case REQUEST_CODE_CAMERA:
                 if (mOutputFile != null) {
@@ -135,8 +166,18 @@ public class PostActivity extends BaseActivity {
                 }
                 break;
             case REQUEST_CODE_CROP:
-                mPostEditText.setBackgroundDrawable(
-                        new BitmapDrawable(getResources(), BitmapFactory.decodeFile(mOutputFile.getAbsolutePath())));
+                if (data != null) {
+                    Uri uri = data.getData();
+
+                    Cursor cursor = getContentResolver()
+                            .query(uri, new String[] { MediaStore.MediaColumns.DATA }, null, null, null);
+
+                    if (cursor.moveToFirst()) {
+                        String p = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
+                        mPostEditText.setBackgroundDrawable(new BitmapDrawable(getResources(),
+                                        BitmapFactory.decodeFile(new File(p).getAbsolutePath())));
+                    }
+                }
                 break;
             default:
                 break;

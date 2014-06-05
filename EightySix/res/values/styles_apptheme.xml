@@ -50,8 +50,13 @@
     <style name="Widget.PostEditText"/>
 
     <style name="Widget.PostEditText.Apptheme" parent="android:Widget.EditText">
-        <item name="android:textSize">16sp</item>
+        <item name="android:shadowColor">#FF333333</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">2</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:gravity">center</item>
+        <item name="android:padding">16dp</item>
         <item name="android:background">@android:color/white</item>
     </style>
 

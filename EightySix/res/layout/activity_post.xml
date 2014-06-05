@@ -11,13 +11,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:shadowColor="#FF000000"
-            android:shadowDx="2"
-            android:shadowDy="2"
-            android:editable="true"
-            android:gravity="center"
-            android:textSize="16sp"
-            android:lines="10"/>
+            android:hint="@string/post_anonymously"
+            android:editable="true"/>
 
     <LinearLayout
             android:background="@color/apptheme_primary_dark_color"

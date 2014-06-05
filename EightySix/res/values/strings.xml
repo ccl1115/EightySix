@@ -79,5 +79,8 @@
     <string name="post">发表</string>
     <string name="who_will_see_this_secret">谁会看到这条秘密</string>
     <string name="add_photo">添加照片</string>
+    <string name="post_description">你在厂里的朋友肯定会看到这条秘密，并肯定知道是厂里面认识的人发的，但是无法猜到谁是作者。\n\n如果秘密被赞的数量较多，将自动转发到其他打工圈，让更多的人看到！</string>
+    <string name="got_it">知道啦</string>
+    <string name="post_anonymously">匿名发表秘密或小心情</string>
 
 </resources>
