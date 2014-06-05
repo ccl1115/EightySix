@@ -122,7 +122,7 @@
 
         <activity
                 android:name=".app.publish.PostActivity"
-                android:windowSoftInputMode="adjustResize"
+                android:windowSoftInputMode="stateHidden|adjustResize"
                 android:configChanges="keyboardHidden|orientation|keyboard|screenSize"
                 android:exported="true"/>
 

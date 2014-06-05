@@ -87,5 +87,7 @@
     <string name="post_over_length">内容不能超过140个字</string>
     <string name="quit_confirm">有内容未发布，确认放弃？</string>
     <string name="resume_editing">继续编辑</string>
+    <string name="error_start_camera">启动相机应用错误</string>
+    <string name="error_start_album">无法选择相册图片</string>
 
 </resources>

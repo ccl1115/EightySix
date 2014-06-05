@@ -3,13 +3,13 @@ package com.utree.eightysix.app.publish;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -20,12 +20,12 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
-import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.FileUtils;
@@ -142,10 +142,14 @@ public class PostActivity extends BaseActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        startCamera();
+                        if (!startCamera()) {
+                            showToast(R.string.error_start_camera);
+                        }
                         break;
                     case 1:
-                        startAlbum();
+                        if (!startAlbum()) {
+                            showToast(R.string.error_start_album);
+                        }
                         break;
                     case Dialog.BUTTON_NEGATIVE:
                         dialog.dismiss();
@@ -231,6 +235,9 @@ public class PostActivity extends BaseActivity {
             @Override
             public void onClick(View view, int position) {
                 if (position == 0) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mPostEditText.getWindowToken(), 0);
+
                     finish();
                 }
             }
@@ -244,8 +251,9 @@ public class PostActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         Env.setFirstRun(FIRST_RUN_KEY, false);
+
+        super.onDestroy();
     }
 
     @Override
@@ -275,13 +283,17 @@ public class PostActivity extends BaseActivity {
                     if (cursor.moveToFirst()) {
                         String p = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
                         mOutputFile = new File(p);
-                        startCrop();
+                        if (!startCrop()) {
+                            setBgImage(p);
+                        }
                     }
                 }
                 break;
             case REQUEST_CODE_CAMERA:
                 if (mOutputFile != null) {
-                    startCrop();
+                    if (!startCrop()) {
+                        setBgImage(mOutputFile.getAbsolutePath());
+                    }
                 }
                 break;
             case REQUEST_CODE_CROP:
@@ -293,11 +305,7 @@ public class PostActivity extends BaseActivity {
 
                     if (cursor.moveToFirst()) {
                         String p = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
-                        Bitmap bitmap = BitmapFactory.decodeFile(new File(p).getAbsolutePath());
-                        mPostEditText.setTextColor(Color.WHITE);
-                        mPostEditText.setShadowLayer(2, 0, 0, Color.WHITE);
-                        mIvPostBg.setImageBitmap(bitmap);
-                        mIvPostBg.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                        setBgImage(p);
                     }
                 }
                 break;
@@ -306,28 +314,40 @@ public class PostActivity extends BaseActivity {
         }
     }
 
-    private void startCamera() {
+    private void setBgImage(String p) {
+        Bitmap bitmap = BitmapFactory.decodeFile(new File(p).getAbsolutePath());
+        mPostEditText.setTextColor(Color.WHITE);
+        mPostEditText.setShadowLayer(2, 0, 0, Color.WHITE);
+        mIvPostBg.setImageBitmap(bitmap);
+        mIvPostBg.setScaleType(ImageView.ScaleType.CENTER_CROP);
+    }
+
+    private boolean startCamera() {
         try {
             Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             mOutputFile = FileUtils.createTmpFile("camera_output");
             i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mOutputFile));
             startActivityForResult(i, REQUEST_CODE_CAMERA);
+            return true;
         } catch (Exception e) {
             U.getAnalyser().reportException(this, e);
+            return false;
         }
     }
 
-    private void startAlbum() {
+    private boolean startAlbum() {
         try {
             Intent i = new Intent(Intent.ACTION_PICK);
             i.setType("image/*");
             startActivityForResult(i, REQUEST_CODE_ALBUM);
+            return true;
         } catch (Exception e) {
             U.getAnalyser().reportException(this, e);
+            return false;
         }
     }
 
-    private void startCrop() {
+    private boolean startCrop() {
         try {
             Intent cropIntent = new Intent("com.android.camera.action.CROP");
             // indicate image type and Uri
@@ -339,13 +359,10 @@ public class PostActivity extends BaseActivity {
             cropIntent.putExtra("aspectY", 1);
             // start the activity - we handle returning in onActivityResult
             startActivityForResult(cropIntent, REQUEST_CODE_CROP);
+            return true;
         } catch (Exception e) {
             U.getAnalyser().reportException(this, e);
+            return false;
         }
-    }
-
-    private int inverseColor(int color) {
-        return (color & 0xff << 24) | (0x00ffffff - (color & ~(0xff << 24)));
-
     }
 }
