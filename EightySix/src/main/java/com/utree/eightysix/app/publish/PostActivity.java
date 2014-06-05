@@ -6,8 +6,12 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -30,12 +34,12 @@ import com.utree.eightysix.utils.OnClick;
 import com.utree.eightysix.utils.ViewId;
 import com.utree.eightysix.widget.PostEditText;
 import com.utree.eightysix.widget.RoundedButton;
+import com.utree.eightysix.widget.TopBar;
 import java.io.File;
 import java.util.Random;
 
 /**
  */
-@Layout(R.layout.activity_post)
 @TopTitle(R.string.post)
 public class PostActivity extends BaseActivity {
 
@@ -51,6 +55,9 @@ public class PostActivity extends BaseActivity {
     @ViewId(R.id.tv_bottom)
     @OnClick
     public TextView mTvBottom;
+
+    @ViewId(R.id.iv_post_bg)
+    public ImageView mIvPostBg;
 
     @ViewId(R.id.iv_camera)
     @OnClick
@@ -90,7 +97,9 @@ public class PostActivity extends BaseActivity {
                     showToast(getString(R.string.shuffle_bg_color));
                     mToastShown = true;
                 }
-                mPostEditText.setBackgroundColor(new Random().nextInt());
+                int color = new Random().nextInt();
+                mIvPostBg.setImageDrawable(new ColorDrawable(color));
+                mPostEditText.setTextColor((color & 0x00FFFFFF) > 0x00888888 ? Color.BLACK : Color.WHITE);
                 break;
             case R.id.tv_bottom:
                 mDescriptionDialog.show();
@@ -102,6 +111,8 @@ public class PostActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setContentView(new PostActivityLayout(this));
 
         final View activityRootView = findViewById(android.R.id.content);
         activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -195,7 +206,7 @@ public class PostActivity extends BaseActivity {
                     mPostTip.setVisibility(View.INVISIBLE);
                 }
 
-                if (InputValidator.post(s)) {
+                if (!InputValidator.post(s) && count > 0) {
                     showToast(R.string.post_over_length);
                 }
             }
@@ -203,6 +214,30 @@ public class PostActivity extends BaseActivity {
             @Override
             public void afterTextChanged(Editable s) {
 
+            }
+        });
+
+        getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
+            @Override
+            public String getTitle(int position) {
+                return getString(R.string.post);
+            }
+
+            @Override
+            public Drawable getIcon(int position) {
+                return null;
+            }
+
+            @Override
+            public void onClick(View view, int position) {
+                if (position == 0) {
+                    finish();
+                }
+            }
+
+            @Override
+            public int getCount() {
+                return 1;
             }
         });
     }
@@ -258,8 +293,11 @@ public class PostActivity extends BaseActivity {
 
                     if (cursor.moveToFirst()) {
                         String p = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
-                        mPostEditText.setBackgroundDrawable(new BitmapDrawable(getResources(),
-                                BitmapFactory.decodeFile(new File(p).getAbsolutePath())));
+                        Bitmap bitmap = BitmapFactory.decodeFile(new File(p).getAbsolutePath());
+                        mPostEditText.setTextColor(Color.WHITE);
+                        mPostEditText.setShadowLayer(2, 0, 0, Color.WHITE);
+                        mIvPostBg.setImageBitmap(bitmap);
+                        mIvPostBg.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     }
                 }
                 break;
@@ -304,5 +342,10 @@ public class PostActivity extends BaseActivity {
         } catch (Exception e) {
             U.getAnalyser().reportException(this, e);
         }
+    }
+
+    private int inverseColor(int color) {
+        return (color & 0xff << 24) | (0x00ffffff - (color & ~(0xff << 24)));
+
     }
 }

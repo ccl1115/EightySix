@@ -162,7 +162,7 @@ public class BaseActivity extends Activity implements View.OnClickListener {
 
         mBaseView.addView(inflate, params);
 
-        U.viewBinding(findViewById(R.id.content), this);
+        U.viewBinding(inflate, this);
 
         TopTitle topTitle = getClass().getAnnotation(TopTitle.class);
 
@@ -182,6 +182,14 @@ public class BaseActivity extends Activity implements View.OnClickListener {
                 ViewGroup.LayoutParams.MATCH_PARENT);
         params.topMargin = getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
         mBaseView.addView(contentView, params);
+
+        U.viewBinding(contentView, this);
+
+        TopTitle topTitle = getClass().getAnnotation(TopTitle.class);
+
+        if (topTitle != null) {
+            setTopTitle(getString(topTitle.value()));
+        }
     }
 
     @Override

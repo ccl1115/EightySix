@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -116,8 +119,13 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
         mActionViews.clear();
 
         for (int i = 0; i < mCurCount; i++) {
-            View view = buildActionItemView(i, mActionAdapter.getIcon(i));
-            addView(view, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            View view;
+            if (TextUtils.isEmpty(mActionAdapter.getTitle(i))) {
+                view = buildActionItemView(i, mActionAdapter.getIcon(i));
+            } else {
+                view = buildActionItemView(i, mActionAdapter.getTitle(i));
+            }
+            addView(view);
             mActionViews.add(view);
         }
         requestLayout();
@@ -180,10 +188,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
             if (mCurCount != mActionAdapter.getCount()) {
                 throw new IllegalStateException("Adapter count updates");
             }
-            if (mCurCount == 0) {
-                mActionOverFlow.measure(MeasureSpec.EXACTLY, MeasureSpec.EXACTLY);
-            } else {
-                mActionOverFlow.measure(heightSize + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
+            if (mCurCount != 0) {
                 widthLeft -= mActionOverFlow.getMeasuredWidth();
 
                 for (View view : mActionViews) {
@@ -196,7 +201,6 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
                 }
             }
         }
-
 
         mTitle.measure(widthLeft + MeasureSpec.AT_MOST, heightSize + MeasureSpec.EXACTLY);
 
@@ -237,6 +241,21 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
         imageView.setOnClickListener(this);
 
         return imageView;
+    }
+
+    private View buildActionItemView(final int position, String text) {
+        if (TextUtils.isEmpty(text)) return null;
+
+        final TextView textView = new TextView(getContext());
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        textView.setText(text);
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextColor(Color.WHITE);
+        if (mActionBgDrawableId != 0) {
+            textView.setBackgroundDrawable(getResources().getDrawable(mActionBgDrawableId));
+        }
+        textView.setOnClickListener(this);
+        return textView;
     }
 
     public interface ActionAdapter {

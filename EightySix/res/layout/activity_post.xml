@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<merge
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
         android:orientation="vertical"
@@ -8,19 +8,25 @@
         android:layout_height="match_parent">
 
     <FrameLayout
+            android:id="@+id/fl_top"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="match_parent">
+
+        <ImageView
+                android:id="@+id/iv_post_bg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"/>
 
         <com.utree.eightysix.widget.PostEditText
                 android:id="@+id/et_post_content"
+                android:layout_gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:editable="true"/>
+                android:layout_height="wrap_content"/>
 
         <view
                 app:radius="4dp"
-                app:background="#33000000"
+                app:background="#66000000"
                 android:textSize="20sp"
                 android:textColor="@android:color/white"
                 android:text="@string/post_anonymously"
@@ -33,39 +39,38 @@
                 android:layout_marginTop="35dp"/>
     </FrameLayout>
 
-    <LinearLayout
+
+    <FrameLayout
+            android:id="@+id/fl_bottom"
             android:background="@color/apptheme_primary_dark_color"
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+        <ImageView
+                android:id="@+id/iv_camera"
+                android:layout_gravity="left|center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:src="@drawable/ic_action_camera"/>
 
-            <ImageView
-                    android:id="@+id/iv_camera"
-                    android:layout_gravity="left|center_vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:src="@drawable/ic_action_camera"/>
+        <ImageView
+                android:id="@+id/iv_shuffle"
+                android:layout_gravity="right|center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:src="@drawable/ic_action_shuffle"/>
+    </FrameLayout>
 
-            <ImageView
-                    android:id="@+id/iv_shuffle"
-                    android:layout_gravity="right|center_vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:src="@drawable/ic_action_shuffle"/>
-        </FrameLayout>
-
-        <TextView
-                android:id="@+id/tv_bottom"
-                android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:gravity="center"
-                android:textSize="16sp"
-                android:text="@string/who_will_see_this_secret"/>
-    </LinearLayout>
-</LinearLayout>
+    <TextView
+            android:id="@+id/tv_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="60dp"
+            android:paddingBottom="60dp"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:background="@color/apptheme_primary_dark_color"
+            android:text="@string/who_will_see_this_secret"/>
+</merge>

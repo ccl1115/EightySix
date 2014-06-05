@@ -13,13 +13,13 @@
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
         -->
-        <item name="android:windowActionBar">false</item>
-        <item name="android:windowBackground">@android:color/white</item>
     </style>
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:windowBackground">@null</item>
+
         <item name="android:windowNoTitle">true</item>
         <item name="topBarStyle">@style/Widget.TopBar.AppTheme</item>
         <item name="roundedButtonStyle">@style/Widget.RoundedButton.Apptheme</item>
