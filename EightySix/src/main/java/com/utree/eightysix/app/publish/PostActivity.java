@@ -11,6 +11,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
@@ -20,10 +23,12 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.FileUtils;
 import com.utree.eightysix.utils.OnClick;
 import com.utree.eightysix.utils.ViewId;
 import com.utree.eightysix.widget.PostEditText;
+import com.utree.eightysix.widget.RoundedButton;
 import java.io.File;
 import java.util.Random;
 
@@ -32,6 +37,8 @@ import java.util.Random;
 @Layout(R.layout.activity_post)
 @TopTitle(R.string.post)
 public class PostActivity extends BaseActivity {
+
+    private static final String FIRST_RUN_KEY = "post_activity";
 
     private static final int REQUEST_CODE_CAMERA = 0x1;
     private static final int REQUEST_CODE_ALBUM = 0x2;
@@ -52,13 +59,20 @@ public class PostActivity extends BaseActivity {
     @OnClick
     public ImageView mIvShuffle;
 
+    @ViewId(R.id.rb_post_tip)
+    public RoundedButton mPostTip;
+
     private Dialog mCameraDialog;
 
     private Dialog mDescriptionDialog;
 
+    private Dialog mConfirmQuitDialog;
+
     private File mOutputFile;
 
     private boolean mIsOpened;
+
+    private boolean mToastShown;
 
     @Override
     public void onClick(View v) {
@@ -71,6 +85,10 @@ public class PostActivity extends BaseActivity {
                 mCameraDialog.show();
                 break;
             case R.id.iv_shuffle:
+                if (Env.firstRun(FIRST_RUN_KEY) && !mToastShown) {
+                    showToast(getString(R.string.shuffle_bg_color));
+                    mToastShown = true;
+                }
                 mPostEditText.setBackgroundColor(new Random().nextInt());
                 break;
             case R.id.tv_bottom:
@@ -139,6 +157,67 @@ public class PostActivity extends BaseActivity {
                 });
 
         mDescriptionDialog = builder.create();
+
+        builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("有内容未发布，确认放弃？")
+                .setPositiveButton("继续编辑", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton("放弃", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+
+        mConfirmQuitDialog = builder.create();
+
+        if (Env.firstRun(FIRST_RUN_KEY)) {
+            mDescriptionDialog.show();
+        }
+
+        mPostEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 0) {
+                    mPostTip.setVisibility(View.VISIBLE);
+                } else {
+                    mPostTip.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Env.setFirstRun(FIRST_RUN_KEY, false);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if (TextUtils.isEmpty(mPostEditText.getText())) {
+            super.onBackPressed();
+        } else {
+            mConfirmQuitDialog.show();
+        }
+
+
     }
 
     @Override
@@ -170,12 +249,12 @@ public class PostActivity extends BaseActivity {
                     Uri uri = data.getData();
 
                     Cursor cursor = getContentResolver()
-                            .query(uri, new String[] { MediaStore.MediaColumns.DATA }, null, null, null);
+                            .query(uri, new String[]{MediaStore.MediaColumns.DATA}, null, null, null);
 
                     if (cursor.moveToFirst()) {
                         String p = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
                         mPostEditText.setBackgroundDrawable(new BitmapDrawable(getResources(),
-                                        BitmapFactory.decodeFile(new File(p).getAbsolutePath())));
+                                BitmapFactory.decodeFile(new File(p).getAbsolutePath())));
                     }
                 }
                 break;
@@ -217,8 +296,7 @@ public class PostActivity extends BaseActivity {
             cropIntent.putExtra("aspectY", 1);
             // start the activity - we handle returning in onActivityResult
             startActivityForResult(cropIntent, REQUEST_CODE_CROP);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             U.getAnalyser().reportException(this, e);
         }
     }

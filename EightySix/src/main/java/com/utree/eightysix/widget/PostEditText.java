@@ -26,13 +26,6 @@ public class PostEditText extends EditText {
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        //final int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-        final int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-        super.onMeasure(widthMeasureSpec, heightSize + MeasureSpec.EXACTLY);
-    }
-
-    @Override
     public void setBackgroundDrawable(Drawable background) {
         super.setBackgroundDrawable(background);
 
@@ -43,8 +36,8 @@ public class PostEditText extends EditText {
 
         if (bitmap != null) {
             ColorArt art = new ColorArt(bitmap);
-            setTextColor(art.getSecondaryColor());
-            setShadowLayer(2, 0, 1, 0xFF333333);
+            setTextColor(art.getDetailColor());
+            setShadowLayer(2, 0, 1, art.getBackgroundColor());
         }
     }
 
@@ -60,8 +53,8 @@ public class PostEditText extends EditText {
             Log.d(this, String.format("Secondary color: %h", art.getSecondaryColor()));
             Log.d(this, String.format("Background color: %h", art.getBackgroundColor()));
             Log.d(this, String.format("Detail color: %h", art.getDetailColor()));
-            setTextColor(art.getSecondaryColor());
-            setShadowLayer(2, 0, 1, 0xFF333333);
+            setTextColor(art.getPrimaryColor());
+            setShadowLayer(2, 0, 1, art.getDetailColor());
         }
     }
 

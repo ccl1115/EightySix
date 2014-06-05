@@ -2,17 +2,36 @@
 
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <com.utree.eightysix.widget.PostEditText
-            android:id="@+id/et_post_content"
+    <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:hint="@string/post_anonymously"
-            android:editable="true"/>
+            android:layout_weight="1">
+
+        <com.utree.eightysix.widget.PostEditText
+                android:id="@+id/et_post_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:editable="true"/>
+
+        <view
+                app:radius="4dp"
+                app:background="#33000000"
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                android:text="@string/post_anonymously"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="10dp"
+                class="com.utree.eightysix.widget.RoundedButton"
+                android:id="@+id/rb_post_tip"
+                android:layout_marginTop="35dp"/>
+    </FrameLayout>
 
     <LinearLayout
             android:background="@color/apptheme_primary_dark_color"

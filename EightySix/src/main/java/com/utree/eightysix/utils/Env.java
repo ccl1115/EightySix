@@ -14,9 +14,19 @@ public class Env {
         return preferences.getBoolean("first_run_" + C.VERSION, true);
     }
 
+    public static boolean firstRun(String key) {
+        SharedPreferences preferences = U.getContext().getSharedPreferences("env", Context.MODE_PRIVATE);
+        return preferences.getBoolean(String.format("first_run_%s_%d", key, C.VERSION), true);
+    }
+
     public static void setFirstRun(boolean firstRun) {
         SharedPreferences preferences = U.getContext().getSharedPreferences("env", Context.MODE_PRIVATE);
         preferences.edit().putBoolean("first_run_" + C.VERSION, firstRun).apply();
+    }
+
+    public static void setFirstRun(String key, boolean firstRun) {
+        SharedPreferences preferences = U.getContext().getSharedPreferences("env", Context.MODE_PRIVATE);
+        preferences.edit().putBoolean(String.format("first_run_%s_%d", key, C.VERSION), firstRun).apply();
     }
 
     public static boolean isPatternLocked() {
