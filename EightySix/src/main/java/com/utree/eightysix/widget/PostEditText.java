@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.EditText;
 import com.utree.eightysix.R;
-import de.akquinet.android.androlog.Log;
 import org.michaelevans.colorart.library.ColorArt;
 
 /**
@@ -49,10 +48,6 @@ public class PostEditText extends EditText {
 
         if (bitmap != null) {
             ColorArt art = new ColorArt(bitmap);
-            Log.d(this, String.format("Primary color: %h", art.getPrimaryColor()));
-            Log.d(this, String.format("Secondary color: %h", art.getSecondaryColor()));
-            Log.d(this, String.format("Background color: %h", art.getBackgroundColor()));
-            Log.d(this, String.format("Detail color: %h", art.getDetailColor()));
             setTextColor(art.getPrimaryColor());
             setShadowLayer(2, 0, 1, art.getDetailColor());
         }

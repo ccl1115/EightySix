@@ -18,4 +18,8 @@ public class InputValidator {
         return pwd.length() >= U.getConfigInt("account.pwd.length.min")
                 && pwd.length() <= U.getConfigInt("account.pwd.length.max");
     }
+
+    public static boolean post(CharSequence post) {
+        return post.length() <= U.getConfigInt("post.length");
+    }
 }

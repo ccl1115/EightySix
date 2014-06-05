@@ -25,6 +25,7 @@ import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.FileUtils;
+import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.utils.OnClick;
 import com.utree.eightysix.utils.ViewId;
 import com.utree.eightysix.widget.PostEditText;
@@ -160,14 +161,14 @@ public class PostActivity extends BaseActivity {
 
         builder = new AlertDialog.Builder(this);
 
-        builder.setTitle("有内容未发布，确认放弃？")
-                .setPositiveButton("继续编辑", new DialogInterface.OnClickListener() {
+        builder.setTitle(getString(R.string.quit_confirm))
+                .setPositiveButton(getString(R.string.resume_editing), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
                 })
-                .setNegativeButton("放弃", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.quit), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
@@ -192,6 +193,10 @@ public class PostActivity extends BaseActivity {
                     mPostTip.setVisibility(View.VISIBLE);
                 } else {
                     mPostTip.setVisibility(View.INVISIBLE);
+                }
+
+                if (InputValidator.post(s)) {
+                    showToast(R.string.post_over_length);
                 }
             }
 

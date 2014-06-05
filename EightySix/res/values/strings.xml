@@ -12,9 +12,10 @@
 
     <!-- General -->
     <string name="phone_number">手机号码</string>
-    <string name="account">账\t号</string>
-    <string name="password">密\t码</string>
+    <string name="account">账\t\t号</string>
+    <string name="password">密\t\t码</string>
     <string name="okay">确定</string>
+    <string name="quit">放弃</string>
     <string name="cancel">取消</string>
     <string name="done">完成</string>
     <string name="settings">设置</string>
@@ -83,5 +84,8 @@
     <string name="got_it">知道啦</string>
     <string name="post_anonymously">匿名发表秘密或小心情</string>
     <string name="shuffle_bg_color">随机切换一种色彩</string>
+    <string name="post_over_length">内容不能超过140个字</string>
+    <string name="quit_confirm">有内容未发布，确认放弃？</string>
+    <string name="resume_editing">继续编辑</string>
 
 </resources>
