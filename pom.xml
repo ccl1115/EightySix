@@ -214,4 +214,15 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>android</id>
+            <url>http://dustr.info:8081/nexus/content/repositories/android</url>
+        </repository>
+        <snapshotRepository>
+            <id>android</id>
+            <url>http://dustr.info:8081/nexus/content/repositories/android-snapshot</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
