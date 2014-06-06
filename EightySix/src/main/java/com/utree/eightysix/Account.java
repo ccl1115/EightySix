@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 import com.utree.eightysix.app.account.LoginActivity;
+import com.utree.eightysix.response.User;
 
 /**
  */
@@ -12,14 +13,15 @@ public class Account {
 
     private static Account sAccount = new Account();
 
-    private String mUserId =
-            U.getContext().getSharedPreferences("account", Context.MODE_PRIVATE).getString("user_id", "");
-    private String mToken =
-            U.getContext().getSharedPreferences("account", Context.MODE_PRIVATE).getString("token", "");
+    private String mUserId;
+    private String mToken;
 
     private boolean mIsLogin;
 
     private Account() {
+        mUserId = U.getContext().getSharedPreferences("account", Context.MODE_PRIVATE).getString("user_id", "");
+        mToken = U.getContext().getSharedPreferences("account", Context.MODE_PRIVATE).getString("token", "");
+        mIsLogin = !TextUtils.isEmpty(mUserId) && !TextUtils.isEmpty(mToken);
     }
 
     public static Account inst() {
@@ -36,6 +38,13 @@ public class Account {
 
     public void login(String userId, String token) {
         if (setUserId(userId) && setToken(token)) {
+            mIsLogin = true;
+            U.getBus().post(new LoginEvent());
+        }
+    }
+
+    public void login(User user) {
+        if (setUserId(user.userId) && setToken(user.token)) {
             mIsLogin = true;
             U.getBus().post(new LoginEvent());
         }

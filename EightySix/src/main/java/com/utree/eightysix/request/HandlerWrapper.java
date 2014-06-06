@@ -80,6 +80,12 @@ public class HandlerWrapper<T> extends BaseJsonHttpResponseHandler<Response<T>> 
                 Toast.makeText(U.getContext(), "HttpStatus: " + statusCode, Toast.LENGTH_SHORT).show();
             }
         }
+
+        if (e != null) {
+            if (BuildConfig.DEBUG) {
+                Toast.makeText(U.getContext(), "Exception: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
         mOnResponse.onResponse(null);
     }
 

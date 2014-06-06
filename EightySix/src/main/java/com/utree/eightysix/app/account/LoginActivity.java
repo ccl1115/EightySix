@@ -7,7 +7,6 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.squareup.otto.Subscribe;
@@ -164,16 +163,23 @@ public class LoginActivity extends BaseActivity {
                     public void onResponse(Response<User> response) {
                         if (response != null) {
                             if (response.code == 0) {
-                                finish();
-                            } else {
-                                mBtnLogin.setEnabled(true);
+                                if (response.object != null) {
+                                    Account.inst().login(response.object.userId, response.object.token);
+                                    return;
+                                } else {
+                                    showToast(R.string.server_object_error);
+                                }
                             }
-                        } else {
-                            mBtnLogin.setEnabled(true);
                         }
+                        mBtnLogin.setEnabled(true);
                     }
                 });
         mBtnLogin.setEnabled(false);
+    }
+
+    @Subscribe public void onLoginEvent(Account.LoginEvent event) {
+        showToast(R.string.login_success);
+        finish();
     }
 
     /**
