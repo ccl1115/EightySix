@@ -8,11 +8,15 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.utils.Env;
 import de.akquinet.android.androlog.Log;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Location service back-end by Baidu LBS
+ *
+ * Note, this implementation will store the last succeeded result to {@link com.utree.eightysix.utils.Env}
  */
 public class BdLocationImpl implements Location, BDLocationListener {
 
@@ -50,6 +54,7 @@ public class BdLocationImpl implements Location, BDLocationListener {
     };
 
     private final List<OnResult> mOnResults;
+    private final List<OnResult> mTransientOnResult;
 
     public BdLocationImpl() {
         mLocationClient = new LocationClient(U.getContext());
@@ -63,6 +68,7 @@ public class BdLocationImpl implements Location, BDLocationListener {
         mLocationClient.registerLocationListener(this);
 
         mOnResults = new ArrayList<OnResult>();
+        mTransientOnResult = new ArrayList<OnResult>();
 
         mLocationClient.start();
     }
@@ -89,6 +95,15 @@ public class BdLocationImpl implements Location, BDLocationListener {
             for (OnResult onResult : mOnResults) {
                 onResult.onResult(result);
             }
+
+            for (OnResult onResult : mTransientOnResult) {
+                onResult.onResult(result);
+            }
+
+            mTransientOnResult.clear();
+
+            Env.setLastLatitude(result.latitude);
+            Env.setLastLongitude(result.longitude);
         }
     }
 
@@ -122,5 +137,12 @@ public class BdLocationImpl implements Location, BDLocationListener {
         mHandler.sendEmptyMessageDelayed(MSG_REQ_LOCATION, REQ_LOCATION_DELAY);
 
         mHandler.sendEmptyMessageDelayed(MSG_REQ_TIMEOUT, REQ_TIMEOUT);
+    }
+
+    @Override
+    public void requestLocation(OnResult onResult) {
+        requestLocation();
+
+        mTransientOnResult.add(onResult);
     }
 }

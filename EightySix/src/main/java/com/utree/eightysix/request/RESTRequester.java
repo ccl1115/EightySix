@@ -146,6 +146,8 @@ public class RESTRequester {
         params.add("imei", Env.getImei());
         params.add("version", String.valueOf(C.VERSION));
         params.add("channel", U.getConfig("app.channel"));
+        params.add("lat", Env.getLastLatitude());
+        params.add("lon", Env.getLastLongitude());
 
         params.add("cuid", CommonParam.getCUID(U.getContext()));
 

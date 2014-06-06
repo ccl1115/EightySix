@@ -27,6 +27,7 @@ import java.util.Properties;
  * Most helpful methods and singleton instances
  * <p/>
  * <b>Most of these methods must be invoked in main thread.</b>
+ *
  */
 public class U {
 

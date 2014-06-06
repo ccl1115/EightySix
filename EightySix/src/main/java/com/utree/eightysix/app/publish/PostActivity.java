@@ -28,7 +28,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.utils.Env;
-import com.utree.eightysix.utils.FileUtils;
+import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.utils.OnClick;
 import com.utree.eightysix.utils.ViewId;
@@ -325,7 +325,7 @@ public class PostActivity extends BaseActivity {
     private boolean startCamera() {
         try {
             Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            mOutputFile = FileUtils.createTmpFile("camera_output");
+            mOutputFile = IOUtils.createTmpFile("camera_output");
             i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mOutputFile));
             startActivityForResult(i, REQUEST_CODE_CAMERA);
             return true;
