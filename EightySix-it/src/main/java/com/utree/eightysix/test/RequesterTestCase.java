@@ -34,14 +34,14 @@ public class RequesterTestCase extends BaseInstrumentationTestCase {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, String responseBody) {
                         super.onSuccess(statusCode, headers, responseBody);
-                        Log.d(C.TAG.AH, responseBody);
+                        Log.d(C.TAG.RR, responseBody);
                         signal.countDown();
                     }
 
                     @Override
                     public void onFailure(String responseBody, Throwable error) {
                         super.onFailure(responseBody, error);
-                        Log.d(C.TAG.AH, responseBody);
+                        Log.d(C.TAG.RR, responseBody);
                         signal.countDown();
                     }
 

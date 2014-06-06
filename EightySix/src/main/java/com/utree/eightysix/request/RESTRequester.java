@@ -47,15 +47,15 @@ public class RESTRequester {
     }
 
     private RequestHandle get(String api, Header[] headers, RequestParams params, ResponseHandlerInterface handler) {
-        Log.d(C.TAG.AH, "   get: " + mHost + api);
-        Log.d(C.TAG.AH, "params: " + params.toString());
+        Log.d(C.TAG.RR, "   get: " + mHost + api);
+        Log.d(C.TAG.RR, "params: " + params.toString());
         putBaseParams(params);
         return mAsyncHttpClient.get(U.getContext(), mHost + api, headers, params, handler);
     }
 
     private RequestHandle post(String api, Header[] headers, RequestParams params, String contentType, ResponseHandlerInterface handler) {
-        Log.d(C.TAG.AH, "  post: " + mHost + api);
-        Log.d(C.TAG.AH, "params: " + params.toString());
+        Log.d(C.TAG.RR, "  post: " + mHost + api);
+        Log.d(C.TAG.RR, "params: " + params.toString());
         putBaseParams(params);
         return mAsyncHttpClient.post(U.getContext(), mHost + api, headers, params, contentType, handler);
     }
