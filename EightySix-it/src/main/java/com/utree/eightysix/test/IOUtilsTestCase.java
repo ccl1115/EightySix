@@ -3,9 +3,9 @@ package com.utree.eightysix.test;
 import android.test.AndroidTestCase;
 
 /**
- * @see com.utree.eightysix.utils.FileUtils
+ * @see com.utree.eightysix.utils.IOUtils
  */
-public class FileUtilsTestCase extends AndroidTestCase {
+public class IOUtilsTestCase extends AndroidTestCase {
 
     public void testCopyFile() throws Exception {
 

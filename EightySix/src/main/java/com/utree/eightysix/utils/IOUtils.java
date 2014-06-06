@@ -11,7 +11,7 @@ import java.io.OutputStream;
 
 /**
  */
-public class FileUtils {
+public class IOUtils {
 
     public static void copyFile(InputStream in, OutputStream os) {
         final byte[] buffer = new byte[1024 * 1024];
