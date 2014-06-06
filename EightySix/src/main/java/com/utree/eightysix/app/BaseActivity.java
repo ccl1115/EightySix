@@ -78,20 +78,46 @@ public class BaseActivity extends Activity implements View.OnClickListener {
         finish();
     }
 
+    /**
+     * Show a toast
+     * @param res the string resource id
+     * @param inActivity if true cancel the toast when activity finish.
+     */
+    protected void showToast(int res, boolean inActivity) {
+        String string = getString(res);
+        if (string != null) {
+            showToast(string, inActivity);
+        }
+    }
+
+    /**
+     * @see #showToast(int, boolean)
+     * @param res
+     */
     protected void showToast(int res) {
+        showToast(res, true);
+    }
+
+    /**
+     * Show a toast
+     * @param string the string
+     * @param inActivity if true cancel the toast when activity finish.
+     */
+    protected void showToast(String string, boolean inActivity) {
         if (mToast != null) {
             mToast.cancel();
         }
-        mToast = Toast.makeText(this, res, Toast.LENGTH_SHORT);
-        mToast.show();
+
+        if (inActivity) {
+            mToast = Toast.makeText(this, string, Toast.LENGTH_SHORT);
+            mToast.show();
+        } else {
+            Toast.makeText(this, string, Toast.LENGTH_SHORT).show();
+        }
     }
 
     protected void showToast(String string) {
-        if (mToast != null) {
-            mToast.cancel();
-        }
-        mToast = Toast.makeText(this, string, Toast.LENGTH_SHORT);
-        mToast.show();
+        showToast(string, true);
     }
 
     protected final Handler getHandler() {

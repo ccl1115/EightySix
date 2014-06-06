@@ -179,7 +179,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     @Subscribe public void onLoginEvent(Account.LoginEvent event) {
-        showToast(R.string.login_success);
+        showToast(R.string.login_success, false);
         finish();
     }
 
