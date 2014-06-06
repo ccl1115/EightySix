@@ -1,14 +1,14 @@
 package com.utree.eightysix.request;
 
 import android.widget.Toast;
-import com.google.gson.reflect.TypeToken;
 import com.jakewharton.disklrucache.DiskLruCache;
 import com.loopj.android.http.BaseJsonHttpResponseHandler;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.C;
 import com.utree.eightysix.U;
-import com.utree.eightysix.response.OnResponse;
-import com.utree.eightysix.response.Response;
+import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.rest.Cache;
 import de.akquinet.android.androlog.Log;
 import java.io.IOException;
 import java.lang.reflect.Type;

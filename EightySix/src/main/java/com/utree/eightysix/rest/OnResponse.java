@@ -1,4 +1,4 @@
-package com.utree.eightysix.response;
+package com.utree.eightysix.rest;
 
 /**
  */

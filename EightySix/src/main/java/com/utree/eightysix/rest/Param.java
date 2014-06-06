@@ -1,4 +1,4 @@
-package com.utree.eightysix.request;
+package com.utree.eightysix.rest;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,8 +7,9 @@ import java.lang.annotation.Target;
 
 /**
  */
-@Target(ElementType.TYPE)
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Api {
+public @interface Param {
+
     String value();
 }

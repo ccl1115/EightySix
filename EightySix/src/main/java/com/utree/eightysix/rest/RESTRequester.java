@@ -1,4 +1,4 @@
-package com.utree.eightysix.request;
+package com.utree.eightysix.rest;
 
 import android.os.Build;
 import com.baidu.android.common.util.CommonParam;
@@ -112,7 +112,7 @@ public class RESTRequester {
                     data.params.put(p.value(), f.get(request));
                 }
 
-                com.utree.eightysix.request.Header h = f.getAnnotation(com.utree.eightysix.request.Header.class);
+                com.utree.eightysix.rest.Header h = f.getAnnotation(com.utree.eightysix.rest.Header.class);
 
                 if (h != null) {
                     headers.add(new BasicHeader(h.value(), (String) f.get(request)));

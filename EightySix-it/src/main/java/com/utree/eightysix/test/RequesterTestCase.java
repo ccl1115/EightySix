@@ -1,13 +1,11 @@
 package com.utree.eightysix.test;
 
-import android.test.AndroidTestCase;
-import android.test.InstrumentationTestCase;
 import android.util.Log;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.utree.eightysix.C;
 import com.utree.eightysix.U;
 import com.utree.eightysix.request.LoginRequest;
-import com.utree.eightysix.request.RESTRequester;
+import com.utree.eightysix.rest.RESTRequester;
 import java.util.concurrent.CountDownLatch;
 import org.apache.http.Header;
 

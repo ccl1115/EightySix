@@ -1,4 +1,4 @@
-package com.utree.eightysix.request;
+package com.utree.eightysix.rest;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,7 +9,6 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Param {
-
+public @interface Header {
     String value();
 }
