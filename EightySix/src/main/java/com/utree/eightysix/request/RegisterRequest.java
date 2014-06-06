@@ -12,8 +12,8 @@ public class RegisterRequest {
     @Param("phone")
     public String phone;
 
-    public RegisterRequest(String password, String phone) {
-        this.password = password;
+    public RegisterRequest(String phone, String password) {
         this.phone = phone;
+        this.password = password;
     }
 }

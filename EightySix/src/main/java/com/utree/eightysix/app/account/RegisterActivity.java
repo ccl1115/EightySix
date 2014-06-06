@@ -3,19 +3,21 @@ package com.utree.eightysix.app.account;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import com.aliyun.android.oss.model.User;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.request.RegisterRequest;
 import com.utree.eightysix.response.OnResponse;
 import com.utree.eightysix.response.Response;
+import com.utree.eightysix.response.User;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.utils.OnClick;
 import com.utree.eightysix.utils.ViewId;
@@ -127,7 +129,21 @@ public class RegisterActivity extends BaseActivity {
                         if (response == null) {
                             mBtnRegister.setEnabled(true);
                         } else {
-                            finish();
+                            if (response.code != 0) {
+                                showToast(String.format("%s(%d)", response.message, response.code));
+                                mBtnRegister.setEnabled(true);
+                            } else {
+                                User user = response.object;
+                                if (user != null && !TextUtils.isEmpty(user.token)
+                                        && !TextUtils.isEmpty(user.userId)){
+                                    Account.inst().login(user.userId, user.token);
+                                    Intent intent = new Intent(RegisterActivity.this, FeedActivity.class);
+                                    startActivity(intent);
+                                } else {
+                                    showToast(R.string.server_error);
+                                    mBtnRegister.setEnabled(true);
+                                }
+                            }
                         }
                     }
                 });

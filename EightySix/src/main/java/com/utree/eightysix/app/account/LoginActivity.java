@@ -163,11 +163,11 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onResponse(Response<User> response) {
                         if (response != null) {
-                            if (response.code == 0) {
-                                finish();
-                            } else {
+                            if (response.code != 0) {
                                 showToast(response.message);
                                 mBtnLogin.setEnabled(true);
+                            } else {
+                                finish();
                             }
                         } else {
                             showToast(R.string.server_error);

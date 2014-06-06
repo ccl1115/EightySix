@@ -1,6 +1,7 @@
 package com.utree.eightysix.request;
 
 import com.google.gson.reflect.TypeToken;
+import com.jakewharton.disklrucache.DiskLruCache;
 import com.loopj.android.http.BaseJsonHttpResponseHandler;
 import com.utree.eightysix.C;
 import com.utree.eightysix.U;
@@ -40,7 +41,9 @@ public class HandlerWrapper<T> extends BaseJsonHttpResponseHandler<Response<T>> 
         if (response != null) {
             if (mKey != null) {
                 try {
-                    U.getApiCache().edit(mKey).set(0, rawResponse);
+                    DiskLruCache.Editor edit = U.getApiCache().edit(mKey);
+                    edit.set(0, rawResponse);
+                    edit.commit();
                 } catch (IOException e) {
                     U.getAnalyser().reportException(U.getContext(), e);
                 }

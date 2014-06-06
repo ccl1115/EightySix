@@ -2,8 +2,6 @@ package com.utree.eightysix.request;
 
 import android.os.Build;
 import com.baidu.android.common.util.CommonParam;
-import com.baidu.android.pushservice.PushManager;
-import com.baidu.android.pushservice.PushSettings;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
