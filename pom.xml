@@ -181,6 +181,12 @@
                 <type>aar</type>
                 <version>0.0.2</version>
             </dependency>
+
+            <dependency>
+                <groupId>galaxy-lite</groupId>
+                <artifactId>galaxy-lite</artifactId>
+                <version>1.0.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

@@ -2,6 +2,7 @@ package com.utree.eightysix.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.telephony.TelephonyManager;
 import com.utree.eightysix.C;
 import com.utree.eightysix.U;
 
@@ -37,5 +38,39 @@ public class Env {
     public static void setPatternLock(boolean lock) {
         SharedPreferences preferences = U.getContext().getSharedPreferences("env", Context.MODE_PRIVATE);
         preferences.edit().putBoolean("pattern_locked", lock).apply();
+    }
+
+    public static String getPushChannelId() {
+        SharedPreferences preferences = U.getContext().getSharedPreferences("env", Context.MODE_PRIVATE);
+        return preferences.getString("push_channel_id", null);
+    }
+
+    public static void setPushChannelId(String id) {
+        if (id == null) return;
+        SharedPreferences preferences = U.getContext().getSharedPreferences("env", Context.MODE_PRIVATE);
+        preferences.edit().putString("push_channel_id", id).commit();
+    }
+
+    public static String getPushUserId() {
+        SharedPreferences preferences = U.getContext().getSharedPreferences("env", Context.MODE_PRIVATE);
+        return preferences.getString("push_user_id", null);
+    }
+
+    public static void setPushUserId(String id) {
+        if (id == null) return;
+        SharedPreferences preferences = U.getContext().getSharedPreferences("env", Context.MODE_PRIVATE);
+        preferences.edit().putString("push_user_id", id).commit();
+    }
+
+    public static String getImei() {
+        SharedPreferences preferences = U.getContext().getSharedPreferences("application", Context.MODE_PRIVATE);
+        String imei = preferences.getString("deviceId", null);
+        if (imei == null) {
+            TelephonyManager t = (TelephonyManager) U.getContext().getSystemService(Context.TELEPHONY_SERVICE);
+            imei = t.getDeviceId();
+            preferences.edit().putString("deviceId", imei).commit();
+        }
+
+        return imei;
     }
 }

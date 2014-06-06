@@ -1,6 +1,9 @@
 package com.utree.eightysix.request;
 
 import android.os.Build;
+import com.baidu.android.common.util.CommonParam;
+import com.baidu.android.pushservice.PushManager;
+import com.baidu.android.pushservice.PushSettings;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
@@ -8,6 +11,7 @@ import com.loopj.android.http.ResponseHandlerInterface;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.C;
 import com.utree.eightysix.U;
+import com.utree.eightysix.utils.Env;
 import de.akquinet.android.androlog.Log;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -139,9 +143,20 @@ public class RESTRequester {
         params.add("device", Build.DEVICE);
         params.add("model", Build.MODEL);
         params.add("manufacturer", Build.MANUFACTURER);
-        params.add("imei", C.IMEI);
+        params.add("imei", Env.getImei());
         params.add("version", String.valueOf(C.VERSION));
         params.add("channel", U.getConfig("app.channel"));
 
+        params.add("cuid", CommonParam.getCUID(U.getContext()));
+
+        String pushChannelId = Env.getPushChannelId();
+        if (pushChannelId != null) {
+            params.add("push_channelid", pushChannelId);
+        }
+
+        String pushUserId = Env.getPushUserId();
+        if (pushUserId != null) {
+            params.add("push_userid", pushUserId);
+        }
     }
 }
