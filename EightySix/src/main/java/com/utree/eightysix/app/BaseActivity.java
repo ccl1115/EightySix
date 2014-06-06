@@ -309,7 +309,7 @@ public class BaseActivity extends Activity implements View.OnClickListener {
         if (isRequesting(data.api, data.params)) return;
 
         RequestHandle handle = U.getRESTRequester().request(request,
-                new HandlerWrapper<T>(genKey(data.api, data.params), onResponse));
+                new HandlerWrapper<T>(genKey(data.api, data.params), request, onResponse));
         mRequestHandles.put(data.api, handle);
     }
 

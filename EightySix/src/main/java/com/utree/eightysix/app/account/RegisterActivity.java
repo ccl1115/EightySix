@@ -126,25 +126,21 @@ public class RegisterActivity extends BaseActivity {
                 new OnResponse<Response<User>>() {
                     @Override
                     public void onResponse(Response<User> response) {
-                        if (response == null) {
-                            mBtnRegister.setEnabled(true);
-                        } else {
-                            if (response.code != 0) {
-                                showToast(String.format("%s(%d)", response.message, response.code));
-                                mBtnRegister.setEnabled(true);
-                            } else {
+                        if (response != null) {
+                            if (response.code == 0) {
                                 User user = response.object;
                                 if (user != null && !TextUtils.isEmpty(user.token)
                                         && !TextUtils.isEmpty(user.userId)){
                                     Account.inst().login(user.userId, user.token);
                                     Intent intent = new Intent(RegisterActivity.this, FeedActivity.class);
                                     startActivity(intent);
+                                    return;
                                 } else {
-                                    showToast(R.string.server_error);
-                                    mBtnRegister.setEnabled(true);
+                                    showToast(R.string.server_object_error);
                                 }
                             }
                         }
+                        mBtnRegister.setEnabled(true);
                     }
                 });
 

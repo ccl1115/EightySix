@@ -1,45 +1,60 @@
 package com.utree.eightysix.request;
 
+import android.widget.Toast;
 import com.google.gson.reflect.TypeToken;
 import com.jakewharton.disklrucache.DiskLruCache;
 import com.loopj.android.http.BaseJsonHttpResponseHandler;
+import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.C;
 import com.utree.eightysix.U;
 import com.utree.eightysix.response.OnResponse;
 import com.utree.eightysix.response.Response;
 import de.akquinet.android.androlog.Log;
 import java.io.IOException;
+import org.apache.http.HttpStatus;
 
 /**
  * Wrapper of handler use to parse response data using Gson and cache automatically
+ * <p/>
+ * And it will do error handling and cache automation.
  */
 public class HandlerWrapper<T> extends BaseJsonHttpResponseHandler<Response<T>> {
 
     private String mKey;
     private OnResponse<Response<T>> mOnResponse;
+    private Object mRequest;
 
     /**
      * No cache constructor
+     *
+     * @param request    the object represents the reqeust
      * @param onResponse the callback
      */
-    public HandlerWrapper(OnResponse<Response<T>> onResponse) {
+    public HandlerWrapper(Object request, OnResponse<Response<T>> onResponse) {
         mOnResponse = onResponse;
+        mRequest = request;
     }
 
     /**
-     * Cache response uing the key
-     * @param key the cache key
+     * Cache response using the key
+     *
+     * @param key        the cache key
+     * @param request    the object represents the request
      * @param onResponse the callback
      */
-    public HandlerWrapper(String key, OnResponse<Response<T>> onResponse) {
+    public HandlerWrapper(String key, Object request, OnResponse<Response<T>> onResponse) {
         mKey = key;
         mOnResponse = onResponse;
+        mRequest = request;
     }
 
     @Override
     public void onSuccess(int statusCode, org.apache.http.Header[] headers, String rawResponse, Response<T> response) {
         if (response != null) {
-            if (mKey != null) {
+            errorHandle(response);
+
+            Cache need = mRequest.getClass().getAnnotation(Cache.class);
+            if (mKey != null && need != null) {
                 try {
                     DiskLruCache.Editor edit = U.getApiCache().edit(mKey);
                     edit.set(0, rawResponse);
@@ -48,14 +63,23 @@ public class HandlerWrapper<T> extends BaseJsonHttpResponseHandler<Response<T>> 
                     U.getAnalyser().reportException(U.getContext(), e);
                 }
             }
-            mOnResponse.onResponse(response);
-        } else {
-            mOnResponse.onResponse(null);
         }
+
+        if (statusCode > HttpStatus.SC_MULTIPLE_CHOICES) {
+            if (BuildConfig.DEBUG) {
+                Toast.makeText(U.getContext(), "HttpStatus: " + statusCode, Toast.LENGTH_SHORT).show();
+            }
+        }
+        mOnResponse.onResponse(response);
     }
 
     @Override
     public void onFailure(int statusCode, org.apache.http.Header[] headers, Throwable e, String rawData, Response<T> errorResponse) {
+        if (statusCode > HttpStatus.SC_MULTIPLE_CHOICES) {
+            if (BuildConfig.DEBUG) {
+                Toast.makeText(U.getContext(), "HttpStatus: " + statusCode, Toast.LENGTH_SHORT).show();
+            }
+        }
         mOnResponse.onResponse(null);
     }
 
@@ -64,5 +88,13 @@ public class HandlerWrapper<T> extends BaseJsonHttpResponseHandler<Response<T>> 
         Log.d(C.TAG.RR, "response: " + responseBody);
         return U.getGson().fromJson(responseBody, new TypeToken<Response<T>>() {
         }.getType());
+    }
+
+    private void errorHandle(Response<T> response) {
+        if (BuildConfig.DEBUG) {
+            if (response.code != 0) {
+                Toast.makeText(U.getContext(), String.format("%s(%d)", response.message, response.code), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
