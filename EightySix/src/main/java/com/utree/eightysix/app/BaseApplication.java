@@ -2,7 +2,7 @@ package com.utree.eightysix.app;
 
 import android.content.Context;
 import com.baidu.frontia.FrontiaApplication;
-import com.utree.eightysix.push.PushHelper;
+import com.utree.eightysix.U;
 import de.akquinet.android.androlog.Constants;
 import de.akquinet.android.androlog.Log;
 
@@ -21,7 +21,7 @@ public class BaseApplication extends FrontiaApplication {
         Log.activateLogging();
         Log.setDefaultLogLevel(Constants.VERBOSE);
 
-        PushHelper.startWork();
+        U.getPushHelper().startWork();
     }
 
     public static Context getContext() {

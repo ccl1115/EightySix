@@ -11,6 +11,8 @@ import com.squareup.otto.ThreadEnforcer;
 import com.utree.eightysix.app.BaseApplication;
 import com.utree.eightysix.location.BdLocationImpl;
 import com.utree.eightysix.location.Location;
+import com.utree.eightysix.push.PushHelper;
+import com.utree.eightysix.push.PushHelperImpl;
 import com.utree.eightysix.request.RESTRequester;
 import com.utree.eightysix.statistics.Analyser;
 import com.utree.eightysix.statistics.MtaAnalyserImpl;
@@ -23,7 +25,7 @@ import java.util.Properties;
 
 /**
  * Most helpful methods and singleton instances
- *
+ * <p/>
  * <b>Most of these methods must be invoked in main thread.</b>
  */
 public class U {
@@ -35,6 +37,8 @@ public class U {
     private static RESTRequester sRESTRequester;
     private static CacheUtils sCacheUtils;
     private static Bus sBus;
+
+    private static PushHelper sPushHelper;
 
     private static Gson sGson = new GsonBuilder().create();
 
@@ -94,6 +98,15 @@ public class U {
         }
         return sCacheUtils;
     }
+
+    public static PushHelper getPushHelper() {
+        checkThread();
+        if (sPushHelper == null) {
+            sPushHelper = new PushHelperImpl();
+        }
+        return sPushHelper;
+    }
+
 
     public static DiskLruCache getApiCache() {
         return getCacheUtils().getCache(U.getConfig("cache.api.dir"),
