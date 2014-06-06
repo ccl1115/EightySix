@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -129,11 +130,8 @@ public class RegisterActivity extends BaseActivity {
                         if (response != null) {
                             if (response.code == 0) {
                                 User user = response.object;
-                                if (user != null && !TextUtils.isEmpty(user.token)
-                                        && !TextUtils.isEmpty(user.userId)){
+                                if (user != null) {
                                     Account.inst().login(user.userId, user.token);
-                                    Intent intent = new Intent(RegisterActivity.this, FeedActivity.class);
-                                    startActivity(intent);
                                     return;
                                 } else {
                                     showToast(R.string.server_object_error);
@@ -145,5 +143,10 @@ public class RegisterActivity extends BaseActivity {
                 });
 
         mBtnRegister.setEnabled(false);
+    }
+
+    @Subscribe public void onLoginEvent(Account.LoginEvent event) {
+        showToast(R.string.register_success);
+        finish();
     }
 }

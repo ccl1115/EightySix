@@ -2,9 +2,11 @@ package com.utree.eightysix.app.intro;
 
 import android.content.Intent;
 import android.os.Bundle;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.account.LoginActivity;
 import com.utree.eightysix.app.account.RegisterActivity;
 import com.utree.eightysix.utils.Env;
 
@@ -19,7 +21,11 @@ public class GuideActivity extends BaseActivity {
         getHandler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(GuideActivity.this, RegisterActivity.class));
+                if (Account.inst().isLogin()) {
+
+                } else {
+                    startActivity(new Intent(GuideActivity.this, LoginActivity.class));
+                }
                 finish();
                 Env.setFirstRun(false);
             }

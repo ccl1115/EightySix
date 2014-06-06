@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.account.GetLockpatternActivity;
@@ -81,21 +82,23 @@ public class IntroActivity extends BaseActivity {
 
         hideTopBar(false);
 
-        if (Env.isPatternLocked()) {
-            animateToLockPattern();
-        } else {
-            getHandler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (Env.firstRun()) {
-                        startActivity(new Intent(IntroActivity.this, GuideActivity.class));
+        getHandler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (Env.isPatternLocked()) {
+                    animateToLockPattern();
+                } else if (Env.firstRun()) {
+                    startActivity(new Intent(IntroActivity.this, GuideActivity.class));
+                } else {
+                    if (Account.inst().isLogin()) {
+
                     } else {
                         startActivity(new Intent(IntroActivity.this, LoginActivity.class));
                     }
-                    finish();
                 }
-            }, 2000);
-        }
+                finish();
+            }
+        }, 1500);
 
         mLockPatternView.setOnPatternListener(new LockPatternView.OnPatternListener() {
             @Override
@@ -151,7 +154,6 @@ public class IntroActivity extends BaseActivity {
                 ObjectAnimator.ofFloat(mIntroUrl, "translationY", 0, dp2px(70))
         );
         animatorSet.setDuration(1500);
-        animatorSet.setStartDelay(1500);
         animatorSet.start();
         animatorSet.addListener(new Animator.AnimatorListener() {
             @Override
