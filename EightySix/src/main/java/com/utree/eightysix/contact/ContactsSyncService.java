@@ -152,7 +152,7 @@ public class ContactsSyncService extends IntentService {
                 projections, selection, null, null);
 
         if (cursor == null) return null;
-        if (!cursor.moveToFirst()) return null;
+        if (!cursor.moveToFirst()) return contacts;
 
         do {
             Contact contact = new Contact();
