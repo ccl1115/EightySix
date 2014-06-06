@@ -25,6 +25,7 @@ import com.utree.eightysix.response.Response;
 import com.utree.eightysix.widget.TopBar;
 import de.akquinet.android.androlog.Log;
 import java.awt.Frame;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -309,12 +310,12 @@ public class BaseActivity extends Activity implements View.OnClickListener {
         return mTopBar;
     }
 
-    protected final <T> void request(Object request, OnResponse<Response<T>> onResponse) {
+    protected final <T> void request(Object request, OnResponse<Response<T>> onResponse, Type type) {
         RESTRequester.RequestData data = U.getRESTRequester().convert(request);
         if (isRequesting(data.api, data.params)) return;
 
         RequestHandle handle = U.getRESTRequester().request(request,
-                new HandlerWrapper<T>(genKey(data.api, data.params), request, onResponse));
+                new HandlerWrapper<T>(genKey(data.api, data.params), request, onResponse, type));
         mRequestHandles.put(data.api, handle);
     }
 

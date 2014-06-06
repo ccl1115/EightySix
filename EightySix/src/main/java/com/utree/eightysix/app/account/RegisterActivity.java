@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
@@ -140,7 +141,7 @@ public class RegisterActivity extends BaseActivity {
                         }
                         mBtnRegister.setEnabled(true);
                     }
-                });
+                }, new TypeToken<Response<User>>() {}.getType());
 
         mBtnRegister.setEnabled(false);
     }

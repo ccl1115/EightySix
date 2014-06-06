@@ -11,6 +11,7 @@ import com.utree.eightysix.response.OnResponse;
 import com.utree.eightysix.response.Response;
 import de.akquinet.android.androlog.Log;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import org.apache.http.HttpStatus;
 
 /**
@@ -23,6 +24,7 @@ public class HandlerWrapper<T> extends BaseJsonHttpResponseHandler<Response<T>> 
     private String mKey;
     private OnResponse<Response<T>> mOnResponse;
     private Object mRequest;
+    private Type mType;
 
     /**
      * No cache constructor
@@ -30,9 +32,10 @@ public class HandlerWrapper<T> extends BaseJsonHttpResponseHandler<Response<T>> 
      * @param request    the object represents the reqeust
      * @param onResponse the callback
      */
-    public HandlerWrapper(Object request, OnResponse<Response<T>> onResponse) {
+    public HandlerWrapper(Object request, OnResponse<Response<T>> onResponse, Type type) {
         mOnResponse = onResponse;
         mRequest = request;
+        mType = type;
     }
 
     /**
@@ -42,10 +45,11 @@ public class HandlerWrapper<T> extends BaseJsonHttpResponseHandler<Response<T>> 
      * @param request    the object represents the request
      * @param onResponse the callback
      */
-    public HandlerWrapper(String key, Object request, OnResponse<Response<T>> onResponse) {
+    public HandlerWrapper(String key, Object request, OnResponse<Response<T>> onResponse, Type type) {
         mKey = key;
         mOnResponse = onResponse;
         mRequest = request;
+        mType = type;
     }
 
     @Override
@@ -92,8 +96,7 @@ public class HandlerWrapper<T> extends BaseJsonHttpResponseHandler<Response<T>> 
     @Override
     public Response<T> parseResponse(String responseBody) throws Throwable {
         Log.d(C.TAG.RR, "response: " + responseBody);
-        return U.getGson().fromJson(responseBody, new TypeToken<Response<T>>() {
-        }.getType());
+        return U.getGson().fromJson(responseBody, mType);
     }
 
     private void errorHandle(Response<T> response) {

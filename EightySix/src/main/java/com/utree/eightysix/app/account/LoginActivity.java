@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
@@ -173,7 +174,7 @@ public class LoginActivity extends BaseActivity {
                         }
                         mBtnLogin.setEnabled(true);
                     }
-                });
+                }, new TypeToken<Response<User>>() {}.getType());
         mBtnLogin.setEnabled(false);
     }
 
