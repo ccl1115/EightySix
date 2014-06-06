@@ -180,12 +180,7 @@ public class LoginActivity extends BaseActivity {
 
     @Subscribe public void onLoginEvent(Account.LoginEvent event) {
         showToast(R.string.login_success);
-        getHandler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                finish();
-            }
-        }, 1000);
+        finish();
     }
 
     /**
