@@ -208,6 +208,8 @@ public class BaseActivity extends Activity implements View.OnClickListener {
     }
 
     protected final void hideTopBar(boolean animate) {
+        ((RelativeLayout.LayoutParams) findViewById(R.id.content).getLayoutParams()).topMargin = 0;
+        mBaseView.requestLayout();
         if (animate) {
             ObjectAnimator animator = ObjectAnimator.ofFloat(mTopBar, "translationY", 0, -mTopBar.getMeasuredHeight());
             animator.addListener(new Animator.AnimatorListener() {
@@ -239,6 +241,9 @@ public class BaseActivity extends Activity implements View.OnClickListener {
     }
 
     protected final void showTopBar(boolean animate) {
+        ((RelativeLayout.LayoutParams) findViewById(R.id.content).getLayoutParams()).topMargin
+                = getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
+        mBaseView.requestLayout();
         mTopBar.setVisibility(View.VISIBLE);
         if (animate) {
             ObjectAnimator animator =
