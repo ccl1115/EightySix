@@ -139,7 +139,34 @@ public class SampleActivity extends BaseActivity {
 1. 重复的请求会被抛弃。我们根据path和params.toString()加起来的md5值来判断一个请求是不是重复的。
 2. Activity在onDestroy的时候会自动取消所有的请求，也可以通过cancelAll()方法来暂停。
 
+## Otto 消息和事件系统
+
+Otto 是一个开源的消息系统，它采用Pub/Sub模型，支持多个Bus，支持线程限定。
+
+#### 为什么引入消息系统
+
+当我们有大量异步任务，或者一个事件被多个对象监听的时候，Pub／Sub消息系统是一个非常好的解决方案。它快速高效，并且降低了开发成本。
+
+#### EightySix在哪里使用了Otto
+
+在我们的应用启动的时候会创建一个全局的Bus，每个继承自BaseActivity的Activity都会自动的在onCreate()的时候注册，
+在onDestroy()的时候反注册。这样每个Activity都能收到发送给全局Bus的消息，当然前提是我们订阅了某一个事件。
+
+```
+@Subscribe public void onSomeEvent(SomeEvent event) {
+    // deal with this event
+}
+```
+
+例如，如果你想关注用户的登录和注销，你可以订阅Account.LoginEvent事件，BaseActivity事实上已经监听了LogoutEvent，
+因为大部分Activity都需要在用户登出的时候finish自身。
+
+
 ## Changelog
+
+**2014/06/06**
+
+增加Otto说明
 
 **2014/05/28**
 
