@@ -97,9 +97,9 @@ public class PostActivity extends BaseActivity {
                     showToast(getString(R.string.shuffle_bg_color));
                     mToastShown = true;
                 }
-                int color = new Random().nextInt();
+                int color = new Random().nextInt() | (0xFF << 24);
                 mIvPostBg.setImageDrawable(new ColorDrawable(color));
-                mPostEditText.setTextColor((color & 0x00FFFFFF) > 0x00888888 ? Color.BLACK : Color.WHITE);
+                mPostEditText.setTextColor(monochromizing(color));
                 break;
             case R.id.tv_bottom:
                 mDescriptionDialog.show();
@@ -366,8 +366,8 @@ public class PostActivity extends BaseActivity {
         }
     }
 
-    private int normalizeColor(int color) {
-        return (color & 0xff) > 0x88 && (color >> 8 & 0xff) > 0x88 && (color >> 16 & 0xff) > 0x88
+    private int monochromizing(int color) {
+        return (color & 0xff) > 0x88 && ((color >> 8) & 0xff) > 0x88 && ((color >> 16) & 0xff) > 0x88
                 ? Color.BLACK : Color.WHITE;
     }
 }
