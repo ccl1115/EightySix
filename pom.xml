@@ -176,13 +176,6 @@
             </dependency>
 
             <dependency>
-                <groupId>org.michaelevans.colorart</groupId>
-                <artifactId>library</artifactId>
-                <type>aar</type>
-                <version>0.0.2</version>
-            </dependency>
-
-            <dependency>
                 <groupId>galaxy-lite</groupId>
                 <artifactId>galaxy-lite</artifactId>
                 <version>1.0.0</version>
