@@ -1,6 +1,7 @@
-package com.utree.eightysix.request;
+package com.utree.eightysix.rest;
 
 import android.widget.Toast;
+import com.google.gson.reflect.TypeToken;
 import com.jakewharton.disklrucache.DiskLruCache;
 import com.loopj.android.http.BaseJsonHttpResponseHandler;
 import com.utree.eightysix.BuildConfig;
@@ -19,12 +20,12 @@ import org.apache.http.HttpStatus;
  * <p/>
  * And it will do error handling and cache automation.
  */
-public class HandlerWrapper<T> extends BaseJsonHttpResponseHandler<Response<T>> {
+public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHandler<T> {
 
     private String mKey;
-    private OnResponse<Response<T>> mOnResponse;
+    private OnResponse<T> mOnResponse;
     private Object mRequest;
-    private Type mType;
+    private Class<T> mClz;
 
     /**
      * No cache constructor
@@ -32,10 +33,10 @@ public class HandlerWrapper<T> extends BaseJsonHttpResponseHandler<Response<T>> 
      * @param request    the object represents the reqeust
      * @param onResponse the callback
      */
-    public HandlerWrapper(Object request, OnResponse<Response<T>> onResponse, Type type) {
+    public HandlerWrapper(Object request, OnResponse<T> onResponse, Class<T> clz) {
         mOnResponse = onResponse;
         mRequest = request;
-        mType = type;
+        mClz = clz;
     }
 
     /**
@@ -45,15 +46,15 @@ public class HandlerWrapper<T> extends BaseJsonHttpResponseHandler<Response<T>> 
      * @param request    the object represents the request
      * @param onResponse the callback
      */
-    public HandlerWrapper(String key, Object request, OnResponse<Response<T>> onResponse, Type type) {
+    public HandlerWrapper(String key, Object request, OnResponse<T> onResponse, Class<T> clz) {
         mKey = key;
         mOnResponse = onResponse;
         mRequest = request;
-        mType = type;
+        mClz = clz;
     }
 
     @Override
-    public void onSuccess(int statusCode, org.apache.http.Header[] headers, String rawResponse, Response<T> response) {
+    public void onSuccess(int statusCode, org.apache.http.Header[] headers, String rawResponse, T response) {
         if (response != null) {
             errorHandle(response);
 
@@ -78,7 +79,7 @@ public class HandlerWrapper<T> extends BaseJsonHttpResponseHandler<Response<T>> 
     }
 
     @Override
-    public void onFailure(int statusCode, org.apache.http.Header[] headers, Throwable e, String rawData, Response<T> errorResponse) {
+    public void onFailure(int statusCode, org.apache.http.Header[] headers, Throwable e, String rawData, T errorResponse) {
         if (statusCode > HttpStatus.SC_MULTIPLE_CHOICES) {
             if (BuildConfig.DEBUG) {
                 Toast.makeText(U.getContext(), "HttpStatus: " + statusCode, Toast.LENGTH_SHORT).show();
@@ -94,12 +95,12 @@ public class HandlerWrapper<T> extends BaseJsonHttpResponseHandler<Response<T>> 
     }
 
     @Override
-    public Response<T> parseResponse(String responseBody) throws Throwable {
+    public T parseResponse(String responseBody) throws Throwable {
         Log.d(C.TAG.RR, "response: " + responseBody);
-        return U.getGson().fromJson(responseBody, mType);
+        return U.getGson().fromJson(responseBody, mClz);
     }
 
-    private void errorHandle(Response<T> response) {
+    private void errorHandle(T response) {
         if (BuildConfig.DEBUG) {
             if (response.code != 0) {
                 Toast.makeText(U.getContext(), String.format("%s(%d)", response.message, response.code), Toast.LENGTH_SHORT).show();

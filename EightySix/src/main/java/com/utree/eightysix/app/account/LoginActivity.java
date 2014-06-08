@@ -19,7 +19,7 @@ import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.request.LoginRequest;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.Response;
-import com.utree.eightysix.response.User;
+import com.utree.eightysix.response.UserResponse;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.utils.OnClick;
@@ -159,9 +159,9 @@ public class LoginActivity extends BaseActivity {
 
     private void requestLogin() {
         request(new LoginRequest(mEtPhoneNumber.getText().toString(), mEtPwd.getText().toString()),
-                new OnResponse<Response<User>>() {
+                new OnResponse<UserResponse>() {
                     @Override
-                    public void onResponse(Response<User> response) {
+                    public void onResponse(UserResponse response) {
                         if (response != null) {
                             if (response.code == 0) {
                                 if (response.object != null) {
@@ -174,7 +174,7 @@ public class LoginActivity extends BaseActivity {
                         }
                         mBtnLogin.setEnabled(true);
                     }
-                }, new TypeToken<Response<User>>() {}.getType());
+                }, UserResponse.class);
         mBtnLogin.setEnabled(false);
     }
 

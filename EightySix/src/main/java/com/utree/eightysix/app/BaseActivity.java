@@ -17,7 +17,7 @@ import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.request.HandlerWrapper;
+import com.utree.eightysix.rest.HandlerWrapper;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.Response;
@@ -57,7 +57,7 @@ public class BaseActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        Log.d(this, getResources().getResourceName(v.getId()));
+        Log.d("EightySix.OnClick", getResources().getResourceName(v.getId()));
 
         switch (v.getId()) {
             case R.id.top_bar_action_overflow:
@@ -334,12 +334,12 @@ public class BaseActivity extends Activity implements View.OnClickListener {
         return mTopBar;
     }
 
-    protected final <T> void request(Object request, OnResponse<Response<T>> onResponse, Type type) {
+    protected final <T extends Response> void request(Object request, OnResponse<T> onResponse, Class<T> clz) {
         RESTRequester.RequestData data = U.getRESTRequester().convert(request);
         if (isRequesting(data.api, data.params)) return;
 
         RequestHandle handle = U.getRESTRequester().request(request,
-                new HandlerWrapper<T>(genKey(data.api, data.params), request, onResponse, type));
+                new HandlerWrapper<T>(genKey(data.api, data.params), request, onResponse, clz));
         mRequestHandles.put(data.api, handle);
     }
 

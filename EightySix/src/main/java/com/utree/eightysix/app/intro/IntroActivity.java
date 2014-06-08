@@ -89,14 +89,15 @@ public class IntroActivity extends BaseActivity {
                     animateToLockPattern();
                 } else if (Env.firstRun()) {
                     startActivity(new Intent(IntroActivity.this, GuideActivity.class));
+                    finish();
                 } else {
                     if (Account.inst().isLogin()) {
 
                     } else {
                         startActivity(new Intent(IntroActivity.this, LoginActivity.class));
                     }
+                    finish();
                 }
-                finish();
             }
         }, 1500);
 

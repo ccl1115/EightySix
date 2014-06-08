@@ -1,11 +1,10 @@
-package com.utree.eightysix.response;
+package com.utree.eightysix.response.data;
 
 import com.google.gson.annotations.SerializedName;
 
 /**
- */
+*/
 public class Post {
-
     @SerializedName("bgUrl")
     public String bgUrl;
 

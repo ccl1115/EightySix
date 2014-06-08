@@ -15,9 +15,10 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.request.RegisterRequest;
+import com.utree.eightysix.response.data.User;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.Response;
-import com.utree.eightysix.response.User;
+import com.utree.eightysix.response.UserResponse;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.utils.OnClick;
 import com.utree.eightysix.utils.ViewId;
@@ -123,9 +124,9 @@ public class RegisterActivity extends BaseActivity {
 
     private void requestRegister() {
         request(new RegisterRequest(mEtPhoneNumber.getText().toString(), mEtPwd.getText().toString()),
-                new OnResponse<Response<User>>() {
+                new OnResponse<UserResponse>() {
                     @Override
-                    public void onResponse(Response<User> response) {
+                    public void onResponse(UserResponse response) {
                         if (response != null) {
                             if (response.code == 0) {
                                 User user = response.object;
@@ -139,7 +140,7 @@ public class RegisterActivity extends BaseActivity {
                         }
                         mBtnRegister.setEnabled(true);
                     }
-                }, new TypeToken<Response<User>>() {}.getType());
+                }, UserResponse.class);
 
         mBtnRegister.setEnabled(false);
     }

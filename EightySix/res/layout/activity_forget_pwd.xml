@@ -54,13 +54,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"/>
 
-        <Button
+        <com.utree.eightysix.widget.RoundedButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/done"
                 android:id="@+id/btn_done"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="25dp"/>
+                android:layout_marginTop="25dp"
+                app:radius="2dp"
+                app:background="@color/apptheme_primary_btn_light"/>
 
     </LinearLayout>
 

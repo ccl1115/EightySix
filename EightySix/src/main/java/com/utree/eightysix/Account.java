@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 import com.utree.eightysix.app.account.LoginActivity;
-import com.utree.eightysix.response.User;
+import com.utree.eightysix.response.UserResponse;
+import com.utree.eightysix.response.data.User;
+import de.akquinet.android.androlog.Log;
 
 /**
  */
@@ -21,6 +23,8 @@ public class Account {
     private Account() {
         mUserId = U.getContext().getSharedPreferences("account", Context.MODE_PRIVATE).getString("user_id", "");
         mToken = U.getContext().getSharedPreferences("account", Context.MODE_PRIVATE).getString("token", "");
+        Log.v("Account", "userId=" + mUserId);
+        Log.v("Account", "token=" + mToken);
         mIsLogin = !TextUtils.isEmpty(mUserId) && !TextUtils.isEmpty(mToken);
     }
 

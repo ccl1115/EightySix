@@ -14,9 +14,13 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.request.FindPwd1Request;
+import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.utils.OnClick;
 import com.utree.eightysix.utils.ViewId;
+import com.utree.eightysix.widget.RoundedButton;
 
 /**
  */
@@ -37,14 +41,18 @@ public class ForgetPwdActivity extends BaseActivity {
     public LinearLayout mPage2;
 
     @ViewId(R.id.btn_send)
-    public Button mSendCaptcha;
+    public Button mBtnSend;
 
     @ViewId(R.id.et_pwd)
     public EditText mEtNewPwd;
 
     @ViewId(R.id.btn_done)
     @OnClick
-    public Button mBtnDone;
+    public RoundedButton mBtnDone;
+
+    @ViewId(R.id.btn_ok_1)
+    @OnClick
+    public RoundedButton mBtnOk1;
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -139,10 +147,15 @@ public class ForgetPwdActivity extends BaseActivity {
         switch (id) {
             case R.id.btn_ok_1:
                 break;
+            case R.id.btn_send:
+                break;
             case R.id.btn_done:
                 break;
             default:
                 break;
         }
+    }
+
+    private void requestFindPwd1() {
     }
 }

@@ -7,7 +7,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.response.Post;
+import com.utree.eightysix.response.data.Post;
 import com.utree.eightysix.utils.OnClick;
 import com.utree.eightysix.utils.ViewId;
 
