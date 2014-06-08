@@ -425,7 +425,6 @@ public class LockPatternView extends View {
                 mInProgressX = centerX + dx;
                 mInProgressY = centerY + dy;
             }
-            // TODO: Infinite loop here...
             invalidate();
         }
 

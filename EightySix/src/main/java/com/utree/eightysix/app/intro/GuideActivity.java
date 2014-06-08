@@ -22,7 +22,7 @@ public class GuideActivity extends BaseActivity {
             @Override
             public void run() {
                 if (Account.inst().isLogin()) {
-
+                    //TODO go to feeds activity or circle list activity
                 } else {
                     startActivity(new Intent(GuideActivity.this, LoginActivity.class));
                 }

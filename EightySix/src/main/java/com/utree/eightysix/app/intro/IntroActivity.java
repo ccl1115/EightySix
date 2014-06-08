@@ -12,6 +12,7 @@ import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.account.GetLockpatternActivity;
 import com.utree.eightysix.app.account.LoginActivity;
@@ -92,14 +93,14 @@ public class IntroActivity extends BaseActivity {
                     finish();
                 } else {
                     if (Account.inst().isLogin()) {
-
+                        //TODO Go to feeds activity or circle list activity
                     } else {
                         startActivity(new Intent(IntroActivity.this, LoginActivity.class));
                     }
                     finish();
                 }
             }
-        }, 1500);
+        }, U.getConfigInt("activity.intro.delay"));
 
         mLockPatternView.setOnPatternListener(new LockPatternView.OnPatternListener() {
             @Override
@@ -154,7 +155,7 @@ public class IntroActivity extends BaseActivity {
 
                 ObjectAnimator.ofFloat(mIntroUrl, "translationY", 0, dp2px(70))
         );
-        animatorSet.setDuration(1500);
+        animatorSet.setDuration(U.getConfigInt("activity.intro.animation.duration"));
         animatorSet.start();
         animatorSet.addListener(new Animator.AnimatorListener() {
             @Override

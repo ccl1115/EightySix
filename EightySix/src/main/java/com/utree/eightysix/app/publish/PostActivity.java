@@ -365,4 +365,9 @@ public class PostActivity extends BaseActivity {
             return false;
         }
     }
+
+    private int normalizeColor(int color) {
+        return (color & 0xff) > 0x88 && (color >> 8 & 0xff) > 0x88 && (color >> 16 & 0xff) > 0x88
+                ? Color.BLACK : Color.WHITE;
+    }
 }
