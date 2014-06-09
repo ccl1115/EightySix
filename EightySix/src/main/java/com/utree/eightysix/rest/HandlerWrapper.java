@@ -1,18 +1,13 @@
 package com.utree.eightysix.rest;
 
 import android.widget.Toast;
-import com.google.gson.reflect.TypeToken;
 import com.jakewharton.disklrucache.DiskLruCache;
 import com.loopj.android.http.BaseJsonHttpResponseHandler;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.C;
 import com.utree.eightysix.U;
-import com.utree.eightysix.rest.OnResponse;
-import com.utree.eightysix.rest.Response;
-import com.utree.eightysix.rest.Cache;
 import de.akquinet.android.androlog.Log;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import org.apache.http.HttpStatus;
 
 /**
@@ -56,7 +51,7 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
     @Override
     public void onSuccess(int statusCode, org.apache.http.Header[] headers, String rawResponse, T response) {
         if (response != null) {
-            errorHandle(response);
+            handleObjectError(response);
 
             Cache need = mRequest.getClass().getAnnotation(Cache.class);
             if (mKey != null && need != null) {
@@ -100,7 +95,7 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
         return U.getGson().fromJson(responseBody, mClz);
     }
 
-    private void errorHandle(T response) {
+    private void handleObjectError(T response) {
         if (BuildConfig.DEBUG) {
             if (response.code != 0) {
                 Toast.makeText(U.getContext(), String.format("%s(%d)", response.message, response.code), Toast.LENGTH_SHORT).show();

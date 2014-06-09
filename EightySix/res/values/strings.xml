@@ -49,16 +49,18 @@
 
 
     <!-- ForgetPwdActivity -->
-    <string name="receiving_captcha">你的手机%d会收到一条4位数字的验证码的短信</string>
-    <string name="send_captcha">发送验证码</string>
-    <string name="resend_captcha">重新发送(%s)</string>
+    <string name="receiving_captcha">你的手机%s会收到一条4位数字的验证码的短信</string>
+    <string name="get_captcha">获取验证码</string>
+    <string name="reget_captcha">重新发送(%s)</string>
     <string name="find_password">找回密码</string>
     <string name="captcha">验证码</string>
-    <string name="set_password">设置新密码</string>
-    <string name="login">登录</string>
+    <string name="set_new_pwd">设置新密码</string>
+    <string name="request_success">请求成功，你将收到验证码短信</string>
+    <string name="new_pwd_set">成功修改密码</string>
 
 
     <!-- LoginActivity -->
+    <string name="login">登录</string>
     <string name="wrong_password">密码错误</string>
     <string name="wrong_phone_number">手机号没有注册</string>
     <string name="login_failed">登录失败</string>

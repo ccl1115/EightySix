@@ -23,9 +23,10 @@ public class Account {
     private Account() {
         mUserId = U.getContext().getSharedPreferences("account", Context.MODE_PRIVATE).getString("user_id", "");
         mToken = U.getContext().getSharedPreferences("account", Context.MODE_PRIVATE).getString("token", "");
-        Log.v("Account", "userId=" + mUserId);
-        Log.v("Account", "token=" + mToken);
         mIsLogin = !TextUtils.isEmpty(mUserId) && !TextUtils.isEmpty(mToken);
+        Log.v("Account", " userId = " + mUserId);
+        Log.v("Account", "  token = " + mToken);
+        Log.v("Account", "isLogin = " + mIsLogin);
     }
 
     public static Account inst() {

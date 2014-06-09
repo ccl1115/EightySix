@@ -7,13 +7,18 @@ import com.utree.eightysix.rest.Param;
 
 /**
  */
-@Api(C.API_FIND_PWD_2)
+@Api (C.API_FIND_PWD_2)
 public class FindPwd2Request {
 
-    @Param("validateCode")
+    @Param ("phone")
+    public String phone;
+
+    @Param ("validateCode")
     public String validateCode;
 
-    public FindPwd2Request(String validateCode) {
+    public FindPwd2Request(String phone, String validateCode) {
+        this.phone = phone;
         this.validateCode = validateCode;
     }
+
 }

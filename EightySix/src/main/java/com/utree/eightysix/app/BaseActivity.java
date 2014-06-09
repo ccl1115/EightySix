@@ -3,6 +3,7 @@ package com.utree.eightysix.app;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -18,32 +19,36 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.rest.HandlerWrapper;
-import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.TopBar;
 import de.akquinet.android.androlog.Log;
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Provides many base functionality to derived class
- *
+ * <p/>
  * <ul>
- *     <li>To show toast using {@link #showToast}</li>
- *     <li>To make api request using {@link #request}</li>
- *     <li>Auto bind views and OnClickListener to annotated fields using annotation
- *     {@link com.utree.eightysix.utils.ViewId} and {@link com.utree.eightysix.utils.OnClick}</li>
- *     <li>Automatically set content view when annotated with {@link com.utree.eightysix.app.Layout}</li>
- *     <li>An independent TopBar acts like the Android's ActionBar</li>
- *     <li>Auto register and unregister to Otto's event bus</li>
- *     <li>Automatically finish when LogoutEventFired, override onLogout() to prevent this</li>
+ * <li>To show toast using {@link #showToast}</li>
+ * <li>To make api request using {@link #request}</li>
+ * <li>Auto bind views and OnClickListener to annotated fields using annotation
+ * {@link com.utree.eightysix.utils.ViewId} and {@link com.utree.eightysix.utils.OnClick}</li>
+ * <li>Automatically set content view when annotated with {@link com.utree.eightysix.app.Layout}</li>
+ * <li>An independent TopBar acts like the Android's ActionBar</li>
+ * <li>Auto register and unregister to Otto's event bus</li>
+ * <li>Automatically finish when LogoutEventFired, override onLogout() to prevent this</li>
  * </ul>
  */
 public class BaseActivity extends Activity implements View.OnClickListener {
 
-    private final Handler mHandler = new Handler();
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            BaseActivity.this.handleMessage(msg);
+        }
+    };
 
     private Map<String, RequestHandle> mRequestHandles = new HashMap<String, RequestHandle>();
 
@@ -78,7 +83,8 @@ public class BaseActivity extends Activity implements View.OnClickListener {
 
     /**
      * Show a toast
-     * @param res the string resource id
+     *
+     * @param res        the string resource id
      * @param inActivity if true cancel the toast when activity finish.
      */
     protected void showToast(int res, boolean inActivity) {
@@ -89,8 +95,8 @@ public class BaseActivity extends Activity implements View.OnClickListener {
     }
 
     /**
-     * @see #showToast(int, boolean)
      * @param res
+     * @see #showToast(int, boolean)
      */
     protected void showToast(int res) {
         showToast(res, true);
@@ -98,7 +104,8 @@ public class BaseActivity extends Activity implements View.OnClickListener {
 
     /**
      * Show a toast
-     * @param string the string
+     *
+     * @param string     the string
      * @param inActivity if true cancel the toast when activity finish.
      */
     protected void showToast(String string, boolean inActivity) {
@@ -360,6 +367,10 @@ public class BaseActivity extends Activity implements View.OnClickListener {
 
     protected final int dp2px(int dp) {
         return U.dp2px(dp);
+    }
+
+    protected void handleMessage(Message message) {
+
     }
 
     private boolean isRequesting(String api, RequestParams params) {

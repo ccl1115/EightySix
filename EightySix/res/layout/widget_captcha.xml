@@ -35,14 +35,14 @@
     <com.utree.eightysix.widget.RoundedButton
             style="@style/Widget.RoundedButton.Apptheme.Small"
             app:radius="2dp"
-            android:id="@+id/btn_send"
+            android:id="@+id/btn_get_captcha"
             android:layout_gravity="center_vertical"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/send_captcha"/>
+            android:text="@string/get_captcha"/>
 
 
 </RelativeLayout>
