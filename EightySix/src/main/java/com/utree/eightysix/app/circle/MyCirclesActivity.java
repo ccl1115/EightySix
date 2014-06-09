@@ -8,9 +8,9 @@ import com.utree.eightysix.app.TopTitle;
 
 /**
  */
-@Layout (R.layout.activity_circle_list)
+@Layout (R.layout.activity_my_circles)
 @TopTitle (R.string.my_circles)
-public class CircleListActivity extends BaseActivity {
+public class MyCirclesActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

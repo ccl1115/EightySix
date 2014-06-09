@@ -141,7 +141,7 @@
                 android:configChanges="keyboardHidden|orientation|keyboard|screenSize"
                 android:exported="@bool/exported"/>
 
-        <activity android:name=".app.circle.CircleListActivity"
+        <activity android:name=".app.circle.MyCirclesActivity"
                 android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
                 android:exported="@bool/exported"/>
 
