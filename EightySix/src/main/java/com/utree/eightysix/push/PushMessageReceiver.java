@@ -4,6 +4,7 @@ import android.content.Context;
 import com.baidu.frontia.api.FrontiaPushMessageReceiver;
 import com.utree.eightysix.U;
 import com.utree.eightysix.utils.Env;
+import de.akquinet.android.androlog.Log;
 import java.util.List;
 
 /**
@@ -13,6 +14,8 @@ public final class PushMessageReceiver extends FrontiaPushMessageReceiver {
     public void onBind(Context context, int errorCode, String appId, String userId, String channelId, String requestId) {
 
         if (errorCode == 0) {
+            Log.v("PushService", "channelId = " + channelId);
+            Log.v("PushService", "   userId = " + userId);
             Env.setPushChannelId(channelId);
             Env.setPushUserId(userId);
         } else {
