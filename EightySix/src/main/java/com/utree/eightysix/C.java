@@ -20,6 +20,9 @@ public class C {
     public static final String API_FIND_PWD_3 = "/login/step3.do";
     public static final String API_LOGOUT = "/login/logout.do";
 
+    public static final String API_FACTORY_MY = "/factory/my.do";
+    public static final String API_FACTORY_FIND = "/factory/find.do";
+
     public static String IMEI = "";
 
     /**
