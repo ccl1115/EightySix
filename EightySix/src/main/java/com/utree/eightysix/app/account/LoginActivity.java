@@ -1,6 +1,7 @@
 package com.utree.eightysix.app.account;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,6 +26,7 @@ import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.utils.OnClick;
 import com.utree.eightysix.utils.ViewId;
 import com.utree.eightysix.widget.RoundedButton;
+import com.utree.eightysix.widget.TopBar;
 
 /**
  */
@@ -40,10 +42,6 @@ public class LoginActivity extends BaseActivity {
 
     @ViewId(R.id.et_phone_number)
     public EditText mEtPhoneNumber;
-
-    @ViewId(R.id.tv_register)
-    @OnClick
-    public TextView mTvRegister;
 
     @ViewId(R.id.tv_forget_pwd)
     @OnClick
@@ -64,9 +62,6 @@ public class LoginActivity extends BaseActivity {
         switch (id) {
             case R.id.btn_login:
                 requestLogin();
-                break;
-            case R.id.tv_register:
-                startActivity(new Intent(this, RegisterActivity.class));
                 break;
             case R.id.tv_forget_pwd:
                 startActivity(new Intent(this, ForgetPwdActivity.class));
@@ -150,11 +145,35 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
-        if (Env.isPatternLocked()) {
-            mTvRegister.setVisibility(View.GONE);
-        } else {
-            mTvRegister.setVisibility(View.VISIBLE);
+        if (!Env.isPatternLocked()) {
+            getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
+                @Override
+                public String getTitle(int position) {
+                    if (position == 0) {
+                        return getString(R.string.register);
+                    }
+                    return null;
+                }
+
+                @Override
+                public Drawable getIcon(int position) {
+                    return null;
+                }
+
+                @Override
+                public void onClick(View view, int position) {
+                    if (position == 0) {
+                        startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                    }
+                }
+
+                @Override
+                public int getCount() {
+                    return 1;
+                }
+            });
         }
+
     }
 
     private void requestLogin() {
