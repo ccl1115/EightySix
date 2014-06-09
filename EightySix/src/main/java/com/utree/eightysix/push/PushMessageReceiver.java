@@ -19,7 +19,7 @@ public final class PushMessageReceiver extends FrontiaPushMessageReceiver {
             Env.setPushChannelId(channelId);
             Env.setPushUserId(userId);
         } else {
-            U.getAnalyser().reportError(context, "bind push service failed");
+            U.getAnalyser().reportError(context, "bind push service failed : " + errorCode);
         }
     }
 
@@ -47,7 +47,8 @@ public final class PushMessageReceiver extends FrontiaPushMessageReceiver {
 
     @Override
     public void onMessage(Context context, String message, String customContentString) {
-
+        Log.d("PushService", "            message = " + message);
+        Log.d("PushService", "customContentString = " + customContentString);
     }
 
     @Override
