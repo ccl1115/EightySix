@@ -95,4 +95,9 @@
     <string name="error_start_camera">启动相机应用错误</string>
     <string name="error_start_album">无法选择相册图片</string>
 
+
+    <!-- CircleListActivity -->
+    <string name="search_circles">找工厂，找商圈，找企业</string>
+    <string name="my_circles">我的工友圈</string>
+
 </resources>

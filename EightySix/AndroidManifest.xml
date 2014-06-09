@@ -72,7 +72,7 @@
 
         <activity
                 android:name=".app.intro.IntroActivity"
-                android:exported="true">
+                android:exported="@bool/exported">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -100,46 +100,50 @@
 
         <activity
                 android:name=".app.account.RegisterActivity"
-                android:exported="true"
+                android:exported="@bool/exported"
                 android:launchMode="singleInstance"
                 android:windowSoftInputMode="stateVisible"/>
 
         <activity
                 android:name=".app.account.ForgetPwdActivity"
-                android:exported="true"
+                android:exported="@bool/exported"
                 android:windowSoftInputMode="stateVisible"/>
 
         <activity
                 android:name=".app.account.LoginActivity"
-                android:exported="true"
+                android:exported="@bool/exported"
                 android:launchMode="singleInstance"
                 android:windowSoftInputMode="stateVisible"/>
 
         <activity
                 android:name=".app.account.ImportContactActivity"
-                android:exported="true"/>
+                android:exported="@bool/exported"/>
 
         <activity
                 android:name=".app.account.GetLockpatternActivity"
-                android:exported="true"/>
+                android:exported="@bool/exported"/>
 
         <activity
                 android:name=".demo.ContactsSyncDemoActivity"
-                android:exported="true"/>
+                android:exported="@bool/exported"/>
 
         <activity
                 android:name=".app.feed.FeedActivity"
-                android:exported="true"/>
+                android:exported="@bool/exported"/>
 
         <activity
                 android:name=".app.intro.GuideActivity"
-                android:exported="true"/>
+                android:exported="@bool/exported"/>
 
         <activity
                 android:name=".app.publish.PostActivity"
                 android:windowSoftInputMode="stateHidden|adjustResize"
                 android:configChanges="keyboardHidden|orientation|keyboard|screenSize"
-                android:exported="true"/>
+                android:exported="@bool/exported"/>
+
+        <activity android:name=".app.circle.CircleListActivity"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+                android:exported="@bool/exported"/>
 
         <service
                 android:name="com.baidu.location.f"
