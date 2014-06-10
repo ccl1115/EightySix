@@ -8,7 +8,7 @@ import java.lang.reflect.Field;
  */
 public class ViewBinding {
 
-    public <T> void bind(View view, T target) {
+    public void bind(View view, Object target) {
         Field[] fields = target.getClass().getDeclaredFields();
 
         for (Field f : fields) {

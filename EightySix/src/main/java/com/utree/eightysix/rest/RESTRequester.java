@@ -11,9 +11,13 @@ import com.utree.eightysix.C;
 import com.utree.eightysix.U;
 import com.utree.eightysix.utils.Env;
 import de.akquinet.android.androlog.Log;
+import java.io.File;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
 
@@ -105,11 +109,20 @@ public class RESTRequester {
                 data.method = Method.METHOD.GET;
             }
 
-            for (Field f : clz.getDeclaredFields()) {
+            for (Field f : clz.getFields()) {
                 Param p = f.getAnnotation(Param.class);
 
                 if (p != null) {
-                    data.params.put(p.value(), f.get(request));
+                    Object value = f.get(request);
+                    if (value instanceof List || value instanceof Set || value instanceof Map) {
+                        data.params.put(p.value(), value);
+                    } else if (value instanceof File) {
+                        data.params.put(p.value(), (File) value);
+                    } else if (value instanceof InputStream) {
+                        data.params.put(p.value(), (InputStream) value);
+                    } else {
+                        data.params.put(p.value(), String.valueOf(value));
+                    }
                 }
 
                 com.utree.eightysix.rest.Header h = f.getAnnotation(com.utree.eightysix.rest.Header.class);

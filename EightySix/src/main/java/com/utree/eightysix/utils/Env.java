@@ -55,7 +55,7 @@ public class Env {
 
     public static void setPushChannelId(String id) {
         if (id == null) return;
-        getSharedPreferences().edit().putString("push_channel_id", id).commit();
+        getSharedPreferences().edit().putString("push_channel_id", id).apply();
     }
 
     public static String getPushUserId() {
@@ -64,7 +64,7 @@ public class Env {
 
     public static void setPushUserId(String id) {
         if (id == null) return;
-        getSharedPreferences().edit().putString("push_user_id", id).commit();
+        getSharedPreferences().edit().putString("push_user_id", id).apply();
     }
 
     public static String getImei() {
@@ -72,7 +72,7 @@ public class Env {
         if (imei == null) {
             TelephonyManager t = (TelephonyManager) U.getContext().getSystemService(Context.TELEPHONY_SERVICE);
             imei = t.getDeviceId();
-            getSharedPreferences().edit().putString("deviceId", imei).commit();
+            getSharedPreferences().edit().putString("deviceId", imei).apply();
         }
 
         return imei;
@@ -83,7 +83,7 @@ public class Env {
     }
 
     public static void setLastLatitude(double lat) {
-        getSharedPreferences().edit().putString("location_last_latitude", String.valueOf(lat)).commit();
+        getSharedPreferences().edit().putString("location_last_latitude", String.valueOf(lat)).apply();
     }
 
     public static String getLastLongitude() {
@@ -91,7 +91,7 @@ public class Env {
     }
 
     public static void setLastLongitude(double lon) {
-        getSharedPreferences().edit().putString("location_last_latitude", String.valueOf(lon)).commit();
+        getSharedPreferences().edit().putString("location_last_latitude", String.valueOf(lon)).apply();
     }
 
     private static SharedPreferences getSharedPreferences() {

@@ -12,7 +12,7 @@ public class FindPwd3Request {
     @Param ("phone")
     public String phone;
 
-    @Param ("new_password")
+    @Param ("newPassword")
     public String newPassword;
 
     public FindPwd3Request(String phone, String newPassword) {

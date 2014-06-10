@@ -106,6 +106,10 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
         }
     }
 
+    public EditText getSearchEditText() {
+        return mEtSearch;
+    }
+
     public String getSubTitle() {
         return mSubTitle.getText().toString();
     }

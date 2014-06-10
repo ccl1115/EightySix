@@ -53,7 +53,7 @@
                 layout="@layout/widget_pwd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"/>
+                android:layout_marginTop="30dp"/>
 
         <com.utree.eightysix.widget.RoundedButton
                 android:layout_width="match_parent"

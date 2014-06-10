@@ -7,6 +7,6 @@ import com.utree.eightysix.response.Paginate;
  */
 public class Circles {
 
-    @SerializedName("factoryCircle")
+    @SerializedName("factoryList")
     public Paginate<Circle> factoryCircle;
 }

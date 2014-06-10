@@ -4,10 +4,15 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.aliyun.android.util.MD5Util;
 import com.loopj.android.http.RequestHandle;
@@ -41,12 +46,12 @@ import java.util.Map;
  * <li>Automatically finish when LogoutEventFired, override onLogout() to prevent this</li>
  * </ul>
  */
-public class BaseActivity extends Activity implements View.OnClickListener {
+public abstract class BaseActivity extends Activity implements View.OnClickListener {
 
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            BaseActivity.this.handleMessage(msg);
+            BaseActivity.this.onHandleMessage(msg);
         }
     };
 
@@ -146,6 +151,34 @@ public class BaseActivity extends Activity implements View.OnClickListener {
         if (layout != null) {
             setContentView(layout.value());
         }
+
+        mTopBar.getSearchEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_DONE) {
+                    onSearchActionGo(v.getText().toString());
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        mTopBar.getSearchEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                onSearchTextChanged(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         U.getBus().register(this);
     }
@@ -369,7 +402,15 @@ public class BaseActivity extends Activity implements View.OnClickListener {
         return U.dp2px(dp);
     }
 
-    protected void handleMessage(Message message) {
+    protected void onHandleMessage(Message message) {
+
+    }
+
+    protected void onSearchActionGo(String keyword) {
+
+    }
+
+    protected void onSearchTextChanged(String newKeyword) {
 
     }
 

@@ -4,10 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
+import com.google.gson.reflect.TypeToken;
 import com.utree.eightysix.app.account.LoginActivity;
 import com.utree.eightysix.response.UserResponse;
 import com.utree.eightysix.response.data.User;
 import de.akquinet.android.androlog.Log;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  */
@@ -69,7 +73,7 @@ public class Account {
     private boolean setToken(String token) {
         mToken = token;
 
-        SharedPreferences preferences = U.getContext().getSharedPreferences("account", Context.MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences();
         if (TextUtils.isEmpty(mToken)) {
             preferences.edit().putString("token", "").apply();
             return false;
@@ -82,7 +86,7 @@ public class Account {
     private boolean setUserId(String userId) {
         mUserId = userId;
 
-        SharedPreferences preferences = U.getContext().getSharedPreferences("account", Context.MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences();
         if (TextUtils.isEmpty(mUserId)) {
             preferences.edit().putString("user_id", "").apply();
             return false;
@@ -90,6 +94,14 @@ public class Account {
             preferences.edit().putString("user_id", mUserId).apply();
             return true;
         }
+    }
+
+    private SharedPreferences getSharedPreferences() {
+        return U.getContext().getSharedPreferences("account", Context.MODE_PRIVATE);
+    }
+
+    private SharedPreferences getAccountSharedPreferences() {
+        return U.getContext().getSharedPreferences("account_" + mUserId, Context.MODE_PRIVATE);
     }
 
     public static class LoginEvent {
@@ -106,4 +118,13 @@ public class Account {
         }
     }
 
+    public List<String> getSearchHistory() {
+        String json = getAccountSharedPreferences().getString("search_history", "[]");
+
+        return U.getGson().fromJson(json, new TypeToken<List<String>>() {}.getType());
+    }
+
+    public void setSearchHistory(List<String> history) {
+        getAccountSharedPreferences().edit().putString("search_history", U.getGson().toJson(history)).apply();
+    }
 }

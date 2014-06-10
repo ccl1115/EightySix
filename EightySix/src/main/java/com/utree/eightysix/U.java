@@ -81,7 +81,7 @@ public class U {
         return sViewBinding.bind(view, holderClass);
     }
 
-    public static <T> void viewBinding(View view, T target) {
+    public static void viewBinding(View view, Object target) {
         sViewBinding.bind(view, target);
     }
 

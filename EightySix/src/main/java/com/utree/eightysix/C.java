@@ -22,6 +22,7 @@ public class C {
 
     public static final String API_FACTORY_MY = "/factory/my.do";
     public static final String API_FACTORY_FIND = "/factory/find.do";
+    public static final String API_FACTORY_SEARCH = "/factory/search.do";
 
     public static String IMEI = "";
 

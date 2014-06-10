@@ -160,7 +160,7 @@ public class ForgetPwdActivity extends BaseActivity {
     }
 
     @Override
-    protected void handleMessage(Message message) {
+    protected void onHandleMessage(Message message) {
         if (message.what == MSG_COUNTDOWN) {
             final long now = new Date().getTime();
             if (now < mTargetTime) {
@@ -195,6 +195,7 @@ public class ForgetPwdActivity extends BaseActivity {
                                 startCountdown();
                                 mTvReceivingCaptcha.setText(String.format(getString(R.string.receiving_captcha),
                                         mEtPhoneNumber.getText().toString()));
+                                mTvReceivingCaptcha.setVisibility(View.VISIBLE);
                             } else {
                                 mBtnGetCaptcha.setEnabled(true);
                             }

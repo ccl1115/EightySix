@@ -80,11 +80,13 @@ public class RegisterActivity extends BaseActivity {
                 }
 
 
-                if (InputValidator.phoneNumber(s)) {
-                    mCorrectPhoneNumber = true;
+                mCorrectPhoneNumber = InputValidator.phoneNumber(s);
+                if (mCorrectPhoneNumber) {
                     if (mCorrectPwd) {
                         mBtnRegister.setEnabled(true);
                     }
+                } else {
+                    mBtnRegister.setEnabled(false);
                 }
             }
 
@@ -102,11 +104,13 @@ public class RegisterActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (InputValidator.pwd(s)) {
-                    mCorrectPwd = true;
+                mCorrectPwd = InputValidator.pwd(s);
+                if (mCorrectPwd) {
                     if (mCorrectPhoneNumber) {
                         mBtnRegister.setEnabled(true);
                     }
+                } else {
+                    mBtnRegister.setEnabled(false);
                 }
             }
 
@@ -161,9 +165,11 @@ public class RegisterActivity extends BaseActivity {
                             }
                         }
                         mBtnRegister.setEnabled(true);
+                        hideProgressBar();
                     }
                 }, UserResponse.class);
 
+        showProgressBar();
         mBtnRegister.setEnabled(false);
     }
 
