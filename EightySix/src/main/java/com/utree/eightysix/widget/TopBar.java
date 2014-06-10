@@ -10,6 +10,8 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.utree.eightysix.R;
@@ -27,24 +29,36 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     private final List<View> mActionViews = new ArrayList<View>();
 
-    @ViewId(R.id.top_bar_title)
+    @ViewId (R.id.top_bar_title)
     public TextView mTitle;
 
-    @ViewId(R.id.top_bar_sub_title)
+    @ViewId (R.id.top_bar_sub_title)
     public TextView mSubTitle;
 
-    @ViewId(R.id.top_bar_action_overflow)
+    @ViewId (R.id.top_bar_action_overflow)
     @OnClick
     public ImageView mActionOverFlow;
 
-    @ViewId(R.id.top_bar_action_left)
+    @ViewId (R.id.top_bar_action_left)
     @OnClick
     public ImageView mActionLeft;
+
+    @ViewId (R.id.top_bar_search)
+    public FrameLayout mFlSearch;
+
+    @ViewId (R.id.top_bar_iv_search_close)
+    @OnClick
+    public ImageView mIvSearchClose;
+
+    @ViewId (R.id.top_bar_et_search)
+    public EditText mEtSearch;
 
     private OnClickListener mOnActionOverflowClickListener;
     private OnClickListener mOnActionLeftClickListener;
 
     private ActionAdapter mActionAdapter;
+    private ActionAdapter mAtionOverflowAdapter;
+
     private int mCurCount;
     private int mActionBgDrawableId;
 
@@ -106,6 +120,11 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     public void hideProgressBar() {
     }
 
+    public void setAtionOverflowAdapter(ActionAdapter actionAdapter) {
+        mAtionOverflowAdapter = actionAdapter;
+    }
+
+
     public void setActionAdapter(ActionAdapter actionAdapter) {
         mActionAdapter = actionAdapter;
         mCurCount = mActionAdapter == null ? 0 : mActionAdapter.getCount();
@@ -140,6 +159,26 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
         mOnActionLeftClickListener = onClickListener;
     }
 
+    public void enterSearch() {
+        mActionOverFlow.setVisibility(INVISIBLE);
+        for (View v : mActionViews) {
+            v.setVisibility(INVISIBLE);
+        }
+
+        mFlSearch.setVisibility(VISIBLE);
+    }
+
+    public void exitSearch() {
+        if (mAtionOverflowAdapter != null && mAtionOverflowAdapter.getCount() > 0) {
+            mActionOverFlow.setVisibility(VISIBLE);
+        }
+        for (View v : mActionViews) {
+            v.setVisibility(VISIBLE);
+        }
+
+        mFlSearch.setVisibility(INVISIBLE);
+    }
+
     @Override
     public void onClick(View v) {
 
@@ -155,6 +194,10 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
                 if (mOnActionLeftClickListener != null) {
                     mOnActionLeftClickListener.onClick(v);
                 }
+                break;
+            case R.id.top_bar_iv_search_close:
+                mEtSearch.setText("");
+                break;
             default:
                 for (int i = 0; i < mActionViews.size(); i++) {
                     View view = mActionViews.get(i);
@@ -169,7 +212,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     }
 
-    @SuppressWarnings("SuspiciousNameCombination")
+    @SuppressWarnings ("SuspiciousNameCombination")
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
@@ -182,6 +225,8 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
         measureChild(mActionLeft, heightSize + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
 
         widthLeft -= mActionLeft.getMeasuredWidth();
+
+        mFlSearch.measure(widthLeft + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
 
         // keep actions as square
         if (mActionAdapter != null) {
@@ -213,6 +258,8 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
         int right = r;
 
         mActionLeft.layout(0, 0, mActionLeft.getMeasuredWidth(), b);
+
+        mFlSearch.layout(mActionLeft.getRight(), 0, mActionLeft.getRight() + mFlSearch.getMeasuredWidth(), b);
 
         mTitle.layout(mActionLeft.getRight(), 0, mActionLeft.getRight() + mTitle.getMeasuredWidth(), b);
 

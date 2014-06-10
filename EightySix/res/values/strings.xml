@@ -100,4 +100,7 @@
     <string name="search_circles">找工厂，找商圈，找企业</string>
     <string name="my_circles">我的工友圈</string>
 
+    <!-- CircleSearchActivity -->
+    <string name="enter_search_keyword">请输入搜索内容</string>
+
 </resources>

@@ -21,7 +21,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/search_circles"
                 android:gravity="left|center_vertical"
-                android:textColor="#ffededed"
+                android:textColor="#ffe2e3e5"
                 android:textSize="15sp"
                 android:paddingLeft="8dp"
                 app:radius="2dp"
