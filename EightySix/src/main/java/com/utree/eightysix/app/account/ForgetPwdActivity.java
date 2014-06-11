@@ -21,8 +21,8 @@ import com.utree.eightysix.request.FindPwd3Request;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.InputValidator;
-import com.utree.eightysix.utils.OnClick;
-import com.utree.eightysix.utils.ViewId;
+import butterknife.OnClick;
+import butterknife.InjectView;
 import com.utree.eightysix.widget.RoundedButton;
 import java.util.Date;
 
@@ -34,34 +34,31 @@ public class ForgetPwdActivity extends BaseActivity {
 
     private static final int MSG_COUNTDOWN = 0x1;
 
-    @ViewId (R.id.page_1)
+    @InjectView (R.id.page_1)
     public LinearLayout mPage1;
 
-    @ViewId (R.id.et_phone_number)
+    @InjectView (R.id.et_phone_number)
     public EditText mEtPhoneNumber;
 
-    @ViewId (R.id.et_captcha)
+    @InjectView (R.id.et_captcha)
     public EditText mEtCaptcha;
 
-    @ViewId (R.id.page_2)
+    @InjectView (R.id.page_2)
     public LinearLayout mPage2;
 
-    @ViewId (R.id.btn_get_captcha)
-    @OnClick
+    @InjectView (R.id.btn_get_captcha)
     public RoundedButton mBtnGetCaptcha;
 
-    @ViewId (R.id.et_pwd)
+    @InjectView (R.id.et_pwd)
     public EditText mEtNewPwd;
 
-    @ViewId (R.id.btn_done)
-    @OnClick
+    @InjectView (R.id.btn_done)
     public RoundedButton mBtnDone;
 
-    @ViewId (R.id.btn_ok_1)
-    @OnClick
+    @InjectView (R.id.btn_ok_1)
     public RoundedButton mBtnOk1;
 
-    @ViewId (R.id.receiving_captcha)
+    @InjectView (R.id.receiving_captcha)
     public TextView mTvReceivingCaptcha;
 
     private long mTargetTime;
@@ -69,25 +66,19 @@ public class ForgetPwdActivity extends BaseActivity {
 
     private boolean mPhoneNumberCorrect;
 
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
+    @OnClick(R.id.btn_done)
+    public void onBtnDoneClicked() {
+        requestFindPwd3();
+    }
 
-        final int id = v.getId();
+    @OnClick(R.id.btn_get_captcha)
+    public void onBtnGetCaptchaClicked() {
+        requestFindPwd1();
+    }
 
-        switch (id) {
-            case R.id.btn_ok_1:
-                requestFindPwd2();
-                break;
-            case R.id.btn_get_captcha:
-                requestFindPwd1();
-                break;
-            case R.id.btn_done:
-                requestFindPwd3();
-                break;
-            default:
-                break;
-        }
+    @OnClick(R.id.btn_ok_1)
+    public void onBtnOk1Clicked() {
+        requestFindPwd2();
     }
 
     public void onCreate(Bundle savedInstanceState) {

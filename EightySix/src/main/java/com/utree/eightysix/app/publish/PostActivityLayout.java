@@ -7,19 +7,19 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.utils.ViewId;
+import butterknife.InjectView;
 
 /**
  */
 public class PostActivityLayout extends ViewGroup {
 
-    @ViewId(R.id.fl_top)
+    @InjectView(R.id.fl_top)
     public FrameLayout mFlTop;
 
-    @ViewId(R.id.fl_bottom)
+    @InjectView(R.id.fl_bottom)
     public FrameLayout mFlBottom;
 
-    @ViewId(R.id.tv_bottom)
+    @InjectView(R.id.tv_bottom)
     public TextView mTvBottom;
 
     public PostActivityLayout(Context context) {

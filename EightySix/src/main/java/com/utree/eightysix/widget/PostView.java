@@ -8,31 +8,26 @@ import android.widget.TextView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.response.data.Post;
-import com.utree.eightysix.utils.OnClick;
-import com.utree.eightysix.utils.ViewId;
+import butterknife.OnClick;
+import butterknife.InjectView;
 
 /**
  */
-public class PostView extends RelativeLayout implements View.OnClickListener {
+public class PostView extends RelativeLayout {
 
-    @ViewId(R.id.tv_content)
-    @OnClick
+    @InjectView(R.id.tv_content)
     public TextView mTvContent;
 
-    @ViewId(R.id.tv_source)
-    @OnClick
+    @InjectView(R.id.tv_source)
     public TextView mTvSource;
 
-    @ViewId(R.id.tv_praise)
-    @OnClick
+    @InjectView(R.id.tv_praise)
     public TextView mTvPraise;
 
-    @ViewId(R.id.tv_comment)
-    @OnClick
+    @InjectView(R.id.tv_comment)
     public TextView mTvComment;
 
-    @ViewId(R.id.tv_last_comment)
-    @OnClick
+    @InjectView(R.id.tv_last_comment)
     public TextView mTvLastComment;
 
     public PostView(Context context) {
@@ -47,12 +42,6 @@ public class PostView extends RelativeLayout implements View.OnClickListener {
         super(context, attrs, defStyle);
         inflate(context, R.layout.item_post, this);
         U.viewBinding(this, this);
-
-        mTvComment.setOnClickListener(this);
-        mTvContent.setOnClickListener(this);
-        mTvLastComment.setOnClickListener(this);
-        mTvSource.setOnClickListener(this);
-        mTvPraise.setOnClickListener(this);
     }
 
     public CharSequence getContent() {
@@ -93,26 +82,6 @@ public class PostView extends RelativeLayout implements View.OnClickListener {
 
     public void setLastComment(String lastComment) {
         mTvLastComment.setText(lastComment);
-    }
-
-    @Override
-    public final void onClick(View v) {
-        final int id = v.getId();
-
-        switch (id) {
-            case R.id.tv_content:
-                break;
-            case R.id.tv_source:
-                break;
-            case R.id.tv_praise:
-                break;
-            case R.id.tv_comment:
-                break;
-            case R.id.tv_last_comment:
-                break;
-            default:
-                break;
-        }
     }
 
     @Override

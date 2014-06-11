@@ -3,6 +3,7 @@ package com.utree.eightysix;
 import android.content.Context;
 import android.os.Looper;
 import android.view.View;
+import butterknife.ButterKnife;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.disklrucache.DiskLruCache;
@@ -78,11 +79,19 @@ public class U {
     }
 
     public static <T> T viewBinding(View view, Class<T> holderClass) {
-        return sViewBinding.bind(view, holderClass);
+        try {
+            T t = holderClass.newInstance();
+            ButterKnife.inject(holderClass, view);
+            return t;
+        } catch (InstantiationException e) {
+            return null;
+        } catch (IllegalAccessException e) {
+            return null;
+        }
     }
 
     public static void viewBinding(View view, Object target) {
-        sViewBinding.bind(view, target);
+        ButterKnife.inject(target, view);
     }
 
     public static RESTRequester getRESTRequester() {

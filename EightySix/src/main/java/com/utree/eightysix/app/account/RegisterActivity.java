@@ -21,8 +21,8 @@ import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.response.UserResponse;
 import com.utree.eightysix.utils.InputValidator;
-import com.utree.eightysix.utils.OnClick;
-import com.utree.eightysix.utils.ViewId;
+import butterknife.OnClick;
+import butterknife.InjectView;
 import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.TopBar;
 
@@ -31,32 +31,21 @@ import com.utree.eightysix.widget.TopBar;
 @Layout(R.layout.activity_register)
 public class RegisterActivity extends BaseActivity {
 
-    @ViewId(R.id.et_phone_number)
+    @InjectView(R.id.et_phone_number)
     public EditText mEtPhoneNumber;
 
-    @ViewId(R.id.et_pwd)
+    @InjectView(R.id.et_pwd)
     public EditText mEtPwd;
 
-    @ViewId(R.id.btn_register)
-    @OnClick
+    @InjectView(R.id.btn_register)
     public RoundedButton mBtnRegister;
 
     private boolean mCorrectPhoneNumber;
     private boolean mCorrectPwd;
 
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
-
-        final int id = v.getId();
-
-        switch (id) {
-            case R.id.btn_register:
-                requestRegister();
-                break;
-            default:
-                break;
-        }
+    @OnClick(R.id.btn_register)
+    public void onBtnRegisterClicked() {
+        requestRegister();
     }
 
     public void onCreate(Bundle savedInstanceState) {
