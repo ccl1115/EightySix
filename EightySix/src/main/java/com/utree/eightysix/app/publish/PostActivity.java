@@ -115,6 +115,7 @@ public class PostActivity extends BaseActivity {
                 break;
             case R.id.tv_bottom:
                 mDescriptionDialog.show();
+                break;
             default:
                 break;
         }
@@ -250,7 +251,7 @@ public class PostActivity extends BaseActivity {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(mPostEditText.getWindowToken(), 0);
 
-
+                    requestPost();
                 }
             }
 
@@ -412,6 +413,7 @@ public class PostActivity extends BaseActivity {
     @Subscribe public void onImageUploaded(ImageUtils.ImageUploadedEvent event) {
         if (event.getHash().equals(mFileHash)) {
             mImageUploadFinished = true;
+            mImageUploadUrl = event.getUrl();
         }
 
         if (mRequestStarted) {

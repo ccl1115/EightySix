@@ -72,6 +72,12 @@
             <groupId>galaxy-lite</groupId>
             <artifactId>galaxy-lite</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.jakewharton</groupId>
+            <artifactId>butterknife</artifactId>
+        </dependency>
+
     </dependencies>
 
 	<build>
