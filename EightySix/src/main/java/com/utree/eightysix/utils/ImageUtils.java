@@ -105,8 +105,7 @@ public class ImageUtils {
     }
 
     public static void asyncUpload(File file) {
-        final String hash = MD5Util.getMD5String(
-                String.format("%s-%d", file.getAbsolutePath(), file.length()).getBytes()).toLowerCase();
+        final String hash = IOUtils.fileHash(file);
         final String path = hash.substring(0, 1) + File.separator + hash.substring(2, 4) + File.separator;
         final String key = hash.substring(5);
         U.getCloudStorage().aPut(U.getConfig("storage.image.bucket.name"), path, key, file,
@@ -114,13 +113,21 @@ public class ImageUtils {
                     @Override
                     public void onResult(Storage.Result result) {
                         if (result.error == 0 && TextUtils.isEmpty(result.msg)) {
-                            U.getBus().post(new ImageUploadedEvent(U.getCloudStorage().getUrl(
+                            U.getBus().post(new ImageUploadedEvent(hash, U.getCloudStorage().getUrl(
                                     U.getConfig("storage.image.bucket.name"), path, key)));
                         } else {
                             Log.d(TAG, "upload error : " + result.msg);
                         }
                     }
                 });
+    }
+
+    public static void cacheImageToDisk(String hash, File file) {
+
+    }
+
+    public static void cacheImageToMemory(String hash, File file) {
+
     }
 
     public static class ImageLoadedEvent {
@@ -142,10 +149,16 @@ public class ImageUtils {
     }
 
     public static class ImageUploadedEvent {
+        private String mHash;
         private String mUrl;
 
-        public ImageUploadedEvent(String url) {
+        public ImageUploadedEvent(String hash, String url) {
+            mHash = hash;
             mUrl = url;
+        }
+
+        public String getHash() {
+            return mHash;
         }
 
         public String getUrl() {

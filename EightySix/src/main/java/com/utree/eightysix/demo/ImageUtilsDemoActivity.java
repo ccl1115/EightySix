@@ -8,11 +8,13 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import com.aliyun.android.util.MD5Util;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.OnClick;
 import com.utree.eightysix.utils.ViewId;
@@ -34,6 +36,8 @@ public class ImageUtilsDemoActivity extends BaseActivity {
     @ViewId(R.id.aiv_show)
     public AsyncImageView mAivShow;
 
+
+    private String mFileHash;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,10 +77,12 @@ public class ImageUtilsDemoActivity extends BaseActivity {
                                 final String name = cursor.getString(cursor.getColumnIndex(columns[1]));
                                 Log.d(this, path);
                                 Log.d(this, name);
-                                ImageUtils.asyncUpload(new File(path));
-                                return;
+                                File file = new File(path);
+                                mFileHash = IOUtils.fileHash(file);
+                                ImageUtils.asyncUpload(file);
                             }
                             cursor.close();
+                            return;
                         }
 
                     }
@@ -89,6 +95,14 @@ public class ImageUtilsDemoActivity extends BaseActivity {
 
     @Subscribe public void onImageUploadedEvent(ImageUtils.ImageUploadedEvent event) {
         Log.d("ImageUtils", "image uploaded : " + event.getUrl());
-        mAivShow.setUrl(event.getUrl());
+        final String url = event.getUrl();
+        if (event.getHash().equals(mFileHash)) {
+            getHandler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mAivShow.setUrl(url);
+                }
+            }, 3000);
+        }
     }
 }

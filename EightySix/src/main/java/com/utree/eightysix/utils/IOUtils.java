@@ -3,6 +3,7 @@ package com.utree.eightysix.utils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
+import com.aliyun.android.util.MD5Util;
 import com.utree.eightysix.U;
 import java.io.File;
 import java.io.IOException;
@@ -42,4 +43,8 @@ public class IOUtils {
         return new File(file.getAbsolutePath() + File.separator + filename);
     }
 
+    public static String fileHash(File file) {
+        return MD5Util.getMD5String(
+                (String.format("%s-%d", file.getAbsolutePath(), file.length())).getBytes()).toLowerCase();
+    }
 }
