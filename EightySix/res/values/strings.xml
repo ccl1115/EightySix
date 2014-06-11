@@ -94,6 +94,7 @@
     <string name="resume_editing">继续编辑</string>
     <string name="error_start_camera">启动相机应用错误</string>
     <string name="error_start_album">无法选择相册图片</string>
+    <string name="send_succeed">发送成功</string>
 
 
     <!-- CircleListActivity -->

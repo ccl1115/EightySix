@@ -22,10 +22,14 @@ import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.request.PostRequest;
+import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
@@ -81,6 +85,14 @@ public class PostActivity extends BaseActivity {
     private boolean mIsOpened;
 
     private boolean mToastShown;
+
+    private String mFileHash;
+
+    private boolean mRequestStarted;
+
+    private boolean mImageUploadFinished;
+
+    private String mImageUploadUrl;
 
     @Override
     public void onClick(View v) {
@@ -314,12 +326,13 @@ public class PostActivity extends BaseActivity {
         }
     }
 
-    @SuppressWarnings ("SuspiciousNameCombination")
     private void setBgImage(String p) {
-        final int width = getResources().getDisplayMetrics().widthPixels;
-        Bitmap bitmap = ImageUtils.decodeSquareBitmap(new File(p), width, width);
+        final File file = new File(p);
+        mFileHash = IOUtils.fileHash(file);
+        Bitmap bitmap = ImageUtils.safeDecodeBitmap(file);
+        ImageUtils.asyncUpload(file);
         mPostEditText.setTextColor(Color.WHITE);
-        mPostEditText.setShadowLayer(2, 0, 0, Color.WHITE);
+        mPostEditText.setShadowLayer(2, 0, 0, Color.BLACK);
         mIvPostBg.setImageBitmap(bitmap);
         mIvPostBg.setScaleType(ImageView.ScaleType.CENTER_CROP);
     }
@@ -374,9 +387,35 @@ public class PostActivity extends BaseActivity {
     }
 
     private void requestPost() {
+        mRequestStarted = true;
+
+        if (mImageUploadFinished) {
+            request(new PostRequest(0, mPostEditText.getText().toString(), "", mImageUploadUrl),
+                    new OnResponse<Response>() {
+
+                        @Override
+                        public void onResponse(Response response) {
+                            if (response != null) {
+                                if (response.code == 0) {
+                                    showToast(R.string.send_succeed, false);
+                                    finish();
+                                }
+                            }
+                            hideProgressBar();
+                        }
+                    }, Response.class);
+        }
+
+        showProgressBar();
     }
 
-    private void uploadBitmapToStorage(File file) {
+    @Subscribe public void onImageUploaded(ImageUtils.ImageUploadedEvent event) {
+        if (event.getHash().equals(mFileHash)) {
+            mImageUploadFinished = true;
+        }
 
+        if (mRequestStarted) {
+            requestPost();
+        }
     }
 }

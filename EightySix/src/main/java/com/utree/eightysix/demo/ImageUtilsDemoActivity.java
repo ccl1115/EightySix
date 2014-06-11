@@ -95,8 +95,8 @@ public class ImageUtilsDemoActivity extends BaseActivity {
 
     @Subscribe public void onImageUploadedEvent(ImageUtils.ImageUploadedEvent event) {
         Log.d("ImageUtils", "image uploaded : " + event.getUrl());
-        final String url = event.getUrl();
         if (event.getHash().equals(mFileHash)) {
+            final String url = event.getUrl();
             getHandler().postDelayed(new Runnable() {
                 @Override
                 public void run() {

@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.text.TextUtils;
-import com.aliyun.android.util.MD5Util;
 import com.jakewharton.disklrucache.DiskLruCache;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.BinaryHttpResponseHandler;
@@ -14,7 +13,9 @@ import com.utree.eightysix.storage.Storage;
 import de.akquinet.android.androlog.Log;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import org.apache.http.Header;
 
@@ -52,7 +53,7 @@ public class ImageUtils {
         return inSampleSize;
     }
 
-    public static Bitmap decodeSquareBitmap(File file, int width, int height) {
+    public static Bitmap decodeBitmap(File file, int width, int height) {
         final String filename = file.getAbsolutePath();
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
@@ -66,6 +67,58 @@ public class ImageUtils {
         return BitmapFactory.decodeFile(filename, options);
     }
 
+    public static Bitmap decodeBitmap(InputStream stream, int width, int height) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(stream, null, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, width, height);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeStream(stream, null, options);
+    }
+
+    /**
+     * Decode bitmap file with catch clause and always decode bitmap into a size that smaller than screen width.
+     * @param file the bitmap file
+     * @return bitmap or null if error occurred
+     */
+    @SuppressWarnings ("SuspiciousNameCombination")
+    public static Bitmap safeDecodeBitmap(File file) {
+        int widthPixels = U.getContext().getResources().getDisplayMetrics().widthPixels;
+        try {
+            return decodeBitmap(file, widthPixels, widthPixels);
+        } catch (OutOfMemoryError e) {
+            sLruCache.evictAll();
+            try {
+                return decodeBitmap(file, widthPixels, widthPixels);
+            } catch (OutOfMemoryError ne) {
+                return null;
+            }
+        }
+    }
+
+    /**
+     * Decode bitmap file with catch clause and always decode bitmap into a size that smaller than screen width.
+     * @param stream the bitmap stream
+     * @return bitmap or null if error occurred
+     */
+    @SuppressWarnings ("SuspiciousNameCombination")
+    public static Bitmap safeDecodeBitmap(InputStream stream) {
+        int widthPixels = U.getContext().getResources().getDisplayMetrics().widthPixels;
+        try {
+            return decodeBitmap(stream, widthPixels, widthPixels);
+        } catch (OutOfMemoryError e) {
+            sLruCache.evictAll();
+            try {
+                return decodeBitmap(stream, widthPixels, widthPixels);
+            } catch (OutOfMemoryError ne) {
+                return null;
+            }
+        }
+    }
 
     public static void asyncLoad(final String url, final String hash) {
         Bitmap bitmap = sLruCache.get(hash);
@@ -104,6 +157,12 @@ public class ImageUtils {
         }
     }
 
+    /**
+     * Upload a image file asynchronously
+     *
+     * <b>Fire {@link com.utree.eightysix.utils.ImageUtils.ImageUploadedEvent} when finished uploading</b>
+     * @param file the file
+     */
     public static void asyncUpload(File file) {
         final String hash = IOUtils.fileHash(file);
         final String path = hash.substring(0, 1) + File.separator + hash.substring(2, 4) + File.separator;
@@ -122,14 +181,17 @@ public class ImageUtils {
                 });
     }
 
-    public static void cacheImageToDisk(String hash, File file) {
-
+    /**
+     * Cache the image to memory and disk
+     * @param file the file to be cache
+     */
+    public static void cacheImage(File file) {
+        new ImageDecodeWorker(IOUtils.fileHash(file), file).execute();
     }
 
-    public static void cacheImageToMemory(String hash, File file) {
-
-    }
-
+    /**
+     * Fired when a image has been downloaded from net or loaded from disk
+     */
     public static class ImageLoadedEvent {
         private Bitmap mBitmap;
         private String mHash;
@@ -148,6 +210,9 @@ public class ImageUtils {
         }
     }
 
+    /**
+     * Fired when a image file uploaded to the cloud storage
+     */
     public static class ImageUploadedEvent {
         private String mHash;
         private String mUrl;
@@ -170,6 +235,7 @@ public class ImageUtils {
         private byte[] mBytes;
         private DiskLruCache.Snapshot mSnapshot;
         private String mHash;
+        private File mFile;
 
         private ImageDecodeWorker(String hash, DiskLruCache.Snapshot snapshot) {
             mHash = hash;
@@ -179,6 +245,11 @@ public class ImageUtils {
         private ImageDecodeWorker(String hash, byte[] bytes) {
             mHash = hash;
             mBytes = bytes;
+        }
+
+        private ImageDecodeWorker(String hash, File file) {
+            mHash = hash;
+            mFile = file;
         }
 
         @Override
@@ -200,7 +271,7 @@ public class ImageUtils {
                     }
                 }
                 try {
-                    return BitmapFactory.decodeStream(new ByteArrayInputStream(mBytes));
+                    return safeDecodeBitmap(new ByteArrayInputStream(mBytes));
                 } catch (OutOfMemoryError e) {
                     U.getAnalyser().reportException(U.getContext(), e);
                     return null;
@@ -208,7 +279,29 @@ public class ImageUtils {
             } else if (mSnapshot != null) {
                 // Here we get bitmap from disk cache
                 try {
-                    return BitmapFactory.decodeStream(mSnapshot.getInputStream(0));
+                    return safeDecodeBitmap(mSnapshot.getInputStream(0));
+                } catch (OutOfMemoryError e) {
+                    U.getAnalyser().reportException(U.getContext(), e);
+                    return null;
+                }
+            } else if (mFile != null){
+
+                OutputStream os = null;
+                try {
+                    os = U.getImageCache().edit(mHash).newOutputStream(0);
+                    IOUtils.copyFile(new FileInputStream(mFile), os);
+                } catch (IOException ignored) {
+                    Log.e(TAG, "Put disk cache IOException: " + ignored.getMessage());
+                } finally {
+                    if (os != null) {
+                        try {
+                            os.close();
+                        } catch (IOException ignored) {
+                        }
+                    }
+                }
+                try {
+                    return safeDecodeBitmap(mFile);
                 } catch (OutOfMemoryError e) {
                     U.getAnalyser().reportException(U.getContext(), e);
                     return null;
