@@ -151,6 +151,9 @@
                 android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
                 android:exported="@bool/exported"/>
 
+        <activity android:name=".demo.AsyncImageViewDemoActivity"
+                android:exported="@bool/exported"/>
+
         <service
                 android:name="com.baidu.location.f"
                 android:enabled="true"
