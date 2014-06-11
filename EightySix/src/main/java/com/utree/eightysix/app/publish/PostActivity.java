@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -29,6 +28,7 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.IOUtils;
+import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.utils.OnClick;
 import com.utree.eightysix.utils.ViewId;
@@ -238,7 +238,7 @@ public class PostActivity extends BaseActivity {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(mPostEditText.getWindowToken(), 0);
 
-                    finish();
+
                 }
             }
 
@@ -314,8 +314,10 @@ public class PostActivity extends BaseActivity {
         }
     }
 
+    @SuppressWarnings ("SuspiciousNameCombination")
     private void setBgImage(String p) {
-        Bitmap bitmap = BitmapFactory.decodeFile(new File(p).getAbsolutePath());
+        final int width = getResources().getDisplayMetrics().widthPixels;
+        Bitmap bitmap = ImageUtils.decodeSquareBitmap(new File(p), width, width);
         mPostEditText.setTextColor(Color.WHITE);
         mPostEditText.setShadowLayer(2, 0, 0, Color.WHITE);
         mIvPostBg.setImageBitmap(bitmap);
@@ -369,5 +371,12 @@ public class PostActivity extends BaseActivity {
     private int monochromizing(int color) {
         return (color & 0xff) > 0x88 && ((color >> 8) & 0xff) > 0x88 && ((color >> 16) & 0xff) > 0x88
                 ? Color.BLACK : Color.WHITE;
+    }
+
+    private void requestPost() {
+    }
+
+    private void uploadBitmapToStorage(File file) {
+
     }
 }

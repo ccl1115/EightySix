@@ -123,6 +123,13 @@ public class U {
                 U.getConfigLong("cache.contacts.size"));
     }
 
+    public static DiskLruCache getImageCache() {
+        return getCacheUtils().getCache(U.getConfig("cache.image.dir"),
+                U.getConfigInt("cache.image.version"),
+                U.getConfigInt("cache.image.count"),
+                U.getConfigInt("cache.image.size"));
+    }
+
     public static String getConfig(String key) {
         if (sConfiguration == null) {
             loadConfig();

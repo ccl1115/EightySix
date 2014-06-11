@@ -42,8 +42,4 @@ public class IOUtils {
         return new File(file.getAbsolutePath() + File.separator + filename);
     }
 
-    public static Bitmap decodeSquareBitmap(File file, int width, int height) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        return null;
-    }
 }
