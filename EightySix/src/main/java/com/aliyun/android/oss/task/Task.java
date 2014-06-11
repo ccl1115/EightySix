@@ -5,8 +5,6 @@
  */
 package com.aliyun.android.oss.task;
 
-import com.aliyun.android.util.Helper;
-import de.akquinet.android.androlog.Log;
 import java.io.IOException;
 
 import org.apache.http.HttpResponse;

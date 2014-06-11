@@ -151,7 +151,7 @@
                 android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
                 android:exported="@bool/exported"/>
 
-        <activity android:name=".demo.AsyncImageViewDemoActivity"
+        <activity android:name=".demo.ImageUtilsDemoActivity"
                 android:exported="@bool/exported"/>
 
         <service

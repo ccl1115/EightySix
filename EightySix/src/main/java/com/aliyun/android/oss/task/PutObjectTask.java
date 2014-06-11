@@ -120,7 +120,7 @@ public class PutObjectTask extends Task {
         String resource = httpTool.generateCanonicalizedResource("/"
                 + bucketName + "/" + objectKey);
 
-        HttpPut httpPut = new HttpPut("http://" + bucketName + "." + OSS_END_POINT + "/" + resource);
+        HttpPut httpPut = new HttpPut("http://" + bucketName + "." + OSS_END_POINT + resource);
 
         // 构造HttpPut
         String dateStr = Helper.getGMTDate();

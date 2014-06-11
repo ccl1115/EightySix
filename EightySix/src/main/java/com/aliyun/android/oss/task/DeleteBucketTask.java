@@ -57,9 +57,8 @@ public class DeleteBucketTask extends Task {
 
     @Override
     protected HttpUriRequest generateHttpRequest() {
-        String resource = httpTool.generateCanonicalizedResource("/"
-                + bucketName + "/");
-        HttpDelete httpDelete = new HttpDelete("http://" + bucketName + "." + OSS_END_POINT + "/" + resource);
+        String resource = httpTool.generateCanonicalizedResource("/" + bucketName + "/");
+        HttpDelete httpDelete = new HttpDelete("http://" + bucketName + "." + OSS_END_POINT + resource);
 
         String dateStr = Helper.getGMTDate();
         String authorization = OSSHttpTool.generateAuthorization(accessId,

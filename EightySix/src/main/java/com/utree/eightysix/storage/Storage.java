@@ -81,4 +81,6 @@ public interface Storage {
     Result deleteBucket(String bucket);
 
     void aDeleteBucket(String bucket, OnResult onResult);
+
+    String getUrl(String bucket, String path, String key);
 }

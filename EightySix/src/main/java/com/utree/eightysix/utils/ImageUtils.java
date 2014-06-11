@@ -3,13 +3,15 @@ package com.utree.eightysix.utils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.text.TextUtils;
+import com.aliyun.android.util.MD5Util;
 import com.jakewharton.disklrucache.DiskLruCache;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.BinaryHttpResponseHandler;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.U;
+import com.utree.eightysix.storage.Storage;
 import de.akquinet.android.androlog.Log;
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -73,7 +75,7 @@ public class ImageUtils {
                 if (snapshot != null) {
                     new ImageDecodeWorker(hash, snapshot).execute();
                 } else {
-                    sClient.get(U.getContext(), url, new BinaryHttpResponseHandler() {
+                    sClient.get(U.getContext(), url, new BinaryHttpResponseHandler(new String[]{".*"}) {
                         @Override
                         public void onSuccess(byte[] binaryData) {
                             Log.d(TAG, "onSuccess");
@@ -102,6 +104,25 @@ public class ImageUtils {
         }
     }
 
+    public static void asyncUpload(File file) {
+        final String hash = MD5Util.getMD5String(
+                String.format("%s-%d", file.getAbsolutePath(), file.length()).getBytes()).toLowerCase();
+        final String path = hash.substring(0, 1) + File.separator + hash.substring(2, 4) + File.separator;
+        final String key = hash.substring(5);
+        U.getCloudStorage().aPut(U.getConfig("storage.image.bucket.name"), path, key, file,
+                new Storage.OnResult() {
+                    @Override
+                    public void onResult(Storage.Result result) {
+                        if (result.error == 0 && TextUtils.isEmpty(result.msg)) {
+                            U.getBus().post(new ImageUploadedEvent(U.getCloudStorage().getUrl(
+                                    U.getConfig("storage.image.bucket.name"), path, key)));
+                        } else {
+                            Log.d(TAG, "upload error : " + result.msg);
+                        }
+                    }
+                });
+    }
+
     public static class ImageLoadedEvent {
         private Bitmap mBitmap;
         private String mHash;
@@ -117,6 +138,18 @@ public class ImageUtils {
 
         public String getHash() {
             return mHash;
+        }
+    }
+
+    public static class ImageUploadedEvent {
+        private String mUrl;
+
+        public ImageUploadedEvent(String url) {
+            mUrl = url;
+        }
+
+        public String getUrl() {
+            return mUrl;
         }
     }
 

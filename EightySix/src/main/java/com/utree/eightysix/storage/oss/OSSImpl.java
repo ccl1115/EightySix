@@ -6,6 +6,7 @@ import com.aliyun.android.oss.OSSClient;
 import com.aliyun.android.oss.OSSException;
 import com.aliyun.android.oss.model.Bucket;
 import com.aliyun.android.oss.model.OSSObject;
+import com.aliyun.android.oss.task.Task;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.storage.Storage;
 import de.akquinet.android.androlog.Log;
@@ -55,17 +56,21 @@ public class OSSImpl implements Storage {
         return mPathValidator.validate(bucket, path, key) && file.exists();
     }
 
-    private void doPut(String bucket, String path, String key, File file, Result result) {
+    private Result doPut(String bucket, String path, String key, File file, Result result) {
         try {
             mOSSClient.uploadObject(bucket, path + key, file.getAbsolutePath());
         } catch (OSSException e) {
+            if (BuildConfig.DEBUG) {
+                e.printStackTrace();
+            }
             result.msg = e.getErrorCode();
         }
+        return result;
     }
 
     @Override
     public void aPut(final String bucket, final String path, final String key, final File file, final OnResult onResult) {
-        new AsyncTask<Void, Void, Result<OSSObject>>() {
+        new AsyncTask<Void, Void, Result>() {
 
             final Result<OSSObject> mResult = new Result<OSSObject>();
 
@@ -80,12 +85,12 @@ public class OSSImpl implements Storage {
             }
 
             @Override
-            protected Result<OSSObject> doInBackground(Void... params) {
-                return put(bucket, path, key, file);
+            protected Result doInBackground(Void... params) {
+                return doPut(bucket, path, key, file, mResult);
             }
 
             @Override
-            protected void onPostExecute(Result<OSSObject> result) {
+            protected void onPostExecute(Result result) {
                 if (onResult != null) {
                     onResult.onResult(result);
                 }
@@ -335,6 +340,11 @@ public class OSSImpl implements Storage {
                 }
             }
         }.execute();
+    }
+
+    @Override
+    public String getUrl(String bucket, String path, String key) {
+        return "http://" + bucket + "." + Task.OSS_END_POINT + "/" + path + key;
     }
 
     private void handleException(OSSException e, String action) {
