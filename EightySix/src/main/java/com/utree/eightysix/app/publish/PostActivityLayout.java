@@ -5,9 +5,9 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import butterknife.InjectView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import butterknife.InjectView;
 
 /**
  */

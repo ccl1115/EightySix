@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
@@ -21,8 +23,6 @@ import com.utree.eightysix.request.FindPwd3Request;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.InputValidator;
-import butterknife.OnClick;
-import butterknife.InjectView;
 import com.utree.eightysix.widget.RoundedButton;
 import java.util.Date;
 

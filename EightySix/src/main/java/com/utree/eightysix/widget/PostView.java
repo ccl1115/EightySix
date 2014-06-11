@@ -2,14 +2,12 @@ package com.utree.eightysix.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import butterknife.InjectView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.response.data.Post;
-import butterknife.OnClick;
-import butterknife.InjectView;
 
 /**
  */

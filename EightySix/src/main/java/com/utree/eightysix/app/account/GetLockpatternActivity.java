@@ -1,13 +1,12 @@
 package com.utree.eightysix.app.account;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
+import butterknife.InjectView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
-import butterknife.InjectView;
 
 /**
  */

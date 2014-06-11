@@ -5,19 +5,17 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.storage.Storage;
-import butterknife.OnClick;
-import butterknife.InjectView;
 import de.akquinet.android.androlog.Log;
-
 import java.io.File;
 
 /**

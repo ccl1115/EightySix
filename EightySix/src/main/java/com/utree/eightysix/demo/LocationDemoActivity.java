@@ -2,11 +2,11 @@ package com.utree.eightysix.demo;
 
 import android.os.Bundle;
 import android.widget.TextView;
+import butterknife.InjectView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.location.Location;
-import butterknife.InjectView;
 
 /**
  */
