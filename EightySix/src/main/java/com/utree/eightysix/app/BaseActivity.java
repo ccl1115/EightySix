@@ -41,11 +41,11 @@ import java.util.Map;
  * <li>To show toast using {@link #showToast}</li>
  * <li>To make api request using {@link #request}</li>
  * <li>Auto bind views and OnClickListener to annotated fields using annotation
- * {@link com.utree.eightysix.utils.ViewId} and {@link com.utree.eightysix.utils.OnClick}</li>
+ * {@link butterknife.InjectView} and {@link butterknife.OnClick}</li>
  * <li>Automatically set content view when annotated with {@link com.utree.eightysix.app.Layout}</li>
  * <li>An independent TopBar acts like the Android's ActionBar</li>
  * <li>Auto register and unregister to Otto's event bus</li>
- * <li>Automatically finish when LogoutEventFired, override onLogout() to prevent this</li>
+ * <li>Automatically finish itself when LogoutEventFired, override onLogout() to prevent this</li>
  * </ul>
  */
 public abstract class BaseActivity extends Activity implements View.OnClickListener {
@@ -77,11 +77,14 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
       case R.id.tb_iv_action_overflow:
         openOptionsMenu();
         break;
+      case R.id.tb_rl_left:
+        onActionLeftOnClicked();
+        break;
     }
   }
 
   /**
-   * When LogoutEvent fired, finish all activities, except the login activity
+   * When LogoutEvent fired, finish myself
    *
    * @param event the logout event
    */
@@ -104,7 +107,7 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
   }
 
   /**
-   * @param res
+   * @param res the string resource id
    * @see #showToast(int, boolean)
    */
   protected void showToast(int res) {
@@ -183,6 +186,8 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
 
       }
     });
+
+    mTopBar.setOnActionLeftClickListener(this);
 
     U.getBus().register(this);
   }
@@ -429,6 +434,10 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
 
   }
 
+  protected void onActionLeftOnClicked() {
+
+  }
+
   private boolean isRequesting(String api, RequestParams params) {
     RequestHandle executed = mRequestHandles.get(genKey(api, params));
     return executed != null && !executed.isCancelled() && !executed.isFinished();
@@ -437,5 +446,4 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
   private String genKey(String api, RequestParams params) {
     return MD5Util.getMD5String((api + params.toString()).getBytes()).toLowerCase();
   }
-
 }

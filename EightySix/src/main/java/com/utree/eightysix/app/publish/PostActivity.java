@@ -278,14 +278,15 @@ public class PostActivity extends BaseActivity {
 
   @Override
   public void onBackPressed() {
+    confirmFinish();
+  }
 
+  private void confirmFinish() {
     if (TextUtils.isEmpty(mPostEditText.getText())) {
       super.onBackPressed();
     } else {
       mConfirmQuitDialog.show();
     }
-
-
   }
 
   @Override
@@ -344,6 +345,11 @@ public class PostActivity extends BaseActivity {
     if (mRequestStarted) {
       requestPost();
     }
+  }
+
+  @Override
+  protected void onActionLeftOnClicked() {
+    confirmFinish();
   }
 
   private void setBgImage(String p) {
@@ -436,4 +442,5 @@ public class PostActivity extends BaseActivity {
 
     showProgressBar();
   }
+
 }

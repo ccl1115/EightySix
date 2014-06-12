@@ -53,7 +53,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
   @InjectView (R.id.tb_et_search)
   public EditText mEtSearch;
 
-  @InjectView (R.id.tb_rl_title)
+  @InjectView (R.id.tb_rl_left)
   public RelativeLayout mRlTitle;
 
   @InjectView (R.id.tb_iv_app_icon)
@@ -213,7 +213,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     mEtSearch.setText("");
   }
 
-  @OnClick (R.id.tb_rl_title)
+  @OnClick (R.id.tb_rl_left)
   public void onActionLeftClicked(View v) {
     if (mOnActionLeftClickListener != null) {
       mOnActionLeftClickListener.onClick(v);

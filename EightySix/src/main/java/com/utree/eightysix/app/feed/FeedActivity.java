@@ -73,8 +73,9 @@ public class FeedActivity extends BaseActivity {
       @Override
       public void run() {
         mLvFeed.setAdapter(new FeedAdapter());
+        hideProgressBar();
       }
-    }, 1000);
+    }, 2000);
 
     mCircleSelectorWidth = dp2px(PW_CIRCLE_SELECTOR_WIDTH);
     mCircleSelectorHeight = dp2px(PW_CIRCLE_SELECTOR_HEIGHT);
@@ -167,23 +168,6 @@ public class FeedActivity extends BaseActivity {
       }
     });
 
-    getTopBar().setOnActionLeftClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        if (mPWCircleSelector == null) {
-          mLLCircleSelector = (LinearLayout) View.inflate(FeedActivity.this,
-              R.layout.widget_popup_circle_selector, null);
-          mPWCircleSelector = new PopupWindow(mLLCircleSelector,
-              mCircleSelectorWidth, mCircleSelectorHeight, true);
-          mPWCircleSelector.setOutsideTouchable(false);
-          mPWCircleSelector.setBackgroundDrawable(new BitmapDrawable());
-        }
-        if (!mPWCircleSelector.isShowing()) {
-          mPWCircleSelector.showAsDropDown(getTopBar());
-        }
-      }
-    });
-
     mRvFeed.setOnRefreshListener(new IRefreshable.OnRefreshListener() {
       @Override
       public void onStateChanged(IRefreshable.State state) {
@@ -207,5 +191,27 @@ public class FeedActivity extends BaseActivity {
       public void onRefreshUI() {
       }
     });
+
+    showProgressBar();
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+  }
+
+  @Override
+  protected void onActionLeftOnClicked() {
+    if (mPWCircleSelector == null) {
+      mLLCircleSelector = (LinearLayout) View.inflate(FeedActivity.this,
+          R.layout.widget_popup_circle_selector, null);
+      mPWCircleSelector = new PopupWindow(mLLCircleSelector,
+          mCircleSelectorWidth, mCircleSelectorHeight, true);
+      mPWCircleSelector.setOutsideTouchable(false);
+      mPWCircleSelector.setBackgroundDrawable(new BitmapDrawable());
+    }
+    if (!mPWCircleSelector.isShowing()) {
+      mPWCircleSelector.showAsDropDown(getTopBar());
+    }
   }
 }
