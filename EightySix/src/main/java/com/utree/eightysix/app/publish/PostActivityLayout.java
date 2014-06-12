@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 import butterknife.InjectView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -16,11 +16,11 @@ public class PostActivityLayout extends ViewGroup {
     @InjectView(R.id.fl_top)
     public FrameLayout mFlTop;
 
-    @InjectView(R.id.fl_bottom)
-    public FrameLayout mFlBottom;
+    @InjectView(R.id.fl_panel)
+    public FrameLayout mFlPanel;
 
-    @InjectView(R.id.tv_bottom)
-    public TextView mTvBottom;
+    @InjectView(R.id.ll_bottom)
+    public LinearLayout mLlBottom;
 
     public PostActivityLayout(Context context) {
         this(context, null, 0);
@@ -45,15 +45,15 @@ public class PostActivityLayout extends ViewGroup {
 
         int heightLeft = heightSize;
 
-        if (mTvBottom.getVisibility() == GONE) {
-            measureChild(mTvBottom, MeasureSpec.EXACTLY, MeasureSpec.EXACTLY);
+        if (mLlBottom.getVisibility() == GONE) {
+            measureChild(mLlBottom, MeasureSpec.EXACTLY, MeasureSpec.EXACTLY);
         } else {
-            measureChild(mTvBottom, widthMeasureSpec, heightSize + MeasureSpec.AT_MOST);
-            heightLeft -= mTvBottom.getMeasuredHeight();
+            measureChild(mLlBottom, widthMeasureSpec, heightSize + MeasureSpec.AT_MOST);
+            heightLeft -= mLlBottom.getMeasuredHeight();
         }
 
-        measureChild(mFlBottom, widthMeasureSpec, heightLeft + MeasureSpec.AT_MOST);
-        heightLeft -= mFlBottom.getMeasuredHeight();
+        measureChild(mFlPanel, widthMeasureSpec, heightLeft + MeasureSpec.AT_MOST);
+        heightLeft -= mFlPanel.getMeasuredHeight();
         measureChild(mFlTop, widthMeasureSpec, heightLeft + MeasureSpec.EXACTLY);
 
         setMeasuredDimension(widthSize, heightSize);
@@ -63,7 +63,7 @@ public class PostActivityLayout extends ViewGroup {
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
 
         mFlTop.layout(l, 0, r, mFlTop.getMeasuredHeight());
-        mFlBottom.layout(l, mFlTop.getBottom(), r, mFlTop.getBottom() + mFlBottom.getMeasuredHeight());
-        mTvBottom.layout(l, mFlBottom.getBottom(), r, mFlBottom.getBottom() + mTvBottom.getMeasuredHeight());
+        mFlPanel.layout(l, mFlTop.getBottom(), r, mFlTop.getBottom() + mFlPanel.getMeasuredHeight());
+        mLlBottom.layout(l, mFlPanel.getBottom(), r, mFlPanel.getBottom() + mLlBottom.getMeasuredHeight());
     }
 }
