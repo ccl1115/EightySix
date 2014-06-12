@@ -16,67 +16,72 @@ import com.utree.eightysix.widget.TopBar;
  */
 public class DemoActivity extends BaseActivity {
 
-    private static final int[] ACTION_ICONS = {
-            R.drawable.ic_action_email,
-            R.drawable.ic_action_help
-    };
+  private static final int[] ACTION_ICONS = {
+      R.drawable.ic_action_email,
+      R.drawable.ic_action_help
+  };
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.main, menu);
+    return super.onCreateOptionsMenu(menu);
+  }
 
-        setTopTitle("测试界面");
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
 
-        LinearLayout linearLayout = new LinearLayout(this);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
+    setTopTitle("测试界面");
 
-        linearLayout.addView(buildItem(getString(R.string.title_location_demo_activity), LocationDemoActivity.class));
-        linearLayout.addView(buildItem(getString(R.string.title_oss_demo_activity), OSSDemoActivity.class));
-        linearLayout.addView(buildItem(getString(R.string.title_contacts_sync_demo_activity), ContactsSyncDemoActivity.class));
-        setContentView(linearLayout);
+    LinearLayout linearLayout = new LinearLayout(this);
+    linearLayout.setOrientation(LinearLayout.VERTICAL);
 
-        getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
+    linearLayout.addView(buildItem(getString(R.string.title_location_demo_activity), LocationDemoActivity.class));
+    linearLayout.addView(buildItem(getString(R.string.title_oss_demo_activity), OSSDemoActivity.class));
+    linearLayout.addView(buildItem(getString(R.string.title_contacts_sync_demo_activity), ContactsSyncDemoActivity.class));
+    setContentView(linearLayout);
 
-            @Override
-            public String getTitle(int position) {
-                return null;
-            }
+    getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
 
-            @Override
-            public Drawable getIcon(int position) {
-                return getResources().getDrawable(ACTION_ICONS[position]);
-            }
+      @Override
+      public String getTitle(int position) {
+        return null;
+      }
 
-            @Override
-            public void onClick(View view, int position) {
+      @Override
+      public Drawable getIcon(int position) {
+        return getResources().getDrawable(ACTION_ICONS[position]);
+      }
 
-            }
+      @Override
+      public Drawable getBackgroundDrawable(int position) {
+        return null;
+      }
 
-            @Override
-            public int getCount() {
-                return 2;
-            }
-        });
-    }
+      @Override
+      public void onClick(View view, int position) {
 
-    private TextView buildItem(String text, final Class<?> clazz) {
-        TextView textView = new TextView(this);
-        textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT));
-        textView.setText(text);
-        textView.setPadding(20, 20, 20, 20);
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(DemoActivity.this, clazz));
-            }
-        });
-        return textView;
-    }
+      }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
+      @Override
+      public int getCount() {
+        return 2;
+      }
+    });
+  }
+
+  private TextView buildItem(String text, final Class<?> clazz) {
+    TextView textView = new TextView(this);
+    textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT));
+    textView.setText(text);
+    textView.setPadding(20, 20, 20, 20);
+    textView.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        startActivity(new Intent(DemoActivity.this, clazz));
+      }
+    });
+    return textView;
+  }
 }

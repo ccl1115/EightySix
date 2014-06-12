@@ -19,6 +19,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.feed.FeedActivity;
+import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.request.LoginRequest;
 import com.utree.eightysix.response.UserResponse;
 import com.utree.eightysix.rest.OnResponse;
@@ -167,6 +168,11 @@ public class LoginActivity extends BaseActivity {
         }
 
         @Override
+        public Drawable getBackgroundDrawable(int position) {
+          return new RoundRectDrawable(dp2px(2), getResources().getColorStateList(R.color.apptheme_primary_btn_light));
+        }
+
+        @Override
         public void onClick(View view, int position) {
           if (position == 0) {
             startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
@@ -191,15 +197,16 @@ public class LoginActivity extends BaseActivity {
               if (response.code == 0) {
                 if (response.object != null) {
                   Account.inst().login(response.object.userId, response.object.token);
-                  return;
                 } else {
                   showToast(R.string.server_object_error);
                 }
               }
             }
             mBtnLogin.setEnabled(true);
+            hideProgressBar();
           }
         }, UserResponse.class);
     mBtnLogin.setEnabled(false);
+    showProgressBar();
   }
 }

@@ -30,6 +30,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.request.PostRequest;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.Response;
@@ -245,12 +246,19 @@ public class PostActivity extends BaseActivity {
       }
 
       @Override
+      public Drawable getBackgroundDrawable(int position) {
+        return new RoundRectDrawable(dp2px(2), getResources().getColorStateList(R.color.apptheme_primary_btn_light));
+      }
+
+      @Override
       public void onClick(View view, int position) {
         if (position == 0) {
-          InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-          imm.hideSoftInputFromWindow(mPostEditText.getWindowToken(), 0);
 
-          requestPost();
+          if (mPostEditText.getText().length() == 0) {
+            showToast(getString(R.string.cannot_post_empty_content));
+          } else {
+            requestPost();
+          }
         }
       }
 
@@ -414,6 +422,10 @@ public class PostActivity extends BaseActivity {
           if (response != null) {
             if (response.code == 0) {
               showToast(R.string.send_succeed, false);
+
+              InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+              imm.hideSoftInputFromWindow(mPostEditText.getWindowToken(), 0);
+
               finish();
             }
           }

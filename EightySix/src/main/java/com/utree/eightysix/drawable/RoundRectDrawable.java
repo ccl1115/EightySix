@@ -25,6 +25,8 @@ public class RoundRectDrawable extends Drawable {
   public RoundRectDrawable(int radius, ColorStateList stateList) {
     mRadius = radius;
     mColorStateList = stateList;
+    mPaint.setAntiAlias(true);
+    mPaint.setColor(mColorStateList.getDefaultColor());
   }
 
   public RoundRectDrawable(int radius, int color) {
@@ -45,12 +47,25 @@ public class RoundRectDrawable extends Drawable {
   @Override
   protected boolean onStateChange(int[] state) {
     if (mColorStateList != null) {
-      int color = mColorStateList.getColorForState(getState(), Color.WHITE);
-
-      mPaint.setColor(color);
+      mPaint.setColor(mColorStateList.getColorForState(state, Color.WHITE));
+      invalidateSelf();
       return true;
     }
     return false;
+  }
+
+  @Override
+  public boolean isStateful() {
+    return mColorStateList != null;
+  }
+
+  @Override
+  protected void onBoundsChange(Rect bounds) {
+    super.onBoundsChange(bounds);
+    mRectF.left = bounds.left;
+    mRectF.right = bounds.right;
+    mRectF.top = bounds.top;
+    mRectF.bottom = bounds.bottom;
   }
 
   @Override
