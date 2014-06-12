@@ -1,19 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-    <ListView
+    <com.utree.eightysix.widget.RefresherView
+            app:direction="side"
+            app:empty_view="@+id/tv_empty"
+            app:refresher_content="@+id/lv_feed"
+            app:refresher_head="@+id/tv_head"
+            app:max_height="150dp"
+            app:threshold_height="100dp"
+            android:id="@+id/rv_feed"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/lv_feed"
-            android:dividerHeight="25dp"
-            android:divider="@null"
-            android:fadingEdge="none"
-            android:drawSelectorOnTop="false"
-            android:listSelector="@android:color/transparent"
-            android:smoothScrollbar="true"/>
+            android:layout_height="match_parent">
+
+        <TextView
+                android:id="@+id/tv_head"
+                android:text="刷新"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"/>
+
+        <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/lv_feed"
+                android:dividerHeight="25dp"
+                android:divider="@null"
+                android:fadingEdge="none"
+                android:drawSelectorOnTop="false"
+                android:listSelector="@android:color/transparent"
+                android:smoothScrollbar="true"/>
+
+        <TextView
+                android:id="@+id/tv_empty"
+                android:text="没有帖子"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+    </com.utree.eightysix.widget.RefresherView>
 
     <ImageButton
             android:layout_width="wrap_content"

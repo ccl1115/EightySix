@@ -6,7 +6,7 @@ import android.view.MotionEvent;
 /**
  * @author Simon
  */
-public interface ViewInjector {
+public interface ViewDelegate {
     void measure(int widthMeasureSpec, int heightMeasureSpec);
 
     void draw(Canvas canvas);

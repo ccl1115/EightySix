@@ -8,6 +8,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import butterknife.InjectView;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
@@ -15,6 +16,8 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.widget.IRefreshable;
+import com.utree.eightysix.widget.RefresherView;
 
 /**
  */
@@ -32,6 +35,15 @@ public class FeedActivity extends BaseActivity {
 
     @InjectView(R.id.ib_refresh)
     public ImageButton mRefresh;
+
+    @InjectView(R.id.rv_feed)
+    public RefresherView mRvFeed;
+
+    @InjectView(R.id.tv_head)
+    public TextView mTvHead;
+
+    @InjectView(R.id.tv_empty)
+    public TextView mTvEmpty;
 
     public PopupWindow mPWCircleSelector;
 
@@ -156,6 +168,30 @@ public class FeedActivity extends BaseActivity {
                 if (!mPWCircleSelector.isShowing()) {
                     mPWCircleSelector.showAsDropDown(getTopBar());
                 }
+            }
+        });
+
+        mRvFeed.setOnRefreshListener(new IRefreshable.OnRefreshListener() {
+            @Override
+            public void onStateChanged(IRefreshable.State state) {
+            }
+
+            @Override
+            public void onPreRefresh() {
+            }
+
+            @Override
+            public void onRefreshData() {
+                synchronized (this) {
+                    try {
+                        wait(2000);
+                    } catch (InterruptedException ignored) {
+                    }
+                }
+            }
+
+            @Override
+            public void onRefreshUI() {
             }
         });
     }

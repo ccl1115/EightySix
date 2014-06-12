@@ -6,6 +6,6 @@ package com.utree.eightysix.widget;
 
 /**
  */
-interface ViewGroupInjector extends ViewInjector {
+interface ViewGroupDelegate extends ViewDelegate {
     void layout(boolean changed, int l, int t, int r, int b);
 }
