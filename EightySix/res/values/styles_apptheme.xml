@@ -21,8 +21,10 @@
     <style name="Widget.TopBar"/>
 
     <style name="Widget.TopBar.AppTheme">
-        <item name="android:background">@color/apptheme_head_color</item>
-        <item name="titleColor">@android:color/white</item>
+        <item name="android:background">#ff363940</item>
+        <item name="titleColor">#fff7f7f7</item>
+        <item name="topLineColor">#ff41454d</item>
+        <item name="botLineColor">#ff2b2333</item>
     </style>
 
     <style name="Widget.RoundedButton.Apptheme.Small">

@@ -3,7 +3,8 @@
 
     <declare-styleable name="TopBar">
         <attr name="titleColor" format="reference|color"/>
-        <attr name="actionBgSelector" format="reference"/>
+        <attr name="topLineColor" format="reference|color"/>
+        <attr name="botLineColor" format="reference|color"/>
     </declare-styleable>
 
     <declare-styleable name="RoundedButton">

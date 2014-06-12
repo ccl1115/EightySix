@@ -74,7 +74,7 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
     Log.d("EightySix.OnClick", getResources().getResourceName(v.getId()));
 
     switch (v.getId()) {
-      case R.id.top_bar_action_overflow:
+      case R.id.tb_iv_action_overflow:
         openOptionsMenu();
         break;
     }

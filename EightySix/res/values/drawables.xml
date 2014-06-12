@@ -3,4 +3,7 @@
     <drawable name="transparent">@android:color/transparent</drawable>
 
     <drawable name="top_bar_action_bg">@drawable/transparent</drawable>
+
+    <drawable name="apptheme_primary_btn_dark_normal">@drawable/transparent</drawable>
+    <drawable name="apptheme_primary_btn_dark_pressed">#ff2b2e33</drawable>
 </resources>
