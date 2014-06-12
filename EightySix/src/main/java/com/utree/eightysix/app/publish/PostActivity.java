@@ -65,7 +65,7 @@ public class PostActivity extends BaseActivity {
   @InjectView (R.id.tv_post_tip)
   public TextView mTvPostTip;
 
-  @InjectView(R.id.ll_bottom)
+  @InjectView (R.id.ll_bottom)
   public LinearLayout mLlBottom;
 
   private Dialog mCameraDialog;
@@ -86,7 +86,11 @@ public class PostActivity extends BaseActivity {
 
   private boolean mImageUploadFinished;
 
+  private boolean mUseColor;
+
   private String mImageUploadUrl;
+
+  private int mBgColor;
 
   @OnClick (R.id.ll_bottom)
   public void onLlBottomClicked() {
@@ -103,6 +107,8 @@ public class PostActivity extends BaseActivity {
     mIvPostBg.setImageDrawable(new ColorDrawable(color));
     mPostEditText.setTextColor(monochromizing(color));
     mTvPostTip.setTextColor(monochromizing(color));
+    mUseColor = true;
+    mBgColor = color;
   }
 
   @OnClick (R.id.iv_camera)
@@ -342,6 +348,8 @@ public class PostActivity extends BaseActivity {
     mTvPostTip.setTextColor(Color.WHITE);
     mIvPostBg.setImageBitmap(bitmap);
     mIvPostBg.setScaleType(ImageView.ScaleType.CENTER_CROP);
+    mUseColor = false;
+    mImageUploadFinished = false;
   }
 
   private boolean startCamera() {
@@ -396,21 +404,22 @@ public class PostActivity extends BaseActivity {
   private void requestPost() {
     mRequestStarted = true;
 
-    if (mImageUploadFinished) {
-      request(new PostRequest(0, mPostEditText.getText().toString(), "", mImageUploadUrl),
-          new OnResponse<Response>() {
+    if (mImageUploadFinished || mUseColor) {
+      final PostRequest request = new PostRequest(1000, mPostEditText.getText().toString(),
+          mUseColor ? String.valueOf(mBgColor) : "", mImageUploadUrl);
 
-            @Override
-            public void onResponse(Response response) {
-              if (response != null) {
-                if (response.code == 0) {
-                  showToast(R.string.send_succeed, false);
-                  finish();
-                }
-              }
-              hideProgressBar();
+      request(request, new OnResponse<Response>() {
+        @Override
+        public void onResponse(Response response) {
+          if (response != null) {
+            if (response.code == 0) {
+              showToast(R.string.send_succeed, false);
+              finish();
             }
-          }, Response.class);
+          }
+          hideProgressBar();
+        }
+      }, Response.class);
     }
 
     showProgressBar();
