@@ -24,27 +24,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-        <view
-                app:radius="4dp"
-                app:background="#66000000"
-                android:textSize="20sp"
-                android:textColor="@android:color/white"
-                android:text="@string/post_anonymously"
+        <TextView
+                android:id="@+id/tv_post_tip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:padding="10dp"
-                class="com.utree.eightysix.widget.RoundedButton"
-                android:id="@+id/rb_post_tip"
-                android:layout_marginTop="35dp"/>
+                android:layout_gravity="center"
+                android:textSize="23sp"
+                android:textColor="@android:color/white"
+                android:text="@string/post_anonymously"/>
     </FrameLayout>
 
 
     <FrameLayout
-            android:id="@+id/fl_bottom"
-            android:background="@color/apptheme_primary_dark_color"
+            android:id="@+id/fl_panel"
+            android:background="@android:color/white"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="45dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp">
 
         <ImageView
                 android:id="@+id/iv_camera"
@@ -61,16 +58,56 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:src="@drawable/ic_action_shuffle"/>
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_gravity="bottom"
+                android:background="#ffe3e3e3"/>
     </FrameLayout>
 
-    <TextView
-            android:id="@+id/tv_bottom"
+    <LinearLayout
+            android:id="@+id/ll_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="60dp"
-            android:paddingBottom="60dp"
-            android:gravity="center"
-            android:textSize="16sp"
-            android:background="@color/apptheme_primary_dark_color"
-            android:text="@string/who_will_see_this_secret"/>
+            android:orientation="vertical"
+            android:background="@android:color/white"
+            android:paddingTop="37dp"
+            android:paddingBottom="50dp">
+
+        <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+            <com.utree.eightysix.widget.RoundedButton
+                    app:radius="61dp"
+                    app:background="#fff3f3f3"
+                    android:layout_width="61dp"
+                    android:layout_height="61dp"
+                    android:layout_gravity="center"/>
+
+            <com.utree.eightysix.widget.RoundedButton
+                    app:radius="60dp"
+                    app:background="#ffffffff"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center"/>
+
+            <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_people"/>
+        </FrameLayout>
+
+        <TextView
+                android:id="@+id/tv_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:textSize="14sp"
+                android:textColor="@android:color/black"
+                android:text="@string/who_will_see_this_secret"/>
+    </LinearLayout>
 </merge>
