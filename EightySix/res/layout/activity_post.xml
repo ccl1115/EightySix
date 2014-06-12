@@ -28,8 +28,7 @@
                 android:id="@+id/tv_post_tip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="100dp"
+                android:layout_gravity="center"
                 android:textSize="23sp"
                 android:textColor="@android:color/white"
                 android:text="@string/post_anonymously"/>

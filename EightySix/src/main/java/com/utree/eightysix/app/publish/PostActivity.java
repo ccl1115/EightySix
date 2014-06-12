@@ -63,7 +63,10 @@ public class PostActivity extends BaseActivity {
   public ImageView mIvPostBg;
 
   @InjectView (R.id.tv_post_tip)
-  public TextView mPostTip;
+  public TextView mTvPostTip;
+
+  @InjectView(R.id.ll_bottom)
+  public LinearLayout mLlBottom;
 
   private Dialog mCameraDialog;
 
@@ -99,6 +102,7 @@ public class PostActivity extends BaseActivity {
     int color = new Random().nextInt() | (0xFF << 24);
     mIvPostBg.setImageDrawable(new ColorDrawable(color));
     mPostEditText.setTextColor(monochromizing(color));
+    mTvPostTip.setTextColor(monochromizing(color));
   }
 
   @OnClick (R.id.iv_camera)
@@ -123,11 +127,11 @@ public class PostActivity extends BaseActivity {
         if (heightDiff > 100) { // 99% of the time the height diff will be due to a keyboard.
 
           if (!mIsOpened) {
-            mTvBottom.setVisibility(View.GONE);
+            mLlBottom.setVisibility(View.GONE);
           }
           mIsOpened = true;
         } else if (mIsOpened) {
-          mTvBottom.setVisibility(View.VISIBLE);
+          mLlBottom.setVisibility(View.VISIBLE);
           mIsOpened = false;
         }
       }
@@ -207,9 +211,9 @@ public class PostActivity extends BaseActivity {
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count) {
         if (s.length() == 0) {
-          mPostTip.setVisibility(View.VISIBLE);
+          mTvPostTip.setVisibility(View.VISIBLE);
         } else {
-          mPostTip.setVisibility(View.INVISIBLE);
+          mTvPostTip.setVisibility(View.INVISIBLE);
         }
 
         if (!InputValidator.post(s) && count > 0) {
@@ -335,6 +339,7 @@ public class PostActivity extends BaseActivity {
     ImageUtils.asyncUpload(file);
     mPostEditText.setTextColor(Color.WHITE);
     mPostEditText.setShadowLayer(2, 0, 0, Color.BLACK);
+    mTvPostTip.setTextColor(Color.WHITE);
     mIvPostBg.setImageBitmap(bitmap);
     mIvPostBg.setScaleType(ImageView.ScaleType.CENTER_CROP);
   }
