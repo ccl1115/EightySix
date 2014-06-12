@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -12,8 +14,6 @@ import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.request.SearchCircleRequest;
 import com.utree.eightysix.response.CirclesResponse;
 import com.utree.eightysix.rest.OnResponse;
-import com.utree.eightysix.utils.OnClick;
-import com.utree.eightysix.utils.ViewId;
 import com.utree.eightysix.widget.RoundedButton;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,31 +25,22 @@ import java.util.Map;
 @Layout (R.layout.activity_circle_search)
 public class CircleSearchActivity extends BaseActivity {
 
-    @ViewId (R.id.lv_history)
+    @InjectView (R.id.lv_history)
     public ListView mLvHistory;
 
-    @ViewId (R.id.lv_result)
+    @InjectView (R.id.lv_result)
     public ListView mLvResult;
 
-    @ViewId (R.id.rb_clear_history)
-    @OnClick
+    @InjectView (R.id.rb_clear_history)
     public RoundedButton mRbClearHistory;
 
     private List<String> mSearchHistory;
 
     private View mFooterClearSearch;
 
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
-
-        final int id = v.getId();
-
-        switch (id) {
-            case R.id.rb_clear_history:
-                clearHistory();
-                break;
-        }
+    @OnClick (R.id.rb_clear_history)
+    public void onRbClearHistory() {
+        clearHistory();
     }
 
     @Override

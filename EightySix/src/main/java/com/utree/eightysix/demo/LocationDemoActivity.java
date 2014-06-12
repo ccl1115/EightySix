@@ -2,11 +2,11 @@ package com.utree.eightysix.demo;
 
 import android.os.Bundle;
 import android.widget.TextView;
+import butterknife.InjectView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.location.Location;
-import com.utree.eightysix.utils.ViewId;
 
 /**
  */
@@ -62,19 +62,19 @@ public class LocationDemoActivity extends BaseActivity implements Location.OnRes
 
     public static class ViewHolder {
 
-        @ViewId(R.id.address)
+        @InjectView(R.id.address)
         public TextView mAddress;
 
-        @ViewId(R.id.city)
+        @InjectView(R.id.city)
         public TextView mCity;
 
-        @ViewId(R.id.longitude)
+        @InjectView(R.id.longitude)
         public TextView mLongitude;
 
-        @ViewId(R.id.latitude)
+        @InjectView(R.id.latitude)
         public TextView mLatitude;
 
-        @ViewId(R.id.poi)
+        @InjectView(R.id.poi)
         public TextView mPoi;
     }
 

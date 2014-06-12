@@ -22,6 +22,8 @@ import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -34,8 +36,6 @@ import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.InputValidator;
-import com.utree.eightysix.utils.OnClick;
-import com.utree.eightysix.utils.ViewId;
 import com.utree.eightysix.widget.PostEditText;
 import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.TopBar;
@@ -53,25 +53,22 @@ public class PostActivity extends BaseActivity {
     private static final int REQUEST_CODE_ALBUM = 0x2;
     private static final int REQUEST_CODE_CROP = 0x4;
 
-    @ViewId(R.id.et_post_content)
+    @InjectView(R.id.et_post_content)
     public PostEditText mPostEditText;
 
-    @ViewId(R.id.tv_bottom)
-    @OnClick
+    @InjectView(R.id.tv_bottom)
     public TextView mTvBottom;
 
-    @ViewId(R.id.iv_post_bg)
+    @InjectView(R.id.iv_post_bg)
     public ImageView mIvPostBg;
 
-    @ViewId(R.id.iv_camera)
-    @OnClick
+    @InjectView(R.id.iv_camera)
     public ImageView mIvCamera;
 
-    @ViewId(R.id.iv_shuffle)
-    @OnClick
+    @InjectView(R.id.iv_shuffle)
     public ImageView mIvShuffle;
 
-    @ViewId(R.id.rb_post_tip)
+    @InjectView(R.id.rb_post_tip)
     public RoundedButton mPostTip;
 
     private Dialog mCameraDialog;
@@ -94,31 +91,25 @@ public class PostActivity extends BaseActivity {
 
     private String mImageUploadUrl;
 
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
+    @OnClick(R.id.tv_bottom)
+    public void onTvBottomClicked() {
+        mDescriptionDialog.show();
+    }
 
-        final int id = v.getId();
-
-        switch (id) {
-            case R.id.iv_camera:
-                mCameraDialog.show();
-                break;
-            case R.id.iv_shuffle:
-                if (Env.firstRun(FIRST_RUN_KEY) && !mToastShown) {
-                    showToast(getString(R.string.shuffle_bg_color));
-                    mToastShown = true;
-                }
-                int color = new Random().nextInt() | (0xFF << 24);
-                mIvPostBg.setImageDrawable(new ColorDrawable(color));
-                mPostEditText.setTextColor(monochromizing(color));
-                break;
-            case R.id.tv_bottom:
-                mDescriptionDialog.show();
-                break;
-            default:
-                break;
+    @OnClick(R.id.iv_shuffle)
+    public void onIvShuffleClicked() {
+        if (Env.firstRun(FIRST_RUN_KEY) && !mToastShown) {
+            showToast(getString(R.string.shuffle_bg_color));
+            mToastShown = true;
         }
+        int color = new Random().nextInt() | (0xFF << 24);
+        mIvPostBg.setImageDrawable(new ColorDrawable(color));
+        mPostEditText.setTextColor(monochromizing(color));
+    }
+
+    @OnClick(R.id.iv_camera)
+    public void onIvCameraClicked() {
+        mCameraDialog.show();
     }
 
     @Override

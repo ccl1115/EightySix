@@ -1,7 +1,6 @@
 package com.utree.eightysix.demo;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -10,17 +9,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
-import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.contact.Contact;
 import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
-import com.utree.eightysix.utils.OnClick;
-import com.utree.eightysix.utils.ViewId;
 import java.util.List;
 
 /**
@@ -29,19 +26,16 @@ import java.util.List;
 @TopTitle(R.string.title_contacts_sync_demo_activity)
 public class ContactsSyncDemoActivity extends BaseActivity {
 
-    @ViewId(R.id.btn_cached)
-    @OnClick
+    @InjectView(R.id.btn_cached)
     public Button mBtnCached;
 
-    @ViewId(R.id.btn_phone)
-    @OnClick
+    @InjectView(R.id.btn_phone)
     public Button mPhone;
 
-    @ViewId(R.id.btn_sync)
-    @OnClick
+    @InjectView(R.id.btn_sync)
     public Button mSync;
 
-    @ViewId(R.id.lv_contacts)
+    @InjectView(R.id.lv_contacts)
     public ListView mLvContacts;
 
     @Subscribe public void onContactsSync(ContactsSyncEvent event) {
@@ -53,24 +47,10 @@ public class ContactsSyncDemoActivity extends BaseActivity {
         mSync.setEnabled(true);
     }
 
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
-
-        final int id = v.getId();
-
-        switch (id) {
-            case R.id.btn_cached:
-                break;
-            case R.id.btn_phone:
-                break;
-            case R.id.btn_sync:
-                startService(new Intent(this, ContactsSyncService.class));
-                mSync.setEnabled(false);
-                break;
-            default:
-                break;
-        }
+    @OnClick(R.id.btn_sync)
+    public void onBtnSyncClicked() {
+        startService(new Intent(this, ContactsSyncService.class));
+        mSync.setEnabled(false);
     }
 
     private static class ContactAdapter extends BaseAdapter {

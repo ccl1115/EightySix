@@ -14,10 +14,10 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.utils.OnClick;
-import com.utree.eightysix.utils.ViewId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,28 +29,25 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     private final List<View> mActionViews = new ArrayList<View>();
 
-    @ViewId (R.id.top_bar_title)
+    @InjectView (R.id.top_bar_title)
     public TextView mTitle;
 
-    @ViewId (R.id.top_bar_sub_title)
+    @InjectView (R.id.top_bar_sub_title)
     public TextView mSubTitle;
 
-    @ViewId (R.id.top_bar_action_overflow)
-    @OnClick
+    @InjectView (R.id.top_bar_action_overflow)
     public ImageView mActionOverFlow;
 
-    @ViewId (R.id.top_bar_action_left)
-    @OnClick
+    @InjectView (R.id.top_bar_action_left)
     public ImageView mActionLeft;
 
-    @ViewId (R.id.top_bar_search)
+    @InjectView (R.id.top_bar_search)
     public FrameLayout mFlSearch;
 
-    @ViewId (R.id.top_bar_iv_search_close)
-    @OnClick
+    @InjectView (R.id.top_bar_iv_search_close)
     public ImageView mIvSearchClose;
 
-    @ViewId (R.id.top_bar_et_search)
+    @InjectView (R.id.top_bar_et_search)
     public EditText mEtSearch;
 
     private OnClickListener mOnActionOverflowClickListener;
@@ -124,7 +121,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     public void hideProgressBar() {
     }
 
-    public void setAtionOverflowAdapter(ActionAdapter actionAdapter) {
+    public void setActionOverflowAdapter(ActionAdapter actionAdapter) {
         mAtionOverflowAdapter = actionAdapter;
     }
 
@@ -189,19 +186,6 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
         final int id = v.getId();
 
         switch (id) {
-            case R.id.top_bar_action_overflow:
-                if (mOnActionOverflowClickListener != null) {
-                    mOnActionOverflowClickListener.onClick(v);
-                }
-                break;
-            case R.id.top_bar_action_left:
-                if (mOnActionLeftClickListener != null) {
-                    mOnActionLeftClickListener.onClick(v);
-                }
-                break;
-            case R.id.top_bar_iv_search_close:
-                mEtSearch.setText("");
-                break;
             default:
                 for (int i = 0; i < mActionViews.size(); i++) {
                     View view = mActionViews.get(i);
@@ -213,7 +197,25 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
                 }
                 break;
         }
+    }
 
+    @OnClick (R.id.top_bar_iv_search_close)
+    public void onIvSearchCloseClicked() {
+        mEtSearch.setText("");
+    }
+
+    @OnClick (R.id.top_bar_action_left)
+    public void onActionLeftClicked(View v) {
+        if (mOnActionLeftClickListener != null) {
+            mOnActionLeftClickListener.onClick(v);
+        }
+    }
+
+    @OnClick (R.id.top_bar_action_overflow)
+    public void onActionOverflowClicked(View v) {
+        if (mOnActionOverflowClickListener != null) {
+            mOnActionOverflowClickListener.onClick(v);
+        }
     }
 
     @SuppressWarnings ("SuspiciousNameCombination")

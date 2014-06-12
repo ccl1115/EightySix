@@ -7,8 +7,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
-import com.google.gson.reflect.TypeToken;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
@@ -16,13 +16,10 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.request.RegisterRequest;
+import com.utree.eightysix.response.UserResponse;
 import com.utree.eightysix.response.data.User;
 import com.utree.eightysix.rest.OnResponse;
-import com.utree.eightysix.rest.Response;
-import com.utree.eightysix.response.UserResponse;
 import com.utree.eightysix.utils.InputValidator;
-import com.utree.eightysix.utils.OnClick;
-import com.utree.eightysix.utils.ViewId;
 import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.TopBar;
 
@@ -31,32 +28,21 @@ import com.utree.eightysix.widget.TopBar;
 @Layout(R.layout.activity_register)
 public class RegisterActivity extends BaseActivity {
 
-    @ViewId(R.id.et_phone_number)
+    @InjectView(R.id.et_phone_number)
     public EditText mEtPhoneNumber;
 
-    @ViewId(R.id.et_pwd)
+    @InjectView(R.id.et_pwd)
     public EditText mEtPwd;
 
-    @ViewId(R.id.btn_register)
-    @OnClick
+    @InjectView(R.id.btn_register)
     public RoundedButton mBtnRegister;
 
     private boolean mCorrectPhoneNumber;
     private boolean mCorrectPwd;
 
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
-
-        final int id = v.getId();
-
-        switch (id) {
-            case R.id.btn_register:
-                requestRegister();
-                break;
-            default:
-                break;
-        }
+    @OnClick(R.id.btn_register)
+    public void onBtnRegisterClicked() {
+        requestRegister();
     }
 
     public void onCreate(Bundle savedInstanceState) {

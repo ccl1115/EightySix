@@ -1,7 +1,5 @@
 package com.utree.eightysix.utils;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Environment;
 import com.aliyun.android.util.MD5Util;
 import com.utree.eightysix.U;

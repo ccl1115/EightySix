@@ -10,7 +10,8 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
-import com.google.gson.reflect.TypeToken;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
@@ -18,33 +19,28 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.request.LoginRequest;
-import com.utree.eightysix.rest.OnResponse;
-import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.response.UserResponse;
+import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.InputValidator;
-import com.utree.eightysix.utils.OnClick;
-import com.utree.eightysix.utils.ViewId;
 import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.TopBar;
 
 /**
  */
-@Layout(R.layout.activity_login)
+@Layout (R.layout.activity_login)
 public class LoginActivity extends BaseActivity {
 
-    @ViewId(R.id.btn_login)
-    @OnClick
+    @InjectView (R.id.btn_login)
     public RoundedButton mBtnLogin;
 
-    @ViewId(R.id.et_pwd)
+    @InjectView (R.id.et_pwd)
     public EditText mEtPwd;
 
-    @ViewId(R.id.et_phone_number)
+    @InjectView (R.id.et_phone_number)
     public EditText mEtPhoneNumber;
 
-    @ViewId(R.id.tv_forget_pwd)
-    @OnClick
+    @InjectView (R.id.tv_forget_pwd)
     public TextView mTvForgetPwd;
 
     private boolean mCorrectPhoneNumber;
@@ -53,22 +49,30 @@ public class LoginActivity extends BaseActivity {
 
     private int mPhoneNumberLength = U.getConfigInt("account.phone.length");
 
+    @OnClick (R.id.btn_login)
+    public void onBtnLoginClicked() {
+        requestLogin();
+    }
+
+    @OnClick (R.id.tv_forget_pwd)
+    public void onTvForgetPwd() {
+        startActivity(new Intent(this, ForgetPwdActivity.class));
+    }
+
+    @Subscribe
+    public void onLoginEvent(Account.LoginEvent event) {
+        showToast(R.string.login_success, false);
+        finish();
+    }
+
+    /**
+     * Do nothing because I'm the login activity
+     *
+     * @param event the logout event
+     */
     @Override
-    public void onClick(View v) {
-        super.onClick(v);
-
-        final int id = v.getId();
-
-        switch (id) {
-            case R.id.btn_login:
-                requestLogin();
-                break;
-            case R.id.tv_forget_pwd:
-                startActivity(new Intent(this, ForgetPwdActivity.class));
-                break;
-            default:
-                break;
-        }
+    @Subscribe
+    public void onLogout(Account.LogoutEvent event) {
     }
 
     public void onCreate(Bundle savedInstanceState) {
@@ -195,19 +199,5 @@ public class LoginActivity extends BaseActivity {
                     }
                 }, UserResponse.class);
         mBtnLogin.setEnabled(false);
-    }
-
-    @Subscribe public void onLoginEvent(Account.LoginEvent event) {
-        showToast(R.string.login_success, false);
-        finish();
-    }
-
-    /**
-     * Do nothing because I'm the login activity
-     * @param event the logout event
-     */
-    @Override
-    @Subscribe
-    public void onLogout(Account.LogoutEvent event) {
     }
 }

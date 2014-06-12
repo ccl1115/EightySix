@@ -3,10 +3,7 @@ package com.utree.eightysix.statistics;
 import android.content.Context;
 import com.tencent.stat.StatConfig;
 import com.tencent.stat.StatService;
-import com.utree.eightysix.BuildConfig;
-import com.utree.eightysix.C;
 import com.utree.eightysix.U;
-import com.utree.eightysix.app.BaseApplication;
 import java.util.Properties;
 
 /**

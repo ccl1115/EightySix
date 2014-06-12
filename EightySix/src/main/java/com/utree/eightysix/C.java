@@ -1,8 +1,5 @@
 package com.utree.eightysix;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * <b>C</b> is abbreviation for configuration
  * <p/>

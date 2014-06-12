@@ -7,6 +7,8 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -17,8 +19,6 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.account.GetLockpatternActivity;
 import com.utree.eightysix.app.account.LoginActivity;
 import com.utree.eightysix.utils.Env;
-import com.utree.eightysix.utils.OnClick;
-import com.utree.eightysix.utils.ViewId;
 import com.utree.eightysix.widget.guide.GuideBuilder;
 import com.utree.eightysix.widget.lockpattern.LockPatternView;
 import java.util.List;
@@ -29,50 +29,40 @@ public class IntroActivity extends BaseActivity {
 
     private final PatternHelper mPatternHelper = new PatternHelper();
 
-    @ViewId(R.id.big_logo)
+    @InjectView(R.id.big_logo)
     public ImageView mBigLogo;
 
-    @ViewId(R.id.app_title)
+    @InjectView(R.id.app_title)
     public TextView mAppTitle;
 
-    @ViewId(R.id.intro_text)
+    @InjectView(R.id.intro_text)
     public TextView mIntroText;
 
-    @ViewId(R.id.intro_url)
+    @InjectView(R.id.intro_url)
     public TextView mIntroUrl;
 
-    @ViewId(R.id.second_layout)
+    @InjectView(R.id.second_layout)
     public LinearLayout mSecondLayout;
 
-    @ViewId(R.id.lock_pattern)
+    @InjectView(R.id.lock_pattern)
     public LockPatternView mLockPatternView;
 
-    @ViewId(R.id.tv_get_pattern)
-    @OnClick
+    @InjectView(R.id.tv_get_pattern)
     public TextView mGetPattern;
 
-    @ViewId(R.id.tv_login)
-    @OnClick
+    @InjectView(R.id.tv_login)
     public TextView mLogin;
 
     private int mRetries = 0;
 
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
+    @OnClick(R.id.tv_get_pattern)
+    public void onTvGetPatternClick() {
+        startActivity(new Intent(this, GetLockpatternActivity.class));
+    }
 
-        final int id = v.getId();
-
-        switch (id) {
-            case R.id.tv_login:
-                startActivity(new Intent(this, LoginActivity.class));
-                break;
-            case R.id.tv_get_pattern:
-                startActivity(new Intent(this, GetLockpatternActivity.class));
-                break;
-            default:
-                break;
-        }
+    @OnClick(R.id.tv_login)
+    public void onTvLoginClicked() {
+        startActivity(new Intent(this, LoginActivity.class));
     }
 
     @Override

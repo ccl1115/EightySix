@@ -11,11 +11,6 @@ import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.storage.Storage;
 import de.akquinet.android.androlog.Log;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.regex.Pattern;
 
 /**

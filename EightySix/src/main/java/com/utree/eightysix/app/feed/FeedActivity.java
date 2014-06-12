@@ -8,14 +8,13 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import butterknife.InjectView;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.utils.OnClick;
-import com.utree.eightysix.utils.ViewId;
 
 /**
  */
@@ -25,15 +24,13 @@ public class FeedActivity extends BaseActivity {
     private static final int PW_CIRCLE_SELECTOR_WIDTH = 190; // dp
     private static final int PW_CIRCLE_SELECTOR_HEIGHT = 200; // dp
 
-    @ViewId(R.id.lv_feed)
+    @InjectView(R.id.lv_feed)
     public ListView mLvFeed;
 
-    @ViewId(R.id.ib_send)
-    @OnClick
+    @InjectView(R.id.ib_send)
     public ImageButton mSend;
 
-    @ViewId(R.id.ib_refresh)
-    @OnClick
+    @InjectView(R.id.ib_refresh)
     public ImageButton mRefresh;
 
     public PopupWindow mPWCircleSelector;
@@ -42,22 +39,6 @@ public class FeedActivity extends BaseActivity {
 
     private int mCircleSelectorWidth;
     private int mCircleSelectorHeight;
-
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
-
-        final int id = v.getId();
-
-        switch (id) {
-            case R.id.ib_refresh:
-                break;
-            case R.id.ib_send:
-                break;
-            default:
-                break;
-        }
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -5,19 +5,17 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.storage.Storage;
-import com.utree.eightysix.utils.OnClick;
-import com.utree.eightysix.utils.ViewId;
 import de.akquinet.android.androlog.Log;
-
 import java.io.File;
 
 /**
@@ -26,33 +24,28 @@ public class OSSDemoActivity extends BaseActivity {
 
     private static final int REQUEST_CODE_PICKFILE = 0x001;
 
-    @ViewId(R.id.bucket)
+    @InjectView(R.id.bucket)
     public EditText mBucket;
 
-    @ViewId(R.id.path)
+    @InjectView(R.id.path)
     public EditText mPath;
 
-    @ViewId(R.id.file_name)
+    @InjectView(R.id.file_name)
     public EditText mFile;
 
-    @ViewId(R.id.button_choose_file)
-    @OnClick
+    @InjectView(R.id.button_choose_file)
     public Button mChooseFile;
 
-    @ViewId(R.id.button_create_bucket)
-    @OnClick
+    @InjectView(R.id.button_create_bucket)
     public Button mCreateBucket;
 
-    @ViewId(R.id.button_delete_bucket)
-    @OnClick
+    @InjectView(R.id.button_delete_bucket)
     public Button mDeleteBucket;
 
-    @ViewId(R.id.button_delete_file)
-    @OnClick
+    @InjectView(R.id.button_delete_file)
     public Button mDeleteFile;
 
-    @ViewId(R.id.button_upload_file)
-    @OnClick
+    @InjectView(R.id.button_upload_file)
     public Button mUploadFile;
 
 
@@ -67,60 +60,58 @@ public class OSSDemoActivity extends BaseActivity {
         setTopTitle(getString(R.string.title_oss_demo_activity));
     }
 
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
+    @OnClick(R.id.button_upload_file)
+    public void onBtnUploadFile() {
+        U.getCloudStorage().aPut(mBucket.getText().toString(),
+                mPath.getText().toString(),
+                mFileName,
+                new File(mFile.getText().toString()),
+                new Storage.OnResult() {
+                    @Override
+                    public void onResult(Storage.Result result) {
+                        Log.d(OSSDemoActivity.this, "  " + result.msg);
+                    }
+                }
+        );
+    }
 
-        final int id = v.getId();
+    @OnClick(R.id.button_delete_bucket)
+    public void onBtnDeleteBucketClicked() {
+        U.getCloudStorage().aDeleteBucket(mBucket.getText().toString(), new Storage.OnResult() {
+            @Override
+            public void onResult(Storage.Result result) {
+                Log.d(this, result.msg);
+            }
+        });
+    }
 
-        switch (id) {
-            case R.id.button_choose_file:
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("file/*");
-                startActivityForResult(Intent.createChooser(intent, "Pick a file"), REQUEST_CODE_PICKFILE);
-                break;
-            case R.id.button_delete_file:
-                U.getCloudStorage().aDelete(mBucket.getText().toString(), mPath.getText().toString(), mFile.getText().toString(),
-                        new Storage.OnResult() {
-                            @Override
-                            public void onResult(Storage.Result result) {
-                                Log.d(this, result.msg);
-                            }
-                        }
-                );
-                break;
-            case R.id.button_create_bucket:
-                U.getCloudStorage().aCreateBucket(mBucket.getText().toString(), new Storage.OnResult() {
+    @OnClick(R.id.button_create_bucket)
+    public void onBtnCreateBucketClicked() {
+        U.getCloudStorage().aCreateBucket(mBucket.getText().toString(), new Storage.OnResult() {
+            @Override
+            public void onResult(Storage.Result result) {
+                Log.d(this, result.msg);
+            }
+        });
+    }
+
+    @OnClick(R.id.button_delete_file)
+    public void onBtnDeleteFileClicked() {
+        U.getCloudStorage().aDelete(mBucket.getText().toString(), mPath.getText().toString(), mFile.getText().toString(),
+                new Storage.OnResult() {
                     @Override
                     public void onResult(Storage.Result result) {
                         Log.d(this, result.msg);
                     }
-                });
-                break;
-            case R.id.button_delete_bucket:
-                U.getCloudStorage().aDeleteBucket(mBucket.getText().toString(), new Storage.OnResult() {
-                    @Override
-                    public void onResult(Storage.Result result) {
-                        Log.d(this, result.msg);
-                    }
-                });
-                break;
-            case R.id.button_upload_file:
-                U.getCloudStorage().aPut(mBucket.getText().toString(),
-                        mPath.getText().toString(),
-                        mFileName,
-                        new File(mFile.getText().toString()),
-                        new Storage.OnResult() {
-                            @Override
-                            public void onResult(Storage.Result result) {
-                                Log.d(OSSDemoActivity.this, "  " + result.msg);
-                            }
-                        }
-                );
-                break;
-            default:
-                break;
-        }
+                }
+        );
+    }
+
+    @OnClick(R.id.button_choose_file)
+    public void onBtnChooseFileClicked() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("file/*");
+        startActivityForResult(Intent.createChooser(intent, "Pick a file"), REQUEST_CODE_PICKFILE);
     }
 
     @Override

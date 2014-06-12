@@ -7,7 +7,6 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.LoginActivity;
-import com.utree.eightysix.app.account.RegisterActivity;
 import com.utree.eightysix.utils.Env;
 
 /**

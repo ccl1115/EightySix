@@ -5,10 +5,10 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-import com.aliyun.android.util.MD5Util;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
@@ -16,8 +16,6 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
-import com.utree.eightysix.utils.OnClick;
-import com.utree.eightysix.utils.ViewId;
 import com.utree.eightysix.widget.AsyncImageView;
 import de.akquinet.android.androlog.Log;
 import java.io.File;
@@ -29,11 +27,10 @@ public class ImageUtilsDemoActivity extends BaseActivity {
 
     private static final int REQUEST_CODE_PICKFILE = 0x1;
 
-    @ViewId(R.id.btn_upload)
-    @OnClick
+    @InjectView(R.id.btn_upload)
     public Button mBtnUpload;
 
-    @ViewId(R.id.aiv_show)
+    @InjectView(R.id.aiv_show)
     public AsyncImageView mAivShow;
 
 
@@ -44,21 +41,11 @@ public class ImageUtilsDemoActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
     }
 
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
-
-        final int id = v.getId();
-
-        switch (id) {
-            case R.id.btn_upload:
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*");
-                startActivityForResult(Intent.createChooser(intent, "Pick a file"), REQUEST_CODE_PICKFILE);
-                break;
-            default:
-                break;
-        }
+    @OnClick(R.id.btn_upload)
+    public void onBtnUpload() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(Intent.createChooser(intent, "Pick a file"), REQUEST_CODE_PICKFILE);
     }
 
     @Override
