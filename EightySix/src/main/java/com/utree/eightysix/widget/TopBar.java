@@ -285,7 +285,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     mRlTitle.layout(0, 0, mRlTitle.getMeasuredWidth(), b);
 
-    mFlSearch.layout(mActionLeft.getRight(), 0, mActionLeft.getRight() + mFlSearch.getMeasuredWidth(), b);
+    mFlSearch.layout(mIvAppIcon.getRight(), 0, mIvAppIcon.getRight() + mFlSearch.getMeasuredWidth(), b);
 
     mActionOverFlow.layout(right - mActionOverFlow.getMeasuredWidth(), 0, right, b);
 

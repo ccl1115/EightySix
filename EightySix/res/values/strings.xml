@@ -105,5 +105,8 @@
     <!-- CircleSearchActivity -->
     <string name="enter_search_keyword">请输入搜索内容</string>
     <string name="clear_search_history">清除搜索记录</string>
+    <string name="no_search_result">没有找到 “%s” 相关的打工圈</string>
+    <string name="try_other_search_keyword">你可以尝试更改搜索关键词，或申请创建打工圈</string>
+    <string name="create_circle">创建工友圈</string>
 
 </resources>

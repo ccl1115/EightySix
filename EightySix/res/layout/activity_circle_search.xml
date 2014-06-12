@@ -4,20 +4,58 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-    <ListView
-            android:id="@+id/lv_history"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@null"
-            android:dividerHeight="0dp"/>
 
     <ListView
             android:id="@+id/lv_result"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
             android:divider="@null"
-            android:dividerHeight="0dp"/>
+            android:dividerHeight="0dp"
+            android:fadingEdge="none"/>
 
+    <LinearLayout
+            android:id="@+id/ll_empty_result"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="invisible">
 
+        <TextView
+                android:id="@+id/tv_empty_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="110dp"
+                android:layout_gravity="center_horizontal"
+                android:textSize="16sp"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:text="@string/try_other_search_keyword"
+                android:textSize="14sp"
+                android:textColor="@color/apptheme_primary_dark_color"/>
+
+        <com.utree.eightysix.widget.RoundedButton
+                android:id="@+id/rb_create_circle"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="70dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:text="@string/create_circle"/>
+
+    </LinearLayout>
+
+    <ListView
+            android:id="@+id/lv_history"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            android:fadingEdge="none"/>
 
 </FrameLayout>
