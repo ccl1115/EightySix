@@ -25,6 +25,10 @@
     <string name="server_error">服务器错误</string>
     <string name="server_object_error">服务器返回对象解析错误</string>
 
+    <!-- Locate -->
+    <string name="locating">定位中…</string>
+    <string name="locating_failed">定位失败</string>
+
     <!-- Action -->
     <string name="action_settings">@string/settings</string>
 
@@ -116,5 +120,7 @@
     <string name="enter_captcha">输入验证码</string>
     <string name="change_captcha">换一张</string>
     <string name="invite_people">邀请好友进入（需要3个朋友加入，才可以开通）</string>
+    <string name="circle_name_length_long">工友圈名字太长</string>
+    <string name="circle_short_name_length_long">工友圈短名称太长</string>
 
 </resources>
