@@ -178,6 +178,7 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
 
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count) {
+        getTopBar().mIvSearchClose.setVisibility(s.length() == 0 ? View.INVISIBLE : View.VISIBLE);
         onSearchTextChanged(s.toString());
       }
 
