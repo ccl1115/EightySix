@@ -20,7 +20,6 @@ import com.utree.eightysix.request.SearchCircleRequest;
 import com.utree.eightysix.response.CirclesResponse;
 import com.utree.eightysix.response.data.Circle;
 import com.utree.eightysix.rest.OnResponse;
-import com.utree.eightysix.widget.LoadMoreAdapterWrapper;
 import com.utree.eightysix.widget.RoundedButton;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,8 +52,6 @@ public class CircleSearchActivity extends BaseActivity {
   private View mFooterClearSearch;
 
   private CircleBaseListAdapter mAdapter;
-
-  private LoadMoreAdapterWrapper mAdapterWrapper;
 
   private List<Circle> mData;
 
