@@ -24,6 +24,7 @@
     <string name="select_album">选择相册</string>
     <string name="server_error">服务器错误</string>
     <string name="server_object_error">服务器返回对象解析错误</string>
+    <string name="create">创建</string>
 
     <!-- Locate -->
     <string name="locating">定位中…</string>
@@ -102,9 +103,10 @@
     <string name="cannot_post_empty_content">不能发表空内容。</string>
 
 
-    <!-- CircleListActivity -->
+    <!-- MyCirclesActivity -->
     <string name="search_circles">找工厂，找商圈，找企业</string>
     <string name="my_circles">我的工友圈</string>
+    <string name="no_circles">没有找到工友圈</string>
 
     <!-- CircleSearchActivity -->
     <string name="enter_search_keyword">请输入搜索内容</string>

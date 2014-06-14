@@ -78,6 +78,11 @@
             <artifactId>butterknife</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>br.com.six2six</groupId>
+            <artifactId>fixture-factory</artifactId>
+        </dependency>
+
     </dependencies>
 
 	<build>

@@ -7,6 +7,7 @@
               android:orientation="vertical">
 
     <FrameLayout
+            android:id="@+id/fl_search"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="45dp"
@@ -24,6 +25,9 @@
                 android:textColor="#ffe2e3e5"
                 android:textSize="15sp"
                 android:paddingLeft="8dp"
+                android:drawableLeft="@drawable/ic_search"
+                android:drawablePadding="6dp"
+                android:clickable="false"
                 app:radius="2dp"
                 app:background="@android:color/white"/>
 
@@ -33,5 +37,17 @@
             android:id="@+id/lv_circles"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            android:listSelector="@drawable/apptheme_primary_list_selector"/>
+
+    <TextView
+            android:id="@+id/tv_empty_text"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/no_circles"
+            android:textSize="18sp"/>
 </LinearLayout>

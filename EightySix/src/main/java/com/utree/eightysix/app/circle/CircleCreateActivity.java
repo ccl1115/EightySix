@@ -59,6 +59,7 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
     if (t.length() > length) {
       showToast(getString(R.string.circle_name_length_long));
       mEtCircleName.setText(t.subSequence(0, length));
+      mEtCircleName.setSelection(length);
     }
   }
 
@@ -68,6 +69,7 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
     if (t.length() > length) {
       showToast(getString(R.string.circle_short_name_length_long));
       mEtCircleAbbreviation.setText(t.subSequence(0, length));
+      mEtCircleAbbreviation.setSelection(length);
     }
   }
 

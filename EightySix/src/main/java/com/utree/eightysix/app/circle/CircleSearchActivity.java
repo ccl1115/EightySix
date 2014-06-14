@@ -83,6 +83,11 @@ public class CircleSearchActivity extends BaseActivity {
   }
 
   @Override
+  protected void onActionLeftOnClicked() {
+    finish();
+  }
+
+  @Override
   protected void onSearchActionGo(String keyword) {
     requestSearch(1, keyword);
 

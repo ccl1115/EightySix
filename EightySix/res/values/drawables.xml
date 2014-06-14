@@ -6,4 +6,7 @@
 
     <drawable name="apptheme_primary_btn_dark_normal">@drawable/transparent</drawable>
     <drawable name="apptheme_primary_btn_dark_pressed">#ff2b2e33</drawable>
+
+    <drawable name="apptheme_primary_list_selector_normal">@drawable/transparent</drawable>
+    <drawable name="apptheme_primary_list_selector_pressed">#fff0f0f0</drawable>
 </resources>

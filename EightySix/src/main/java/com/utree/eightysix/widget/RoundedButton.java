@@ -60,6 +60,12 @@ public final class RoundedButton extends TextView {
         throw new IllegalStateException("Background can only set to color");
     }
 
+  public void setBackgroundColor(int color) {
+    mColorStateList = null;
+    mBackgroundPaint.setColor(color);
+    invalidate();
+  }
+
     public void setRadius(int radius) {
         mRadius = radius;
     }
