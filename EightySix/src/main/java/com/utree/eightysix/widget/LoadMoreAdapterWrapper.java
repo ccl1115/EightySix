@@ -8,38 +8,40 @@ import android.widget.ListAdapter;
 /**
  * @author simon
  */
-public class LoadMoreAdapterWrapper extends BaseAdapter {
+class LoadMoreAdapterWrapper extends BaseAdapter {
 
-  public static final int TYPE_LOAD_MORE = 0x3 << 30;
-  public static final int TYPE_INVALID = -1;
+  private static final int TYPE_LOAD_MORE = 0;
+
   private boolean mIsLoading;
 
   private ListAdapter mListAdapter;
 
   private LoadMoreCallback mCallback;
 
-  public interface LoadMoreCallback {
-
-    View getLoadMoreView();
-
-    boolean hasMore();
-
-    boolean onLoadMoreStart();
-  }
 
   public LoadMoreAdapterWrapper(ListAdapter adapter, LoadMoreCallback moreCallback) {
     mListAdapter = adapter;
     mCallback = moreCallback;
   }
 
+  public LoadMoreAdapterWrapper(ListAdapter adapter) {
+    mListAdapter = adapter;
+  }
+
+  public void setLoadMoreCallback(LoadMoreCallback callback) {
+    mCallback = callback;
+  }
+
   @Override
   public int getCount() {
-    return 1 + mListAdapter.getCount();
+    return (hasCallback() ? 1 : 0) + mListAdapter.getCount();
   }
 
   @Override
   public Object getItem(int position) {
-    return position == getCount() - 1 ? null : mListAdapter.getItem(position);
+    return hasCallback() ?
+        (position == getCount() - 1 ? null : mListAdapter.getItem(position)) :
+        mListAdapter.getItem(position);
   }
 
   @Override
@@ -69,16 +71,22 @@ public class LoadMoreAdapterWrapper extends BaseAdapter {
 
   @Override
   public int getItemViewType(int position) {
-    return position == getCount() - 1 ? TYPE_LOAD_MORE : mListAdapter.getItemViewType(position);
+    return hasCallback() ?
+        position == getCount() - 1 ? TYPE_LOAD_MORE : mListAdapter.getItemViewType(position) :
+        mListAdapter.getItemViewType(position);
   }
 
   @Override
   public int getViewTypeCount() {
-    return 1 + mListAdapter.getViewTypeCount();
+    return (hasCallback() ? 1 : 0) + mListAdapter.getViewTypeCount();
   }
 
   public void stopLoadMore() {
     mIsLoading = false;
     notifyDataSetChanged();
+  }
+
+  private boolean hasCallback() {
+    return mCallback == null;
   }
 }

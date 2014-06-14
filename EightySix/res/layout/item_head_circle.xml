@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="36dp">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content">
 
     <TextView
+            android:id="@+id/tv_circle_group_type"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginBottom="5dp"
-            android:gravity="left|bottom"
+            android:layout_height="36dp"
+            android:layout_marginLeft="15dp"
+            android:paddingTop="3dp"
+            android:gravity="center_vertical"
             android:textSize="16sp"
-            android:text="在职企业"
             android:textColor="@color/apptheme_primary_dark_color"/>
 
     <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#ffd9d9d9"/>
-</LinearLayout>
+            android:layout_gravity="bottom"
+            android:background="#ffd9d9d9"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+</FrameLayout>

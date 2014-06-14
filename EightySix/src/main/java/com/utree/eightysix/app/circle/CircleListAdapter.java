@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.circle;
 
+import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -11,20 +12,28 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.response.data.Circle;
 import com.utree.eightysix.widget.RoundedButton;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 /**
  */
-public class CircleListAdapter extends BaseAdapter {
+class CircleListAdapter extends BaseAdapter {
+
+  private static final int TYPE_CIRCLE = 1;
+  private static final int TYPE_HEAD = 2;
 
   private List<Circle> mCircles;
+  private SparseArray<String> mHeadMark;
+
 
   public CircleListAdapter(List<Circle> circles) {
     mCircles = circles;
+    markHeadPosition();
   }
 
   public void add(Collection<Circle> collection) {
     mCircles.addAll(collection);
+    markHeadPosition();
     notifyDataSetChanged();
   }
 
@@ -45,14 +54,39 @@ public class CircleListAdapter extends BaseAdapter {
 
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
-    ViewHolder holder;
+    final int type = getItemViewType(position);
+    if (type == TYPE_CIRCLE) {
+      return getCircleView(position, convertView, parent);
+    } else if (type == TYPE_HEAD) {
+      if (convertView == null) {
+        convertView = View.inflate(parent.getContext(), R.layout.item_head_circle, null);
+      }
+
+      ((TextView) convertView.findViewById(R.id.tv_circle_group_type)).setText(mHeadMark.get(position));
+      return convertView;
+    }
+    return convertView;
+  }
+
+  @Override
+  public int getItemViewType(int position) {
+    return mHeadMark.get(position) == null ? TYPE_CIRCLE : TYPE_HEAD;
+  }
+
+  @Override
+  public int getViewTypeCount() {
+    return mHeadMark.size() + 1;
+  }
+
+  private View getCircleView(int position, View convertView, ViewGroup parent) {
+    CircleViewHolder holder;
     if (convertView == null) {
       convertView = View.inflate(parent.getContext(), R.layout.item_circle, null);
-      holder = new ViewHolder();
+      holder = new CircleViewHolder();
       ButterKnife.inject(holder, convertView);
       convertView.setTag(holder);
     } else {
-      holder = (ViewHolder) convertView.getTag();
+      holder = (CircleViewHolder) convertView.getTag();
     }
 
     Circle item = getItem(position);
@@ -86,7 +120,28 @@ public class CircleListAdapter extends BaseAdapter {
     return convertView;
   }
 
-  public static class ViewHolder {
+  private void markHeadPosition() {
+    mHeadMark = new SparseArray<String>();
+    for (Iterator<Circle> iterator = mCircles.iterator(); iterator.hasNext(); ) {
+      Circle circle = iterator.next();
+      if (circle == null) {
+        iterator.remove();
+      }
+    }
+    Circle pre = null;
+    for (int i = 0, size = mCircles.size(); i < size; i++) {
+      Circle circle = mCircles.get(i);
+      if (circle == null) continue;
+
+      if ((pre == null) || !circle.viewGroupType.equals(pre.viewGroupType)) {
+        mHeadMark.put(i, circle.viewGroupType);
+        mCircles.add(i, null);
+      }
+      pre = circle;
+    }
+  }
+
+  public static class CircleViewHolder {
     @InjectView (R.id.tv_circle_name)
     public TextView mTvCircleName;
 

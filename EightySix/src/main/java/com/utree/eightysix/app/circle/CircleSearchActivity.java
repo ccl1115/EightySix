@@ -18,7 +18,9 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.request.SearchCircleRequest;
 import com.utree.eightysix.response.CirclesResponse;
+import com.utree.eightysix.response.data.Circle;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.widget.LoadMoreAdapterWrapper;
 import com.utree.eightysix.widget.RoundedButton;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,6 +51,12 @@ public class CircleSearchActivity extends BaseActivity {
 
   private List<String> mSearchHistory;
   private View mFooterClearSearch;
+
+  private CircleBaseListAdapter mAdapter;
+
+  private LoadMoreAdapterWrapper mAdapterWrapper;
+
+  private List<Circle> mData;
 
   @OnClick (R.id.rb_create_circle)
   public void onRbCreateCircleClicked() {
@@ -91,17 +99,22 @@ public class CircleSearchActivity extends BaseActivity {
   protected void onSearchActionGo(String keyword) {
     requestSearch(1, keyword);
 
+
+    //region load history keyword
     for (String k : mSearchHistory) {
       if (k.equals(keyword)) {
         return;
       }
     }
-
     mSearchHistory.add(keyword);
-
     Account.inst().setSearchHistory(mSearchHistory);
-
     updateHistoryData();
+    //endregion
+
+
+    mData = new ArrayList<Circle>();
+    mAdapter = new CircleBaseListAdapter(mData);
+
   }
 
   @Override
@@ -148,6 +161,8 @@ public class CircleSearchActivity extends BaseActivity {
   private void showSearchResult() {
     mLvResult.setVisibility(View.VISIBLE);
     mLvHistory.setVisibility(View.GONE);
+
+
   }
 
   private void requestSearch(int page, String keyword) {

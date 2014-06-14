@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.Rule;
@@ -19,7 +18,7 @@ import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.response.CirclesResponse;
 import com.utree.eightysix.response.data.Circle;
 import com.utree.eightysix.rest.FixtureUtil;
-import com.utree.eightysix.widget.LoadMoreAdapterWrapper;
+import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.TopBar;
 
 /**
@@ -32,11 +31,11 @@ public class MyCirclesActivity extends BaseActivity {
   public FrameLayout mFlSearch;
 
   @InjectView (R.id.lv_circles)
-  public ListView mLvCircles;
+  public AdvancedListView mLvCircles;
 
   @InjectView (R.id.tv_empty_text)
   public TextView mTvEmptyText;
-  private LoadMoreAdapterWrapper mAdapterWrapper;
+
   private CircleListAdapter mCircleListAdapter;
 
   @OnClick (R.id.fl_search)
@@ -80,39 +79,7 @@ public class MyCirclesActivity extends BaseActivity {
     mCircleListAdapter =
         new CircleListAdapter(((CirclesResponse) FixtureUtil.get(C.API_FACTORY_MY)).object.factoryCircle.lists);
 
-    mAdapterWrapper =
-        new LoadMoreAdapterWrapper(mCircleListAdapter, new LoadMoreAdapterWrapper.LoadMoreCallback() {
-          @Override
-          public View getLoadMoreView() {
-            return View.inflate(MyCirclesActivity.this, R.layout.footer_load_more, null);
-          }
-
-          @Override
-          public boolean hasMore() {
-            return true;
-          }
-
-          @Override
-          public boolean onLoadMoreStart() {
-            getHandler().postDelayed(new Runnable() {
-              @Override
-              public void run() {
-                mCircleListAdapter.add(Fixture.from(Circle.class).<Circle>gimme(20, "valid", new Rule() {
-                      {
-                        add("viewGroupType", "智能推荐");
-                        add("viewType", 4);
-                      }
-                    }
-                ));
-                mCircleListAdapter.notifyDataSetChanged();
-                mAdapterWrapper.stopLoadMore();
-              }
-            }, 1000);
-            return true;
-          }
-        });
-
-    mLvCircles.setAdapter(mAdapterWrapper);
+    mLvCircles.setAdapter(mCircleListAdapter);
   }
 
   @Override

@@ -33,7 +33,7 @@
 
     </FrameLayout>
 
-    <ListView
+    <com.utree.eightysix.widget.AdvancedListView
             android:id="@+id/lv_circles"
             android:layout_width="match_parent"
             android:layout_height="0dp"
