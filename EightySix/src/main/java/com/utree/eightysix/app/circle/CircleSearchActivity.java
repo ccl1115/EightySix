@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import br.com.six2six.fixturefactory.Fixture;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
@@ -20,6 +21,8 @@ import com.utree.eightysix.request.SearchCircleRequest;
 import com.utree.eightysix.response.CirclesResponse;
 import com.utree.eightysix.response.data.Circle;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.widget.AdvancedListView;
+import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RoundedButton;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +40,7 @@ public class CircleSearchActivity extends BaseActivity {
   public ListView mLvHistory;
 
   @InjectView (R.id.lv_result)
-  public ListView mLvResult;
+  public AdvancedListView mLvResult;
 
   @InjectView (R.id.ll_empty_result)
   public LinearLayout mLlEmptyResult;
@@ -51,7 +54,7 @@ public class CircleSearchActivity extends BaseActivity {
   private List<String> mSearchHistory;
   private View mFooterClearSearch;
 
-  private CircleBaseListAdapter mAdapter;
+  private CircleBaseListAdapter mResultAdapter;
 
   private List<Circle> mData;
 
@@ -110,7 +113,7 @@ public class CircleSearchActivity extends BaseActivity {
 
 
     mData = new ArrayList<Circle>();
-    mAdapter = new CircleBaseListAdapter(mData);
+    mResultAdapter = new CircleBaseListAdapter(mData);
 
   }
 
@@ -160,6 +163,31 @@ public class CircleSearchActivity extends BaseActivity {
     mLvHistory.setVisibility(View.GONE);
 
 
+    mResultAdapter = new CircleBaseListAdapter(Fixture.from(Circle.class).<Circle>gimme(20, "valid"));
+    mLvResult.setAdapter(mResultAdapter);
+    mLvResult.setLoadMoreCallback(new LoadMoreCallback() {
+      @Override
+      public View getLoadMoreView() {
+        return View.inflate(CircleSearchActivity.this, R.layout.footer_load_more, null);
+      }
+
+      @Override
+      public boolean hasMore() {
+        return true;
+      }
+
+      @Override
+      public boolean onLoadMoreStart() {
+        getHandler().postDelayed(new Runnable() {
+          @Override
+          public void run() {
+            mResultAdapter.add(Fixture.from(Circle.class).<Circle>gimme(20, "valid"));
+            mLvResult.stopLoadMore();
+          }
+        }, 2000);
+        return true;
+      }
+    });
   }
 
   private void requestSearch(int page, String keyword) {
@@ -167,9 +195,9 @@ public class CircleSearchActivity extends BaseActivity {
 
       @Override
       public void onResponse(CirclesResponse response) {
-        if (response != null) {
+        //if (response != null) {
           showSearchResult();
-        }
+        //}
         hideProgressBar();
       }
     }, CirclesResponse.class);

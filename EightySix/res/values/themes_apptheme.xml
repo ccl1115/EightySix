@@ -35,6 +35,8 @@
         <item name="aosp_drawable_indicator_code_lock_point_area_normal">
             @drawable/aosp_indicator_code_lock_point_area_green_holo
         </item>
+
+        <item name="android:listViewStyle">@style/Widget.ListView.Apptheme</item>
     </style>
 
 

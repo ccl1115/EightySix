@@ -19,6 +19,7 @@ import com.utree.eightysix.response.CirclesResponse;
 import com.utree.eightysix.response.data.Circle;
 import com.utree.eightysix.rest.FixtureUtil;
 import com.utree.eightysix.widget.AdvancedListView;
+import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.TopBar;
 
 /**
@@ -80,6 +81,36 @@ public class MyCirclesActivity extends BaseActivity {
         new CircleListAdapter(((CirclesResponse) FixtureUtil.get(C.API_FACTORY_MY)).object.factoryCircle.lists);
 
     mLvCircles.setAdapter(mCircleListAdapter);
+
+    mLvCircles.setLoadMoreCallback(new LoadMoreCallback() {
+      @Override
+      public View getLoadMoreView() {
+        return View.inflate(MyCirclesActivity.this, R.layout.footer_load_more, null);
+      }
+
+      @Override
+      public boolean hasMore() {
+        return true;
+      }
+
+      @Override
+      public boolean onLoadMoreStart() {
+        getHandler().postDelayed(new Runnable() {
+          @Override
+          public void run() {
+            mCircleListAdapter.add(Fixture.from(Circle.class).<Circle>gimme(20, "valid", new Rule() {
+                  {
+                    add("viewGroupType", "智能推荐");
+                    add("viewType", 4);
+                  }
+                }
+            ));
+            mLvCircles.stopLoadMore();
+          }
+        }, 2000);
+        return true;
+      }
+    });
   }
 
   @Override

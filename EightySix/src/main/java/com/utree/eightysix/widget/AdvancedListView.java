@@ -17,7 +17,7 @@ public final class AdvancedListView extends ListView {
   }
 
   public AdvancedListView(Context context, AttributeSet attrs) {
-    this(context, attrs, 0);
+    super(context, attrs);
   }
 
   public AdvancedListView(Context context, AttributeSet attrs, int defStyle) {
@@ -39,6 +39,12 @@ public final class AdvancedListView extends ListView {
     if (mAdapterWrapper != null) {
       mAdapterWrapper.setLoadMoreCallback(callback);
       mAdapterWrapper.notifyDataSetChanged();
+    }
+  }
+
+  public void stopLoadMore() {
+    if (mAdapterWrapper != null) {
+      mAdapterWrapper.stopLoadMore();
     }
   }
 }

@@ -5,14 +5,11 @@
              android:layout_height="match_parent">
 
 
-    <ListView
+    <com.utree.eightysix.widget.AdvancedListView
             android:id="@+id/lv_result"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:divider="@null"
-            android:dividerHeight="0dp"
-            android:fadingEdge="none"/>
+            android:layout_height="match_parent"
+            android:background="@android:color/white"/>
 
     <LinearLayout
             android:id="@+id/ll_empty_result"
@@ -53,9 +50,6 @@
             android:id="@+id/lv_history"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/white"
-            android:divider="@null"
-            android:dividerHeight="0dp"
-            android:fadingEdge="none"/>
+            android:background="@android:color/white"/>
 
 </FrameLayout>

@@ -87,6 +87,6 @@ class LoadMoreAdapterWrapper extends BaseAdapter {
   }
 
   private boolean hasCallback() {
-    return mCallback == null;
+    return mCallback != null;
   }
 }

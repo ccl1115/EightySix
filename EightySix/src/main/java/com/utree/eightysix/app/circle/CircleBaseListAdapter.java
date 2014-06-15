@@ -5,8 +5,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.response.data.Circle;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -14,10 +16,16 @@ import java.util.List;
  */
 class CircleBaseListAdapter extends BaseAdapter {
 
+  private static final int TYPE_CIRCLE_BASE = 1;
+
   private List<Circle> mBaseCircles;
 
   public CircleBaseListAdapter(List<Circle> circles) {
     mBaseCircles = circles;
+  }
+
+  public void add(Collection<Circle> list) {
+    mBaseCircles.addAll(list);
   }
 
   @Override
@@ -43,7 +51,7 @@ class CircleBaseListAdapter extends BaseAdapter {
       convertView = View.inflate(parent.getContext(), R.layout.item_circle_base, null);
       viewHolder = new CircleBaseViewHolder();
       ButterKnife.inject(viewHolder, convertView);
-      convertView.setTag(convertView);
+      convertView.setTag(viewHolder);
     } else {
       viewHolder = (CircleBaseViewHolder) convertView.getTag();
     }
@@ -59,10 +67,17 @@ class CircleBaseListAdapter extends BaseAdapter {
     return convertView;
   }
 
+  @Override
+  public int getItemViewType(int position) {
+    return TYPE_CIRCLE_BASE;
+  }
+
   public static class CircleBaseViewHolder {
 
+    @InjectView (R.id.tv_circle_name)
     public TextView mTvCircleName;
 
+    @InjectView (R.id.tv_circle_info)
     public TextView mTvCircleInfo;
   }
 }
