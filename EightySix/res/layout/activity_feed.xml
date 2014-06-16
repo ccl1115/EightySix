@@ -4,14 +4,21 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
+    <com.utree.eightysix.widget.RefreshIndicator
+            android:id="@+id/ri_feed"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_top_bar_height"
+            android:textSize="24sp"
+            android:textColor="#ffd8dbdb"
+            android:text="@string/pull_to_refresh"/>
 
     <com.utree.eightysix.widget.AdvancedListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/lv_feed"
             android:dividerHeight="25dp"
-            android:background="#ffd8dbdb"
             android:smoothScrollbar="true"
+            android:background="#ffd8dbdb"
             android:listSelector="@drawable/transparent"/>
 
 

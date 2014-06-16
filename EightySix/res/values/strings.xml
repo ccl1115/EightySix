@@ -124,5 +124,6 @@
     <string name="invite_people">邀请好友进入（需要3个朋友加入，才可以开通）</string>
     <string name="circle_name_length_long">工友圈名字太长</string>
     <string name="circle_short_name_length_long">工友圈短名称太长</string>
+    <string name="pull_to_refresh">下拉刷新</string>
 
 </resources>

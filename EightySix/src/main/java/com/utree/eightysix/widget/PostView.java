@@ -103,7 +103,7 @@ public class PostView extends RelativeLayout {
   }
 
   public void setData(Post post) {
-    setContent(post.content.length() > 140 ? post.content.substring(0, sPostLength) : post.content);
+    setContent(post.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content);
     setComment(String.valueOf(post.comments));
     setPraise(String.valueOf(post.praise));
     setSource(post.source);
@@ -135,7 +135,7 @@ public class PostView extends RelativeLayout {
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
     final int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-    super.onMeasure(widthMeasureSpec, (int) (widthSize * 1.1f + MeasureSpec.EXACTLY));
+    super.onMeasure(widthMeasureSpec, widthSize + MeasureSpec.EXACTLY);
   }
 
   @Override

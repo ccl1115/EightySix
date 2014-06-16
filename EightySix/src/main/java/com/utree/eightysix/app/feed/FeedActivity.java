@@ -23,6 +23,7 @@ import com.utree.eightysix.response.data.Post;
 import com.utree.eightysix.rest.FixtureUtil;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
+import com.utree.eightysix.widget.RefreshIndicator;
 
 /**
  */
@@ -31,7 +32,6 @@ public class FeedActivity extends BaseActivity {
 
   private static final int PW_CIRCLE_SELECTOR_WIDTH = 190; // dp
   private static final int PW_CIRCLE_SELECTOR_HEIGHT = 200; // dp
-  private FeedAdapter mFeedAdapter;
 
   @InjectView (R.id.lv_feed)
   public AdvancedListView mLvFeed;
@@ -39,16 +39,15 @@ public class FeedActivity extends BaseActivity {
   @InjectView (R.id.ib_send)
   public ImageButton mSend;
 
+  @InjectView (R.id.ri_feed)
+  public RefreshIndicator mRiFeed;
 
   public PopupWindow mPWCircleSelector;
-
   public LinearLayout mLLCircleSelector;
 
+  private FeedAdapter mFeedAdapter;
   private int mCircleSelectorWidth;
   private int mCircleSelectorHeight;
-
-  public FeedActivity() {
-  }
 
   @OnClick (R.id.ib_send)
   public void onSendClicked() {
@@ -149,18 +148,20 @@ public class FeedActivity extends BaseActivity {
 
       @Override
       public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (firstVisibleItem > mPreFirstVisibleItem) {
-          if (!mDownSet.isRunning() && !mIsDown) {
-            mDownSet.start();
-            hideTopBar(true);
+        if (firstVisibleItem >= 1) {
+          if (firstVisibleItem > mPreFirstVisibleItem) {
+            if (!mDownSet.isRunning() && !mIsDown) {
+              mDownSet.start();
+              hideTopBar(true);
+            }
+          } else if (firstVisibleItem < mPreFirstVisibleItem) {
+            if (!mUpSet.isRunning() && !mIsUp) {
+              mUpSet.start();
+              showTopBar(true);
+            }
           }
-        } else if (firstVisibleItem < mPreFirstVisibleItem) {
-          if (!mUpSet.isRunning() && !mIsUp) {
-            mUpSet.start();
-            showTopBar(true);
-          }
+          mPreFirstVisibleItem = firstVisibleItem;
         }
-        mPreFirstVisibleItem = firstVisibleItem;
       }
 
     });
@@ -189,7 +190,26 @@ public class FeedActivity extends BaseActivity {
       }
     });
 
-    mLvFeed.addHeaderView(View.inflate(this, R.layout.header_top_bar_placeholder, null), null, false);
+    mLvFeed.setOnTopOverScrollListener(new AdvancedListView.OnTopOverScrollListener() {
+      private int mDistance;
+      private int mThreshold = getResources().getDimensionPixelOffset(R.dimen.feed_activity_refresh_threshold);
+
+      @Override
+      public void onOverScroll(int distance) {
+        mDistance = distance;
+        mRiFeed.setFactor(Math.max(1f, distance / mThreshold));
+      }
+
+      @Override
+      public void onStateChanged(int state) {
+        if (state == IDLE) {
+          showTopBar(true);
+        } else if (state == OVER_SCROLLING) {
+          hideTopBar(true);
+        }
+
+      }
+    });
 
     showProgressBar();
   }

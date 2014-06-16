@@ -69,6 +69,8 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
   private ObjectAnimator mShowProgressBarAnimator;
   private ObjectAnimator mHideProgressBarAnimator;
   private boolean mFillContent;
+  private ObjectAnimator mHideTopBarAnimator;
+  private ObjectAnimator mShowTopBarAnimator;
 
   public boolean isFillContent() {
     return mFillContent;
@@ -299,30 +301,34 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
     ((RelativeLayout.LayoutParams) findViewById(R.id.content).getLayoutParams()).topMargin = 0;
     mBaseView.requestLayout();
     if (animate) {
-      ObjectAnimator animator = ObjectAnimator.ofFloat(mTopBar, "translationY", 0, -mTopBar.getMeasuredHeight());
-      animator.addListener(new Animator.AnimatorListener() {
-        @Override
-        public void onAnimationStart(Animator animation) {
+      if (mHideTopBarAnimator == null) {
+        mHideTopBarAnimator = ObjectAnimator.ofFloat(mTopBar, "translationY", 0, -mTopBar.getMeasuredHeight());
+        mHideTopBarAnimator.addListener(new Animator.AnimatorListener() {
+          @Override
+          public void onAnimationStart(Animator animation) {
 
-        }
+          }
 
-        @Override
-        public void onAnimationEnd(Animator animation) {
-          mTopBar.setVisibility(View.INVISIBLE);
-        }
+          @Override
+          public void onAnimationEnd(Animator animation) {
+          }
 
-        @Override
-        public void onAnimationCancel(Animator animation) {
+          @Override
+          public void onAnimationCancel(Animator animation) {
 
-        }
+          }
 
-        @Override
-        public void onAnimationRepeat(Animator animation) {
+          @Override
+          public void onAnimationRepeat(Animator animation) {
 
-        }
-      });
-      animator.setDuration(150);
-      animator.start();
+          }
+        });
+        mHideTopBarAnimator.setDuration(150);
+      }
+      if (mShowTopBarAnimator != null && mShowTopBarAnimator.isRunning()) {
+        mShowTopBarAnimator.cancel();
+      }
+      mHideTopBarAnimator.start();
     } else {
       mTopBar.setVisibility(View.INVISIBLE);
     }
@@ -332,12 +338,17 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
     ((RelativeLayout.LayoutParams) findViewById(R.id.content).getLayoutParams()).topMargin
         = mFillContent ? 0 : getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
     mBaseView.requestLayout();
-    mTopBar.setVisibility(View.VISIBLE);
     if (animate) {
-      ObjectAnimator animator =
-          ObjectAnimator.ofFloat(mTopBar, "translationY", -mTopBar.getMeasuredHeight(), 0f);
-      animator.setDuration(150);
-      animator.start();
+      if (mShowTopBarAnimator == null) {
+        mShowTopBarAnimator = ObjectAnimator.ofFloat(mTopBar, "translationY", -mTopBar.getMeasuredHeight(), 0f);
+        mShowTopBarAnimator.setDuration(150);
+      }
+      if (mHideTopBarAnimator != null && mHideTopBarAnimator.isRunning()) {
+        mHideTopBarAnimator.cancel();
+      }
+      mShowTopBarAnimator.start();
+    } else {
+      mTopBar.setVisibility(View.VISIBLE);
     }
   }
 

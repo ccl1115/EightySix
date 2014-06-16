@@ -5,4 +5,7 @@
     <dimen name="activity_vertical_margin">10dp</dimen>
 
     <dimen name="activity_top_bar_height">56dp</dimen>
+
+    <dimen name="feed_activity_refresh_threshold">100dp</dimen>
+
 </resources>
