@@ -6,15 +6,20 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.InjectView;
+import com.nineoldandroids.animation.ObjectAnimator;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.drawable.RoundRectDrawable;
+import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
 import com.utree.eightysix.response.data.Post;
 import java.util.Random;
 
 /**
  */
 public class PostView extends RelativeLayout {
+
+  private static int sPostLength = U.getConfigInt("post.length");
 
   @InjectView (R.id.tv_content)
   public TextView mTvContent;
@@ -51,6 +56,10 @@ public class PostView extends RelativeLayout {
         new RoundRectDrawable(U.dp2px(2), getResources().getColorStateList(R.color.apptheme_transparent_bg)));
 
     mTvContent.setBackgroundColor(new Random().nextInt());
+  }
+
+  public ImageView getIvShare() {
+    return mIvShare;
   }
 
   public CharSequence getContent() {
@@ -94,7 +103,7 @@ public class PostView extends RelativeLayout {
   }
 
   public void setData(Post post) {
-    setContent(post.content);
+    setContent(post.content.length() > 140 ? post.content.substring(0, sPostLength) : post.content);
     setComment(String.valueOf(post.comments));
     setPraise(String.valueOf(post.praise));
     setSource(post.source);
@@ -109,12 +118,35 @@ public class PostView extends RelativeLayout {
       mTvPraise.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_heart_outline_normal), null, null, null);
     }
 
+    mIvShare.setVisibility(INVISIBLE);
 
+  }
+
+  @Subscribe
+  public void onListViewScrollStateIdled(ListViewScrollStateIdledEvent event) {
+    if (mIvShare.getVisibility() == INVISIBLE && getTop() >= 0) {
+      mIvShare.setVisibility(VISIBLE);
+      ObjectAnimator animator = ObjectAnimator.ofFloat(mIvShare, "alpha", 0f, 1f);
+      animator.setDuration(500);
+      animator.start();
+    }
   }
 
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
     final int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-    super.onMeasure(widthMeasureSpec, widthSize + MeasureSpec.EXACTLY);
+    super.onMeasure(widthMeasureSpec, (int) (widthSize * 1.1f + MeasureSpec.EXACTLY));
+  }
+
+  @Override
+  protected void onAttachedToWindow() {
+    super.onAttachedToWindow();
+    U.getBus().register(this);
+  }
+
+  @Override
+  protected void onDetachedFromWindow() {
+    super.onDetachedFromWindow();
+    U.getBus().unregister(this);
   }
 }

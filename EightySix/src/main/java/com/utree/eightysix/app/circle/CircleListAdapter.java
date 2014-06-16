@@ -19,8 +19,8 @@ import java.util.List;
  */
 class CircleListAdapter extends BaseAdapter {
 
-  private static final int TYPE_CIRCLE = 1;
-  private static final int TYPE_HEAD = 2;
+  private static final int TYPE_CIRCLE = 0;
+  private static final int TYPE_HEAD = 1;
 
   private List<Circle> mCircles;
   private SparseArray<String> mHeadMark;
@@ -55,15 +55,11 @@ class CircleListAdapter extends BaseAdapter {
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
     final int type = getItemViewType(position);
-    if (type == TYPE_CIRCLE) {
-      return getCircleView(position, convertView, parent);
-    } else if (type == TYPE_HEAD) {
-      if (convertView == null) {
-        convertView = View.inflate(parent.getContext(), R.layout.item_head_circle, null);
-      }
-
-      ((TextView) convertView.findViewById(R.id.tv_circle_group_type)).setText(mHeadMark.get(position));
-      return convertView;
+    switch (type) {
+      case TYPE_CIRCLE:
+        return getCircleView(position, convertView, parent);
+      case TYPE_HEAD:
+        return getHeadView(position, convertView, parent);
     }
     return convertView;
   }
@@ -75,7 +71,16 @@ class CircleListAdapter extends BaseAdapter {
 
   @Override
   public int getViewTypeCount() {
-    return mHeadMark.size() + 1;
+    return 2;
+  }
+
+  private View getHeadView(int position, View convertView, ViewGroup parent) {
+    if (convertView == null) {
+      convertView = View.inflate(parent.getContext(), R.layout.item_head_circle, null);
+    }
+
+    ((TextView) convertView.findViewById(R.id.tv_circle_group_type)).setText(mHeadMark.get(position));
+    return convertView;
   }
 
   private View getCircleView(int position, View convertView, ViewGroup parent) {
@@ -90,7 +95,8 @@ class CircleListAdapter extends BaseAdapter {
     }
 
     Circle item = getItem(position);
-    final String info = String.format("%.1fkm | 朋友(%d) | 工友(%d)", item.distance / 1000f, item.friendCount, item.workmateCount);
+    final String info =
+        String.format("%.1fkm | 朋友(%d) | 工友(%d)", item.distance / 1000f, item.friendCount, item.workmateCount);
     holder.mTvCircleInfo.setText(info);
     holder.mTvCircleName.setText(item.name);
     if (item.circleType == 1) {

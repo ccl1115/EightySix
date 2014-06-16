@@ -30,6 +30,7 @@ class FeedAdapter extends BaseAdapter {
     } else {
       mPosts = posts;
     }
+    notifyDataSetChanged();
   }
 
   @Override
@@ -63,12 +64,12 @@ class FeedAdapter extends BaseAdapter {
       set.start();
       mAnimated.put(position, true);
     } else {
-      ViewHelper.setAlpha(convertView, 1f);
       ViewHelper.setTranslationY(convertView, 0);
       ViewHelper.setRotationX(convertView, 0);
     }
 
-    ((PostView) convertView).setData(getItem(position));
+    PostView postView = (PostView) convertView;
+    postView.setData(getItem(position));
 
     return convertView;
   }

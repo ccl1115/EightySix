@@ -7,22 +7,22 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.publish.PostActivity;
+import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
 import com.utree.eightysix.response.data.Post;
 import com.utree.eightysix.rest.FixtureUtil;
-import com.utree.eightysix.widget.IRefreshable;
-import com.utree.eightysix.widget.RefresherView;
+import com.utree.eightysix.widget.AdvancedListView;
+import com.utree.eightysix.widget.LoadMoreCallback;
 
 /**
  */
@@ -31,9 +31,10 @@ public class FeedActivity extends BaseActivity {
 
   private static final int PW_CIRCLE_SELECTOR_WIDTH = 190; // dp
   private static final int PW_CIRCLE_SELECTOR_HEIGHT = 200; // dp
+  private FeedAdapter mFeedAdapter;
 
   @InjectView (R.id.lv_feed)
-  public ListView mLvFeed;
+  public AdvancedListView mLvFeed;
 
   @InjectView (R.id.ib_send)
   public ImageButton mSend;
@@ -46,6 +47,9 @@ public class FeedActivity extends BaseActivity {
   private int mCircleSelectorWidth;
   private int mCircleSelectorHeight;
 
+  public FeedActivity() {
+  }
+
   @OnClick (R.id.ib_send)
   public void onSendClicked() {
     startActivity(new Intent(this, PostActivity.class));
@@ -55,10 +59,14 @@ public class FeedActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    setFillContent(true);
+
     getHandler().postDelayed(new Runnable() {
       @Override
       public void run() {
-        mLvFeed.setAdapter(new FeedAdapter(FixtureUtil.from(Post.class).<Post>gimme(20, "valid")));
+        mFeedAdapter = new FeedAdapter(FixtureUtil.from(Post.class).<Post>gimme(20, "valid"));
+        mLvFeed.setAdapter(mFeedAdapter);
+        U.getBus().post(new ListViewScrollStateIdledEvent());
         hideProgressBar();
       }
     }, 2000);
@@ -134,7 +142,9 @@ public class FeedActivity extends BaseActivity {
 
       @Override
       public void onScrollStateChanged(AbsListView view, int scrollState) {
-
+        if (scrollState == SCROLL_STATE_IDLE) {
+          U.getBus().post(new ListViewScrollStateIdledEvent());
+        }
       }
 
       @Override
@@ -142,16 +152,46 @@ public class FeedActivity extends BaseActivity {
         if (firstVisibleItem > mPreFirstVisibleItem) {
           if (!mDownSet.isRunning() && !mIsDown) {
             mDownSet.start();
+            hideTopBar(true);
           }
         } else if (firstVisibleItem < mPreFirstVisibleItem) {
           if (!mUpSet.isRunning() && !mIsUp) {
             mUpSet.start();
+            showTopBar(true);
           }
         }
         mPreFirstVisibleItem = firstVisibleItem;
       }
+
     });
 
+    mLvFeed.setLoadMoreCallback(new LoadMoreCallback() {
+      @Override
+      public View getLoadMoreView() {
+        return View.inflate(FeedActivity.this, R.layout.footer_load_more, null);
+      }
+
+      @Override
+      public boolean hasMore() {
+        return true;
+      }
+
+      @Override
+      public boolean onLoadMoreStart() {
+        getHandler().postDelayed(new Runnable() {
+          @Override
+          public void run() {
+            mFeedAdapter.add(FixtureUtil.from(Post.class).<Post>gimme(20, "valid"));
+            mLvFeed.stopLoadMore();
+          }
+        }, 2000);
+        return true;
+      }
+    });
+
+    mLvFeed.addHeaderView(View.inflate(this, R.layout.header_top_bar_placeholder, null), null, false);
+
+    showProgressBar();
   }
 
   @Override

@@ -8,9 +8,8 @@
 
     <com.utree.eightysix.widget.TopBar
             android:id="@+id/top_bar"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/activity_top_bar_height"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_top_bar_height"/>
 
     <FrameLayout
             android:id="@+id/progress_bar"

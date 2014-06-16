@@ -10,26 +10,28 @@ import android.widget.ListAdapter;
  */
 class LoadMoreAdapterWrapper extends BaseAdapter {
 
-  private static final int TYPE_LOAD_MORE = 0;
-
   private boolean mIsLoading;
 
   private ListAdapter mListAdapter;
 
   private LoadMoreCallback mCallback;
 
+  private int mLoadMoreType;
+
 
   public LoadMoreAdapterWrapper(ListAdapter adapter, LoadMoreCallback moreCallback) {
-    mListAdapter = adapter;
+    this(adapter);
     mCallback = moreCallback;
   }
 
   public LoadMoreAdapterWrapper(ListAdapter adapter) {
     mListAdapter = adapter;
+    mLoadMoreType = mListAdapter.getViewTypeCount();
   }
 
   public void setLoadMoreCallback(LoadMoreCallback callback) {
     mCallback = callback;
+    notifyDataSetInvalidated();
   }
 
   @Override
@@ -51,7 +53,7 @@ class LoadMoreAdapterWrapper extends BaseAdapter {
 
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
-    if (getItemViewType(position) == TYPE_LOAD_MORE) {
+    if (getItemViewType(position) == mLoadMoreType) {
       if (convertView == null) convertView = mCallback.getLoadMoreView();
 
       if (mCallback.hasMore()) {
@@ -72,7 +74,7 @@ class LoadMoreAdapterWrapper extends BaseAdapter {
   @Override
   public int getItemViewType(int position) {
     return hasCallback() ?
-        position == getCount() - 1 ? TYPE_LOAD_MORE : mListAdapter.getItemViewType(position) :
+        (position == getCount() - 1 ? mLoadMoreType : mListAdapter.getItemViewType(position)) :
         mListAdapter.getItemViewType(position);
   }
 

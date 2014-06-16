@@ -68,6 +68,19 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
   private boolean mResumed;
   private ObjectAnimator mShowProgressBarAnimator;
   private ObjectAnimator mHideProgressBarAnimator;
+  private boolean mFillContent;
+
+  public boolean isFillContent() {
+    return mFillContent;
+  }
+
+  public void setFillContent(boolean fillContent) {
+    if (mFillContent == fillContent) return;
+    mFillContent = fillContent;
+    ((RelativeLayout.LayoutParams) mBaseView.findViewById(R.id.content).getLayoutParams()).topMargin =
+        fillContent ? 0 : getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
+    mBaseView.requestLayout();
+  }
 
   @Override
   public void onClick(View v) {
@@ -232,9 +245,9 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
     inflate.setId(R.id.content);
     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
         ViewGroup.LayoutParams.MATCH_PARENT);
-    params.topMargin = getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
+    params.topMargin = mFillContent ? 0 : getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
 
-    mBaseView.addView(inflate, 1, params);
+    mBaseView.addView(inflate, 0, params);
 
     U.viewBinding(inflate, this);
 
@@ -254,9 +267,9 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
     contentView.setId(R.id.content);
     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
         ViewGroup.LayoutParams.MATCH_PARENT);
-    params.topMargin = getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
+    params.topMargin = mFillContent ? 0 : getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
 
-    mBaseView.addView(contentView, 1, params);
+    mBaseView.addView(contentView, 0, params);
 
     U.viewBinding(contentView, this);
 
@@ -308,7 +321,7 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
 
         }
       });
-      animator.setDuration(500);
+      animator.setDuration(150);
       animator.start();
     } else {
       mTopBar.setVisibility(View.INVISIBLE);
@@ -317,13 +330,13 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
 
   protected final void showTopBar(boolean animate) {
     ((RelativeLayout.LayoutParams) findViewById(R.id.content).getLayoutParams()).topMargin
-        = getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
+        = mFillContent ? 0 : getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
     mBaseView.requestLayout();
     mTopBar.setVisibility(View.VISIBLE);
     if (animate) {
       ObjectAnimator animator =
           ObjectAnimator.ofFloat(mTopBar, "translationY", -mTopBar.getMeasuredHeight(), 0f);
-      animator.setDuration(500);
+      animator.setDuration(150);
       animator.start();
     }
   }

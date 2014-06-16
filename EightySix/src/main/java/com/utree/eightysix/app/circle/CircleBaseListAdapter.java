@@ -16,8 +16,6 @@ import java.util.List;
  */
 class CircleBaseListAdapter extends BaseAdapter {
 
-  private static final int TYPE_CIRCLE_BASE = 1;
-
   private List<Circle> mBaseCircles;
 
   public CircleBaseListAdapter(List<Circle> circles) {
@@ -65,11 +63,6 @@ class CircleBaseListAdapter extends BaseAdapter {
     viewHolder.mTvCircleName.setText(item.name);
 
     return convertView;
-  }
-
-  @Override
-  public int getItemViewType(int position) {
-    return TYPE_CIRCLE_BASE;
   }
 
   public static class CircleBaseViewHolder {
