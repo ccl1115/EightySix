@@ -13,7 +13,7 @@ public final class AdvancedListView extends ListView {
   private LoadMoreAdapterWrapper mAdapterWrapper;
 
   public AdvancedListView(Context context) {
-    this(context, null, 0);
+    super(context);
   }
 
   public AdvancedListView(Context context, AttributeSet attrs) {

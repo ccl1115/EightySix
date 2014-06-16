@@ -3,35 +3,40 @@ package com.utree.eightysix.response.data;
 import com.google.gson.annotations.SerializedName;
 
 /**
-*/
+ */
 public class Post {
-    @SerializedName("bgUrl")
-    public String bgUrl;
+  @SerializedName ("bgUrl")
+  public String bgUrl;
 
-    @SerializedName("content")
-    public String content;
+  @SerializedName ("bgColor")
+  public int bgColor;
 
-    @SerializedName("countComment")
-    public int comments;
+  @SerializedName ("content")
+  public String content;
 
-    @SerializedName("countPraise")
-    public int praise;
+  @SerializedName ("countComment")
+  public int comments;
 
-    @SerializedName("id")
-    public int id;
+  @SerializedName ("countPraise")
+  public int praise;
 
-    @SerializedName("myPraiseCount")
-    public int myPraiseCount;
+  @SerializedName ("id")
+  public int id;
 
-    @SerializedName("postSource")
-    public String source;
+  @SerializedName ("myPraiseCount")
+  public int myPraiseCount;
 
-    @SerializedName("readed")
-    public boolean read;
+  @SerializedName ("postSource")
+  public String source;
 
-    @SerializedName("viewComment")
-    public Comment comment;
+  @SerializedName ("readed")
+  public boolean read;
 
-    @SerializedName("whoAtMe")
-    public String whoAtMe;
+  @SerializedName ("viewComment")
+  public Comment comment;
+
+  @SerializedName ("whoAtMe")
+  public String whoAtMe;
+
+  public int praised;
 }

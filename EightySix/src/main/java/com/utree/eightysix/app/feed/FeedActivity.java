@@ -19,6 +19,8 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.publish.PostActivity;
+import com.utree.eightysix.response.data.Post;
+import com.utree.eightysix.rest.FixtureUtil;
 import com.utree.eightysix.widget.IRefreshable;
 import com.utree.eightysix.widget.RefresherView;
 
@@ -36,17 +38,6 @@ public class FeedActivity extends BaseActivity {
   @InjectView (R.id.ib_send)
   public ImageButton mSend;
 
-  @InjectView (R.id.ib_refresh)
-  public ImageButton mRefresh;
-
-  @InjectView (R.id.rv_feed)
-  public RefresherView mRvFeed;
-
-  @InjectView (R.id.tv_head)
-  public TextView mTvHead;
-
-  @InjectView (R.id.tv_empty)
-  public TextView mTvEmpty;
 
   public PopupWindow mPWCircleSelector;
 
@@ -60,11 +51,6 @@ public class FeedActivity extends BaseActivity {
     startActivity(new Intent(this, PostActivity.class));
   }
 
-  @OnClick(R.id.ib_refresh)
-  public void onRefreshClicked() {
-    mRvFeed.refreshShowingHeader();
-  }
-
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -72,7 +58,7 @@ public class FeedActivity extends BaseActivity {
     getHandler().postDelayed(new Runnable() {
       @Override
       public void run() {
-        mLvFeed.setAdapter(new FeedAdapter());
+        mLvFeed.setAdapter(new FeedAdapter(FixtureUtil.from(Post.class).<Post>gimme(20, "valid")));
         hideProgressBar();
       }
     }, 2000);
@@ -93,8 +79,7 @@ public class FeedActivity extends BaseActivity {
       {
         mDownSet.setDuration(500);
         mDownSet.playTogether(
-            ObjectAnimator.ofFloat(mSend, "translationY", 0f, 200f),
-            ObjectAnimator.ofFloat(mRefresh, "translationY", 0f, 200f)
+            ObjectAnimator.ofFloat(mSend, "translationY", 0f, 200f)
         );
         mDownSet.addListener(new Animator.AnimatorListener() {
           @Override
@@ -121,8 +106,7 @@ public class FeedActivity extends BaseActivity {
 
         mUpSet.setDuration(500);
         mUpSet.playTogether(
-            ObjectAnimator.ofFloat(mSend, "translationY", 200f, 0f),
-            ObjectAnimator.ofFloat(mRefresh, "translationY", 200f, 0f)
+            ObjectAnimator.ofFloat(mSend, "translationY", 200f, 0f)
         );
         mUpSet.addListener(new Animator.AnimatorListener() {
           @Override
@@ -168,31 +152,6 @@ public class FeedActivity extends BaseActivity {
       }
     });
 
-    mRvFeed.setOnRefreshListener(new IRefreshable.OnRefreshListener() {
-      @Override
-      public void onStateChanged(IRefreshable.State state) {
-      }
-
-      @Override
-      public void onPreRefresh() {
-      }
-
-      @Override
-      public void onRefreshData() {
-        synchronized (this) {
-          try {
-            wait(2000);
-          } catch (InterruptedException ignored) {
-          }
-        }
-      }
-
-      @Override
-      public void onRefreshUI() {
-      }
-    });
-
-    showProgressBar();
   }
 
   @Override
