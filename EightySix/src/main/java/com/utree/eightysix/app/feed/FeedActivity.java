@@ -191,6 +191,13 @@ public class FeedActivity extends BaseActivity {
     showProgressBar();
 
     setActionLeftDrawable(null);
+
+    getTopBar().setOnActionOverflowClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        showToast("TODO show settings");
+      }
+    });
   }
 
   @Override

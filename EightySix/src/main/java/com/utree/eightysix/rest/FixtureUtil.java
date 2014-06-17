@@ -39,6 +39,23 @@ public class FixtureUtil {
       "你们再不要抱怨丈母娘迟迟不发货，我妈一直想发货，但不知道地址写哪儿~~85后的妹纸伤不起"
   };
 
+  private static String[] FIXTURE_BG_URL = {
+      "http://utree-images.oss-cn-beijing.aliyuncs.com/c/1b/cfe6eb49253e58ab5bffce60a0b",
+      "http://utree-images.oss-cn-beijing.aliyuncs.com/f/13/d9f9b88e0c13b611513dbab0e5a",
+      "",
+      ""
+  };
+
+  private static Integer[] FIXTURE_BG_COLOR = {
+      0xff403923,
+      0xff4a49f3,
+      0xff3296ad,
+      0xff38993f,
+      0xffaa439c,
+      0xff89ce94
+  };
+
+
   static {
     Fixture.of(Circle.class).addTemplate("valid", new Rule() {
       {
@@ -82,6 +99,8 @@ public class FixtureUtil {
     Fixture.of(Post.class).addTemplate("valid", new Rule() {
       {
         add("id", random(Integer.class));
+        add("bgUrl", random(FIXTURE_BG_URL));
+        add("bgColor", random(FIXTURE_BG_COLOR));
         add("content", random(FIXTURE_POST_CONTENT));
         add("comments", random(Integer.class, range(0, 10000)));
         add("praise", random(Integer.class, range(0, 10000)));

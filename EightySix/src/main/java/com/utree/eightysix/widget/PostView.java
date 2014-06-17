@@ -1,11 +1,18 @@
 package com.utree.eightysix.widget;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.InjectView;
+import butterknife.OnClick;
+import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
@@ -39,6 +46,11 @@ public class PostView extends RelativeLayout {
   @InjectView (R.id.iv_share)
   public ImageView mIvShare;
 
+  @InjectView (R.id.aiv_bg)
+  public AsyncImageView mAivBg;
+
+  private Post mPost;
+
   public PostView(Context context) {
     this(context, null, 0);
   }
@@ -54,8 +66,6 @@ public class PostView extends RelativeLayout {
 
     mIvShare.setBackgroundDrawable(
         new RoundRectDrawable(U.dp2px(2), getResources().getColorStateList(R.color.apptheme_transparent_bg)));
-
-    mTvContent.setBackgroundColor(new Random().nextInt());
   }
 
   public ImageView getIvShare() {
@@ -103,11 +113,21 @@ public class PostView extends RelativeLayout {
   }
 
   public void setData(Post post) {
+    mPost = post;
+
     setContent(post.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content);
     setComment(String.valueOf(post.comments));
     setPraise(String.valueOf(post.praise));
     setSource(post.source);
     //setLastComment(post.comment.toString());
+
+    if (!TextUtils.isEmpty(post.bgUrl)) {
+      mAivBg.setUrl(post.bgUrl);
+      mTvContent.setBackgroundColor(Color.TRANSPARENT);
+    } else {
+      mAivBg.setUrl(null);
+      mTvContent.setBackgroundColor(post.bgColor);
+    }
 
     if (post.praised == 1) {
       mTvPraise.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_heart_red_pressed), null, null, null);
@@ -118,18 +138,57 @@ public class PostView extends RelativeLayout {
       mTvPraise.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_heart_outline_normal), null, null, null);
     }
 
-    mIvShare.setVisibility(INVISIBLE);
+    //if (getTop() <= 0) {
+      mIvShare.setVisibility(INVISIBLE);
+    //}
 
+  }
+
+  @OnClick (R.id.iv_share)
+  public void onIvShareClicked() {
+    Toast.makeText(getContext(), "TODO share", Toast.LENGTH_SHORT).show();
+  }
+
+  @OnClick (R.id.tv_praise)
+  public void onTvPraiseClicked() {
+    Toast.makeText(getContext(), "TODO praise request", Toast.LENGTH_SHORT).show();
+    if (mPost.praised == 1) {
+      AnimatorSet unlikeAnimator = new AnimatorSet();
+      unlikeAnimator.setDuration(500);
+      unlikeAnimator.playTogether(
+          ObjectAnimator.ofFloat(mTvPraise, "scaleX", 1, 0.8f, 1),
+          ObjectAnimator.ofFloat(mTvPraise, "scaleY", 1, 0.8f, 1)
+      );
+      unlikeAnimator.start();
+      mPost.praised = 0;
+      mPost.praise--;
+    } else {
+      AnimatorSet praiseAnimator = new AnimatorSet();
+      praiseAnimator.setDuration(800);
+      praiseAnimator.playTogether(
+          ObjectAnimator.ofFloat(mTvPraise, "scaleX", 1, 1.3f, 0.8f, 1),
+          ObjectAnimator.ofFloat(mTvPraise, "scaleY", 1, 1.3f, 0.8f, 1)
+      );
+      praiseAnimator.start();
+      mPost.praised = 1;
+      mPost.praise++;
+    }
+    ((BaseAdapter) ((ListView) getParent()).getAdapter()).notifyDataSetChanged();
+  }
+
+  @OnClick (R.id.tv_comment)
+  public void onTvCommentClicked() {
+    Toast.makeText(getContext(), "TODO comment", Toast.LENGTH_SHORT).show();
   }
 
   @Subscribe
   public void onListViewScrollStateIdled(ListViewScrollStateIdledEvent event) {
-    if (mIvShare.getVisibility() == INVISIBLE && getTop() >= 0) {
-      mIvShare.setVisibility(VISIBLE);
-      ObjectAnimator animator = ObjectAnimator.ofFloat(mIvShare, "alpha", 0f, 1f);
-      animator.setDuration(500);
-      animator.start();
-    }
+    //if (mIvShare.getVisibility() == INVISIBLE && getTop() >= 0) {
+    //  mIvShare.setVisibility(VISIBLE);
+    //  ObjectAnimator animator = ObjectAnimator.ofFloat(mIvShare, "alpha", 0f, 1f);
+    //  animator.setDuration(500);
+    //  animator.start();
+    //}
   }
 
   @Override
