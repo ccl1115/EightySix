@@ -78,7 +78,7 @@ public final class AdvancedListView extends ListView {
             mLastDownY = y;
             break;
           case MotionEvent.ACTION_MOVE:
-            if (!mOverScrolled && y - mLastDownY > ViewConfig.TOUCH_EVENT_MOVE_SLOP_SMALL) {
+            if (!mOverScrolled && (y - mLastDownY) > ViewConfig.TOUCH_EVENT_MOVE_SLOP_MEDIUM) {
               mOverScrolled = true;
               mOnTopOverScrollListener.onStateChanged(OnTopOverScrollListener.OVER_SCROLLING);
               mLastDownY = ev.getY();

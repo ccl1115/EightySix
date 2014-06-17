@@ -25,7 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="5dp"
                 android:layout_toRightOf="@+id/tb_iv_action_left"
                 android:src="@drawable/ic_app_icon"
                 android:layout_centerVertical="true"/>
@@ -72,7 +72,8 @@
             android:id="@+id/tb_fl_search"
             android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="#ff363940">
 
         <EditText
                 android:id="@+id/tb_et_search"

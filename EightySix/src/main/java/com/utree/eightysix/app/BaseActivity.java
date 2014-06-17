@@ -1,6 +1,7 @@
 package com.utree.eightysix.app;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -445,6 +446,19 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
 
   protected final int dp2px(int dp) {
     return U.dp2px(dp);
+  }
+
+  protected final void setActionLeftDrawable(Drawable drawable) {
+    if (drawable == null) {
+      mTopBar.mActionLeft.setPadding(U.dp2px(10), 0, 0, 0);
+    } else {
+      mTopBar.mActionLeft.setPadding(0, 0, 0, 0);
+    }
+    mTopBar.mActionLeft.setImageDrawable(drawable);
+  }
+
+  protected final void setActionLeftVisibility(int visibility) {
+    mTopBar.mActionLeft.setVisibility(visibility);
   }
 
   protected void onHandleMessage(Message message) {

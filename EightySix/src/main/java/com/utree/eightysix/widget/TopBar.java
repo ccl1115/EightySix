@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.InjectView;
@@ -63,7 +64,6 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
   private OnClickListener mOnActionLeftClickListener;
 
   private ActionAdapter mActionAdapter;
-  private ActionAdapter mActionOverflowAdapter;
 
   private int mCurCount;
 
@@ -130,10 +130,6 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     mSubTitle.setText(subTitle);
   }
 
-  public void setActionOverflowAdapter(ActionAdapter actionAdapter) {
-    mActionOverflowAdapter = actionAdapter;
-  }
-
 
   public void setActionAdapter(ActionAdapter actionAdapter) {
     mActionAdapter = actionAdapter;
@@ -170,22 +166,10 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
   }
 
   public void enterSearch() {
-    mActionOverFlow.setVisibility(INVISIBLE);
-    for (View v : mActionViews) {
-      v.setVisibility(INVISIBLE);
-    }
-
     mFlSearch.setVisibility(VISIBLE);
   }
 
   public void exitSearch() {
-    if (mActionOverflowAdapter != null && mActionOverflowAdapter.getCount() > 0) {
-      mActionOverFlow.setVisibility(VISIBLE);
-    }
-    for (View v : mActionViews) {
-      v.setVisibility(VISIBLE);
-    }
-
     mFlSearch.setVisibility(INVISIBLE);
   }
 
@@ -243,16 +227,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     mFlSearch.measure(widthSize - mIvAppIcon.getRight() + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
 
-    if (mActionOverflowAdapter != null) {
-      if (mOverflowCurCount != mActionOverflowAdapter.getCount()) {
-        throw new IllegalStateException("Adapter count updates");
-      }
-      if (mOverflowCurCount != 0) {
-        mActionOverFlow.measure(heightSize + MeasureSpec.EXACTLY, widthSize + MeasureSpec.EXACTLY);
-      } else {
-        mActionOverFlow.measure(MeasureSpec.EXACTLY, widthSize + MeasureSpec.EXACTLY);
-      }
-    } else {
+    if (mOnActionOverflowClickListener != null) {
       mActionOverFlow.measure(MeasureSpec.EXACTLY, widthSize + MeasureSpec.EXACTLY);
     }
 

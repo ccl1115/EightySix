@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -38,9 +39,6 @@ public class FeedActivity extends BaseActivity {
 
   @InjectView (R.id.ib_send)
   public ImageButton mSend;
-
-  @InjectView (R.id.ri_feed)
-  public RefreshIndicator mRiFeed;
 
   public PopupWindow mPWCircleSelector;
   public LinearLayout mLLCircleSelector;
@@ -190,28 +188,9 @@ public class FeedActivity extends BaseActivity {
       }
     });
 
-    mLvFeed.setOnTopOverScrollListener(new AdvancedListView.OnTopOverScrollListener() {
-      private int mDistance;
-      private int mThreshold = getResources().getDimensionPixelOffset(R.dimen.feed_activity_refresh_threshold);
-
-      @Override
-      public void onOverScroll(int distance) {
-        mDistance = distance;
-        mRiFeed.setFactor(Math.max(1f, distance / mThreshold));
-      }
-
-      @Override
-      public void onStateChanged(int state) {
-        if (state == IDLE) {
-          showTopBar(true);
-        } else if (state == OVER_SCROLLING) {
-          hideTopBar(true);
-        }
-
-      }
-    });
-
     showProgressBar();
+
+    setActionLeftDrawable(null);
   }
 
   @Override
