@@ -22,6 +22,8 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.response.data.Circle;
+import com.utree.eightysix.rest.FixtureUtil;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,21 +103,17 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     mBotLinePaint.setStrokeWidth(1);
 
     mActionOverFlow.setOnClickListener(this);
+    mActionOverFlow.setBackgroundDrawable(getResources().getDrawable(R.drawable.apptheme_primary_btn_dark));
 
     mActionLeft.setOnClickListener(this);
   }
 
   public String getTitle() {
-    if (mTitle != null) {
-      return mTitle.getText().toString();
-    }
-    return null;
+    return mTitle.getText().toString();
   }
 
   public void setTitle(String title) {
-    if (mTitle != null) {
-      mTitle.setText(title);
-    }
+    mTitle.setText(title);
   }
 
   public EditText getSearchEditText() {
@@ -127,6 +125,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
   }
 
   public void setSubTitle(String subTitle) {
+    mSubTitle.setVisibility(TextUtils.isEmpty(subTitle) ? GONE : VISIBLE);
     mSubTitle.setText(subTitle);
   }
 
@@ -159,6 +158,8 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
   public void setOnActionOverflowClickListener(OnClickListener onClickListener) {
     mOnActionOverflowClickListener = onClickListener;
+    requestLayout();
+    invalidate();
   }
 
   public void setOnActionLeftClickListener(OnClickListener onClickListener) {
@@ -221,14 +222,8 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     int widthLeft = widthSize;
 
-    measureChild(mRlTitle, widthSize + MeasureSpec.AT_MOST, heightSize + MeasureSpec.EXACTLY);
-
-    widthLeft -= mRlTitle.getMeasuredWidth();
-
-    mFlSearch.measure(widthSize - mIvAppIcon.getRight() + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
-
     if (mOnActionOverflowClickListener != null) {
-      mActionOverFlow.measure(MeasureSpec.EXACTLY, widthSize + MeasureSpec.EXACTLY);
+      mActionOverFlow.measure(heightSize + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
     }
 
     widthLeft -= mActionOverFlow.getMeasuredWidth();
@@ -242,12 +237,41 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
           if (widthLeft < heightSize) {
             view.measure(MeasureSpec.EXACTLY, heightSize + MeasureSpec.AT_MOST);
           } else {
-            view.measure(heightSize + MeasureSpec.EXACTLY, heightSize + MeasureSpec.AT_MOST);
+            LayoutParams lp = view.getLayoutParams();
+            int childHeightSpec = 0, childWidthSpec = 0;
+            switch (lp.height) {
+              case LayoutParams.WRAP_CONTENT:
+                childHeightSpec = heightSize + MeasureSpec.AT_MOST;
+                break;
+              case LayoutParams.MATCH_PARENT:
+                childHeightSpec = heightSize + MeasureSpec.EXACTLY;
+                break;
+              default:
+                childHeightSpec = lp.height + MeasureSpec.EXACTLY;
+                break;
+            }
+
+            switch (lp.width) {
+              case LayoutParams.WRAP_CONTENT:
+                childWidthSpec = heightSize + MeasureSpec.AT_MOST;
+                break;
+              case LayoutParams.MATCH_PARENT:
+                childWidthSpec = heightSize + MeasureSpec.EXACTLY;
+                break;
+              default:
+                childWidthSpec = lp.width + MeasureSpec.EXACTLY;
+            }
+            view.measure(childWidthSpec, childHeightSpec);
           }
           widthLeft -= view.getMeasuredWidth();
         }
       }
     }
+
+    measureChild(mRlTitle, widthLeft + MeasureSpec.AT_MOST, heightSize + MeasureSpec.EXACTLY);
+
+    mFlSearch.measure(widthSize - mIvAppIcon.getRight() + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
+
 
     setMeasuredDimension(widthSize, heightSize);
   }
@@ -255,24 +279,23 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
   @Override
   protected void onLayout(boolean changed, int l, int t, int r, int b) {
 
-    int right = r - U.dp2px(DEFAULT_RIGHT_PADDING);
     final int height = b - t;
 
     mRlTitle.layout(0, 0, mRlTitle.getMeasuredWidth(), b);
 
     mFlSearch.layout(mIvAppIcon.getRight(), 0, mIvAppIcon.getRight() + mFlSearch.getMeasuredWidth(), b);
 
-    mActionOverFlow.layout(right - mActionOverFlow.getMeasuredWidth(), 0, right, b);
+    mActionOverFlow.layout(r - mActionOverFlow.getMeasuredWidth(), 0, r, b);
 
-    right -= mActionOverFlow.getMeasuredWidth();
+    r -= mActionOverFlow.getMeasuredWidth();
 
     if (mCurCount != 0) {
       for (View child : mActionViews) {
-        child.layout(right - child.getMeasuredWidth(),
+        r -= height;
+        child.layout(r + ((height - child.getMeasuredWidth()) >> 1),
             (height - child.getMeasuredHeight()) >> 1,
-            right,
+            r + ((height + child.getMeasuredWidth()) >> 1),
             (height + child.getMeasuredHeight()) >> 1);
-        right -= child.getMeasuredWidth();
       }
     }
   }
@@ -283,7 +306,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     final ImageView imageView = new ImageView(getContext());
     imageView.setImageDrawable(drawable);
     imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-    imageView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+    imageView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
     imageView.setBackgroundDrawable(backgroundDrawable);
     imageView.setOnClickListener(this);
 
@@ -294,14 +317,16 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     if (TextUtils.isEmpty(text)) return null;
 
     final TextView textView = new TextView(getContext());
+    textView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
     textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
     textView.setText(text);
     textView.setGravity(Gravity.CENTER);
     textView.setTextColor(Color.WHITE);
     textView.setBackgroundDrawable(backgroundDrawable);
     textView.setOnClickListener(this);
-    final int padding = U.dp2px(5);
-    textView.setPadding(padding, padding, padding, padding);
+    final int hPadding = U.dp2px(6);
+    final int vPadding = U.dp2px(4);
+    textView.setPadding(hPadding, vPadding, hPadding, vPadding);
     return textView;
   }
 

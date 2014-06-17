@@ -165,7 +165,6 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
     super.setContentView(mBaseView);
 
     mTopBar = (TopBar) mBaseView.findViewById(R.id.top_bar);
-    mTopBar.setOnActionOverflowClickListener(this);
 
     mProgressBar = (FrameLayout) mBaseView.findViewById(R.id.progress_bar);
 

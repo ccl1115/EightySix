@@ -193,6 +193,12 @@
                 <version>2.2.0</version>
             </dependency>
 
+            <dependency>
+                <groupId>tencent.opensdk</groupId>
+                <artifactId>opensdk</artifactId>
+                <version>2.3.1</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

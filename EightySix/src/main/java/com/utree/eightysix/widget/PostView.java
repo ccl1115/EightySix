@@ -1,7 +1,9 @@
 package com.utree.eightysix.widget;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.BaseAdapter;
@@ -15,12 +17,15 @@ import butterknife.OnClick;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
+import com.tencent.connect.share.QQShare;
+import com.tencent.tauth.IUiListener;
+import com.tencent.tauth.UiError;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
 import com.utree.eightysix.response.data.Post;
-import java.util.Random;
+import com.utree.eightysix.utils.ShareUtils;
 
 /**
  */
@@ -138,15 +143,33 @@ public class PostView extends RelativeLayout {
       mTvPraise.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_heart_outline_normal), null, null, null);
     }
 
-    //if (getTop() <= 0) {
+    if (getTop() <= 0) {
       mIvShare.setVisibility(INVISIBLE);
-    //}
+    }
 
   }
 
   @OnClick (R.id.iv_share)
   public void onIvShareClicked() {
-    Toast.makeText(getContext(), "TODO share", Toast.LENGTH_SHORT).show();
+    Bundle data = new Bundle();
+    data.putString(QQShare.SHARE_TO_QQ_TITLE, "分享个秘密");
+    data.putString(QQShare.SHARE_TO_QQ_SUMMARY, mPost.content);
+    ShareUtils.shareToQQ(((Activity) getContext()), data, new IUiListener() {
+      @Override
+      public void onComplete(Object o) {
+
+      }
+
+      @Override
+      public void onError(UiError uiError) {
+
+      }
+
+      @Override
+      public void onCancel() {
+
+      }
+    });
   }
 
   @OnClick (R.id.tv_praise)
@@ -166,8 +189,8 @@ public class PostView extends RelativeLayout {
       AnimatorSet praiseAnimator = new AnimatorSet();
       praiseAnimator.setDuration(800);
       praiseAnimator.playTogether(
-          ObjectAnimator.ofFloat(mTvPraise, "scaleX", 1, 1.3f, 0.8f, 1),
-          ObjectAnimator.ofFloat(mTvPraise, "scaleY", 1, 1.3f, 0.8f, 1)
+          ObjectAnimator.ofFloat(mTvPraise, "scaleX", 1, 1.2f, 0.8f, 1),
+          ObjectAnimator.ofFloat(mTvPraise, "scaleY", 1, 1.2f, 0.8f, 1)
       );
       praiseAnimator.start();
       mPost.praised = 1;
@@ -183,12 +206,12 @@ public class PostView extends RelativeLayout {
 
   @Subscribe
   public void onListViewScrollStateIdled(ListViewScrollStateIdledEvent event) {
-    //if (mIvShare.getVisibility() == INVISIBLE && getTop() >= 0) {
-    //  mIvShare.setVisibility(VISIBLE);
-    //  ObjectAnimator animator = ObjectAnimator.ofFloat(mIvShare, "alpha", 0f, 1f);
-    //  animator.setDuration(500);
-    //  animator.start();
-    //}
+    if (mIvShare.getVisibility() == INVISIBLE && getTop() >= 0) {
+      mIvShare.setVisibility(VISIBLE);
+      ObjectAnimator animator = ObjectAnimator.ofFloat(mIvShare, "alpha", 0f, 1f);
+      animator.setDuration(500);
+      animator.start();
+    }
   }
 
   @Override

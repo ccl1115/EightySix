@@ -39,6 +39,11 @@
         </dependency>
 
         <dependency>
+            <groupId>tencent.opensdk</groupId>
+            <artifactId>opensdk</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>de.akquinet.android.androlog</groupId>
             <artifactId>androlog</artifactId>
         </dependency>

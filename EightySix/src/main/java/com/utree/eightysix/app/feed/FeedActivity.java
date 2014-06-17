@@ -2,6 +2,7 @@ package com.utree.eightysix.app.feed;
 
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AbsListView;
@@ -20,11 +21,13 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.publish.PostActivity;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
+import com.utree.eightysix.response.data.Circle;
 import com.utree.eightysix.response.data.Post;
 import com.utree.eightysix.rest.FixtureUtil;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RefreshIndicator;
+import com.utree.eightysix.widget.TopBar;
 
 /**
  */
@@ -44,8 +47,12 @@ public class FeedActivity extends BaseActivity {
   public LinearLayout mLLCircleSelector;
 
   private FeedAdapter mFeedAdapter;
+
   private int mCircleSelectorWidth;
   private int mCircleSelectorHeight;
+
+
+  private Circle mCircle = FixtureUtil.from(Circle.class).gimme("valid");
 
   @OnClick (R.id.ib_send)
   public void onSendClicked() {
@@ -198,6 +205,48 @@ public class FeedActivity extends BaseActivity {
         showToast("TODO show settings");
       }
     });
+
+    getTopBar().mTitle.setCompoundDrawablesWithIntrinsicBounds(null, null,
+        getResources().getDrawable(R.drawable.top_bar_arrow_down), null);
+
+    setTopTitle(mCircle.name);
+    setTopSubTitle(String.format("朋友(%d) | 工友(%d)", mCircle.friendCount, mCircle.workmateCount));
+
+    getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
+      @Override
+      public String getTitle(int position) {
+        return null;
+      }
+
+      @Override
+      public Drawable getIcon(int position) {
+        if (position == 0) {
+          return getResources().getDrawable(R.drawable.ic_action_msg);
+        } else if (position == 1) {
+          return getResources().getDrawable(R.drawable.ic_action_refresh);
+        }
+        return null;
+      }
+
+      @Override
+      public Drawable getBackgroundDrawable(int position) {
+        return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
+      }
+
+      @Override
+      public void onClick(View view, int position) {
+        if (position == 0) {
+          showToast("TODO goto message center");
+        } else if (position == 1) {
+          showToast("TODO refresh");
+        }
+      }
+
+      @Override
+      public int getCount() {
+        return 2;
+      }
+    });
   }
 
   @Override
@@ -214,9 +263,20 @@ public class FeedActivity extends BaseActivity {
           mCircleSelectorWidth, mCircleSelectorHeight, true);
       mPWCircleSelector.setOutsideTouchable(false);
       mPWCircleSelector.setBackgroundDrawable(new BitmapDrawable());
+
+      mPWCircleSelector.setOnDismissListener(new PopupWindow.OnDismissListener() {
+        @Override
+        public void onDismiss() {
+          setTopTitle(mCircle.name);
+          setTopSubTitle(String.format("朋友(%d) | 工友(%d)", mCircle.friendCount, mCircle.workmateCount));
+        }
+      });
     }
     if (!mPWCircleSelector.isShowing()) {
       mPWCircleSelector.showAsDropDown(getTopBar());
+      setTopTitle(getString(R.string.select_circle));
+      setTopSubTitle("");
     }
   }
+
 }

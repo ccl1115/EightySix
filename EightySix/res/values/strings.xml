@@ -126,4 +126,6 @@
     <string name="circle_short_name_length_long">工友圈短名称太长</string>
     <string name="pull_to_refresh">下拉刷新</string>
 
+    <!-- FeedActivity -->
+    <string name="select_circle">选择工友圈</string>
 </resources>
