@@ -15,18 +15,11 @@ import com.utree.eightysix.U;
  */
 public class ShareUtils {
 
-  private static QQAuth sQqAuth;
-  private static Tencent sTencent;
-
-  static {
-    sQqAuth = QQAuth.createInstance(U.getConfig("qq.app_id"), U.getContext());
-    sTencent = Tencent.createInstance(U.getConfig("qq.app_id"), U.getContext());
-  }
-
+  private static Tencent sTencent =
+      Tencent.createInstance(U.getConfig("qq.app_id"), U.getContext().getApplicationContext());
 
   public static void shareToQQ(Activity from, Bundle data, IUiListener listener) {
-    QQShare share = new QQShare(U.getContext(), sQqAuth.getQQToken());
     data.putString(QQShare.SHARE_TO_QQ_APP_NAME, U.getContext().getString(R.string.app_name));
-    share.shareToQQ(from, data, listener);
+    sTencent.shareToQQ(from, data, listener);
   }
 }

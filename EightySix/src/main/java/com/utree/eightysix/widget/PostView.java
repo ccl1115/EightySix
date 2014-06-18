@@ -20,6 +20,7 @@ import com.squareup.otto.Subscribe;
 import com.tencent.connect.share.QQShare;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.UiError;
+import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.drawable.RoundRectDrawable;
@@ -154,20 +155,25 @@ public class PostView extends RelativeLayout {
     Bundle data = new Bundle();
     data.putString(QQShare.SHARE_TO_QQ_TITLE, "分享个秘密");
     data.putString(QQShare.SHARE_TO_QQ_SUMMARY, mPost.content);
+    data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "http://www.baidu.com");
+    data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
     ShareUtils.shareToQQ(((Activity) getContext()), data, new IUiListener() {
       @Override
       public void onComplete(Object o) {
-
+        if (BuildConfig.DEBUG) Toast.makeText(getContext(), "onComplete", Toast.LENGTH_LONG).show();
       }
 
       @Override
       public void onError(UiError uiError) {
-
+        if (BuildConfig.DEBUG)
+          Toast.makeText(getContext(),
+              String.format("%d: %s - %s", uiError.errorCode, uiError.errorMessage, uiError.errorDetail),
+              Toast.LENGTH_LONG).show();
       }
 
       @Override
       public void onCancel() {
-
+        if (BuildConfig.DEBUG) Toast.makeText(getContext(), "onCancel", Toast.LENGTH_LONG).show();
       }
     });
   }

@@ -15,6 +15,7 @@ import butterknife.OnItemClick;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
+import com.tencent.tauth.Tencent;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
@@ -26,7 +27,6 @@ import com.utree.eightysix.response.data.Post;
 import com.utree.eightysix.rest.FixtureUtil;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
-import com.utree.eightysix.widget.RefreshIndicator;
 import com.utree.eightysix.widget.TopBar;
 
 /**
@@ -210,7 +210,7 @@ public class FeedActivity extends BaseActivity {
         getResources().getDrawable(R.drawable.top_bar_arrow_down), null);
 
     setTopTitle(mCircle.name);
-    setTopSubTitle(String.format("朋友(%d) | 工友(%d)", mCircle.friendCount, mCircle.workmateCount));
+    setTopSubTitle(String.format(getString(R.string.feed_sub_title), mCircle.friendCount, mCircle.workmateCount));
 
     getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
       @Override
@@ -268,7 +268,7 @@ public class FeedActivity extends BaseActivity {
         @Override
         public void onDismiss() {
           setTopTitle(mCircle.name);
-          setTopSubTitle(String.format("朋友(%d) | 工友(%d)", mCircle.friendCount, mCircle.workmateCount));
+          setTopSubTitle(String.format(getString(R.string.feed_sub_title), mCircle.friendCount, mCircle.workmateCount));
         }
       });
     }

@@ -19,6 +19,7 @@ import com.aliyun.android.util.MD5Util;
 import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
 import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import static com.nineoldandroids.view.ViewHelper.getTranslationY;
@@ -26,6 +27,7 @@ import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.rest.HandlerWrapper;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RESTRequester;
@@ -64,11 +66,13 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
   private TopBar mTopBar;
   private FrameLayout mProgressBar;
 
+  private FrameLayout mFlLoadingWrapper;
+
   private Toast mToast;
 
   private boolean mResumed;
-  private ObjectAnimator mShowProgressBarAnimator;
-  private ObjectAnimator mHideProgressBarAnimator;
+  private AnimatorSet mShowProgressBarAnimator;
+  private AnimatorSet mHideProgressBarAnimator;
   private boolean mFillContent;
   private ObjectAnimator mHideTopBarAnimator;
   private ObjectAnimator mShowTopBarAnimator;
@@ -167,6 +171,10 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
     mTopBar = (TopBar) mBaseView.findViewById(R.id.top_bar);
 
     mProgressBar = (FrameLayout) mBaseView.findViewById(R.id.progress_bar);
+    mFlLoadingWrapper = (FrameLayout) mBaseView.findViewById(R.id.fl_loading_wrapper);
+
+    mFlLoadingWrapper.setBackgroundDrawable(
+        new RoundRectDrawable(dp2px(5), getResources().getColor(R.color.apptheme_primary_dark_color)));
 
     Layout layout = getClass().getAnnotation(Layout.class);
 
@@ -371,10 +379,15 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
   protected final void showProgressBar() {
     mProgressBar.setVisibility(View.VISIBLE);
     if (mShowProgressBarAnimator == null) {
-      mShowProgressBarAnimator = ObjectAnimator.ofFloat(mProgressBar,
-          "translationY",
-          (getTranslationY(mProgressBar) == 0) ? mProgressBar.getMeasuredHeight() : getTranslationY(mProgressBar),
-          0);
+      mShowProgressBarAnimator = new AnimatorSet();
+      mShowProgressBarAnimator.playTogether(
+          ObjectAnimator.ofFloat(mFlLoadingWrapper,
+              "translationY",
+              (getTranslationY(mFlLoadingWrapper) == 0) ?
+                  mFlLoadingWrapper.getMeasuredHeight() : getTranslationY(mFlLoadingWrapper),
+              0),
+          ObjectAnimator.ofFloat(mFlLoadingWrapper, "alpha", 0f, 1f)
+      );
       mShowProgressBarAnimator.setDuration(500);
     }
     if (mHideProgressBarAnimator != null) mHideProgressBarAnimator.cancel();
@@ -383,10 +396,14 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
 
   protected final void hideProgressBar() {
     if (mHideProgressBarAnimator == null) {
-      mHideProgressBarAnimator = ObjectAnimator.ofFloat(mProgressBar,
-          "translationY",
-          getTranslationY(mProgressBar),
-          mProgressBar.getMeasuredHeight());
+      mHideProgressBarAnimator = new AnimatorSet();
+      mHideProgressBarAnimator.playTogether(
+          ObjectAnimator.ofFloat(mFlLoadingWrapper,
+              "translationY",
+              getTranslationY(mFlLoadingWrapper),
+              mFlLoadingWrapper.getMeasuredHeight()),
+          ObjectAnimator.ofFloat(mFlLoadingWrapper, "alpha", 1f, 0f)
+      );
       mHideProgressBarAnimator.setDuration(500);
       mHideProgressBarAnimator.addListener(new Animator.AnimatorListener() {
         @Override
@@ -397,7 +414,7 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
         @Override
         public void onAnimationEnd(Animator animation) {
           mProgressBar.setVisibility(View.INVISIBLE);
-          ViewHelper.setTranslationY(mProgressBar, 0);
+          ViewHelper.setTranslationY(mFlLoadingWrapper, 0);
         }
 
         @Override

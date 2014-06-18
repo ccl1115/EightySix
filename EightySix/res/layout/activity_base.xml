@@ -14,19 +14,17 @@
     <FrameLayout
             android:id="@+id/progress_bar"
             android:visibility="invisible"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/apptheme_progress_loading_bg">
+            android:layout_centerHorizontal="true">
 
         <FrameLayout
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="55dp"
+                android:id="@+id/fl_loading_wrapper"
+                android:padding="15dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
 
             <ProgressBar
                     android:layout_width="wrap_content"
