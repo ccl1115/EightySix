@@ -46,7 +46,7 @@ import java.util.Random;
 /**
  */
 @TopTitle (R.string.post)
-public class PostActivity extends BaseActivity {
+public class PublishActivity extends BaseActivity {
 
   private static final String FIRST_RUN_KEY = "post_activity";
 
@@ -121,7 +121,7 @@ public class PostActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    setContentView(new PostActivityLayout(this));
+    setContentView(new PublishLayout(this));
 
     onIvShuffleClicked();
 

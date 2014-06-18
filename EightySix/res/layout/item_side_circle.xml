@@ -10,29 +10,24 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="4dp"
-            android:text="工厂"
+            android:lines="1"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:id="@+id/name"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:textColor="@android:color/white"/>
 
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:text="1个朋友 ｜ 19.1km"
+            android:lines="1"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:id="@+id/friends"
+            android:textSize="12sp"
             android:layout_below="@+id/name"
             android:textColor="#FFA2A2A2"/>
-
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:text="*****"
-            android:id="@+id/hot"
-            android:layout_alignParentRight="true"
-            android:textColor="#FFFF0000"/>
 
     <View
             android:layout_alignParentBottom="true"

@@ -9,4 +9,7 @@
 
     <drawable name="apptheme_primary_list_selector_normal">@drawable/transparent</drawable>
     <drawable name="apptheme_primary_list_selector_pressed">#fff0f0f0</drawable>
+
+    <drawable name="apptheme_secondary_list_selector_normal">@drawable/transparent</drawable>
+    <drawable name="apptheme_secondary_list_selector_pressed">#ff22262a</drawable>
 </resources>

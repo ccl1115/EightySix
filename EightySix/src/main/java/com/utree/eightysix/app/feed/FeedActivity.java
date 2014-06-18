@@ -1,30 +1,27 @@
 package com.utree.eightysix.app.feed;
 
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import butterknife.OnItemClick;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
-import com.tencent.tauth.Tencent;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.publish.PostActivity;
+import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
 import com.utree.eightysix.response.data.Circle;
 import com.utree.eightysix.response.data.Post;
 import com.utree.eightysix.rest.FixtureUtil;
+import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.TopBar;
@@ -37,26 +34,27 @@ public class FeedActivity extends BaseActivity {
   private static final int PW_CIRCLE_SELECTOR_WIDTH = 190; // dp
   private static final int PW_CIRCLE_SELECTOR_HEIGHT = 200; // dp
 
+  private static final String FIRST_RUN_KEY = "feed";
+
   @InjectView (R.id.lv_feed)
   public AdvancedListView mLvFeed;
+
+  @InjectView (R.id.lv_side_circles)
+  public AdvancedListView mLvSideCircles;
 
   @InjectView (R.id.ib_send)
   public ImageButton mSend;
 
-  public PopupWindow mPWCircleSelector;
-  public LinearLayout mLLCircleSelector;
-
   private FeedAdapter mFeedAdapter;
+  private SideCirclesAdapter mSideCirclesAdapter;
 
-  private int mCircleSelectorWidth;
-  private int mCircleSelectorHeight;
-
+  private boolean mSideShown;
 
   private Circle mCircle = FixtureUtil.from(Circle.class).gimme("valid");
 
   @OnClick (R.id.ib_send)
   public void onSendClicked() {
-    startActivity(new Intent(this, PostActivity.class));
+    startActivity(new Intent(this, PublishActivity.class));
   }
 
   @Override
@@ -75,8 +73,12 @@ public class FeedActivity extends BaseActivity {
       }
     }, 2000);
 
-    mCircleSelectorWidth = dp2px(PW_CIRCLE_SELECTOR_WIDTH);
-    mCircleSelectorHeight = dp2px(PW_CIRCLE_SELECTOR_HEIGHT);
+    mSideCirclesAdapter = new SideCirclesAdapter(FixtureUtil.from(Circle.class).<Circle>gimme(10, "valid"));
+    mLvSideCircles.setAdapter(mSideCirclesAdapter);
+
+    if (Env.firstRun(FIRST_RUN_KEY)) {
+
+    }
 
     mLvFeed.setOnScrollListener(new AbsListView.OnScrollListener() {
 
@@ -153,20 +155,18 @@ public class FeedActivity extends BaseActivity {
 
       @Override
       public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (firstVisibleItem >= 1) {
-          if (firstVisibleItem > mPreFirstVisibleItem) {
-            if (!mDownSet.isRunning() && !mIsDown) {
-              mDownSet.start();
-              hideTopBar(true);
-            }
-          } else if (firstVisibleItem < mPreFirstVisibleItem) {
-            if (!mUpSet.isRunning() && !mIsUp) {
-              mUpSet.start();
-              showTopBar(true);
-            }
+        if (firstVisibleItem > mPreFirstVisibleItem) {
+          if (!mDownSet.isRunning() && !mIsDown) {
+            mDownSet.start();
+            hideTopBar(true);
           }
-          mPreFirstVisibleItem = firstVisibleItem;
+        } else if (firstVisibleItem < mPreFirstVisibleItem) {
+          if (!mUpSet.isRunning() && !mIsUp) {
+            mUpSet.start();
+            showTopBar(true);
+          }
         }
+        mPreFirstVisibleItem = firstVisibleItem;
       }
 
     });
@@ -210,7 +210,7 @@ public class FeedActivity extends BaseActivity {
         getResources().getDrawable(R.drawable.top_bar_arrow_down), null);
 
     setTopTitle(mCircle.name);
-    setTopSubTitle(String.format(getString(R.string.feed_sub_title), mCircle.friendCount, mCircle.workmateCount));
+    setTopSubTitle(String.format(getString(R.string.friends_info), mCircle.friendCount, mCircle.workmateCount));
 
     getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
       @Override
@@ -247,6 +247,14 @@ public class FeedActivity extends BaseActivity {
         return 2;
       }
     });
+
+    mLvFeed.setOnTouchListener(new View.OnTouchListener() {
+      @Override
+      public boolean onTouch(View v, MotionEvent event) {
+        if (mSideShown) hideSide();
+        return false;
+      }
+    });
   }
 
   @Override
@@ -255,28 +263,67 @@ public class FeedActivity extends BaseActivity {
   }
 
   @Override
-  protected void onActionLeftOnClicked() {
-    if (mPWCircleSelector == null) {
-      mLLCircleSelector = (LinearLayout) View.inflate(FeedActivity.this,
-          R.layout.widget_popup_circle_selector, null);
-      mPWCircleSelector = new PopupWindow(mLLCircleSelector,
-          mCircleSelectorWidth, mCircleSelectorHeight, true);
-      mPWCircleSelector.setOutsideTouchable(false);
-      mPWCircleSelector.setBackgroundDrawable(new BitmapDrawable());
+  protected void onDestroy() {
+    Env.setFirstRun(FIRST_RUN_KEY, false);
+    super.onDestroy();
+  }
 
-      mPWCircleSelector.setOnDismissListener(new PopupWindow.OnDismissListener() {
-        @Override
-        public void onDismiss() {
-          setTopTitle(mCircle.name);
-          setTopSubTitle(String.format(getString(R.string.feed_sub_title), mCircle.friendCount, mCircle.workmateCount));
-        }
-      });
-    }
-    if (!mPWCircleSelector.isShowing()) {
-      mPWCircleSelector.showAsDropDown(getTopBar());
-      setTopTitle(getString(R.string.select_circle));
-      setTopSubTitle("");
+  @Override
+  protected void onActionLeftOnClicked() {
+    if (mSideShown) {
+      hideSide();
+    } else {
+      showSide();
     }
   }
 
+  @Override
+  public void onBackPressed() {
+    if (mSideShown) {
+      hideSide();
+    } else {
+      super.onBackPressed();
+    }
+  }
+
+  private void showSide() {
+    mSideShown = true;
+    hideTopBar(true);
+
+    mLvSideCircles.setVisibility(View.VISIBLE);
+    ObjectAnimator animator =
+        ObjectAnimator.ofFloat(mLvSideCircles, "translationX", -mLvSideCircles.getMeasuredWidth(), 0);
+    animator.setDuration(200);
+    animator.start();
+  }
+
+  private void hideSide() {
+    mSideShown = false;
+    showTopBar(true);
+
+    ObjectAnimator animator = ObjectAnimator.ofFloat(mLvSideCircles, "translationX", 0, -mLvSideCircles.getMeasuredWidth());
+    animator.setDuration(200);
+    animator.addListener(new Animator.AnimatorListener() {
+      @Override
+      public void onAnimationStart(Animator animation) {
+
+      }
+
+      @Override
+      public void onAnimationEnd(Animator animation) {
+        mLvSideCircles.setVisibility(View.INVISIBLE);
+      }
+
+      @Override
+      public void onAnimationCancel(Animator animation) {
+
+      }
+
+      @Override
+      public void onAnimationRepeat(Animator animation) {
+
+      }
+    });
+    animator.start();
+  }
 }

@@ -24,4 +24,12 @@
             android:src="@drawable/ic_post_pen"
             android:background="@drawable/btn_post"/>
 
+    <com.utree.eightysix.widget.AdvancedListView
+            android:id="@+id/lv_side_circles"
+            android:layout_width="190dp"
+            android:layout_height="match_parent"
+            android:background="#ff2f3238"
+            android:listSelector="@drawable/apptheme_secondary_list_selector"
+            android:visibility="invisible"/>
+
 </FrameLayout>

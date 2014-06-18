@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
               android:orientation="vertical"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:background="#FF2F3238">
-
-    <include layout="@layout/item_popup_circle"/>
-
-    <include layout="@layout/item_popup_circle"/>
-
-    <include layout="@layout/item_popup_circle"/>
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
 
     <com.utree.eightysix.widget.RoundedButton
-            android:id="@+id/more"
+            android:id="@+id/rb_more"
             android:text="@string/more"
             android:layout_width="match_parent"
             android:layout_height="35dp"
@@ -24,4 +17,4 @@
             android:layout_marginRight="15dp"
             app:radius="2dp"
             app:background="@color/apptheme_primary_btn_light"/>
-</LinearLayout>
+</FrameLayout>

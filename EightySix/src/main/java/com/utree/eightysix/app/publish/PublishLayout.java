@@ -11,7 +11,7 @@ import com.utree.eightysix.U;
 
 /**
  */
-public class PostActivityLayout extends ViewGroup {
+public class PublishLayout extends ViewGroup {
 
     @InjectView(R.id.fl_top)
     public FrameLayout mFlTop;
@@ -22,18 +22,18 @@ public class PostActivityLayout extends ViewGroup {
     @InjectView(R.id.ll_bottom)
     public LinearLayout mLlBottom;
 
-    public PostActivityLayout(Context context) {
+    public PublishLayout(Context context) {
         this(context, null, 0);
     }
 
-    public PostActivityLayout(Context context, AttributeSet attrs) {
+    public PublishLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public PostActivityLayout(Context context, AttributeSet attrs, int defStyle) {
+    public PublishLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        inflate(context, R.layout.activity_post, this);
+        inflate(context, R.layout.activity_publish, this);
         U.viewBinding(this, this);
 
     }

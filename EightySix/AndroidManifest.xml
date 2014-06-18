@@ -156,7 +156,7 @@
                 android:exported="@bool/exported"/>
 
         <activity
-                android:name=".app.publish.PostActivity"
+                android:name=".app.publish.PublishActivity"
                 android:windowSoftInputMode="stateHidden|adjustResize"
                 android:configChanges="keyboardHidden|orientation|keyboard|screenSize"
                 android:exported="@bool/exported"/>
@@ -179,6 +179,7 @@
                 android:name=".app.circle.CircleCreateActivity"
                 android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
                 android:exported="@bool/exported"/>
+        <activity android:name=".app.feed.PostActivity"/>
 
         <service
                 android:name="com.baidu.location.f"
