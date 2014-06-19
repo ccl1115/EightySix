@@ -4,14 +4,18 @@ import com.google.gson.annotations.SerializedName;
 import com.utree.eightysix.response.Paginate;
 
 /**
-*/
+ */
 public class Feeds {
-    @SerializedName("friendAnonymousPostCount")
-    public int friendsPosts;
+  @SerializedName ("friendAnonymousPostCount")
+  public int friendsPosts;
 
-    @SerializedName("myPraiseCount")
-    public int myPraiseCount;
+  @SerializedName ("myPraiseCount")
+  public int myPraiseCount;
 
-    @SerializedName("posts")
-    public Paginate<Post> posts;
+  public int showUnlock;
+
+  public int hiddenCount;
+
+  @SerializedName ("posts")
+  public Paginate<Post> posts;
 }

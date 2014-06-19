@@ -12,7 +12,6 @@ import com.utree.eightysix.response.data.Circles;
 import com.utree.eightysix.response.data.Comment;
 import com.utree.eightysix.response.data.Post;
 import java.util.Date;
-import java.util.Random;
 
 /**
  * Provide fixture data
@@ -24,9 +23,9 @@ public class FixtureUtil {
   private static FixtureUtil sFixtureUtil;
   private static String[] FIXTURE_CITIES = {"凯里", "重庆", "昆山", "北京", "深圳", "东莞", "上海", "L.A.", "成都"};
   private static String[] FIXTURE_VIEW_GROUP_TYPES = {"最佳建议", "在职工厂", "智能推荐"};
-  private static String[] FIXTURE_CIRCLES = {"圣美电脑", "洗脚城", "富士康", "仁宝电脑" };
+  private static String[] FIXTURE_CIRCLES = {"圣美电脑", "洗脚城", "富士康", "仁宝电脑"};
 
-  private static String[] FIXTURE_POST_CONTENT = { "人性：如果你每天给他一元钱，只要一天不给，他就会恨你！——如果每天给他一巴掌，只要一天不打他就会跪谢你！",
+  private static String[] FIXTURE_POST_CONTENT = {"人性：如果你每天给他一元钱，只要一天不给，他就会恨你！——如果每天给他一巴掌，只要一天不打他就会跪谢你！",
       "昨天和男朋友爱爱，他着急，准备用一只手把我胸罩弄开，结果半天弄不开，这二货就问你这怎么这么难打开，我说都是这样的啊，然后他说，别人的都好弄啊！我当你是口误？",
       "父亲节那天，为了让老公感受一下节日地快乐，特意拉着他陪我和宝宝逛超市，买的算是瓶瓶罐罐的汤汤水水类，又去菜市场，排骨，龙骨，萝卜，面…，最后提着三大包回家，还得做饭，洗衣服，拖地…。我睡觉他带哇，这父亲节过得，一年能两次麽？",
       "苦逼工程男一枚，四个月没回家了，昨天回家见到老婆那个渴望你懂的。知道父母不在家所以抱起二货老婆就往卧室走去。可是你个二货为什么不告诉我丈母娘在卧室呢！那什么丈母娘你好歹也吃完饭在走啊！还有老婆你别笑了行不？",
@@ -74,6 +73,12 @@ public class FixtureUtil {
       0xff38993f,
       0xffaa439c,
       0xff89ce94
+  };
+
+  private static Character[] FIXTURE_PORTRAIT_CHAR = {
+      '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
+      'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+      'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
   };
 
 
@@ -125,6 +130,7 @@ public class FixtureUtil {
         add("praised", random(0, 1));
         add("praise", random(Integer.class, range(0, 300)));
         add("isHost", random(0, 1));
+        add("portrait", random(FIXTURE_PORTRAIT_CHAR));
       }
     });
 

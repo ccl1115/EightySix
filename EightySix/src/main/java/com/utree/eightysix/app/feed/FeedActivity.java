@@ -58,7 +58,7 @@ public class FeedActivity extends BaseActivity {
 
   @OnItemClick (R.id.lv_feed)
   public void onLvFeedItemClicked(int position) {
-    if (!mSideShown) {
+    if (mFeedAdapter.getItemViewType(position) == FeedAdapter.TYPE_POST) {
       PostActivity.start(this, mFeedAdapter.getItem(position));
     }
   }

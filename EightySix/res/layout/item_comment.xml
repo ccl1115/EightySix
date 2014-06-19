@@ -7,10 +7,11 @@
                 android:paddingTop="4dp"
                 android:paddingRight="15dp">
 
-    <com.utree.eightysix.widget.AsyncImageView
-            android:id="@+id/aiv_portrait"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+    <com.utree.eightysix.widget.FontPortraitView
+            android:id="@+id/fpv_portrait"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="10dp"/>
 
     <TextView
@@ -18,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:layout_toRightOf="@+id/aiv_portrait"
+            android:layout_toRightOf="@+id/fpv_portrait"
             android:layout_toLeftOf="@+id/iv_heart"
             android:textSize="14sp"/>
 

@@ -43,4 +43,6 @@ public class Post implements Serializable {
 
   public int praised;
 
+  public int permission;
+
 }

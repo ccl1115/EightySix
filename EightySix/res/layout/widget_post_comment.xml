@@ -34,7 +34,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
                 android:enabled="false"
-                android:text="@string/comment"/>
+                android:text="@string/post"/>
 
     </LinearLayout>
 

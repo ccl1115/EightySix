@@ -15,6 +15,7 @@ import com.utree.eightysix.response.data.Comment;
 import com.utree.eightysix.response.data.Post;
 import com.utree.eightysix.utils.Utils;
 import com.utree.eightysix.widget.AsyncImageView;
+import com.utree.eightysix.widget.FontPortraitView;
 import com.utree.eightysix.widget.PostPostView;
 import java.util.List;
 
@@ -94,7 +95,7 @@ class PostCommentsAdapter extends BaseAdapter {
     final Comment comment = (Comment) getItem(position);
     Resources resources = parent.getContext().getResources();
 
-    holder.mAivPortrait.setUrl(comment.avatar);
+    holder.mFpvPortrait.setEmotion(comment.portrait);
     holder.mIvHeart.setImageDrawable(comment.praised == 1 ?
         resources.getDrawable(R.drawable.ic_heart_red_pressed) :
         resources.getDrawable(R.drawable.ic_heart_grey_normal));
@@ -103,6 +104,11 @@ class PostCommentsAdapter extends BaseAdapter {
       @Override
       public void onClick(View v) {
         comment.praised = comment.praised == 1 ? 0 : 1;
+        if (comment.praised == 1) {
+          comment.praise++;
+        } else {
+          comment.praise--;
+        }
         ((BaseAdapter) ((ListView) parent).getAdapter()).notifyDataSetChanged();
       }
     });
@@ -126,8 +132,8 @@ class PostCommentsAdapter extends BaseAdapter {
 
   public static class CommentViewHolder {
 
-    @InjectView (R.id.aiv_portrait)
-    public AsyncImageView mAivPortrait;
+    @InjectView (R.id.fpv_portrait)
+    public FontPortraitView mFpvPortrait;
 
     @InjectView (R.id.tv_comment)
     public TextView mTvComment;

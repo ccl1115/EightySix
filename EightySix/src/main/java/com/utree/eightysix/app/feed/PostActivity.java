@@ -48,7 +48,7 @@ public class PostActivity extends BaseActivity {
   }
 
   public static void start(Context context, int postId) {
-    Intent intent = new Intent(U.getContext(), PostActivity.class);
+    Intent intent = new Intent(context, PostActivity.class);
     intent.putExtra("id", postId);
     context.startActivity(intent);
   }

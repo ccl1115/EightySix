@@ -21,6 +21,8 @@ public class Comment implements Serializable {
   @SerializedName ("userAvatar")
   public String avatar;
 
+  public char portrait;
+
   public int praised;
 
   public int isHost;
