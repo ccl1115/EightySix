@@ -9,7 +9,9 @@ import com.utree.eightysix.response.CirclesResponse;
 import com.utree.eightysix.response.Paginate;
 import com.utree.eightysix.response.data.Circle;
 import com.utree.eightysix.response.data.Circles;
+import com.utree.eightysix.response.data.Comment;
 import com.utree.eightysix.response.data.Post;
+import java.util.Date;
 import java.util.Random;
 
 /**
@@ -44,6 +46,25 @@ public class FixtureUtil {
       "http://utree-images.oss-cn-beijing.aliyuncs.com/f/13/d9f9b88e0c13b611513dbab0e5a",
       "",
       ""
+  };
+
+  private static String[] FIXTURE_COMMENT_CONTENT = {
+      "擦擦擦擦擦擦擦擦擦擦擦",
+      "擦擦擦擦擦擦擦擦擦擦擦擦擦擦擦擦擦擦擦擦擦擦",
+      "ooo",
+      "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo",
+      "呵呵",
+      "泥煤",
+      "呵呵呵呵呵呵呵呵",
+      "西瓜",
+      "苹果",
+      "句子",
+      "减肥 i 哦啊记得放假啊对宋激发",
+      "Warden said gamble your last game",
+      "Nothing",
+      "WTF",
+      "Adobe illustrator",
+      "PostCommentAdapter"
   };
 
   private static Integer[] FIXTURE_BG_COLOR = {
@@ -96,6 +117,16 @@ public class FixtureUtil {
       }
     });
 
+    Fixture.of(Comment.class).addTemplate("valid", new Rule() {
+      {
+        add("id", random(Integer.class));
+        add("content", random(FIXTURE_COMMENT_CONTENT));
+        add("timestamp", sequence(new Date().getTime(), 30000));
+        add("praised", random(0, 1));
+        add("isHost", random(0, 1));
+      }
+    });
+
     Fixture.of(Post.class).addTemplate("valid", new Rule() {
       {
         add("id", random(Integer.class));
@@ -103,11 +134,13 @@ public class FixtureUtil {
         add("bgColor", random(FIXTURE_BG_COLOR));
         add("content", random(FIXTURE_POST_CONTENT));
         add("comments", random(Integer.class, range(0, 10000)));
+        add("comment", from(Comment.class).gimme("valid"));
         add("praise", random(Integer.class, range(0, 10000)));
         add("source", random(FIXTURE_CIRCLES));
         add("praised", random(0, 1));
       }
     });
+
   }
 
   public static <T> ObjectFactory from(Class<T> clz) {

@@ -179,7 +179,12 @@
                 android:name=".app.circle.CircleCreateActivity"
                 android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
                 android:exported="@bool/exported"/>
-        <activity android:name=".app.feed.PostActivity"/>
+
+        <activity
+                android:name=".app.feed.PostActivity"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+                android:windowSoftInputMode="adjustResize|stateHidden"
+                android:exported="@bool/exported"/>
 
         <service
                 android:name="com.baidu.location.f"

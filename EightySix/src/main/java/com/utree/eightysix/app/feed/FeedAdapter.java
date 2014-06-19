@@ -11,7 +11,7 @@ import com.nineoldandroids.view.ViewHelper;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.response.data.Post;
-import com.utree.eightysix.widget.PostView;
+import com.utree.eightysix.widget.FeedPostView;
 import java.util.List;
 
 /**
@@ -65,7 +65,7 @@ class FeedAdapter extends BaseAdapter {
         return convertView;
       case TYPE_POST:
         if (convertView == null) {
-          convertView = new PostView(parent.getContext());
+          convertView = new FeedPostView(parent.getContext());
         }
 
         if (!mAnimated.get(position, false)) {
@@ -82,8 +82,8 @@ class FeedAdapter extends BaseAdapter {
           ViewHelper.setRotationX(convertView, 0);
         }
 
-        PostView postView = (PostView) convertView;
-        postView.setData(getItem(position));
+        FeedPostView feedPostView = (FeedPostView) convertView;
+        feedPostView.setData(getItem(position));
 
         return convertView;
     }

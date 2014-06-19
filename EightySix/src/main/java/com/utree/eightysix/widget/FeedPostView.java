@@ -30,7 +30,7 @@ import com.utree.eightysix.utils.ShareUtils;
 
 /**
  */
-public class PostView extends RelativeLayout {
+public class FeedPostView extends RelativeLayout {
 
   private static int sPostLength = U.getConfigInt("post.length");
 
@@ -57,17 +57,17 @@ public class PostView extends RelativeLayout {
 
   private Post mPost;
 
-  public PostView(Context context) {
+  public FeedPostView(Context context) {
     this(context, null, 0);
   }
 
-  public PostView(Context context, AttributeSet attrs) {
+  public FeedPostView(Context context, AttributeSet attrs) {
     this(context, attrs, 0);
   }
 
-  public PostView(Context context, AttributeSet attrs, int defStyle) {
+  public FeedPostView(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
-    inflate(context, R.layout.item_post, this);
+    inflate(context, R.layout.item_feed_post, this);
     U.viewBinding(this, this);
 
     mIvShare.setBackgroundDrawable(

@@ -1,10 +1,13 @@
 package com.utree.eightysix.response.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
+import java.io.Serializable;
 
 /**
  */
-public class Post {
+public class Post implements Serializable {
   @SerializedName ("bgUrl")
   public String bgUrl;
 
@@ -39,4 +42,5 @@ public class Post {
   public String whoAtMe;
 
   public int praised;
+
 }

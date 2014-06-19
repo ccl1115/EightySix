@@ -1,23 +1,27 @@
 package com.utree.eightysix.response.data;
 
 import com.google.gson.annotations.SerializedName;
+import java.io.Serializable;
 
 /**
-*/
-public class Comment {
-    @SerializedName("content")
-    public String content;
+ */
+public class Comment implements Serializable {
+  @SerializedName ("content")
+  public String content;
 
-    @SerializedName("countPraise")
-    public int praise;
+  @SerializedName ("countPraise")
+  public int praise;
 
-    @SerializedName("createTime")
-    public long timestamp;
+  @SerializedName ("createTime")
+  public long timestamp;
 
-    @SerializedName("id")
-    public int id;
+  @SerializedName ("id")
+  public int id;
 
-    @SerializedName("userAvatar")
-    public String avatar;
+  @SerializedName ("userAvatar")
+  public String avatar;
 
+  public int praised;
+
+  public int isHost;
 }
