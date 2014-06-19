@@ -4,7 +4,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="15dp"
-                android:paddingTop="6dp"
+                android:paddingTop="4dp"
                 android:paddingRight="15dp">
 
     <com.utree.eightysix.widget.AsyncImageView
@@ -40,8 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:padding="5dp"
-            android:src="@drawable/ic_heart_grey_normal"/>
+            android:padding="5dp"/>
 
     <View
             android:layout_width="match_parent"

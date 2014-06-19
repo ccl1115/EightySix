@@ -1,6 +1,8 @@
 package com.utree.eightysix.widget;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -77,14 +79,27 @@ public class PostPostView extends FrameLayout {
       mTvContent.setBackgroundColor(post.bgColor);
     }
 
+    Resources r = getResources();
     if (post.praised == 1) {
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_heart_red_pressed), null, null, null);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(
+          r.getDrawable(R.drawable.ic_heart_red_pressed), null, null, null);
     } else if (post.praise > 0) {
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_heart_white_normal), null, null, null);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(
+          r.getDrawable(R.drawable.ic_heart_white_normal), null, null, null);
     } else {
       mTvPraise.setText("");
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_heart_outline_normal), null, null, null);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(
+          r.getDrawable(R.drawable.ic_heart_outline_normal), null, null, null);
     }
+  }
+
+  @OnClick (R.id.iv_close)
+  public void onIvCloseClicked() {
+    ((Activity) getContext()).finish();
+  }
+
+  @OnClick (R.id.iv_more)
+  public void onIvMoreClicked() {
   }
 
   @OnClick (R.id.tv_praise)
@@ -117,6 +132,9 @@ public class PostPostView extends FrameLayout {
   @SuppressWarnings ("SuspiciousNameCombination")
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    super.onMeasure(widthMeasureSpec, widthMeasureSpec);
+    final int widthSize = widthMeasureSpec & ~(0x3 << 30);
+    super.onMeasure(widthMeasureSpec, (int) (widthSize * 1.1f) + MeasureSpec.EXACTLY);
   }
+
+
 }

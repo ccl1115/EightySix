@@ -12,4 +12,7 @@
 
     <drawable name="apptheme_secondary_list_selector_normal">@drawable/transparent</drawable>
     <drawable name="apptheme_secondary_list_selector_pressed">#ff22262a</drawable>
+
+    <drawable name="apptheme_transparent_bg_normal">#00000000</drawable>
+    <drawable name="apptheme_transparent_bg_pressed">#88000000</drawable>
 </resources>

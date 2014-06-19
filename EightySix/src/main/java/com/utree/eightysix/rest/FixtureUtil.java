@@ -121,8 +121,9 @@ public class FixtureUtil {
       {
         add("id", random(Integer.class));
         add("content", random(FIXTURE_COMMENT_CONTENT));
-        add("timestamp", sequence(new Date().getTime(), 30000));
+        add("timestamp", sequence(new Date().getTime(), -300000));
         add("praised", random(0, 1));
+        add("praise", random(Integer.class, range(0, 300)));
         add("isHost", random(0, 1));
       }
     });

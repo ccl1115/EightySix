@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -14,7 +15,6 @@ import com.utree.eightysix.response.data.Comment;
 import com.utree.eightysix.response.data.Post;
 import com.utree.eightysix.utils.Utils;
 import com.utree.eightysix.widget.AsyncImageView;
-import com.utree.eightysix.widget.FeedPostView;
 import com.utree.eightysix.widget.PostPostView;
 import java.util.List;
 
@@ -81,7 +81,7 @@ class PostCommentsAdapter extends BaseAdapter {
     return 2;
   }
 
-  private View getCommentView(int position, View convertView, ViewGroup parent) {
+  private View getCommentView(int position, View convertView, final ViewGroup parent) {
     CommentViewHolder holder;
     if (convertView == null) {
       convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment, parent, false);
@@ -91,15 +91,23 @@ class PostCommentsAdapter extends BaseAdapter {
       holder = (CommentViewHolder) convertView.getTag();
     }
 
-    Comment comment = (Comment) getItem(position);
+    final Comment comment = (Comment) getItem(position);
     Resources resources = parent.getContext().getResources();
 
     holder.mAivPortrait.setUrl(comment.avatar);
-    holder.mIvHeart.setImageDrawable(comment.praise == 1 ?
+    holder.mIvHeart.setImageDrawable(comment.praised == 1 ?
         resources.getDrawable(R.drawable.ic_heart_red_pressed) :
         resources.getDrawable(R.drawable.ic_heart_grey_normal));
+
+    holder.mIvHeart.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        comment.praised = comment.praised == 1 ? 0 : 1;
+        ((BaseAdapter) ((ListView) parent).getAdapter()).notifyDataSetChanged();
+      }
+    });
     holder.mTvComment.setText(comment.content);
-    final String floor = comment.isHost == 1 ? "楼主" : (position - 1) + "楼";
+    final String floor = comment.isHost == 1 ? "楼主" : position + "楼";
     holder.mTvInfo.setText(String.format("%s | %s | 赞(%d)", floor, Utils.timestamp(comment.timestamp), comment.praise));
     return convertView;
   }

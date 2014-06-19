@@ -174,7 +174,7 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
     mFlLoadingWrapper = (FrameLayout) mBaseView.findViewById(R.id.fl_loading_wrapper);
 
     mFlLoadingWrapper.setBackgroundDrawable(
-        new RoundRectDrawable(dp2px(5), getResources().getColor(R.color.apptheme_primary_dark_color)));
+        new RoundRectDrawable(dp2px(15), getResources().getColor(R.color.apptheme_progress_bar_bg)));
 
     Layout layout = getClass().getAnnotation(Layout.class);
 

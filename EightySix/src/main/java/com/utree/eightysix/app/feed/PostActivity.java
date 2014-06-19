@@ -1,11 +1,15 @@
 package com.utree.eightysix.app.feed;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -37,16 +41,40 @@ public class PostActivity extends BaseActivity {
   private Post mPost;
   private PostCommentsAdapter mPostCommentsAdapter;
 
-  public static void start(Post post) {
-    Intent intent = new Intent(U.getContext(), PostActivity.class);
+  public static void start(Context context, Post post) {
+    Intent intent = new Intent(context, PostActivity.class);
     intent.putExtra("post", post);
-    U.getContext().startActivity(intent);
+    context.startActivity(intent);
   }
 
-  public static void start(int postId) {
+  public static void start(Context context, int postId) {
     Intent intent = new Intent(U.getContext(), PostActivity.class);
     intent.putExtra("id", postId);
-    U.getContext().startActivity(intent);
+    context.startActivity(intent);
+  }
+
+  @OnTextChanged(R.id.et_post_content)
+  public void onEtPostContentTextChanged(CharSequence text) {
+    if (TextUtils.isEmpty(text)) {
+      mRbPost.setEnabled(false);
+    } else {
+      mRbPost.setEnabled(true);
+    }
+  }
+
+  @OnClick(R.id.rb_post)
+  public void onRbPostClicked() {
+    showToast("TODO request post");
+    mEtPostContent.setEnabled(false);
+    showProgressBar();
+    getHandler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        mEtPostContent.setText("");
+        mEtPostContent.setEnabled(true);
+        hideProgressBar();
+      }
+    }, 3000);
   }
 
   @Override

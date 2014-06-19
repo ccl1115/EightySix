@@ -16,7 +16,7 @@ import android.graphics.drawable.Drawable;
 public class RoundRectDrawable extends Drawable {
 
   private final RectF mRectF = new RectF();
-  private final Paint mPaint = new Paint();
+  private final Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
   private ColorStateList mColorStateList;
   private int mColor = Color.WHITE;

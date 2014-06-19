@@ -15,9 +15,9 @@
             android:id="@+id/tv_content"
             android:textSize="23sp"
             android:textColor="@android:color/white"
+            android:gravity="center_vertical"
             android:paddingLeft="40dp"
             android:paddingRight="40dp"
-            android:paddingTop="50dp"
             android:background="@android:color/transparent"/>
 
     <LinearLayout
@@ -68,6 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left|top"
+            android:background="@drawable/apptheme_transparent_bg"
             android:src="@drawable/ic_action_post_close"/>
 
     <ImageView
@@ -75,6 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right|top"
+            android:background="@drawable/apptheme_transparent_bg"
             android:src="@drawable/ic_action_post_more"/>
 
 </FrameLayout>

@@ -9,6 +9,7 @@ import android.widget.AbsListView;
 import android.widget.ImageButton;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -31,9 +32,6 @@ import com.utree.eightysix.widget.TopBar;
 @Layout (R.layout.activity_feed)
 public class FeedActivity extends BaseActivity {
 
-  private static final int PW_CIRCLE_SELECTOR_WIDTH = 190; // dp
-  private static final int PW_CIRCLE_SELECTOR_HEIGHT = 200; // dp
-
   private static final String FIRST_RUN_KEY = "feed";
 
   @InjectView (R.id.lv_feed)
@@ -54,7 +52,15 @@ public class FeedActivity extends BaseActivity {
 
   @OnClick (R.id.ib_send)
   public void onSendClicked() {
+
     startActivity(new Intent(this, PublishActivity.class));
+  }
+
+  @OnItemClick (R.id.lv_feed)
+  public void onLvFeedItemClicked(int position) {
+    if (!mSideShown) {
+      PostActivity.start(this, mFeedAdapter.getItem(position));
+    }
   }
 
   @Override
@@ -249,9 +255,24 @@ public class FeedActivity extends BaseActivity {
     });
 
     mLvFeed.setOnTouchListener(new View.OnTouchListener() {
+
+      private boolean mHidden;
+
       @Override
       public boolean onTouch(View v, MotionEvent event) {
-        if (mSideShown) hideSide();
+        switch (event.getActionMasked()) {
+          case MotionEvent.ACTION_DOWN:
+            if (mSideShown) {
+              mHidden = true;
+              hideSide();
+              return true;
+            }
+          case MotionEvent.ACTION_UP:
+            final boolean b = mHidden;
+            mHidden = false;
+            return b;
+        }
+
         return false;
       }
     });
@@ -287,8 +308,8 @@ public class FeedActivity extends BaseActivity {
   }
 
   private void showSide() {
-    mSideShown = true;
     hideTopBar(true);
+    mSideShown = true;
 
     mLvSideCircles.setVisibility(View.VISIBLE);
     ObjectAnimator animator =
@@ -298,8 +319,8 @@ public class FeedActivity extends BaseActivity {
   }
 
   private void hideSide() {
-    mSideShown = false;
     showTopBar(true);
+    mSideShown = false;
 
     ObjectAnimator animator = ObjectAnimator.ofFloat(mLvSideCircles, "translationX", 0, -mLvSideCircles.getMeasuredWidth());
     animator.setDuration(200);
