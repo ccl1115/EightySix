@@ -6,17 +6,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
+import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.response.data.Comment;
 import com.utree.eightysix.response.data.Post;
-import com.utree.eightysix.utils.Utils;
-import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.FontPortraitView;
 import com.utree.eightysix.widget.PostPostView;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,6 +42,13 @@ class PostCommentsAdapter extends BaseAdapter {
       mComments.addAll(comments);
     }
     notifyDataSetChanged();
+  }
+
+  public void add(Comment comment) {
+    if (mComments == null) {
+      mComments = new ArrayList<Comment>();
+    }
+    mComments.add(comment);
   }
 
   @Override
@@ -95,7 +102,6 @@ class PostCommentsAdapter extends BaseAdapter {
     final Comment comment = (Comment) getItem(position);
     Resources resources = parent.getContext().getResources();
 
-    holder.mFpvPortrait.setEmotion(comment.portrait);
     holder.mIvHeart.setImageDrawable(comment.praised == 1 ?
         resources.getDrawable(R.drawable.ic_heart_red_pressed) :
         resources.getDrawable(R.drawable.ic_heart_grey_normal));
@@ -109,12 +115,24 @@ class PostCommentsAdapter extends BaseAdapter {
         } else {
           comment.praise--;
         }
-        ((BaseAdapter) ((ListView) parent).getAdapter()).notifyDataSetChanged();
+        U.getBus().post(new AdapterDataSetChangedEvent());
       }
     });
     holder.mTvComment.setText(comment.content);
-    final String floor = comment.isHost == 1 ? "楼主" : position + "楼";
-    holder.mTvInfo.setText(String.format("%s | %s | 赞(%d)", floor, Utils.timestamp(comment.timestamp), comment.praise));
+    final String floor;
+    if (comment.isHost == 1) {
+      floor = "楼主";
+      int color = resources.getColor(R.color.apptheme_primary_light_color);
+      holder.mTvComment.setTextColor(color);
+      holder.mFpvPortrait.setEmotion('0');
+      holder.mFpvPortrait.setEmotionColor(color);
+    } else {
+      floor = position + "楼";
+      holder.mTvComment.setTextColor(resources.getColor(android.R.color.black));
+      holder.mFpvPortrait.setEmotion(comment.portrait);
+      holder.mFpvPortrait.setEmotionColor(comment.portraitColor);
+    }
+    holder.mTvInfo.setText(String.format("%s | %s | 赞(%d)", floor, U.timestamp(comment.timestamp), comment.praise));
     return convertView;
   }
 

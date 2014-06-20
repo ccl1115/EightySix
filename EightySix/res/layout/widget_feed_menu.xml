@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="190dp"
+              android:layout_height="wrap_content"
+              android:background="#ff2f3339">
+
+    <LinearLayout
+            android:id="@+id/ll_introduce"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/apptheme_primary_btn_dark"
+            android:orientation="horizontal">
+
+        <TextView
+                style="@style/TextView.SingleLine"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="15dp"
+                android:gravity="center_vertical"
+                android:text="@string/introduce_to_friends"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingRight="15dp"
+                android:text="送话费"
+                android:textSize="14sp"
+                android:textColor="@color/apptheme_primary_light_color"/>
+    </LinearLayout>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#ff262a2e"/>
+
+    <LinearLayout
+            android:id="@+id/ll_praise_count"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/apptheme_primary_btn_dark"
+            android:orientation="horizontal">
+
+        <TextView
+                style="@style/TextView.SingleLine"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="15dp"
+                android:gravity="center_vertical"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingRight="15dp"
+                android:textSize="14sp"
+                android:textColor="#ffef5724"/>
+
+    </LinearLayout>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#ff262a2e"/>
+
+    <LinearLayout
+            android:id="@+id/ll_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/apptheme_primary_btn_dark"
+            android:orientation="horizontal">
+
+        <TextView
+                style="@style/TextView.SingleLine"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="15dp"
+                android:gravity="center_vertical"
+                android:text="@string/feedback"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingRight="15dp"
+                android:textSize="14sp"
+                android:textColor="#ffef5724"/>
+
+    </LinearLayout>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#ff262a2e"/>
+
+    <LinearLayout
+            android:id="@+id/ll_about"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/apptheme_primary_btn_dark"
+            android:orientation="horizontal">
+
+        <TextView
+                style="@style/TextView.SingleLine"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="15dp"
+                android:gravity="center_vertical"
+                android:text="@string/about"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingRight="15dp"
+                android:textSize="14sp"
+                android:textColor="#ffef5724"/>
+
+    </LinearLayout>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#ff262a2e"/>
+
+    <LinearLayout
+            android:id="@+id/ll_settings"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/apptheme_primary_btn_dark"
+            android:orientation="horizontal">
+
+        <TextView
+                style="@style/TextView.SingleLine"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="15dp"
+                android:gravity="center_vertical"
+                android:text="@string/settings"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingRight="15dp"
+                android:textSize="14sp"
+                android:textColor="#ffef5724"/>
+
+    </LinearLayout>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#ff262a2e"/>
+</LinearLayout>

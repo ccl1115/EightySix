@@ -1,5 +1,7 @@
 package com.utree.eightysix.widget;
 
+import android.os.Debug;
+import android.os.Trace;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -65,10 +67,10 @@ class LoadMoreAdapterWrapper extends BaseAdapter {
         convertView.setVisibility(View.GONE);
       }
 
-      return convertView;
     } else {
-      return mListAdapter.getView(position, convertView, parent);
+      convertView = mListAdapter.getView(position, convertView, parent);
     }
+    return convertView;
   }
 
   @Override

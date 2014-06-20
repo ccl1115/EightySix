@@ -131,6 +131,7 @@ public class FixtureUtil {
         add("praise", random(Integer.class, range(0, 300)));
         add("isHost", random(0, 1));
         add("portrait", random(FIXTURE_PORTRAIT_CHAR));
+        add("portraitColor", random(FIXTURE_BG_COLOR));
       }
     });
 

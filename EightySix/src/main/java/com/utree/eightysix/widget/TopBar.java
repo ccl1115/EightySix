@@ -102,7 +102,6 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     mTopLinePaint.setStrokeWidth(1);
     mBotLinePaint.setStrokeWidth(1);
 
-    mActionOverFlow.setOnClickListener(this);
     mActionOverFlow.setBackgroundDrawable(getResources().getDrawable(R.drawable.apptheme_primary_btn_dark));
 
     mActionLeft.setOnClickListener(this);

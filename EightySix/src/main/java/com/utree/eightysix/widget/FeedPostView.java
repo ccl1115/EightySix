@@ -3,7 +3,6 @@ package com.utree.eightysix.widget;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.BaseAdapter;
@@ -17,13 +16,10 @@ import butterknife.OnClick;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
-import com.tencent.connect.share.QQShare;
-import com.tencent.tauth.IUiListener;
-import com.tencent.tauth.UiError;
-import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.drawable.RoundRectDrawable;
+import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
 import com.utree.eightysix.response.data.Post;
 import com.utree.eightysix.utils.ShareUtils;
@@ -152,30 +148,7 @@ public class FeedPostView extends RelativeLayout {
 
   @OnClick (R.id.iv_share)
   public void onIvShareClicked() {
-    Bundle data = new Bundle();
-    data.putString(QQShare.SHARE_TO_QQ_TITLE, "分享个秘密");
-    data.putString(QQShare.SHARE_TO_QQ_SUMMARY, mPost.content);
-    data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "http://www.baidu.com");
-    data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
-    ShareUtils.shareToQQ(((Activity) getContext()), data, new IUiListener() {
-      @Override
-      public void onComplete(Object o) {
-        if (BuildConfig.DEBUG) Toast.makeText(getContext(), "onComplete", Toast.LENGTH_LONG).show();
-      }
-
-      @Override
-      public void onError(UiError uiError) {
-        if (BuildConfig.DEBUG)
-          Toast.makeText(getContext(),
-              String.format("%d: %s - %s", uiError.errorCode, uiError.errorMessage, uiError.errorDetail),
-              Toast.LENGTH_LONG).show();
-      }
-
-      @Override
-      public void onCancel() {
-        if (BuildConfig.DEBUG) Toast.makeText(getContext(), "onCancel", Toast.LENGTH_LONG).show();
-      }
-    });
+    ShareUtils.sharePostToQQ((Activity) getContext(), mPost);
   }
 
   @OnClick (R.id.tv_praise)
@@ -202,7 +175,7 @@ public class FeedPostView extends RelativeLayout {
       mPost.praised = 1;
       mPost.praise++;
     }
-    ((BaseAdapter) ((ListView) getParent()).getAdapter()).notifyDataSetChanged();
+    U.getBus().post(new AdapterDataSetChangedEvent());
   }
 
   @OnClick (R.id.tv_comment)
@@ -237,4 +210,5 @@ public class FeedPostView extends RelativeLayout {
     super.onDetachedFromWindow();
     U.getBus().unregister(this);
   }
+
 }

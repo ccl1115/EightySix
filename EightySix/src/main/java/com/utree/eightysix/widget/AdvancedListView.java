@@ -6,6 +6,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import com.squareup.otto.Subscribe;
+import com.utree.eightysix.U;
+import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 
 /**
  * @author simon
@@ -113,5 +116,9 @@ public final class AdvancedListView extends ListView {
     void onOverScroll(int distance);
 
     void onStateChanged(int state);
+  }
+
+  @Subscribe public void onAdapterDataSetChangedEvent(AdapterDataSetChangedEvent event) {
+    mAdapterWrapper.notifyDataSetChanged();
   }
 }

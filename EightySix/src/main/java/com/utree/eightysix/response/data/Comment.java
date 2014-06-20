@@ -6,6 +6,7 @@ import java.io.Serializable;
 /**
  */
 public class Comment implements Serializable {
+
   @SerializedName ("content")
   public String content;
 
@@ -22,6 +23,8 @@ public class Comment implements Serializable {
   public String avatar;
 
   public char portrait;
+
+  public int portraitColor;
 
   public int praised;
 

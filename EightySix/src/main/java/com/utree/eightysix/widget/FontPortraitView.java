@@ -29,10 +29,13 @@ public class FontPortraitView extends TextView {
     super(context, attrs, defStyleAttr);
     setTypeface(sTypeface);
     setTextSize(30);
-    setTextColor(new Random().nextInt() | 0xff000000);
   }
 
   public void setEmotion(char c) {
     setText(String.valueOf(c));
+  }
+
+  public void setEmotionColor(int color) {
+    setTextColor(color);
   }
 }

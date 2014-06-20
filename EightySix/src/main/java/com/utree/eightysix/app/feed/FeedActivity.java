@@ -1,12 +1,19 @@
 package com.utree.eightysix.app.feed;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
@@ -45,6 +52,48 @@ public class FeedActivity extends BaseActivity {
 
   private FeedAdapter mFeedAdapter;
   private SideCirclesAdapter mSideCirclesAdapter;
+
+  private PopupWindow mPopupMenu;
+  private LinearLayout mMenu;
+  private MenuViewHolder mMenuViewHolder;
+
+  class MenuViewHolder {
+
+
+    @OnClick(R.id.ll_introduce)
+    void onLlIntroduceClicked() {
+      showToast("TODO introduce");
+      mPopupMenu.dismiss();
+    }
+
+    @OnClick(R.id.ll_praise_count)
+    void onLlPraiseCountClicked() {
+      showToast("TODO praise count");
+      mPopupMenu.dismiss();
+    }
+
+    @OnClick(R.id.ll_feedback)
+    void onLlFeedbackClicked() {
+      showToast("TODO feedback");
+      mPopupMenu.dismiss();
+    }
+
+    @OnClick(R.id.ll_about)
+    void onLlAboutClicked() {
+      showToast("TODO about");
+      mPopupMenu.dismiss();
+    }
+
+    @OnClick(R.id.ll_settings)
+    void onLlSettingsClicked() {
+      showToast("TODO settings");
+      mPopupMenu.dismiss();
+    }
+
+    MenuViewHolder(View view) {
+      ButterKnife.inject(this, view);
+    }
+  }
 
   private boolean mSideShown;
 
@@ -208,7 +257,16 @@ public class FeedActivity extends BaseActivity {
     getTopBar().setOnActionOverflowClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        showToast("TODO show settings");
+        if (mPopupMenu == null) {
+          mMenu = (LinearLayout) View.inflate(FeedActivity.this, R.layout.widget_feed_menu, null);
+          mMenuViewHolder = new MenuViewHolder(mMenu);
+          mPopupMenu = new PopupWindow(mMenu, dp2px(190), dp2px(225) + 4);
+          mPopupMenu.setFocusable(true);
+          mPopupMenu.setOutsideTouchable(true);
+          mPopupMenu.setBackgroundDrawable(new BitmapDrawable(getResources()));
+        }
+
+        mPopupMenu.showAsDropDown(getTopBar().mActionOverFlow);
       }
     });
 
@@ -281,6 +339,15 @@ public class FeedActivity extends BaseActivity {
   @Override
   protected void onResume() {
     super.onResume();
+
+    U.getBus().register(mLvFeed);
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+
+    U.getBus().unregister(mLvFeed);
   }
 
   @Override

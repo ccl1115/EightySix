@@ -1,15 +1,15 @@
 package com.utree.eightysix.widget;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
@@ -19,7 +19,9 @@ import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.response.data.Post;
+import com.utree.eightysix.utils.ShareUtils;
 
 /**
  * This is the post view in PostActivity
@@ -47,6 +49,8 @@ public class PostPostView extends FrameLayout {
   public TextView mTvPraise;
 
   private Post mPost;
+
+  private AlertDialog mPostContextDialog;
 
   public PostPostView(Context context) {
     this(context, null, 0);
@@ -79,17 +83,13 @@ public class PostPostView extends FrameLayout {
       mTvContent.setBackgroundColor(post.bgColor);
     }
 
-    Resources r = getResources();
     if (post.praised == 1) {
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(
-          r.getDrawable(R.drawable.ic_heart_red_pressed), null, null, null);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(U.gd(R.drawable.ic_heart_red_pressed), null, null, null);
     } else if (post.praise > 0) {
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(
-          r.getDrawable(R.drawable.ic_heart_white_normal), null, null, null);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(U.gd(R.drawable.ic_heart_white_normal), null, null, null);
     } else {
       mTvPraise.setText("");
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(
-          r.getDrawable(R.drawable.ic_heart_outline_normal), null, null, null);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(U.gd(R.drawable.ic_heart_outline_normal), null, null, null);
     }
   }
 
@@ -100,11 +100,34 @@ public class PostPostView extends FrameLayout {
 
   @OnClick (R.id.iv_more)
   public void onIvMoreClicked() {
+    new AlertDialog.Builder(getContext()).setTitle(U.gs(R.string.post_action))
+        .setItems(new String[]{U.gs(R.string.share), U.gs(R.string.report),
+                mPost.praised == 1 ? U.gs(R.string.unlike) : U.gs(R.string.like),
+                U.gs(R.string.delete)},
+            new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                  case 0:
+                    ShareUtils.sharePostToQQ(((Activity) getContext()), mPost);
+                    break;
+                  case 1:
+                    U.showToast("TODO report");
+                    break;
+                  case 2:
+                    onTvPraiseClicked();
+                    break;
+                  case 3:
+                    U.showToast("TODO delete");
+                    break;
+                }
+              }
+            }).create().show();
+
   }
 
   @OnClick (R.id.tv_praise)
   public void onTvPraiseClicked() {
-    Toast.makeText(getContext(), "TODO praise request", Toast.LENGTH_SHORT).show();
     if (mPost.praised == 1) {
       AnimatorSet unlikeAnimator = new AnimatorSet();
       unlikeAnimator.setDuration(500);
@@ -126,10 +149,9 @@ public class PostPostView extends FrameLayout {
       mPost.praised = 1;
       mPost.praise++;
     }
-    ((BaseAdapter) ((ListView) getParent()).getAdapter()).notifyDataSetChanged();
+    U.getBus().post(new AdapterDataSetChangedEvent());
   }
 
-  @SuppressWarnings ("SuspiciousNameCombination")
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
     final int widthSize = widthMeasureSpec & ~(0x3 << 30);

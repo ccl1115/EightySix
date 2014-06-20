@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">1886</string>
+    <string name="app_name">蓝莓</string>
     <string name="app_url"><a href="http://1886.me">1886.me</a></string>
 
     <!-- AndroidLockPattern -->
@@ -24,7 +24,13 @@
     <string name="select_album">选择相册</string>
     <string name="server_error">服务器错误</string>
     <string name="server_object_error">服务器返回对象解析错误</string>
+    <string name="feedback">意见反馈</string>
     <string name="create">创建</string>
+    <string name="report">举报</string>
+    <string name="like">点赞</string>
+    <string name="unlike">取消赞</string>
+    <string name="delete">删除</string>
+    <string name="share">分享</string>
 
     <!-- Locate -->
     <string name="locating">定位中…</string>
@@ -131,8 +137,12 @@
     <string name="friends_info">朋友(%1$d) | 工友(%2$d)</string>
     <string name="hidden_friends_feed">朋友发的%1$d条匿名贴被隐藏</string>
     <string name="unlock_to_view">解锁查看</string>
+    <string name="introduce_to_friends">介绍给朋友</string>
 
     <!-- PostActivity -->
     <string name="comment">评论</string>
     <string name="anonymously_comment">匿名发表评论</string>
+    <string name="about">蓝莓的故事</string>
+    <string name="comment_action">评论操作</string>
+    <string name="post_action">帖子操作</string>
 </resources>
