@@ -103,6 +103,9 @@ public class FeedActivity extends BaseActivity {
           mLvFeed.setAdapter(mFeedAdapter);
           U.getBus().post(new ListViewScrollStateIdledEvent());
           hideProgressBar();
+          if (mSideShown) {
+            mLvFeed.setSelection(1);
+          }
         }
       }, 2000);
       showProgressBar();
@@ -114,7 +117,7 @@ public class FeedActivity extends BaseActivity {
     mLvSideCircles.setAdapter(mSideCirclesAdapter);
 
     if (Env.firstRun(FIRST_RUN_KEY)) {
-      showSide();
+        showSide();
     }
 
     mLvFeed.setOnScrollListener(new AbsListView.OnScrollListener() {

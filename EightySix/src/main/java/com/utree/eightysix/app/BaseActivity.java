@@ -310,7 +310,8 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
     mBaseView.requestLayout();
     if (animate) {
       if (mHideTopBarAnimator == null) {
-        mHideTopBarAnimator = ObjectAnimator.ofFloat(mTopBar, "translationY", 0, -mTopBar.getMeasuredHeight());
+        mHideTopBarAnimator = ObjectAnimator.ofFloat(mTopBar, "translationY", 0,
+            -getResources().getDimensionPixelSize(R.dimen.activity_top_bar_height));
         mHideTopBarAnimator.addListener(new Animator.AnimatorListener() {
           @Override
           public void onAnimationStart(Animator animation) {
@@ -348,7 +349,8 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
     mBaseView.requestLayout();
     if (animate) {
       if (mShowTopBarAnimator == null) {
-        mShowTopBarAnimator = ObjectAnimator.ofFloat(mTopBar, "translationY", -mTopBar.getMeasuredHeight(), 0f);
+        mShowTopBarAnimator = ObjectAnimator.ofFloat(mTopBar, "translationY",
+            -getResources().getDimensionPixelSize(R.dimen.activity_top_bar_height), 0f);
         mShowTopBarAnimator.setDuration(150);
       }
       if (mHideTopBarAnimator != null && mHideTopBarAnimator.isRunning()) {
