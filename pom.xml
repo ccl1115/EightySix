@@ -11,7 +11,8 @@
 
     <modules>
         <module>EightySix</module>
-        <module>EightySix-it</module>
+        <module>EightySix-fixture</module>
+        <module>EightySix-data</module>
     </modules>
 
     <properties>
@@ -246,4 +247,14 @@
             <url>http://dustr.info:8081/nexus/content/repositories/android-snapshot</url>
         </snapshotRepository>
     </distributionManagement>
+
+    <profiles>
+        <profile>
+            <id>debug</id>
+            <modules>
+                <module>EightySix-it</module>
+            </modules>
+        </profile>
+
+    </profiles>
 </project>

@@ -1,7 +1,6 @@
-package com.utree.eightysix.response.data;
+package com.utree.eightysix.data;
 
 import com.google.gson.annotations.SerializedName;
-import com.utree.eightysix.response.Paginate;
 
 /**
  */

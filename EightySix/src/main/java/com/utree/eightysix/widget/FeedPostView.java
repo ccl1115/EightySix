@@ -5,9 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,7 +19,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
-import com.utree.eightysix.response.data.Post;
+import com.utree.eightysix.data.Post;
 import com.utree.eightysix.utils.ShareUtils;
 
 /**

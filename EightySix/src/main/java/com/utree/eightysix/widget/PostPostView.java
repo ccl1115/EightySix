@@ -4,14 +4,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -20,7 +18,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
-import com.utree.eightysix.response.data.Post;
+import com.utree.eightysix.data.Post;
 import com.utree.eightysix.utils.ShareUtils;
 
 /**
@@ -70,27 +68,40 @@ public class PostPostView extends FrameLayout {
   public void setData(Post post) {
     mPost = post;
 
-    mTvContent.setText(post.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content);
+    if (post == null) {
+      clear();
+      return;
+    }
+
+    mTvContent.setText(mPost.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content);
     mTvComment.setText(String.valueOf(post.comments));
     mTvPraise.setText(String.valueOf(post.praise));
-    mTvSource.setText(post.source);
+    mTvSource.setText(mPost.source);
 
-    if (!TextUtils.isEmpty(post.bgUrl)) {
-      mAivBg.setUrl(post.bgUrl);
+    if (!TextUtils.isEmpty(mPost.bgUrl)) {
+      mAivBg.setUrl(mPost.bgUrl);
       mTvContent.setBackgroundColor(Color.TRANSPARENT);
     } else {
       mAivBg.setUrl(null);
-      mTvContent.setBackgroundColor(post.bgColor);
+      mTvContent.setBackgroundColor(mPost.bgColor);
     }
 
-    if (post.praised == 1) {
+    if (mPost.praised == 1) {
       mTvPraise.setCompoundDrawablesWithIntrinsicBounds(U.gd(R.drawable.ic_heart_red_pressed), null, null, null);
-    } else if (post.praise > 0) {
+    } else if (mPost.praise > 0) {
       mTvPraise.setCompoundDrawablesWithIntrinsicBounds(U.gd(R.drawable.ic_heart_white_normal), null, null, null);
     } else {
       mTvPraise.setText("");
       mTvPraise.setCompoundDrawablesWithIntrinsicBounds(U.gd(R.drawable.ic_heart_outline_normal), null, null, null);
     }
+  }
+
+  private void clear() {
+    mTvContent.setText("");
+    mTvComment.setBackgroundColor(Color.WHITE);
+    mTvComment.setText("");
+    mTvPraise.setText("");
+    mTvSource.setText("");
   }
 
   @OnClick (R.id.iv_close)
@@ -100,6 +111,7 @@ public class PostPostView extends FrameLayout {
 
   @OnClick (R.id.iv_more)
   public void onIvMoreClicked() {
+    if (mPost == null) return;
     new AlertDialog.Builder(getContext()).setTitle(U.gs(R.string.post_action))
         .setItems(new String[]{U.gs(R.string.share), U.gs(R.string.report),
                 mPost.praised == 1 ? U.gs(R.string.unlike) : U.gs(R.string.like),
@@ -128,6 +140,7 @@ public class PostPostView extends FrameLayout {
 
   @OnClick (R.id.tv_praise)
   public void onTvPraiseClicked() {
+    if (mPost == null) return;
     if (mPost.praised == 1) {
       AnimatorSet unlikeAnimator = new AnimatorSet();
       unlikeAnimator.setDuration(500);

@@ -18,9 +18,8 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
-import com.utree.eightysix.response.data.Comment;
-import com.utree.eightysix.response.data.Post;
-import com.utree.eightysix.rest.FixtureUtil;
+import com.utree.eightysix.data.Comment;
+import com.utree.eightysix.data.Post;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RoundedButton;
@@ -43,8 +42,6 @@ public class PostActivity extends BaseActivity {
 
   private Post mPost;
   private PostCommentsAdapter mPostCommentsAdapter;
-
-  private AlertDialog mCommentContextDialog;
 
   public static void start(Context context, Post post) {
     Intent intent = new Intent(context, PostActivity.class);
@@ -121,10 +118,8 @@ public class PostActivity extends BaseActivity {
 
     mPost = (Post) getIntent().getSerializableExtra("post");
 
-    if (mPost == null) {
-      if (BuildConfig.DEBUG) {
-        mPost = FixtureUtil.from(Post.class).gimme("valid");
-      }
+    if (mPost == null && BuildConfig.DEBUG) {
+      mPost = U.getFixture(Post.class, "valid");
     }
 
     mPostCommentsAdapter = new PostCommentsAdapter(mPost, new ArrayList<Comment>());
@@ -143,14 +138,19 @@ public class PostActivity extends BaseActivity {
 
       @Override
       public boolean onLoadMoreStart() {
-        getHandler().postDelayed(new Runnable() {
-          @Override
-          public void run() {
-            mPostCommentsAdapter.add(FixtureUtil.from(Comment.class).<Comment>gimme(20, "valid"));
-            mLvComments.stopLoadMore();
-          }
-        }, 2000);
-        return true;
+        if (BuildConfig.DEBUG) {
+          getHandler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+              mPostCommentsAdapter.add(U.getFixture(Comment.class, 20, "valid"));
+              mLvComments.stopLoadMore();
+            }
+          }, 2000);
+          return true;
+        } else {
+          // TODO request more data
+          return false;
+        }
       }
     });
 
@@ -159,14 +159,12 @@ public class PostActivity extends BaseActivity {
   @Override
   protected void onResume() {
     super.onResume();
-
     U.getBus().register(mLvComments);
   }
 
   @Override
   protected void onPause() {
     super.onPause();
-
     U.getBus().unregister(mLvComments);
   }
 }

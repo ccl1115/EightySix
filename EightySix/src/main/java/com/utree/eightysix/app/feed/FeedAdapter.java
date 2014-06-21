@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.feed;
 
-import android.content.Intent;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,8 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.response.data.Post;
+import com.utree.eightysix.annotations.Keep;
+import com.utree.eightysix.data.Post;
 import com.utree.eightysix.widget.FeedPostView;
 import com.utree.eightysix.widget.RoundedButton;
 import java.util.List;
@@ -185,6 +185,7 @@ class FeedAdapter extends BaseAdapter {
     return convertView;
   }
 
+  @Keep
   public static class UnlockViewHolder {
     @InjectView(R.id.rb_unlock)
     public RoundedButton mRbUnlock;

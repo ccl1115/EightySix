@@ -7,7 +7,8 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.utree.eightysix.R;
-import com.utree.eightysix.response.data.Circle;
+import com.utree.eightysix.annotations.Keep;
+import com.utree.eightysix.data.Circle;
 import java.util.Collection;
 import java.util.List;
 
@@ -65,6 +66,7 @@ class CircleBaseListAdapter extends BaseAdapter {
     return convertView;
   }
 
+  @Keep
   public static class CircleBaseViewHolder {
 
     @InjectView (R.id.tv_circle_name)

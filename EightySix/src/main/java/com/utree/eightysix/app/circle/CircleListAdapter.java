@@ -9,7 +9,8 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.utree.eightysix.R;
-import com.utree.eightysix.response.data.Circle;
+import com.utree.eightysix.annotations.Keep;
+import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.widget.RoundedButton;
 import java.util.Collection;
 import java.util.Iterator;
@@ -147,6 +148,7 @@ class CircleListAdapter extends BaseAdapter {
     }
   }
 
+  @Keep
   public static class CircleViewHolder {
     @InjectView (R.id.tv_circle_name)
     public TextView mTvCircleName;

@@ -6,18 +6,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import br.com.six2six.fixturefactory.Fixture;
-import br.com.six2six.fixturefactory.Rule;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import com.utree.eightysix.C;
+import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
-import com.utree.eightysix.response.CirclesResponse;
-import com.utree.eightysix.response.data.Circle;
-import com.utree.eightysix.rest.FixtureUtil;
+import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.TopBar;
@@ -77,40 +74,33 @@ public class MyCirclesActivity extends BaseActivity {
 
     mLvCircles.setEmptyView(mTvEmptyText);
 
-    mCircleListAdapter =
-        new CircleListAdapter(((CirclesResponse) FixtureUtil.get(C.API_FACTORY_MY)).object.factoryCircle.lists);
+    if (BuildConfig.DEBUG) {
+      mCircleListAdapter = new CircleListAdapter(U.getFixture(Circle.class, 20, "valid"));
+      mLvCircles.setAdapter(mCircleListAdapter);
+      mLvCircles.setLoadMoreCallback(new LoadMoreCallback() {
+        @Override
+        public View getLoadMoreView() {
+          return View.inflate(MyCirclesActivity.this, R.layout.footer_load_more, null);
+        }
 
-    mLvCircles.setAdapter(mCircleListAdapter);
+        @Override
+        public boolean hasMore() {
+          return true;
+        }
 
-    mLvCircles.setLoadMoreCallback(new LoadMoreCallback() {
-      @Override
-      public View getLoadMoreView() {
-        return View.inflate(MyCirclesActivity.this, R.layout.footer_load_more, null);
-      }
-
-      @Override
-      public boolean hasMore() {
-        return true;
-      }
-
-      @Override
-      public boolean onLoadMoreStart() {
-        getHandler().postDelayed(new Runnable() {
-          @Override
-          public void run() {
-            mCircleListAdapter.add(Fixture.from(Circle.class).<Circle>gimme(20, "valid", new Rule() {
-                  {
-                    add("viewGroupType", "智能推荐");
-                    add("viewType", 4);
-                  }
-                }
-            ));
-            mLvCircles.stopLoadMore();
-          }
-        }, 2000);
-        return true;
-      }
-    });
+        @Override
+        public boolean onLoadMoreStart() {
+          getHandler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+              mCircleListAdapter.add(U.getFixture(Circle.class, 20, "valid"));
+              mLvCircles.stopLoadMore();
+            }
+          }, 2000);
+          return true;
+        }
+      });
+    }
   }
 
   @Override

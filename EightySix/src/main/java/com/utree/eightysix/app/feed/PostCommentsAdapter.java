@@ -11,9 +11,10 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
-import com.utree.eightysix.response.data.Comment;
-import com.utree.eightysix.response.data.Post;
+import com.utree.eightysix.data.Comment;
+import com.utree.eightysix.data.Post;
 import com.utree.eightysix.widget.FontPortraitView;
 import com.utree.eightysix.widget.PostPostView;
 import java.util.ArrayList;
@@ -148,6 +149,7 @@ class PostCommentsAdapter extends BaseAdapter {
     return convertView;
   }
 
+  @Keep
   public static class CommentViewHolder {
 
     @InjectView (R.id.fpv_portrait)

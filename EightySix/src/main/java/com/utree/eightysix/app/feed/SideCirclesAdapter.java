@@ -6,12 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.utree.eightysix.R;
+import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.circle.MyCirclesActivity;
-import com.utree.eightysix.response.data.Circle;
+import com.utree.eightysix.data.Circle;
 import java.util.List;
 
 /**
@@ -103,6 +103,7 @@ class SideCirclesAdapter extends BaseAdapter {
     return (position == getCount() - 1) ? TYPE_MORE : TYPE_CIRCLE;
   }
 
+  @Keep
   static class ViewHolder {
 
     @InjectView (R.id.name)

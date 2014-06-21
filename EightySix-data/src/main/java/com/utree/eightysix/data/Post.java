@@ -1,7 +1,5 @@
-package com.utree.eightysix.response.data;
+package com.utree.eightysix.data;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 

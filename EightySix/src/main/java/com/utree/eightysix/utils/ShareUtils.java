@@ -3,8 +3,6 @@ package com.utree.eightysix.utils;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.Toast;
-import com.tencent.connect.auth.QQAuth;
-import com.tencent.connect.auth.QQToken;
 import com.tencent.connect.share.QQShare;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
@@ -12,7 +10,7 @@ import com.tencent.tauth.UiError;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.response.data.Post;
+import com.utree.eightysix.data.Post;
 
 /**
  * @author simon

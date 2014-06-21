@@ -1,26 +1,22 @@
-package com.utree.eightysix.rest;
+package com.utree.eightysix.fixture;
 
-import br.com.six2six.fixturefactory.Fixture;
-import br.com.six2six.fixturefactory.ObjectFactory;
 import br.com.six2six.fixturefactory.Rule;
 import br.com.six2six.fixturefactory.base.Sequence;
-import com.utree.eightysix.C;
-import com.utree.eightysix.response.CirclesResponse;
-import com.utree.eightysix.response.Paginate;
-import com.utree.eightysix.response.data.Circle;
-import com.utree.eightysix.response.data.Circles;
-import com.utree.eightysix.response.data.Comment;
-import com.utree.eightysix.response.data.Post;
+import com.utree.eightysix.Fixture;
+import com.utree.eightysix.data.Paginate;
+import com.utree.eightysix.data.Circle;
+import com.utree.eightysix.data.Comment;
+import com.utree.eightysix.data.Post;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Provide fixture data
  *
  * @author simon
  */
-public class FixtureUtil {
+public class FixtureImpl implements Fixture {
 
-  private static FixtureUtil sFixtureUtil;
   private static String[] FIXTURE_CITIES = {"凯里", "重庆", "昆山", "北京", "深圳", "东莞", "上海", "L.A.", "成都"};
   private static String[] FIXTURE_VIEW_GROUP_TYPES = {"最佳建议", "在职工厂", "智能推荐"};
   private static String[] FIXTURE_CIRCLES = {"圣美电脑", "洗脚城", "富士康", "仁宝电脑"};
@@ -83,7 +79,7 @@ public class FixtureUtil {
 
 
   static {
-    Fixture.of(Circle.class).addTemplate("valid", new Rule() {
+    br.com.six2six.fixturefactory.Fixture.of(Circle.class).addTemplate("valid", new Rule() {
       {
         add("name", random(FIXTURE_CIRCLES));
         add("friendCount", random(Integer.class, range(1, 100)));
@@ -111,7 +107,7 @@ public class FixtureUtil {
       }
     });
 
-    Fixture.of(Paginate.Page.class).addTemplate("valid", new Rule() {
+    br.com.six2six.fixturefactory.Fixture.of(Paginate.Page.class).addTemplate("valid", new Rule() {
       {
         add("countPage", 100);
         add("countRec", 1);
@@ -122,7 +118,7 @@ public class FixtureUtil {
       }
     });
 
-    Fixture.of(Comment.class).addTemplate("valid", new Rule() {
+    br.com.six2six.fixturefactory.Fixture.of(Comment.class).addTemplate("valid", new Rule() {
       {
         add("id", random(Integer.class));
         add("content", random(FIXTURE_COMMENT_CONTENT));
@@ -135,14 +131,14 @@ public class FixtureUtil {
       }
     });
 
-    Fixture.of(Post.class).addTemplate("valid", new Rule() {
+    br.com.six2six.fixturefactory.Fixture.of(Post.class).addTemplate("valid", new Rule() {
       {
         add("id", random(Integer.class));
         add("bgUrl", random(FIXTURE_BG_URL));
         add("bgColor", random(FIXTURE_BG_COLOR));
         add("content", random(FIXTURE_POST_CONTENT));
         add("comments", random(Integer.class, range(0, 10000)));
-        add("comment", from(Comment.class).gimme("valid"));
+        add("comment", br.com.six2six.fixturefactory.Fixture.from(Comment.class).gimme("valid"));
         add("praise", random(Integer.class, range(0, 10000)));
         add("source", random(FIXTURE_CIRCLES));
         add("praised", random(0, 1));
@@ -151,41 +147,11 @@ public class FixtureUtil {
 
   }
 
-  public static <T> ObjectFactory from(Class<T> clz) {
-    return Fixture.from(clz);
+  public <T> T get(Class<T> clz, String template) {
+    return br.com.six2six.fixturefactory.Fixture.from(clz).gimme(template);
   }
 
-  public static Response get(String api) {
-    return getFixtureUtil().route(api);
-  }
-
-  private static FixtureUtil getFixtureUtil() {
-    if (sFixtureUtil == null) {
-      sFixtureUtil = new FixtureUtil();
-    }
-    return sFixtureUtil;
-  }
-
-  private Response route(String api) {
-    if (C.API_FACTORY_MY.equals(api)) {
-      return getCirclesResponse();
-    } else {
-      return null;
-    }
-  }
-
-  private CirclesResponse getCirclesResponse() {
-    CirclesResponse response = new CirclesResponse();
-
-    response.code = 0;
-    response.message = "";
-    Circles circles = new Circles();
-    circles.factoryCircle = new Paginate<Circle>();
-    circles.factoryCircle.lists = Fixture.from(Circle.class).gimme(20, "valid");
-    circles.factoryCircle.page = Fixture.from(Paginate.Page.class).gimme("valid");
-
-    response.object = circles;
-
-    return response;
+  public <T> List<T> get(Class<T> clz, int quantity, String template) {
+    return br.com.six2six.fixturefactory.Fixture.from(clz).gimme(quantity, template);
   }
 }

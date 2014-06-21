@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import com.google.gson.reflect.TypeToken;
 import com.utree.eightysix.app.account.LoginActivity;
-import com.utree.eightysix.response.data.User;
+import com.utree.eightysix.data.User;
 import de.akquinet.android.androlog.Log;
 import java.util.List;
 

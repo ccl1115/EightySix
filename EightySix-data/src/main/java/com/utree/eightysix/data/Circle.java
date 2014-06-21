@@ -1,11 +1,12 @@
-package com.utree.eightysix.response.data;
+package com.utree.eightysix.data;
 
 import com.google.gson.annotations.SerializedName;
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
  */
-public class Circle extends BaseCircle implements Comparator<Circle>, Comparable<Circle> {
+public class Circle extends BaseCircle implements Comparator<Circle>, Comparable<Circle>, Serializable {
 
   @SerializedName ("cityName")
   public String cityName;

@@ -1,7 +1,7 @@
 package com.utree.eightysix.app.feed;
 
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -10,9 +10,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -20,15 +18,16 @@ import butterknife.OnItemClick;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
+import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.publish.PublishActivity;
+import com.utree.eightysix.data.Circle;
+import com.utree.eightysix.data.Post;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
-import com.utree.eightysix.response.data.Circle;
-import com.utree.eightysix.response.data.Post;
-import com.utree.eightysix.rest.FixtureUtil;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
@@ -40,68 +39,33 @@ import com.utree.eightysix.widget.TopBar;
 public class FeedActivity extends BaseActivity {
 
   private static final String FIRST_RUN_KEY = "feed";
-
   @InjectView (R.id.lv_feed)
   public AdvancedListView mLvFeed;
-
   @InjectView (R.id.lv_side_circles)
   public AdvancedListView mLvSideCircles;
-
   @InjectView (R.id.ib_send)
   public ImageButton mSend;
-
   private FeedAdapter mFeedAdapter;
   private SideCirclesAdapter mSideCirclesAdapter;
-
   private PopupWindow mPopupMenu;
   private LinearLayout mMenu;
-  private MenuViewHolder mMenuViewHolder;
+  private boolean mSideShown;
+  private Circle mCircle;
 
-  class MenuViewHolder {
-
-
-    @OnClick(R.id.ll_introduce)
-    void onLlIntroduceClicked() {
-      showToast("TODO introduce");
-      mPopupMenu.dismiss();
-    }
-
-    @OnClick(R.id.ll_praise_count)
-    void onLlPraiseCountClicked() {
-      showToast("TODO praise count");
-      mPopupMenu.dismiss();
-    }
-
-    @OnClick(R.id.ll_feedback)
-    void onLlFeedbackClicked() {
-      showToast("TODO feedback");
-      mPopupMenu.dismiss();
-    }
-
-    @OnClick(R.id.ll_about)
-    void onLlAboutClicked() {
-      showToast("TODO about");
-      mPopupMenu.dismiss();
-    }
-
-    @OnClick(R.id.ll_settings)
-    void onLlSettingsClicked() {
-      showToast("TODO settings");
-      mPopupMenu.dismiss();
-    }
-
-    MenuViewHolder(View view) {
-      ButterKnife.inject(this, view);
-    }
+  public static void start(Context context, Circle circle) {
+    Intent intent = new Intent(context, FeedActivity.class);
+    intent.putExtra("circle", circle);
+    context.startActivity(intent);
   }
 
-  private boolean mSideShown;
-
-  private Circle mCircle = FixtureUtil.from(Circle.class).gimme("valid");
+  public static void start(Context context, int id) {
+    Intent intent = new Intent(context, FeedActivity.class);
+    intent.putExtra("id", id);
+    context.startActivity(intent);
+  }
 
   @OnClick (R.id.ib_send)
   public void onSendClicked() {
-
     startActivity(new Intent(this, PublishActivity.class));
   }
 
@@ -118,21 +82,39 @@ public class FeedActivity extends BaseActivity {
 
     setFillContent(true);
 
-    getHandler().postDelayed(new Runnable() {
-      @Override
-      public void run() {
-        mFeedAdapter = new FeedAdapter(FixtureUtil.from(Post.class).<Post>gimme(20, "valid"));
-        mLvFeed.setAdapter(mFeedAdapter);
-        U.getBus().post(new ListViewScrollStateIdledEvent());
-        hideProgressBar();
-      }
-    }, 2000);
+    mCircle = (Circle) getIntent().getSerializableExtra("circle");
 
-    mSideCirclesAdapter = new SideCirclesAdapter(FixtureUtil.from(Circle.class).<Circle>gimme(10, "valid"));
+    if (mCircle == null && BuildConfig.DEBUG) {
+      mCircle = U.getFixture(Circle.class, "valid");
+    }
+
+    if (mCircle == null) {
+      showToast(R.string.circle_not_found, false);
+    } else {
+      setTopTitle(mCircle.name);
+      setTopSubTitle(String.format(getString(R.string.friends_info), mCircle.friendCount, mCircle.workmateCount));
+    }
+
+    if (BuildConfig.DEBUG) {
+      getHandler().postDelayed(new Runnable() {
+        @Override
+        public void run() {
+          mFeedAdapter = new FeedAdapter(U.getFixture(Post.class, 20, "valid"));
+          mLvFeed.setAdapter(mFeedAdapter);
+          U.getBus().post(new ListViewScrollStateIdledEvent());
+          hideProgressBar();
+        }
+      }, 2000);
+      showProgressBar();
+    } else {
+      // TODO request data
+    }
+
+    mSideCirclesAdapter = new SideCirclesAdapter(U.getFixture(Circle.class, 10, "valid"));
     mLvSideCircles.setAdapter(mSideCirclesAdapter);
 
     if (Env.firstRun(FIRST_RUN_KEY)) {
-
+      showSide();
     }
 
     mLvFeed.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -239,18 +221,22 @@ public class FeedActivity extends BaseActivity {
 
       @Override
       public boolean onLoadMoreStart() {
-        getHandler().postDelayed(new Runnable() {
-          @Override
-          public void run() {
-            mFeedAdapter.add(FixtureUtil.from(Post.class).<Post>gimme(20, "valid"));
-            mLvFeed.stopLoadMore();
-          }
-        }, 2000);
-        return true;
+        if (BuildConfig.DEBUG) {
+          getHandler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+              mFeedAdapter.add(U.getFixture(Post.class, 20, "valid"));
+              mLvFeed.stopLoadMore();
+            }
+          }, 2000);
+          return true;
+        } else {
+          // TODO request more data
+          return false;
+        }
       }
     });
 
-    showProgressBar();
 
     setActionLeftDrawable(null);
 
@@ -259,8 +245,8 @@ public class FeedActivity extends BaseActivity {
       public void onClick(View v) {
         if (mPopupMenu == null) {
           mMenu = (LinearLayout) View.inflate(FeedActivity.this, R.layout.widget_feed_menu, null);
-          mMenuViewHolder = new MenuViewHolder(mMenu);
           mPopupMenu = new PopupWindow(mMenu, dp2px(190), dp2px(225) + 4);
+          new MenuViewHolder(mMenu);
           mPopupMenu.setFocusable(true);
           mPopupMenu.setOutsideTouchable(true);
           mPopupMenu.setBackgroundDrawable(new BitmapDrawable(getResources()));
@@ -273,8 +259,6 @@ public class FeedActivity extends BaseActivity {
     getTopBar().mTitle.setCompoundDrawablesWithIntrinsicBounds(null, null,
         getResources().getDrawable(R.drawable.top_bar_arrow_down), null);
 
-    setTopTitle(mCircle.name);
-    setTopSubTitle(String.format(getString(R.string.friends_info), mCircle.friendCount, mCircle.workmateCount));
 
     getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
       @Override
@@ -413,5 +397,44 @@ public class FeedActivity extends BaseActivity {
       }
     });
     animator.start();
+  }
+
+  @Keep
+  class MenuViewHolder {
+
+
+    MenuViewHolder(View view) {
+      ButterKnife.inject(this, view);
+    }
+
+    @OnClick (R.id.ll_introduce)
+    void onLlIntroduceClicked() {
+      showToast("TODO introduce");
+      mPopupMenu.dismiss();
+    }
+
+    @OnClick (R.id.ll_praise_count)
+    void onLlPraiseCountClicked() {
+      showToast("TODO praise count");
+      mPopupMenu.dismiss();
+    }
+
+    @OnClick (R.id.ll_feedback)
+    void onLlFeedbackClicked() {
+      showToast("TODO feedback");
+      mPopupMenu.dismiss();
+    }
+
+    @OnClick (R.id.ll_about)
+    void onLlAboutClicked() {
+      showToast("TODO about");
+      mPopupMenu.dismiss();
+    }
+
+    @OnClick (R.id.ll_settings)
+    void onLlSettingsClicked() {
+      showToast("TODO settings");
+      mPopupMenu.dismiss();
+    }
   }
 }

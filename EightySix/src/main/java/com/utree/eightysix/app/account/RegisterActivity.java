@@ -17,7 +17,7 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.request.RegisterRequest;
 import com.utree.eightysix.response.UserResponse;
-import com.utree.eightysix.response.data.User;
+import com.utree.eightysix.data.User;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.widget.RoundedButton;

@@ -22,9 +22,9 @@ import com.utree.eightysix.statistics.MtaAnalyserImpl;
 import com.utree.eightysix.storage.Storage;
 import com.utree.eightysix.storage.oss.OSSImpl;
 import com.utree.eightysix.utils.CacheUtils;
-import com.utree.eightysix.utils.ViewBinding;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -247,5 +247,29 @@ public class U {
    */
   public static void showToast(String string) {
     Toast.makeText(getContext(), string, Toast.LENGTH_SHORT).show();
+  }
+
+  private static Fixture sFixture;
+
+  public static <T> List<T> getFixture(Class<T> clz, int quantity, String template) {
+    return sFixture == null ? null : sFixture.get(clz, quantity, template);
+  }
+
+  public static <T> T getFixture(Class<T> clz, String template) {
+    return sFixture == null ? null : sFixture.get(clz, template);
+  }
+
+
+  static {
+    try {
+      Class fixtureClass = Class.forName("com.utree.eightysix.fixture.FixtureImpl");
+      sFixture = (Fixture) fixtureClass.newInstance();
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    } catch (InstantiationException e) {
+      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    }
   }
 }

@@ -1,27 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	
-	<parent>
-		<groupId>com.utree.eightysix</groupId>
-		<artifactId>EightySix-parent</artifactId>
-		<version>1.0-SNAPSHOT</version>
-	</parent>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<artifactId>EightySix</artifactId>
-	<version>1.0-SNAPSHOT</version>
-	<packaging>apk</packaging>
-	<name>EightySix - Application</name>
+    <parent>
+        <groupId>com.utree.eightysix</groupId>
+        <artifactId>EightySix-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
 
-	<dependencies>
+    <artifactId>EightySix</artifactId>
+    <packaging>apk</packaging>
+    <name>EightySix - Application</name>
 
-		<dependency>
-			<groupId>android</groupId>
-			<artifactId>android</artifactId>
-			<version>${platform.version}</version>
-			<scope>provided</scope>
-		</dependency>
+    <dependencies>
+
+        <dependency>
+            <groupId>android</groupId>
+            <artifactId>android</artifactId>
+            <version>${platform.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
         <dependency>
             <groupId>mta-sdk</groupId>
@@ -84,20 +83,20 @@
         </dependency>
 
         <dependency>
-            <groupId>br.com.six2six</groupId>
-            <artifactId>fixture-factory</artifactId>
+            <groupId>com.utree.eightysix</groupId>
+            <artifactId>EightySix-data</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
-
     </dependencies>
 
-	<build>
-		<finalName>${project.artifactId}-${project.version}</finalName>
-		<plugins>
-			<plugin>
-				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
-				<artifactId>android-maven-plugin</artifactId>
-				<extensions>true</extensions>
-			</plugin>
+    <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                <artifactId>android-maven-plugin</artifactId>
+                <extensions>true</extensions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jarsigner-plugin</artifactId>
@@ -129,12 +128,42 @@
                     </execution>
                 </executions>
             </plugin>
-		</plugins>
-	</build>
+        </plugins>
+    </build>
 
     <profiles>
         <profile>
-            <id>proguard</id>
+            <id>debug</id>
+            <activation>
+                <property>
+                    <name>environment</name>
+                    <value>development</value>
+                </property>
+            </activation>
+
+            <dependencies>
+                <dependency>
+                    <groupId>com.utree.eightysix</groupId>
+                    <artifactId>EightySix-fixture</artifactId>
+                    <version>1.0-SNAPSHOT</version>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                        <artifactId>android-maven-plugin</artifactId>
+                        <configuration>
+                            <release>false</release>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>release</id>
             <activation>
                 <property>
                     <name>environment</name>
@@ -143,6 +172,26 @@
             </activation>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                        <artifactId>android-maven-plugin</artifactId>
+                        <configuration>
+                            <release>true</release>
+                        </configuration>
+                    </plugin>
+
+                    <!-- 这种方式会混淆所有的maven依赖包，但是会自动使用Android的工具生成默认的proguard配置-->
+                    <!--<plugin>-->
+                        <!--<groupId>com.jayway.maven.plugins.android.generation2</groupId>-->
+                        <!--<artifactId>android-maven-plugin</artifactId>-->
+                        <!--<configuration>-->
+                            <!--<proguardSkip>false</proguardSkip>-->
+                            <!--<proguardFile>proguard-gen.cfg</proguardFile>-->
+                            <!--<proguardConfig>proguard.cfg</proguardConfig>-->
+                        <!--</configuration>-->
+                    <!--</plugin>-->
+
+                    <!-- 这种方法只混淆源代码，混淆速度更快，但是需要编写一些额外的规则 -->
                     <plugin>
                         <groupId>com.github.wvengen</groupId>
                         <artifactId>proguard-maven-plugin</artifactId>
@@ -163,60 +212,6 @@
                             <options>
                                 <option>@proguard.cfg</option>
                             </options>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>debug</id>
-            <activation>
-                <property>
-                    <name>environment</name>
-                    <value>development</value>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
-                        <artifactId>android-maven-plugin</artifactId>
-                        <configuration>
-                            <manifestDebuggable>true</manifestDebuggable>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>manifestUpdate</id>
-                                <phase>process-resources</phase>
-                                <goals>
-                                    <goal>manifest-update</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>release</id>
-            <activation>
-                <property>
-                    <name>environment</name>
-                    <value>production</value>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
-                        <artifactId>android-maven-plugin</artifactId>
-                        <inherited>true</inherited>
-                        <configuration>
-                            <sign>
-                                <debug>false</debug>
-                            </sign>
                         </configuration>
                     </plugin>
                 </plugins>

@@ -1,4 +1,4 @@
-package com.utree.eightysix.response;
+package com.utree.eightysix.data;
 
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
