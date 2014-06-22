@@ -39,12 +39,16 @@ import com.utree.eightysix.widget.TopBar;
 public class FeedActivity extends BaseActivity {
 
   private static final String FIRST_RUN_KEY = "feed";
+
   @InjectView (R.id.lv_feed)
   public AdvancedListView mLvFeed;
+
   @InjectView (R.id.lv_side_circles)
   public AdvancedListView mLvSideCircles;
+
   @InjectView (R.id.ib_send)
   public ImageButton mSend;
+
   private FeedAdapter mFeedAdapter;
   private SideCirclesAdapter mSideCirclesAdapter;
   private PopupWindow mPopupMenu;

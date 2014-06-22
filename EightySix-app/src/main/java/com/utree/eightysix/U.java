@@ -263,9 +263,8 @@ public class U {
     try {
       Class fixtureClass = Class.forName("com.utree.eightysix.fixture.FixtureImpl");
       sFixture = (Fixture) fixtureClass.newInstance();
-    } catch (ClassNotFoundException ignored) {
-    } catch (InstantiationException ignored) {
-    } catch (IllegalAccessException ignored) {
+    } catch (Exception e) {
+      if (BuildConfig.DEBUG) e.printStackTrace();
     }
   }
 }
