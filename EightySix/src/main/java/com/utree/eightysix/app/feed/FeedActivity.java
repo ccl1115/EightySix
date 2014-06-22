@@ -188,6 +188,9 @@ public class FeedActivity extends BaseActivity {
 
       @Override
       public void onScrollStateChanged(AbsListView view, int scrollState) {
+        if (view.getFirstVisiblePosition() <= 1) {
+          showTopBar(true);
+        }
         if (scrollState == SCROLL_STATE_IDLE) {
           U.getBus().post(new ListViewScrollStateIdledEvent());
         }

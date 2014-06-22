@@ -64,39 +64,21 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
 
   private ViewGroup mBaseView;
   private TopBar mTopBar;
-  private FrameLayout mProgressBar;
 
-  private FrameLayout mFlLoadingWrapper;
-
-  private Toast mToast;
-
-  private boolean mResumed;
-  private AnimatorSet mShowProgressBarAnimator;
-  private AnimatorSet mHideProgressBarAnimator;
-  private boolean mFillContent;
   private ObjectAnimator mHideTopBarAnimator;
   private ObjectAnimator mShowTopBarAnimator;
+  private AnimatorSet mShowProgressBarAnimator;
+  private AnimatorSet mHideProgressBarAnimator;
 
-  public boolean isFillContent() {
-    return mFillContent;
-  }
-
-  public void setFillContent(boolean fillContent) {
-    if (mFillContent == fillContent) return;
-    mFillContent = fillContent;
-    ((RelativeLayout.LayoutParams) mBaseView.findViewById(R.id.content).getLayoutParams()).topMargin =
-        fillContent ? 0 : getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
-    mBaseView.requestLayout();
-  }
+  private FrameLayout mProgressBar;
+  private FrameLayout mFlLoadingWrapper;
+  private Toast mToast;
+  private boolean mResumed;
+  private boolean mFillContent;
 
   @Override
   public void onClick(View v) {
-    Log.d("EightySix.OnClick", getResources().getResourceName(v.getId()));
-
     switch (v.getId()) {
-      case R.id.tb_iv_action_overflow:
-        openOptionsMenu();
-        break;
       case R.id.tb_rl_left:
         onActionLeftOnClicked();
         break;
@@ -111,6 +93,18 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
   @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();
+  }
+
+  protected boolean isFillContent() {
+    return mFillContent;
+  }
+
+  public void setFillContent(boolean fillContent) {
+    if (mFillContent == fillContent) return;
+    mFillContent = fillContent;
+    ((RelativeLayout.LayoutParams) mBaseView.findViewById(R.id.content).getLayoutParams()).topMargin =
+        fillContent ? 0 : getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
+    mBaseView.requestLayout();
   }
 
   /**
@@ -213,6 +207,8 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
 
     mTopBar.setOnActionLeftClickListener(this);
 
+    initAnimator();
+
     U.getBus().register(this);
   }
 
@@ -306,34 +302,10 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
   }
 
   protected final void hideTopBar(boolean animate) {
+    if (!topBarShown()) return;
     ((RelativeLayout.LayoutParams) findViewById(R.id.content).getLayoutParams()).topMargin = 0;
     mBaseView.requestLayout();
     if (animate) {
-      if (mHideTopBarAnimator == null) {
-        mHideTopBarAnimator = ObjectAnimator.ofFloat(mTopBar, "translationY", 0,
-            -getResources().getDimensionPixelSize(R.dimen.activity_top_bar_height));
-        mHideTopBarAnimator.addListener(new Animator.AnimatorListener() {
-          @Override
-          public void onAnimationStart(Animator animation) {
-
-          }
-
-          @Override
-          public void onAnimationEnd(Animator animation) {
-          }
-
-          @Override
-          public void onAnimationCancel(Animator animation) {
-
-          }
-
-          @Override
-          public void onAnimationRepeat(Animator animation) {
-
-          }
-        });
-        mHideTopBarAnimator.setDuration(150);
-      }
       if (mShowTopBarAnimator != null && mShowTopBarAnimator.isRunning()) {
         mShowTopBarAnimator.cancel();
       }
@@ -344,15 +316,11 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
   }
 
   protected final void showTopBar(boolean animate) {
+    if (topBarShown()) return;
     ((RelativeLayout.LayoutParams) findViewById(R.id.content).getLayoutParams()).topMargin
         = mFillContent ? 0 : getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
     mBaseView.requestLayout();
     if (animate) {
-      if (mShowTopBarAnimator == null) {
-        mShowTopBarAnimator = ObjectAnimator.ofFloat(mTopBar, "translationY",
-            -getResources().getDimensionPixelSize(R.dimen.activity_top_bar_height), 0f);
-        mShowTopBarAnimator.setDuration(150);
-      }
       if (mHideTopBarAnimator != null && mHideTopBarAnimator.isRunning()) {
         mHideTopBarAnimator.cancel();
       }
@@ -495,6 +463,57 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
 
   }
 
+  private void initAnimator() {
+    mHideTopBarAnimator = ObjectAnimator.ofFloat(mTopBar, "translationY", 0,
+        -getResources().getDimensionPixelSize(R.dimen.activity_top_bar_height));
+    mHideTopBarAnimator.setDuration(150);
+    mHideTopBarAnimator.addListener(new Animator.AnimatorListener() {
+      @Override
+      public void onAnimationStart(Animator animation) {
+
+      }
+
+      @Override
+      public void onAnimationEnd(Animator animation) {
+        mTopBar.setVisibility(View.INVISIBLE);
+      }
+
+      @Override
+      public void onAnimationCancel(Animator animation) {
+
+      }
+
+      @Override
+      public void onAnimationRepeat(Animator animation) {
+
+      }
+    });
+
+    mShowTopBarAnimator = ObjectAnimator.ofFloat(mTopBar, "translationY",
+        -getResources().getDimensionPixelSize(R.dimen.activity_top_bar_height), 0f);
+    mShowTopBarAnimator.setDuration(150);
+    mShowTopBarAnimator.addListener(new Animator.AnimatorListener() {
+      @Override
+      public void onAnimationStart(Animator animation) {
+        mTopBar.setVisibility(View.VISIBLE);
+      }
+
+      @Override
+      public void onAnimationEnd(Animator animation) {
+      }
+
+      @Override
+      public void onAnimationCancel(Animator animation) {
+
+      }
+
+      @Override
+      public void onAnimationRepeat(Animator animation) {
+
+      }
+    });
+  }
+
   private boolean isRequesting(String api, RequestParams params) {
     RequestHandle executed = mRequestHandles.get(genKey(api, params));
     return executed != null && !executed.isCancelled() && !executed.isFinished();
@@ -502,5 +521,9 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
 
   private String genKey(String api, RequestParams params) {
     return MD5Util.getMD5String((api + params.toString()).getBytes()).toLowerCase();
+  }
+
+  private boolean topBarShown() {
+    return mTopBar.getVisibility() == View.VISIBLE;
   }
 }
