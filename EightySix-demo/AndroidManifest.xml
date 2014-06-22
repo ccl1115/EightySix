@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.utree.eightysix.demo"
+    android:versionCode="1"
+    android:versionName="1.0-SNAPSHOT" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="16" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+
+        <!-- Demonstrations -->
+        <activity
+                android:name=".DemoActivity"
+                android:label="@string/title_demo_activity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+                android:name=".LocationDemoActivity"
+                android:label="@string/title_location_demo_activity"/>
+
+        <activity
+                android:name=".OSSDemoActivity"
+                android:label="@string/title_oss_demo_activity"/>
+
+        <activity
+                android:name=".ContactsSyncDemoActivity"
+                android:exported="@bool/exported"/>
+
+        <activity
+                android:name=".ImageUtilsDemoActivity"
+                android:exported="@bool/exported"/>
+
+    </application>
+
+</manifest>

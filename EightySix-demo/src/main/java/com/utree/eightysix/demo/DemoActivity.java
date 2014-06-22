@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.utree.eightysix.R;
+import com.utree.eightysix.demo.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.widget.TopBar;
 

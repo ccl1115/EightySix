@@ -100,23 +100,6 @@
                 android:theme="@android:style/Theme.Translucent.NoTitleBar"
                 android:configChanges="orientation|keyboardHidden"/>
 
-        <!-- Demonstrations -->
-        <activity
-                android:name=".demo.DemoActivity"
-                android:label="@string/title_demo_activity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
-
-        <activity
-                android:name=".demo.LocationDemoActivity"
-                android:label="@string/title_location_demo_activity"/>
-
-        <activity
-                android:name=".demo.OSSDemoActivity"
-                android:label="@string/title_oss_demo_activity"/>
 
         <activity
                 android:name=".app.account.RegisterActivity"
@@ -143,9 +126,6 @@
                 android:name=".app.account.GetLockpatternActivity"
                 android:exported="@bool/exported"/>
 
-        <activity
-                android:name=".demo.ContactsSyncDemoActivity"
-                android:exported="@bool/exported"/>
 
         <activity
                 android:name=".app.feed.FeedActivity"
@@ -169,10 +149,6 @@
         <activity
                 android:name=".app.circle.CircleSearchActivity"
                 android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-                android:exported="@bool/exported"/>
-
-        <activity
-                android:name=".demo.ImageUtilsDemoActivity"
                 android:exported="@bool/exported"/>
 
         <activity
