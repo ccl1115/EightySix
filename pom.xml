@@ -10,7 +10,7 @@
     <name>EightySix - Parent</name>
 
     <modules>
-        <module>EightySix</module>
+        <module>EightySix-app</module>
         <module>EightySix-fixture</module>
         <module>EightySix-data</module>
     </modules>

@@ -2,6 +2,8 @@ package com.utree.eightysix.fixture;
 
 import com.utree.eightysix.Fixture;
 import com.utree.eightysix.data.Circle;
+import com.utree.eightysix.data.Post;
+import java.util.List;
 import static org.testng.Assert.*;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -26,5 +28,7 @@ public class FixtureImplTest {
     Circle circle = mFixture.get(Circle.class, "valid");
     assertNotNull(circle);
 
+    List<Post> posts = mFixture.get(Post.class, 20, "valid");
+    assertNotNull(posts);
   }
 }

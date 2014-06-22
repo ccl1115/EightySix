@@ -15,9 +15,9 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.data.User;
 import com.utree.eightysix.request.RegisterRequest;
 import com.utree.eightysix.response.UserResponse;
-import com.utree.eightysix.data.User;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.widget.RoundedButton;
@@ -122,7 +122,7 @@ public class RegisterActivity extends BaseActivity {
 
       @Override
       public Drawable getBackgroundDrawable(int position) {
-        return null;
+        return U.gd(R.drawable.apptheme_primary_btn_dark);
       }
 
       @Override
@@ -142,6 +142,11 @@ public class RegisterActivity extends BaseActivity {
   @Subscribe
   public void onLoginEvent(Account.LoginEvent event) {
     showToast(R.string.register_success, false);
+    finish();
+  }
+
+  @Override
+  protected void onActionLeftOnClicked() {
     finish();
   }
 

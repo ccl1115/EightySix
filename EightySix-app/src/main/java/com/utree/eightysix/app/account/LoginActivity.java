@@ -19,11 +19,9 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.feed.FeedActivity;
-import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.request.LoginRequest;
 import com.utree.eightysix.response.UserResponse;
 import com.utree.eightysix.rest.OnResponse;
-import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.TopBar;
@@ -152,40 +150,13 @@ public class LoginActivity extends BaseActivity {
       }
     });
 
-    if (!Env.isPatternLocked()) {
-      getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
-        @Override
-        public String getTitle(int position) {
-          if (position == 0) {
-            return getString(R.string.register);
-          }
-          return null;
-        }
+    getTopBar().setActionAdapter(new ActionAdapter());
 
-        @Override
-        public Drawable getIcon(int position) {
-          return null;
-        }
+  }
 
-        @Override
-        public Drawable getBackgroundDrawable(int position) {
-          return new RoundRectDrawable(dp2px(2), getResources().getColorStateList(R.color.apptheme_primary_btn_light));
-        }
-
-        @Override
-        public void onClick(View view, int position) {
-          if (position == 0) {
-            startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-          }
-        }
-
-        @Override
-        public int getCount() {
-          return 1;
-        }
-      });
-    }
-
+  @Override
+  protected void onActionLeftOnClicked() {
+    finish();
   }
 
   private void requestLogin() {
@@ -208,5 +179,39 @@ public class LoginActivity extends BaseActivity {
         }, UserResponse.class);
     mBtnLogin.setEnabled(false);
     showProgressBar();
+  }
+
+  private class ActionAdapter implements TopBar.ActionAdapter {
+    @Override
+    public String getTitle(int position) {
+      if (position == 0) {
+        return getString(R.string.register);
+      }
+      return null;
+    }
+
+    @Override
+    public Drawable getIcon(int position) {
+      return null;
+    }
+
+    @Override
+    public Drawable getBackgroundDrawable(int position) {
+      if (position == 0) return U.gd(R.drawable.apptheme_primary_btn_dark);
+
+      return null;
+    }
+
+    @Override
+    public void onClick(View view, int position) {
+      if (position == 0) {
+        startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+      }
+    }
+
+    @Override
+    public int getCount() {
+      return 1;
+    }
   }
 }

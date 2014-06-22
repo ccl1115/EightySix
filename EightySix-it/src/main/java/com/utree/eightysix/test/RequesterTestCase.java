@@ -1,5 +1,6 @@
 package com.utree.eightysix.test;
 
+import android.test.suitebuilder.annotation.LargeTest;
 import android.util.Log;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.utree.eightysix.C;
@@ -10,46 +11,47 @@ import org.apache.http.Header;
 
 /**
  */
+@LargeTest
 public class RequesterTestCase extends BaseInstrumentationTestCase {
 
 
-    public void testLoginRequest() throws Throwable {
-        final CountDownLatch signal = new CountDownLatch(1);
+  public void testLoginRequest() throws Throwable {
+    final CountDownLatch signal = new CountDownLatch(1);
 
-        runTestOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                U.getRESTRequester().request(new LoginRequest("18688716376", "test-test-test"),
-                        new TextHttpResponseHandler() {
-                            @Override
-                            public void onFailure(String responseBody, Throwable error) {
-                                super.onFailure(responseBody, error);
-                                Log.d(C.TAG.RR, responseBody);
-                                signal.countDown();
-                            }
+    runTestOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        U.getRESTRequester().request(new LoginRequest("18688716376", "test-test-test"),
+            new TextHttpResponseHandler() {
+              @Override
+              public void onFailure(String responseBody, Throwable error) {
+                super.onFailure(responseBody, error);
+                Log.d(C.TAG.RR, responseBody);
+                signal.countDown();
+              }
 
-                            @Override
-                            public void onSuccess(int statusCode, Header[] headers, String responseBody) {
-                                super.onSuccess(statusCode, headers, responseBody);
-                                Log.d(C.TAG.RR, responseBody);
-                                signal.countDown();
-                            }
+              @Override
+              public void onSuccess(int statusCode, Header[] headers, String responseBody) {
+                super.onSuccess(statusCode, headers, responseBody);
+                Log.d(C.TAG.RR, responseBody);
+                signal.countDown();
+              }
 
-                            @Override
-                            public void onFinish() {
-                                super.onFinish();
-                                signal.countDown();
-                            }
-                        });
-            }
-        });
+              @Override
+              public void onFinish() {
+                super.onFinish();
+                signal.countDown();
+              }
+            });
+      }
+    });
 
-        signal.await();
-    }
+    signal.await();
+  }
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+  @Override
+  protected void setUp() throws Exception {
+    super.setUp();
 
-    }
+  }
 }

@@ -141,9 +141,9 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     for (int i = 0; i < mCurCount; i++) {
       View view;
       if (TextUtils.isEmpty(mActionAdapter.getTitle(i))) {
-        view = buildActionItemView(i, mActionAdapter.getIcon(i), mActionAdapter.getBackgroundDrawable(i));
+        view = buildActionItemView(mActionAdapter.getIcon(i), mActionAdapter.getBackgroundDrawable(i));
       } else {
-        view = buildActionItemView(i, mActionAdapter.getTitle(i), mActionAdapter.getBackgroundDrawable(i));
+        view = buildActionItemView(mActionAdapter.getTitle(i), mActionAdapter.getBackgroundDrawable(i));
       }
       addView(view);
       mActionViews.add(view);
@@ -296,7 +296,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     }
   }
 
-  private View buildActionItemView(final int position, Drawable drawable, Drawable backgroundDrawable) {
+  private View buildActionItemView(Drawable drawable, Drawable backgroundDrawable) {
     if (drawable == null) return null;
 
     final ImageView imageView = new ImageView(getContext());
@@ -309,11 +309,11 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     return imageView;
   }
 
-  private View buildActionItemView(final int position, String text, Drawable backgroundDrawable) {
+  private View buildActionItemView(String text, Drawable backgroundDrawable) {
     if (TextUtils.isEmpty(text)) return null;
 
     final TextView textView = new TextView(getContext());
-    textView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+    textView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
     textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
     textView.setText(text);
     textView.setGravity(Gravity.CENTER);

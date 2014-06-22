@@ -1,6 +1,7 @@
 package com.utree.eightysix.test.storage;
 
 import android.test.AndroidTestCase;
+import android.test.suitebuilder.annotation.LargeTest;
 import com.utree.eightysix.storage.Storage;
 import com.utree.eightysix.storage.oss.OSSImpl;
 
@@ -9,6 +10,7 @@ import com.utree.eightysix.storage.oss.OSSImpl;
  *
  * @see com.utree.eightysix.storage.oss.OSSImpl
  */
+@LargeTest
 public class OSSImplTestCase extends AndroidTestCase {
 
     private static final String ACCESS_KEY_ID = "test access key id";
