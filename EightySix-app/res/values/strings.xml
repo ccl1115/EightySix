@@ -146,4 +146,5 @@
     <string name="comment_action">评论操作</string>
     <string name="post_action">帖子操作</string>
     <string name="circle_not_found">没有找到工友圈</string>
+    <string name="success_created">创建成功</string>
 </resources>

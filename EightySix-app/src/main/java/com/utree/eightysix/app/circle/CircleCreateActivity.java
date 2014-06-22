@@ -129,6 +129,10 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
         new OnResponse<Response>() {
           @Override
           public void onResponse(Response response) {
+            if (response.code == 0) {
+              showToast(getString(R.string.success_created), false);
+              finish();
+            }
           }
         }, Response.class);
   }

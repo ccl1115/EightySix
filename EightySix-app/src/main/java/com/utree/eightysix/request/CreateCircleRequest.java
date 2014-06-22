@@ -2,6 +2,7 @@ package com.utree.eightysix.request;
 
 import com.utree.eightysix.C;
 import com.utree.eightysix.rest.Api;
+import com.utree.eightysix.rest.Method;
 import com.utree.eightysix.rest.Param;
 import com.utree.eightysix.rest.Token;
 
@@ -10,6 +11,7 @@ import com.utree.eightysix.rest.Token;
  */
 @Token
 @Api(C.API_FACTORY_ADD)
+@Method(Method.METHOD.POST)
 public class CreateCircleRequest {
 
   public static final int TYPE_FACTORY = 1;
