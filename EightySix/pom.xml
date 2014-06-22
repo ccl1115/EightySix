@@ -9,9 +9,9 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>EightySix</artifactId>
+    <artifactId>EightySix-app</artifactId>
     <packaging>apk</packaging>
-    <name>EightySix - Application</name>
+    <name>EightySix-app - Application</name>
 
     <dependencies>
 
