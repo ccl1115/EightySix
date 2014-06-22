@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -18,6 +19,7 @@ import butterknife.OnItemClick;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
+import com.nineoldandroids.animation.ValueAnimator;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -296,7 +298,7 @@ public class FeedActivity extends BaseActivity {
         if (position == 0) {
           showToast("TODO goto message center");
         } else if (position == 1) {
-          showToast("TODO refresh");
+          refresh();
         }
       }
 
@@ -365,6 +367,18 @@ public class FeedActivity extends BaseActivity {
       hideSide();
     } else {
       super.onBackPressed();
+    }
+  }
+
+  private void refresh() {
+    View refreshIcon = getTopBar().getActionView(1);
+    if (refreshIcon != null) {
+      ObjectAnimator rotate = ObjectAnimator.ofFloat(refreshIcon, "rotation", 0, 360);
+      rotate.setInterpolator(new DecelerateInterpolator());
+      rotate.setDuration(1000);
+      rotate.setRepeatCount(Integer.MAX_VALUE);
+      rotate.setRepeatMode(ValueAnimator.INFINITE);
+      rotate.start();
     }
   }
 

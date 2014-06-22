@@ -238,6 +238,8 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
 
     U.getBus().unregister(this);
 
+    hideProgressBar();
+
     super.onDestroy();
   }
 

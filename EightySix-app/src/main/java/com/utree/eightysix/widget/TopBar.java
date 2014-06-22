@@ -208,6 +208,10 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     }
   }
 
+  public View getActionView(int position) {
+    return mActionViews.get(position);
+  }
+
   @SuppressWarnings ("SuspiciousNameCombination")
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
