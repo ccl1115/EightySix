@@ -13,6 +13,7 @@
         <module>EightySix-app</module>
         <module>EightySix-fixture</module>
         <module>EightySix-data</module>
+        <module>EightySix-base</module>
     </modules>
 
     <properties>
