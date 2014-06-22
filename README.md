@@ -32,13 +32,25 @@
 
 这是EightySix的根项目，它作为实际的EightySix项目和集成测试项目的容器。
 
-#### EightySix
+#### EightySix-app
 
-实际的Android项目
+EightySix的应用层
 
 #### EightySix - it
 
 集成测试项目，基于Android的测试框架的测试项目
+
+#### EightySix-base
+
+基础服务
+
+#### EightySix-fixture
+
+提供测试数据，因为只在Debug版本中使用，所以Release中没有该依赖
+
+#### EightySix-data
+
+数据定义，用于将json解析为pojo对象
 
 ## Dependencies
 
@@ -163,6 +175,10 @@ Otto 是一个开源的消息系统，它采用Pub/Sub模型，支持多个Bus�
 
 
 ## Changelog
+
+**2014/06/21**
+
+更新项目结构变更说明
 
 **2014/06/06**
 
