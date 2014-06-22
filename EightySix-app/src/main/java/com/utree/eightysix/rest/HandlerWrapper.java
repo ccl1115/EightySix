@@ -98,7 +98,7 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
     private void handleObjectError(T response) {
         if (BuildConfig.DEBUG) {
             if (response.code != 0) {
-                Toast.makeText(U.getContext(), String.format("%s(%d)", response.message, response.code), Toast.LENGTH_SHORT).show();
+                Toast.makeText(U.getContext(), String.format("%s(%h)", response.message, response.code), Toast.LENGTH_SHORT).show();
             }
         }
     }

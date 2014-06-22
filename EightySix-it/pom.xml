@@ -76,7 +76,6 @@
                             <!--<package>com.utree.eightysix.test</package>-->
 						<!--</packages>-->
 					</test>
-                    <undeployBeforeDeploy>true</undeployBeforeDeploy>
 				</configuration>
 				<extensions>true</extensions>
 			</plugin>

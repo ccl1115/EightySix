@@ -20,10 +20,12 @@ public class C {
   public static final String API_FACTORY_MY = "/factory/my.do";
   public static final String API_FACTORY_FIND = "/factory/find.do";
   public static final String API_FACTORY_SEARCH = "/factory/search.do";
+  public static final String API_FACTORY_ADD = "/factory/add.do";
 
   public static final String API_POST = "/feed/addPost.do";
 
   public static final String API_VALICODE = "/login/valiCode.do";
+
 
   public static String IMEI = "";
 

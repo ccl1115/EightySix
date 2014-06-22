@@ -1,7 +1,6 @@
 package com.utree.eightysix.app.circle;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -15,6 +14,9 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.location.Location;
+import com.utree.eightysix.request.CreateCircleRequest;
+import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.RoundedButton;
 
 /**
@@ -80,14 +82,13 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
 
   @OnClick (R.id.rb_create)
   public void onRbCreateClicked() {
-    showToast("TODO create circle");
+    requestCreateFactory();
   }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    U.getLocation().requestLocation();
   }
 
   @Override
@@ -121,5 +122,14 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
       mTvLocation.setText(getString(R.string.locating_failed));
     }
     hideProgressBar();
+  }
+
+  private void requestCreateFactory() {
+    request(new CreateCircleRequest(mEtCircleName.getText().toString(), CreateCircleRequest.TYPE_FACTORY, mEtCircleAbbreviation.getText().toString()),
+        new OnResponse<Response>() {
+          @Override
+          public void onResponse(Response response) {
+          }
+        }, Response.class);
   }
 }
