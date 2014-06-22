@@ -50,6 +50,7 @@ public class U {
   private static Gson sGson = new GsonBuilder().create();
 
   private static Properties sConfiguration;
+  private static Fixture sFixture;
 
   public static Gson getGson() {
     return sGson;
@@ -121,7 +122,6 @@ public class U {
     }
     return sPushHelper;
   }
-
 
   public static DiskLruCache getApiCache() {
     return getCacheUtils().getCache(U.getConfig("cache.api.dir"),
@@ -229,7 +229,8 @@ public class U {
 
   /**
    * get formatted string
-   * @param id the string id
+   *
+   * @param id      the string id
    * @param objects the populated values
    * @return the formatted string
    */
@@ -243,13 +244,12 @@ public class U {
 
   /**
    * Easily show a un-managed toast
+   *
    * @param string the string to show
    */
   public static void showToast(String string) {
     Toast.makeText(getContext(), string, Toast.LENGTH_SHORT).show();
   }
-
-  private static Fixture sFixture;
 
   public static <T> List<T> getFixture(Class<T> clz, int quantity, String template) {
     return sFixture == null ? null : sFixture.get(clz, quantity, template);
@@ -259,17 +259,13 @@ public class U {
     return sFixture == null ? null : sFixture.get(clz, template);
   }
 
-
   static {
     try {
       Class fixtureClass = Class.forName("com.utree.eightysix.fixture.FixtureImpl");
       sFixture = (Fixture) fixtureClass.newInstance();
-    } catch (ClassNotFoundException e) {
-      e.printStackTrace();
-    } catch (InstantiationException e) {
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
+    } catch (ClassNotFoundException ignored) {
+    } catch (InstantiationException ignored) {
+    } catch (IllegalAccessException ignored) {
     }
   }
 }

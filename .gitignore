@@ -5,3 +5,4 @@ EightySix-parent.iml
 *.iml
 classes
 gen-external-apklibs
+*.ec
