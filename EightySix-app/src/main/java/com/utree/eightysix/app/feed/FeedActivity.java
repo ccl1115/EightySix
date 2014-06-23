@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.ImageButton;
@@ -305,6 +306,11 @@ public class FeedActivity extends BaseActivity {
       @Override
       public int getCount() {
         return 2;
+      }
+
+      @Override
+      public ViewGroup.LayoutParams getLayoutParams(int position) {
+        return new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
       }
     });
 

@@ -20,6 +20,8 @@ import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
+import com.utree.eightysix.utils.ShareUtils;
+import com.utree.eightysix.utils.Utils;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RoundedButton;
@@ -70,7 +72,7 @@ public class PostActivity extends BaseActivity {
 
     final Comment comment = (Comment) mPostCommentsAdapter.getItem(position);
     new AlertDialog.Builder(this).setTitle(getString(R.string.comment_action))
-        .setItems(new String[]{comment.praised == 1 ? getString(R.string.unlike) : getString(R.string.like), getString(R.string.report)},
+        .setItems(new String[]{comment.praised == 1 ? getString(R.string.unlike) : getString(R.string.like), getString(R.string.report), getString(R.string.share)},
             new DialogInterface.OnClickListener() {
               @Override
               public void onClick(DialogInterface dialog, int which) {
@@ -86,6 +88,9 @@ public class PostActivity extends BaseActivity {
                     break;
                   case 1:
                     showToast("TODO report");
+                    break;
+                  case 2:
+                    if (mPost != null) ShareUtils.sharePostToQQ(PostActivity.this, mPost);
                     break;
                 }
               }

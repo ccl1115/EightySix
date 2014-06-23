@@ -140,10 +140,12 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     for (int i = 0; i < mCurCount; i++) {
       View view;
+      LayoutParams layoutParams = mActionAdapter.getLayoutParams(i);
+      if (layoutParams == null) layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
       if (TextUtils.isEmpty(mActionAdapter.getTitle(i))) {
-        view = buildActionItemView(mActionAdapter.getIcon(i), mActionAdapter.getBackgroundDrawable(i));
+        view = buildActionItemView(mActionAdapter.getIcon(i), mActionAdapter.getBackgroundDrawable(i), layoutParams);
       } else {
-        view = buildActionItemView(mActionAdapter.getTitle(i), mActionAdapter.getBackgroundDrawable(i));
+        view = buildActionItemView(mActionAdapter.getTitle(i), mActionAdapter.getBackgroundDrawable(i), layoutParams);
       }
       addView(view);
       mActionViews.add(view);
@@ -300,24 +302,24 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     }
   }
 
-  private View buildActionItemView(Drawable drawable, Drawable backgroundDrawable) {
+  private View buildActionItemView(Drawable drawable, Drawable backgroundDrawable, LayoutParams layoutParams) {
     if (drawable == null) return null;
 
     final ImageView imageView = new ImageView(getContext());
     imageView.setImageDrawable(drawable);
     imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-    imageView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+    imageView.setLayoutParams(layoutParams);
     imageView.setBackgroundDrawable(backgroundDrawable);
     imageView.setOnClickListener(this);
 
     return imageView;
   }
 
-  private View buildActionItemView(String text, Drawable backgroundDrawable) {
+  private View buildActionItemView(String text, Drawable backgroundDrawable, LayoutParams layoutParams) {
     if (TextUtils.isEmpty(text)) return null;
 
     final TextView textView = new TextView(getContext());
-    textView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+    textView.setLayoutParams(layoutParams);
     textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
     textView.setText(text);
     textView.setGravity(Gravity.CENTER);
@@ -340,6 +342,8 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     void onClick(View view, int position);
 
     int getCount();
+
+    LayoutParams getLayoutParams(int position);
   }
 
   @Override

@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -212,6 +213,11 @@ public class LoginActivity extends BaseActivity {
     @Override
     public int getCount() {
       return 1;
+    }
+
+    @Override
+    public ViewGroup.LayoutParams getLayoutParams(int position) {
+      return new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     }
   }
 }

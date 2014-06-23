@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import butterknife.InjectView;
@@ -69,6 +70,11 @@ public class MyCirclesActivity extends BaseActivity {
       @Override
       public int getCount() {
         return 1;
+      }
+
+      @Override
+      public ViewGroup.LayoutParams getLayoutParams(int position) {
+        return new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
       }
     });
 
