@@ -35,7 +35,6 @@ public class ItemView extends View implements View.OnClickListener {
     }
 
     mSelectDrawableList = (StateListDrawable) getResources().getDrawable(R.drawable.apptheme_transparent_bg);
-
     mSelectDrawable = mSelectDrawableList.getCurrent();
 
     setOnClickListener(this);

@@ -53,6 +53,7 @@ public class PublishLayout extends ViewGroup {
       mGpColor.setVisibility(VISIBLE);
       mLlBottom.setVisibility(GONE);
     }
+    mPanelHidden = false;
     requestLayout();
     invalidate();
   }
@@ -71,6 +72,7 @@ public class PublishLayout extends ViewGroup {
       mLlBottom.setVisibility(VISIBLE);
       mGpColor.setVisibility(GONE);
     }
+    mPanelHidden = false;
     requestLayout();
     invalidate();
   }
@@ -100,12 +102,12 @@ public class PublishLayout extends ViewGroup {
 
     int heightLeft = heightSize;
 
-    if (mLastPanel == PANEL_INFO) {
+    if (mLastPanel == PANEL_INFO && !mPanelHidden) {
       measureChild(mLlBottom, widthMeasureSpec, heightSize + MeasureSpec.AT_MOST);
       heightLeft -= mLlBottom.getMeasuredHeight();
     }
 
-    if (mLastPanel == PANEL_COLOR) {
+    if (mLastPanel == PANEL_COLOR && !mPanelHidden) {
       measureChild(mGpColor, widthMeasureSpec, heightSize + MeasureSpec.AT_MOST);
       heightLeft -= mGpColor.getMeasuredHeight();
     }

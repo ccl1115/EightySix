@@ -41,6 +41,7 @@ import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.widget.PostEditText;
 import com.utree.eightysix.widget.TopBar;
+import com.utree.eightysix.widget.panel.Panel;
 import java.io.File;
 import java.util.Random;
 
@@ -102,7 +103,12 @@ public class PublishActivity extends BaseActivity {
 
   @OnClick (R.id.iv_shuffle)
   public void onIvShuffleClicked() {
-    mPublishLayout.switchPanel();
+    if (mIsOpened) {
+      hideSoftKeyboard(mPostEditText);
+      mPublishLayout.switchToPanel(PublishLayout.PANEL_COLOR);
+    } else {
+      mPublishLayout.switchPanel();
+    }
   }
 
   @OnClick (R.id.iv_camera)
