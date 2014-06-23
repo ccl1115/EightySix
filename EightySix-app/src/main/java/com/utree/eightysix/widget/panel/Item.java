@@ -18,6 +18,10 @@ public class Item {
     return mParent;
   }
 
+  public List<TypedValue> getValues() {
+    return mValues;
+  }
+
   private List<TypedValue> mValues = new ArrayList<TypedValue>();
 
   public Item(Page parent, XmlPullParser parser) throws XmlPullParserException, IOException {
@@ -40,7 +44,7 @@ public class Item {
     if (text.startsWith("#")) {
       TypedValue tv = new TypedValue();
       tv.type = TypedValue.TYPE_INT_COLOR_ARGB8;
-      tv.data = Integer.parseInt(text.substring(1));
+      tv.data = (int) Long.parseLong(text.substring(1), 16);
       parser.next();
       parser.next();
       return tv;

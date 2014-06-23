@@ -3,6 +3,7 @@ package com.utree.eightysix.widget.panel;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
+import de.akquinet.android.androlog.Log;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,14 +21,16 @@ public class PageView extends ViewGroup {
     mPage = page;
 
     for (Item item : page.getItems()) {
-      mChildren.add(new ItemView(context, item));
+      ItemView child = new ItemView(context, item);
+      mChildren.add(child);
+      addView(child, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
     }
   }
 
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    final int widthSize = widthMeasureSpec & ~(0x3 << 30);
-    final int heightSize = heightMeasureSpec & ~(0x3 << 30);
+    final int widthSize = (widthMeasureSpec & ~(0x3 << 30)) - mPage.getSpaceHorizontal() * (mPage.getColumn() + 1);
+    final int heightSize = (heightMeasureSpec & ~(0x3 << 30)) - mPage.getSpaceVertical() * (mPage.getRow() + 1);
 
 
     int itemWidth;
@@ -48,7 +51,17 @@ public class PageView extends ViewGroup {
       measureChild(child, itemWidth + MeasureSpec.EXACTLY, itemHeight + MeasureSpec.EXACTLY);
     }
 
-    setMeasuredDimension(widthSize, heightSize);
+    int mw = 0;
+    switch (widthMeasureSpec & (0x3 << 30)) {
+      case MeasureSpec.AT_MOST:
+        mw = itemWidth * mPage.getColumn() + (mPage.getColumn() + 1) * mPage.getSpaceHorizontal();
+        break;
+      case MeasureSpec.EXACTLY:
+        mw = widthMeasureSpec & ~(0x3 << 30);
+        break;
+    }
+    setMeasuredDimension(mw,
+        itemHeight * mPage.getRow() + (mPage.getRow() + 1) * mPage.getSpaceVertical());
   }
 
   @Override
@@ -70,7 +83,6 @@ public class PageView extends ViewGroup {
           left + ((cw + iw) >> 1), top + ((ch + ih) >> 1));
 
       left += cw;
-      top += ch;
     }
   }
 }

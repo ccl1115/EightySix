@@ -1,5 +1,7 @@
 package com.utree.eightysix.widget.panel;
 
+import com.utree.eightysix.U;
+import static com.utree.eightysix.widget.panel.Panel.INHERITED;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +15,13 @@ public class Page {
 
   private Panel mParent;
 
-  private int mRow = Panel.INHERITED;
-  private int mColumn = Panel.INHERITED;
-  private int mItemWidth = Panel.INHERITED;
-  private int mItemHeight = Panel.INHERITED;
+  private int mRow = INHERITED;
+  private int mColumn = INHERITED;
+  private int mItemWidth = INHERITED;
+  private int mItemHeight = INHERITED;
+  private int mSpaceVertical = INHERITED;
+  private int mSpaceHorizontal = INHERITED;
+
   private List<Item> mItems = new ArrayList<Item>();
 
   public Page(Panel parent, XmlPullParser parser) throws XmlPullParserException, IOException {
@@ -33,9 +38,13 @@ public class Page {
             } else if ("column".equals(name)) {
               mColumn = Integer.parseInt(value);
             } else if ("itemWidth".equals(name)) {
-              mItemWidth = Integer.parseInt(value);
+              mItemWidth = U.dp2px(Integer.parseInt(value));
             } else if ("itemHeight".equals(name)) {
-              mItemHeight = Integer.parseInt(value);
+              mItemHeight = U.dp2px(Integer.parseInt(value));
+            } else if ("spaceHorizontal".equals(name)) {
+              mSpaceHorizontal = U.dp2px(Integer.parseInt(value));
+            } else if ("spaceVertical".equals(name)) {
+              mSpaceVertical = U.dp2px(Integer.parseInt(value));
             }
           }
         } else if ("item".equals(parser.getName())) {
@@ -46,20 +55,28 @@ public class Page {
     }
   }
 
+  public int getSpaceHorizontal() {
+    return mSpaceHorizontal == INHERITED ? mParent.getSpaceHorizontal() : mSpaceHorizontal;
+  }
+
+  public int getSpaceVertical() {
+    return mSpaceVertical == INHERITED ? mParent.getSpaceVertical() : mSpaceVertical;
+  }
+
   public int getRow() {
-    return mRow == Panel.INHERITED ? mParent.getPageRow() : mRow;
+    return mRow == INHERITED ? mParent.getPageRow() : mRow;
   }
 
   public int getColumn() {
-    return mColumn == Panel.INHERITED ? mParent.getPageColumn() : mColumn;
+    return mColumn == INHERITED ? mParent.getPageColumn() : mColumn;
   }
 
   public int getItemWidth() {
-    return mItemWidth == Panel.INHERITED ? mParent.getItemWidth() : mItemWidth;
+    return mItemWidth == INHERITED ? mParent.getItemWidth() : mItemWidth;
   }
 
   public int getItemHeight() {
-    return mItemHeight == Panel.INHERITED ? mParent.getItemHeight() : mItemHeight;
+    return mItemHeight == INHERITED ? mParent.getItemHeight() : mItemHeight;
   }
 
   public List<Item> getItems() {

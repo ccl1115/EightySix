@@ -1,5 +1,6 @@
 package com.utree.eightysix.widget.panel;
 
+import com.utree.eightysix.U;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,8 @@ public class Panel {
   private int mPageColumn;
   private int mItemWidth;
   private int mItemHeight;
-
+  private int mSpaceHorizontal;
+  private int mSpaceVertical;
 
   public Panel(XmlPullParser parser) throws IOException, XmlPullParserException {
     int eventType;
@@ -33,9 +35,13 @@ public class Panel {
             } else if ("column".equals(name)) {
               mPageColumn = Integer.parseInt(value);
             } else if ("itemWidth".equals(name)) {
-              mItemWidth = Integer.parseInt(value);
+              mItemWidth = U.dp2px(Integer.parseInt(value));
             } else if ("itemHeight".equals(name)) {
-              mItemHeight = Integer.parseInt(value);
+              mItemHeight = U.dp2px(Integer.parseInt(value));
+            } else if ("spaceHorizontal".equals(name)) {
+              mSpaceHorizontal = U.dp2px(Integer.parseInt(value));
+            } else if ("spaceVertical".equals(name)) {
+              mSpaceVertical = U.dp2px(Integer.parseInt(value));
             }
           }
         } else if ("page".equals(parser.getName())) {
@@ -45,6 +51,14 @@ public class Panel {
       }
       parser.next();
     }
+  }
+
+  public int getSpaceHorizontal() {
+    return mSpaceHorizontal;
+  }
+
+  public int getSpaceVertical() {
+    return mSpaceVertical;
   }
 
   public List<Page> getPages() {

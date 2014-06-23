@@ -17,7 +17,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
  */
 public class GridPanel extends ViewPager {
 
-  private Panel mPanelDefinition;
+  private Panel mPanel;
 
   public GridPanel(Context context) {
     this(context, null);
@@ -29,7 +29,7 @@ public class GridPanel extends ViewPager {
     try {
       XmlPullParser parser = XmlPullParserFactory.newInstance().newPullParser();
       parser.setInput(getResources().openRawResource(R.raw.panel), "UTF-8");
-      mPanelDefinition = new Panel(parser);
+      mPanel = new Panel(parser);
     } catch (IOException e) {
       e.printStackTrace();
     } catch (XmlPullParserException e) {
@@ -43,7 +43,7 @@ public class GridPanel extends ViewPager {
 
     @Override
     public int getCount() {
-      return mPanelDefinition.getPages().size();
+      return mPanel.getPages().size();
     }
 
     @Override
@@ -53,7 +53,8 @@ public class GridPanel extends ViewPager {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-      PageView pageView = new PageView(getContext(), mPanelDefinition.getPages().get(position));
+      PageView pageView = new PageView(getContext(), mPanel.getPages().get(position));
+      pageView.setLayoutParams(new LayoutParams());
       container.addView(pageView);
       return pageView;
     }
@@ -62,5 +63,11 @@ public class GridPanel extends ViewPager {
     public void destroyItem(ViewGroup container, int position, Object object) {
       container.removeView((View) object);
     }
+  }
+
+  @Override
+  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    super.onMeasure(widthMeasureSpec,
+        mPanel.getItemHeight() * mPanel.getPageRow() + (mPanel.getPageRow() + 1) * mPanel.getSpaceVertical() + MeasureSpec.AT_MOST);
   }
 }

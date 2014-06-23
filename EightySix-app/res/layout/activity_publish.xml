@@ -113,7 +113,7 @@
     </LinearLayout>
 
     <com.utree.eightysix.widget.panel.GridPanel
-            android:id="@+id/publish_panel"
+            android:id="@+id/gp_color"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"/>

@@ -93,6 +93,7 @@ public class PublishActivity extends BaseActivity {
   private String mImageUploadUrl;
 
   private int mBgColor;
+  private PublishLayout mPublishLayout;
 
   @OnClick (R.id.ll_bottom)
   public void onLlBottomClicked() {
@@ -101,16 +102,7 @@ public class PublishActivity extends BaseActivity {
 
   @OnClick (R.id.iv_shuffle)
   public void onIvShuffleClicked() {
-    if (Env.firstRun(FIRST_RUN_KEY) && !mToastShown) {
-      showToast(getString(R.string.shuffle_bg_color));
-      mToastShown = true;
-    }
-    int color = new Random().nextInt() | (0xFF << 24);
-    mIvPostBg.setImageDrawable(new ColorDrawable(color));
-    mPostEditText.setTextColor(monochromizing(color));
-    mTvPostTip.setTextColor(monochromizing(color));
-    mUseColor = true;
-    mBgColor = color;
+    mPublishLayout.switchPanel();
   }
 
   @OnClick (R.id.iv_camera)
@@ -122,7 +114,8 @@ public class PublishActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    setContentView(new PublishLayout(this));
+    mPublishLayout = new PublishLayout(this);
+    setContentView(mPublishLayout);
 
     onIvShuffleClicked();
 
@@ -135,11 +128,11 @@ public class PublishActivity extends BaseActivity {
         if (heightDiff > 100) { // 99% of the time the height diff will be due to a keyboard.
 
           if (!mIsOpened) {
-            mLlBottom.setVisibility(View.GONE);
+            mPublishLayout.hidePanel();
           }
           mIsOpened = true;
         } else if (mIsOpened) {
-          mLlBottom.setVisibility(View.VISIBLE);
+          mPublishLayout.showPanel();
           mIsOpened = false;
         }
       }
