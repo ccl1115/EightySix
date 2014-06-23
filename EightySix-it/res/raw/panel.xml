@@ -1,0 +1,69 @@
+<panel row="4" column="5" itemWidth="40" itemHeight="30">
+    <page>
+        <item>
+            <color>#ffffaeaa</color>
+        </item>
+        <item>
+            <color>#ffd4706a</color>
+        </item>
+        <item>
+            <color>#ffaa3e39</color>
+        </item>
+        <item>
+            <color>#ff801b15</color>
+        </item>
+        <item>
+            <color>#ff550400</color>
+        </item>
+
+        <item>
+            <color>#ffffd7aa</color>
+        </item>
+        <item>
+            <color>#ffd4a26a</color>
+        </item>
+        <item>
+            <color>#ffaa7539</color>
+        </item>
+        <item>
+            <color>#ff804d15</color>
+        </item>
+        <item>
+            <color>#ff552d00</color>
+        </item>
+
+        <item>
+            <color>#ff6e91a1</color>
+        </item>
+        <item>
+            <color>#ff467386</color>
+        </item>
+        <item>
+            <color>#ff27576b</color>
+        </item>
+        <item>
+            <color>#ff103d50</color>
+        </item>
+        <item>
+            <color>#ff022636</color>
+        </item>
+
+        <item>
+            <color>#ff84c68c</color>
+        </item>
+        <item>
+            <color>#ff52a55d</color>
+        </item>
+        <item>
+            <color>#ff2c8437</color>
+        </item>
+        <item>
+            <color>#ff10631b</color>
+        </item>
+        <item>
+            <color>#ff004208</color>
+        </item>
+
+    </page>
+
+</panel>

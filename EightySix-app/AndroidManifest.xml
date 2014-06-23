@@ -159,7 +159,12 @@
         <activity
                 android:name=".app.feed.PostActivity"
                 android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-                android:windowSoftInputMode="adjustResize|stateHidden"
+                android:exported="@bool/exported"/>
+
+        <activity
+                android:name=".app.publish.FeedbackActivity"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+                android:windowSoftInputMode="adjustResize"
                 android:exported="@bool/exported"/>
 
         <service

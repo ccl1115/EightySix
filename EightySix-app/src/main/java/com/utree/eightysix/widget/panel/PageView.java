@@ -1,0 +1,76 @@
+package com.utree.eightysix.widget.panel;
+
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.ViewGroup;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @author simon
+ */
+public class PageView extends ViewGroup {
+
+  private Page mPage;
+
+  private List<ItemView> mChildren = new ArrayList<ItemView>();
+
+  public PageView(Context context, Page page) {
+    super(context);
+    mPage = page;
+
+    for (Item item : page.getItems()) {
+      mChildren.add(new ItemView(context, item));
+    }
+  }
+
+  @Override
+  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    final int widthSize = widthMeasureSpec & ~(0x3 << 30);
+    final int heightSize = heightMeasureSpec & ~(0x3 << 30);
+
+
+    int itemWidth;
+    if (widthSize >= mPage.getItemWidth() * mPage.getColumn()) {
+      itemWidth = mPage.getItemWidth();
+    } else {
+      itemWidth = (int) (widthSize / (float) mPage.getColumn());
+    }
+
+    int itemHeight;
+    if (heightSize >= mPage.getItemHeight() * mPage.getRow()) {
+      itemHeight = mPage.getItemHeight();
+    } else {
+      itemHeight = (int) (heightSize / (float) mPage.getRow());
+    }
+
+    for (ItemView child : mChildren) {
+      measureChild(child, itemWidth + MeasureSpec.EXACTLY, itemHeight + MeasureSpec.EXACTLY);
+    }
+
+    setMeasuredDimension(widthSize, heightSize);
+  }
+
+  @Override
+  protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    int left = 0, top = 0;
+    final int cw = (int) ((r - l) / (float) mPage.getColumn());
+    final int ch = (int) ((b - t) / (float) mPage.getRow());
+
+    for (int i = 0; i < mChildren.size(); i++) {
+      if (i % mPage.getColumn() == 0) {
+        left = 0;
+        top = (i / mPage.getRow()) * ch;
+      }
+
+      ItemView itemView = mChildren.get(i);
+      final int iw = itemView.getMeasuredWidth();
+      final int ih = itemView.getMeasuredHeight();
+      itemView.layout(left + ((cw - iw) >> 1), top + ((ch - ih) >> 1),
+          left + ((cw + iw) >> 1), top + ((ch + ih) >> 1));
+
+      left += cw;
+      top += ch;
+    }
+  }
+}

@@ -1,6 +1,7 @@
 package com.utree.eightysix.app;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -463,6 +465,16 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
 
   protected void onActionLeftOnClicked() {
 
+  }
+
+  protected void hideSoftKeyboard(View view) {
+    ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
+        .hideSoftInputFromWindow(view.getWindowToken(), 0);
+  }
+
+  protected void showSoftKeyboard(View view) {
+    ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
+        .showSoftInput(view, InputMethodManager.SHOW_FORCED);
   }
 
   private void initAnimator() {

@@ -23,6 +23,18 @@
         </dependency>
 
         <dependency>
+            <groupId>android.support</groupId>
+            <artifactId>compatibility-v4</artifactId>
+            <type>jar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>mta-sdk</groupId>
             <artifactId>mta-sdk</artifactId>
         </dependency>
@@ -157,6 +169,23 @@
         </profile>
 
         <profile>
+            <id>test</id>
+
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <skip>false</skip>
+                        </configuration>
+
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
             <id>release</id>
 
             <build>
@@ -172,13 +201,13 @@
 
                     <!-- 这种方式会混淆所有的maven依赖包，但是会自动使用Android的工具生成默认的proguard配置-->
                     <!--<plugin>-->
-                        <!--<groupId>com.jayway.maven.plugins.android.generation2</groupId>-->
-                        <!--<artifactId>android-maven-plugin</artifactId>-->
-                        <!--<configuration>-->
-                            <!--<proguardSkip>false</proguardSkip>-->
-                            <!--<proguardFile>proguard-gen.cfg</proguardFile>-->
-                            <!--<proguardConfig>proguard.cfg</proguardConfig>-->
-                        <!--</configuration>-->
+                    <!--<groupId>com.jayway.maven.plugins.android.generation2</groupId>-->
+                    <!--<artifactId>android-maven-plugin</artifactId>-->
+                    <!--<configuration>-->
+                    <!--<proguardSkip>false</proguardSkip>-->
+                    <!--<proguardFile>proguard-gen.cfg</proguardFile>-->
+                    <!--<proguardConfig>proguard.cfg</proguardConfig>-->
+                    <!--</configuration>-->
                     <!--</plugin>-->
 
                     <!-- 这种方法只混淆源代码，混淆速度更快，但是需要编写一些额外的规则 -->
