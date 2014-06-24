@@ -142,6 +142,7 @@ public class FixtureImpl implements Fixture {
         add("praise", random(Integer.class, range(0, 10000)));
         add("source", random(FIXTURE_CIRCLES));
         add("praised", random(0, 1));
+        add("read", random(0, 1));
       }
     });
 

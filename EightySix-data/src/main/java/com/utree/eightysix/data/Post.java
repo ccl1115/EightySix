@@ -31,7 +31,7 @@ public class Post implements Serializable {
   public String source;
 
   @SerializedName ("readed")
-  public boolean read;
+  public int read;
 
   @SerializedName ("viewComment")
   public Comment comment;

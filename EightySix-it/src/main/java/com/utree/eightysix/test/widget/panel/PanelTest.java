@@ -2,7 +2,7 @@ package com.utree.eightysix.test.widget.panel;
 
 import android.test.suitebuilder.annotation.SmallTest;
 import com.utree.eightysix.test.BaseAndroidTestCase;
-import com.utree.eightysix.test.R;
+import com.utree.eightysix.R;
 import com.utree.eightysix.widget.panel.Panel;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;

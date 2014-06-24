@@ -2,23 +2,30 @@ package com.utree.eightysix.app.msg;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.widget.AsyncImageView;
-import java.awt.TexturePaint;
 
 /**
  * @author simon
  */
 public class MsgItemView extends LinearLayout {
+
+  @InjectView (R.id.fl_left)
+  public FrameLayout mFlLeft;
+
+  @InjectView (R.id.fl_right)
+  public FrameLayout mFlRight;
 
   @InjectView (R.id.tv_content_left)
   public TextView mTvContentLeft;
@@ -32,11 +39,23 @@ public class MsgItemView extends LinearLayout {
   @InjectView (R.id.aiv_bg_right)
   public AsyncImageView mAivBgRight;
 
-  @InjectView (R.id.iv_more_left)
-  public ImageView mIvMoreLeft;
+  @InjectView (R.id.v_mask_left)
+  public View mVMaskLeft;
 
-  @InjectView (R.id.iv_more_right)
-  public ImageView mIvMoreRight;
+  @InjectView (R.id.v_mask_right)
+  public View mVMaskRight;
+
+  @OnClick (R.id.fl_left)
+  public void onFlLeftClicked() {
+    U.getBus().post(mPosts[0]);
+  }
+
+  @OnClick(R.id.fl_right)
+  public void onFlRightClicked() {
+    U.getBus().post(mPosts[1]);
+  }
+
+  private Post[] mPosts;
 
   public MsgItemView(Context context) {
     this(context, null);
@@ -49,9 +68,11 @@ public class MsgItemView extends LinearLayout {
   }
 
   public void setData(Post[] posts) {
+    mPosts = posts;
     if (posts.length == 2) {
-      Post left = posts[0];
+      final Post left = posts[0];
       if (left != null) {
+        mFlLeft.setVisibility(VISIBLE);
         mTvContentLeft.setText(left.content);
         if (!TextUtils.isEmpty(left.bgUrl)) {
           mAivBgLeft.setUrl(left.bgUrl);
@@ -60,10 +81,18 @@ public class MsgItemView extends LinearLayout {
           mAivBgLeft.setUrl(null);
           mTvContentLeft.setBackgroundColor(left.bgColor);
         }
+        if (left.read == 1) {
+          mVMaskLeft.setVisibility(VISIBLE);
+        } else {
+          mVMaskLeft.setVisibility(INVISIBLE);
+        }
+      } else {
+        mFlLeft.setVisibility(INVISIBLE);
       }
 
-      Post right = posts[1];
+      final Post right = posts[1];
       if (right != null) {
+        mFlRight.setVisibility(VISIBLE);
         mTvContentRight.setText(right.content);
         if (!TextUtils.isEmpty(right.bgUrl)) {
           mAivBgRight.setUrl(right.bgUrl);
@@ -72,6 +101,13 @@ public class MsgItemView extends LinearLayout {
           mAivBgRight.setUrl(null);
           mTvContentRight.setBackgroundColor(right.bgColor);
         }
+        if (right.read == 1) {
+          mVMaskRight.setVisibility(VISIBLE);
+        } else {
+          mVMaskRight.setVisibility(INVISIBLE);
+        }
+      } else {
+        mFlRight.setVisibility(INVISIBLE);
       }
     }
   }

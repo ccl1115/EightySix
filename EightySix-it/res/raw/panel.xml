@@ -1,4 +1,6 @@
-<panel row="4" column="5" itemWidth="40" itemHeight="30">
+<?xml version="1.0" encoding="utf-8"?>
+
+<panel row="4" column="5" itemWidth="40" itemHeight="30" spaceVertical="10" spaceHorizontal="10">
     <page>
         <item>
             <color>#ffffaeaa</color>
