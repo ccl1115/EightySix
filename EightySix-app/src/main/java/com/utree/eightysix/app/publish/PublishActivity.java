@@ -98,7 +98,7 @@ public class PublishActivity extends BaseActivity {
 
   private int mBgColor;
 
-  private PublishLayout mPublishLayout;
+  protected PublishLayout mPublishLayout;
 
   @OnClick (R.id.ll_bottom)
   public void onLlBottomClicked() {
@@ -457,6 +457,7 @@ public class PublishActivity extends BaseActivity {
       if (tv.type == TypedValue.TYPE_INT_COLOR_ARGB8) {
         mIvPostBg.setImageDrawable(new ColorDrawable(tv.data));
         mPostEditText.setTextColor(monochromizing(tv.data));
+        mTvPostTip.setTextColor(monochromizing(tv.data));
       }
     }
   }

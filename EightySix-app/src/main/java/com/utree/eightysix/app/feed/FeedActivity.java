@@ -27,6 +27,8 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.account.PraiseStaticActivity;
+import com.utree.eightysix.app.publish.FeedbackActivity;
 import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Post;
@@ -445,13 +447,13 @@ public class FeedActivity extends BaseActivity {
 
     @OnClick (R.id.ll_praise_count)
     void onLlPraiseCountClicked() {
-      showToast("TODO praise count");
+      startActivity(new Intent(FeedActivity.this, PraiseStaticActivity.class));
       mPopupMenu.dismiss();
     }
 
     @OnClick (R.id.ll_feedback)
     void onLlFeedbackClicked() {
-      showToast("TODO feedback");
+      startActivity(new Intent(FeedActivity.this, FeedbackActivity.class));
       mPopupMenu.dismiss();
     }
 

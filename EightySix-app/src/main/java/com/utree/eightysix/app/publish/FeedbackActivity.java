@@ -4,9 +4,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
 import butterknife.InjectView;
+import butterknife.OnClick;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.widget.panel.Item;
 
 /**
  * @author simon
@@ -31,5 +34,17 @@ public class FeedbackActivity extends PublishActivity {
     mFeedbackCircleId = U.getConfigInt("feedback.circle.id");
 
     showSoftKeyboard(mPostEditText);
+  }
+
+  @Subscribe
+  @Override
+  public void onGridPanelItemClicked(Item item) {
+    super.onGridPanelItemClicked(item);
+  }
+
+  @OnClick(R.id.iv_shuffle)
+  public void onIvShuffleClicked() {
+    hideSoftKeyboard(mPostEditText);
+    mPublishLayout.switchToPanel(PublishLayout.PANEL_COLOR);
   }
 }
