@@ -25,20 +25,18 @@ public class AsyncImageView extends ImageView {
     this(context, attrs, 0);
   }
 
-  @SuppressLint ("NewApi")
   public AsyncImageView(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
+    U.getBus().register(this);
   }
 
   @Subscribe
   public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
-    Log.d(TAG, "onImageLoadedEvent");
     if (event.getHash().equals(mUrlHash)) {
       if (event.getBitmap() != null) {
         setImageBitmap(event.getBitmap());
       }
     }
-    U.getBus().unregister(this);
   }
 
   public void setUrl(String url) {
@@ -51,8 +49,17 @@ public class AsyncImageView extends ImageView {
 
     mUrlHash = MD5Util.getMD5String(url.getBytes()).toLowerCase();
 
-    U.getBus().register(this);
-
     ImageUtils.asyncLoad(url, mUrlHash);
+  }
+
+  @Override
+  protected void onAttachedToWindow() {
+    super.onAttachedToWindow();
+  }
+
+  @Override
+  protected void onDetachedFromWindow() {
+    super.onDetachedFromWindow();
+    U.getBus().unregister(this);
   }
 }
