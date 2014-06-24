@@ -149,4 +149,6 @@
     <string name="success_created">创建成功</string>
     <string name="give_us_feedback">向我们提出建议</string>
     <string name="praise_count_static">被赞次数统计</string>
+    <string name="messages">消息</string>
+    <string name="no_new_msg">没有新消息</string>
 </resources>

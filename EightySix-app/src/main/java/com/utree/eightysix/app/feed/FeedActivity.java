@@ -26,6 +26,7 @@ import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.PraiseStaticActivity;
+import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.publish.FeedbackActivity;
 import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.data.Circle;
@@ -297,7 +298,7 @@ public class FeedActivity extends BaseActivity {
       @Override
       public void onClick(View view, int position) {
         if (position == 0) {
-          showToast("TODO goto message center");
+          startActivity(new Intent(FeedActivity.this, MsgActivity.class));
         } else if (position == 1) {
           refresh();
         }
@@ -372,7 +373,7 @@ public class FeedActivity extends BaseActivity {
     if (mSideShown) {
       hideSide();
     } else {
-      super.onBackPressed();
+      moveTaskToBack(true);
     }
   }
 
