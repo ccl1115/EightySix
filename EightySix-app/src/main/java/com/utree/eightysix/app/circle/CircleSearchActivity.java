@@ -163,7 +163,7 @@ public class CircleSearchActivity extends BaseActivity {
     mLvHistory.setVisibility(View.GONE);
 
 
-    if (BuildConfig.DEBUG) {
+    if (U.useFixture()) {
       mResultAdapter = new CircleBaseListAdapter(U.getFixture(Circle.class, 20, "valid"));
       mLvResult.setAdapter(mResultAdapter);
       mLvResult.setLoadMoreCallback(new LoadMoreCallback() {

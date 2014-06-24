@@ -443,7 +443,9 @@ public class RefresherView extends ViewGroup implements IRefreshable {
             }
 
             if (mRefresherHeader != null) {
-                mRefresherHeader.layout(0, -mRefresherHeader.getMeasuredHeight(), width, 0);
+                MarginLayoutParams mlp = (MarginLayoutParams) mRefresherHeader.getLayoutParams();
+                mRefresherHeader.layout(mlp.leftMargin, -(mRefresherHeader.getMeasuredHeight() + mlp.bottomMargin),
+                    r - mlp.rightMargin, -mlp.bottomMargin);
             }
 
             getLocationOnScreen(mTempLocation);
@@ -866,4 +868,18 @@ public class RefresherView extends ViewGroup implements IRefreshable {
         }
     }
 
+  @Override
+  public LayoutParams generateLayoutParams(AttributeSet attrs) {
+    return new MarginLayoutParams(getContext(), attrs);
+  }
+
+  @Override
+  protected LayoutParams generateDefaultLayoutParams() {
+    return new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+  }
+
+  @Override
+  protected LayoutParams generateLayoutParams(LayoutParams p) {
+    return p;
+  }
 }

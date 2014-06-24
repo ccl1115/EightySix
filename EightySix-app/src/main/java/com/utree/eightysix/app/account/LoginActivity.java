@@ -44,6 +44,9 @@ public class LoginActivity extends BaseActivity {
   @InjectView (R.id.tv_forget_pwd)
   public TextView mTvForgetPwd;
 
+  @InjectView(R.id.btn_fixture)
+  public RoundedButton mBtnFixture;
+
   private boolean mCorrectPhoneNumber;
 
   private boolean mCorrectPwd;
@@ -58,6 +61,11 @@ public class LoginActivity extends BaseActivity {
   @OnClick (R.id.tv_forget_pwd)
   public void onTvForgetPwd() {
     startActivity(new Intent(this, ForgetPwdActivity.class));
+  }
+
+  @OnClick(R.id.btn_fixture)
+  public void onBtnFixtureClicked() {
+    FeedActivity.start(this, null);
   }
 
   @Subscribe
@@ -80,8 +88,13 @@ public class LoginActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-
     setTopTitle(getString(R.string.login) + getString(R.string.app_name));
+
+    if(U.useFixture()) {
+      mBtnFixture.setVisibility(View.VISIBLE);
+    } else {
+      mBtnFixture.setVisibility(View.GONE);
+    }
 
     mEtPhoneNumber.addTextChangedListener(new TextWatcher() {
       @Override

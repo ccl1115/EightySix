@@ -1,19 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-    <com.utree.eightysix.widget.AdvancedListView
-            android:id="@+id/alv_msg"
+    <com.utree.eightysix.widget.RefresherView
+            android:id="@+id/rv_msg"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            app:direction="top"
+            app:refresher_content="@+id/alv_msg"
+            app:refresher_head="@+id/tv_head"
+            app:empty_view="@+id/tv_no_new_msg"
+            app:max_height="200dp"
+            app:threshold_height="150dp">
 
-    <TextView
-            android:id="@+id/tv_no_new_msg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textSize="24sp"
-            android:text="@string/no_new_msg"/>
+        <com.utree.eightysix.widget.AdvancedListView
+                android:id="@+id/alv_msg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        <TextView
+                android:id="@+id/tv_head"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="40sp"
+                android:layout_marginBottom="15dp"/>
+
+        <TextView
+                android:id="@+id/tv_no_new_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="24sp"
+                android:text="@string/no_new_msg"/>
+    </com.utree.eightysix.widget.RefresherView>
+
 </FrameLayout>

@@ -24,6 +24,16 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="25dp"/>
 
+    <com.utree.eightysix.widget.RoundedButton
+            app:radius="2dp"
+            app:background="@color/apptheme_primary_btn_light"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fixture"
+            android:id="@+id/btn_fixture"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="25dp"/>
+
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -33,4 +43,5 @@
             android:text="@string/forget_pwd"
             android:textColor="@color/apptheme_primary_btn_light"
             android:layout_marginRight="2dp"/>
+
 </LinearLayout>

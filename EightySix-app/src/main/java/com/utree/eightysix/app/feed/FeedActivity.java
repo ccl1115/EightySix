@@ -92,7 +92,7 @@ public class FeedActivity extends BaseActivity {
 
     mCircle = (Circle) getIntent().getSerializableExtra("circle");
 
-    if (mCircle == null && BuildConfig.DEBUG) {
+    if (mCircle == null && U.useFixture()) {
       mCircle = U.getFixture(Circle.class, "valid");
     }
 
@@ -103,7 +103,7 @@ public class FeedActivity extends BaseActivity {
       setTopSubTitle(String.format(getString(R.string.friends_info), mCircle.friendCount, mCircle.workmateCount));
     }
 
-    if (BuildConfig.DEBUG) {
+    if (U.useFixture()) {
       getHandler().postDelayed(new Runnable() {
         @Override
         public void run() {
@@ -235,7 +235,7 @@ public class FeedActivity extends BaseActivity {
 
       @Override
       public boolean onLoadMoreStart() {
-        if (BuildConfig.DEBUG) {
+        if (U.useFixture()) {
           getHandler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -378,7 +378,7 @@ public class FeedActivity extends BaseActivity {
   }
 
   private void refresh() {
-    if (BuildConfig.DEBUG) {
+    if (U.useFixture()) {
       showProgressBar();
       getHandler().postDelayed(new Runnable() {
         @Override

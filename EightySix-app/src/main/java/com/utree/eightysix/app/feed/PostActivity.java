@@ -123,7 +123,7 @@ public class PostActivity extends BaseActivity {
 
     mPost = (Post) getIntent().getSerializableExtra("post");
 
-    if (mPost == null && BuildConfig.DEBUG) {
+    if (mPost == null && U.useFixture()) {
       mPost = U.getFixture(Post.class, "valid");
     }
 
@@ -143,7 +143,7 @@ public class PostActivity extends BaseActivity {
 
       @Override
       public boolean onLoadMoreStart() {
-        if (BuildConfig.DEBUG) {
+        if (U.useFixture()) {
           getHandler().postDelayed(new Runnable() {
             @Override
             public void run() {

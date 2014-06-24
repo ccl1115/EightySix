@@ -80,7 +80,7 @@ public class MyCirclesActivity extends BaseActivity {
 
     mLvCircles.setEmptyView(mTvEmptyText);
 
-    if (BuildConfig.DEBUG) {
+    if (U.useFixture()) {
       mCircleListAdapter = new CircleListAdapter(U.getFixture(Circle.class, 20, "valid"));
       mLvCircles.setAdapter(mCircleListAdapter);
       mLvCircles.setLoadMoreCallback(new LoadMoreCallback() {

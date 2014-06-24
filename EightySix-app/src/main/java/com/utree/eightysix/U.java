@@ -251,6 +251,10 @@ public class U {
     Toast.makeText(getContext(), string, Toast.LENGTH_SHORT).show();
   }
 
+  public static boolean useFixture() {
+    return getConfigBoolean("fixture");
+  }
+
   public static <T> List<T> getFixture(Class<T> clz, int quantity, String template) {
     return sFixture == null ? null : sFixture.get(clz, quantity, template);
   }
