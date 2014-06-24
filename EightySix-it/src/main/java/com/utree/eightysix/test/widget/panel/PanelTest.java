@@ -15,7 +15,7 @@ public class PanelTest extends BaseAndroidTestCase {
 
   public void testNewPanel() throws Exception {
     XmlPullParser parser = XmlPullParserFactory.newInstance().newPullParser();
-    parser.setInput(getContext().getResources().openRawResource((R.raw.panel)), "UTF-8");
+    parser.setInput(getContext().getResources().openRawResource((R.raw.publish_panel)), "UTF-8");
     Panel panel = new Panel(parser);
     assertNotNull(panel);
     assertEquals(1, panel.getPages().size());
