@@ -17,6 +17,7 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -41,7 +42,9 @@ import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.widget.PostEditText;
 import com.utree.eightysix.widget.TopBar;
+import com.utree.eightysix.widget.panel.Item;
 import com.utree.eightysix.widget.panel.Panel;
+import de.akquinet.android.androlog.Log;
 import java.io.File;
 import java.util.Random;
 
@@ -94,6 +97,7 @@ public class PublishActivity extends BaseActivity {
   private String mImageUploadUrl;
 
   private int mBgColor;
+
   private PublishLayout mPublishLayout;
 
   @OnClick (R.id.ll_bottom)
@@ -448,4 +452,12 @@ public class PublishActivity extends BaseActivity {
     showProgressBar();
   }
 
+  @Subscribe public void onGridPanelItemClicked(Item item) {
+    for (TypedValue tv : item.getValues()) {
+      if (tv.type == TypedValue.TYPE_INT_COLOR_ARGB8) {
+        mIvPostBg.setImageDrawable(new ColorDrawable(tv.data));
+        mPostEditText.setTextColor(monochromizing(tv.data));
+      }
+    }
+  }
 }

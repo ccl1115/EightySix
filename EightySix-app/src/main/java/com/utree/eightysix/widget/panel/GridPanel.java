@@ -28,7 +28,7 @@ public class GridPanel extends ViewPager {
 
     try {
       XmlPullParser parser = XmlPullParserFactory.newInstance().newPullParser();
-      parser.setInput(getResources().openRawResource(R.raw.panel), "UTF-8");
+      parser.setInput(getResources().openRawResource(R.raw.publish_panel), "UTF-8");
       mPanel = new Panel(parser);
     } catch (IOException e) {
       e.printStackTrace();

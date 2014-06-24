@@ -67,15 +67,4 @@
         </item>
     </page>
 
-    <page>
-        <item>
-            <color>#ff2c8437</color>
-        </item>
-        <item>
-            <color>#ff10631b</color>
-        </item>
-        <item>
-            <color>#ff004208</color>
-        </item>
-    </page>
 </panel>

@@ -53,4 +53,12 @@ public class Item {
     parser.next();
     return null;
   }
+
+  @Override
+  public String toString() {
+    return "Item{" +
+        "mParent=" + mParent +
+        ", mValues=" + mValues +
+        '}';
+  }
 }
