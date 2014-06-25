@@ -176,11 +176,6 @@ public class FeedPostView extends RelativeLayout {
     U.getBus().post(new AdapterDataSetChangedEvent());
   }
 
-  @OnClick (R.id.tv_comment)
-  public void onTvCommentClicked() {
-    Toast.makeText(getContext(), "TODO comment", Toast.LENGTH_SHORT).show();
-  }
-
   @Subscribe
   public void onListViewScrollStateIdled(ListViewScrollStateIdledEvent event) {
     if (mIvShare.getVisibility() == INVISIBLE && getTop() >= 0) {

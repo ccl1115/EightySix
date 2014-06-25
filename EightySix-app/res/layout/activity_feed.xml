@@ -44,7 +44,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:background="@android:color/white"
-                android:listSelector="@drawable/apptheme_secondary_list_selector"/>
+                android:listSelector="@drawable/apptheme_primary_list_selector"/>
 
         <include layout="@layout/item_side_more"/>
     </LinearLayout>

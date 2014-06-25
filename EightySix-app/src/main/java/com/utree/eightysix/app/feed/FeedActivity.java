@@ -89,9 +89,9 @@ public class FeedActivity extends BaseActivity {
 
   @OnItemClick (R.id.lv_feed)
   public void onLvFeedItemClicked(int position) {
-    if (mFeedAdapter.getItemViewType(position) == FeedAdapter.TYPE_POST) {
-      PostActivity.start(this, mFeedAdapter.getItem(position));
-    }
+    Object item = mLvFeed.getAdapter().getItem(position);
+    if (item == null) return;
+    PostActivity.start(this, (Post) item);
   }
 
   @OnClick (R.id.v_mask)

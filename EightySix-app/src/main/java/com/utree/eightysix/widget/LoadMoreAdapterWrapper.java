@@ -1,7 +1,5 @@
 package com.utree.eightysix.widget;
 
-import android.os.Debug;
-import android.os.Trace;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -43,9 +41,10 @@ class LoadMoreAdapterWrapper extends BaseAdapter {
 
   @Override
   public Object getItem(int position) {
-    return hasCallback() ?
-        (position == getCount() - 1 ? null : mListAdapter.getItem(position)) :
-        mListAdapter.getItem(position);
+    if (hasCallback())
+      if (position == getCount() - 1) return null;
+      else return mListAdapter.getItem(position);
+    else return mListAdapter.getItem(position);
   }
 
   @Override

@@ -70,7 +70,7 @@ public class PostActivity extends BaseActivity {
   public void onLvCommentsItemClicked(final int position) {
     if (position == 0) return;
 
-    final Comment comment = (Comment) mPostCommentsAdapter.getItem(position);
+    final Comment comment = (Comment) mLvComments.getAdapter().getItem(position);
     if (comment == null) return;
 
     new AlertDialog.Builder(this).setTitle(getString(R.string.comment_action))
