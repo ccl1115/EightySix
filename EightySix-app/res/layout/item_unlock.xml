@@ -13,7 +13,7 @@
             android:layout_marginRight="10dp"
             android:paddingLeft="10dp"
             android:paddingRight="16dp"
-            android:background="@drawable/texture_blue">
+            android:background="#ff2b7db9">
 
         <FrameLayout
                 android:layout_width="wrap_content"

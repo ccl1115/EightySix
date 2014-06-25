@@ -1,16 +1,17 @@
 package com.utree.eightysix.app.feed;
 
-import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.annotations.Keep;
-import com.utree.eightysix.app.circle.MyCirclesActivity;
 import com.utree.eightysix.data.Circle;
 import java.util.List;
 
@@ -66,6 +67,15 @@ class SideCirclesAdapter extends BaseAdapter {
     viewHolder.mTvFriends.setText(
         String.format(parent.getContext().getString(R.string.friends_info),
             circle.friendCount, circle.workmateCount));
+
+    Resources res = parent.getResources();
+    if (circle.selected) {
+      viewHolder.mLlItem.setBackgroundColor(res.getColor(R.color.apptheme_primary_light_color));
+      viewHolder.mTvName.setTextColor(Color.WHITE);
+    } else {
+      viewHolder.mLlItem.setBackgroundDrawable(res.getDrawable(R.drawable.apptheme_primary_list_selector));
+      viewHolder.mTvName.setTextColor(res.getColor(R.color.apptheme_primary_text_dark));
+    }
     return convertView;
   }
 
@@ -77,6 +87,9 @@ class SideCirclesAdapter extends BaseAdapter {
 
     @InjectView (R.id.friends)
     public TextView mTvFriends;
+
+    @InjectView (R.id.ll_item)
+    public LinearLayout mLlItem;
 
     ViewHolder(View view) {
       ButterKnife.inject(this, view);

@@ -138,7 +138,7 @@ public class FixtureImpl implements Fixture {
         add("bgColor", random(FIXTURE_BG_COLOR));
         add("content", random(FIXTURE_POST_CONTENT));
         add("comments", random(Integer.class, range(0, 10000)));
-        add("comment", br.com.six2six.fixturefactory.Fixture.from(Comment.class).gimme("valid"));
+        add("comment", one(Comment.class, "valid"));
         add("praise", random(Integer.class, range(0, 10000)));
         add("source", random(FIXTURE_CIRCLES));
         add("praised", random(0, 1));

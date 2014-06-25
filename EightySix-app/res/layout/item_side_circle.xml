@@ -1,40 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:orientation="horizontal"
-                android:layout_width="190dp"
-                android:layout_height="50dp">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="190dp"
+              android:layout_height="50dp">
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="4dp"
-            android:lines="1"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:id="@+id/name"
-            android:textSize="16sp"
-            android:textColor="@android:color/black"/>
+    <LinearLayout
+            android:id="@+id/ll_item"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:background="@drawable/apptheme_primary_list_selector">
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:lines="1"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:id="@+id/friends"
-            android:textSize="12sp"
-            android:layout_below="@+id/name"
-            android:textColor="#ffb3b3b3"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="4dp"
+                android:duplicateParentState="true"
+                android:lines="1"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:id="@+id/name"
+                android:textSize="16sp"
+                android:textColor="@color/apptheme_primary_text_dark"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:lines="1"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:id="@+id/friends"
+                android:textSize="12sp"
+                android:textColor="#ffb3b3b3"/>
+    </LinearLayout>
 
     <View
-            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:background="#fff0f0f0"/>
 
-</RelativeLayout>
+</LinearLayout>

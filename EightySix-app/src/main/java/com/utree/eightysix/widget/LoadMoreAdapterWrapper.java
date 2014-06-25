@@ -92,4 +92,16 @@ class LoadMoreAdapterWrapper extends BaseAdapter {
   private boolean hasCallback() {
     return mCallback != null;
   }
+
+  @Override
+  public void notifyDataSetChanged() {
+    super.notifyDataSetChanged();
+    ((BaseAdapter) mListAdapter).notifyDataSetChanged();
+  }
+
+  @Override
+  public void notifyDataSetInvalidated() {
+    super.notifyDataSetInvalidated();
+    ((BaseAdapter) mListAdapter).notifyDataSetInvalidated();
+  }
 }

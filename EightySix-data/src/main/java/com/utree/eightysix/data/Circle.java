@@ -1,12 +1,14 @@
 package com.utree.eightysix.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.Comparator;
 
 /**
  */
-public class Circle extends BaseCircle implements Comparator<Circle>, Comparable<Circle>, Serializable {
+public class Circle extends BaseCircle implements Comparator<Circle>, Comparable<Circle>, Parcelable {
 
   @SerializedName ("cityName")
   public String cityName;
@@ -51,6 +53,8 @@ public class Circle extends BaseCircle implements Comparator<Circle>, Comparable
   @SerializedName ("viewType")
   public int viewType;
 
+  public boolean selected = false;
+
   @Override
   public int compareTo(Circle another) {
     return viewGroupType.compareTo(another.viewGroupType);
@@ -60,4 +64,42 @@ public class Circle extends BaseCircle implements Comparator<Circle>, Comparable
   public int compare(Circle lhs, Circle rhs) {
     return lhs.compareTo(rhs);
   }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(name);
+    dest.writeString(cityName);
+    dest.writeInt(circleType);
+    dest.writeInt(lock);
+    dest.writeString(viewGroupType);
+    dest.writeInt(viewType);
+    dest.writeInt(selected ? 1 : 0);
+    dest.writeInt(distance);
+  }
+
+  public static final Creator<Circle> CREATOR = new Creator<Circle>() {
+    @Override
+    public Circle createFromParcel(Parcel source) {
+      Circle circle = new Circle();
+      circle.name = source.readString();
+      circle.cityName = source.readString();
+      circle.circleType = source.readInt();
+      circle.lock = source.readInt();
+      circle.viewGroupType = source.readString();
+      circle.viewType = source.readInt();
+      circle.selected = source.readInt() == 1;
+      circle.distance = source.readInt();
+      return circle;
+    }
+
+    @Override
+    public Circle[] newArray(int size) {
+      return new Circle[size];
+    }
+  };
 }

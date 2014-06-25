@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="invisible"
-            android:background="#aa000000"/>
+            android:background="#cc000000"/>
 
     <LinearLayout
             android:id="@+id/ll_side"
@@ -43,8 +43,7 @@
                 android:layout_width="190dp"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:background="@android:color/white"
-                android:listSelector="@drawable/apptheme_primary_list_selector"/>
+                android:background="@android:color/white"/>
 
         <include layout="@layout/item_side_more"/>
     </LinearLayout>
