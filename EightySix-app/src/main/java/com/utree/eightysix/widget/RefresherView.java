@@ -456,7 +456,7 @@ public class RefresherView extends ViewGroup implements IRefreshable {
         public void draw(Canvas canvas) {
             final long drawingTime = getDrawingTime();
 
-            if (mEmptyView != null) {
+            if (mEmptyView.getVisibility() == VISIBLE) {
                 drawChild(canvas, mEmptyView, drawingTime);
             }
 
@@ -464,7 +464,9 @@ public class RefresherView extends ViewGroup implements IRefreshable {
             canvas.translate(0, mYOffset / 2);
             drawChild(canvas, mRefresherContent, drawingTime);
             if (mYOffset > 0) {
-                drawChild(canvas, mRefresherHeader, drawingTime);
+                if (mRefresherHeader.getVisibility() == VISIBLE) {
+                  drawChild(canvas, mRefresherHeader, drawingTime);
+                }
             }
             canvas.restore();
         }
