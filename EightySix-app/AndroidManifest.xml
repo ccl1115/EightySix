@@ -175,6 +175,7 @@
         <activity android:name=".app.msg.MsgActivity"
                   android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
                   android:exported="@bool/exported"/>
+        <activity android:name=".app.circle.SelectCircleActivity"/>
 
         <service
                 android:name="com.baidu.location.f"

@@ -2,6 +2,7 @@ package com.utree.eightysix.app.account;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Message;
@@ -18,6 +19,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.app.circle.SelectCircleActivity;
 import com.utree.eightysix.widget.RoundedButton;
 import java.util.Random;
 
@@ -50,6 +52,11 @@ public class ImportContactActivity extends BaseActivity {
   private Random mRandom = new Random();
 
   private AlertDialog mQuitConfirmDialog;
+
+  @OnClick(R.id.rb_done)
+  public void onRbDoneClicked() {
+    startActivity(new Intent(this, SelectCircleActivity.class));
+  }
 
   @OnClick (R.id.rb_import)
   public void onRbImportClicked() {
