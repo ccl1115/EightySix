@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -19,13 +18,13 @@ import butterknife.OnItemClick;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
-import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.PraiseStaticActivity;
+import com.utree.eightysix.app.circle.MyCirclesActivity;
 import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.publish.FeedbackActivity;
 import com.utree.eightysix.app.publish.PublishActivity;
@@ -53,6 +52,12 @@ public class FeedActivity extends BaseActivity {
   @InjectView (R.id.ib_send)
   public ImageButton mSend;
 
+  @InjectView (R.id.ll_side)
+  public LinearLayout mLlSide;
+
+  @InjectView (R.id.v_mask)
+  public View mVMask;
+
   private FeedAdapter mFeedAdapter;
   private SideCirclesAdapter mSideCirclesAdapter;
   private PopupWindow mPopupMenu;
@@ -77,11 +82,21 @@ public class FeedActivity extends BaseActivity {
     startActivity(new Intent(this, PublishActivity.class));
   }
 
+  @OnClick (R.id.tv_more)
+  public void onSideMoreClicked() {
+    startActivity(new Intent(this, MyCirclesActivity.class));
+  }
+
   @OnItemClick (R.id.lv_feed)
   public void onLvFeedItemClicked(int position) {
     if (mFeedAdapter.getItemViewType(position) == FeedAdapter.TYPE_POST) {
       PostActivity.start(this, mFeedAdapter.getItem(position));
     }
+  }
+
+  @OnClick (R.id.v_mask)
+  public void onVMaskClicked() {
+    hideSide();
   }
 
   @Override
@@ -117,15 +132,16 @@ public class FeedActivity extends BaseActivity {
         }
       }, 2000);
       showProgressBar();
+
+      mSideCirclesAdapter = new SideCirclesAdapter(U.getFixture(Circle.class, 10, "valid"));
+      mLvSideCircles.setAdapter(mSideCirclesAdapter);
     } else {
       // TODO request data
     }
 
-    mSideCirclesAdapter = new SideCirclesAdapter(U.getFixture(Circle.class, 10, "valid"));
-    mLvSideCircles.setAdapter(mSideCirclesAdapter);
 
     if (Env.firstRun(FIRST_RUN_KEY)) {
-      showSide();
+      //showSide();
     }
 
     mLvFeed.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -314,29 +330,6 @@ public class FeedActivity extends BaseActivity {
         return new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
       }
     });
-
-    mLvFeed.setOnTouchListener(new View.OnTouchListener() {
-
-      private boolean mHidden;
-
-      @Override
-      public boolean onTouch(View v, MotionEvent event) {
-        switch (event.getActionMasked()) {
-          case MotionEvent.ACTION_DOWN:
-            if (mSideShown) {
-              mHidden = true;
-              hideSide();
-              return true;
-            }
-          case MotionEvent.ACTION_UP:
-            final boolean b = mHidden;
-            mHidden = false;
-            return b;
-        }
-
-        return false;
-      }
-    });
   }
 
   @Override
@@ -399,20 +392,28 @@ public class FeedActivity extends BaseActivity {
     hideTopBar(true);
     mSideShown = true;
 
-    mLvSideCircles.setVisibility(View.VISIBLE);
-    ObjectAnimator animator =
-        ObjectAnimator.ofFloat(mLvSideCircles, "translationX", -mLvSideCircles.getMeasuredWidth(), 0);
-    animator.setDuration(200);
-    animator.start();
+    mLlSide.setVisibility(View.VISIBLE);
+    mVMask.setVisibility(View.VISIBLE);
+    AnimatorSet set = new AnimatorSet();
+    set.playTogether(
+        ObjectAnimator.ofFloat(mLlSide, "translationX", -mLvSideCircles.getMeasuredWidth(), 0f),
+        ObjectAnimator.ofFloat(mVMask, "alpha", 0f, 1f)
+    );
+    set.setDuration(200);
+    set.start();
   }
 
   private void hideSide() {
     showTopBar(true);
     mSideShown = false;
 
-    ObjectAnimator animator = ObjectAnimator.ofFloat(mLvSideCircles, "translationX", 0, -mLvSideCircles.getMeasuredWidth());
-    animator.setDuration(200);
-    animator.addListener(new Animator.AnimatorListener() {
+    AnimatorSet set = new AnimatorSet();
+    set.playTogether(
+        ObjectAnimator.ofFloat(mLlSide, "translationX", 0f, -mLlSide.getMeasuredWidth()),
+        ObjectAnimator.ofFloat(mVMask, "alpha", 1f, 0f)
+    );
+    set.setDuration(200);
+    set.addListener(new Animator.AnimatorListener() {
       @Override
       public void onAnimationStart(Animator animation) {
 
@@ -420,7 +421,8 @@ public class FeedActivity extends BaseActivity {
 
       @Override
       public void onAnimationEnd(Animator animation) {
-        mLvSideCircles.setVisibility(View.INVISIBLE);
+        mLlSide.setVisibility(View.INVISIBLE);
+        mVMask.setVisibility(View.INVISIBLE);
       }
 
       @Override
@@ -433,7 +435,7 @@ public class FeedActivity extends BaseActivity {
 
       }
     });
-    animator.start();
+    set.start();
   }
 
   @Keep

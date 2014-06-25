@@ -19,9 +19,6 @@ import java.util.List;
  */
 class SideCirclesAdapter extends BaseAdapter {
 
-  private static final int TYPE_CIRCLE = 0;
-  private static final int TYPE_MORE = 1;
-
   private List<Circle> mCircles;
 
   public SideCirclesAdapter(List<Circle> circles) {
@@ -39,7 +36,7 @@ class SideCirclesAdapter extends BaseAdapter {
 
   @Override
   public int getCount() {
-    return mCircles == null ? 0 : mCircles.size() + 1;
+    return mCircles == null ? 0 : mCircles.size();
   }
 
   @Override
@@ -54,27 +51,6 @@ class SideCirclesAdapter extends BaseAdapter {
 
   @Override
   public View getView(int position, View convertView, final ViewGroup parent) {
-    switch (getItemViewType(position)) {
-      case TYPE_CIRCLE:
-        convertView = getCircleView(position, convertView, parent);
-        break;
-      case TYPE_MORE:
-        if (convertView == null) {
-          convertView = View.inflate(parent.getContext(), R.layout.item_side_more, null);
-        }
-
-        convertView.findViewById(R.id.rb_more).setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-            parent.getContext().startActivity(new Intent(parent.getContext(), MyCirclesActivity.class));
-          }
-        });
-    }
-
-    return convertView;
-  }
-
-  private View getCircleView(int position, View convertView, ViewGroup parent) {
     ViewHolder viewHolder;
     if (convertView == null) {
       convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_side_circle, parent, false);
@@ -91,16 +67,6 @@ class SideCirclesAdapter extends BaseAdapter {
         String.format(parent.getContext().getString(R.string.friends_info),
             circle.friendCount, circle.workmateCount));
     return convertView;
-  }
-
-  @Override
-  public int getViewTypeCount() {
-    return 2;
-  }
-
-  @Override
-  public int getItemViewType(int position) {
-    return (position == getCount() - 1) ? TYPE_MORE : TYPE_CIRCLE;
   }
 
   @Keep

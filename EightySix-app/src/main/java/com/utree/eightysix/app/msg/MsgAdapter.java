@@ -23,6 +23,7 @@ class MsgAdapter extends BaseAdapter {
     } else {
       mPosts.addAll(posts);
     }
+    notifyDataSetChanged();
   }
 
   @Override

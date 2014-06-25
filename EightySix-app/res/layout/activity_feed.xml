@@ -24,12 +24,30 @@
             android:src="@drawable/ic_post_pen"
             android:background="@drawable/btn_post"/>
 
-    <com.utree.eightysix.widget.AdvancedListView
-            android:id="@+id/lv_side_circles"
+    <View
+            android:id="@+id/v_mask"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            android:background="#aa000000"/>
+
+    <LinearLayout
+            android:id="@+id/ll_side"
             android:layout_width="190dp"
             android:layout_height="match_parent"
-            android:background="#ff2f3238"
-            android:listSelector="@drawable/apptheme_secondary_list_selector"
-            android:visibility="invisible"/>
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+        <com.utree.eightysix.widget.AdvancedListView
+                android:id="@+id/lv_side_circles"
+                android:layout_width="190dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@android:color/white"
+                android:listSelector="@drawable/apptheme_secondary_list_selector"/>
+
+        <include layout="@layout/item_side_more"/>
+    </LinearLayout>
+
 
 </FrameLayout>

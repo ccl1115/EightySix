@@ -15,7 +15,7 @@
             android:ellipsize="end"
             android:id="@+id/name"
             android:textSize="16sp"
-            android:textColor="@android:color/white"/>
+            android:textColor="@android:color/black"/>
 
     <TextView
             android:layout_width="wrap_content"
@@ -27,12 +27,14 @@
             android:id="@+id/friends"
             android:textSize="12sp"
             android:layout_below="@+id/name"
-            android:textColor="#FFA2A2A2"/>
+            android:textColor="#ffb3b3b3"/>
 
     <View
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#FF27292E"/>
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="#fff0f0f0"/>
 
 </RelativeLayout>

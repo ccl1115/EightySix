@@ -66,6 +66,7 @@ public class LoginActivity extends BaseActivity {
   @OnClick(R.id.btn_fixture)
   public void onBtnFixtureClicked() {
     FeedActivity.start(this, null);
+    finish();
   }
 
   @Subscribe
