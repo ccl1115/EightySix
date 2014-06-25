@@ -17,7 +17,6 @@ import com.utree.eightysix.data.Post;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.IRefreshable;
 import com.utree.eightysix.widget.RefresherView;
-import de.akquinet.android.androlog.Log;
 import java.util.List;
 import java.util.Random;
 
@@ -31,32 +30,41 @@ public class MsgActivity extends BaseActivity {
   private static final int MSG_ANIMATE = 0x1;
   @InjectView (R.id.rv_msg)
   public RefresherView mRvMsg;
+
   @InjectView (R.id.tv_no_new_msg)
-  public TextView mTvEmpty;
+  public TextView mTvNoNewMsg;
+
+  @InjectView(R.id.tv_no_msg)
+  public TextView mTvNoMsg;
+
   @InjectView (R.id.alv_msg)
   public AdvancedListView mAivMsg;
+
   @InjectView (R.id.tv_head)
   public TextView mTvHead;
+
   private Random mRandom = new Random();
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    mTvHead.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/refresh_icon.ttf"));
+
     if (U.useFixture()) {
+      showProgressBar();
       getHandler().postDelayed(new Runnable() {
         @Override
         public void run() {
           List<Post> valid = U.getFixture(Post.class, 23, "valid");
-
-          mTvHead.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/refresh_icon.ttf"));
-
-          for (Post p : valid) {
+          for (Post p : valid)
+          {
             if (p.read == 0) {
-              mTvEmpty.setVisibility(View.INVISIBLE);
+              mTvNoNewMsg.setVisibility(View.INVISIBLE);
             }
           }
           mAivMsg.setAdapter(new MsgAdapter(valid));
+          hideProgressBar();
         }
       }, 1000);
     }
@@ -65,9 +73,6 @@ public class MsgActivity extends BaseActivity {
       @Override
       public void onStateChanged(IRefreshable.State state) {
         switch (state) {
-          case pulling_no_refresh:
-            mTvHead.setText(String.format("%c", (char) (0xe801 + mRandom.nextInt(14))));
-            break;
           case pulling_refresh:
             mTvHead.setText(String.format("%c", (char) (0xe801 + mRandom.nextInt(14))));
             break;

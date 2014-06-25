@@ -31,6 +31,7 @@
     <string name="unlike">取消赞</string>
     <string name="delete">删除</string>
     <string name="share">分享</string>
+    <string name="fixture">假数据</string>
 
     <!-- Locate -->
     <string name="locating">定位中…</string>
@@ -138,18 +139,25 @@
     <string name="hidden_friends_feed">朋友发的%1$d条匿名贴被隐藏</string>
     <string name="unlock_to_view">解锁查看</string>
     <string name="introduce_to_friends">介绍给朋友</string>
+    <string name="about">蓝莓的故事</string>
 
     <!-- PostActivity -->
     <string name="comment">评论</string>
     <string name="anonymously_comment">匿名发表评论</string>
-    <string name="about">蓝莓的故事</string>
     <string name="comment_action">评论操作</string>
     <string name="post_action">帖子操作</string>
     <string name="circle_not_found">没有找到工友圈</string>
     <string name="success_created">创建成功</string>
+
+    <!-- FeedbackActivity -->
     <string name="give_us_feedback">向我们提出建议</string>
+
+    <!-- PraiseStaticActivity -->
     <string name="praise_count_static">被赞次数统计</string>
+
+    <!-- MsgActivity -->
     <string name="messages">消息</string>
     <string name="no_new_msg">没有新消息</string>
-    <string name="fixture">假数据</string>
+    <string name="no_msg">没有消息</string>
+
 </resources>

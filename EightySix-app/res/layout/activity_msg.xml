@@ -12,7 +12,7 @@
             app:direction="top"
             app:refresher_content="@+id/alv_msg"
             app:refresher_head="@+id/tv_head"
-            app:empty_view="@+id/tv_no_new_msg"
+            app:empty_view="@+id/tv_no_msg"
             app:max_height="200dp"
             app:threshold_height="150dp">
 
@@ -30,12 +30,21 @@
                 android:layout_marginBottom="15dp"/>
 
         <TextView
-                android:id="@+id/tv_no_new_msg"
+                android:id="@+id/tv_no_msg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textSize="24sp"
-                android:text="@string/no_new_msg"/>
+                android:text="@string/no_msg"
+                android:visibility="invisible"/>
     </com.utree.eightysix.widget.RefresherView>
 
+    <TextView
+            android:id="@+id/tv_no_new_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="24sp"
+            android:text="@string/no_new_msg"
+            android:visibility="invisible"/>
 </FrameLayout>
