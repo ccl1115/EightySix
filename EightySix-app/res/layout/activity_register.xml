@@ -24,6 +24,16 @@
             android:layout_marginTop="25dp"
             android:enabled="false"/>
 
+    <com.utree.eightysix.widget.RoundedButton
+            app:radius="2dp"
+            app:background="@color/apptheme_primary_btn_light"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/find_friend"
+            android:id="@+id/btn_import_contact"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="25dp"/>
+
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

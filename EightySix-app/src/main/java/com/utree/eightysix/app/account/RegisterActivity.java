@@ -38,6 +38,9 @@ public class RegisterActivity extends BaseActivity {
   @InjectView (R.id.btn_register)
   public RoundedButton mBtnRegister;
 
+  @InjectView(R.id.btn_import_contact)
+  public RoundedButton mRbImportContact;
+
   private boolean mCorrectPhoneNumber;
   private boolean mCorrectPwd;
 
@@ -46,11 +49,18 @@ public class RegisterActivity extends BaseActivity {
     requestRegister();
   }
 
+  @OnClick(R.id.btn_import_contact)
+  public void onBtnImportContactClicked() {
+    startActivity(new Intent(this, ImportContactActivity.class));
+  }
+
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_register);
 
     setTopTitle(getString(R.string.register) + getString(R.string.app_name));
+
+    mRbImportContact.setVisibility(U.useFixture() ? View.VISIBLE : View.INVISIBLE);
 
     mEtPhoneNumber.addTextChangedListener(new TextWatcher() {
       @Override
