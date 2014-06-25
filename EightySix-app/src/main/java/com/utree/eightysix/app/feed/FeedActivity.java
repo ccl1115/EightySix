@@ -143,15 +143,14 @@ public class FeedActivity extends BaseActivity {
     if (mCircle == null) {
       showToast(R.string.circle_not_found, false);
     } else {
-      setTopTitle(mCircle.name);
-      setTopSubTitle(String.format(getString(R.string.friends_info), mCircle.friendCount, mCircle.workmateCount));
+      setTitle();
     }
 
     if (U.useFixture()) {
       getHandler().postDelayed(new Runnable() {
         @Override
         public void run() {
-          mFeedAdapter = new FeedAdapter(U.getFixture(Post.class, 20, "valid"));
+          mFeedAdapter = new FeedAdapter(U.getFixture(Post.class, 20, "valid"), mCircle.lock == 1);
           mLvFeed.setAdapter(mFeedAdapter);
           U.getBus().post(new ListViewScrollStateIdledEvent());
           hideProgressBar();
@@ -404,14 +403,13 @@ public class FeedActivity extends BaseActivity {
   }
 
   private void refresh() {
-    setTopTitle(mCircle.name);
-    setTopSubTitle(String.format(getString(R.string.friends_info), mCircle.friendCount, mCircle.workmateCount));
+    setTitle();
     if (U.useFixture()) {
       showProgressBar();
       getHandler().postDelayed(new Runnable() {
         @Override
         public void run() {
-          mFeedAdapter = new FeedAdapter(U.getFixture(Post.class, 20, "valid"));
+          mFeedAdapter = new FeedAdapter(U.getFixture(Post.class, 20, "valid"), mCircle.lock == 1);
           mLvFeed.setAdapter(mFeedAdapter);
           U.getBus().post(new ListViewScrollStateIdledEvent());
           if (mSideShown) {
@@ -420,6 +418,18 @@ public class FeedActivity extends BaseActivity {
           hideProgressBar();
         }
       }, 2000);
+    }
+  }
+
+  private void setTitle() {
+    setTopTitle(mCircle.name);
+    setTopSubTitle(String.format(getString(R.string.friends_info), mCircle.friendCount, mCircle.workmateCount));
+    if (mCircle.lock == 1) {
+      getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(
+          getResources().getDrawable(R.drawable.ic_lock_small), null, null, null);
+      getTopBar().mSubTitle.setCompoundDrawablePadding(U.dp2px(5));
+    } else {
+      getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
     }
   }
 

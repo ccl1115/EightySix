@@ -11,6 +11,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.data.Circle;
 import java.util.List;
@@ -72,10 +73,21 @@ class SideCirclesAdapter extends BaseAdapter {
     if (circle.selected) {
       viewHolder.mLlItem.setBackgroundColor(res.getColor(R.color.apptheme_primary_light_color));
       viewHolder.mTvName.setTextColor(Color.WHITE);
+      viewHolder.mTvFriends.setTextColor(Color.WHITE);
     } else {
       viewHolder.mLlItem.setBackgroundDrawable(res.getDrawable(R.drawable.apptheme_primary_list_selector));
       viewHolder.mTvName.setTextColor(res.getColor(R.color.apptheme_primary_text_dark));
+      viewHolder.mTvFriends.setTextColor(0xffb3b3b3);
     }
+
+    if (circle.lock == 1) {
+      viewHolder.mTvFriends.setCompoundDrawablesWithIntrinsicBounds(
+          res.getDrawable(R.drawable.ic_lock_small), null, null, null);
+      viewHolder.mTvFriends.setCompoundDrawablePadding(U.dp2px(5));
+    } else {
+      viewHolder.mTvFriends.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+    }
+
     return convertView;
   }
 

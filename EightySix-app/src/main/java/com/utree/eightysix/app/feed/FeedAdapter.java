@@ -37,13 +37,11 @@ class FeedAdapter extends BaseAdapter {
   private boolean mShowInvite;
   private boolean mShowUnlock = true;
 
-  FeedAdapter(List<Post> posts) {
+  FeedAdapter(List<Post> posts, boolean showUnlock) {
     mPosts = posts;
     mPosts.add(0, null); // for placeholder view
+    mShowUnlock = showUnlock;
     if (mShowUnlock) {
-      mPosts.add(1, null);
-    }
-    if (mShowInvite) {
       mPosts.add(1, null);
     }
   }
