@@ -50,6 +50,7 @@ class PostCommentsAdapter extends BaseAdapter {
       mComments = new ArrayList<Comment>();
     }
     mComments.add(comment);
+    notifyDataSetChanged();
   }
 
   @Override
@@ -59,7 +60,7 @@ class PostCommentsAdapter extends BaseAdapter {
 
   @Override
   public Object getItem(int position) {
-    return position == 0 ? mPost : mComments.get(position - 1);
+    return position == 0 ? mPost : (mComments == null ? null : mComments.get(position - 1));
   }
 
   @Override

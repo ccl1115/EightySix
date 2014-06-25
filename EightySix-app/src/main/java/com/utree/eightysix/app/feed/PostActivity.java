@@ -71,6 +71,8 @@ public class PostActivity extends BaseActivity {
     if (position == 0) return;
 
     final Comment comment = (Comment) mPostCommentsAdapter.getItem(position);
+    if (comment == null) return;
+
     new AlertDialog.Builder(this).setTitle(getString(R.string.comment_action))
         .setItems(new String[]{comment.praised == 1 ? getString(R.string.unlike) : getString(R.string.like), getString(R.string.report), getString(R.string.share)},
             new DialogInterface.OnClickListener() {
