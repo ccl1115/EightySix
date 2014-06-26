@@ -146,10 +146,57 @@
                     </execution>
                 </executions>
             </plugin>
+
+
         </plugins>
     </build>
 
     <profiles>
+        <profile>
+            <id>mail</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+
+                        <groupId>ch.fortysix</groupId>
+                        <artifactId>maven-postman-plugin</artifactId>
+                        <version>0.1.6</version>
+                        <executions>
+                            <execution>
+                                <id>send-mail</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>send-mail</goal>
+                                </goals>
+
+                                <inherited>false</inherited>
+                                <configuration>
+                                    <from>yulu@utree.cn</from>
+                                    <failonerror>true</failonerror>
+                                    <mailhost>smtp.exmail.qq.com</mailhost>
+                                    <mailport>465</mailport>
+                                    <mailuser>yulu@utree.com</mailuser>
+                                    <mailpassword>0612053qq</mailpassword>
+                                    <receivers>
+                                        <receiver>all@utree.cn</receiver>
+                                    </receivers>
+                                    <subject>EightySix-app</subject>
+                                    <fileSets>
+                                        <fileSet>
+                                            <directory>target</directory>
+                                            <include>*.apk</include>
+                                        </fileSet>
+                                    </fileSets>
+                                </configuration>
+
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
         <profile>
             <id>debug</id>
 

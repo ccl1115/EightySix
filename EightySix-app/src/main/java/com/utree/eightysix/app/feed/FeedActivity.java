@@ -24,6 +24,7 @@ import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.PraiseStaticActivity;
+import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.circle.MyCirclesActivity;
 import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.publish.FeedbackActivity;
@@ -36,8 +37,8 @@ import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.TopBar;
-import de.akquinet.android.androlog.Log;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -136,6 +137,7 @@ public class FeedActivity extends BaseActivity {
 
     mCircle = getIntent().getParcelableExtra("circle");
 
+
     if (mCircle == null && U.useFixture()) {
       mCircle = U.getFixture(Circle.class, "valid");
     }
@@ -145,6 +147,24 @@ public class FeedActivity extends BaseActivity {
     } else {
       setTitle();
     }
+
+    mSideCircles = getIntent().getParcelableArrayListExtra("side");
+
+    if (mSideCircles != null) {
+      for (Iterator<Circle> iterator = mSideCircles.iterator(); iterator.hasNext(); ) {
+        Circle c = iterator.next();
+        if (c == null) iterator.remove();
+      }
+      mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
+      mLvSideCircles.setAdapter(mSideCirclesAdapter);
+    } else if (U.useFixture()) {
+      mSideCircles = U.getFixture(Circle.class, 10, "valid");
+      mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
+      mLvSideCircles.setAdapter(mSideCirclesAdapter);
+    } else {
+      // TODO loading my circles
+    }
+
 
     if (U.useFixture()) {
       getHandler().postDelayed(new Runnable() {
@@ -160,11 +180,6 @@ public class FeedActivity extends BaseActivity {
         }
       }, 2000);
       showProgressBar();
-
-      mSideCircles = U.getFixture(Circle.class, 10, "valid");
-      mSideCircles.get(1).selected = true;
-      mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
-      mLvSideCircles.setAdapter(mSideCirclesAdapter);
     } else {
       // TODO request data
     }

@@ -159,5 +159,10 @@
     <string name="messages">消息</string>
     <string name="no_new_msg">没有新消息</string>
     <string name="no_msg">没有消息</string>
+    <string name="factory">工</string>
+    <string name="business">商</string>
+    <string name="most_friends">朋友最多</string>
+    <string name="nearest">距离最近</string>
+    <string name="last_visited">最后访问</string>
 
 </resources>

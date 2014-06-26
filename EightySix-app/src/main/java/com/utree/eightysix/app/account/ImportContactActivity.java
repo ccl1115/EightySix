@@ -55,6 +55,7 @@ public class ImportContactActivity extends BaseActivity {
 
   @OnClick(R.id.rb_done)
   public void onRbDoneClicked() {
+    finish();
     startActivity(new Intent(this, SelectCircleActivity.class));
   }
 

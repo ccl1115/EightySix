@@ -142,7 +142,7 @@
                 android:exported="@bool/exported"/>
 
         <activity
-                android:name=".app.circle.MyCirclesActivity"
+                android:name=".app.circle.BaseCirclesActivity"
                 android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
                 android:exported="@bool/exported"/>
 
@@ -176,6 +176,7 @@
                   android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
                   android:exported="@bool/exported"/>
         <activity android:name=".app.circle.SelectCircleActivity"/>
+        <activity android:name=".app.circle.MyCirclesActivity"/>
 
         <service
                 android:name="com.baidu.location.f"

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.widget.RoundedButton;
@@ -22,14 +23,16 @@ class CircleListAdapter extends BaseAdapter {
 
   private static final int TYPE_CIRCLE = 0;
   private static final int TYPE_HEAD = 1;
-
   private List<Circle> mCircles;
   private SparseArray<String> mHeadMark;
-
 
   public CircleListAdapter(List<Circle> circles) {
     mCircles = circles;
     markHeadPosition();
+  }
+
+  public List<Circle> getCircles() {
+    return mCircles;
   }
 
   public void add(Collection<Circle> collection) {
@@ -101,10 +104,10 @@ class CircleListAdapter extends BaseAdapter {
     holder.mTvCircleInfo.setText(info);
     holder.mTvCircleName.setText(item.name);
     if (item.circleType == 1) {
-      holder.mRbIcon.setText("工");
+      holder.mRbIcon.setText(U.gs(R.string.factory));
       holder.mRbIcon.setBackgroundColor(0xff6a51a5);
     } else {
-      holder.mRbIcon.setText("商");
+      holder.mRbIcon.setText(U.gs(R.string.business));
       holder.mRbIcon.setBackgroundColor(0xffff6600);
     }
 
@@ -113,13 +116,13 @@ class CircleListAdapter extends BaseAdapter {
     } else {
       holder.mRbType.setVisibility(View.VISIBLE);
       if (item.viewType == 1) {
-        holder.mRbType.setText("朋友最多");
+        holder.mRbType.setText(U.gs(R.string.most_friends));
         holder.mRbType.setBackgroundColor(0xffea6161);
       } else if (item.viewType == 2) {
-        holder.mRbType.setText("距离最近");
+        holder.mRbType.setText(U.gs(R.string.nearest));
         holder.mRbType.setBackgroundColor(0xff1cbd51);
       } else if (item.viewType == 3) {
-        holder.mRbType.setText("最后访问");
+        holder.mRbType.setText(U.gs(R.string.last_visited));
         holder.mRbType.setBackgroundColor(0xff12bce7);
       }
     }
