@@ -6,6 +6,7 @@ import android.widget.FrameLayout;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.TopTitle;
@@ -46,5 +47,11 @@ public class FeedbackActivity extends PublishActivity {
   public void onIvShuffleClicked() {
     hideSoftKeyboard(mPostEditText);
     mPublishLayout.switchToPanel(PublishLayout.PANEL_COLOR);
+  }
+
+  @Override
+  @Subscribe
+  public void onLogout(Account.LogoutEvent event) {
+    finish();
   }
 }

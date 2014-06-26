@@ -10,6 +10,7 @@ import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
@@ -219,4 +220,15 @@ public class CircleSearchActivity extends BaseActivity {
       clearHistory();
     }
   }
+
+  /**
+   * When LogoutEvent fired, finish myself
+   *
+   * @param event the logout event
+   */
+  @Subscribe
+  public void onLogout(Account.LogoutEvent event) {
+    finish();
+  }
+
 }

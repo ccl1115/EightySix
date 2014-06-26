@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 import butterknife.InjectView;
 import com.squareup.otto.Subscribe;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
@@ -101,6 +102,12 @@ public class MsgActivity extends BaseActivity {
         getHandler().removeMessages(MSG_ANIMATE);
       }
     });
+  }
+
+  @Override
+  @Subscribe
+  public void onLogout(Account.LogoutEvent event) {
+    finish();
   }
 
   @Override

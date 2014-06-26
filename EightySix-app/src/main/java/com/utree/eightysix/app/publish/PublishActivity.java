@@ -28,6 +28,7 @@ import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
@@ -43,10 +44,7 @@ import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.widget.PostEditText;
 import com.utree.eightysix.widget.TopBar;
 import com.utree.eightysix.widget.panel.Item;
-import com.utree.eightysix.widget.panel.Panel;
-import de.akquinet.android.androlog.Log;
 import java.io.File;
-import java.util.Random;
 
 /**
  */
@@ -73,32 +71,19 @@ public class PublishActivity extends BaseActivity {
 
   @InjectView (R.id.ll_bottom)
   public LinearLayout mLlBottom;
-
-  private Dialog mCameraDialog;
-
-  private Dialog mDescriptionDialog;
-
-  private Dialog mConfirmQuitDialog;
-
-  private File mOutputFile;
-
-  private boolean mIsOpened;
-
-  private boolean mToastShown;
-
-  private String mFileHash;
-
-  private boolean mRequestStarted;
-
-  private boolean mImageUploadFinished;
-
-  private boolean mUseColor;
-
-  private String mImageUploadUrl;
-
-  private int mBgColor;
-
   protected PublishLayout mPublishLayout;
+  private Dialog mCameraDialog;
+  private Dialog mDescriptionDialog;
+  private Dialog mConfirmQuitDialog;
+  private File mOutputFile;
+  private boolean mIsOpened;
+  private boolean mToastShown;
+  private String mFileHash;
+  private boolean mRequestStarted;
+  private boolean mImageUploadFinished;
+  private boolean mUseColor;
+  private String mImageUploadUrl;
+  private int mBgColor;
 
   @OnClick (R.id.ll_bottom)
   public void onLlBottomClicked() {
@@ -228,7 +213,7 @@ public class PublishActivity extends BaseActivity {
         }
 
         if (!InputValidator.post(s) && count > 0) {
-          showToast(R.string.post_over_length);
+          showToast(U.gfs(R.string.post_over_length, U.getConfig("post.length")));
         }
       }
 
@@ -286,16 +271,19 @@ public class PublishActivity extends BaseActivity {
   }
 
   @Override
-  public void onBackPressed() {
+  protected void onActionLeftOnClicked() {
     confirmFinish();
   }
 
-  private void confirmFinish() {
-    if (TextUtils.isEmpty(mPostEditText.getText())) {
-      super.onBackPressed();
-    } else {
-      mConfirmQuitDialog.show();
-    }
+  @Override
+  @Subscribe
+  public void onLogout(Account.LogoutEvent event) {
+    finish();
+  }
+
+  @Override
+  public void onBackPressed() {
+    confirmFinish();
   }
 
   @Override
@@ -356,9 +344,23 @@ public class PublishActivity extends BaseActivity {
     }
   }
 
-  @Override
-  protected void onActionLeftOnClicked() {
-    confirmFinish();
+  @Subscribe
+  public void onGridPanelItemClicked(Item item) {
+    for (TypedValue tv : item.getValues()) {
+      if (tv.type == TypedValue.TYPE_INT_COLOR_ARGB8) {
+        mIvPostBg.setImageDrawable(new ColorDrawable(tv.data));
+        mPostEditText.setTextColor(monochromizing(tv.data));
+        mTvPostTip.setTextColor(monochromizing(tv.data));
+      }
+    }
+  }
+
+  private void confirmFinish() {
+    if (TextUtils.isEmpty(mPostEditText.getText())) {
+      super.onBackPressed();
+    } else {
+      mConfirmQuitDialog.show();
+    }
   }
 
   private void setBgImage(String p) {
@@ -450,15 +452,5 @@ public class PublishActivity extends BaseActivity {
     }
 
     showProgressBar();
-  }
-
-  @Subscribe public void onGridPanelItemClicked(Item item) {
-    for (TypedValue tv : item.getValues()) {
-      if (tv.type == TypedValue.TYPE_INT_COLOR_ARGB8) {
-        mIvPostBg.setImageDrawable(new ColorDrawable(tv.data));
-        mPostEditText.setTextColor(monochromizing(tv.data));
-        mTvPostTip.setTextColor(monochromizing(tv.data));
-      }
-    }
   }
 }

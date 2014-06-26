@@ -30,6 +30,7 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.drawable.RoundRectDrawable;
+import com.utree.eightysix.event.LogoutListener;
 import com.utree.eightysix.rest.HandlerWrapper;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RESTRequester;
@@ -53,7 +54,7 @@ import java.util.Map;
  * <li>Automatically finish itself when LogoutEventFired, override onLogout() to prevent this</li>
  * </ul>
  */
-public abstract class BaseActivity extends Activity implements View.OnClickListener {
+public abstract class BaseActivity extends Activity implements View.OnClickListener, LogoutListener {
 
   private final Handler mHandler = new Handler() {
     @Override
@@ -85,16 +86,6 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
         onActionLeftOnClicked();
         break;
     }
-  }
-
-  /**
-   * When LogoutEvent fired, finish myself
-   *
-   * @param event the logout event
-   */
-  @Subscribe
-  public void onLogout(Account.LogoutEvent event) {
-    finish();
   }
 
   protected boolean isFillContent() {

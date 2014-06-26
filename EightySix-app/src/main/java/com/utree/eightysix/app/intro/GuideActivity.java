@@ -2,6 +2,7 @@ package com.utree.eightysix.app.intro;
 
 import android.content.Intent;
 import android.os.Bundle;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
@@ -32,4 +33,9 @@ public class GuideActivity extends BaseActivity {
     }
 
 
+  @Override
+  @Subscribe
+  public void onLogout(Account.LogoutEvent event) {
+    finish();
+  }
 }

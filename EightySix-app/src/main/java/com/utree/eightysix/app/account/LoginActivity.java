@@ -76,15 +76,6 @@ public class LoginActivity extends BaseActivity {
     startActivity(new Intent(this, FeedActivity.class));
   }
 
-  /**
-   * Do nothing because I'm the login activity
-   *
-   * @param event the logout event
-   */
-  @Override
-  @Subscribe
-  public void onLogout(Account.LogoutEvent event) {
-  }
 
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -170,6 +161,11 @@ public class LoginActivity extends BaseActivity {
   }
 
   @Override
+  @Subscribe
+  public void onLogout(Account.LogoutEvent event) {
+  }
+
+  @Override
   protected void onActionLeftOnClicked() {
     finish();
   }
@@ -231,7 +227,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public ViewGroup.LayoutParams getLayoutParams(int position) {
-      return new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+      return new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
     }
   }
 }

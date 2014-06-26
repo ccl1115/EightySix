@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import butterknife.OnItemClick;
+import com.squareup.otto.Subscribe;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
@@ -49,5 +51,11 @@ public class SelectCircleActivity extends BaseCirclesActivity {
     super.onCreate(savedInstanceState);
 
 
+  }
+
+  @Override
+  @Subscribe
+  public void onLogout(Account.LogoutEvent event) {
+    finish();
   }
 }

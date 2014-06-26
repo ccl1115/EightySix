@@ -8,11 +8,14 @@ import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
+import com.squareup.otto.Subscribe;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.event.LogoutListener;
 import com.utree.eightysix.location.Location;
 import com.utree.eightysix.request.CreateCircleRequest;
 import com.utree.eightysix.rest.OnResponse;
@@ -24,7 +27,7 @@ import com.utree.eightysix.widget.RoundedButton;
  */
 @Layout (R.layout.activity_circle_create)
 @TopTitle (R.string.create_circle)
-public class CircleCreateActivity extends BaseActivity implements Location.OnResult {
+public class CircleCreateActivity extends BaseActivity implements Location.OnResult, LogoutListener {
 
   @InjectView (R.id.et_circle_name)
   public EditText mEtCircleName;
@@ -136,4 +139,16 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
           }
         }, Response.class);
   }
+
+  /**
+   * When LogoutEvent fired, finish myself
+   *
+   * @param event the logout event
+   */
+  @Subscribe
+  @Override
+  public void onLogout(Account.LogoutEvent event) {
+    finish();
+  }
+
 }

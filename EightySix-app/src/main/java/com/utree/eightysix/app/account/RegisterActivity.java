@@ -38,7 +38,7 @@ public class RegisterActivity extends BaseActivity {
   @InjectView (R.id.btn_register)
   public RoundedButton mBtnRegister;
 
-  @InjectView(R.id.btn_import_contact)
+  @InjectView (R.id.btn_import_contact)
   public RoundedButton mRbImportContact;
 
   private boolean mCorrectPhoneNumber;
@@ -49,7 +49,7 @@ public class RegisterActivity extends BaseActivity {
     requestRegister();
   }
 
-  @OnClick(R.id.btn_import_contact)
+  @OnClick (R.id.btn_import_contact)
   public void onBtnImportContactClicked() {
     startActivity(new Intent(this, ImportContactActivity.class));
   }
@@ -150,9 +150,14 @@ public class RegisterActivity extends BaseActivity {
 
       @Override
       public ViewGroup.LayoutParams getLayoutParams(int position) {
-        return new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        return new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
       }
     });
+  }
+
+  @Override
+  protected void onActionLeftOnClicked() {
+    finish();
   }
 
   @Subscribe
@@ -162,7 +167,7 @@ public class RegisterActivity extends BaseActivity {
   }
 
   @Override
-  protected void onActionLeftOnClicked() {
+  public void onLogout(Account.LogoutEvent event) {
     finish();
   }
 

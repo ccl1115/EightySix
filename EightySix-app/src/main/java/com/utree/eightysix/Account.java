@@ -25,9 +25,6 @@ public class Account {
         mUserId = U.getContext().getSharedPreferences("account", Context.MODE_PRIVATE).getString("user_id", "");
         mToken = U.getContext().getSharedPreferences("account", Context.MODE_PRIVATE).getString("token", "");
         mIsLogin = !TextUtils.isEmpty(mUserId) && !TextUtils.isEmpty(mToken);
-        Log.v("Account", " userId = " + mUserId);
-        Log.v("Account", "  token = " + mToken);
-        Log.v("Account", "isLogin = " + mIsLogin);
     }
 
     public static Account inst() {
@@ -111,7 +108,9 @@ public class Account {
          * When fire this event, start the login activity.
          */
         public LogoutEvent() {
-            U.getContext().startActivity(new Intent(U.getContext(), LoginActivity.class));
+          Intent intent = new Intent(U.getContext(), LoginActivity.class);
+          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+          U.getContext().startActivity(intent);
         }
     }
 

@@ -101,7 +101,7 @@
     <string name="got_it">知道啦</string>
     <string name="post_anonymously">匿名发表秘密或小心情</string>
     <string name="shuffle_bg_color">随机切换一种色彩</string>
-    <string name="post_over_length">内容不能超过140个字</string>
+    <string name="post_over_length">内容不能超过%1$d个字</string>
     <string name="quit_confirm">有内容未发布，确认放弃？</string>
     <string name="resume_editing">继续编辑</string>
     <string name="error_start_camera">启动相机应用错误</string>
@@ -164,5 +164,6 @@
     <string name="most_friends">朋友最多</string>
     <string name="nearest">距离最近</string>
     <string name="last_visited">最后访问</string>
+    <string name="logout">登出</string>
 
 </resources>

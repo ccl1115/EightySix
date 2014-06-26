@@ -38,7 +38,7 @@ class SideCirclesAdapter extends BaseAdapter {
 
   @Override
   public int getCount() {
-    return mCircles == null ? 0 : mCircles.size();
+    return mCircles == null ? 0 : Math.min(20, mCircles.size());
   }
 
   @Override

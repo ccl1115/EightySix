@@ -18,17 +18,19 @@ import butterknife.OnItemClick;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
+import com.squareup.otto.Subscribe;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.PraiseStaticActivity;
-import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.circle.MyCirclesActivity;
 import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.publish.FeedbackActivity;
 import com.utree.eightysix.app.publish.PublishActivity;
+import com.utree.eightysix.app.settings.MainSettingsActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
@@ -107,7 +109,7 @@ public class FeedActivity extends BaseActivity {
     PostActivity.start(this, (Post) item);
   }
 
-  @OnItemClick(R.id.lv_side_circles)
+  @OnItemClick (R.id.lv_side_circles)
   public void onLvSideItemClicked(int position) {
     Circle circle = mSideCircles.get(position);
     if (circle != null && !circle.selected) {
@@ -135,54 +137,7 @@ public class FeedActivity extends BaseActivity {
     setFillContent(true);
 
 
-    mCircle = getIntent().getParcelableExtra("circle");
-
-
-    if (mCircle == null && U.useFixture()) {
-      mCircle = U.getFixture(Circle.class, "valid");
-    }
-
-    if (mCircle == null) {
-      showToast(R.string.circle_not_found, false);
-    } else {
-      setTitle();
-    }
-
-    mSideCircles = getIntent().getParcelableArrayListExtra("side");
-
-    if (mSideCircles != null) {
-      for (Iterator<Circle> iterator = mSideCircles.iterator(); iterator.hasNext(); ) {
-        Circle c = iterator.next();
-        if (c == null) iterator.remove();
-      }
-      mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
-      mLvSideCircles.setAdapter(mSideCirclesAdapter);
-    } else if (U.useFixture()) {
-      mSideCircles = U.getFixture(Circle.class, 10, "valid");
-      mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
-      mLvSideCircles.setAdapter(mSideCirclesAdapter);
-    } else {
-      // TODO loading my circles
-    }
-
-
-    if (U.useFixture()) {
-      getHandler().postDelayed(new Runnable() {
-        @Override
-        public void run() {
-          mFeedAdapter = new FeedAdapter(U.getFixture(Post.class, 20, "valid"), mCircle.lock == 1);
-          mLvFeed.setAdapter(mFeedAdapter);
-          U.getBus().post(new ListViewScrollStateIdledEvent());
-          hideProgressBar();
-          if (mSideShown) {
-            mLvFeed.setSelection(1);
-          }
-        }
-      }, 2000);
-      showProgressBar();
-    } else {
-      // TODO request data
-    }
+    onNewIntent(getIntent());
 
 
     if (Env.firstRun(FIRST_RUN_KEY)) {
@@ -409,6 +364,87 @@ public class FeedActivity extends BaseActivity {
   }
 
   @Override
+  @Subscribe
+  public void onLogout(Account.LogoutEvent event) {
+    finish();
+  }
+
+  protected void onNewIntent(Intent intent) {
+    Circle circle = intent.getParcelableExtra("circle");
+
+    if (circle == null || !circle.equals(mCircle)) {
+      mLvFeed.setAdapter(null);
+    }
+
+    mCircle = circle;
+
+    if (mCircle == null && U.useFixture()) {
+      mCircle = U.getFixture(Circle.class, "valid");
+    }
+
+    if (mCircle == null) {
+      showToast(R.string.circle_not_found, false);
+    } else {
+      setTitle();
+    }
+
+    if (mSideCircles == null) {
+      mSideCircles = intent.getParcelableArrayListExtra("side");
+    }
+
+    if (mSideCircles != null) {
+      for (Iterator<Circle> iterator = mSideCircles.iterator(); iterator.hasNext(); ) {
+        Circle c = iterator.next();
+        if (c == null) iterator.remove();
+      }
+      mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
+      mLvSideCircles.setAdapter(mSideCirclesAdapter);
+    } else if (U.useFixture()) {
+      mSideCircles = U.getFixture(Circle.class, 10, "valid");
+      mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
+      mLvSideCircles.setAdapter(mSideCirclesAdapter);
+    } else {
+      // TODO loading my circles
+    }
+
+    for (Circle c : mSideCircles) {
+      c.selected = false;
+    }
+
+    for (Circle c : mSideCircles) {
+      if (mCircle.name.equals(c.name)) {
+        c.selected = true;
+        break;
+      }
+    }
+
+    if (U.useFixture()) {
+      getHandler().postDelayed(new Runnable() {
+        @Override
+        public void run() {
+          mFeedAdapter = new FeedAdapter(U.getFixture(Post.class, 20, "valid"), mCircle.lock == 1);
+          mLvFeed.setAdapter(mFeedAdapter);
+          U.getBus().post(new ListViewScrollStateIdledEvent());
+          hideProgressBar();
+          if (mSideShown) {
+            mLvFeed.setSelection(1);
+          }
+        }
+      }, 2000);
+      showProgressBar();
+    } else {
+      // TODO request data
+    }
+
+    getHandler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        hideSide();
+      }
+    }, 1000);
+  }
+
+  @Override
   public void onBackPressed() {
     if (mSideShown) {
       hideSide();
@@ -532,7 +568,7 @@ public class FeedActivity extends BaseActivity {
 
     @OnClick (R.id.ll_settings)
     void onLlSettingsClicked() {
-      showToast("TODO settings");
+      startActivity(new Intent(FeedActivity.this, MainSettingsActivity.class));
       mPopupMenu.dismiss();
     }
   }
