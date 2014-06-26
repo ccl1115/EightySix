@@ -80,6 +80,8 @@ public class Circle extends BaseCircle implements Comparator<Circle>, Comparable
     dest.writeInt(viewType);
     dest.writeInt(selected ? 1 : 0);
     dest.writeInt(distance);
+    dest.writeInt(workmateCount);
+    dest.writeInt(friendCount);
   }
 
   public static final Creator<Circle> CREATOR = new Creator<Circle>() {
@@ -94,6 +96,8 @@ public class Circle extends BaseCircle implements Comparator<Circle>, Comparable
       circle.viewType = source.readInt();
       circle.selected = source.readInt() == 1;
       circle.distance = source.readInt();
+      circle.workmateCount = source.readInt();
+      circle.friendCount = source.readInt();
       return circle;
     }
 
