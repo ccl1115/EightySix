@@ -69,14 +69,6 @@ public class LoginActivity extends BaseActivity {
     finish();
   }
 
-  @Subscribe
-  public void onLoginEvent(Account.LoginEvent event) {
-    showToast(R.string.login_success, false);
-    finish();
-    startActivity(new Intent(this, FeedActivity.class));
-  }
-
-
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
@@ -127,6 +119,11 @@ public class LoginActivity extends BaseActivity {
 
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count) {
+        s = InputValidator.trimPwd(s);
+
+        mEtPwd.setText(s);
+        mEtPwd.setSelection(s.length());
+
         if (InputValidator.pwd(s)) {
           mCorrectPwd = true;
           if (mCorrectPhoneNumber) {
@@ -179,6 +176,9 @@ public class LoginActivity extends BaseActivity {
               if (response.code == 0) {
                 if (response.object != null) {
                   Account.inst().login(response.object.userId, response.object.token);
+                  showToast(R.string.login_success, false);
+                  finish();
+                  startActivity(new Intent(LoginActivity.this, FeedActivity.class));
                 } else {
                   showToast(R.string.server_object_error);
                 }

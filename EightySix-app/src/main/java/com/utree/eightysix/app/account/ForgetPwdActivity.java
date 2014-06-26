@@ -100,7 +100,8 @@ public class ForgetPwdActivity extends BaseActivity {
           mEtPhoneNumber.setSelection(phoneLength);
         }
 
-        mBtnGetCaptcha.setEnabled(mPhoneNumberCorrect = InputValidator.phoneNumber(s));
+        mPhoneNumberCorrect = InputValidator.phoneNumber(s);
+        mBtnGetCaptcha.setEnabled(mPhoneNumberCorrect);
       }
 
       @Override
@@ -138,6 +139,11 @@ public class ForgetPwdActivity extends BaseActivity {
 
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count) {
+        s = InputValidator.trimPwd(s);
+
+        mEtNewPwd.setText(s);
+        mEtNewPwd.setSelection(s.length());
+
         if (InputValidator.pwd(s)) {
           mBtnDone.setEnabled(true);
         } else {
@@ -254,5 +260,10 @@ public class ForgetPwdActivity extends BaseActivity {
     mTargetTime = new Date().getTime() + U.getConfigInt("activity.find_pwd.captcha.countdown");
 
     getHandler().sendEmptyMessageDelayed(MSG_COUNTDOWN, 1000);
+  }
+
+  @Override
+  protected void onActionLeftOnClicked() {
+    finish();
   }
 }

@@ -101,7 +101,6 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     mActionOverFlow.setBackgroundDrawable(getResources().getDrawable(R.drawable.apptheme_primary_btn_dark));
 
-    mActionLeft.setOnClickListener(this);
   }
 
   public String getTitle() {

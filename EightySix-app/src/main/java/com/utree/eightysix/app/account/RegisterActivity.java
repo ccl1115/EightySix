@@ -101,6 +101,11 @@ public class RegisterActivity extends BaseActivity {
 
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count) {
+        s = InputValidator.trimPwd(s);
+
+        mEtPwd.setText(s);
+        mEtPwd.setSelection(s.length());
+
         mCorrectPwd = InputValidator.pwd(s);
         if (mCorrectPwd) {
           if (mCorrectPhoneNumber) {
@@ -160,12 +165,6 @@ public class RegisterActivity extends BaseActivity {
     finish();
   }
 
-  @Subscribe
-  public void onLoginEvent(Account.LoginEvent event) {
-    showToast(R.string.register_success, false);
-    finish();
-  }
-
   @Override
   public void onLogout(Account.LogoutEvent event) {
     finish();
@@ -181,6 +180,9 @@ public class RegisterActivity extends BaseActivity {
                 User user = response.object;
                 if (user != null) {
                   Account.inst().login(user.userId, user.token);
+                  showToast(R.string.register_success, false);
+                  startActivity(new Intent(RegisterActivity.this, ImportContactActivity.class));
+                  finish();
                   return;
                 } else {
                   showToast(R.string.server_object_error);

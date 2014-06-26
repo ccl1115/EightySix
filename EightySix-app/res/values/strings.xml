@@ -165,5 +165,6 @@
     <string name="nearest">距离最近</string>
     <string name="last_visited">最后访问</string>
     <string name="logout">登出</string>
+    <string name="error_connect_exception">无法访问服务器，请检查你的网络设置</string>
 
 </resources>
