@@ -49,4 +49,9 @@ public class MainSettingsActivity extends BaseActivity {
   public void onLogout(Account.LogoutEvent event) {
     finish();
   }
+
+  @Override
+  protected void onActionLeftOnClicked() {
+    finish();
+  }
 }
