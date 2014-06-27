@@ -77,18 +77,20 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
 
   @Override
   public void onFailure(int statusCode, org.apache.http.Header[] headers, Throwable e, String rawData, T errorResponse) {
-    if (statusCode > HttpStatus.SC_MULTIPLE_CHOICES) {
-      if (BuildConfig.DEBUG) {
-        Toast.makeText(U.getContext(), "HttpStatus: " + statusCode, Toast.LENGTH_SHORT).show();
-      }
-    }
-
     if (e != null) {
       if (e instanceof ConnectException) {
         Toast.makeText(U.getContext(), U.gs(R.string.error_connect_exception), Toast.LENGTH_SHORT).show();
       }
       if (BuildConfig.DEBUG) {
         e.printStackTrace();
+      }
+    }
+
+    if (statusCode > HttpStatus.SC_MULTIPLE_CHOICES) {
+      if (BuildConfig.DEBUG) {
+        Toast.makeText(U.getContext(), "HttpStatus: " + statusCode, Toast.LENGTH_SHORT).show();
+      } else {
+        U.showToast(U.gs(R.string.server_500));
       }
     }
     mOnResponse.onResponse(null);

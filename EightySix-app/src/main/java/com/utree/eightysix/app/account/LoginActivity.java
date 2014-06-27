@@ -90,8 +90,9 @@ public class LoginActivity extends BaseActivity {
       public void onTextChanged(CharSequence s, int start, int before, int count) {
         if (s.length() > mPhoneNumberLength) {
           s = s.subSequence(0, mPhoneNumberLength);
+          final int selection = mEtPhoneNumber.getSelectionStart();
           mEtPhoneNumber.setText(s);
-          mEtPhoneNumber.setSelection(11);
+          mEtPhoneNumber.setSelection(Math.min(selection, s.length()));
         }
 
         if (InputValidator.phoneNumber(s)) {
@@ -121,8 +122,9 @@ public class LoginActivity extends BaseActivity {
       public void onTextChanged(CharSequence s, int start, int before, int count) {
         s = InputValidator.trimPwd(s);
 
+        final int selection = mEtPwd.getSelectionStart();
         mEtPwd.setText(s);
-        mEtPwd.setSelection(s.length());
+        mEtPwd.setSelection(Math.min(selection, s.length()));
 
         if (InputValidator.pwd(s)) {
           mCorrectPwd = true;

@@ -72,8 +72,9 @@ public class RegisterActivity extends BaseActivity {
       public void onTextChanged(CharSequence s, int start, int before, int count) {
         final int phoneLength = U.getConfigInt("account.phone.length");
         if (s.length() > phoneLength) {
+          final int selection = mEtPhoneNumber.getSelectionStart();
           mEtPhoneNumber.setText(s.subSequence(0, phoneLength));
-          mEtPhoneNumber.setSelection(phoneLength);
+          mEtPhoneNumber.setSelection(Math.min(selection, s.length()));
         }
 
 
@@ -103,8 +104,9 @@ public class RegisterActivity extends BaseActivity {
       public void onTextChanged(CharSequence s, int start, int before, int count) {
         s = InputValidator.trimPwd(s);
 
+        final int selection = mEtPwd.getSelectionStart();
         mEtPwd.setText(s);
-        mEtPwd.setSelection(s.length());
+        mEtPwd.setSelection(Math.min(selection, s.length()));
 
         mCorrectPwd = InputValidator.pwd(s);
         if (mCorrectPwd) {

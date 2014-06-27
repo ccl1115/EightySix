@@ -94,10 +94,12 @@ public class ForgetPwdActivity extends BaseActivity {
 
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count) {
+        final int selection = mEtPhoneNumber.getSelectionStart();
         int phoneLength = U.getConfigInt("account.phone.length");
         if (s.length() > phoneLength) {
-          mEtPhoneNumber.setText(s.subSequence(0, phoneLength));
-          mEtPhoneNumber.setSelection(phoneLength);
+          s = s.subSequence(0, phoneLength);
+          mEtPhoneNumber.setText(s);
+          mEtPhoneNumber.setSelection(Math.min(selection, s.length()));
         }
 
         mPhoneNumberCorrect = InputValidator.phoneNumber(s);
