@@ -114,6 +114,11 @@
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                 <artifactId>android-maven-plugin</artifactId>
                 <extensions>true</extensions>
+                <configuration>
+                    <sign>
+                        <debug>false</debug>
+                    </sign>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -134,7 +139,7 @@
                             </includes>
                             <keystore>../keystore.ks</keystore>
                             <storepass>0612053</storepass>
-                            <alias>sign-apk</alias>
+                            <alias>debug</alias>
                             <keypass>0612053</keypass>
                             <arguments>
                                 <argument>-sigalg</argument>
