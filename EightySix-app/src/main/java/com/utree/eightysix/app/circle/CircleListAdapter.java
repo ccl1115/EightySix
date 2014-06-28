@@ -111,7 +111,7 @@ class CircleListAdapter extends BaseAdapter {
       holder.mRbIcon.setBackgroundColor(0xffff6600);
     }
 
-    if (item.viewType == 4) {
+    if (item.viewType == 0) {
       holder.mRbType.setVisibility(View.INVISIBLE);
     } else {
       holder.mRbType.setVisibility(View.VISIBLE);

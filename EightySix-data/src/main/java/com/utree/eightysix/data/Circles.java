@@ -6,6 +6,6 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Circles {
 
-    @SerializedName("factoryList")
+    @SerializedName("object")
     public Paginate<Circle> factoryCircle;
 }

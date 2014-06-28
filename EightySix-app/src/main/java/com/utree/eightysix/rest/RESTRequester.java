@@ -25,151 +25,156 @@ import org.apache.http.message.BasicHeader;
  */
 public class RESTRequester {
 
-    private AsyncHttpClient mAsyncHttpClient;
+  private AsyncHttpClient mAsyncHttpClient;
 
-    private String mHost;
+  private String mHost;
 
-    public RESTRequester(String host) {
-        mHost = host;
-        mAsyncHttpClient = new AsyncHttpClient();
-        mAsyncHttpClient.setMaxConnections(U.getConfigInt("api.connections"));
-        mAsyncHttpClient.setMaxRetriesAndTimeout(U.getConfigInt("api.retry"), U.getConfigInt("api.timeout"));
+  public RESTRequester(String host) {
+    mHost = host;
+    mAsyncHttpClient = new AsyncHttpClient();
+    mAsyncHttpClient.setMaxConnections(U.getConfigInt("api.connections"));
+    mAsyncHttpClient.setMaxRetriesAndTimeout(U.getConfigInt("api.retry"), U.getConfigInt("api.timeout"));
+  }
+
+  public RESTRequester(String host, int maxConnections) {
+    mHost = host;
+    mAsyncHttpClient = new AsyncHttpClient();
+    mAsyncHttpClient.setMaxConnections(maxConnections);
+    mAsyncHttpClient.setMaxRetriesAndTimeout(U.getConfigInt("api.retry"), U.getConfigInt("api.timeout"));
+  }
+
+  public RESTRequester(String host, int maxConnections, int retry, int timeout) {
+    mHost = host;
+    mAsyncHttpClient = new AsyncHttpClient();
+    mAsyncHttpClient.setMaxConnections(maxConnections);
+    mAsyncHttpClient.setMaxRetriesAndTimeout(retry, timeout);
+  }
+
+  public AsyncHttpClient getClient() {
+    return mAsyncHttpClient;
+  }
+
+  public RequestHandle request(Object request, ResponseHandlerInterface handler) {
+    RequestData data = convert(request);
+    return request(data, handler);
+  }
+
+  public RequestHandle request(RequestData data, ResponseHandlerInterface handler) {
+    if (data.method == Method.METHOD.GET) {
+      return get(data.api, data.headers, data.params, handler);
+    } else if (data.method == Method.METHOD.POST) {
+      return post(data.api, data.headers, data.params, null, handler);
     }
+    return null;
+  }
 
-    public RESTRequester(String host, int maxConnections) {
-        mHost = host;
-        mAsyncHttpClient = new AsyncHttpClient();
-        mAsyncHttpClient.setMaxConnections(maxConnections);
-        mAsyncHttpClient.setMaxRetriesAndTimeout(U.getConfigInt("api.retry"), U.getConfigInt("api.timeout"));
-    }
+  public RequestData convert(Object request) {
+    RequestData data = new RequestData();
+    Class<?> clz = request.getClass();
 
-    public RESTRequester(String host, int maxConnections, int retry, int timeout) {
-        mHost = host;
-        mAsyncHttpClient = new AsyncHttpClient();
-        mAsyncHttpClient.setMaxConnections(maxConnections);
-        mAsyncHttpClient.setMaxRetriesAndTimeout(retry, timeout);
-    }
+    List<Header> headers = new ArrayList<Header>();
 
-    private RequestHandle get(String api, Header[] headers, RequestParams params, ResponseHandlerInterface handler) {
-        Log.d(C.TAG.RR, "   get: " + mHost + api);
-        Log.d(C.TAG.RR, "params: " + params.toString());
-        putBaseParams(params);
-        return mAsyncHttpClient.get(U.getContext(), mHost + api, headers, params, handler);
-    }
+    try {
+      data.api = clz.getAnnotation(Api.class).value();
+      data.params = new RequestParams();
 
-    private RequestHandle post(String api, Header[] headers, RequestParams params, String contentType, ResponseHandlerInterface handler) {
-        Log.d(C.TAG.RR, "  post: " + mHost + api);
-        Log.d(C.TAG.RR, "params: " + params.toString());
-        putBaseParams(params);
-        return mAsyncHttpClient.post(U.getContext(), mHost + api, headers, params, contentType, handler);
-    }
+      Token token = clz.getAnnotation(Token.class);
 
-    public RequestHandle request(Object request, ResponseHandlerInterface handler) {
-        RequestData data = convert(request);
-        return request(data, handler);
-    }
+      if (token != null && Account.inst().isLogin()) {
+        data.params.add("token", Account.inst().getToken());
+        data.params.add("userId", Account.inst().getUserId());
+      }
 
-    public RequestHandle request(RequestData data, ResponseHandlerInterface handler) {
-        if (data.method == Method.METHOD.GET) {
-            return get(data.api, data.headers, data.params, handler);
-        } else if (data.method == Method.METHOD.POST) {
-            return post(data.api, data.headers, data.params, null, handler);
-        }
-        return null;
-    }
+      Method method = clz.getAnnotation(Method.class);
+      if (method != null) {
+        data.method = method.value();
+      } else {
+        data.method = Method.METHOD.GET;
+      }
 
-    public static class RequestData {
-        Method.METHOD method;
-        public String api;
-        Header[] headers;
-        public RequestParams params;
-    }
+      for (Field f : clz.getFields()) {
+        Param p = f.getAnnotation(Param.class);
 
-    public RequestData convert(Object request) {
-        RequestData data = new RequestData();
-        Class<?> clz = request.getClass();
-
-        List<Header> headers = new ArrayList<Header>();
-
-        try {
-            data.api = clz.getAnnotation(Api.class).value();
-            data.params = new RequestParams();
-
-            Token token = clz.getAnnotation(Token.class);
-
-            if (token != null && Account.inst().isLogin()) {
-                data.params.add("token", Account.inst().getToken());
-                data.params.add("userId", Account.inst().getUserId());
-            }
-
-            Method method = clz.getAnnotation(Method.class);
-            if (method != null) {
-                data.method = method.value();
-            } else {
-                data.method = Method.METHOD.GET;
-            }
-
-            for (Field f : clz.getFields()) {
-                Param p = f.getAnnotation(Param.class);
-
-                if (p != null) {
-                    Object value = f.get(request);
-                    if (value instanceof List || value instanceof Set || value instanceof Map) {
-                        data.params.put(p.value(), value);
-                    } else if (value instanceof File) {
-                        data.params.put(p.value(), (File) value);
-                    } else if (value instanceof InputStream) {
-                        data.params.put(p.value(), (InputStream) value);
-                    } else {
-                        data.params.put(p.value(), String.valueOf(value));
-                    }
-                }
-
-                com.utree.eightysix.rest.Header h = f.getAnnotation(com.utree.eightysix.rest.Header.class);
-
-                if (h != null) {
-                    headers.add(new BasicHeader(h.value(), (String) f.get(request)));
-                }
-            }
-
-            if (headers.size() > 0) {
-                data.headers = new Header[headers.size()];
-                headers.toArray(data.headers);
-            }
-        } catch (Throwable t) {
-            U.getAnalyser().reportException(U.getContext(), t);
-            throw new IllegalArgumentException("Request object parse failed");
+        if (p != null) {
+          Object value = f.get(request);
+          if (value instanceof List || value instanceof Set || value instanceof Map) {
+            data.params.put(p.value(), value);
+          } else if (value instanceof File) {
+            data.params.put(p.value(), (File) value);
+          } else if (value instanceof InputStream) {
+            data.params.put(p.value(), (InputStream) value);
+          } else {
+            data.params.put(p.value(), String.valueOf(value));
+          }
         }
 
-        return data;
+        com.utree.eightysix.rest.Header h = f.getAnnotation(com.utree.eightysix.rest.Header.class);
+
+        if (h != null) {
+          headers.add(new BasicHeader(h.value(), (String) f.get(request)));
+        }
+      }
+
+      if (headers.size() > 0) {
+        data.headers = new Header[headers.size()];
+        headers.toArray(data.headers);
+      }
+    } catch (Throwable t) {
+      U.getAnalyser().reportException(U.getContext(), t);
+      throw new IllegalArgumentException("Request object parse failed");
     }
 
-    private void putBaseParams(RequestParams params) {
-        if (params == null) {
-            params = new RequestParams();
-        }
+    return data;
+  }
 
-        params.add("os", "android");
-        params.add("os_version", String.valueOf(Build.VERSION.SDK_INT));
-        params.add("device", Build.DEVICE);
-        params.add("model", Build.MODEL);
-        params.add("manufacturer", Build.MANUFACTURER);
-        params.add("imei", Env.getImei());
-        params.add("version", String.valueOf(C.VERSION));
-        params.add("channel", U.getConfig("app.channel"));
-        params.add("lat", Env.getLastLatitude());
-        params.add("lon", Env.getLastLongitude());
+  private RequestHandle get(String api, Header[] headers, RequestParams params, ResponseHandlerInterface handler) {
+    Log.d(C.TAG.RR, "   get: " + mHost + api);
+    Log.d(C.TAG.RR, "params: " + params.toString());
+    putBaseParams(params);
+    return mAsyncHttpClient.get(U.getContext(), mHost + api, headers, params, handler);
+  }
 
-        params.add("cuid", CommonParam.getCUID(U.getContext()));
+  private RequestHandle post(String api, Header[] headers, RequestParams params, String contentType, ResponseHandlerInterface handler) {
+    Log.d(C.TAG.RR, "  post: " + mHost + api);
+    Log.d(C.TAG.RR, "params: " + params.toString());
+    putBaseParams(params);
+    return mAsyncHttpClient.post(U.getContext(), mHost + api, headers, params, contentType, handler);
+  }
 
-        String pushChannelId = Env.getPushChannelId();
-        if (pushChannelId != null) {
-            params.add("push_channelid", pushChannelId);
-        }
-
-        String pushUserId = Env.getPushUserId();
-        if (pushUserId != null) {
-            params.add("push_userid", pushUserId);
-        }
+  private void putBaseParams(RequestParams params) {
+    if (params == null) {
+      params = new RequestParams();
     }
+
+    params.add("os", "android");
+    params.add("os_version", String.valueOf(Build.VERSION.SDK_INT));
+    params.add("device", Build.DEVICE);
+    params.add("model", Build.MODEL);
+    params.add("manufacturer", Build.MANUFACTURER);
+    params.add("imei", Env.getImei());
+    params.add("version", String.valueOf(C.VERSION));
+    params.add("channel", U.getConfig("app.channel"));
+    params.add("lat", Env.getLastLatitude());
+    params.add("lon", Env.getLastLongitude());
+    params.add("cityName", Env.getLastCity());
+
+    params.add("cuid", CommonParam.getCUID(U.getContext()));
+
+    String pushChannelId = Env.getPushChannelId();
+    if (pushChannelId != null) {
+      params.add("push_channelid", pushChannelId);
+    }
+
+    String pushUserId = Env.getPushUserId();
+    if (pushUserId != null) {
+      params.add("push_userid", pushUserId);
+    }
+  }
+
+  public static class RequestData {
+    public String api;
+    public RequestParams params;
+    Method.METHOD method;
+    Header[] headers;
+  }
 }

@@ -252,7 +252,7 @@ public class U {
   }
 
   public static boolean useFixture() {
-    return getConfigBoolean("fixture");
+    return getConfigBoolean("debug.fixture");
   }
 
   public static <T> List<T> getFixture(Class<T> clz, int quantity, String template) {

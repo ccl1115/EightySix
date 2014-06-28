@@ -167,5 +167,6 @@
     <string name="logout">登出</string>
     <string name="error_connect_exception">无法访问服务器，请检查你的网络设置</string>
     <string name="server_500">服务器暂时无法提供服务</string>
+    <string name="sync_contact_failed">同步通讯录失败，请尝试重新同步</string>
 
 </resources>

@@ -212,8 +212,15 @@ public class PublishActivity extends BaseActivity {
           mTvPostTip.setVisibility(View.INVISIBLE);
         }
 
+        if (s.length() > U.getConfigInt("post.length")) {
+          final int selection = mPostEditText.getSelectionStart();
+          s = s.subSequence(0, U.getConfigInt("post.length"));
+          mPostEditText.setText(s);
+          mPostEditText.setSelection(Math.min(selection, s.length()));
+        }
+
         if (!InputValidator.post(s) && count > 0) {
-          showToast(U.gfs(R.string.post_over_length, U.getConfig("post.length")));
+          showToast(U.gfs(R.string.post_over_length, U.getConfigInt("post.length")));
         }
       }
 

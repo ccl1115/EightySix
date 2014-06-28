@@ -64,7 +64,7 @@ class SideCirclesAdapter extends BaseAdapter {
 
     Circle circle = getItem(position);
 
-    viewHolder.mTvName.setText(circle.name);
+    viewHolder.mTvName.setText(circle.shortName);
     viewHolder.mTvFriends.setText(
         String.format(parent.getContext().getString(R.string.friends_info),
             circle.friendCount, circle.workmateCount));

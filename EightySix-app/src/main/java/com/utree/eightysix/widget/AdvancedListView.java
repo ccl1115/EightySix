@@ -119,6 +119,8 @@ public final class AdvancedListView extends ListView {
   }
 
   @Subscribe public void onAdapterDataSetChangedEvent(AdapterDataSetChangedEvent event) {
-    mAdapterWrapper.notifyDataSetChanged();
+    if (mAdapterWrapper != null) {
+      mAdapterWrapper.notifyDataSetChanged();
+    }
   }
 }

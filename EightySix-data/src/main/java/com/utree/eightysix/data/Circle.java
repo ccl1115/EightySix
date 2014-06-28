@@ -11,7 +11,7 @@ import java.util.Comparator;
 public class Circle extends BaseCircle implements Comparator<Circle>, Comparable<Circle>, Parcelable {
 
   @SerializedName ("cityName")
-  public String cityName;
+  public String cityName = "";
 
   /**
    * unit mitre
@@ -41,8 +41,8 @@ public class Circle extends BaseCircle implements Comparator<Circle>, Comparable
    * 工作过的地方(4) 活动的等级
    *
    */
-  @SerializedName ("viewGroupType")
-  public String viewGroupType;
+  @SerializedName ("viewGroupName")
+  public String viewGroupType = "";
 
   /**
    * 1 is the most friends

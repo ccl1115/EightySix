@@ -22,6 +22,8 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.circle.SelectCircleActivity;
+import com.utree.eightysix.contact.ContactsSyncEvent;
+import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.widget.RoundedButton;
 import java.util.Random;
 
@@ -48,6 +50,9 @@ public class ImportContactActivity extends BaseActivity {
   @InjectView (R.id.tv_result)
   public TextView mTvResult;
 
+  @InjectView (R.id.rb_import)
+  public RoundedButton mRbImport;
+
   @InjectView (R.id.v_mask)
   public View mVMask;
 
@@ -55,7 +60,7 @@ public class ImportContactActivity extends BaseActivity {
 
   private AlertDialog mQuitConfirmDialog;
 
-  @OnClick(R.id.rb_done)
+  @OnClick (R.id.rb_done)
   public void onRbDoneClicked() {
     finish();
     startActivity(new Intent(this, SelectCircleActivity.class));
@@ -63,6 +68,8 @@ public class ImportContactActivity extends BaseActivity {
 
   @OnClick (R.id.rb_import)
   public void onRbImportClicked() {
+
+    mRbImport.setEnabled(false);
 
     mVMask.setVisibility(View.VISIBLE);
     mFlImport.setVisibility(View.VISIBLE);
@@ -79,18 +86,23 @@ public class ImportContactActivity extends BaseActivity {
 
     getHandler().sendEmptyMessageDelayed(MSG_ANIMATE, 500);
 
-    getHandler().postDelayed(new Runnable() {
-      @Override
-      public void run() {
-        getHandler().removeMessages(MSG_ANIMATE);
+    if (U.useFixture()) {
 
-        mTvResult.setText("为你找到" + mRandom.nextInt(100) + "个朋友");
+      getHandler().postDelayed(new Runnable() {
+        @Override
+        public void run() {
+          getHandler().removeMessages(MSG_ANIMATE);
 
-        ObjectAnimator animator = ObjectAnimator.ofFloat(mLlScroll, "translationY", 0, -U.dp2px(180));
-        animator.setDuration(500);
-        animator.start();
-      }
-    }, 5000);
+          mTvResult.setText("为你找到" + mRandom.nextInt(100) + "个朋友");
+
+          ObjectAnimator animator = ObjectAnimator.ofFloat(mLlScroll, "translationY", 0, -U.dp2px(180));
+          animator.setDuration(500);
+          animator.start();
+        }
+      }, 5000);
+    } else {
+      startService(new Intent(this, ContactsSyncService.class));
+    }
 
   }
 
@@ -153,5 +165,21 @@ public class ImportContactActivity extends BaseActivity {
   @Override
   public void onLogout(Account.LogoutEvent event) {
     finish();
+  }
+
+  @Subscribe
+  public void onContactSync(ContactsSyncEvent event) {
+    if (event.isSucceed()) {
+      mTvResult.setText("为你找到" + mRandom.nextInt(100) + "个朋友");
+
+      ObjectAnimator animator = ObjectAnimator.ofFloat(mLlScroll, "translationY", 0, -U.dp2px(180));
+      animator.setDuration(500);
+      animator.start();
+    } else {
+      showToast(getString(R.string.sync_contact_failed));
+      mRbImport.setEnabled(true);
+      mVMask.setVisibility(View.INVISIBLE);
+      mFlImport.setVisibility(View.INVISIBLE);
+    }
   }
 }

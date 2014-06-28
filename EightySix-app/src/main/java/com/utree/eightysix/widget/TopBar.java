@@ -66,8 +66,6 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
   private int mCurCount;
 
-  private int mOverflowCurCount;
-
   private final Paint mTopLinePaint = new Paint();
   private final Paint mBotLinePaint = new Paint();
 
@@ -101,6 +99,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     mActionOverFlow.setBackgroundDrawable(getResources().getDrawable(R.drawable.apptheme_primary_btn_dark));
 
+    setOnClickListener(this);
   }
 
   public String getTitle() {

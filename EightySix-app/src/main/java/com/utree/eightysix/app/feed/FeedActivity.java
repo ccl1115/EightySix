@@ -35,6 +35,9 @@ import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
+import com.utree.eightysix.request.MyCirclesRequest;
+import com.utree.eightysix.response.CirclesResponse;
+import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
@@ -397,26 +400,18 @@ public class FeedActivity extends BaseActivity {
         Circle c = iterator.next();
         if (c == null) iterator.remove();
       }
+      selectSideCircle(mSideCircles);
       mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
       mLvSideCircles.setAdapter(mSideCirclesAdapter);
     } else if (U.useFixture()) {
       mSideCircles = U.getFixture(Circle.class, 10, "valid");
+      selectSideCircle(mSideCircles);
       mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
       mLvSideCircles.setAdapter(mSideCirclesAdapter);
     } else {
-      // TODO loading my circles
+      requestMyCircle();
     }
 
-    for (Circle c : mSideCircles) {
-      c.selected = false;
-    }
-
-    for (Circle c : mSideCircles) {
-      if (mCircle.name.equals(c.name)) {
-        c.selected = true;
-        break;
-      }
-    }
 
     if (U.useFixture()) {
       getHandler().postDelayed(new Runnable() {
@@ -453,6 +448,23 @@ public class FeedActivity extends BaseActivity {
     }
   }
 
+  private void selectSideCircle(List<Circle> sideCircles) {
+    if (sideCircles != null) {
+      for (Circle c : sideCircles) {
+        c.selected = false;
+      }
+
+      if (mCircle == null) return;
+
+      for (Circle c : sideCircles) {
+        if (mCircle.name.equals(c.name)) {
+          c.selected = true;
+          break;
+        }
+      }
+    }
+  }
+
   private void refresh() {
     setTitle();
     if (U.useFixture()) {
@@ -473,7 +485,9 @@ public class FeedActivity extends BaseActivity {
   }
 
   private void setTitle() {
-    setTopTitle(mCircle.name);
+    if (mCircle == null) return;
+
+    setTopTitle(mCircle.shortName);
     setTopSubTitle(String.format(getString(R.string.friends_info), mCircle.friendCount, mCircle.workmateCount));
     if (mCircle.lock == 1) {
       getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(
@@ -532,6 +546,21 @@ public class FeedActivity extends BaseActivity {
       }
     });
     set.start();
+  }
+
+  private void requestMyCircle() {
+    request(new MyCirclesRequest("", 1), new OnResponse<CirclesResponse>() {
+
+      @Override
+      public void onResponse(CirclesResponse response) {
+        if (response != null && response.code == 0) {
+          mSideCircles = response.object.lists.subList(0, 10);
+          selectSideCircle(FeedActivity.this.mSideCircles);
+          mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
+          mLvSideCircles.setAdapter(mSideCirclesAdapter);
+        }
+      }
+    }, CirclesResponse.class);
   }
 
   @Keep
