@@ -28,6 +28,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.event.LogoutListener;
+import com.utree.eightysix.rest.CacheInWorker;
 import com.utree.eightysix.rest.CacheOutWorker;
 import com.utree.eightysix.rest.HandlerWrapper;
 import com.utree.eightysix.rest.OnResponse;
@@ -35,6 +36,8 @@ import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.RequestData;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.TopBar;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -412,6 +415,11 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
     RequestData data = U.getRESTRequester().convert(request);
 
     new CacheOutWorker<T>(RESTRequester.genCacheKey(data.getApi(), data.getParams()), onResponse, clz).execute();
+  }
+
+  protected final void cacheIn(Object request, InputStream is) {
+    RequestData data = U.getRESTRequester().convert(request);
+    new CacheInWorker(RESTRequester.genCacheKey(data.getApi(), data.getParams()), is).execute();
   }
 
   protected final void cancel(String api, RequestParams params) {
