@@ -46,7 +46,7 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
 
       if (mRequestData.needCache()) {
         new CacheInWorker(RESTRequester.genCacheKey(mRequestData.getApi(), mRequestData.getParams()),
-            new ByteArrayInputStream(rawResponse.getBytes())).execute();
+            rawResponse).execute();
       }
     }
 

@@ -7,7 +7,6 @@ import com.utree.eightysix.utils.IOUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Reader;
 
 /**
  * @author simon
@@ -16,14 +15,46 @@ public class CacheInWorker extends AsyncTask<Void, Void, Void> {
 
   private String mKey;
   private InputStream mInputStream;
+  private String mValue;
 
   public CacheInWorker(String key, InputStream inputStream) {
     mKey = key;
     mInputStream = inputStream;
   }
 
+  public CacheInWorker(String key, String string) {
+    mKey = key;
+    mValue = string;
+  }
+
   @Override
   protected Void doInBackground(Void... voids) {
+    if (mInputStream != null) {
+      cacheInputStream();
+    } else if (mValue != null) {
+      cacheInString();
+    }
+    return null;
+  }
+
+  private void cacheInString() {
+    DiskLruCache.Editor edit = null;
+    try {
+      edit = U.getApiCache().edit(mKey);
+      edit.set(0, mValue);
+    } catch (IOException e) {
+      U.getAnalyser().reportException(U.getContext(), e);
+    } finally {
+      if (edit != null) {
+        try {
+          edit.commit();
+        } catch (IOException ignored) {
+        }
+      }
+    }
+  }
+
+  private void cacheInputStream() {
     DiskLruCache.Editor edit = null;
     OutputStream os = null;
     try {
@@ -34,17 +65,18 @@ public class CacheInWorker extends AsyncTask<Void, Void, Void> {
       U.getAnalyser().reportException(U.getContext(), e);
     } finally {
 
-      try {
-        if (os != null) {
+      if (os != null) {
+        try {
           os.close();
+        } catch (IOException ignored) {
         }
-      } catch (IOException ignored) {
       }
 
-      try {
-        if (edit != null)
+      if (edit != null) {
+        try {
           edit.commit();
-      } catch (IOException ignored) {
+        } catch (IOException ignored) {
+        }
       }
 
       try {
@@ -52,6 +84,5 @@ public class CacheInWorker extends AsyncTask<Void, Void, Void> {
       } catch (IOException ignored) {
       }
     }
-    return null;
   }
 }

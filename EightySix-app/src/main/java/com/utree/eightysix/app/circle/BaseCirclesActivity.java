@@ -59,7 +59,6 @@ public class BaseCirclesActivity extends BaseActivity {
   public TextView mTvHead;
 
   protected CircleListAdapter mCircleListAdapter;
-  protected List<Circle> mCircles;
 
   private int mMode;
 
@@ -90,10 +89,14 @@ public class BaseCirclesActivity extends BaseActivity {
     if (circle != null) {
       if (mMode == MODE_MY) {
         circle.selected = true;
-        FeedActivity.start(this, circle);
+        if (mRefreshed) {
+          FeedActivity.start(this, circle, new ArrayList<Circle>(mCircleListAdapter.getCircles().subList(0, 10)));
+        } else {
+          FeedActivity.start(this, circle);
+        }
       } else if (mMode == MODE_SELECT) {
         AlertDialog dialog = new AlertDialog.Builder(this)
-            .setTitle("确认在" + circle.name + "上班么？")
+            .setTitle(String.format("确认在%s上班么？", circle.name))
             .setPositiveButton("确认", new DialogInterface.OnClickListener() {
               @Override
               public void onClick(DialogInterface dialog, int which) {

@@ -422,6 +422,12 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
     new CacheInWorker(RESTRequester.genCacheKey(data.getApi(), data.getParams()), is).execute();
   }
 
+  protected final void cacheIn(Object request, String string) {
+    RequestData data = U.getRESTRequester().convert(request);
+    new CacheInWorker(RESTRequester.genCacheKey(data.getApi(), data.getParams()), string).execute();
+  }
+
+
   protected final void cancel(String api, RequestParams params) {
     RequestHandle handle = mRequestHandles.get(RESTRequester.genCacheKey(api, params));
     if (handle != null) {

@@ -15,6 +15,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import com.google.gson.reflect.TypeToken;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -38,11 +39,11 @@ import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
 import com.utree.eightysix.request.MyCirclesRequest;
 import com.utree.eightysix.response.CirclesResponse;
 import com.utree.eightysix.rest.OnResponse;
-import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.TopBar;
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -374,6 +375,7 @@ public class FeedActivity extends BaseActivity {
   }
 
   protected void onNewIntent(Intent intent) {
+    //region 标题栏数据处理
     Circle circle = intent.getParcelableExtra("circle");
 
     if (circle == null || !circle.equals(mCircle)) {
@@ -391,9 +393,14 @@ public class FeedActivity extends BaseActivity {
     } else {
       setTitle();
     }
+    //endregion
 
-    if (mSideCircles == null) {
-      mSideCircles = intent.getParcelableArrayListExtra("side");
+
+    //region 侧边栏数据处理
+    List<Circle> circles = intent.getParcelableArrayListExtra("side");
+
+    if (circles != null) {
+      mSideCircles = circles;
     }
 
     if (mSideCircles != null) {
@@ -410,8 +417,9 @@ public class FeedActivity extends BaseActivity {
       mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
       mLvSideCircles.setAdapter(mSideCirclesAdapter);
     } else {
-      cacheOutMyCircle();
+      cacheOutSideCircle();
     }
+    //endregion
 
 
     if (U.useFixture()) {
@@ -549,23 +557,27 @@ public class FeedActivity extends BaseActivity {
     set.start();
   }
 
-  private void cacheOutMyCircle() {
+  private void cacheOutSideCircle() {
     cacheOut(new MyCirclesRequest("", 1), new OnResponse<CirclesResponse>() {
       @Override
       public void onResponse(CirclesResponse response) {
         if (response != null && response.code == 0) {
           mSideCircles = response.object.lists.subList(0, 10);
-          selectSideCircle(FeedActivity.this.mSideCircles);
+          selectSideCircle(mSideCircles);
           mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
           mLvSideCircles.setAdapter(mSideCirclesAdapter);
         } else {
-          requestMyCircle();
+          requestSideCircle();
         }
       }
     }, CirclesResponse.class);
   }
 
-  private void requestMyCircle() {
+  private void cacheInSideCircle(String string) {
+    cacheIn(new MyCirclesRequest("", 1), string);
+  }
+
+  private void requestSideCircle() {
     request(new MyCirclesRequest("", 1), new OnResponse<CirclesResponse>() {
 
       @Override
