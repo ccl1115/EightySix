@@ -11,7 +11,6 @@ import com.utree.eightysix.rest.Token;
  */
 @Token
 @Api(C.API_FACTORY_ADD)
-@Method(Method.METHOD.POST)
 public class CreateCircleRequest {
 
   public static final int TYPE_FACTORY = 1;

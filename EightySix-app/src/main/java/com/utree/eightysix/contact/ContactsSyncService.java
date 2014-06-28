@@ -12,14 +12,11 @@ import static android.provider.ContactsContract.CommonDataKinds.Phone.RAW_CONTAC
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonWriter;
 import com.jakewharton.disklrucache.DiskLruCache;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.TextHttpResponseHandler;
-import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.U;
 import com.utree.eightysix.request.ImportContactsRequest;
 import com.utree.eightysix.rest.HandlerWrapper;
 import com.utree.eightysix.rest.OnResponse;
-import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.RequestData;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.InputValidator;
 import java.io.Closeable;
@@ -30,7 +27,6 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.apache.http.Header;
 
 /**
  * The workflow of syncing contacts:
@@ -80,14 +76,14 @@ public class ContactsSyncService extends IntentService {
       @Override
       public void run() {
         final ImportContactsRequest request = new ImportContactsRequest();
-        RESTRequester.RequestData data = U.getRESTRequester().convert(request);
+        RequestData data = U.getRESTRequester().convert(request);
         for (int i = 0; i < contacts.size(); i++) {
           Contact contact = contacts.get(i);
-          data.params.add(String.format("contact[%d].name", i), contact.name);
-          data.params.add(String.format("contact[%d].phone", i), contact.phone);
+          data.getParams().add(String.format("contact[%d].name", i), contact.name);
+          data.getParams().add(String.format("contact[%d].phone", i), contact.phone);
         }
 
-        U.getRESTRequester().request(data, new HandlerWrapper<Response>(request, new OnResponse<Response>() {
+        U.getRESTRequester().request(data, new HandlerWrapper<Response>(data, new OnResponse<Response>() {
           @Override
           public void onResponse(Response response) {
             if (response != null && response.code == 0) {

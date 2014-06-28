@@ -6,7 +6,6 @@ import com.utree.eightysix.rest.Method;
 import com.utree.eightysix.rest.Param;
 
 @Api(C.API_REG)
-@Method(Method.METHOD.POST)
 public class RegisterRequest {
 
     @Param("password")

@@ -17,7 +17,6 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.aliyun.android.util.MD5Util;
 import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
 import com.nineoldandroids.animation.Animator;
@@ -25,18 +24,17 @@ import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import static com.nineoldandroids.view.ViewHelper.getTranslationY;
-import com.squareup.otto.Subscribe;
-import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.event.LogoutListener;
+import com.utree.eightysix.rest.CacheOutWorker;
 import com.utree.eightysix.rest.HandlerWrapper;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.RequestData;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.TopBar;
-import de.akquinet.android.androlog.Log;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -402,16 +400,22 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
   }
 
   protected final <T extends Response> void request(Object request, OnResponse<T> onResponse, Class<T> clz) {
-    RESTRequester.RequestData data = U.getRESTRequester().convert(request);
-    if (isRequesting(data.api, data.params)) return;
+    RequestData data = U.getRESTRequester().convert(request);
 
-    RequestHandle handle = U.getRESTRequester().request(request,
-        new HandlerWrapper<T>(genKey(data.api, data.params), request, onResponse, clz));
-    mRequestHandles.put(data.api, handle);
+    if (isRequesting(data.getApi(), data.getParams())) return;
+
+    RequestHandle handle = U.getRESTRequester().request(request, new HandlerWrapper<T>(data, onResponse, clz));
+    mRequestHandles.put(data.getApi(), handle);
+  }
+
+  protected final <T extends Response> void cacheOut(Object request, OnResponse<T> onResponse, Class<T> clz) {
+    RequestData data = U.getRESTRequester().convert(request);
+
+    new CacheOutWorker<T>(RESTRequester.genCacheKey(data.getApi(), data.getParams()), onResponse, clz).execute();
   }
 
   protected final void cancel(String api, RequestParams params) {
-    RequestHandle handle = mRequestHandles.get(genKey(api, params));
+    RequestHandle handle = mRequestHandles.get(RESTRequester.genCacheKey(api, params));
     if (handle != null) {
       handle.cancel(true);
       mRequestHandles.remove(api);
@@ -441,6 +445,7 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
   protected final void setActionLeftVisibility(int visibility) {
     mTopBar.mActionLeft.setVisibility(visibility);
   }
+
 
   protected void onHandleMessage(Message message) {
 
@@ -520,12 +525,8 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
   }
 
   private boolean isRequesting(String api, RequestParams params) {
-    RequestHandle executed = mRequestHandles.get(genKey(api, params));
+    RequestHandle executed = mRequestHandles.get(RESTRequester.genCacheKey(api, params));
     return executed != null && !executed.isCancelled() && !executed.isFinished();
-  }
-
-  private String genKey(String api, RequestParams params) {
-    return MD5Util.getMD5String((api + params.toString()).getBytes()).toLowerCase();
   }
 
   private boolean topBarShown() {

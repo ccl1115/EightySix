@@ -26,6 +26,7 @@ import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.PraiseStaticActivity;
+import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.circle.MyCirclesActivity;
 import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.publish.FeedbackActivity;
@@ -102,7 +103,7 @@ public class FeedActivity extends BaseActivity {
 
   @OnClick (R.id.tv_more)
   public void onSideMoreClicked() {
-    startActivity(new Intent(this, MyCirclesActivity.class));
+    startActivity(new Intent(this, BaseCirclesActivity.class));
   }
 
   @OnItemClick (R.id.lv_feed)

@@ -9,7 +9,7 @@ import com.utree.eightysix.rest.Token;
  */
 @Api (C.API_FACTORY_SEARCH)
 @Token
-public class SearchCircleRequest extends PaginateRequest {
+public class SearchCircleRequest extends Paginate {
 
     @Param ("keywords")
     public String keywords;

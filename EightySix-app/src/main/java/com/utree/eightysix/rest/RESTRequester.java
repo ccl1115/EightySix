@@ -1,6 +1,7 @@
 package com.utree.eightysix.rest;
 
 import android.os.Build;
+import com.aliyun.android.util.MD5Util;
 import com.baidu.android.common.util.CommonParam;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestHandle;
@@ -50,6 +51,10 @@ public class RESTRequester {
     mAsyncHttpClient.setMaxRetriesAndTimeout(retry, timeout);
   }
 
+  public static String genCacheKey(String api, RequestParams params) {
+    return MD5Util.getMD5String((api + params.toString()).getBytes()).toLowerCase();
+  }
+
   public AsyncHttpClient getClient() {
     return mAsyncHttpClient;
   }
@@ -60,10 +65,10 @@ public class RESTRequester {
   }
 
   public RequestHandle request(RequestData data, ResponseHandlerInterface handler) {
-    if (data.method == Method.METHOD.GET) {
-      return get(data.api, data.headers, data.params, handler);
-    } else if (data.method == Method.METHOD.POST) {
-      return post(data.api, data.headers, data.params, null, handler);
+    if (data.getMethod() == Method.GET) {
+      return get(data.getApi(), data.getHeaders(), data.getParams(), handler);
+    } else if (data.getMethod() == Method.POST) {
+      return post(data.getApi(), data.getHeaders(), data.getParams(), null, handler);
     }
     return null;
   }
@@ -78,18 +83,20 @@ public class RESTRequester {
       data.api = clz.getAnnotation(Api.class).value();
       data.params = new RequestParams();
 
-      Token token = clz.getAnnotation(Token.class);
+      Cache cache = clz.getAnnotation(Cache.class);
+      data.cache = cache != null;
 
+      Token token = clz.getAnnotation(Token.class);
       if (token != null && Account.inst().isLogin()) {
-        data.params.add("token", Account.inst().getToken());
-        data.params.add("userId", Account.inst().getUserId());
+        data.getParams().add("token", Account.inst().getToken());
+        data.getParams().add("userId", Account.inst().getUserId());
       }
 
       Method method = clz.getAnnotation(Method.class);
       if (method != null) {
         data.method = method.value();
       } else {
-        data.method = Method.METHOD.GET;
+        data.method = Method.POST;
       }
 
       for (Field f : clz.getFields()) {
@@ -98,13 +105,13 @@ public class RESTRequester {
         if (p != null) {
           Object value = f.get(request);
           if (value instanceof List || value instanceof Set || value instanceof Map) {
-            data.params.put(p.value(), value);
+            data.getParams().put(p.value(), value);
           } else if (value instanceof File) {
-            data.params.put(p.value(), (File) value);
+            data.getParams().put(p.value(), (File) value);
           } else if (value instanceof InputStream) {
-            data.params.put(p.value(), (InputStream) value);
+            data.getParams().put(p.value(), (InputStream) value);
           } else {
-            data.params.put(p.value(), String.valueOf(value));
+            data.getParams().put(p.value(), String.valueOf(value));
           }
         }
 
@@ -117,7 +124,7 @@ public class RESTRequester {
 
       if (headers.size() > 0) {
         data.headers = new Header[headers.size()];
-        headers.toArray(data.headers);
+        headers.toArray(data.getHeaders());
       }
     } catch (Throwable t) {
       U.getAnalyser().reportException(U.getContext(), t);
@@ -171,10 +178,4 @@ public class RESTRequester {
     }
   }
 
-  public static class RequestData {
-    public String api;
-    public RequestParams params;
-    Method.METHOD method;
-    Header[] headers;
-  }
 }

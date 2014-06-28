@@ -33,14 +33,12 @@
 
     </FrameLayout>
 
-    <com.utree.eightysix.widget.AdvancedListView
-            android:id="@+id/lv_circles"
+    <include
+            layout="@layout/widget_refreshable_list_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:divider="@null"
-            android:dividerHeight="0dp"
-            android:listSelector="@drawable/apptheme_primary_list_selector"/>
+            android:layout_weight="1"/>
+
 
     <TextView
             android:id="@+id/tv_empty_text"

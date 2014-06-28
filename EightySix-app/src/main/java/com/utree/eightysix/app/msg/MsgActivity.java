@@ -11,6 +11,7 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.app.EmotionOnRefreshListener;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.feed.PostActivity;
@@ -29,7 +30,7 @@ import java.util.Random;
 public class MsgActivity extends BaseActivity {
 
   private static final int MSG_ANIMATE = 0x1;
-  @InjectView (R.id.rv_msg)
+  @InjectView (R.id.refresh_view)
   public RefresherView mRvMsg;
 
   @InjectView (R.id.tv_no_new_msg)
@@ -38,7 +39,7 @@ public class MsgActivity extends BaseActivity {
   @InjectView(R.id.tv_no_msg)
   public TextView mTvNoMsg;
 
-  @InjectView (R.id.alv_msg)
+  @InjectView (R.id.alv_refresh)
   public AdvancedListView mAivMsg;
 
   @InjectView (R.id.tv_head)
@@ -49,9 +50,6 @@ public class MsgActivity extends BaseActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
-    mTvHead.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/refresh_icon.ttf"));
-
     if (U.useFixture()) {
       showProgressBar();
       getHandler().postDelayed(new Runnable() {
@@ -70,36 +68,16 @@ public class MsgActivity extends BaseActivity {
       }, 1000);
     }
 
-    mRvMsg.setOnRefreshListener(new IRefreshable.OnRefreshListener() {
-      @Override
-      public void onStateChanged(IRefreshable.State state) {
-        switch (state) {
-          case pulling_refresh:
-            mTvHead.setText(String.format("%c", (char) (0xe801 + mRandom.nextInt(14))));
-            break;
-
-        }
-      }
-
-      @Override
-      public void onPreRefresh() {
-        getHandler().sendEmptyMessageDelayed(MSG_ANIMATE, 500);
-      }
-
+    mRvMsg.setOnRefreshListener(new EmotionOnRefreshListener(mTvHead) {
       @Override
       public void onRefreshData() {
-        try {
-          synchronized (this) {
-            wait(2000);
-          }
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-      }
+        synchronized (this) {
+          try{
+            wait(3000);
+          } catch (InterruptedException ignored) {
 
-      @Override
-      public void onRefreshUI() {
-        getHandler().removeMessages(MSG_ANIMATE);
+          }
+        }
       }
     });
   }

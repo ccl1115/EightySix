@@ -21,7 +21,6 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
-import com.utree.eightysix.app.circle.SelectCircleActivity;
 import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.widget.RoundedButton;

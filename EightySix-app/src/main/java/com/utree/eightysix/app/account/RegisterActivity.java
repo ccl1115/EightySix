@@ -73,7 +73,8 @@ public class RegisterActivity extends BaseActivity {
         final int phoneLength = U.getConfigInt("account.phone.length");
         if (s.length() > phoneLength) {
           final int selection = mEtPhoneNumber.getSelectionStart();
-          mEtPhoneNumber.setText(s.subSequence(0, phoneLength));
+          s = s.subSequence(0, phoneLength);
+          mEtPhoneNumber.setText(s);
           mEtPhoneNumber.setSelection(Math.min(selection, s.length()));
         }
 

@@ -8,7 +8,6 @@ import com.utree.eightysix.rest.Param;
 /**
  */
 @Api(C.API_LOGIN)
-@Method(Method.METHOD.POST)
 public class LoginRequest {
 
     @Param("phone")

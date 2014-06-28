@@ -7,13 +7,12 @@ import java.lang.annotation.Target;
 
 /**
  */
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
+@Target (ElementType.TYPE)
+@Retention (RetentionPolicy.RUNTIME)
 public @interface Method {
 
-    enum METHOD {
-        GET, POST
-    }
+  int GET = 0;
+  int POST = 1;
 
-    METHOD value() default METHOD.GET;
+  int value() default GET;
 }

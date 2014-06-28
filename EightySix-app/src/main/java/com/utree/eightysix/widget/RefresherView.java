@@ -60,7 +60,6 @@ public class RefresherView extends ViewGroup implements IRefreshable {
     private Animator mAnimator;
     private AnimatorHandler mHandler;
     private OnRefreshListener mOnRefreshListener;
-    private RefreshAsyncTask mRefreshAsyncTask;
 
     private ViewGroupDelegate mViewGroupDelegate;
 
@@ -194,17 +193,22 @@ public class RefresherView extends ViewGroup implements IRefreshable {
     }
 
     public void refresh() {
-        if (mRefreshAsyncTask == null ||
-                mRefreshAsyncTask.getStatus() != AsyncTask.Status.RUNNING) {
-            mRefreshAsyncTask = new RefreshAsyncTask();
-            mRefreshAsyncTask.execute((Void[]) null);
-        }
+      mBackPosition = mThresholdHeight;
+      mRefreshing = true;
+      if (mOnRefreshListener != null) {
+        mOnRefreshListener.onPreRefresh();
+      }
     }
 
     @Override
-    public void refreshShowingHeader() {
+    public void showHeader() {
         if (!mRefreshing) mViewGroupDelegate.animate(MSG_ANIMATE_DOWN);
     }
+
+  public void hideHeader() {
+    mBackPosition = 0;
+    mViewGroupDelegate.animate(MSG_ANIMATE_BACK);
+  }
 
     private class Animator {
         private boolean animating;
@@ -365,41 +369,6 @@ public class RefresherView extends ViewGroup implements IRefreshable {
             } else if (msg.what == MSG_ANIMATE_DOWN) {
                 mAnimator.computeDown();
             }
-        }
-    }
-
-    /**
-     */
-    private class RefreshAsyncTask extends AsyncTask<Void, Void, Void> {
-        /**
-         */
-        private final OnRefreshListener mListener;
-
-        RefreshAsyncTask() {
-            mListener = mOnRefreshListener;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            if (mListener != null) {
-                mBackPosition = mThresholdHeight;
-                mListener.onPreRefresh();
-            }
-        }
-
-        @Override
-        protected Void doInBackground(final Void... params) {
-            mRefreshing = true;
-            if (mListener != null) {
-                mListener.onRefreshData();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(final Void aVoid) {
-            mBackPosition = 0;
-            mViewGroupDelegate.animate(MSG_ANIMATE_BACK);
         }
     }
 

@@ -14,7 +14,6 @@ import java.util.List;
  */
 @Token
 @Api (C.API_UPLOAD_CONTACTS)
-@Method(Method.METHOD.POST)
 public class ImportContactsRequest {
 
 }

@@ -53,7 +53,7 @@ public interface IRefreshable {
    */
   void refresh();
 
-  void refreshShowingHeader();
+  void showHeader();
 
   void setRefresherContent(ViewGroup view);
 
