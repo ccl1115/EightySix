@@ -91,7 +91,7 @@ public class BaseCirclesActivity extends BaseActivity {
       if (mMode == MODE_MY) {
         circle.selected = true;
         FeedActivity.start(this, circle);
-      } else {
+      } else if (mMode == MODE_SELECT) {
         AlertDialog dialog = new AlertDialog.Builder(this)
             .setTitle("确认在" + circle.name + "上班么？")
             .setPositiveButton("确认", new DialogInterface.OnClickListener() {

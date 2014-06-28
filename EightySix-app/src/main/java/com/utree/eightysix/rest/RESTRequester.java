@@ -55,6 +55,10 @@ public class RESTRequester {
     return MD5Util.getMD5String((api + params.toString()).getBytes()).toLowerCase();
   }
 
+  public String getHost() {
+    return mHost;
+  }
+
   public AsyncHttpClient getClient() {
     return mAsyncHttpClient;
   }
@@ -88,8 +92,7 @@ public class RESTRequester {
 
       Token token = clz.getAnnotation(Token.class);
       if (token != null && Account.inst().isLogin()) {
-        data.getParams().add("token", Account.inst().getToken());
-        data.getParams().add("userId", Account.inst().getUserId());
+        addAuthParams(data.getParams());
       }
 
       Method method = clz.getAnnotation(Method.class);
@@ -134,14 +137,14 @@ public class RESTRequester {
     return data;
   }
 
-  private RequestHandle get(String api, Header[] headers, RequestParams params, ResponseHandlerInterface handler) {
+  public RequestHandle get(String api, Header[] headers, RequestParams params, ResponseHandlerInterface handler) {
     Log.d(C.TAG.RR, "   get: " + mHost + api);
     Log.d(C.TAG.RR, "params: " + params.toString());
     putBaseParams(params);
     return mAsyncHttpClient.get(U.getContext(), mHost + api, headers, params, handler);
   }
 
-  private RequestHandle post(String api, Header[] headers, RequestParams params, String contentType, ResponseHandlerInterface handler) {
+  public RequestHandle post(String api, Header[] headers, RequestParams params, String contentType, ResponseHandlerInterface handler) {
     Log.d(C.TAG.RR, "  post: " + mHost + api);
     Log.d(C.TAG.RR, "params: " + params.toString());
     putBaseParams(params);
@@ -178,4 +181,10 @@ public class RESTRequester {
     }
   }
 
+  public RequestParams addAuthParams(RequestParams params) {
+    if (params == null) params = new RequestParams();
+    params.add("userId", Account.inst().getUserId());
+    params.add("token", Account.inst().getToken());
+    return params;
+  }
 }

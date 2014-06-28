@@ -73,6 +73,7 @@ public class Circle extends BaseCircle implements Comparator<Circle>, Comparable
   @Override
   public void writeToParcel(Parcel dest, int flags) {
     dest.writeString(name);
+    dest.writeString(shortName);
     dest.writeString(cityName);
     dest.writeInt(circleType);
     dest.writeInt(lock);
@@ -89,6 +90,7 @@ public class Circle extends BaseCircle implements Comparator<Circle>, Comparable
     public Circle createFromParcel(Parcel source) {
       Circle circle = new Circle();
       circle.name = source.readString();
+      circle.shortName = source.readString();
       circle.cityName = source.readString();
       circle.circleType = source.readInt();
       circle.lock = source.readInt();

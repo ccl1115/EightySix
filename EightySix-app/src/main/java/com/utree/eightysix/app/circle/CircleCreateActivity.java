@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.circle;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
@@ -8,8 +9,11 @@ import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
+import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.BuildConfig;
+import com.utree.eightysix.C;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
@@ -20,7 +24,10 @@ import com.utree.eightysix.location.Location;
 import com.utree.eightysix.request.CreateCircleRequest;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.widget.RoundedButton;
+import de.akquinet.android.androlog.Log;
+import java.io.File;
 
 /**
  * @author simon
@@ -92,6 +99,23 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    requestCaptcha();
+  }
+
+  private void requestCaptcha() {
+    U.getRESTRequester().post(C.API_VALICODE_CREATE_FACTORY, null,
+        U.getRESTRequester().addAuthParams(null), null,
+        new FileAsyncHttpResponseHandler(IOUtils.createTmpFile("valicode.jpg")) {
+          @Override
+          public void onSuccess(File file) {
+            mIvCaptcha.setImageURI(Uri.fromFile(file));
+          }
+
+          @Override
+          public void onFailure(Throwable e, File response) {
+            if (BuildConfig.DEBUG) Log.d("CircleCreateActivity", e.getMessage());
+          }
+        });
   }
 
   @Override
@@ -127,19 +151,6 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
     hideProgressBar();
   }
 
-  private void requestCreateFactory() {
-    request(new CreateCircleRequest(mEtCircleName.getText().toString(), CreateCircleRequest.TYPE_FACTORY, mEtCircleAbbreviation.getText().toString()),
-        new OnResponse<Response>() {
-          @Override
-          public void onResponse(Response response) {
-            if (response.code == 0) {
-              showToast(getString(R.string.success_created), false);
-              finish();
-            }
-          }
-        }, Response.class);
-  }
-
   /**
    * When LogoutEvent fired, finish myself
    *
@@ -151,4 +162,25 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
     finish();
   }
 
+  private void requestCreateFactory() {
+    CreateCircleRequest request = new CreateCircleRequest(mEtCircleName.getText().toString(),
+        CreateCircleRequest.TYPE_FACTORY,
+        mEtCircleAbbreviation.getText().toString(),
+        mEtCaptcha.getText().toString());
+
+    request(request, new OnResponse<Response>() {
+      @Override
+      public void onResponse(Response response) {
+        if (response != null && response.code == 0) {
+          showToast(getString(R.string.success_created), false);
+          finish();
+        }
+      }
+    }, Response.class);
+  }
+
+  @Override
+  protected void onActionLeftOnClicked() {
+    finish();
+  }
 }

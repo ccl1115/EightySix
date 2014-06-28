@@ -25,9 +25,13 @@ public class CreateCircleRequest {
   @Param("shortName")
   public String shortName;
 
-  public CreateCircleRequest(String name, int circleType, String shortName) {
+  @Param("valiCode")
+  public String valiCode;
+
+  public CreateCircleRequest(String name, int circleType, String shortName, String valiCode) {
     this.name = name;
     this.circleType = circleType;
     this.shortName = shortName;
+    this.valiCode = valiCode;
   }
 }

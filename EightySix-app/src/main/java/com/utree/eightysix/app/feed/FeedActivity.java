@@ -27,7 +27,6 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.PraiseStaticActivity;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
-import com.utree.eightysix.app.circle.MyCirclesActivity;
 import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.publish.FeedbackActivity;
 import com.utree.eightysix.app.publish.PublishActivity;
@@ -39,6 +38,7 @@ import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
 import com.utree.eightysix.request.MyCirclesRequest;
 import com.utree.eightysix.response.CirclesResponse;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
@@ -410,7 +410,7 @@ public class FeedActivity extends BaseActivity {
       mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
       mLvSideCircles.setAdapter(mSideCirclesAdapter);
     } else {
-      requestMyCircle();
+      cacheOutMyCircle();
     }
 
 
@@ -547,6 +547,22 @@ public class FeedActivity extends BaseActivity {
       }
     });
     set.start();
+  }
+
+  private void cacheOutMyCircle() {
+    cacheOut(new MyCirclesRequest("", 1), new OnResponse<CirclesResponse>() {
+      @Override
+      public void onResponse(CirclesResponse response) {
+        if (response != null && response.code == 0) {
+          mSideCircles = response.object.lists.subList(0, 10);
+          selectSideCircle(FeedActivity.this.mSideCircles);
+          mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
+          mLvSideCircles.setAdapter(mSideCirclesAdapter);
+        } else {
+          requestMyCircle();
+        }
+      }
+    }, CirclesResponse.class);
   }
 
   private void requestMyCircle() {

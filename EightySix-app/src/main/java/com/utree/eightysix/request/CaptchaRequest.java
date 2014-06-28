@@ -6,7 +6,7 @@ import com.utree.eightysix.rest.Api;
 /**
  * @author simon
  */
-@Api(C.API_VALICODE)
+@Api(C.API_VALICODE_FIND_PWD)
 public class CaptchaRequest {
 
 }

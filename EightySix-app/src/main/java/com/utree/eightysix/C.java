@@ -26,7 +26,9 @@ public class C {
 
   public static final String API_POST = "/feed/addPost.do";
 
-  public static final String API_VALICODE = "/login/valiCode.do";
+  public static final String API_VALICODE_FIND_PWD = "/login/valiCode.do";
+
+  public static final String API_VALICODE_CREATE_FACTORY = "/factory/valiCode.do";
 
 
   public static String IMEI = "";

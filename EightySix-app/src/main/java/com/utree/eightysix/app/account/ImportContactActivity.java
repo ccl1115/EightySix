@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
@@ -21,6 +22,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.widget.RoundedButton;
@@ -62,7 +64,7 @@ public class ImportContactActivity extends BaseActivity {
   @OnClick (R.id.rb_done)
   public void onRbDoneClicked() {
     finish();
-    startActivity(new Intent(this, SelectCircleActivity.class));
+    BaseCirclesActivity.startSelect(this);
   }
 
   @OnClick (R.id.rb_import)
@@ -81,27 +83,47 @@ public class ImportContactActivity extends BaseActivity {
     );
 
     set.setDuration(500);
-    set.start();
+    set.addListener(new Animator.AnimatorListener() {
+      @Override
+      public void onAnimationStart(Animator animation) {
 
-    getHandler().sendEmptyMessageDelayed(MSG_ANIMATE, 500);
+      }
 
-    if (U.useFixture()) {
+      @Override
+      public void onAnimationEnd(Animator animation) {
+        getHandler().sendEmptyMessageDelayed(MSG_ANIMATE, 500);
 
-      getHandler().postDelayed(new Runnable() {
-        @Override
-        public void run() {
-          getHandler().removeMessages(MSG_ANIMATE);
+        if (U.useFixture()) {
 
-          mTvResult.setText("为你找到" + mRandom.nextInt(100) + "个朋友");
+          getHandler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+              getHandler().removeMessages(MSG_ANIMATE);
 
-          ObjectAnimator animator = ObjectAnimator.ofFloat(mLlScroll, "translationY", 0, -U.dp2px(180));
-          animator.setDuration(500);
-          animator.start();
+              mTvResult.setText("为你找到" + mRandom.nextInt(100) + "个朋友");
+
+              ObjectAnimator animator = ObjectAnimator.ofFloat(mLlScroll, "translationY", 0, -U.dp2px(180));
+              animator.setDuration(500);
+              animator.start();
+            }
+          }, 5000);
+        } else {
+          startService(new Intent(ImportContactActivity.this, ContactsSyncService.class));
         }
-      }, 5000);
-    } else {
-      startService(new Intent(this, ContactsSyncService.class));
-    }
+
+      }
+
+      @Override
+      public void onAnimationCancel(Animator animation) {
+
+      }
+
+      @Override
+      public void onAnimationRepeat(Animator animation) {
+
+      }
+    });
+    set.start();
 
   }
 
