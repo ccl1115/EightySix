@@ -170,9 +170,15 @@
     <string name="messages">消息</string>
     <string name="no_new_msg">没有新消息</string>
     <string name="no_msg">没有消息</string>
+
+    <!-- InviteActivity -->
     <string name="invite_info">为了保护发帖人的隐私安全（不让你猜出是谁发的），当你有三个朋友在“%s”打工圈时，才可以查看。</string>
     <string name="current_friend_count">当前朋友数量：%1$d</string>
     <string name="invite_contact_friends">邀请通讯录朋友加入</string>
 
-    <!-- InviteActivity -->
+    <!-- ContactsActivity -->
+    <string name="who_to_invite">想邀请谁？</string>
+    <string name="no_permission_to_read_contacts">没有读取到通讯录</string>
+    <string name="contacts_empty">通讯录没为空</string>
+
 </resources>

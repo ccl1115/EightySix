@@ -68,14 +68,14 @@ public class ContactsSyncService extends IntentService {
         }
       });
       return;
-    } else {
-      mHandler.post(new Runnable() {
-        @Override
-        public void run() {
-          U.getBus().post(new ContactsReadEvent(phone));
-        }
-      });
     }
+
+    mHandler.post(new Runnable() {
+      @Override
+      public void run() {
+        U.getBus().post(new ContactsReadEvent(phone));
+      }
+    });
 
     if (cache == null || !compareCacheAndPhone(cache, phone)) {
       cacheContacts(phone);

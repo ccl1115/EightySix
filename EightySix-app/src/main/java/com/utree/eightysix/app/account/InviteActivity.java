@@ -26,8 +26,6 @@ public class InviteActivity extends BaseActivity {
   @InjectView (R.id.tv_friend_count)
   public TextView mTvFriendCount;
 
-  private String mCircle;
-
   public static void start(Context context, String circle) {
     Intent intent = new Intent(context, InviteActivity.class);
     intent.putExtra("circle", circle);
@@ -37,6 +35,7 @@ public class InviteActivity extends BaseActivity {
   @OnClick (R.id.rb_invite)
   public void onRbInviteClicked() {
     startActivity(new Intent(this, ContactsActivity.class));
+    finish();
   }
 
   @Override
@@ -47,9 +46,10 @@ public class InviteActivity extends BaseActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    mCircle = getIntent().getStringExtra("circle");
+    String circle = getIntent().getStringExtra("circle");
+    if (circle == null) circle = null;
 
-    mTvInviteInfo.setText(U.gfs(R.string.invite_info, mCircle));
+    mTvInviteInfo.setText(U.gfs(R.string.invite_info, circle));
   }
 
   @Override

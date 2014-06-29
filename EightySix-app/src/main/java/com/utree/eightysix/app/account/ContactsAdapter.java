@@ -1,15 +1,20 @@
 package com.utree.eightysix.app.account;
 
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.util.SparseArray;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnCheckedChanged;
 import com.utree.eightysix.R;
 import com.utree.eightysix.contact.Contact;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,8 +24,21 @@ public class ContactsAdapter extends BaseAdapter {
 
   private List<Contact> mContacts;
 
+  private SparseBooleanArray mChecked;
+
   public ContactsAdapter(List<Contact> contact) {
     mContacts = contact;
+    mChecked = new SparseBooleanArray();
+  }
+
+  public List<Contact> getChecked() {
+    List<Contact> ret = new ArrayList<Contact>();
+    for (int i = 0, size = mContacts.size(); i < size; i++) {
+      if (mChecked.get(i)) {
+        ret.add(mContacts.get(i));
+      }
+    }
+    return ret;
   }
 
   public void add(List<Contact> contacts) {
@@ -48,7 +66,7 @@ public class ContactsAdapter extends BaseAdapter {
   }
 
   @Override
-  public View getView(int i, View view, ViewGroup viewGroup) {
+  public View getView(int position, View view, ViewGroup viewGroup) {
 
     ContactViewHolder holder;
     if (view == null) {
@@ -59,23 +77,28 @@ public class ContactsAdapter extends BaseAdapter {
       holder = (ContactViewHolder) view.getTag();
     }
 
-    Contact contact = getItem(i);
+    Contact contact = getItem(position);
 
+    holder.mPosition = position;
     holder.mTvName.setText(contact.name);
     holder.mTvPhone.setText(contact.phone);
 
     return view;
   }
 
-  public static class ContactViewHolder {
+  public class ContactViewHolder {
     @InjectView (R.id.tv_name)
     public TextView mTvName;
 
     @InjectView (R.id.tv_phone)
     public TextView mTvPhone;
 
-    @InjectView (R.id.cb_check)
-    public CheckBox mCbCheck;
+    @OnCheckedChanged(R.id.cb_check)
+    public void onCbCheckChecked(boolean c) {
+      mChecked.put(mPosition, c);
+    }
+
+    public int mPosition;
 
     public ContactViewHolder(View view) {
       ButterKnife.inject(this, view);
