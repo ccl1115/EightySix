@@ -170,17 +170,30 @@
                 android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
                 android:exported="@bool/exported"/>
 
-        <activity android:name=".app.msg.MsgActivity"
-                  android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-                  android:exported="@bool/exported"/>
+        <activity
+                android:name=".app.msg.MsgActivity"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+                android:exported="@bool/exported"/>
 
-        <activity android:name=".app.circle.BaseCirclesActivity"
-                  android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-                  android:exported="@bool/exported"/>
+        <activity
+                android:name=".app.circle.BaseCirclesActivity"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+                android:exported="@bool/exported"/>
 
-        <activity android:name=".app.settings.MainSettingsActivity"
-                  android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-                  android:exported="@bool/exported"/>
+        <activity
+                android:name=".app.settings.MainSettingsActivity"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+                android:exported="@bool/exported"/>
+
+        <activity
+                android:name=".app.account.InviteActivity"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+                android:exported="@bool/exported"/>
+
+        <activity
+                android:name=".app.account.ContactsActivity"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+                android:exported="@bool/exported"/>
 
         <service
                 android:name="com.baidu.location.f"

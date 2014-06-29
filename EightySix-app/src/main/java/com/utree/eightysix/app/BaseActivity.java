@@ -473,9 +473,7 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
 
   }
 
-  protected void onActionLeftOnClicked() {
-
-  }
+  protected abstract void onActionLeftOnClicked();
 
   protected void hideSoftKeyboard(View view) {
     ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))

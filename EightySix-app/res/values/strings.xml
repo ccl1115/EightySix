@@ -22,8 +22,6 @@
     <string name="more">更多</string>
     <string name="use_camera">使用相机</string>
     <string name="select_album">选择相册</string>
-    <string name="server_error">服务器错误</string>
-    <string name="server_object_error">服务器返回对象解析错误</string>
     <string name="feedback">意见反馈</string>
     <string name="create">创建</string>
     <string name="report">举报</string>
@@ -32,6 +30,13 @@
     <string name="delete">删除</string>
     <string name="share">分享</string>
     <string name="fixture">假数据</string>
+    <string name="login">登录</string>
+    <string name="logout">登出</string>
+
+    <string name="server_error">服务器错误</string>
+    <string name="server_object_error">服务器返回对象解析错误</string>
+    <string name="server_connection_exception">无法访问服务器，请检查你的网络设置</string>
+    <string name="server_500">服务器内部错误</string>
 
     <!-- Locate -->
     <string name="locating">定位中…</string>
@@ -72,7 +77,6 @@
 
 
     <!-- LoginActivity -->
-    <string name="login">登录</string>
     <string name="wrong_password">密码错误</string>
     <string name="wrong_phone_number">手机号没有注册</string>
     <string name="login_failed">登录失败</string>
@@ -85,13 +89,15 @@
     <string name="import_contact_1">通讯录里的朋友，现在都在哪个厂上班？他们正在这些厂里匿名说什么？</string>
     <string name="import_contact_2">通过手机通讯录，找出和你一个厂的朋友</string>
     <string name="import_contact_3">是认识的人，为什么还要匿名</string>
+    <string name="sync_contact_failed">同步通讯录失败，请尝试重新同步</string>
 
 
     <!-- GetLockpatternActivity -->
     <string name="get_lock_pattern">获取手势密码</string>
     <string name="get_lockpattern_1">1886是一个私密的，需要邀请的劳动者匿名社区。如果你没有朋友的介绍，是不能进入的！</string>
     <string name="get_lockpattern_2">向1886里的熟人索取手势密码</string>
-    <string name="start_find">开始查找</string>
+    <string name="start_find">邀请通讯录好友加入</string>
+    <string name="invite_people_to_unlock">邀请好友，即可解锁</string>
 
     <!-- PostActivity -->
     <string name="post">发表</string>
@@ -110,10 +116,15 @@
     <string name="cannot_post_empty_content">不能发表空内容。</string>
 
 
-    <!-- MyCirclesActivity -->
+    <!-- BaseCirclesActivity -->
     <string name="search_circles">找工厂，找商圈，找企业</string>
     <string name="my_circles">我的工友圈</string>
     <string name="no_circles">没有找到工友圈</string>
+    <string name="factory">工</string>
+    <string name="business">商</string>
+    <string name="most_friends">朋友最多</string>
+    <string name="nearest">距离最近</string>
+    <string name="last_visited">最后访问</string>
 
     <!-- CircleSearchActivity -->
     <string name="enter_search_keyword">请输入搜索内容</string>
@@ -159,14 +170,9 @@
     <string name="messages">消息</string>
     <string name="no_new_msg">没有新消息</string>
     <string name="no_msg">没有消息</string>
-    <string name="factory">工</string>
-    <string name="business">商</string>
-    <string name="most_friends">朋友最多</string>
-    <string name="nearest">距离最近</string>
-    <string name="last_visited">最后访问</string>
-    <string name="logout">登出</string>
-    <string name="error_connect_exception">无法访问服务器，请检查你的网络设置</string>
-    <string name="server_500">服务器暂时无法提供服务</string>
-    <string name="sync_contact_failed">同步通讯录失败，请尝试重新同步</string>
+    <string name="invite_info">为了保护发帖人的隐私安全（不让你猜出是谁发的），当你有三个朋友在“%s”打工圈时，才可以查看。</string>
+    <string name="current_friend_count">当前朋友数量：%1$d</string>
+    <string name="invite_contact_friends">邀请通讯录朋友加入</string>
 
+    <!-- InviteActivity -->
 </resources>

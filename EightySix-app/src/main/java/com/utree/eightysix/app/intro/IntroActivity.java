@@ -48,4 +48,8 @@ public class IntroActivity extends BaseActivity {
     }, U.getConfigInt("activity.intro.delay"));
 
   }
+
+  @Override
+  protected void onActionLeftOnClicked() {
+  }
 }

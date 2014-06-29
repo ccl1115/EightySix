@@ -32,6 +32,10 @@ public class GuideActivity extends BaseActivity {
         }, 2000);
     }
 
+  @Override
+  protected void onActionLeftOnClicked() {
+  }
+
 
   @Override
   @Subscribe

@@ -7,7 +7,7 @@
               android:background="#ff2f3339">
 
     <LinearLayout
-            android:id="@+id/ll_introduce"
+            android:id="@+id/ll_invite"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:background="@drawable/apptheme_primary_btn_dark"

@@ -15,7 +15,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
-import com.google.gson.reflect.TypeToken;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -26,6 +25,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.account.InviteActivity;
 import com.utree.eightysix.app.account.PraiseStaticActivity;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.msg.MsgActivity;
@@ -43,7 +43,6 @@ import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.TopBar;
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -600,9 +599,9 @@ public class FeedActivity extends BaseActivity {
       ButterKnife.inject(this, view);
     }
 
-    @OnClick (R.id.ll_introduce)
-    void onLlIntroduceClicked() {
-      showToast("TODO introduce");
+    @OnClick (R.id.ll_invite)
+    void onLlInviteClicked() {
+      if (mCircle != null) InviteActivity.start(FeedActivity.this, mCircle.shortName);
       mPopupMenu.dismiss();
     }
 

@@ -61,8 +61,20 @@ public class ContactsSyncService extends IntentService {
     final List<Contact> phone = getContactsFromPhone();
 
     if (phone == null) {
-      U.getBus().post(new ContactsSyncEvent(false));
+      mHandler.post(new Runnable() {
+        @Override
+        public void run() {
+          U.getBus().post(new ContactsSyncEvent(false));
+        }
+      });
       return;
+    } else {
+      mHandler.post(new Runnable() {
+        @Override
+        public void run() {
+          U.getBus().post(new ContactsReadEvent(phone));
+        }
+      });
     }
 
     if (cache == null || !compareCacheAndPhone(cache, phone)) {

@@ -182,4 +182,8 @@ public class PostActivity extends BaseActivity {
     super.onPause();
     U.getBus().unregister(mLvComments);
   }
+
+  @Override
+  protected void onActionLeftOnClicked() {
+  }
 }

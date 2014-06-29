@@ -1,18 +1,12 @@
 package com.utree.eightysix.rest;
 
 import android.widget.Toast;
-import com.jakewharton.disklrucache.DiskLruCache;
 import com.loopj.android.http.BaseJsonHttpResponseHandler;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.C;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.utils.CacheUtils;
 import de.akquinet.android.androlog.Log;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.StringBufferInputStream;
-import java.io.StringReader;
 import java.net.ConnectException;
 import org.apache.http.HttpStatus;
 
@@ -62,7 +56,7 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
   public void onFailure(int statusCode, org.apache.http.Header[] headers, Throwable e, String rawData, T errorResponse) {
     if (e != null) {
       if (e instanceof ConnectException) {
-        Toast.makeText(U.getContext(), U.gs(R.string.error_connect_exception), Toast.LENGTH_SHORT).show();
+        Toast.makeText(U.getContext(), U.gs(R.string.server_connection_exception), Toast.LENGTH_SHORT).show();
       }
       if (BuildConfig.DEBUG) {
         e.printStackTrace();

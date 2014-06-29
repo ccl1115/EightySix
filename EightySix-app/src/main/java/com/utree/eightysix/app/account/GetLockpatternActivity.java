@@ -9,6 +9,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.widget.RoundedButton;
 
 /**
  */
@@ -17,10 +18,14 @@ import com.utree.eightysix.app.TopTitle;
 public class GetLockpatternActivity extends BaseActivity {
 
   @InjectView (R.id.btn_start_find)
-  public Button mBtnStartFind;
+  public RoundedButton mBtnStartFind;
 
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+  }
+
+  @Override
+  protected void onActionLeftOnClicked() {
   }
 
   /**
