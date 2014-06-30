@@ -141,11 +141,6 @@ public class ForgetPwdActivity extends BaseActivity {
 
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count) {
-        s = InputValidator.trimPwd(s);
-
-        mEtNewPwd.setText(s);
-        mEtNewPwd.setSelection(s.length());
-
         if (InputValidator.pwd(s)) {
           mBtnDone.setEnabled(true);
         } else {

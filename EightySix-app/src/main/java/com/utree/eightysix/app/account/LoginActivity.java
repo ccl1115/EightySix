@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
@@ -120,12 +122,6 @@ public class LoginActivity extends BaseActivity {
 
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count) {
-        s = InputValidator.trimPwd(s);
-
-        final int selection = mEtPwd.getSelectionStart();
-        mEtPwd.setText(s);
-        mEtPwd.setSelection(Math.min(selection, s.length()));
-
         if (InputValidator.pwd(s)) {
           mCorrectPwd = true;
           if (mCorrectPhoneNumber) {

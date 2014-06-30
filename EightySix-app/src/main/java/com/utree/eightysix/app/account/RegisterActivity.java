@@ -103,12 +103,6 @@ public class RegisterActivity extends BaseActivity {
 
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count) {
-        s = InputValidator.trimPwd(s);
-
-        final int selection = mEtPwd.getSelectionStart();
-        mEtPwd.setText(s);
-        mEtPwd.setSelection(Math.min(selection, s.length()));
-
         mCorrectPwd = InputValidator.pwd(s);
         if (mCorrectPwd) {
           if (mCorrectPhoneNumber) {

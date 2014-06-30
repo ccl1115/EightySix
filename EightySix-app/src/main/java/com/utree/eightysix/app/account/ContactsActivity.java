@@ -23,6 +23,7 @@ import com.utree.eightysix.contact.ContactsReadEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.widget.AdvancedListView;
+import com.utree.eightysix.widget.TextActionButton;
 import com.utree.eightysix.widget.TopBar;
 
 /**
@@ -46,7 +47,7 @@ public class ContactsActivity extends BaseActivity {
 
   @Subscribe
   public void onContactCheckedChanged(ContactCheckedCountChanged changed) {
-    ((TextView) getTopBar().getActionView(0)).setText(String.format("完成(%d)", changed.getCount()));
+    ((TextActionButton) getTopBar().getActionView(0)).setText(String.format("完成(%d)", changed.getCount()));
   }
 
   public static class ContactCheckedCountChanged {

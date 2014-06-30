@@ -20,8 +20,8 @@ public class InputValidator {
 
   public static boolean pwd(CharSequence pwd) {
     return PWD_REGEX.matcher(pwd).matches()
-        && pwd.length() > U.getConfigInt("account.pwd.length.min")
-        && pwd.length() < U.getConfigInt("account.pwd.length.max");
+        && pwd.length() >= U.getConfigInt("account.pwd.length.min")
+        && pwd.length() <= U.getConfigInt("account.pwd.length.max");
   }
 
   public static CharSequence trimPwd(CharSequence pwd) {
