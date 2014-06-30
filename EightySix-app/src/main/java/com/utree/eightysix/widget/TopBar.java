@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +29,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
   public static final int DEFAULT_RIGHT_PADDING = 5;
   private static final int MINIMIUM_TITLE_WIDTH = 60;
-  private final List<View> mActionViews = new ArrayList<View>();
+  private final List<ActionButton> mActionViews = new ArrayList<ActionButton>();
 
   @InjectView (R.id.tb_tv_bar_title)
   public TextView mTitle;
@@ -38,8 +37,8 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
   @InjectView (R.id.tb_tv_sub_title)
   public TextView mSubTitle;
 
-  @InjectView (R.id.tb_iv_action_overflow)
-  public ImageView mActionOverFlow;
+  @InjectView (R.id.tb_iab_action_overflow)
+  public ImageActionButton mActionOverFlow;
 
   @InjectView (R.id.tb_iv_action_left)
   public ImageView mActionLeft;
@@ -137,7 +136,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     mActionViews.clear();
 
     for (int i = 0; i < mCurCount; i++) {
-      View view;
+      ActionButton view;
       LayoutParams layoutParams = mActionAdapter.getLayoutParams(i);
       if (layoutParams == null) layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
       if (TextUtils.isEmpty(mActionAdapter.getTitle(i))) {
@@ -201,15 +200,19 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     }
   }
 
-  @OnClick (R.id.tb_iv_action_overflow)
+  @OnClick (R.id.tb_iab_action_overflow)
   public void onActionOverflowClicked(View v) {
     if (mOnActionOverflowClickListener != null) {
       mOnActionOverflowClickListener.onClick(v);
     }
   }
 
-  public View getActionView(int position) {
+  public ActionButton getActionView(int position) {
     return mActionViews.get(position);
+  }
+
+  public ActionButton getActionOverflow() {
+    return mActionOverFlow;
   }
 
   @SuppressWarnings ("SuspiciousNameCombination")
@@ -300,10 +303,10 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     }
   }
 
-  private View buildActionItemView(Drawable drawable, Drawable backgroundDrawable, LayoutParams layoutParams) {
+  private ActionButton buildActionItemView(Drawable drawable, Drawable backgroundDrawable, LayoutParams layoutParams) {
     if (drawable == null) return null;
 
-    final ImageView imageView = new ImageView(getContext());
+    final ImageActionButton imageView = new ImageActionButton(getContext());
     imageView.setImageDrawable(drawable);
     imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
     imageView.setLayoutParams(layoutParams);
@@ -313,23 +316,23 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     return imageView;
   }
 
-  private View buildActionItemView(String text, Drawable backgroundDrawable, LayoutParams layoutParams) {
+  private ActionButton buildActionItemView(String text, Drawable backgroundDrawable, LayoutParams layoutParams) {
     if (TextUtils.isEmpty(text)) return null;
 
-    final TextView textView = new TextView(getContext());
-    textView.setLayoutParams(layoutParams);
-    textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-    textView.setText(text);
-    textView.setGravity(Gravity.CENTER);
-    textView.setTextColor(Color.WHITE);
-    textView.setSingleLine(true);
-    textView.setLines(1);
-    textView.setBackgroundDrawable(backgroundDrawable);
-    textView.setOnClickListener(this);
+    final TextActionButton button = new TextActionButton(getContext());
+    button.setLayoutParams(layoutParams);
+    button.setTextSize(14);
+    button.setText(text);
+    button.setGravity(Gravity.CENTER);
+    button.setTextColor(Color.WHITE);
+    button.setSingleLine(true);
+    button.setLines(1);
+    button.setBackgroundDrawable(backgroundDrawable);
+    button.setOnClickListener(this);
     final int hPadding = U.dp2px(6);
     final int vPadding = U.dp2px(4);
-    textView.setPadding(hPadding, vPadding, hPadding, vPadding);
-    return textView;
+    button.setPadding(hPadding, vPadding, hPadding, vPadding);
+    return button;
   }
 
   public interface ActionAdapter {

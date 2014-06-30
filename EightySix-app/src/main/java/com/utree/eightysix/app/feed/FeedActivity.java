@@ -334,6 +334,9 @@ public class FeedActivity extends BaseActivity {
         return new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
       }
     });
+
+    getTopBar().getActionView(0).setCount(99);
+    getTopBar().getActionOverflow().setHasNew(true);
   }
 
   @Override
