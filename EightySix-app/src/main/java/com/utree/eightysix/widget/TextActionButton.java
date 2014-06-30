@@ -1,8 +1,8 @@
 package com.utree.eightysix.widget;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -11,7 +11,7 @@ import android.widget.TextView;
  */
 public class TextActionButton extends ActionButton {
 
-  private TextView mActionView;
+  private TextView mTextAction;
 
   public TextActionButton(Context context) {
     this(context, null);
@@ -20,39 +20,56 @@ public class TextActionButton extends ActionButton {
   public TextActionButton(Context context, AttributeSet attrs) {
     super(context, attrs);
 
-    mActionView = new TextView(context, attrs);
-    LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-    mActionView.setLayoutParams(lp);
+    setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
-    addView(mActionView, 0);
+    mTextAction = new TextView(context, attrs);
+    LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+    mTextAction.setLayoutParams(lp);
+
+    addView(mTextAction, 0);
+  }
+
+  @Override
+  public void setActionLayoutParams(LayoutParams params) {
+    mTextAction.setLayoutParams(params);
+  }
+
+  @Override
+  public void setActionBackgroundDrawable(Drawable drawable) {
+    mTextAction.setBackgroundDrawable(drawable);
   }
 
 
   public void setGravity(int gravity) {
-    mActionView.setGravity(gravity);
+    mTextAction.setGravity(gravity);
   }
 
   public void setText(CharSequence cs) {
-    mActionView.setText(cs);
+    mTextAction.setText(cs);
   }
 
   public void setText(int resId) {
-    mActionView.setText(resId);
+    mTextAction.setText(resId);
   }
 
   public void setLines(int lines) {
-    mActionView.setLines(lines);
+    mTextAction.setLines(lines);
+  }
+
+  @Override
+  public void setPadding(int left, int top, int right, int bottom) {
+    mTextAction.setPadding(left, top, right, bottom);
   }
 
   public void setSingleLine(boolean singleLine) {
-    mActionView.setSingleLine(singleLine);
+    mTextAction.setSingleLine(singleLine);
   }
 
   public void setTextColor(int color) {
-    mActionView.setTextColor(color);
+    mTextAction.setTextColor(color);
   }
 
   public void setTextSize(float size) {
-    mActionView.setTextSize(size);
+    mTextAction.setTextSize(size);
   }
 }

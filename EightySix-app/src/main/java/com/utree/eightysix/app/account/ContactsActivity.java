@@ -6,9 +6,11 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import butterknife.InjectView;
 import com.squareup.otto.Subscribe;
@@ -40,7 +42,7 @@ public class ContactsActivity extends BaseActivity {
   @InjectView (R.id.tv_empty_text)
   public TextView mTvEmptyView;
 
-  @InjectView(R.id.tv_search_hint)
+  @InjectView (R.id.tv_search_hint)
   public EditText mRbSearchHint;
 
   private ContactsAdapter mContactsAdapter;
@@ -48,18 +50,6 @@ public class ContactsActivity extends BaseActivity {
   @Subscribe
   public void onContactCheckedChanged(ContactCheckedCountChanged changed) {
     ((TextActionButton) getTopBar().getActionView(0)).setText(String.format("完成(%d)", changed.getCount()));
-  }
-
-  public static class ContactCheckedCountChanged {
-    private int mCount;
-
-    public ContactCheckedCountChanged(int count) {
-      mCount = count;
-    }
-
-    public int getCount() {
-      return mCount;
-    }
   }
 
   @Override
@@ -101,8 +91,9 @@ public class ContactsActivity extends BaseActivity {
       }
 
       @Override
-      public ViewGroup.LayoutParams getLayoutParams(int position) {
-        return new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+      public FrameLayout.LayoutParams getLayoutParams(int position) {
+        return new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
       }
     });
 
@@ -138,6 +129,18 @@ public class ContactsActivity extends BaseActivity {
     PendingIntent intent = PendingIntent.getActivity(this, 0, new Intent(this, ContactsActivity.class), 0);
     SmsManager sms = SmsManager.getDefault();
     sms.sendTextMessage(phoneNumber, null, message, null, null);
+  }
+
+  public static class ContactCheckedCountChanged {
+    private int mCount;
+
+    public ContactCheckedCountChanged(int count) {
+      mCount = count;
+    }
+
+    public int getCount() {
+      return mCount;
+    }
   }
 
 }

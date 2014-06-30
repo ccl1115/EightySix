@@ -81,8 +81,6 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     final float density = getResources().getDisplayMetrics().density;
 
-    int minimumTitleWidth = (int) (MINIMIUM_TITLE_WIDTH * density + 0.5f);
-
     View.inflate(context, R.layout.widget_top_bar, this);
     U.viewBinding(this, this);
 
@@ -138,7 +136,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     for (int i = 0; i < mCurCount; i++) {
       ActionButton view;
       LayoutParams layoutParams = mActionAdapter.getLayoutParams(i);
-      if (layoutParams == null) layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+      if (layoutParams == null) layoutParams = new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
       if (TextUtils.isEmpty(mActionAdapter.getTitle(i))) {
         view = buildActionItemView(mActionAdapter.getIcon(i), mActionAdapter.getBackgroundDrawable(i), layoutParams);
       } else {
@@ -309,8 +307,8 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     final ImageActionButton imageView = new ImageActionButton(getContext());
     imageView.setImageDrawable(drawable);
     imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-    imageView.setLayoutParams(layoutParams);
-    imageView.setBackgroundDrawable(backgroundDrawable);
+    imageView.setActionLayoutParams((FrameLayout.LayoutParams) layoutParams);
+    imageView.setActionBackgroundDrawable(backgroundDrawable);
     imageView.setOnClickListener(this);
 
     return imageView;
@@ -320,14 +318,14 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     if (TextUtils.isEmpty(text)) return null;
 
     final TextActionButton button = new TextActionButton(getContext());
-    button.setLayoutParams(layoutParams);
+    button.setActionLayoutParams((FrameLayout.LayoutParams) layoutParams);
+    button.setActionBackgroundDrawable(backgroundDrawable);
     button.setTextSize(14);
     button.setText(text);
     button.setGravity(Gravity.CENTER);
     button.setTextColor(Color.WHITE);
     button.setSingleLine(true);
     button.setLines(1);
-    button.setBackgroundDrawable(backgroundDrawable);
     button.setOnClickListener(this);
     final int hPadding = U.dp2px(6);
     final int vPadding = U.dp2px(4);
@@ -346,7 +344,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     int getCount();
 
-    LayoutParams getLayoutParams(int position);
+    FrameLayout.LayoutParams getLayoutParams(int position);
   }
 
   @Override

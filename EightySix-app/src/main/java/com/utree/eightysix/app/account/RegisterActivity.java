@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
@@ -151,8 +152,8 @@ public class RegisterActivity extends BaseActivity {
       }
 
       @Override
-      public ViewGroup.LayoutParams getLayoutParams(int position) {
-        return new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+      public FrameLayout.LayoutParams getLayoutParams(int position) {
+        return new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
       }
     });
   }

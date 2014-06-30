@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -224,8 +225,8 @@ public class LoginActivity extends BaseActivity {
     }
 
     @Override
-    public ViewGroup.LayoutParams getLayoutParams(int position) {
-      return new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+    public FrameLayout.LayoutParams getLayoutParams(int position) {
+      return new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
     }
   }
 }
