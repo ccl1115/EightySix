@@ -107,6 +107,13 @@ public class RESTRequester {
 
         if (p != null) {
           Object value = f.get(request);
+          if (value == null) {
+            if (f.getAnnotation(Optional.class) == null) {
+              throw new IllegalArgumentException("value is null, add @Optional");
+            } else {
+              continue;
+            }
+          }
           if (value instanceof List || value instanceof Set || value instanceof Map) {
             data.getParams().put(p.value(), value);
           } else if (value instanceof File) {

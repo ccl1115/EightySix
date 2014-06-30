@@ -2,10 +2,9 @@ package com.utree.eightysix.app.account;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputFilter;
-import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
@@ -13,11 +12,16 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.loopj.android.http.FileAsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.C;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
@@ -26,9 +30,11 @@ import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.request.LoginRequest;
 import com.utree.eightysix.response.UserResponse;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.TopBar;
+import java.io.File;
 
 /**
  */
@@ -47,8 +53,17 @@ public class LoginActivity extends BaseActivity {
   @InjectView (R.id.tv_forget_pwd)
   public TextView mTvForgetPwd;
 
-  @InjectView(R.id.btn_fixture)
+  @InjectView (R.id.btn_fixture)
   public RoundedButton mBtnFixture;
+
+  @InjectView (R.id.ll_captcha)
+  public LinearLayout mLlCaptcha;
+
+  @InjectView (R.id.iv_captcha)
+  public ImageView mIvCaptcha;
+
+  @InjectView (R.id.et_captcha)
+  public EditText mEtCaptcha;
 
   private boolean mCorrectPhoneNumber;
 
@@ -66,7 +81,7 @@ public class LoginActivity extends BaseActivity {
     startActivity(new Intent(this, ForgetPwdActivity.class));
   }
 
-  @OnClick(R.id.btn_fixture)
+  @OnClick (R.id.btn_fixture)
   public void onBtnFixtureClicked() {
     FeedActivity.start(this, null);
     finish();
@@ -77,7 +92,7 @@ public class LoginActivity extends BaseActivity {
 
     setTopTitle(getString(R.string.login) + getString(R.string.app_name));
 
-    if(U.useFixture()) {
+    if (U.useFixture()) {
       mBtnFixture.setVisibility(View.VISIBLE);
     } else {
       mBtnFixture.setVisibility(View.GONE);
@@ -157,38 +172,74 @@ public class LoginActivity extends BaseActivity {
   }
 
   @Override
-  @Subscribe
-  public void onLogout(Account.LogoutEvent event) {
-  }
-
-  @Override
   protected void onActionLeftOnClicked() {
     finish();
   }
 
+  @Override
+  @Subscribe
+  public void onLogout(Account.LogoutEvent event) {
+  }
+
   private void requestLogin() {
-    request(new LoginRequest(mEtPhoneNumber.getText().toString(), mEtPwd.getText().toString()),
-        new OnResponse<UserResponse>() {
-          @Override
-          public void onResponse(UserResponse response) {
-            if (response != null) {
-              if (response.code == 0) {
-                if (response.object != null) {
-                  Account.inst().login(response.object.userId, response.object.token);
-                  showToast(R.string.login_success, false);
-                  finish();
-                  startActivity(new Intent(LoginActivity.this, FeedActivity.class));
-                } else {
-                  showToast(R.string.server_object_error);
-                }
-              }
+    OnResponse<UserResponse> onResponse = new OnResponse<UserResponse>() {
+      @Override
+      public void onResponse(UserResponse response) {
+        if (response != null) {
+          if (response.code == 0) {
+            if (response.object != null) {
+              Account.inst().login(response.object.userId, response.object.token);
+              showToast(R.string.login_success, false);
+              finish();
+              startActivity(new Intent(LoginActivity.this, FeedActivity.class));
+            } else {
+              showToast(R.string.server_object_error);
             }
-            mBtnLogin.setEnabled(true);
-            hideProgressBar();
+          } else if (response.code == 2450) {
+            mLlCaptcha.setVisibility(View.VISIBLE);
+            requestCaptcha();
           }
-        }, UserResponse.class);
+        }
+        mBtnLogin.setEnabled(true);
+        hideProgressBar();
+      }
+    };
+
+    if (mEtCaptcha.getText().length() > 0) {
+      request(new LoginRequest(mEtPhoneNumber.getText().toString(),
+              mEtPwd.getText().toString(),
+              mEtCaptcha.getText().toString()),
+          onResponse, UserResponse.class);
+    } else {
+      request(new LoginRequest(mEtPhoneNumber.getText().toString(), mEtPwd.getText().toString()),
+          onResponse, UserResponse.class);
+    }
+
     mBtnLogin.setEnabled(false);
     showProgressBar();
+  }
+
+  private void requestCaptcha() {
+    U.getRESTRequester().post(C.API_VALICODE_FIND_PWD, null,
+        new RequestParams("phone", mEtPhoneNumber.getText().toString()), null,
+        new FileAsyncHttpResponseHandler(IOUtils.createTmpFile("valicode.png")) {
+          @Override
+          public void onSuccess(File file) {
+            mIvCaptcha.setImageURI(Uri.fromFile(file));
+            if (file != null) {
+              file.delete();
+            }
+          }
+
+          @Override
+          public void onFailure(Throwable e, File response) {
+            showToast("获取验证码失败，请重新尝试");
+            if (response != null) {
+              response.delete();
+            }
+          }
+        }
+    );
   }
 
   private class ActionAdapter implements TopBar.ActionAdapter {

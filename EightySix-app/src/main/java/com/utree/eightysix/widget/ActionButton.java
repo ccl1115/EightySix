@@ -6,10 +6,8 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.Gravity;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -20,12 +18,14 @@ import com.utree.eightysix.drawable.RoundRectDrawable;
  */
 public abstract class ActionButton extends FrameLayout {
 
-  public static final int INDICATOR_MARGIN = 8;
   private boolean mHasNew;
 
   private Drawable mNewIndicator;
 
   private TextView mCountIndicator;
+
+  private final int kIndicatorMargin;
+  private final int kIndicatorSize;
 
   public ActionButton(Context context) {
     this(context, null);
@@ -34,7 +34,11 @@ public abstract class ActionButton extends FrameLayout {
   public ActionButton(Context context, AttributeSet attrs) {
     super(context, attrs);
 
-    mNewIndicator = getResources().getDrawable(R.drawable.apptheme_action_button_new_indicator);
+    kIndicatorMargin = U.dp2px(10);
+    kIndicatorSize = U.dp2px(10);
+
+    mNewIndicator =
+        new RoundRectDrawable(U.dp2px(10), getResources().getColor(R.color.apptheme_secondary_light_color));
 
     mCountIndicator = new TextView(context);
     mCountIndicator.setSingleLine(true);
@@ -42,11 +46,11 @@ public abstract class ActionButton extends FrameLayout {
     mCountIndicator.setTextColor(Color.WHITE);
     final int p = U.dp2px(4);
     mCountIndicator.setPadding(p, 0, p, 0);
-    mCountIndicator.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(8),
+    mCountIndicator.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(10),
         getResources().getColor(R.color.apptheme_secondary_light_color)));
     LayoutParams params =
         new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-    final int m = U.dp2px(8);
+    final int m = kIndicatorMargin;
     params.setMargins(m, m, m, m);
     params.gravity = Gravity.RIGHT;
     mCountIndicator.setLayoutParams(params);
@@ -78,8 +82,8 @@ public abstract class ActionButton extends FrameLayout {
   @Override
   protected void onLayout(boolean changed, int l, int t, int r, int b) {
     super.onLayout(changed, l, t, r, b);
-    final int m = U.dp2px(INDICATOR_MARGIN);
-    mNewIndicator.setBounds(m - m - mNewIndicator.getIntrinsicWidth(), t + m, r - m, t + m + mNewIndicator.getIntrinsicHeight());
+    mNewIndicator.setBounds(r - l - kIndicatorMargin - kIndicatorSize, t + kIndicatorMargin,
+        r - l - kIndicatorMargin, t + kIndicatorMargin + kIndicatorSize);
   }
 
   @Override

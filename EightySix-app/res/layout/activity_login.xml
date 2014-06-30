@@ -13,6 +13,44 @@
 
     <include layout="@layout/widget_pwd"/>
 
+    <LinearLayout
+            android:id="@+id/ll_captcha"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:visibility="gone">
+
+        <TextView
+                android:id="@+id/tv_captcha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/captcha"
+                android:textSize="16sp"
+                android:layout_marginRight="14dp"
+                android:paddingBottom="6dp"/>
+
+        <EditText
+                android:id="@+id/et_captcha"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="number"
+                android:layout_gravity="center_vertical"
+                android:imeOptions="actionGo"
+                android:imeActionLabel="登录"/>
+
+        <ImageView
+                android:id="@+id/iv_captcha"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="8dp"
+                android:scaleType="fitCenter"/>
+
+    </LinearLayout>
+
     <com.utree.eightysix.widget.RoundedButton
             app:radius="2dp"
             app:background="@color/apptheme_primary_btn_light"
