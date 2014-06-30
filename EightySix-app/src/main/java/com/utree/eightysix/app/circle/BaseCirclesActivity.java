@@ -4,11 +4,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import butterknife.InjectView;
@@ -24,6 +26,7 @@ import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
+import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.request.MyCirclesRequest;
 import com.utree.eightysix.request.SelectCirclesRequest;
 import com.utree.eightysix.response.CirclesResponse;
@@ -31,10 +34,8 @@ import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RefresherView;
-import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.TopBar;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  */
@@ -59,8 +60,8 @@ public class BaseCirclesActivity extends BaseActivity {
   @InjectView (R.id.tv_head)
   public TextView mTvHead;
 
-  @InjectView (R.id.rb_search_hint)
-  public RoundedButton mRbSearchHint;
+  @InjectView (R.id.tv_search_hint)
+  public EditText mRbSearchHint;
 
   protected CircleListAdapter mCircleListAdapter;
 
@@ -82,7 +83,7 @@ public class BaseCirclesActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
-  @OnClick (R.id.fl_search)
+  @OnClick ({R.id.fl_search, R.id.tv_search_hint})
   public void onFlSearchClicked() {
     startActivity(new Intent(this, CircleSearchActivity.class));
   }
@@ -129,7 +130,8 @@ public class BaseCirclesActivity extends BaseActivity {
 
     mTvEmptyText.setText("");
 
-    mRbSearchHint.setText(R.string.search_circles);
+    mRbSearchHint.setHint(R.string.search_circles);
+    mRbSearchHint.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(2), Color.WHITE));
 
     mMode = getIntent().getIntExtra("mode", MODE_MY);
     setTopTitle(mMode == MODE_MY ? getString(R.string.my_circles) : getString(R.string.select_circle));
@@ -247,13 +249,13 @@ public class BaseCirclesActivity extends BaseActivity {
   }
 
   @Override
-  @Subscribe
-  public void onLogout(Account.LogoutEvent event) {
+  protected void onActionLeftOnClicked() {
     finish();
   }
 
   @Override
-  protected void onActionLeftOnClicked() {
+  @Subscribe
+  public void onLogout(Account.LogoutEvent event) {
     finish();
   }
 

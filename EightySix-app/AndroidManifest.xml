@@ -121,6 +121,7 @@
 
         <activity
                 android:name=".app.account.ImportContactActivity"
+                android:windowSoftInputMode="stateHidden"
                 android:exported="@bool/exported"/>
 
         <activity
@@ -193,6 +194,7 @@
 
         <activity
                 android:name=".app.account.ContactsActivity"
+                android:windowSoftInputMode="stateHidden"
                 android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
                 android:exported="@bool/exported"/>
 

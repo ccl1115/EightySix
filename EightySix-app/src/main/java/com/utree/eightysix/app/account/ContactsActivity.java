@@ -2,24 +2,27 @@ package com.utree.eightysix.app.account;
 
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import butterknife.InjectView;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.contact.Contact;
 import com.utree.eightysix.contact.ContactsReadEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
+import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.TopBar;
 
 /**
@@ -36,8 +39,8 @@ public class ContactsActivity extends BaseActivity {
   @InjectView (R.id.tv_empty_text)
   public TextView mTvEmptyView;
 
-  @InjectView(R.id.rb_search_hint)
-  public RoundedButton mRbSearchHint;
+  @InjectView(R.id.tv_search_hint)
+  public EditText mRbSearchHint;
 
   private ContactsAdapter mContactsAdapter;
 
@@ -45,7 +48,8 @@ public class ContactsActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    mRbSearchHint.setText(getString(R.string.search_contact));
+    mRbSearchHint.setHint(R.string.search_contact);
+    mRbSearchHint.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(2), Color.WHITE));
 
     showProgressBar();
 

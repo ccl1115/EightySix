@@ -2,7 +2,6 @@
 
 
 <FrameLayout
-        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/fl_search"
         android:orientation="vertical"
@@ -14,18 +13,19 @@
         android:paddingBottom="5dp"
         android:background="#ffe2e3e5">
 
-    <com.utree.eightysix.widget.RoundedButton
-            android:id="@+id/rb_search_hint"
+    <EditText
+            android:id="@+id/tv_search_hint"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="left|center_vertical"
-            android:textColor="#ffe2e3e5"
+            android:textColorHint="#ffe2e3e5"
             android:textSize="15sp"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
             android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:drawableLeft="@drawable/ic_search"
             android:drawablePadding="6dp"
-            android:clickable="false"
-            app:radius="2dp"
-            app:background="@android:color/white"/>
+            android:editable="false"/>
 
 </FrameLayout>
