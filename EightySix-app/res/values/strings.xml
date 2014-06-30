@@ -181,5 +181,7 @@
     <string name="no_permission_to_read_contacts">没有读取通讯录的权限</string>
     <string name="contacts_empty">通讯录为空</string>
     <string name="search_contact">搜人名</string>
+    <string name="check_update">检查更新</string>
+    <string name="help">使用帮助</string>
 
 </resources>

@@ -4,9 +4,11 @@
     <color name="apptheme_primary_light_color_pressed">#ff228000</color>
     <color name="apptheme_primary_light_color_disabled">#fff0f0f0</color>
 
-    <color name="apptheme_primary_dark_color">#FFA2A2A2</color>
+    <color name="apptheme_secondary_light_color">#ffe64545</color>
+    <color name="apptheme_secondary_light_color_pressed">#ffa23131</color>
+    <color name="apptheme_secondary_light_color_disabled">#ff505050</color>
 
-    <color name="apptheme_secondary_light_color">#FF6A51A6</color>
+    <color name="apptheme_primary_dark_color">#FFA2A2A2</color>
 
     <color name="apptheme_progress_bar_bg">#88000000</color>
 </resources>

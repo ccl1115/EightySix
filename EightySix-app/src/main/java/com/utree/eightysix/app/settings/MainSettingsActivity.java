@@ -7,6 +7,7 @@ import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
@@ -39,19 +40,37 @@ public class MainSettingsActivity extends BaseActivity {
     dialog.show();
   }
 
+  @OnClick (R.id.tv_check_update)
+  public void onTvCheckUpdateClicked() {
+    if (U.useFixture()) {
+      showProgressBar();
+      getHandler().postDelayed(new Runnable() {
+        @Override
+        public void run() {
+          hideProgressBar();
+        }
+      }, 2000);
+    }
+  }
+
+  @OnClick (R.id.tv_help)
+  public void onTvHelpClicked() {
+
+  }
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
   }
 
   @Override
-  @Subscribe
-  public void onLogout(Account.LogoutEvent event) {
+  protected void onActionLeftOnClicked() {
     finish();
   }
 
   @Override
-  protected void onActionLeftOnClicked() {
+  @Subscribe
+  public void onLogout(Account.LogoutEvent event) {
     finish();
   }
 }

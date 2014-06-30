@@ -4,15 +4,41 @@
               xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:padding="10dp">
+              android:layout_height="match_parent">
+
+    <TextView
+            android:id="@+id/tv_check_update"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingLeft="10dp"
+            android:gravity="center_vertical"
+            android:textSize="16sp"
+            android:text="@string/check_update"
+            android:background="@drawable/apptheme_primary_list_selector"/>
+
+    <include layout="@layout/widget_primary_divider"/>
+
+    <TextView
+            android:id="@+id/tv_help"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingLeft="10dp"
+            android:gravity="center_vertical"
+            android:textSize="16sp"
+            android:text="@string/help"
+            android:background="@drawable/apptheme_primary_list_selector"/>
+
+    <include layout="@layout/widget_primary_divider"/>
 
     <com.utree.eightysix.widget.RoundedButton
             android:id="@+id/rb_logout"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="47dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="16dp"
             android:text="@string/logout"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:radius="5dp"
-            app:background="#ff74160b"/>
+            app:background="@color/apptheme_secondary_btn_light"/>
 </LinearLayout>
