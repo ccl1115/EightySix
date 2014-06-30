@@ -44,6 +44,23 @@ public class ContactsActivity extends BaseActivity {
 
   private ContactsAdapter mContactsAdapter;
 
+  @Subscribe
+  public void onContactCheckedChanged(ContactCheckedCountChanged changed) {
+    ((TextView) getTopBar().getActionView(0)).setText(String.format("完成(%d)", changed.getCount()));
+  }
+
+  public static class ContactCheckedCountChanged {
+    private int mCount;
+
+    public ContactCheckedCountChanged(int count) {
+      mCount = count;
+    }
+
+    public int getCount() {
+      return mCount;
+    }
+  }
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -66,7 +83,7 @@ public class ContactsActivity extends BaseActivity {
 
       @Override
       public Drawable getBackgroundDrawable(int position) {
-        return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
+        return new RoundRectDrawable(U.dp2px(2), getResources().getColorStateList(R.color.apptheme_primary_btn_light));
       }
 
       @Override
@@ -84,7 +101,7 @@ public class ContactsActivity extends BaseActivity {
 
       @Override
       public ViewGroup.LayoutParams getLayoutParams(int position) {
-        return new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        return new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
       }
     });
 

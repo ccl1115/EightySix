@@ -318,10 +318,12 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     final TextView textView = new TextView(getContext());
     textView.setLayoutParams(layoutParams);
-    textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+    textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
     textView.setText(text);
     textView.setGravity(Gravity.CENTER);
     textView.setTextColor(Color.WHITE);
+    textView.setSingleLine(true);
+    textView.setLines(1);
     textView.setBackgroundDrawable(backgroundDrawable);
     textView.setOnClickListener(this);
     final int hPadding = U.dp2px(6);

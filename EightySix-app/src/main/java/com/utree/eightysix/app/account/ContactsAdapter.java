@@ -10,6 +10,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnCheckedChanged;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.contact.Contact;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,16 @@ public class ContactsAdapter extends BaseAdapter {
     for (int i = 0, size = mContacts.size(); i < size; i++) {
       if (mChecked.get(i)) {
         ret.add(mContacts.get(i));
+      }
+    }
+    return ret;
+  }
+
+  public int getCheckedCount() {
+    int ret = 0;
+    for (int i = 0, size = mContacts.size(); i < size; i++) {
+      if (mChecked.get(i)) {
+        ret++;
       }
     }
     return ret;
@@ -106,6 +117,8 @@ public class ContactsAdapter extends BaseAdapter {
     return 2;
   }
 
+  private int mCheckedCount = 0;
+
   public class ContactViewHolder {
     @InjectView (R.id.tv_name)
     public TextView mTvName;
@@ -116,6 +129,8 @@ public class ContactsAdapter extends BaseAdapter {
     @OnCheckedChanged(R.id.cb_check)
     public void onCbCheckChecked(boolean c) {
       mChecked.put(mPosition, c);
+      mCheckedCount = c ? mCheckedCount + 1 : mCheckedCount - 1;
+      U.getBus().post(new ContactsActivity.ContactCheckedCountChanged(mCheckedCount));
     }
 
     public int mPosition;
