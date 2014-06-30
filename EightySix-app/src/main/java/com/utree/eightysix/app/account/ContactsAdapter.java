@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -26,6 +27,7 @@ public class ContactsAdapter extends BaseAdapter {
   private List<Contact> mContacts;
 
   private SparseBooleanArray mChecked;
+  private int mCheckedCount = 0;
 
   public ContactsAdapter(List<Contact> contact) {
     mContacts = contact;
@@ -92,6 +94,7 @@ public class ContactsAdapter extends BaseAdapter {
         Contact contact = getItem(position);
 
         holder.mPosition = position;
+        holder.mCbCheck.setChecked(mChecked.get(position));
         holder.mTvName.setText(contact.name);
         holder.mTvPhone.setText(contact.phone);
         break;
@@ -117,8 +120,6 @@ public class ContactsAdapter extends BaseAdapter {
     return 2;
   }
 
-  private int mCheckedCount = 0;
-
   public class ContactViewHolder {
     @InjectView (R.id.tv_name)
     public TextView mTvName;
@@ -126,17 +127,20 @@ public class ContactsAdapter extends BaseAdapter {
     @InjectView (R.id.tv_phone)
     public TextView mTvPhone;
 
-    @OnCheckedChanged(R.id.cb_check)
-    public void onCbCheckChecked(boolean c) {
-      mChecked.put(mPosition, c);
-      mCheckedCount = c ? mCheckedCount + 1 : mCheckedCount - 1;
-      U.getBus().post(new ContactsActivity.ContactCheckedCountChanged(mCheckedCount));
-    }
+    @InjectView (R.id.cb_check)
+    public CheckBox mCbCheck;
 
     public int mPosition;
 
     public ContactViewHolder(View view) {
       ButterKnife.inject(this, view);
+    }
+
+    @OnCheckedChanged (R.id.cb_check)
+    public void onCbCheckChecked(boolean c) {
+      mChecked.put(mPosition, c);
+      mCheckedCount = c ? mCheckedCount + 1 : mCheckedCount - 1;
+      U.getBus().post(new ContactsActivity.ContactCheckedCountChanged(mCheckedCount));
     }
   }
 

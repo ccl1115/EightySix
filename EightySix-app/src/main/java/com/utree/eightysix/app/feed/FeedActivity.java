@@ -285,9 +285,43 @@ public class FeedActivity extends BaseActivity {
           mPopupMenu.setFocusable(true);
           mPopupMenu.setOutsideTouchable(true);
           mPopupMenu.setBackgroundDrawable(new BitmapDrawable(getResources()));
+          mPopupMenu.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+              ObjectAnimator animator = ObjectAnimator.ofFloat(mVMask, "alpha", 1f, 0f);
+              animator.setDuration(150);
+              animator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                  mVMask.setVisibility(View.INVISIBLE);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+              });
+              animator.start();
+            }
+          });
         }
 
         mPopupMenu.showAsDropDown(getTopBar().mActionOverFlow);
+
+        mVMask.setVisibility(View.VISIBLE);
+        ObjectAnimator animator = ObjectAnimator.ofFloat(mVMask, "alpha", 0f, 1f);
+        animator.setDuration(150);
+        animator.start();
       }
     });
 

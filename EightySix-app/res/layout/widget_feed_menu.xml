@@ -4,13 +4,13 @@
               android:orientation="vertical"
               android:layout_width="190dp"
               android:layout_height="wrap_content"
-              android:background="#ff2f3339">
+              android:background="@android:color/white">
 
     <LinearLayout
             android:id="@+id/ll_invite"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:background="@drawable/apptheme_primary_btn_dark"
+            android:background="@drawable/apptheme_primary_list_selector"
             android:orientation="horizontal">
 
         <TextView
@@ -22,7 +22,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/introduce_to_friends"
                 android:textSize="16sp"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/black"/>
 
         <TextView
                 android:layout_width="wrap_content"
@@ -37,13 +37,13 @@
     <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#ff262a2e"/>
+            android:background="#fff0f0f0"/>
 
     <LinearLayout
             android:id="@+id/ll_praise_count"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:background="@drawable/apptheme_primary_btn_dark"
+            android:background="@drawable/apptheme_primary_list_selector"
             android:orientation="horizontal">
 
         <TextView
@@ -54,7 +54,7 @@
                 android:paddingLeft="15dp"
                 android:gravity="center_vertical"
                 android:textSize="16sp"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/black"/>
 
         <TextView
                 android:layout_width="wrap_content"
@@ -69,13 +69,13 @@
     <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#ff262a2e"/>
+            android:background="#fff0f0f0"/>
 
     <LinearLayout
             android:id="@+id/ll_feedback"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:background="@drawable/apptheme_primary_btn_dark"
+            android:background="@drawable/apptheme_primary_list_selector"
             android:orientation="horizontal">
 
         <TextView
@@ -87,7 +87,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/feedback"
                 android:textSize="16sp"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/black"/>
 
         <TextView
                 android:layout_width="wrap_content"
@@ -102,13 +102,13 @@
     <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#ff262a2e"/>
+            android:background="#fff0f0f0"/>
 
     <LinearLayout
             android:id="@+id/ll_about"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:background="@drawable/apptheme_primary_btn_dark"
+            android:background="@drawable/apptheme_primary_list_selector"
             android:orientation="horizontal">
 
         <TextView
@@ -120,7 +120,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/about"
                 android:textSize="16sp"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/black"/>
 
         <TextView
                 android:layout_width="wrap_content"
@@ -135,13 +135,13 @@
     <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#ff262a2e"/>
+            android:background="#fff0f0f0"/>
 
     <LinearLayout
             android:id="@+id/ll_settings"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:background="@drawable/apptheme_primary_btn_dark"
+            android:background="@drawable/apptheme_primary_list_selector"
             android:orientation="horizontal">
 
         <TextView
@@ -153,7 +153,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/settings"
                 android:textSize="16sp"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/black"/>
 
         <TextView
                 android:layout_width="wrap_content"
@@ -168,5 +168,5 @@
     <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#ff262a2e"/>
+            android:background="#fff0f0f0"/>
 </LinearLayout>
