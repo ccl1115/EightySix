@@ -19,6 +19,7 @@ import com.utree.eightysix.contact.Contact;
 import com.utree.eightysix.contact.ContactsReadEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.widget.AdvancedListView;
+import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.TopBar;
 
 /**
@@ -35,11 +36,16 @@ public class ContactsActivity extends BaseActivity {
   @InjectView (R.id.tv_empty_text)
   public TextView mTvEmptyView;
 
+  @InjectView(R.id.rb_search_hint)
+  public RoundedButton mRbSearchHint;
+
   private ContactsAdapter mContactsAdapter;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    mRbSearchHint.setText(getString(R.string.search_contact));
 
     showProgressBar();
 
@@ -74,7 +80,7 @@ public class ContactsActivity extends BaseActivity {
 
       @Override
       public ViewGroup.LayoutParams getLayoutParams(int position) {
-        return null;
+        return new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
       }
     });
 

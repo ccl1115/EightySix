@@ -1,8 +1,5 @@
 package com.utree.eightysix.app.account;
 
-import android.app.PendingIntent;
-import android.content.Intent;
-import android.util.SparseArray;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +18,9 @@ import java.util.List;
  * @author simon
  */
 public class ContactsAdapter extends BaseAdapter {
+
+  private static final int TYPE_HEAD = 0;
+  private static final int TYPE_CONTACT = 1;
 
   private List<Contact> mContacts;
 
@@ -52,12 +52,12 @@ public class ContactsAdapter extends BaseAdapter {
 
   @Override
   public int getCount() {
-    return mContacts == null ? 0 : mContacts.size();
+    return mContacts == null ? 0 : mContacts.size() + 1;
   }
 
   @Override
   public Contact getItem(int i) {
-    return mContacts.get(i);
+    return i == 0 ? null : mContacts.get(i - 1);
   }
 
   @Override
@@ -67,23 +67,43 @@ public class ContactsAdapter extends BaseAdapter {
 
   @Override
   public View getView(int position, View view, ViewGroup viewGroup) {
+    switch (getItemViewType(position)) {
+      case TYPE_CONTACT:
+        ContactViewHolder holder;
+        if (view == null) {
+          view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_contact, viewGroup, false);
+          holder = new ContactViewHolder(view);
+          view.setTag(holder);
+        } else {
+          holder = (ContactViewHolder) view.getTag();
+        }
 
-    ContactViewHolder holder;
-    if (view == null) {
-      view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_contact, viewGroup, false);
-      holder = new ContactViewHolder(view);
-      view.setTag(holder);
-    } else {
-      holder = (ContactViewHolder) view.getTag();
+        Contact contact = getItem(position);
+
+        holder.mPosition = position;
+        holder.mTvName.setText(contact.name);
+        holder.mTvPhone.setText(contact.phone);
+        break;
+      case TYPE_HEAD:
+        if (view == null) {
+          view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_head, viewGroup, false);
+          ((TextView) view.findViewById(R.id.tv_head)).setText("通讯录");
+        }
+        break;
     }
 
-    Contact contact = getItem(position);
-
-    holder.mPosition = position;
-    holder.mTvName.setText(contact.name);
-    holder.mTvPhone.setText(contact.phone);
 
     return view;
+  }
+
+  @Override
+  public int getItemViewType(int position) {
+    return position == 0 ? TYPE_HEAD : TYPE_CONTACT;
+  }
+
+  @Override
+  public int getViewTypeCount() {
+    return 2;
   }
 
   public class ContactViewHolder {

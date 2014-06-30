@@ -31,6 +31,7 @@ import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RefresherView;
+import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.TopBar;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,9 @@ public class BaseCirclesActivity extends BaseActivity {
 
   @InjectView (R.id.tv_head)
   public TextView mTvHead;
+
+  @InjectView (R.id.rb_search_hint)
+  public RoundedButton mRbSearchHint;
 
   protected CircleListAdapter mCircleListAdapter;
 
@@ -124,6 +128,8 @@ public class BaseCirclesActivity extends BaseActivity {
     setContentView(R.layout.activity_base_circles);
 
     mTvEmptyText.setText("");
+
+    mRbSearchHint.setText(R.string.search_circles);
 
     mMode = getIntent().getIntExtra("mode", MODE_MY);
     setTopTitle(mMode == MODE_MY ? getString(R.string.my_circles) : getString(R.string.select_circle));

@@ -80,10 +80,10 @@ class CircleListAdapter extends BaseAdapter {
 
   private View getHeadView(int position, View convertView, ViewGroup parent) {
     if (convertView == null) {
-      convertView = View.inflate(parent.getContext(), R.layout.item_head_circle, null);
+      convertView = View.inflate(parent.getContext(), R.layout.item_head, null);
     }
 
-    ((TextView) convertView.findViewById(R.id.tv_circle_group_type)).setText(mHeadMark.get(position));
+    ((TextView) convertView.findViewById(R.id.tv_head)).setText(mHeadMark.get(position));
     return convertView;
   }
 

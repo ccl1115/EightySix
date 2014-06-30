@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<FrameLayout
+        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fl_search"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:paddingLeft="15dp"
+        android:paddingTop="5dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="5dp"
+        android:background="#ffe2e3e5">
+
+    <com.utree.eightysix.widget.RoundedButton
+            android:id="@+id/rb_search_hint"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="left|center_vertical"
+            android:textColor="#ffe2e3e5"
+            android:textSize="15sp"
+            android:paddingLeft="8dp"
+            android:drawableLeft="@drawable/ic_search"
+            android:drawablePadding="6dp"
+            android:clickable="false"
+            app:radius="2dp"
+            app:background="@android:color/white"/>
+
+</FrameLayout>
