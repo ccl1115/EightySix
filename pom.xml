@@ -279,5 +279,12 @@
             </activation>
         </profile>
 
+        <profile>
+            <id>config-tool</id>
+            <modules>
+                <module>EightySix-config-tool</module>
+            </modules>
+        </profile>
     </profiles>
+
 </project>
