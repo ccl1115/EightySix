@@ -393,12 +393,13 @@ public class FeedActivity extends BaseActivity {
 
     U.getBus().unregister(mLvFeed);
     U.getBus().unregister(mLvSideCircles);
+
+    Env.setLastCircle(mCircle);
   }
 
   @Override
   protected void onDestroy() {
     Env.setFirstRun(FIRST_RUN_KEY, false);
-    Env.setLastCircle(mCircle);
     super.onDestroy();
   }
 
@@ -427,12 +428,13 @@ public class FeedActivity extends BaseActivity {
 
     mCircle = circle;
 
-    if (mCircle == null && U.useFixture()) {
-      mCircle = U.getFixture(Circle.class, "valid");
-    } else {
-      mCircle = Env.getLastCircle();
+    if (mCircle == null) {
+      if (U.useFixture()) {
+        mCircle = U.getFixture(Circle.class, "valid");
+      } else {
+        mCircle = Env.getLastCircle();
+      }
     }
-
 
     if (mCircle != null) {
       setTitle();

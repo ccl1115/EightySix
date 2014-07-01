@@ -117,7 +117,7 @@ public class Env {
   public static void setLastCircle(Circle circle) {
     if (circle == null) return;
     getSharedPreferences().edit().putString(String.format("last_circle_%s", Account.inst().getUserId()),
-        U.getGson().toJson(circle));
+        U.getGson().toJson(circle)).apply();
   }
 
   public static Circle getLastCircle() {
