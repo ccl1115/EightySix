@@ -27,8 +27,6 @@ import java.util.List;
  */
 public class TopBar extends ViewGroup implements View.OnClickListener {
 
-  public static final int DEFAULT_RIGHT_PADDING = 5;
-  private static final int MINIMIUM_TITLE_WIDTH = 60;
   private final List<ActionButton> mActionViews = new ArrayList<ActionButton>();
 
   @InjectView (R.id.tb_tv_bar_title)
@@ -329,7 +327,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     button.setOnClickListener(this);
     final int hPadding = U.dp2px(6);
     final int vPadding = U.dp2px(4);
-    button.setPadding(hPadding, vPadding, hPadding, vPadding);
+    button.setActionPadding(hPadding, vPadding, hPadding, vPadding);
     return button;
   }
 

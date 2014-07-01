@@ -56,8 +56,7 @@ public class TextActionButton extends ActionButton {
     mTextAction.setLines(lines);
   }
 
-  @Override
-  public void setPadding(int left, int top, int right, int bottom) {
+  public void setActionPadding(int left, int top, int right, int bottom) {
     mTextAction.setPadding(left, top, right, bottom);
   }
 
