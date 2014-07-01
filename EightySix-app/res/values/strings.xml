@@ -183,5 +183,9 @@
     <string name="search_contact">搜人名</string>
     <string name="check_update">检查更新</string>
     <string name="help">使用帮助</string>
+    <string name="new_version_to_upgrade">升级提醒</string>
+    <string name="new_version">新版本: %s</string>
+    <string name="download_upgrade">下载并升级</string>
+    <string name="force_update_tip">你的客户端版本太旧，需要升级才能使用</string>
 
 </resources>
