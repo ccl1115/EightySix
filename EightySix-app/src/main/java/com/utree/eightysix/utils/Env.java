@@ -102,6 +102,14 @@ public class Env {
     return getSharedPreferences().getString("location_last_city", "");
   }
 
+  public static long getUpgradeCanceledTimestamp() {
+    return getSharedPreferences().getLong(String.format("upgrade_canceled_time_%d", C.VERSION), 0);
+  }
+
+  public static void setUpgradeCanceledTimestamp(long timestamp) {
+    getSharedPreferences().edit().putLong(String.format("upgrade_canceled_time_%d", C.VERSION), timestamp).apply();
+  }
+
   private static SharedPreferences getSharedPreferences() {
     return U.getContext().getSharedPreferences("env", Context.MODE_PRIVATE);
   }

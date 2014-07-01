@@ -2,7 +2,6 @@ package com.utree.eightysix.app.settings;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
@@ -12,7 +11,6 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
-import com.utree.eightysix.app.UpgradeActivity;
 
 /**
  * @author simon
@@ -50,7 +48,7 @@ public class MainSettingsActivity extends BaseActivity {
         @Override
         public void run() {
           hideProgressBar();
-          UpgradeActivity.start(MainSettingsActivity.this, "1.0.1", "新版本", true);
+          UpgradeActivity.start(MainSettingsActivity.this, "1.0.1", "新版本", false);
         }
       }, 2000);
     } else {

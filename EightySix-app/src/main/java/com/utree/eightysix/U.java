@@ -2,6 +2,7 @@ package com.utree.eightysix;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Environment;
 import android.os.Looper;
 import android.view.View;
 import android.widget.Toast;
@@ -22,6 +23,9 @@ import com.utree.eightysix.statistics.MtaAnalyserImpl;
 import com.utree.eightysix.storage.Storage;
 import com.utree.eightysix.storage.oss.OSSImpl;
 import com.utree.eightysix.utils.CacheUtils;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -154,6 +158,19 @@ public class U {
   private static void loadConfig() {
     checkThread();
     sConfiguration = new Properties();
+    File file = new File(Environment.getExternalStorageDirectory().getAbsoluteFile() + "/configuration.properties");
+    if (file.exists() && file.isFile()) {
+      try {
+        sConfiguration.load(new FileReader(file));
+      } catch (Exception e) {
+        loadInternalConfig();
+      }
+    } else {
+      loadInternalConfig();
+    }
+  }
+
+  private static void loadInternalConfig() {
     try {
       sConfiguration.load(U.getContext().getResources().openRawResource(R.raw.configuration));
     } catch (IOException e) {

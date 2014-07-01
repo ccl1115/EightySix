@@ -1,4 +1,4 @@
-package com.utree.eightysix.app;
+package com.utree.eightysix.app.settings;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,10 +6,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.RoundedButton;
+import java.util.Date;
 
 /**
  * @author simon
@@ -39,6 +44,17 @@ public class UpgradeActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
+  @OnClick (R.id.rb_download_upgrade)
+  public void onRbDownloadUpgrade() {
+
+  }
+
+  @OnClick (R.id.rb_cancel)
+  public void onRbCancelClicked() {
+    Env.setUpgradeCanceledTimestamp(new Date().getTime());
+    finish();
+  }
+
   @Override
   public void onLogout(Account.LogoutEvent event) {
     finish();
@@ -49,6 +65,7 @@ public class UpgradeActivity extends BaseActivity {
     if (mForce) {
       showToast(getString(R.string.force_update_tip));
     } else {
+      Env.setUpgradeCanceledTimestamp(new Date().getTime());
       super.onBackPressed();
     }
   }

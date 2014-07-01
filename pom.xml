@@ -14,7 +14,6 @@
         <module>EightySix-fixture</module>
         <module>EightySix-data</module>
         <module>EightySix-base</module>
-        <module>EightySix-config-tool</module>
     </modules>
 
     <properties>
