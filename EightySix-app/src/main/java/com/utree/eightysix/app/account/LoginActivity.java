@@ -222,6 +222,7 @@ public class LoginActivity extends BaseActivity {
 
     mBtnLogin.setEnabled(false);
     showProgressBar();
+    hideSoftKeyboard(mEtPwd);
   }
 
   private void requestCaptcha() {

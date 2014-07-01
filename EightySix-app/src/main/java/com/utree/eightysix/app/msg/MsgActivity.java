@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.msg;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.View;
@@ -11,13 +10,12 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
-import com.utree.eightysix.app.EmotionOnRefreshListener;
+import com.utree.eightysix.widget.EmotionOnRefreshListener;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.feed.PostActivity;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.IRefreshable;
 import com.utree.eightysix.widget.RefresherView;
 import java.util.List;
 import java.util.Random;

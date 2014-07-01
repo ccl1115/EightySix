@@ -15,16 +15,22 @@ import com.utree.eightysix.widget.panel.GridPanel;
 public class PublishLayout extends ViewGroup {
 
   public final static int PANEL_INFO = 0x0;
-  private int mLastPanel = PANEL_INFO;
   public final static int PANEL_COLOR = 0x1;
+
+  private int mLastPanel = PANEL_INFO;
+
   @InjectView (R.id.fl_top)
   public FrameLayout mFlTop;
+
   @InjectView (R.id.fl_panel)
   public FrameLayout mFlPanel;
+
   @InjectView (R.id.ll_bottom)
   public LinearLayout mLlBottom;
+
   @InjectView (R.id.gp_color)
   public GridPanel mGpColor;
+
   private boolean mPanelHidden = false;
 
   public PublishLayout(Context context) {

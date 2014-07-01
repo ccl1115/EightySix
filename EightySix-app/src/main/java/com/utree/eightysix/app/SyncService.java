@@ -26,4 +26,8 @@ public class SyncService extends IntentService {
   protected void onHandleIntent(Intent intent) {
 
   }
+
+  private void requestSync() {
+
+  }
 }

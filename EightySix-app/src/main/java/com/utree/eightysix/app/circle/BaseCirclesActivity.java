@@ -20,9 +20,7 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
-import com.utree.eightysix.app.EmotionOnRefreshListener;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.account.ImportContactActivity;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
@@ -32,6 +30,7 @@ import com.utree.eightysix.request.SelectCirclesRequest;
 import com.utree.eightysix.response.CirclesResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.widget.AdvancedListView;
+import com.utree.eightysix.widget.EmotionOnRefreshListener;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RefresherView;
 import com.utree.eightysix.widget.TopBar;
@@ -94,14 +93,15 @@ public class BaseCirclesActivity extends BaseActivity {
     if (circle != null) {
       if (mMode == MODE_MY) {
         circle.selected = true;
-        if (mRefreshed) {
+        if (mRefreshed && mCircleListAdapter != null) {
           FeedActivity.start(this, circle, new ArrayList<Circle>(mCircleListAdapter.getCircles().subList(0, 10)));
         } else {
-          FeedActivity.start(this, circle);
+          FeedActivity.start(this);
         }
       } else if (mMode == MODE_SELECT) {
         AlertDialog dialog = new AlertDialog.Builder(this)
             .setTitle(String.format("确认在%s上班么？", circle.name))
+            .setMessage("15天之内不能修改在职工厂")
             .setPositiveButton("确认", new DialogInterface.OnClickListener() {
               @Override
               public void onClick(DialogInterface dialog, int which) {
@@ -251,7 +251,7 @@ public class BaseCirclesActivity extends BaseActivity {
   @Override
   protected void onActionLeftOnClicked() {
     if (mMode == MODE_MY) {
-      if (mRefreshed) {
+      if (mRefreshed && mCircleListAdapter != null) {
         FeedActivity.start(this, null, new ArrayList<Circle>(mCircleListAdapter.getCircles().subList(0, 10)));
       } else {
         FeedActivity.start(this);
@@ -315,7 +315,6 @@ public class BaseCirclesActivity extends BaseActivity {
             mCircleListAdapter = new CircleListAdapter(response.object.lists);
             mLvCircles.setAdapter(mCircleListAdapter);
             mPageInfo = response.object.page;
-            if (mRefreshed) mRefresherView.hideHeader();
           } else if (mCircleListAdapter != null) {
             mCircleListAdapter.add(response.object.lists);
             mPageInfo = response.object.page;
@@ -325,6 +324,7 @@ public class BaseCirclesActivity extends BaseActivity {
         }
         mLvCircles.stopLoadMore();
         hideProgressBar();
+        if (mRefreshed) mRefresherView.hideHeader();
       }
     }, CirclesResponse.class);
   }
