@@ -78,6 +78,11 @@ public class FeedActivity extends BaseActivity {
   private Circle mCircle;
   private List<Circle> mSideCircles;
 
+  public static void start(Context context) {
+    Intent intent = new Intent(context, FeedActivity.class);
+    context.startActivity(intent);
+  }
+
   public static void start(Context context, Circle circle) {
     Intent intent = new Intent(context, FeedActivity.class);
     intent.putExtra("circle", circle);
@@ -393,6 +398,7 @@ public class FeedActivity extends BaseActivity {
   @Override
   protected void onDestroy() {
     Env.setFirstRun(FIRST_RUN_KEY, false);
+    Env.setLastCircle(mCircle);
     super.onDestroy();
   }
 
@@ -423,11 +429,12 @@ public class FeedActivity extends BaseActivity {
 
     if (mCircle == null && U.useFixture()) {
       mCircle = U.getFixture(Circle.class, "valid");
+    } else {
+      mCircle = Env.getLastCircle();
     }
 
-    if (mCircle == null) {
-      showToast(R.string.circle_not_found, false);
-    } else {
+
+    if (mCircle != null) {
       setTitle();
     }
     //endregion
@@ -438,6 +445,10 @@ public class FeedActivity extends BaseActivity {
 
     if (circles != null) {
       mSideCircles = circles;
+      if (mCircle == null && mSideCircles.size() > 0) {
+        mCircle = mSideCircles.get(0);
+        setTitle();
+      }
     }
 
     if (mSideCircles != null) {
@@ -598,11 +609,17 @@ public class FeedActivity extends BaseActivity {
     cacheOut(new MyCirclesRequest("", 1), new OnResponse<CirclesResponse>() {
       @Override
       public void onResponse(CirclesResponse response) {
-        if (response != null && response.code == 0) {
+        if (response != null && response.code == 0 && response.object != null) {
           mSideCircles = response.object.lists.subList(0, 10);
+          if (mCircle == null && mSideCircles.size() > 0) {
+            mCircle = mSideCircles.get(0);
+            setTitle();
+          }
           selectSideCircle(mSideCircles);
+
           mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
           mLvSideCircles.setAdapter(mSideCirclesAdapter);
+
         } else {
           requestSideCircle();
         }
@@ -619,11 +636,17 @@ public class FeedActivity extends BaseActivity {
 
       @Override
       public void onResponse(CirclesResponse response) {
-        if (response != null && response.code == 0) {
+        if (response != null && response.code == 0 && response.object != null) {
           mSideCircles = response.object.lists.subList(0, 10);
-          selectSideCircle(FeedActivity.this.mSideCircles);
+          if (mCircle == null && mSideCircles.size() > 0) {
+            mCircle = mSideCircles.get(0);
+            setTitle();
+          }
+          selectSideCircle(mSideCircles);
+
           mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
           mLvSideCircles.setAdapter(mSideCirclesAdapter);
+
         }
       }
     }, CirclesResponse.class);

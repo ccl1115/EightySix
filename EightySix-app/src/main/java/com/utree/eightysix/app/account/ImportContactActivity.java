@@ -23,6 +23,7 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
+import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.widget.RoundedButton;
@@ -100,7 +101,7 @@ public class ImportContactActivity extends BaseActivity {
             public void run() {
               getHandler().removeMessages(MSG_ANIMATE);
 
-              mTvResult.setText("为你找到" + mRandom.nextInt(100) + "个朋友");
+              mTvResult.setText(String.format("为你找到%d个朋友", mRandom.nextInt(100)));
 
               ObjectAnimator animator = ObjectAnimator.ofFloat(mLlScroll, "translationY", 0, -U.dp2px(180));
               animator.setDuration(500);
@@ -137,11 +138,15 @@ public class ImportContactActivity extends BaseActivity {
 
     mTvLoading.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/refresh_icon.ttf"));
 
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    mQuitConfirmDialog = builder.setTitle("建议完成设置以便更好的和朋友互动")
+    mQuitConfirmDialog = getQuitConfirmDialog();
+  }
+
+  private AlertDialog getQuitConfirmDialog() {
+    return new AlertDialog.Builder(this).setTitle("建议完成设置以便更好的和朋友互动")
         .setPositiveButton("停止", new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
+            FeedActivity.start(ImportContactActivity.this);
             finish();
           }
         }).setNegativeButton("继续", new DialogInterface.OnClickListener() {

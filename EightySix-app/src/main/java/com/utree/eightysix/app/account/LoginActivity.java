@@ -181,6 +181,11 @@ public class LoginActivity extends BaseActivity {
   public void onLogout(Account.LogoutEvent event) {
   }
 
+  @Subscribe
+  public void onLogin(Account.LoginEvent event) {
+    finish();
+  }
+
   private void requestLogin() {
     OnResponse<UserResponse> onResponse = new OnResponse<UserResponse>() {
       @Override

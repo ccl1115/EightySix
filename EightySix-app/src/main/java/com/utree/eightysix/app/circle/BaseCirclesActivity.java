@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -23,6 +22,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.EmotionOnRefreshListener;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.account.ImportContactActivity;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
@@ -250,13 +250,38 @@ public class BaseCirclesActivity extends BaseActivity {
 
   @Override
   protected void onActionLeftOnClicked() {
-    finish();
+    if (mMode == MODE_MY) {
+      if (mRefreshed) {
+        FeedActivity.start(this, null, new ArrayList<Circle>(mCircleListAdapter.getCircles().subList(0, 10)));
+      } else {
+        FeedActivity.start(this);
+      }
+      finish();
+    } else if (mMode == MODE_SELECT) {
+      getQuitConfirmDialog().show();
+    }
   }
 
   @Override
   @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();
+  }
+
+  private AlertDialog getQuitConfirmDialog() {
+    return new AlertDialog.Builder(this).setTitle("建议完成设置以便更好的和朋友互动")
+        .setPositiveButton("停止", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            FeedActivity.start(BaseCirclesActivity.this);
+            finish();
+          }
+        }).setNegativeButton("继续", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            dialog.dismiss();
+          }
+        }).create();
   }
 
   private void cacheOutCircles(final int page) {
