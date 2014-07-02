@@ -37,8 +37,10 @@ import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
+import com.utree.eightysix.request.FeedsRequest;
 import com.utree.eightysix.request.MyCirclesRequest;
 import com.utree.eightysix.response.CirclesResponse;
+import com.utree.eightysix.response.FeedsResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
@@ -459,6 +461,8 @@ public class FeedActivity extends BaseActivity {
     } else {
       getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
     }
+
+    requestFeed(1);
   }
 
   private void showSide() {
@@ -554,6 +558,17 @@ public class FeedActivity extends BaseActivity {
         }
       }
     }, CirclesResponse.class);
+  }
+
+  private void requestFeed(int page) {
+    request(new FeedsRequest(mCircle.id, page), new OnResponse<FeedsResponse>() {
+      @Override
+      public void onResponse(FeedsResponse response) {
+        if (response != null && response.code == 0 && response.object != null) {
+          mLvFeed.setAdapter(new FeedAdapter(response.object.posts.lists, response.object.showUnlock == 1));
+        }
+      }
+    }, FeedsResponse.class);
   }
 
   @Keep

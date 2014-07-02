@@ -8,9 +8,9 @@ import com.utree.eightysix.rest.Token;
 
 /**
  */
-@Api (C.API_POST)
+@Api (C.API_FEED_PUBLISH)
 @Token
-public class PostRequest {
+public class PublishRequest {
 
   @Optional
   @Param ("bgUrl")
@@ -25,7 +25,7 @@ public class PostRequest {
   @Param ("factoryId")
   public int factoryId;
 
-  public PostRequest(int factoryId, String content, String bgColor, String bgUrl) {
+  public PublishRequest(int factoryId, String content, String bgColor, String bgUrl) {
     this.factoryId = factoryId;
     this.content = content;
     this.bgColor = bgColor;
