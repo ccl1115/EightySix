@@ -62,13 +62,13 @@ public class FixtureImpl implements Fixture {
       "PostCommentAdapter"
   };
 
-  private static Integer[] FIXTURE_BG_COLOR = {
-      0xff403923,
-      0xff4a49f3,
-      0xff3296ad,
-      0xff38993f,
-      0xffaa439c,
-      0xff89ce94
+  private static String[] FIXTURE_BG_COLOR = {
+      "ff403923",
+      "ff4a49f3",
+      "ff3296ad",
+      "ff38993f",
+      "ffaa439c",
+      "ff89ce94"
   };
 
   private static Character[] FIXTURE_PORTRAIT_CHAR = {
@@ -121,7 +121,6 @@ public class FixtureImpl implements Fixture {
 
     br.com.six2six.fixturefactory.Fixture.of(Comment.class).addTemplate("valid", new Rule() {
       {
-        add("id", random(Integer.class));
         add("content", random(FIXTURE_COMMENT_CONTENT));
         add("timestamp", sequence(new Date().getTime(), -300000));
         add("praised", random(0, 1));
@@ -134,12 +133,11 @@ public class FixtureImpl implements Fixture {
 
     br.com.six2six.fixturefactory.Fixture.of(Post.class).addTemplate("valid", new Rule() {
       {
-        add("id", random(Integer.class));
         add("bgUrl", random(FIXTURE_BG_URL));
         add("bgColor", random(FIXTURE_BG_COLOR));
         add("content", random(FIXTURE_POST_CONTENT));
         add("comments", random(Integer.class, range(0, 10000)));
-        add("comment", one(Comment.class, "valid"));
+        add("comment", random(FIXTURE_POST_CONTENT));
         add("praise", random(Integer.class, range(0, 10000)));
         add("source", random(FIXTURE_CIRCLES));
         add("praised", random(0, 1));

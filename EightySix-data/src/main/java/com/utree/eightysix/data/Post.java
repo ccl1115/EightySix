@@ -10,7 +10,7 @@ public class Post implements Serializable {
   public String bgUrl;
 
   @SerializedName ("bgColor")
-  public int bgColor;
+  public String bgColor;
 
   @SerializedName ("content")
   public String content;
@@ -22,7 +22,7 @@ public class Post implements Serializable {
   public int praise;
 
   @SerializedName ("id")
-  public int id;
+  public String id;
 
   @SerializedName ("myPraiseCount")
   public int myPraiseCount;
@@ -33,14 +33,16 @@ public class Post implements Serializable {
   @SerializedName ("readed")
   public int read;
 
-  @SerializedName ("viewComment")
-  public Comment comment;
+  @SerializedName ("commentMsg")
+  public String comment;
 
   @SerializedName ("whoAtMe")
   public String whoAtMe;
 
+  @SerializedName("praised")
   public int praised;
 
   public int permission;
+
 
 }

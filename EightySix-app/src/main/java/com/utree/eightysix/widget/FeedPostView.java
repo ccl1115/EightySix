@@ -21,6 +21,7 @@ import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.utils.ShareUtils;
+import com.utree.eightysix.utils.Utils;
 
 /**
  */
@@ -126,7 +127,7 @@ public class FeedPostView extends RelativeLayout {
       mTvContent.setBackgroundColor(Color.TRANSPARENT);
     } else {
       mAivBg.setUrl(null);
-      mTvContent.setBackgroundColor(post.bgColor);
+      mTvContent.setBackgroundColor(Utils.strToColor(post.bgColor));
     }
 
     if (post.praised == 1) {

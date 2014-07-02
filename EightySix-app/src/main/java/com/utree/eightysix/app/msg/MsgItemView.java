@@ -14,6 +14,7 @@ import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.data.Post;
+import com.utree.eightysix.utils.Utils;
 import com.utree.eightysix.widget.AsyncImageView;
 
 /**
@@ -79,7 +80,7 @@ public class MsgItemView extends LinearLayout {
           mTvContentLeft.setBackgroundColor(Color.TRANSPARENT);
         } else {
           mAivBgLeft.setUrl(null);
-          mTvContentLeft.setBackgroundColor(left.bgColor);
+          mTvContentLeft.setBackgroundColor(Utils.strToColor(left.bgColor));
         }
         if (left.read == 1) {
           mVMaskLeft.setVisibility(VISIBLE);
@@ -99,7 +100,7 @@ public class MsgItemView extends LinearLayout {
           mTvContentRight.setBackgroundColor(Color.TRANSPARENT);
         } else {
           mAivBgRight.setUrl(null);
-          mTvContentRight.setBackgroundColor(right.bgColor);
+          mTvContentRight.setBackgroundColor(Utils.strToColor(right.bgColor));
         }
         if (right.read == 1) {
           mVMaskRight.setVisibility(VISIBLE);
