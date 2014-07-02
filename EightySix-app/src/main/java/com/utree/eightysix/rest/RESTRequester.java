@@ -138,7 +138,7 @@ public class RESTRequester {
       }
     } catch (Throwable t) {
       U.getAnalyser().reportException(U.getContext(), t);
-      throw new IllegalArgumentException("Request object parse failed");
+      throw new IllegalArgumentException("Request object parse failed", t);
     }
 
     return data;

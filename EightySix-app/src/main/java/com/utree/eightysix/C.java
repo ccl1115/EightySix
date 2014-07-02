@@ -24,7 +24,7 @@ public class C {
 
   public static final String API_UPLOAD_CONTACTS = "/friend/upContacts.do";
 
-  public static final String API_POST = "/feed/addPost.do";
+  public static final String API_POST = "/feed/add.do";
 
   public static final String API_VALICODE_FIND_PWD = "/login/valiCode.do";
 

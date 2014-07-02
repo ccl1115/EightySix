@@ -104,7 +104,9 @@ public class FeedActivity extends BaseActivity {
 
   @OnClick (R.id.ib_send)
   public void onSendClicked() {
-    startActivity(new Intent(this, PublishActivity.class));
+    if (mCircle != null) {
+      PublishActivity.start(this, mCircle.id);
+    }
   }
 
   @OnClick (R.id.tv_more)

@@ -73,19 +73,39 @@ public class PublishActivity extends BaseActivity {
 
   @InjectView (R.id.ll_bottom)
   public LinearLayout mLlBottom;
+
   protected PublishLayout mPublishLayout;
+
   private Dialog mCameraDialog;
   private Dialog mDescriptionDialog;
   private Dialog mConfirmQuitDialog;
+
   private File mOutputFile;
+
   private boolean mIsOpened;
   private boolean mToastShown;
-  private String mFileHash;
   private boolean mRequestStarted;
   private boolean mImageUploadFinished;
-  private boolean mUseColor;
+  private boolean mUseColor = true;
+
+  private String mFileHash;
+
   private String mImageUploadUrl;
-  private int mBgColor;
+
+  private int mBgColor = Color.WHITE;
+
+  private int mFactoryId;
+
+  public static void start(Context context, int factoryId) {
+    Intent intent = new Intent(context, PublishActivity.class);
+    intent.putExtra("factoryId", factoryId);
+
+    if (!(context instanceof Activity)) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    context.startActivity(intent);
+  }
 
   @OnClick (R.id.ll_bottom)
   public void onLlBottomClicked() {
@@ -110,6 +130,13 @@ public class PublishActivity extends BaseActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    mFactoryId = getIntent().getIntExtra("factoryId", -1);
+
+    if (mFactoryId == -1) {
+      showToast("没有找到圈子", false);
+      finish();
+    }
 
     mPublishLayout = new PublishLayout(this);
     setContentView(mPublishLayout);
@@ -361,6 +388,7 @@ public class PublishActivity extends BaseActivity {
         mIvPostBg.setImageDrawable(new ColorDrawable(tv.data));
         mPostEditText.setTextColor(monochromizing(tv.data));
         mTvPostTip.setTextColor(monochromizing(tv.data));
+        mBgColor = tv.data;
       }
     }
   }
@@ -440,8 +468,9 @@ public class PublishActivity extends BaseActivity {
     mRequestStarted = true;
 
     if (mImageUploadFinished || mUseColor) {
-      final PostRequest request = new PostRequest(1000, mPostEditText.getText().toString(),
-          mUseColor ? String.valueOf(mBgColor) : "", mImageUploadUrl);
+
+      final PostRequest request = new PostRequest(mFactoryId, mPostEditText.getText().toString(),
+          mUseColor ? String.format("%h", mBgColor) : "", mImageUploadUrl);
 
       request(request, new OnResponse<Response>() {
         @Override

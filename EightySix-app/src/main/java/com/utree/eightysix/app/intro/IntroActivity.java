@@ -27,6 +27,12 @@ public class IntroActivity extends BaseActivity {
 
     setContentView(R.layout.activity_intro);
 
+    // start push service in main entry activity
+    // note:
+    // put this in Application#onCreate() entry, if push service crashed,
+    // it will cause app restart infinitely.
+    U.getPushHelper().startWork();
+
     hideTopBar(false);
 
     getHandler().postDelayed(new Runnable() {

@@ -196,7 +196,7 @@ public class ImportContactActivity extends BaseActivity {
   @Subscribe
   public void onContactSync(ContactsSyncEvent event) {
     if (event.isSucceed()) {
-      mTvResult.setText("为你找到" + mRandom.nextInt(100) + "个朋友");
+      mTvResult.setText(String.format("为你找到%d个朋友", mRandom.nextInt(100)));
 
       ObjectAnimator animator = ObjectAnimator.ofFloat(mLlScroll, "translationY", 0, -U.dp2px(180));
       animator.setDuration(500);
@@ -207,5 +207,6 @@ public class ImportContactActivity extends BaseActivity {
       mVMask.setVisibility(View.INVISIBLE);
       mFlImport.setVisibility(View.INVISIBLE);
     }
+    getHandler().removeMessages(MSG_ANIMATE);
   }
 }
