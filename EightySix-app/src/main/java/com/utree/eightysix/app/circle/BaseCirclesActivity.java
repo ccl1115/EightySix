@@ -96,7 +96,7 @@ public class BaseCirclesActivity extends BaseActivity {
         if (mRefreshed && mCircleListAdapter != null) {
           FeedActivity.start(this, circle, new ArrayList<Circle>(mCircleListAdapter.getCircles().subList(0, 10)));
         } else {
-          FeedActivity.start(this);
+          FeedActivity.start(this, circle);
         }
       } else if (mMode == MODE_SELECT) {
         AlertDialog dialog = new AlertDialog.Builder(this)
