@@ -210,11 +210,11 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
   protected void onResume() {
     super.onResume();
     U.getAnalyser().onResume(this);
-    if (mResumed) {
-      overridePendingTransition(R.anim.activity_exit_in, R.anim.activity_exit_out);
-    } else {
-      overridePendingTransition(R.anim.activity_enter_in, R.anim.activity_enter_out);
-    }
+    //if (mResumed) {
+    //  overridePendingTransition(R.anim.activity_exit_in, R.anim.activity_exit_out);
+    //} else {
+    //  overridePendingTransition(R.anim.activity_enter_in, R.anim.activity_enter_out);
+    //}
     mResumed = true;
   }
 
