@@ -6,7 +6,7 @@ import java.util.Comparator;
 /**
  */
 public class Contact implements Comparable<Contact>, Comparator<Contact> {
-    public transient int contactId;
+    public int contactId;
     public String name;
     public String phone;
 
