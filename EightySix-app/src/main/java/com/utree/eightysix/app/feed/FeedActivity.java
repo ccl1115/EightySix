@@ -144,109 +144,11 @@ public class FeedActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    setFillContent(true);
-
-
     onNewIntent(getIntent());
-
 
     if (Env.firstRun(FIRST_RUN_KEY)) {
       //showSide();
     }
-
-    mLvFeed.setOnScrollListener(new AbsListView.OnScrollListener() {
-
-      private int mPreFirstVisibleItem;
-
-      private AnimatorSet mDownSet = new AnimatorSet();
-      private AnimatorSet mUpSet = new AnimatorSet();
-
-      private boolean mIsDown = false;
-      private boolean mIsUp = true;
-
-      {
-        mDownSet.setDuration(500);
-        mDownSet.playTogether(
-            ObjectAnimator.ofFloat(mSend, "translationY", 0f, 200f)
-        );
-        mDownSet.addListener(new Animator.AnimatorListener() {
-          @Override
-          public void onAnimationStart(Animator animation) {
-
-          }
-
-          @Override
-          public void onAnimationEnd(Animator animation) {
-            mIsDown = true;
-            mIsUp = false;
-          }
-
-          @Override
-          public void onAnimationCancel(Animator animation) {
-
-          }
-
-          @Override
-          public void onAnimationRepeat(Animator animation) {
-
-          }
-        });
-
-        mUpSet.setDuration(500);
-        mUpSet.playTogether(
-            ObjectAnimator.ofFloat(mSend, "translationY", 200f, 0f)
-        );
-        mUpSet.addListener(new Animator.AnimatorListener() {
-          @Override
-          public void onAnimationStart(Animator animation) {
-
-          }
-
-          @Override
-          public void onAnimationEnd(Animator animation) {
-            mIsUp = true;
-            mIsDown = false;
-          }
-
-          @Override
-          public void onAnimationCancel(Animator animation) {
-
-          }
-
-          @Override
-          public void onAnimationRepeat(Animator animation) {
-
-          }
-        });
-      }
-
-      @Override
-      public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if (view.getFirstVisiblePosition() <= 1) {
-          showTopBar(true);
-        }
-        if (scrollState == SCROLL_STATE_IDLE) {
-          U.getBus().post(new ListViewScrollStateIdledEvent());
-        }
-      }
-
-      @Override
-      public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (firstVisibleItem > mPreFirstVisibleItem) {
-          if (!mDownSet.isRunning() && !mIsDown) {
-            mDownSet.start();
-            hideTopBar(true);
-          }
-        } else if (firstVisibleItem < mPreFirstVisibleItem) {
-          if (!mUpSet.isRunning() && !mIsUp) {
-            mUpSet.start();
-            showTopBar(true);
-          }
-        }
-        mPreFirstVisibleItem = firstVisibleItem;
-      }
-
-    });
 
     mLvFeed.setLoadMoreCallback(new LoadMoreCallback() {
       @Override
@@ -558,7 +460,6 @@ public class FeedActivity extends BaseActivity {
   }
 
   private void showSide() {
-    hideTopBar(true);
     mSideShown = true;
 
     mLlSide.setVisibility(View.VISIBLE);
@@ -573,7 +474,6 @@ public class FeedActivity extends BaseActivity {
   }
 
   private void hideSide() {
-    showTopBar(true);
     mSideShown = false;
 
     AnimatorSet set = new AnimatorSet();
