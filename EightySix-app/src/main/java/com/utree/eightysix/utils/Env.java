@@ -3,8 +3,10 @@ package com.utree.eightysix.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.telephony.TelephonyManager;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.C;
 import com.utree.eightysix.U;
+import com.utree.eightysix.data.Circle;
 
 /**
  * Persistent key/value storage back-end by Android SharedPreference
@@ -41,10 +43,12 @@ public class Env {
     getSharedPreferences().edit().putBoolean(String.format("first_run_%s_%d", key, C.VERSION), firstRun).apply();
   }
 
+  @Deprecated
   public static boolean isPatternLocked() {
     return getSharedPreferences().getBoolean("pattern_locked", true);
   }
 
+  @Deprecated
   public static void setPatternLock(boolean lock) {
     getSharedPreferences().edit().putBoolean("pattern_locked", lock).apply();
   }
@@ -100,6 +104,26 @@ public class Env {
 
   public static String getLastCity() {
     return getSharedPreferences().getString("location_last_city", "");
+  }
+
+  public static long getUpgradeCanceledTimestamp() {
+    return getSharedPreferences().getLong(String.format("upgrade_canceled_time_%d", C.VERSION), 0);
+  }
+
+  public static void setUpgradeCanceledTimestamp(long timestamp) {
+    getSharedPreferences().edit().putLong(String.format("upgrade_canceled_time_%d", C.VERSION), timestamp).apply();
+  }
+
+  public static void setLastCircle(Circle circle) {
+    if (circle == null) return;
+    getSharedPreferences().edit().putString(String.format("last_circle_%s", Account.inst().getUserId()),
+        U.getGson().toJson(circle)).apply();
+  }
+
+  public static Circle getLastCircle() {
+    String str = getSharedPreferences().getString(String.format("last_circle_%s", Account.inst().getUserId()), null);
+    if (str == null) return null;
+    return U.getGson().fromJson(str, Circle.class);
   }
 
   private static SharedPreferences getSharedPreferences() {

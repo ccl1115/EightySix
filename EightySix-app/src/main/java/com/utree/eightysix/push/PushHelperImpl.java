@@ -8,6 +8,9 @@ import com.utree.eightysix.U;
  */
 public class PushHelperImpl implements PushHelper {
 
+  public PushHelperImpl() {
+  }
+
     public void startWork() {
         PushManager.startWork(U.getContext(), PushConstants.LOGIN_TYPE_API_KEY, U.getConfig("bd.api_key"));
     }

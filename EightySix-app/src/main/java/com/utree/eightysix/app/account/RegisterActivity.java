@@ -61,7 +61,7 @@ public class RegisterActivity extends BaseActivity {
 
     setTopTitle(getString(R.string.register) + getString(R.string.app_name));
 
-    mRbImportContact.setVisibility(U.useFixture() ? View.VISIBLE : View.INVISIBLE);
+    mRbImportContact.setVisibility(U.useFixture() ? View.VISIBLE : View.GONE);
 
     mEtPhoneNumber.addTextChangedListener(new TextWatcher() {
       @Override

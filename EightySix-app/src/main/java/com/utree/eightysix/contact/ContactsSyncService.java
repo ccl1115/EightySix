@@ -91,8 +91,8 @@ public class ContactsSyncService extends IntentService {
         RequestData data = U.getRESTRequester().convert(request);
         for (int i = 0; i < contacts.size(); i++) {
           Contact contact = contacts.get(i);
-          data.getParams().add(String.format("contact[%d].name", i), contact.name);
-          data.getParams().add(String.format("contact[%d].phone", i), contact.phone);
+          data.getParams().add(String.format("c[%d].name", i), contact.name);
+          data.getParams().add(String.format("c[%d].phone", i), contact.phone);
         }
 
         U.getRESTRequester().request(data, new HandlerWrapper<Response>(data, new OnResponse<Response>() {

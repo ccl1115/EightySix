@@ -6,7 +6,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:paddingLeft="16dp"
-              android:paddingTop="39dp"
+              android:paddingTop="35dp"
               android:paddingRight="16dp">
 
     <include layout="@layout/widget_phone_number"/>
@@ -60,7 +60,7 @@
             android:id="@+id/btn_login"
             android:enabled="false"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="25dp"/>
+            android:layout_marginTop="20dp"/>
 
     <com.utree.eightysix.widget.RoundedButton
             app:radius="2dp"

@@ -21,7 +21,6 @@ public class BaseApplication extends FrontiaApplication {
         Log.activateLogging();
         Log.setDefaultLogLevel(Constants.VERBOSE);
 
-        U.getPushHelper().startWork();
     }
 
     public static Context getContext() {

@@ -145,8 +145,7 @@ class FeedAdapter extends BaseAdapter {
   private View getPlaceHolderView(View convertView, ViewGroup parent) {
     if (convertView == null) {
       convertView = new View(parent.getContext());
-      convertView.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-          parent.getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height)));
+      convertView.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, U.dp2px(5)));
     }
     return convertView;
   }

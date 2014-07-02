@@ -198,6 +198,12 @@
                 android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
                 android:exported="@bool/exported"/>
 
+        <activity
+                android:theme="@style/AppTheme.Dialog"
+                android:name=".app.settings.UpgradeActivity"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+                android:exported="@bool/exported"/>
+
         <service
                 android:name="com.baidu.location.f"
                 android:enabled="true"
@@ -250,6 +256,7 @@
                 <action android:name="com.baidu.android.pushservice.action.PUSH_SERVICE"/>
             </intent-filter>
         </service>
+        <service android:name=".app.SyncService"/>
         <!-- push结束 -->
 
     </application>

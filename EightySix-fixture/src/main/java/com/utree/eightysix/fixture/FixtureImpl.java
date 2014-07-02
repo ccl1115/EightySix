@@ -82,6 +82,7 @@ public class FixtureImpl implements Fixture {
     br.com.six2six.fixturefactory.Fixture.of(Circle.class).addTemplate("valid", new Rule() {
       {
         add("name", random(FIXTURE_CIRCLES));
+        add("shortName", random(FIXTURE_CIRCLES));
         add("friendCount", random(Integer.class, range(1, 100)));
         add("workmateCount", random(Integer.class, range(100, 10000)));
         add("cityName", random(FIXTURE_CITIES));

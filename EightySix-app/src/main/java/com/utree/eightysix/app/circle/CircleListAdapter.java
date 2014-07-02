@@ -13,6 +13,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.widget.RoundedButton;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -32,7 +33,7 @@ class CircleListAdapter extends BaseAdapter {
   }
 
   public List<Circle> getCircles() {
-    return mCircles;
+    return mCircles == null ? new ArrayList<Circle>() : mCircles;
   }
 
   public void add(Collection<Circle> collection) {

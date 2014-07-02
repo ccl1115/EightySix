@@ -78,6 +78,11 @@ public class FeedActivity extends BaseActivity {
   private Circle mCircle;
   private List<Circle> mSideCircles;
 
+  public static void start(Context context) {
+    Intent intent = new Intent(context, FeedActivity.class);
+    context.startActivity(intent);
+  }
+
   public static void start(Context context, Circle circle) {
     Intent intent = new Intent(context, FeedActivity.class);
     intent.putExtra("circle", circle);
@@ -99,7 +104,9 @@ public class FeedActivity extends BaseActivity {
 
   @OnClick (R.id.ib_send)
   public void onSendClicked() {
-    startActivity(new Intent(this, PublishActivity.class));
+    if (mCircle != null) {
+      PublishActivity.start(this, mCircle.id);
+    }
   }
 
   @OnClick (R.id.tv_more)
@@ -139,109 +146,11 @@ public class FeedActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    setFillContent(true);
-
-
     onNewIntent(getIntent());
-
 
     if (Env.firstRun(FIRST_RUN_KEY)) {
       //showSide();
     }
-
-    mLvFeed.setOnScrollListener(new AbsListView.OnScrollListener() {
-
-      private int mPreFirstVisibleItem;
-
-      private AnimatorSet mDownSet = new AnimatorSet();
-      private AnimatorSet mUpSet = new AnimatorSet();
-
-      private boolean mIsDown = false;
-      private boolean mIsUp = true;
-
-      {
-        mDownSet.setDuration(500);
-        mDownSet.playTogether(
-            ObjectAnimator.ofFloat(mSend, "translationY", 0f, 200f)
-        );
-        mDownSet.addListener(new Animator.AnimatorListener() {
-          @Override
-          public void onAnimationStart(Animator animation) {
-
-          }
-
-          @Override
-          public void onAnimationEnd(Animator animation) {
-            mIsDown = true;
-            mIsUp = false;
-          }
-
-          @Override
-          public void onAnimationCancel(Animator animation) {
-
-          }
-
-          @Override
-          public void onAnimationRepeat(Animator animation) {
-
-          }
-        });
-
-        mUpSet.setDuration(500);
-        mUpSet.playTogether(
-            ObjectAnimator.ofFloat(mSend, "translationY", 200f, 0f)
-        );
-        mUpSet.addListener(new Animator.AnimatorListener() {
-          @Override
-          public void onAnimationStart(Animator animation) {
-
-          }
-
-          @Override
-          public void onAnimationEnd(Animator animation) {
-            mIsUp = true;
-            mIsDown = false;
-          }
-
-          @Override
-          public void onAnimationCancel(Animator animation) {
-
-          }
-
-          @Override
-          public void onAnimationRepeat(Animator animation) {
-
-          }
-        });
-      }
-
-      @Override
-      public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if (view.getFirstVisiblePosition() <= 1) {
-          showTopBar(true);
-        }
-        if (scrollState == SCROLL_STATE_IDLE) {
-          U.getBus().post(new ListViewScrollStateIdledEvent());
-        }
-      }
-
-      @Override
-      public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (firstVisibleItem > mPreFirstVisibleItem) {
-          if (!mDownSet.isRunning() && !mIsDown) {
-            mDownSet.start();
-            hideTopBar(true);
-          }
-        } else if (firstVisibleItem < mPreFirstVisibleItem) {
-          if (!mUpSet.isRunning() && !mIsUp) {
-            mUpSet.start();
-            showTopBar(true);
-          }
-        }
-        mPreFirstVisibleItem = firstVisibleItem;
-      }
-
-    });
 
     mLvFeed.setLoadMoreCallback(new LoadMoreCallback() {
       @Override
@@ -388,6 +297,8 @@ public class FeedActivity extends BaseActivity {
 
     U.getBus().unregister(mLvFeed);
     U.getBus().unregister(mLvSideCircles);
+
+    Env.setLastCircle(mCircle);
   }
 
   @Override
@@ -421,13 +332,15 @@ public class FeedActivity extends BaseActivity {
 
     mCircle = circle;
 
-    if (mCircle == null && U.useFixture()) {
-      mCircle = U.getFixture(Circle.class, "valid");
+    if (mCircle == null) {
+      if (U.useFixture()) {
+        mCircle = U.getFixture(Circle.class, "valid");
+      } else {
+        mCircle = Env.getLastCircle();
+      }
     }
 
-    if (mCircle == null) {
-      showToast(R.string.circle_not_found, false);
-    } else {
+    if (mCircle != null) {
       setTitle();
     }
     //endregion
@@ -438,6 +351,10 @@ public class FeedActivity extends BaseActivity {
 
     if (circles != null) {
       mSideCircles = circles;
+      if (mCircle == null && mSideCircles.size() > 0) {
+        mCircle = mSideCircles.get(0);
+        setTitle();
+      }
     }
 
     if (mSideCircles != null) {
@@ -545,7 +462,6 @@ public class FeedActivity extends BaseActivity {
   }
 
   private void showSide() {
-    hideTopBar(true);
     mSideShown = true;
 
     mLlSide.setVisibility(View.VISIBLE);
@@ -560,7 +476,6 @@ public class FeedActivity extends BaseActivity {
   }
 
   private void hideSide() {
-    showTopBar(true);
     mSideShown = false;
 
     AnimatorSet set = new AnimatorSet();
@@ -598,11 +513,17 @@ public class FeedActivity extends BaseActivity {
     cacheOut(new MyCirclesRequest("", 1), new OnResponse<CirclesResponse>() {
       @Override
       public void onResponse(CirclesResponse response) {
-        if (response != null && response.code == 0) {
+        if (response != null && response.code == 0 && response.object != null) {
           mSideCircles = response.object.lists.subList(0, 10);
+          if (mCircle == null && mSideCircles.size() > 0) {
+            mCircle = mSideCircles.get(0);
+            setTitle();
+          }
           selectSideCircle(mSideCircles);
+
           mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
           mLvSideCircles.setAdapter(mSideCirclesAdapter);
+
         } else {
           requestSideCircle();
         }
@@ -619,11 +540,17 @@ public class FeedActivity extends BaseActivity {
 
       @Override
       public void onResponse(CirclesResponse response) {
-        if (response != null && response.code == 0) {
+        if (response != null && response.code == 0 && response.object != null) {
           mSideCircles = response.object.lists.subList(0, 10);
-          selectSideCircle(FeedActivity.this.mSideCircles);
+          if (mCircle == null && mSideCircles.size() > 0) {
+            mCircle = mSideCircles.get(0);
+            setTitle();
+          }
+          selectSideCircle(mSideCircles);
+
           mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
           mLvSideCircles.setAdapter(mSideCirclesAdapter);
+
         }
       }
     }, CirclesResponse.class);

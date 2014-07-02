@@ -48,8 +48,11 @@ public class MainSettingsActivity extends BaseActivity {
         @Override
         public void run() {
           hideProgressBar();
+          UpgradeActivity.start(MainSettingsActivity.this, "1.0.1", "新版本", false);
         }
       }, 2000);
+    } else {
+
     }
   }
 
