@@ -136,7 +136,7 @@ public class ContactsSyncService extends IntentService {
     for (int i = 0, size = cache.size(); i < size; i++) {
       if (!cache.get(i).equals(phone.get(i))) {
         return false;
-      }
+    }
     }
     return true;
   }
@@ -187,7 +187,6 @@ public class ContactsSyncService extends IntentService {
     do {
       Contact contact = new Contact();
 
-      contact.contactId = cursor.getInt(cursor.getColumnIndex(RAW_CONTACT_ID));
       contact.name = cursor.getString(cursor.getColumnIndex(DISPLAY_NAME));
       String number = cursor.getString(cursor.getColumnIndex(NUMBER));
       StringBuilder b = new StringBuilder();
