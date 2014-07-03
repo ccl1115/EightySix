@@ -1,5 +1,7 @@
 package com.utree.eightysix.app.feed;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
@@ -26,6 +28,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.account.ContactsActivity;
 import com.utree.eightysix.app.account.InviteActivity;
 import com.utree.eightysix.app.account.PraiseStaticActivity;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
@@ -43,8 +46,10 @@ import com.utree.eightysix.response.CirclesResponse;
 import com.utree.eightysix.response.FeedsResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.utils.Env;
+import com.utree.eightysix.utils.ShareUtils;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
+import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TopBar;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -571,6 +576,8 @@ public class FeedActivity extends BaseActivity {
     }, FeedsResponse.class);
   }
 
+  private ThemedDialog mInviteDialog;
+
   @Keep
   class MenuViewHolder {
 
@@ -581,7 +588,18 @@ public class FeedActivity extends BaseActivity {
 
     @OnClick (R.id.ll_invite)
     void onLlInviteClicked() {
-      if (mCircle != null) InviteActivity.start(FeedActivity.this, mCircle.shortName);
+      if (mInviteDialog == null) {
+        mInviteDialog = new ThemedDialog(FeedActivity.this);
+        mInviteDialog.setTitle("分享给厂里的朋友");
+        mInviteDialog.setPositive("加入工友圈", null);
+        View view = getLayoutInflater().inflate(R.layout.dialog_content_share, null);
+        mInviteDialog.setContent(view);
+        new ShareViewHolder(view);
+      }
+      if (!mInviteDialog.isShowing()) {
+        mInviteDialog.show();
+      }
+
       mPopupMenu.dismiss();
     }
 
@@ -607,6 +625,23 @@ public class FeedActivity extends BaseActivity {
     void onLlSettingsClicked() {
       startActivity(new Intent(FeedActivity.this, MainSettingsActivity.class));
       mPopupMenu.dismiss();
+    }
+  }
+
+  @Keep
+  class ShareViewHolder {
+    @OnClick(R.id.tv_sms)
+    void onTvSmsClicked() {
+      startActivity(new Intent(FeedActivity.this, ContactsActivity.class));
+    }
+
+    @OnClick(R.id.tv_qq_friends)
+    void onQQFriendsClicked() {
+      ShareUtils.shareAppToQQ(FeedActivity.this);
+    }
+
+    ShareViewHolder(View view) {
+      ButterKnife.inject(this, view);
     }
   }
 }

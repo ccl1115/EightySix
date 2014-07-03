@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <com.utree.eightysix.widget.AsyncImageView
+            android:id="@+id/aiv_qr_code"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:textSize="13sp"
+            android:textColor="#ffa2a2a2"
+            android:text="扫描二维码，立即下载"/>
+
+    <View
+            android:background="#fff0f0f0"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="10dp">
+
+
+        <TextView
+                android:id="@+id/tv_sms"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginRight="10dp"
+                android:text="短信"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:drawablePadding="4dp"
+                android:drawableTop="@drawable/ic_share_sms"
+                android:background="@drawable/apptheme_primary_list_selector"/>
+
+        <TextView
+                android:id="@+id/tv_qq_friends"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="QQ好友"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:background="@drawable/apptheme_primary_list_selector"/>
+
+        <TextView
+                android:id="@+id/tv_bluetooth"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:text="蓝牙传输"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:drawablePadding="4dp"
+                android:drawableTop="@drawable/ic_share_bluetooth"
+                android:background="@drawable/apptheme_primary_list_selector"
+                android:visibility="gone"/>
+    </LinearLayout>
+</LinearLayout>
