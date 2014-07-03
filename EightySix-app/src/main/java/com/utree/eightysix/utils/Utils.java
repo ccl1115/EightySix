@@ -9,4 +9,11 @@ import java.util.Date;
  */
 public class Utils {
 
+  public static int strToColor(String color) {
+    try {
+      return (int) Long.parseLong(color, 16);
+    } catch (NumberFormatException e) {
+      return 0x00000000;
+    }
+  }
 }

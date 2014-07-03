@@ -36,7 +36,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.drawable.RoundRectDrawable;
-import com.utree.eightysix.request.PostRequest;
+import com.utree.eightysix.request.PublishRequest;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
@@ -469,7 +469,7 @@ public class PublishActivity extends BaseActivity {
 
     if (mImageUploadFinished || mUseColor) {
 
-      final PostRequest request = new PostRequest(mFactoryId, mPostEditText.getText().toString(),
+      final PublishRequest request = new PublishRequest(mFactoryId, mPostEditText.getText().toString(),
           mUseColor ? String.format("%h", mBgColor) : "", mImageUploadUrl);
 
       request(request, new OnResponse<Response>() {

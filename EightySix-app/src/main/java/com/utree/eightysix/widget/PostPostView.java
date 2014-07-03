@@ -20,6 +20,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.utils.ShareUtils;
+import com.utree.eightysix.utils.Utils;
 
 /**
  * This is the post view in PostActivity
@@ -83,7 +84,7 @@ public class PostPostView extends FrameLayout {
       mTvContent.setBackgroundColor(Color.TRANSPARENT);
     } else {
       mAivBg.setUrl(null);
-      mTvContent.setBackgroundColor(mPost.bgColor);
+      mTvContent.setBackgroundColor(Utils.strToColor(mPost.bgColor));
     }
 
     if (mPost.praised == 1) {
