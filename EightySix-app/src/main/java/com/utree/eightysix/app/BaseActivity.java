@@ -408,7 +408,7 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
     if (isRequesting(data.getApi(), data.getParams())) return;
 
     RequestHandle handle = U.getRESTRequester().request(request, new HandlerWrapper<T>(data, onResponse, clz));
-    mRequestHandles.put(data.getApi(), handle);
+    mRequestHandles.put(RESTRequester.genCacheKey(data.getApi(), data.getParams()), handle);
   }
 
   protected final <T extends Response> void cacheOut(Object request, OnResponse<T> onResponse, Class<T> clz) {
