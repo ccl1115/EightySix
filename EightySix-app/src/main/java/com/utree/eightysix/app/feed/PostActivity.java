@@ -6,7 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -14,7 +16,6 @@ import butterknife.OnItemClick;
 import butterknife.OnTextChanged;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
-import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
@@ -23,7 +24,6 @@ import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.utils.ShareUtils;
-import com.utree.eightysix.utils.Utils;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RoundedButton;
@@ -136,8 +136,8 @@ public class PostActivity extends BaseActivity {
 
     mLvComments.setLoadMoreCallback(new LoadMoreCallback() {
       @Override
-      public View getLoadMoreView() {
-        return View.inflate(PostActivity.this, R.layout.footer_load_more, null);
+      public View getLoadMoreView(ViewGroup parent) {
+        return LayoutInflater.from(PostActivity.this).inflate(R.layout.footer_load_more, parent, false);
       }
 
       @Override

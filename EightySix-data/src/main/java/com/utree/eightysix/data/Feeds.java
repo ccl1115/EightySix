@@ -13,6 +13,7 @@ public class Feeds {
 
   public int showUnlock;
 
+  @SerializedName("friendAnonymousPostCount")
   public int hiddenCount;
 
   @SerializedName ("posts")

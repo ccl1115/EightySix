@@ -2,7 +2,9 @@ package com.utree.eightysix.app.circle;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -169,8 +171,8 @@ public class CircleSearchActivity extends BaseActivity {
       mLvResult.setAdapter(mResultAdapter);
       mLvResult.setLoadMoreCallback(new LoadMoreCallback() {
         @Override
-        public View getLoadMoreView() {
-          return View.inflate(CircleSearchActivity.this, R.layout.footer_load_more, null);
+        public View getLoadMoreView(ViewGroup parent) {
+          return LayoutInflater.from(CircleSearchActivity.this).inflate(R.layout.footer_load_more, parent, false);
         }
 
         @Override

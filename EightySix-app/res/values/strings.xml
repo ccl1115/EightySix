@@ -139,7 +139,8 @@
     <string name="current_location">当前位置</string>
     <string name="enter_captcha">输入验证码</string>
     <string name="change_captcha">换一张</string>
-    <string name="invite_people">邀请好友进入（需要3个朋友加入，才可以开通）</string>
+    <string name="invite_people">邀请朋友</string>
+    <string name="invite_people_info">邀请好友进入（需要3个朋友加入，才可以开通）</string>
     <string name="circle_name_length_long">工友圈名字太长</string>
     <string name="circle_short_name_length_long">工友圈短名称太长</string>
     <string name="pull_to_refresh">下拉刷新</string>
@@ -173,7 +174,7 @@
 
     <!-- InviteActivity -->
     <string name="invite_info">为了保护发帖人的隐私安全（不让你猜出是谁发的），当你有三个朋友在“%s”打工圈时，才可以查看。</string>
-    <string name="current_friend_count">当前朋友数量：%1$d</string>
+    <string name="current_friend_count">此圈内的通讯录朋友：%1$d</string>
     <string name="invite_contact_friends">邀请通讯录朋友加入</string>
 
     <!-- ContactsActivity -->
@@ -187,5 +188,6 @@
     <string name="new_version">新版本: %s</string>
     <string name="download_upgrade">下载并升级</string>
     <string name="force_update_tip">你的客户端版本太旧，需要升级才能使用</string>
+    <string name="no_perm_to_publish">你还没有发帖的权限</string>
 
 </resources>

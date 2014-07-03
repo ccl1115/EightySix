@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -175,8 +177,8 @@ public class BaseCirclesActivity extends BaseActivity {
       mLvCircles.setAdapter(mCircleListAdapter);
       mLvCircles.setLoadMoreCallback(new LoadMoreCallback() {
         @Override
-        public View getLoadMoreView() {
-          return View.inflate(BaseCirclesActivity.this, R.layout.footer_load_more, null);
+        public View getLoadMoreView(ViewGroup parent) {
+          return LayoutInflater.from(BaseCirclesActivity.this).inflate(R.layout.footer_load_more, parent, false);
         }
 
         @Override
@@ -202,21 +204,21 @@ public class BaseCirclesActivity extends BaseActivity {
 
       mLvCircles.setLoadMoreCallback(new LoadMoreCallback() {
         @Override
-        public View getLoadMoreView() {
-          return View.inflate(BaseCirclesActivity.this, R.layout.footer_load_more, null);
+        public View getLoadMoreView(ViewGroup parent) {
+          return LayoutInflater.from(BaseCirclesActivity.this).inflate(R.layout.footer_load_more, parent, false);
         }
 
         @Override
         public boolean hasMore() {
-          return mPageInfo.currPage < mPageInfo.countPage;
+          return (mPageInfo != null) && (mPageInfo.currPage < mPageInfo.countPage);
         }
 
         @Override
         public boolean onLoadMoreStart() {
           if (mRefreshed) {
-            requestCircles(mPageInfo.currPage + 1);
+            requestCircles(mPageInfo == null ? 1 : mPageInfo.currPage + 1);
           } else {
-            cacheOutCircles(mPageInfo.currPage + 1);
+            cacheOutCircles(mPageInfo == null ? 1 : mPageInfo.currPage + 1);
           }
           return true;
         }
@@ -292,11 +294,10 @@ public class BaseCirclesActivity extends BaseActivity {
           if (page == 1) {
             mCircleListAdapter = new CircleListAdapter(response.object.lists);
             mLvCircles.setAdapter(mCircleListAdapter);
-            mPageInfo = response.object.page;
           } else if (mCircleListAdapter != null) {
             mCircleListAdapter.add(response.object.lists);
-            mPageInfo = response.object.page;
           }
+          mPageInfo = response.object.page;
           mLvCircles.stopLoadMore();
           hideProgressBar();
         } else {
@@ -314,11 +315,10 @@ public class BaseCirclesActivity extends BaseActivity {
           if (page == 1) {
             mCircleListAdapter = new CircleListAdapter(response.object.lists);
             mLvCircles.setAdapter(mCircleListAdapter);
-            mPageInfo = response.object.page;
           } else if (mCircleListAdapter != null) {
             mCircleListAdapter.add(response.object.lists);
-            mPageInfo = response.object.page;
           }
+          mPageInfo = response.object.page;
         } else {
           mTvEmptyText.setText(getString(R.string.no_circles));
         }

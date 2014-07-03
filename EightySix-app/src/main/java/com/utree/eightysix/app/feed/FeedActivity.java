@@ -1,25 +1,23 @@
 package com.utree.eightysix.app.feed;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
@@ -29,7 +27,6 @@ import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.ContactsActivity;
-import com.utree.eightysix.app.account.InviteActivity;
 import com.utree.eightysix.app.account.PraiseStaticActivity;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.msg.MsgActivity;
@@ -38,6 +35,7 @@ import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.Circle;
+import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
@@ -80,11 +78,28 @@ public class FeedActivity extends BaseActivity {
 
   private FeedAdapter mFeedAdapter;
   private SideCirclesAdapter mSideCirclesAdapter;
+
   private PopupWindow mPopupMenu;
   private LinearLayout mMenu;
+
   private boolean mSideShown;
+
   private Circle mCircle;
   private List<Circle> mSideCircles;
+
+  private Paginate.Page mPageInfo;
+
+  /**
+   * 邀请好友对话框
+   */
+  private ThemedDialog mInviteDialog;
+
+  /**
+   * 没有发帖权限对话框
+   */
+  private ThemedDialog mNoPermDialog;
+
+  private boolean mRefreshed;
 
   public static void start(Context context) {
     Intent intent = new Intent(context, FeedActivity.class);
@@ -111,9 +126,34 @@ public class FeedActivity extends BaseActivity {
   }
 
   @OnClick (R.id.ib_send)
-  public void onSendClicked() {
+  public void onIbSendClicked() {
     if (mCircle != null) {
-      PublishActivity.start(this, mCircle.id);
+      if (mCircle.lock == 1) {
+        showNoPermDialog();
+      } else {
+        PublishActivity.start(this, mCircle.id);
+      }
+    }
+  }
+
+  private void showNoPermDialog() {
+    if (mNoPermDialog == null) {
+      mNoPermDialog = new ThemedDialog(this);
+      View view = LayoutInflater.from(this).inflate(R.layout.dialog_content_locked, null);
+      NoPermViewHolder noPermViewHolder = new NoPermViewHolder(view);
+      noPermViewHolder.mTvFriendCount.setText(getString(R.string.current_friend_count, mCircle.friendCount));
+      mNoPermDialog.setContent(view);
+      mNoPermDialog.setPositive(R.string.invite_people, new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          showInviteDialog();
+        }
+      });
+      mNoPermDialog.setTitle(getString(R.string.no_perm_to_publish));
+    }
+
+    if (!mNoPermDialog.isShowing()) {
+      mNoPermDialog.show();
     }
   }
 
@@ -167,30 +207,23 @@ public class FeedActivity extends BaseActivity {
 
     mLvFeed.setLoadMoreCallback(new LoadMoreCallback() {
       @Override
-      public View getLoadMoreView() {
-        return View.inflate(FeedActivity.this, R.layout.footer_load_more, null);
+      public View getLoadMoreView(ViewGroup parent) {
+        return LayoutInflater.from(FeedActivity.this).inflate(R.layout.footer_load_more, parent, false);
       }
 
       @Override
       public boolean hasMore() {
-        return true;
+        return (mPageInfo != null) && (mPageInfo.currPage < mPageInfo.countPage);
       }
 
       @Override
       public boolean onLoadMoreStart() {
-        if (U.useFixture()) {
-          getHandler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-              mFeedAdapter.add(U.getFixture(Post.class, 20, "valid"));
-              mLvFeed.stopLoadMore();
-            }
-          }, 2000);
-          return true;
+        if (mRefreshed) {
+          requestFeeds(mPageInfo == null ? 1 : mPageInfo.currPage + 1);
         } else {
-          // TODO request more data
-          return false;
+          cacheOutFeeds(mPageInfo == null ? 1 : mPageInfo.currPage + 1);
         }
+        return true;
       }
     });
 
@@ -272,40 +305,6 @@ public class FeedActivity extends BaseActivity {
 
     getTopBar().getActionView(0).setCount(99);
     getTopBar().getActionOverflow().setHasNew(true);
-  }
-
-  private void showMask() {
-    mVMask.setVisibility(View.VISIBLE);
-    ObjectAnimator animator = ObjectAnimator.ofFloat(mVMask, "alpha", 0f, 1f);
-    animator.setDuration(150);
-    animator.start();
-  }
-
-  private void hideMask() {
-    ObjectAnimator animator = ObjectAnimator.ofFloat(mVMask, "alpha", 1f, 0f);
-    animator.setDuration(150);
-    animator.addListener(new Animator.AnimatorListener() {
-      @Override
-      public void onAnimationStart(Animator animation) {
-
-      }
-
-      @Override
-      public void onAnimationEnd(Animator animation) {
-        mVMask.setVisibility(View.INVISIBLE);
-      }
-
-      @Override
-      public void onAnimationCancel(Animator animation) {
-
-      }
-
-      @Override
-      public void onAnimationRepeat(Animator animation) {
-
-      }
-    });
-    animator.start();
   }
 
   @Override
@@ -440,6 +439,40 @@ public class FeedActivity extends BaseActivity {
     }
   }
 
+  private void showMask() {
+    mVMask.setVisibility(View.VISIBLE);
+    ObjectAnimator animator = ObjectAnimator.ofFloat(mVMask, "alpha", 0f, 1f);
+    animator.setDuration(150);
+    animator.start();
+  }
+
+  private void hideMask() {
+    ObjectAnimator animator = ObjectAnimator.ofFloat(mVMask, "alpha", 1f, 0f);
+    animator.setDuration(150);
+    animator.addListener(new Animator.AnimatorListener() {
+      @Override
+      public void onAnimationStart(Animator animation) {
+
+      }
+
+      @Override
+      public void onAnimationEnd(Animator animation) {
+        mVMask.setVisibility(View.INVISIBLE);
+      }
+
+      @Override
+      public void onAnimationCancel(Animator animation) {
+
+      }
+
+      @Override
+      public void onAnimationRepeat(Animator animation) {
+
+      }
+    });
+    animator.start();
+  }
+
   private void selectSideCircle(List<Circle> sideCircles) {
     if (sideCircles != null) {
       for (Circle c : sideCircles) {
@@ -474,7 +507,7 @@ public class FeedActivity extends BaseActivity {
         }
       }, 2000);
     } else {
-      requestFeed(1);
+      requestFeeds(1);
     }
     hideSide();
     hideMask();
@@ -579,18 +612,74 @@ public class FeedActivity extends BaseActivity {
     }, CirclesResponse.class);
   }
 
-  private void requestFeed(int page) {
+  private void requestFeeds(final int page) {
     request(new FeedsRequest(mCircle.id, page), new OnResponse<FeedsResponse>() {
       @Override
       public void onResponse(FeedsResponse response) {
         if (response != null && response.code == 0 && response.object != null) {
-          mLvFeed.setAdapter(new FeedAdapter(response.object.posts.lists, response.object.showUnlock == 1));
+          if (page == 1) {
+            mFeedAdapter = new FeedAdapter(response.object.posts.lists, response.object.showUnlock == 1);
+            mLvFeed.setAdapter(mFeedAdapter);
+          } else if (mFeedAdapter != null) {
+            mFeedAdapter.add(response.object.posts.lists);
+          }
+          mPageInfo = response.object.posts.page;
+        } else {
+          mLvFeed.setAdapter(null);
+        }
+        mLvFeed.stopLoadMore();
+      }
+    }, FeedsResponse.class);
+  }
+
+  private void cacheOutFeeds(final int page) {
+    showProgressBar();
+
+    cacheOut(new FeedsRequest(mCircle.id, page), new OnResponse<FeedsResponse>() {
+      @Override
+      public void onResponse(FeedsResponse response) {
+        if (response != null && response.code == 0 && response.object != null) {
+          if (page == 1) {
+            mFeedAdapter = new FeedAdapter(response.object.posts.lists, response.object.showUnlock == 1);
+            mLvFeed.setAdapter(mFeedAdapter);
+          } else if (mFeedAdapter != null) {
+            mFeedAdapter.add(response.object.posts.lists);
+          }
+          mPageInfo = response.object.posts.page;
+
+          mLvFeed.stopLoadMore();
+          hideProgressBar();
+        } else {
+          requestFeeds(page);
         }
       }
     }, FeedsResponse.class);
   }
 
-  private ThemedDialog mInviteDialog;
+  private void showInviteDialog() {
+    if (mInviteDialog == null) {
+      mInviteDialog = new ThemedDialog(this);
+      mInviteDialog.setTitle("分享给厂里的朋友");
+      mInviteDialog.setCanceledOnTouchOutside(true);
+      View view = getLayoutInflater().inflate(R.layout.dialog_content_share, null);
+      mInviteDialog.setContent(view);
+      new ShareViewHolder(view);
+    }
+    if (!mInviteDialog.isShowing()) {
+      mInviteDialog.show();
+    }
+  }
+
+  @Keep
+  class NoPermViewHolder {
+
+    @InjectView (R.id.tv_friend_count)
+    TextView mTvFriendCount;
+
+    NoPermViewHolder(View view) {
+      ButterKnife.inject(this, view);
+    }
+  }
 
   @Keep
   class MenuViewHolder {
@@ -602,19 +691,7 @@ public class FeedActivity extends BaseActivity {
 
     @OnClick (R.id.ll_invite)
     void onLlInviteClicked() {
-      if (mInviteDialog == null) {
-        mInviteDialog = new ThemedDialog(FeedActivity.this);
-        mInviteDialog.setTitle("分享给厂里的朋友");
-        mInviteDialog.setPositive("加入工友圈", null);
-        mInviteDialog.setCanceledOnTouchOutside(true);
-        View view = getLayoutInflater().inflate(R.layout.dialog_content_share, null);
-        mInviteDialog.setContent(view);
-        new ShareViewHolder(view);
-      }
-      if (!mInviteDialog.isShowing()) {
-        mInviteDialog.show();
-      }
-
+      showInviteDialog();
       mPopupMenu.dismiss();
     }
 
@@ -645,18 +722,18 @@ public class FeedActivity extends BaseActivity {
 
   @Keep
   class ShareViewHolder {
-    @OnClick(R.id.tv_sms)
+    ShareViewHolder(View view) {
+      ButterKnife.inject(this, view);
+    }
+
+    @OnClick (R.id.tv_sms)
     void onTvSmsClicked() {
       startActivity(new Intent(FeedActivity.this, ContactsActivity.class));
     }
 
-    @OnClick(R.id.tv_qq_friends)
+    @OnClick (R.id.tv_qq_friends)
     void onQQFriendsClicked() {
       ShareUtils.shareAppToQQ(FeedActivity.this);
-    }
-
-    ShareViewHolder(View view) {
-      ButterKnife.inject(this, view);
     }
   }
 }

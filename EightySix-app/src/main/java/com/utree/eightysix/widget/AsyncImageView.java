@@ -15,7 +15,10 @@ import de.akquinet.android.androlog.Log;
 public class AsyncImageView extends ImageView {
 
   public static final String TAG = "AsyncImageView";
+
   private String mUrlHash;
+
+  private String mUrl;
 
   public AsyncImageView(Context context) {
     this(context, null, 0);
@@ -45,7 +48,9 @@ public class AsyncImageView extends ImageView {
       return;
     }
 
-    if (url.equals(mUrlHash)) return;
+    if (url.equals(mUrl)) return;
+
+    mUrl = url;
 
     mUrlHash = MD5Util.getMD5String(url.getBytes()).toLowerCase();
 

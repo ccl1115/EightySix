@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -55,7 +56,7 @@ import java.util.Map;
  * <li>Automatically finish itself when LogoutEventFired, override onLogout() to prevent this</li>
  * </ul>
  */
-public abstract class BaseActivity extends Activity implements View.OnClickListener, LogoutListener {
+public abstract class BaseActivity extends FragmentActivity implements View.OnClickListener, LogoutListener {
 
   private final Handler mHandler = new Handler() {
     @Override

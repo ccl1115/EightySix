@@ -36,12 +36,12 @@ class LoadMoreAdapterWrapper extends BaseAdapter {
 
   @Override
   public int getCount() {
-    return (hasCallback() ? 1 : 0) + mListAdapter.getCount();
+    return (hasMore() ? 1 : 0) + mListAdapter.getCount();
   }
 
   @Override
   public Object getItem(int position) {
-    if (hasCallback())
+    if (hasMore())
       if (position == getCount() - 1) return null;
       else return mListAdapter.getItem(position);
     else return mListAdapter.getItem(position);
@@ -55,7 +55,7 @@ class LoadMoreAdapterWrapper extends BaseAdapter {
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
     if (getItemViewType(position) == mLoadMoreType) {
-      if (convertView == null) convertView = mCallback.getLoadMoreView();
+      if (convertView == null) convertView = mCallback.getLoadMoreView(parent);
 
       if (mCallback.hasMore()) {
         convertView.setVisibility(View.VISIBLE);
@@ -74,23 +74,23 @@ class LoadMoreAdapterWrapper extends BaseAdapter {
 
   @Override
   public int getItemViewType(int position) {
-    return hasCallback() ?
+    return hasMore() ?
         (position == getCount() - 1 ? mLoadMoreType : mListAdapter.getItemViewType(position)) :
         mListAdapter.getItemViewType(position);
   }
 
+  private boolean hasMore() {
+    return mCallback != null && mCallback.hasMore();
+  }
+
   @Override
   public int getViewTypeCount() {
-    return (hasCallback() ? 1 : 0) + mListAdapter.getViewTypeCount();
+    return (hasMore() ? 1 : 0) + mListAdapter.getViewTypeCount();
   }
 
   public void stopLoadMore() {
     mIsLoading = false;
     notifyDataSetChanged();
-  }
-
-  private boolean hasCallback() {
-    return mCallback != null;
   }
 
   @Override

@@ -131,18 +131,26 @@ public class FeedPostView extends RelativeLayout {
     }
 
     if (post.praised == 1) {
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_heart_red_pressed), null, null, null);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(
+          getResources().getDrawable(R.drawable.ic_heart_red_pressed), null, null, null);
     } else if (post.praise > 0) {
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_heart_white_normal), null, null, null);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(
+          getResources().getDrawable(R.drawable.ic_heart_white_normal), null, null, null);
     } else {
       mTvPraise.setText("");
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_heart_outline_normal), null, null, null);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(
+          getResources().getDrawable(R.drawable.ic_heart_outline_normal), null, null, null);
     }
 
     if (getTop() <= 0) {
       mIvShare.setVisibility(INVISIBLE);
     }
 
+    if (TextUtils.isEmpty(post.comment)) {
+      mTvLastComment.setVisibility(GONE);
+    } else {
+      mTvLastComment.setVisibility(VISIBLE);
+    }
   }
 
   @OnClick (R.id.iv_share)
