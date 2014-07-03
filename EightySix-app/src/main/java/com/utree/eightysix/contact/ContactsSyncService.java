@@ -1,6 +1,7 @@
 package com.utree.eightysix.contact;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Handler;
@@ -18,6 +19,7 @@ import com.utree.eightysix.rest.HandlerWrapper;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RequestData;
 import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.InputValidator;
 import java.io.Closeable;
 import java.io.IOException;
@@ -26,6 +28,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,6 +42,7 @@ import java.util.List;
  */
 public class ContactsSyncService extends IntentService {
 
+  public static final String TIMESTAMP_KEY = "ContactsSync";
   private Handler mHandler;
 
   /**
@@ -46,6 +50,12 @@ public class ContactsSyncService extends IntentService {
    */
   public ContactsSyncService() {
     super("ContactsSyncService");
+  }
+
+  public static void start(Context context, boolean force) {
+    Intent intent = new Intent(context, ContactsSyncService.class);
+    intent.putExtra("force", force);
+    context.startService(intent);
   }
 
   @Override
@@ -57,30 +67,37 @@ public class ContactsSyncService extends IntentService {
 
   @Override
   protected void onHandleIntent(Intent intent) {
-    final List<Contact> cache = getContactsFromCache();
-    final List<Contact> phone = getContactsFromPhone();
+    if (checkTimestamp() || intent.getBooleanExtra("force", false)) {
 
-    if (phone == null) {
+      final List<Contact> cache = getContactsFromCache();
+      final List<Contact> phone = getContactsFromPhone();
+
+      if (phone == null) {
+        mHandler.post(new Runnable() {
+          @Override
+          public void run() {
+            U.getBus().post(new ContactsSyncEvent(false));
+          }
+        });
+        return;
+      }
+
       mHandler.post(new Runnable() {
         @Override
         public void run() {
-          U.getBus().post(new ContactsSyncEvent(false));
+          U.getBus().post(new ContactsReadEvent(phone));
         }
       });
-      return;
-    }
 
-    mHandler.post(new Runnable() {
-      @Override
-      public void run() {
-        U.getBus().post(new ContactsReadEvent(phone));
+      if (cache == null || !compareCacheAndPhone(cache, phone)) {
+        cacheContacts(phone);
+        uploadContact(phone);
       }
-    });
-
-    if (cache == null || !compareCacheAndPhone(cache, phone)) {
-      cacheContacts(phone);
-      uploadContact(phone);
     }
+  }
+
+  private boolean checkTimestamp() {
+    return new Date().getTime() - Env.getTimestamp(TIMESTAMP_KEY) > U.DAY_IN_MS;
   }
 
   private void uploadContact(final List<Contact> contacts) {
@@ -99,6 +116,7 @@ public class ContactsSyncService extends IntentService {
           @Override
           public void onResponse(Response response) {
             if (response != null && response.code == 0) {
+              Env.setTimestamp(TIMESTAMP_KEY);
               U.getBus().post(new ContactsSyncEvent(true));
             } else {
               U.getBus().post(new ContactsSyncEvent(false));
@@ -187,7 +205,6 @@ public class ContactsSyncService extends IntentService {
     do {
       Contact contact = new Contact();
 
-      contact.contactId = cursor.getInt(cursor.getColumnIndex(RAW_CONTACT_ID));
       contact.name = cursor.getString(cursor.getColumnIndex(DISPLAY_NAME));
       String number = cursor.getString(cursor.getColumnIndex(NUMBER));
       StringBuilder b = new StringBuilder();

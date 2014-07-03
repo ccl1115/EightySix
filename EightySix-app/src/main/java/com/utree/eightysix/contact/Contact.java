@@ -6,15 +6,12 @@ import java.util.Comparator;
 /**
  */
 public class Contact implements Comparable<Contact>, Comparator<Contact> {
-    public int contactId;
     public String name;
     public String phone;
 
     @Override
     public String toString() {
-        return "Contact{" +
-                "contactId=" + contactId +
-                ", name='" + name + '\'' +
+        return "Contact{ name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 '}';
     }
@@ -22,17 +19,16 @@ public class Contact implements Comparable<Contact>, Comparator<Contact> {
 
     @Override
     public int compareTo(Contact another) {
+        int ret = 0;
         if (another != null) {
-            if (contactId > another.contactId) {
-                return 1;
-            } else if (contactId < another.contactId) {
-                return -1;
-            } else {
-                return 0;
+            ret = (phone == null ? "" : phone).compareTo(another.phone == null ? "" : another.phone);
+            if(ret == 0){
+                ret = (name == null ? "" : name).compareTo(another.name == null ? "" : another.name);
             }
         } else {
-            return 0;
+            ret = 1;
         }
+        return ret;
     }
 
     @Override
@@ -45,10 +41,8 @@ public class Contact implements Comparable<Contact>, Comparator<Contact> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Contact contact = (Contact) o;
 
-        if (contactId != contact.contactId) return false;
         if (name != null ? !name.equals(contact.name) : contact.name != null) return false;
         if (phone != null ? !phone.equals(contact.phone) : contact.phone != null) return false;
 
@@ -57,8 +51,7 @@ public class Contact implements Comparable<Contact>, Comparator<Contact> {
 
     @Override
     public int hashCode() {
-        int result = contactId;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
+        int result = (name != null ? name.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
         return result;
     }

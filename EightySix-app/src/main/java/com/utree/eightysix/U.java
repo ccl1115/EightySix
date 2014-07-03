@@ -39,9 +39,10 @@ import java.util.Properties;
 public class U {
 
   public static final int SECOND_IN_MS = 1000;
-  private static final int DAY_IN_MS = 86400000; // 60 * 60 * 24 * 1000
-  private static final int HOUR_IN_MS = 3600000; // 60 * 60 * 1000
-  private static final int MINUTE_IN_MS = 60 * 1000;
+  public static final int DAY_IN_MS = 86400000; // 60 * 60 * 24 * 1000
+  public static final int HOUR_IN_MS = 3600000; // 60 * 60 * 1000
+  public static final int MINUTE_IN_MS = 60 * 1000;
+
   private static Analyser sStatistics;
   private static Location sLocation;
   private static Storage sCloudStorage;

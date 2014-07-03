@@ -7,6 +7,7 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.C;
 import com.utree.eightysix.U;
 import com.utree.eightysix.data.Circle;
+import java.util.Date;
 
 /**
  * Persistent key/value storage back-end by Android SharedPreference
@@ -124,6 +125,14 @@ public class Env {
     String str = getSharedPreferences().getString(String.format("last_circle_%s", Account.inst().getUserId()), null);
     if (str == null) return null;
     return U.getGson().fromJson(str, Circle.class);
+  }
+
+  public static void setTimestamp(String key) {
+    getSharedPreferences().edit().putLong(key, new Date().getTime()).apply();
+  }
+
+  public static long getTimestamp(String key) {
+    return getSharedPreferences().getLong(key, new Date().getTime());
   }
 
   private static SharedPreferences getSharedPreferences() {

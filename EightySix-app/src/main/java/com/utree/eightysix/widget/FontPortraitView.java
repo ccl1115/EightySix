@@ -13,7 +13,7 @@ import java.util.Random;
  */
 public class FontPortraitView extends TextView {
 
-  private static Typeface sTypeface = Typeface.createFromAsset(U.getContext().getAssets(), "fonts/justvectorv2-webfont.ttf");
+  private static Typeface sTypeface = Typeface.createFromAsset(U.getContext().getAssets(), "fonts/fontello.ttf");
 
   private char mChar;
 

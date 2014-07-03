@@ -58,8 +58,8 @@ public class AsyncImageView extends ImageView {
   }
 
   @Override
-  protected void onDetachedFromWindow() {
-    super.onDetachedFromWindow();
+  protected void finalize() throws Throwable {
+    super.finalize();
     U.getBus().unregister(this);
   }
 }

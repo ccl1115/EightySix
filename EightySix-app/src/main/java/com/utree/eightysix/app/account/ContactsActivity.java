@@ -97,7 +97,7 @@ public class ContactsActivity extends BaseActivity {
       }
     });
 
-    startService(new Intent(this, ContactsSyncService.class));
+    ContactsSyncService.start(this, true);
   }
 
   @Override
