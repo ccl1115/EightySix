@@ -1,4 +1,4 @@
-package com.utree.eightysix.app.feed;
+package com.utree.eightysix.app.feed.event;
 
 /**
  * @author simon

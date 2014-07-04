@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.feed;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,15 +7,21 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.feed.event.FeedPostCancelPraiseEvent;
+import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
+import com.utree.eightysix.request.CancelPraisePostRequest;
 import com.utree.eightysix.request.FeedsRequest;
+import com.utree.eightysix.request.PraisePostRequest;
 import com.utree.eightysix.response.FeedsResponse;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
@@ -170,5 +175,34 @@ public class FeedFragment extends BaseFragment {
         }
       }
     }, FeedsResponse.class);
+  }
+
+
+  @Subscribe
+  public void onFeedPostPraiseEvent(final FeedPostPraiseEvent event) {
+    getBaseActivity().request(new PraisePostRequest(mCircle.id, event.getPost().id), new OnResponse<Response>() {
+      @Override
+      public void onResponse(Response response) {
+        if (response == null || response.code != 0) {
+          event.getPost().praised = 0;
+          event.getPost().praise--;
+          U.getBus().post(new AdapterDataSetChangedEvent());
+        }
+      }
+    }, Response.class);
+  }
+
+  @Subscribe
+  public void onFeedPostCancelPraiseEvent(final FeedPostCancelPraiseEvent event) {
+    getBaseActivity().request(new CancelPraisePostRequest(mCircle.id, event.getPost().id), new OnResponse<Response>() {
+      @Override
+      public void onResponse(Response response) {
+        if (response == null || response.code != 0) {
+          event.getPost().praised = 1;
+          event.getPost().praise++;
+          U.getBus().post(new AdapterDataSetChangedEvent());
+        }
+      }
+    }, Response.class);
   }
 }

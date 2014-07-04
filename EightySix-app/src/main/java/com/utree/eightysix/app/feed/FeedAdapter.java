@@ -16,9 +16,10 @@ import com.nineoldandroids.view.ViewHelper;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
+import com.utree.eightysix.app.feed.event.InviteClickedEvent;
+import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
 import com.utree.eightysix.data.Feeds;
 import com.utree.eightysix.data.Post;
-import com.utree.eightysix.widget.FeedPostView;
 import com.utree.eightysix.widget.RoundedButton;
 import java.util.List;
 

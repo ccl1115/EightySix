@@ -30,6 +30,8 @@ import com.utree.eightysix.app.account.ContactsActivity;
 import com.utree.eightysix.app.account.ImportContactActivity;
 import com.utree.eightysix.app.account.PraiseStaticActivity;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
+import com.utree.eightysix.app.feed.event.InviteClickedEvent;
+import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
 import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.publish.FeedbackActivity;
 import com.utree.eightysix.app.publish.PublishActivity;
@@ -533,6 +535,7 @@ public class FeedActivity extends BaseActivity {
     startActivity(new Intent(this, ImportContactActivity.class));
   }
 
+  @Subscribe
   public void onUnlockClicked(UnlockClickedEvent event) {
     showInviteDialog();
   }

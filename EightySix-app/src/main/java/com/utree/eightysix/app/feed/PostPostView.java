@@ -1,4 +1,4 @@
-package com.utree.eightysix.widget;
+package com.utree.eightysix.app.feed;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -21,6 +21,7 @@ import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.utils.ShareUtils;
 import com.utree.eightysix.utils.Utils;
+import com.utree.eightysix.widget.AsyncImageView;
 
 /**
  * This is the post view in PostActivity

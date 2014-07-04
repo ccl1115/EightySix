@@ -13,6 +13,7 @@ import com.jakewharton.disklrucache.DiskLruCache;
 import com.squareup.otto.Bus;
 import com.squareup.otto.ThreadEnforcer;
 import com.utree.eightysix.app.BaseApplication;
+import com.utree.eightysix.app.EventRequester;
 import com.utree.eightysix.location.BdLocationImpl;
 import com.utree.eightysix.location.Location;
 import com.utree.eightysix.push.PushHelper;
@@ -56,6 +57,13 @@ public class U {
 
   private static Properties sConfiguration;
   private static Fixture sFixture;
+
+  private static EventRequester sEventRequester;
+
+  static {
+    sEventRequester = new EventRequester();
+    getBus().register(sEventRequester);
+  }
 
   public static Gson getGson() {
     return sGson;

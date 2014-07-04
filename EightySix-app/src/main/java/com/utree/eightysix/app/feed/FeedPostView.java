@@ -1,4 +1,4 @@
-package com.utree.eightysix.widget;
+package com.utree.eightysix.app.feed;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,7 +8,6 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.nineoldandroids.animation.AnimatorSet;
@@ -16,12 +15,15 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.feed.event.FeedPostCancelPraiseEvent;
+import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.utils.ShareUtils;
 import com.utree.eightysix.utils.Utils;
+import com.utree.eightysix.widget.AsyncImageView;
 
 /**
  */
@@ -160,7 +162,6 @@ public class FeedPostView extends RelativeLayout {
 
   @OnClick (R.id.tv_praise)
   public void onTvPraiseClicked() {
-    Toast.makeText(getContext(), "TODO praise request", Toast.LENGTH_SHORT).show();
     if (mPost.praised == 1) {
       AnimatorSet unlikeAnimator = new AnimatorSet();
       unlikeAnimator.setDuration(500);
@@ -171,6 +172,7 @@ public class FeedPostView extends RelativeLayout {
       unlikeAnimator.start();
       mPost.praised = 0;
       mPost.praise--;
+      U.getBus().post(new FeedPostCancelPraiseEvent(mPost));
     } else {
       AnimatorSet praiseAnimator = new AnimatorSet();
       praiseAnimator.setDuration(800);
@@ -181,6 +183,7 @@ public class FeedPostView extends RelativeLayout {
       praiseAnimator.start();
       mPost.praised = 1;
       mPost.praise++;
+      U.getBus().post(new FeedPostPraiseEvent(mPost));
     }
     U.getBus().post(new AdapterDataSetChangedEvent());
   }

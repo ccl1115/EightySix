@@ -16,7 +16,6 @@ import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.widget.FontPortraitView;
-import com.utree.eightysix.widget.PostPostView;
 import java.util.ArrayList;
 import java.util.List;
 
