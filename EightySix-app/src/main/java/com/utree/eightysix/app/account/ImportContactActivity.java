@@ -1,8 +1,5 @@
 package com.utree.eightysix.app.account;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Message;
@@ -23,7 +20,6 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
-import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.widget.RoundedButton;
@@ -59,8 +55,6 @@ public class ImportContactActivity extends BaseActivity {
   public View mVMask;
 
   private Random mRandom = new Random();
-
-  private AlertDialog mQuitConfirmDialog;
 
   @OnClick (R.id.rb_done)
   public void onRbDoneClicked() {
@@ -109,7 +103,7 @@ public class ImportContactActivity extends BaseActivity {
             }
           }, 5000);
         } else {
-          startService(new Intent(ImportContactActivity.this, ContactsSyncService.class));
+          ContactsSyncService.start(ImportContactActivity.this, true);
         }
 
       }
@@ -138,23 +132,7 @@ public class ImportContactActivity extends BaseActivity {
 
     mTvLoading.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/refresh_icon.ttf"));
 
-    mQuitConfirmDialog = getQuitConfirmDialog();
-  }
-
-  private AlertDialog getQuitConfirmDialog() {
-    return new AlertDialog.Builder(this).setTitle("建议完成设置以便更好的和朋友互动")
-        .setPositiveButton("停止", new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
-            FeedActivity.start(ImportContactActivity.this);
-            finish();
-          }
-        }).setNegativeButton("继续", new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
-            dialog.dismiss();
-          }
-        }).create();
+    setActionLeftDrawable(null);
   }
 
   @Override
@@ -170,16 +148,10 @@ public class ImportContactActivity extends BaseActivity {
 
   @Override
   protected void onActionLeftOnClicked() {
-    onBackPressed();
   }
 
   @Override
   public void onBackPressed() {
-    if (mQuitConfirmDialog.isShowing()) {
-      mQuitConfirmDialog.dismiss();
-    } else {
-      mQuitConfirmDialog.show();
-    }
   }
 
   /**

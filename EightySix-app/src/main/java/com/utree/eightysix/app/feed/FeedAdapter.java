@@ -1,15 +1,12 @@
 package com.utree.eightysix.app.feed;
 
-import android.content.Intent;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -19,7 +16,7 @@ import com.nineoldandroids.view.ViewHelper;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
-import com.utree.eightysix.app.account.ImportContactActivity;
+import com.utree.eightysix.data.Feeds;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.widget.FeedPostView;
 import com.utree.eightysix.widget.RoundedButton;
@@ -29,55 +26,55 @@ import java.util.List;
  */
 class FeedAdapter extends BaseAdapter {
 
-  static final int TYPE_POST = 0;
+  public static final int TYPE_COUNT = 5;
+  private static final int TYPE_POST = 0;
   private static final int TYPE_PLACEHOLDER = 1;
   private static final int TYPE_UNLOCK = 2;
   private static final int TYPE_INVITE = 3;
-
+  private static final int TYPE_SELECT = 4;
   private SparseBooleanArray mAnimated = new SparseBooleanArray();
 
-  private List<Post> mPosts;
+  private Feeds mFeeds;
 
-  private boolean mShowInvite = false;
-  private boolean mShowUnlock = false;
+  private boolean mShowInvite;
+  private boolean mShowUnlock;
+  private boolean mShowSelect;
 
-  FeedAdapter(List<Post> posts, boolean showUnlock, boolean showInvite) {
-    mPosts = posts;
-    mPosts.add(0, null); // for placeholder view
-    mShowUnlock = showUnlock;
-    mShowInvite = showInvite;
+  FeedAdapter(Feeds feeds) {
+    mFeeds = feeds;
+    mFeeds.posts.lists.add(0, null); // for placeholder view
+    mShowUnlock = mFeeds.lock == 1;
+    mShowInvite = mFeeds.upContact != 1;
+    mShowSelect = mFeeds.selectFactory != 1;
     if (mShowUnlock) {
-      mPosts.add(1, null);
+      mFeeds.posts.lists.add(1, null);
     }
     if (mShowInvite) {
-      mPosts.add(1, null);
+      mFeeds.posts.lists.add(1, null);
+    }
+    if (mShowSelect) {
+      mFeeds.posts.lists.add(1, null);
     }
   }
 
   public void add(List<Post> posts) {
-    if (mPosts == null) {
-      mPosts = posts;
-      mPosts.add(0, null); // for placeholder view
-      if (mShowUnlock) {
-        mPosts.add(1, null);
-      }
-      if (mShowInvite) {
-        mPosts.add(1, null);
-      }
+    if (mFeeds.posts.lists == null) {
+      mFeeds.posts.lists = posts;
+      mFeeds.posts.lists.add(0, null); // for placeholder view
     } else {
-      mPosts.addAll(posts);
+      mFeeds.posts.lists.addAll(posts);
     }
     notifyDataSetChanged();
   }
 
   @Override
   public int getCount() {
-    return mPosts == null ? 0 : mPosts.size();
+    return mFeeds.posts.lists == null ? 0 : mFeeds.posts.lists.size();
   }
 
   @Override
   public Post getItem(int position) {
-    return mPosts.get(position);
+    return mFeeds.posts.lists.get(position);
   }
 
   @Override
@@ -100,6 +97,9 @@ class FeedAdapter extends BaseAdapter {
       case TYPE_INVITE:
         convertView = getInviteView(convertView, parent);
         break;
+      case TYPE_SELECT:
+        convertView = getSelectView(convertView, parent);
+        break;
     }
     return convertView;
   }
@@ -112,9 +112,15 @@ class FeedAdapter extends BaseAdapter {
       case 1:
         if (mShowInvite) return TYPE_INVITE;
         else if (mShowUnlock) return TYPE_UNLOCK;
+        else if (mShowSelect) return TYPE_SELECT;
         else return TYPE_POST;
       case 2:
         if (mShowInvite && mShowUnlock) return TYPE_UNLOCK;
+        else if (mShowInvite && mShowSelect) return TYPE_SELECT;
+        else if (mShowUnlock && mShowSelect) return TYPE_SELECT;
+        else return TYPE_POST;
+      case 3:
+        if (mShowInvite && mShowUnlock && mShowSelect) return TYPE_SELECT;
         else return TYPE_POST;
       default:
         return TYPE_POST;
@@ -123,7 +129,7 @@ class FeedAdapter extends BaseAdapter {
 
   @Override
   public int getViewTypeCount() {
-    return 4;
+    return TYPE_COUNT;
   }
 
   private View getPostView(int position, View convertView, ViewGroup parent) {
@@ -137,7 +143,7 @@ class FeedAdapter extends BaseAdapter {
           ObjectAnimator.ofFloat(convertView, "translationY", U.dp2px(350), 0),
           ObjectAnimator.ofFloat(convertView, "rotationX", 15, 0)
       );
-      set.setDuration(400);
+      set.setDuration(500);
       set.start();
       mAnimated.put(position, true);
     } else {
@@ -182,39 +188,65 @@ class FeedAdapter extends BaseAdapter {
     }
 
     holder.mRbUnlock.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          U.getBus().post(new UnlockClickedEvent());
-        }
-      });
+      @Override
+      public void onClick(View v) {
+        U.getBus().post(new UnlockClickedEvent());
+      }
+    });
 
-    holder.mTvHidden.setText(String.format(parent.getContext().getString(R.string.hidden_friends_feed), 22));
+    holder.mRbHidden.setText(String.valueOf(mFeeds.hiddenCount));
+    holder.mTvHidden.setText(String.format(parent.getContext().getString(R.string.hidden_friends_feed), mFeeds.hiddenCount));
 
     return convertView;
   }
 
-  @Keep
-  class InviteViewHolder {
-
-    @OnClick (R.id.rb_invite)
-    public void onRbInviteClicked(View view) {
-      U.getBus().post(new InviteClickedEvent());
+  private View getSelectView(View convertView, final ViewGroup parent) {
+    SelectViewHolder holder;
+    if (convertView == null) {
+      convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_select, parent, false);
+      holder = new SelectViewHolder(convertView);
+      convertView.setTag(holder);
+    } else {
+      holder = (SelectViewHolder) convertView.getTag();
     }
+    return convertView;
+  }
+
+  @Keep
+  static class SelectViewHolder {
+
+    public SelectViewHolder(View view) {
+      ButterKnife.inject(this, view);
+    }
+
+    @OnClick (R.id.rb_select)
+    public void onRbSelectClicked(View view) {
+
+    }
+  }
+
+  @Keep
+  static class InviteViewHolder {
 
     public InviteViewHolder(View view) {
       ButterKnife.inject(this, view);
+    }
+
+    @OnClick (R.id.rb_invite)
+    public void onRbInviteClicked() {
+      U.getBus().post(new InviteClickedEvent());
     }
   }
 
   @Keep
   public static class UnlockViewHolder {
-    @InjectView(R.id.rb_unlock)
+    @InjectView (R.id.rb_unlock)
     public RoundedButton mRbUnlock;
 
-    @InjectView(R.id.tv_hidden_count)
+    @InjectView (R.id.tv_hidden_count)
     public TextView mTvHidden;
 
-    @InjectView(R.id.rb_hidden_count)
+    @InjectView (R.id.rb_hidden_count)
     public RoundedButton mRbHidden;
 
     public UnlockViewHolder(View view) {

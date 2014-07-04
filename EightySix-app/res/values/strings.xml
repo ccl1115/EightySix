@@ -189,6 +189,6 @@
     <string name="download_upgrade">下载并升级</string>
     <string name="force_update_tip">你的客户端版本太旧，需要升级才能使用</string>
     <string name="no_perm_to_publish">你还没有发帖的权限</string>
-    <string name="find_friends">找出厂里的朋友，看他们都在说什么？</string>
+    <string name="find_friends">找出圈子里的朋友，看他们都在说什么？</string>
 
 </resources>

@@ -132,7 +132,7 @@ public class FeedFragment extends BaseFragment {
       public void onResponse(FeedsResponse response) {
         if (response != null && response.code == 0 && response.object != null) {
           if (page == 1) {
-            mFeedAdapter = new FeedAdapter(response.object.posts.lists, mCircle.lock == 1, response.object.upContact == 1);
+            mFeedAdapter = new FeedAdapter(response.object);
             mLvFeed.setAdapter(mFeedAdapter);
           } else if (mFeedAdapter != null) {
             mFeedAdapter.add(response.object.posts.lists);
@@ -156,7 +156,7 @@ public class FeedFragment extends BaseFragment {
       public void onResponse(FeedsResponse response) {
         if (response != null && response.code == 0 && response.object != null) {
           if (page == 1) {
-            mFeedAdapter = new FeedAdapter(response.object.posts.lists, mCircle.lock == 1, response.object.upContact == 1);
+            mFeedAdapter = new FeedAdapter(response.object);
             mLvFeed.setAdapter(mFeedAdapter);
           } else if (mFeedAdapter != null) {
             mFeedAdapter.add(response.object.posts.lists);
