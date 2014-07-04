@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.feed;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +52,6 @@ public class FeedFragment extends BaseFragment {
   public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     ButterKnife.inject(this, view);
-
 
     mLvFeed.setLoadMoreCallback(new LoadMoreCallback() {
       @Override
@@ -113,6 +113,9 @@ public class FeedFragment extends BaseFragment {
     if (mCircle != null) {
       mCircle.selected = true;
       if (mLvFeed != null) mLvFeed.setAdapter(null);
+    }
+
+    if (isAdded()) {
       U.getBus().post(new AdapterDataSetChangedEvent());
       refresh();
     }
