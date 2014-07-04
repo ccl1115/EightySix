@@ -113,10 +113,10 @@ public class FeedFragment extends BaseFragment {
     if (mCircle != null) {
       mCircle.selected = true;
       if (mLvFeed != null) mLvFeed.setAdapter(null);
+      U.getBus().post(new AdapterDataSetChangedEvent());
     }
 
     if (isAdded()) {
-      U.getBus().post(new AdapterDataSetChangedEvent());
       refresh();
     }
   }

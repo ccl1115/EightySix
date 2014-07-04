@@ -178,8 +178,6 @@ public class FeedActivity extends BaseActivity {
 
     ContactsSyncService.start(this, false);
 
-    onNewIntent(getIntent());
-
     setActionLeftDrawable(getResources().getDrawable(R.drawable.ic_drawer));
 
     getTopBar().setOnActionOverflowClickListener(new View.OnClickListener() {
@@ -254,8 +252,15 @@ public class FeedActivity extends BaseActivity {
       }
     });
 
-    getTopBar().getActionView(0).setCount(99);
-    getTopBar().getActionOverflow().setHasNew(true);
+    if (U.useFixture()) {
+      getTopBar().getActionView(0).setCount(99);
+      getTopBar().getActionOverflow().setHasNew(true);
+    }
+
+    mFeedFragment = new FeedFragment();
+    getSupportFragmentManager().beginTransaction().add(R.id.fl_feed, mFeedFragment, "feed").commitAllowingStateLoss();
+    onNewIntent(getIntent());
+
   }
 
   @Override
@@ -300,10 +305,6 @@ public class FeedActivity extends BaseActivity {
   protected void onNewIntent(Intent intent) {
     //region 标题栏数据处理
     Circle circle = intent.getParcelableExtra("circle");
-
-    mFeedFragment = new FeedFragment();
-
-    getSupportFragmentManager().beginTransaction().add(R.id.fl_feed, mFeedFragment, "feed").commit();
 
     mFeedFragment.setCircle(circle);
 
