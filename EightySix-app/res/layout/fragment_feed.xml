@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<com.utree.eightysix.widget.AdvancedListView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/lv_feed"
+        android:dividerHeight="10dp"
+        android:smoothScrollbar="true"
+        android:background="#ffd8dbdb"
+        android:listSelector="@drawable/transparent"/>

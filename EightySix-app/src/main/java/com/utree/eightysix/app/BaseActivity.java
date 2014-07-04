@@ -343,7 +343,7 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
     mTopBar.setSubTitle(title);
   }
 
-  protected final void showProgressBar() {
+  public final void showProgressBar() {
     mProgressBar.setVisibility(View.VISIBLE);
     if (mShowProgressBarAnimator == null) {
       mShowProgressBarAnimator = new AnimatorSet();
@@ -361,7 +361,7 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
     mShowProgressBarAnimator.start();
   }
 
-  protected final void hideProgressBar() {
+  public final void hideProgressBar() {
     if (mHideProgressBarAnimator == null) {
       mHideProgressBarAnimator = new AnimatorSet();
       mHideProgressBarAnimator.playTogether(
@@ -403,7 +403,7 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
     return mTopBar;
   }
 
-  protected final <T extends Response> void request(Object request, OnResponse<T> onResponse, Class<T> clz) {
+  public final <T extends Response> void request(Object request, OnResponse<T> onResponse, Class<T> clz) {
     RequestData data = U.getRESTRequester().convert(request);
 
     if (isRequesting(data.getApi(), data.getParams())) return;
@@ -412,7 +412,7 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
     mRequestHandles.put(RESTRequester.genCacheKey(data.getApi(), data.getParams()), handle);
   }
 
-  protected final <T extends Response> void cacheOut(Object request, OnResponse<T> onResponse, Class<T> clz) {
+  public final <T extends Response> void cacheOut(Object request, OnResponse<T> onResponse, Class<T> clz) {
     RequestData data = U.getRESTRequester().convert(request);
 
     new CacheOutWorker<T>(RESTRequester.genCacheKey(data.getApi(), data.getParams()), onResponse, clz).execute();

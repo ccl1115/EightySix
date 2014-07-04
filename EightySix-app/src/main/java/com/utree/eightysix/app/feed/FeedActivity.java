@@ -35,19 +35,12 @@ import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.Circle;
-import com.utree.eightysix.data.Paginate;
-import com.utree.eightysix.data.Post;
-import com.utree.eightysix.event.AdapterDataSetChangedEvent;
-import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
-import com.utree.eightysix.request.FeedsRequest;
 import com.utree.eightysix.request.MyCirclesRequest;
 import com.utree.eightysix.response.CirclesResponse;
-import com.utree.eightysix.response.FeedsResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.ShareUtils;
 import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TopBar;
 import java.util.ArrayList;
@@ -61,9 +54,6 @@ public class FeedActivity extends BaseActivity {
 
   private static final String FIRST_RUN_KEY = "feed";
 
-  @InjectView (R.id.lv_feed)
-  public AdvancedListView mLvFeed;
-
   @InjectView (R.id.lv_side_circles)
   public AdvancedListView mLvSideCircles;
 
@@ -76,7 +66,6 @@ public class FeedActivity extends BaseActivity {
   @InjectView (R.id.v_mask)
   public View mVMask;
 
-  private FeedAdapter mFeedAdapter;
   private SideCirclesAdapter mSideCirclesAdapter;
 
   private PopupWindow mPopupMenu;
@@ -84,10 +73,9 @@ public class FeedActivity extends BaseActivity {
 
   private boolean mSideShown;
 
-  private Circle mCircle;
   private List<Circle> mSideCircles;
 
-  private Paginate.Page mPageInfo;
+  private FeedFragment mFeedFragment;
 
   /**
    * 邀请好友对话框
@@ -127,11 +115,11 @@ public class FeedActivity extends BaseActivity {
 
   @OnClick (R.id.ib_send)
   public void onIbSendClicked() {
-    if (mCircle != null) {
-      if (mCircle.lock == 1) {
+    if (mFeedFragment.getCircle() != null) {
+      if (mFeedFragment.getCircle().lock == 1) {
         showNoPermDialog();
       } else {
-        PublishActivity.start(this, mCircle.id);
+        PublishActivity.start(this, mFeedFragment.getCircle().id);
       }
     }
   }
@@ -141,7 +129,7 @@ public class FeedActivity extends BaseActivity {
       mNoPermDialog = new ThemedDialog(this);
       View view = LayoutInflater.from(this).inflate(R.layout.dialog_content_locked, null);
       NoPermViewHolder noPermViewHolder = new NoPermViewHolder(view);
-      noPermViewHolder.mTvFriendCount.setText(getString(R.string.current_friend_count, mCircle.friendCount));
+      noPermViewHolder.mTvFriendCount.setText(getString(R.string.current_friend_count, mFeedFragment.getCircle().friendCount));
       mNoPermDialog.setContent(view);
       mNoPermDialog.setPositive(R.string.invite_people, new View.OnClickListener() {
         @Override
@@ -162,25 +150,17 @@ public class FeedActivity extends BaseActivity {
     startActivity(new Intent(this, BaseCirclesActivity.class));
   }
 
-  @OnItemClick (R.id.lv_feed)
-  public void onLvFeedItemClicked(int position) {
-    Object item = mLvFeed.getAdapter().getItem(position);
-    if (item == null) return;
-    PostActivity.start(this, (Post) item);
-  }
 
   @OnItemClick (R.id.lv_side_circles)
   public void onLvSideItemClicked(int position) {
     Circle circle = mSideCircles.get(position);
     if (circle != null && !circle.selected) {
-      mCircle = circle;
-      mLvFeed.setAdapter(null);
       for (Circle c : mSideCircles) {
         c.selected = false;
       }
-      mCircle.selected = true;
-      U.getBus().post(new AdapterDataSetChangedEvent());
-      refresh();
+
+      mFeedFragment.setCircle(circle);
+      setTitle(circle);
     }
     hideSide();
     hideMask();
@@ -200,35 +180,6 @@ public class FeedActivity extends BaseActivity {
 
     onNewIntent(getIntent());
 
-    if (Env.firstRun(FIRST_RUN_KEY)) {
-      //showSide();
-    }
-
-
-    mLvFeed.setLoadMoreCallback(new LoadMoreCallback() {
-      @Override
-      public View getLoadMoreView(ViewGroup parent) {
-        return LayoutInflater.from(FeedActivity.this).inflate(R.layout.footer_load_more, parent, false);
-      }
-
-      @Override
-      public boolean hasMore() {
-        return (mPageInfo != null) && (mPageInfo.currPage < mPageInfo.countPage);
-      }
-
-      @Override
-      public boolean onLoadMoreStart() {
-        if (mRefreshed) {
-          requestFeeds(mPageInfo == null ? 1 : mPageInfo.currPage + 1);
-        } else {
-          cacheOutFeeds(mPageInfo == null ? 1 : mPageInfo.currPage + 1);
-        }
-        return true;
-      }
-    });
-
-
-    //setActionLeftDrawable(null);
     setActionLeftDrawable(getResources().getDrawable(R.drawable.ic_drawer));
 
     getTopBar().setOnActionOverflowClickListener(new View.OnClickListener() {
@@ -288,7 +239,7 @@ public class FeedActivity extends BaseActivity {
         if (position == 0) {
           startActivity(new Intent(FeedActivity.this, MsgActivity.class));
         } else if (position == 1) {
-          refresh();
+          mFeedFragment.refresh();
         }
       }
 
@@ -311,7 +262,6 @@ public class FeedActivity extends BaseActivity {
   protected void onResume() {
     super.onResume();
 
-    U.getBus().register(mLvFeed);
     U.getBus().register(mLvSideCircles);
   }
 
@@ -319,10 +269,9 @@ public class FeedActivity extends BaseActivity {
   protected void onPause() {
     super.onPause();
 
-    U.getBus().unregister(mLvFeed);
     U.getBus().unregister(mLvSideCircles);
 
-    Env.setLastCircle(mCircle);
+    Env.setLastCircle(mFeedFragment.getCircle());
   }
 
   @Override
@@ -352,22 +301,14 @@ public class FeedActivity extends BaseActivity {
     //region 标题栏数据处理
     Circle circle = intent.getParcelableExtra("circle");
 
-    if (circle == null || !circle.equals(mCircle)) {
-      mLvFeed.setAdapter(null);
-    }
+    mFeedFragment = new FeedFragment();
 
-    mCircle = circle;
+    getSupportFragmentManager().beginTransaction().add(R.id.fl_feed, mFeedFragment, "feed").commit();
 
-    if (mCircle == null) {
-      if (U.useFixture()) {
-        mCircle = U.getFixture(Circle.class, "valid");
-      } else {
-        mCircle = Env.getLastCircle();
-      }
-    }
+    mFeedFragment.setCircle(circle);
 
-    if (mCircle != null) {
-      setTitle();
+    if (mFeedFragment.getCircle() != null) {
+      setTitle(mFeedFragment.getCircle());
     }
     //endregion
 
@@ -377,9 +318,9 @@ public class FeedActivity extends BaseActivity {
 
     if (circles != null) {
       mSideCircles = circles;
-      if (mCircle == null && mSideCircles.size() > 0) {
-        mCircle = mSideCircles.get(0);
-        setTitle();
+      if (mFeedFragment.getCircle() == null && mSideCircles.size() > 0) {
+        mFeedFragment.setCircle(mSideCircles.get(0));
+        setTitle(mFeedFragment.getCircle());
       }
     }
 
@@ -401,24 +342,6 @@ public class FeedActivity extends BaseActivity {
     }
     //endregion
 
-
-    if (U.useFixture()) {
-      getHandler().postDelayed(new Runnable() {
-        @Override
-        public void run() {
-          mFeedAdapter = new FeedAdapter(U.getFixture(Post.class, 20, "valid"), mCircle.lock == 1);
-          mLvFeed.setAdapter(mFeedAdapter);
-          U.getBus().post(new ListViewScrollStateIdledEvent());
-          hideProgressBar();
-          if (mSideShown) {
-            mLvFeed.setSelection(1);
-          }
-        }
-      }, 2000);
-      showProgressBar();
-    } else {
-      // TODO request data
-    }
 
     getHandler().postDelayed(new Runnable() {
       @Override
@@ -479,10 +402,10 @@ public class FeedActivity extends BaseActivity {
         c.selected = false;
       }
 
-      if (mCircle == null) return;
+      if (mFeedFragment.getCircle() == null) return;
 
       for (Circle c : sideCircles) {
-        if (mCircle.name.equals(c.name)) {
+        if (mFeedFragment.getCircle().name.equals(c.name)) {
           c.selected = true;
           break;
         }
@@ -490,35 +413,12 @@ public class FeedActivity extends BaseActivity {
     }
   }
 
-  private void refresh() {
-    setTitle();
-    if (U.useFixture()) {
-      showProgressBar();
-      getHandler().postDelayed(new Runnable() {
-        @Override
-        public void run() {
-          mFeedAdapter = new FeedAdapter(U.getFixture(Post.class, 20, "valid"), mCircle.lock == 1);
-          mLvFeed.setAdapter(mFeedAdapter);
-          U.getBus().post(new ListViewScrollStateIdledEvent());
-          if (mSideShown) {
-            mLvFeed.setSelection(1);
-          }
-          hideProgressBar();
-        }
-      }, 2000);
-    } else {
-      requestFeeds(1);
-    }
-    hideSide();
-    hideMask();
-  }
+  private void setTitle(Circle circle) {
+    if (circle == null) return;
 
-  private void setTitle() {
-    if (mCircle == null) return;
-
-    setTopTitle(mCircle.shortName);
-    setTopSubTitle(String.format(getString(R.string.friends_info), mCircle.friendCount, mCircle.workmateCount));
-    if (mCircle.lock == 1) {
+    setTopTitle(circle.shortName);
+    setTopSubTitle(String.format(getString(R.string.friends_info), circle.friendCount, circle.workmateCount));
+    if (circle.lock == 1) {
       getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(
           getResources().getDrawable(R.drawable.ic_lock_small), null, null, null);
       getTopBar().mSubTitle.setCompoundDrawablePadding(U.dp2px(5));
@@ -571,9 +471,9 @@ public class FeedActivity extends BaseActivity {
       public void onResponse(CirclesResponse response) {
         if (response != null && response.code == 0 && response.object != null) {
           mSideCircles = response.object.lists.subList(0, 10);
-          if (mCircle == null && mSideCircles.size() > 0) {
-            mCircle = mSideCircles.get(0);
-            setTitle();
+          if (mFeedFragment.getCircle() == null && mSideCircles.size() > 0) {
+            mFeedFragment.setCircle(mSideCircles.get(0));
+            setTitle(mFeedFragment.getCircle());
           }
           selectSideCircle(mSideCircles);
 
@@ -598,9 +498,9 @@ public class FeedActivity extends BaseActivity {
       public void onResponse(CirclesResponse response) {
         if (response != null && response.code == 0 && response.object != null) {
           mSideCircles = response.object.lists.subList(0, 10);
-          if (mCircle == null && mSideCircles.size() > 0) {
-            mCircle = mSideCircles.get(0);
-            setTitle();
+          if (mFeedFragment.getCircle() == null && mSideCircles.size() > 0) {
+            mFeedFragment.setCircle(mSideCircles.get(0));
+            setTitle(mFeedFragment.getCircle());
           }
           selectSideCircle(mSideCircles);
 
@@ -612,49 +512,6 @@ public class FeedActivity extends BaseActivity {
     }, CirclesResponse.class);
   }
 
-  private void requestFeeds(final int page) {
-    request(new FeedsRequest(mCircle.id, page), new OnResponse<FeedsResponse>() {
-      @Override
-      public void onResponse(FeedsResponse response) {
-        if (response != null && response.code == 0 && response.object != null) {
-          if (page == 1) {
-            mFeedAdapter = new FeedAdapter(response.object.posts.lists, response.object.showUnlock == 1);
-            mLvFeed.setAdapter(mFeedAdapter);
-          } else if (mFeedAdapter != null) {
-            mFeedAdapter.add(response.object.posts.lists);
-          }
-          mPageInfo = response.object.posts.page;
-        } else {
-          mLvFeed.setAdapter(null);
-        }
-        mLvFeed.stopLoadMore();
-      }
-    }, FeedsResponse.class);
-  }
-
-  private void cacheOutFeeds(final int page) {
-    showProgressBar();
-
-    cacheOut(new FeedsRequest(mCircle.id, page), new OnResponse<FeedsResponse>() {
-      @Override
-      public void onResponse(FeedsResponse response) {
-        if (response != null && response.code == 0 && response.object != null) {
-          if (page == 1) {
-            mFeedAdapter = new FeedAdapter(response.object.posts.lists, response.object.showUnlock == 1);
-            mLvFeed.setAdapter(mFeedAdapter);
-          } else if (mFeedAdapter != null) {
-            mFeedAdapter.add(response.object.posts.lists);
-          }
-          mPageInfo = response.object.posts.page;
-
-          mLvFeed.stopLoadMore();
-          hideProgressBar();
-        } else {
-          requestFeeds(page);
-        }
-      }
-    }, FeedsResponse.class);
-  }
 
   private void showInviteDialog() {
     if (mInviteDialog == null) {
