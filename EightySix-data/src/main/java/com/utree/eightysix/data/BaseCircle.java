@@ -12,9 +12,6 @@ public class BaseCircle {
   @SerializedName("shortName")
   public String shortName;
 
-  @SerializedName("friendCount")
-  public int friendCount;
-
   @SerializedName("id")
   public int id;
 

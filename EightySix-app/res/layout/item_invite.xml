@@ -29,12 +29,9 @@
                     app:background="#44000000"/>
 
             <com.utree.eightysix.widget.RoundedButton
-                    android:id="@+id/rb_hidden_count"
                     android:layout_gravity="center"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
-                    android:gravity="center"
-                    android:textSize="23sp"
                     app:radius="64dp"
                     app:background="#ff00b7ec"/>
 
@@ -48,21 +45,20 @@
                 android:orientation="vertical">
 
             <TextView
-                    android:id="@+id/tv_hidden_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
-                    android:text="@string/hidden_friends_feed"
+                    android:text="@string/find_friends"
                     android:textSize="14sp"
                     android:textColor="@android:color/white"/>
 
             <com.utree.eightysix.widget.RoundedButton
-                    android:id="@+id/rb_unlock"
+                    android:id="@+id/rb_invite"
                     android:layout_width="160dp"
                     android:layout_height="35dp"
                     android:layout_gravity="right"
                     android:layout_marginTop="5dp"
-                    android:text="@string/unlock_to_view"
+                    android:text="@string/find_friend"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
                     app:radius="4dp"

@@ -27,6 +27,7 @@ import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.ContactsActivity;
+import com.utree.eightysix.app.account.ImportContactActivity;
 import com.utree.eightysix.app.account.PraiseStaticActivity;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.msg.MsgActivity;
@@ -124,32 +125,10 @@ public class FeedActivity extends BaseActivity {
     }
   }
 
-  private void showNoPermDialog() {
-    if (mNoPermDialog == null) {
-      mNoPermDialog = new ThemedDialog(this);
-      View view = LayoutInflater.from(this).inflate(R.layout.dialog_content_locked, null);
-      NoPermViewHolder noPermViewHolder = new NoPermViewHolder(view);
-      noPermViewHolder.mTvFriendCount.setText(getString(R.string.current_friend_count, mFeedFragment.getCircle().friendCount));
-      mNoPermDialog.setContent(view);
-      mNoPermDialog.setPositive(R.string.invite_people, new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          showInviteDialog();
-        }
-      });
-      mNoPermDialog.setTitle(getString(R.string.no_perm_to_publish));
-    }
-
-    if (!mNoPermDialog.isShowing()) {
-      mNoPermDialog.show();
-    }
-  }
-
   @OnClick (R.id.tv_more)
   public void onSideMoreClicked() {
     startActivity(new Intent(this, BaseCirclesActivity.class));
   }
-
 
   @OnItemClick (R.id.lv_side_circles)
   public void onLvSideItemClicked(int position) {
@@ -302,6 +281,16 @@ public class FeedActivity extends BaseActivity {
     finish();
   }
 
+  @Override
+  public void onBackPressed() {
+    if (mSideShown) {
+      hideSide();
+      hideMask();
+    } else {
+      moveTaskToBack(true);
+    }
+  }
+
   protected void onNewIntent(Intent intent) {
     //region 标题栏数据处理
     Circle circle = intent.getParcelableExtra("circle");
@@ -353,13 +342,24 @@ public class FeedActivity extends BaseActivity {
     }, 1000);
   }
 
-  @Override
-  public void onBackPressed() {
-    if (mSideShown) {
-      hideSide();
-      hideMask();
-    } else {
-      moveTaskToBack(true);
+  private void showNoPermDialog() {
+    if (mNoPermDialog == null) {
+      mNoPermDialog = new ThemedDialog(this);
+      View view = LayoutInflater.from(this).inflate(R.layout.dialog_content_locked, null);
+      NoPermViewHolder noPermViewHolder = new NoPermViewHolder(view);
+      noPermViewHolder.mTvFriendCount.setText(getString(R.string.current_friend_count, mFeedFragment.getCircle().friendCount));
+      mNoPermDialog.setContent(view);
+      mNoPermDialog.setPositive(R.string.invite_people, new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          showInviteDialog();
+        }
+      });
+      mNoPermDialog.setTitle(getString(R.string.no_perm_to_publish));
+    }
+
+    if (!mNoPermDialog.isShowing()) {
+      mNoPermDialog.show();
     }
   }
 
@@ -526,6 +526,15 @@ public class FeedActivity extends BaseActivity {
     if (!mInviteDialog.isShowing()) {
       mInviteDialog.show();
     }
+  }
+
+  @Subscribe
+  public void onInviteClicked(InviteClickedEvent event) {
+    startActivity(new Intent(this, ImportContactActivity.class));
+  }
+
+  public void onUnlockClicked(UnlockClickedEvent event) {
+    showInviteDialog();
   }
 
   @Keep

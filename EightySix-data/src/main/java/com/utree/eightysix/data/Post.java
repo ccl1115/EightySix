@@ -36,6 +36,12 @@ public class Post implements Serializable {
   @SerializedName ("commentMsg")
   public String comment;
 
+  @SerializedName("commentHead")
+  public String commentHead;
+
+  @SerializedName("commentTail")
+  public String commentTail;
+
   @SerializedName ("whoAtMe")
   public String whoAtMe;
 
