@@ -152,8 +152,8 @@ class PostCommentsAdapter extends BaseAdapter {
     } else {
       floor = position + "楼";
       holder.mTvComment.setTextColor(resources.getColor(android.R.color.black));
-      holder.mFpvPortrait.setEmotion(comment.avatar.charAt(0));
-      holder.mFpvPortrait.setEmotionColor(Utils.strToColor(comment.avatarColor));
+      //holder.mFpvPortrait.setEmotion(comment.avatar.charAt(0));
+      //holder.mFpvPortrait.setEmotionColor(Utils.strToColor(comment.avatarColor));
     }
     holder.mTvInfo.setText(String.format("%s | %s | 赞(%d)", floor, U.timestamp(comment.timestamp), comment.praise));
     return convertView;
