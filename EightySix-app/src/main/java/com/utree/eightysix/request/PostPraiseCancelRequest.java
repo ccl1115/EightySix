@@ -8,9 +8,9 @@ import com.utree.eightysix.rest.Token;
 /**
  * @author simon
  */
-@Api(C.API_FEED_CANCEL_PRAISE)
+@Api(C.API_FEED_PRAISE_CANCEL)
 @Token
-public class CancelPraisePostRequest {
+public class PostPraiseCancelRequest {
 
   @Param("factoryId")
   public int factoryId;
@@ -18,7 +18,7 @@ public class CancelPraisePostRequest {
   @Param("postId")
   public String postId;
 
-  public CancelPraisePostRequest(int factoryId, String postId) {
+  public PostPraiseCancelRequest(int factoryId, String postId) {
     this.factoryId = factoryId;
     this.postId = postId;
   }

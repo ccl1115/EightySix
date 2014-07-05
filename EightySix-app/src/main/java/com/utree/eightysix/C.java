@@ -4,12 +4,20 @@ package com.utree.eightysix;
  * <b>C</b> is abbreviation for configuration
  * <p/>
  * All system-wide configuration are defined here.
+ *
+ * 命名规范
+ *
+ * API_模块_动作_修饰
+ *
+ * Naming conversion
+ *
+ * API_MODULE_ACTION_MODIFIER
  */
 public class C {
 
-  public static final String API_LOGIN = "/login/login.do";
-  public static final String API_REG = "/login/reg.do";
-  public static final String API_SHOW_INFO = "/login/showInfo.do";
+  public static final String API_ACCOUNT_LOGIN = "/login/login.do";
+  public static final String API_ACCOUNT_REG = "/login/reg.do";
+  public static final String API_ACCOUNT_SHOW_INFO = "/login/showInfo.do";
   public static final String API_INFO_BY_FRIEND = "/login/infoByFriend.do";
   public static final String API_FIND_FRIEND_INFO = "/login/infoFriendInfo.do";
   public static final String API_FIND_PWD_1 = "/login/step1.do";
@@ -24,14 +32,17 @@ public class C {
 
   public static final String API_UPLOAD_CONTACTS = "/friend/upContacts.do";
 
-  public static final String API_FEED_PUBLISH = "/feed/add.do";
+  public static final String API_FEED_ADD = "/feed/add.do";
+  public static final String API_FEED_DELETE = "/feed/delete.do";
   public static final String API_FEED_LIST = "/feed/list.do";
   public static final String API_FEED_PRAISE = "/feed/praise.do";
-  public static final String API_FEED_CANCEL_PRAISE = "/feed/cancelPraise.do";
+  public static final String API_FEED_PRAISE_CANCEL = "/feed/cancelPraise.do";
 
   public static final String API_COMMENT_ADD = "/comment/add.do";
+  public static final String API_COMMENT_DELETE = "/comment/delete.do";
   public static final String API_COMMENT_LIST = "/comment/list.do";
   public static final String API_COMMENT_PRAISE = "/comment/praise.do";
+  public static final String API_COMMENT_PRAISE_CANCEL = "/comment/cancelPraise.do";
 
   public static final String API_VALICODE_FIND_PWD = "/login/valiCode.do";
 

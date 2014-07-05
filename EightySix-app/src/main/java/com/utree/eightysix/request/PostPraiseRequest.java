@@ -8,18 +8,18 @@ import com.utree.eightysix.rest.Token;
 /**
  * @author simon
  */
-@Api (C.API_COMMENT_PRAISE)
+@Api (C.API_FEED_PRAISE)
 @Token
-public class PraiseCommentRequest {
+public class PostPraiseRequest {
+
+  @Param ("factoryId")
+  public int factoryId;
 
   @Param ("postId")
   public String postId;
 
-  @Param ("commentId")
-  public String commentId;
-
-  public PraiseCommentRequest(String postId, String commentId) {
+  public PostPraiseRequest(int factoryId, String postId) {
+    this.factoryId = factoryId;
     this.postId = postId;
-    this.commentId = commentId;
   }
 }

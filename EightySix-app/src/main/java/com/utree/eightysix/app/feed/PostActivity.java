@@ -6,9 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -24,8 +21,9 @@ import com.utree.eightysix.app.feed.event.PostCommentPraiseEvent;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
+import com.utree.eightysix.request.CommentPraiseCancelRequest;
+import com.utree.eightysix.request.CommentPraiseRequest;
 import com.utree.eightysix.request.PostCommentsRequest;
-import com.utree.eightysix.request.PraiseCommentRequest;
 import com.utree.eightysix.request.PublishCommentRequest;
 import com.utree.eightysix.response.PostCommentsResponse;
 import com.utree.eightysix.response.PublishCommentResponse;
@@ -33,11 +31,9 @@ import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.ShareUtils;
 import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RoundedButton;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Random;
 
 /**
  * @author simon
@@ -223,14 +219,22 @@ public class PostActivity extends BaseActivity {
   @Subscribe
   public void onPostCommentPraiseEvent(final PostCommentPraiseEvent event) {
     if (event.isCancel()) {
+      request(new CommentPraiseCancelRequest(mPost.id, event.getComment().id), new OnResponse<Response>() {
 
-    } else {
-      request(new PraiseCommentRequest(mPost.id, event.getComment().id), new OnResponse<Response>() {
         @Override
         public void onResponse(Response response) {
-          if (response != null && response.code == 0) {
-
-          } else {
+          if (response == null || response.code != 0) {
+            event.getComment().praised = 1;
+            event.getComment().praise++;
+            U.getBus().post(new AdapterDataSetChangedEvent());
+          }
+        }
+      }, Response.class);
+    } else {
+      request(new CommentPraiseRequest(mPost.id, event.getComment().id), new OnResponse<Response>() {
+        @Override
+        public void onResponse(Response response) {
+          if (response == null || response.code != 0) {
             event.getComment().praised = 0;
             event.getComment().praise--;
             U.getBus().post(new AdapterDataSetChangedEvent());

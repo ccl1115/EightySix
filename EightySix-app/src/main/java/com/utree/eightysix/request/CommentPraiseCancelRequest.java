@@ -6,20 +6,22 @@ import com.utree.eightysix.rest.Param;
 import com.utree.eightysix.rest.Token;
 
 /**
+ * 评论取消赞
+ *
  * @author simon
  */
-@Api (C.API_FEED_PRAISE)
+@Api (C.API_COMMENT_PRAISE_CANCEL)
 @Token
-public class PraisePostRequest {
-
-  @Param ("factoryId")
-  public int factoryId;
+public class CommentPraiseCancelRequest {
 
   @Param ("postId")
   public String postId;
 
-  public PraisePostRequest(int factoryId, String postId) {
-    this.factoryId = factoryId;
+  @Param ("commentId")
+  public String commentId;
+
+  public CommentPraiseCancelRequest(String postId, String commentId) {
     this.postId = postId;
+    this.commentId = commentId;
   }
 }

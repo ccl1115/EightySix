@@ -8,7 +8,7 @@ import com.utree.eightysix.rest.Token;
 
 /**
  */
-@Api (C.API_FEED_PUBLISH)
+@Api (C.API_FEED_ADD)
 @Token
 public class PublishRequest {
 

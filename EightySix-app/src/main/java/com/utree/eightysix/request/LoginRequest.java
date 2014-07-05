@@ -7,7 +7,7 @@ import com.utree.eightysix.rest.Param;
 
 /**
  */
-@Api (C.API_LOGIN)
+@Api (C.API_ACCOUNT_LOGIN)
 public class LoginRequest {
 
   @Param ("phone")

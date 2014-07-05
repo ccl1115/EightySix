@@ -16,9 +16,9 @@ import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
-import com.utree.eightysix.request.CancelPraisePostRequest;
+import com.utree.eightysix.request.PostPraiseCancelRequest;
 import com.utree.eightysix.request.FeedsRequest;
-import com.utree.eightysix.request.PraisePostRequest;
+import com.utree.eightysix.request.PostPraiseRequest;
 import com.utree.eightysix.response.FeedsResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.Response;
@@ -181,7 +181,7 @@ public class FeedFragment extends BaseFragment {
   @Subscribe
   public void onFeedPostPraiseEvent(final FeedPostPraiseEvent event) {
     if (event.isCancel()) {
-      getBaseActivity().request(new CancelPraisePostRequest(mCircle.id, event.getPost().id), new OnResponse<Response>() {
+      getBaseActivity().request(new PostPraiseCancelRequest(mCircle.id, event.getPost().id), new OnResponse<Response>() {
         @Override
         public void onResponse(Response response) {
           if (response == null || response.code != 0) {
@@ -192,7 +192,7 @@ public class FeedFragment extends BaseFragment {
         }
       }, Response.class);
     } else {
-      getBaseActivity().request(new PraisePostRequest(mCircle.id, event.getPost().id), new OnResponse<Response>() {
+      getBaseActivity().request(new PostPraiseRequest(mCircle.id, event.getPost().id), new OnResponse<Response>() {
         @Override
         public void onResponse(Response response) {
           if (response == null || response.code != 0) {
