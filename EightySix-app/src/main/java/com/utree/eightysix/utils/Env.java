@@ -96,7 +96,7 @@ public class Env {
   }
 
   public static void setLastLongitude(double lon) {
-    getSharedPreferences().edit().putString("location_last_latitude", String.valueOf(lon)).apply();
+    getSharedPreferences().edit().putString("location_last_longitude", String.valueOf(lon)).apply();
   }
 
   public static void setLastCity(String name) {

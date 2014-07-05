@@ -20,14 +20,22 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
+import com.utree.eightysix.event.AdapterDataSetChangedEvent;
+import com.utree.eightysix.request.PostCommentsRequest;
+import com.utree.eightysix.request.PublishCommentRequest;
+import com.utree.eightysix.response.PostCommentsResponse;
+import com.utree.eightysix.response.PublishCommentResponse;
+import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.ShareUtils;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RoundedButton;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Random;
 
 /**
  * @author simon
@@ -45,17 +53,20 @@ public class PostActivity extends BaseActivity {
   public RoundedButton mRbPost;
 
   private Post mPost;
+  private int mFactoryId;
   private PostCommentsAdapter mPostCommentsAdapter;
 
-  public static void start(Context context, Post post) {
+  public static void start(Context context, int factoryId, Post post) {
     Intent intent = new Intent(context, PostActivity.class);
     intent.putExtra("post", post);
+    intent.putExtra("factoryId", factoryId);
     context.startActivity(intent);
   }
 
-  public static void start(Context context, int postId) {
+  public static void start(Context context, int factoryId, int postId) {
     Intent intent = new Intent(context, PostActivity.class);
     intent.putExtra("id", postId);
+    intent.putExtra("factoryId", factoryId);
     context.startActivity(intent);
   }
 
@@ -103,20 +114,10 @@ public class PostActivity extends BaseActivity {
 
   @OnClick (R.id.rb_post)
   public void onRbPostClicked() {
-    showToast("TODO request post");
     showProgressBar();
     mEtPostContent.setEnabled(false);
     mRbPost.setEnabled(false);
-    getHandler().postDelayed(new Runnable() {
-      @Override
-      public void run() {
-        hideProgressBar();
-        mEtPostContent.setText("");
-        mEtPostContent.setEnabled(true);
-        mRbPost.setEnabled(true);
-        mLvComments.setSelection(mLvComments.getCount());
-      }
-    }, 3000);
+    requestPublishComment();
   }
 
   @Override
@@ -126,6 +127,11 @@ public class PostActivity extends BaseActivity {
     hideTopBar(false);
 
     mPost = (Post) getIntent().getSerializableExtra("post");
+    mFactoryId = getIntent().getIntExtra("factoryId", -1);
+
+    if (mFactoryId == -1) {
+      finish();
+    }
 
     if (mPost == null && U.useFixture()) {
       mPost = U.getFixture(Post.class, "valid");
@@ -147,28 +153,11 @@ public class PostActivity extends BaseActivity {
 
       @Override
       public boolean onLoadMoreStart() {
-        if (U.useFixture()) {
-          getHandler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-              mPostCommentsAdapter.add(U.getFixture(Comment.class, 20, "valid"));
-              mLvComments.stopLoadMore();
-            }
-          }, 2000);
-          return true;
-        } else {
-          // TODO request more data
-          return false;
-        }
+        return true;
       }
     });
 
-  }
-
-  @Override
-  @Subscribe
-  public void onLogout(Account.LogoutEvent event) {
-    finish();
+    requestComment(1);
   }
 
   @Override
@@ -185,5 +174,50 @@ public class PostActivity extends BaseActivity {
 
   @Override
   protected void onActionLeftOnClicked() {
+  }
+
+  @Override
+  @Subscribe
+  public void onLogout(Account.LogoutEvent event) {
+    finish();
+  }
+
+  private void requestComment(final int page) {
+    request(new PostCommentsRequest(mFactoryId, mPost.id, page), new OnResponse<PostCommentsResponse>() {
+      @Override
+      public void onResponse(PostCommentsResponse response) {
+        if (response != null && response.code == 0 && response.object != null) {
+          mPostCommentsAdapter.setPost(response.object.post);
+          mPostCommentsAdapter.add(response.object.comments.lists);
+          mLvComments.stopLoadMore();
+          hideProgressBar();
+        }
+      }
+    }, PostCommentsResponse.class);
+  }
+
+  private void requestPublishComment() {
+    request(new PublishCommentRequest(mEtPostContent.getText().toString(), mFactoryId, mPost.id),
+        new OnResponse<PublishCommentResponse>() {
+          @Override
+          public void onResponse(PublishCommentResponse response) {
+            if (response != null && response.code == 0 && response.object != null) {
+              Comment comment = new Comment();
+              comment.avatar = "\ue801";
+              comment.avatarColor = "ff837827";
+              comment.id = response.object.id;
+              comment.isHost = 0;
+              comment.timestamp = new Date().getTime();
+              comment.content = mEtPostContent.getText().toString();
+              mPostCommentsAdapter.add(comment);
+            }
+            hideProgressBar();
+            mEtPostContent.setText("");
+            mEtPostContent.setEnabled(true);
+            mRbPost.setEnabled(true);
+            mLvComments.setSelection(mLvComments.getCount());
+            mLvComments.stopLoadMore();
+          }
+        }, PublishCommentResponse.class);
   }
 }

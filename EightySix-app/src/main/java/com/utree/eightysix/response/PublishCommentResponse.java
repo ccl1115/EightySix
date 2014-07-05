@@ -5,9 +5,11 @@ import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.rest.Response;
 
 /**
+ * @author simon
  */
-public class CommentResponse extends Response {
+public class PublishCommentResponse extends Response {
 
-    @SerializedName("object")
-    public Comment object;
+  @SerializedName("object")
+  public Comment object;
+
 }

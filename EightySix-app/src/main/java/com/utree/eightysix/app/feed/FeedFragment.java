@@ -45,7 +45,7 @@ public class FeedFragment extends BaseFragment {
   public void onLvFeedItemClicked(int position) {
     Object item = mLvFeed.getAdapter().getItem(position);
     if (item == null) return;
-    PostActivity.start(getActivity(), (Post) item);
+    PostActivity.start(getActivity(), mCircle.id, (Post) item);
   }
 
   @Override

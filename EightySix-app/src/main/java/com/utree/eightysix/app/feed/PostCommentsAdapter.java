@@ -15,6 +15,7 @@ import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
+import com.utree.eightysix.utils.Utils;
 import com.utree.eightysix.widget.FontPortraitView;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,11 @@ class PostCommentsAdapter extends BaseAdapter {
       mComments = new ArrayList<Comment>();
     }
     mComments.add(comment);
+    notifyDataSetChanged();
+  }
+
+  public void setPost(Post post) {
+    mPost = post;
     notifyDataSetChanged();
   }
 
@@ -125,13 +131,13 @@ class PostCommentsAdapter extends BaseAdapter {
       floor = "楼主";
       int color = resources.getColor(R.color.apptheme_primary_light_color);
       holder.mTvComment.setTextColor(color);
-      holder.mFpvPortrait.setEmotion('0');
+      holder.mFpvPortrait.setEmotion('楼');
       holder.mFpvPortrait.setEmotionColor(color);
     } else {
       floor = position + "楼";
       holder.mTvComment.setTextColor(resources.getColor(android.R.color.black));
-      holder.mFpvPortrait.setEmotion(comment.portrait);
-      holder.mFpvPortrait.setEmotionColor(comment.portraitColor);
+      holder.mFpvPortrait.setEmotion(comment.avatar.charAt(0));
+      holder.mFpvPortrait.setEmotionColor(Utils.strToColor(comment.avatarColor));
     }
     holder.mTvInfo.setText(String.format("%s | %s | 赞(%d)", floor, U.timestamp(comment.timestamp), comment.praise));
     return convertView;

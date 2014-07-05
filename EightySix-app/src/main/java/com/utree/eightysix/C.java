@@ -29,6 +29,9 @@ public class C {
   public static final String API_FEED_PRAISE = "/feed/praise.do";
   public static final String API_FEED_CANCEL_PRAISE = "/feed/cancelPraise.do";
 
+  public static final String API_COMMENT_ADD = "/comment/add.do";
+  public static final String API_COMMENT_LIST = "/comment/list.do";
+
   public static final String API_VALICODE_FIND_PWD = "/login/valiCode.do";
 
   public static final String API_VALICODE_CREATE_FACTORY = "/factory/valiCode.do";
