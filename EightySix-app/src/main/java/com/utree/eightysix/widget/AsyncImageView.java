@@ -45,6 +45,8 @@ public class AsyncImageView extends ImageView {
   public void setUrl(String url) {
     if (url == null) {
       setImageBitmap(null);
+      mUrl = null;
+      mUrlHash = null;
       return;
     }
 
