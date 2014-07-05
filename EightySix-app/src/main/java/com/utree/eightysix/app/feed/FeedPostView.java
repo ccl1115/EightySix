@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.InjectView;
@@ -17,10 +18,10 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.FeedPostCancelPraiseEvent;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
+import com.utree.eightysix.data.Post;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
-import com.utree.eightysix.data.Post;
 import com.utree.eightysix.utils.ShareUtils;
 import com.utree.eightysix.utils.Utils;
 import com.utree.eightysix.widget.AsyncImageView;
@@ -46,11 +47,20 @@ public class FeedPostView extends RelativeLayout {
   @InjectView (R.id.tv_last_comment)
   public TextView mTvLastComment;
 
+  @InjectView (R.id.tv_last_comment_head)
+  public TextView mTvLastCommentHead;
+
+  @InjectView (R.id.tv_last_comment_tail)
+  public TextView mTvLastCommentTail;
+
   @InjectView (R.id.iv_share)
   public ImageView mIvShare;
 
   @InjectView (R.id.aiv_bg)
   public AsyncImageView mAivBg;
+
+  @InjectView(R.id.ll_comment)
+  public LinearLayout mLlComment;
 
   private Post mPost;
 
@@ -79,50 +89,46 @@ public class FeedPostView extends RelativeLayout {
     return mTvContent.getText();
   }
 
-  public void setContent(String content) {
-    mTvContent.setText(content);
-  }
-
   public CharSequence getSource() {
     return mTvSource.getText();
-  }
-
-  public void setSource(String source) {
-    mTvSource.setText(source);
   }
 
   public CharSequence getPraise() {
     return mTvPraise.getText();
   }
 
-  public void setPraise(String praise) {
-    mTvPraise.setText(praise);
-  }
-
   public CharSequence getComment() {
     return mTvComment.getText();
-  }
-
-  public void setComment(String comment) {
-    mTvComment.setText(comment);
   }
 
   public TextView getLastComment() {
     return mTvLastComment;
   }
 
-  public void setLastComment(String lastComment) {
-    mTvLastComment.setText(lastComment);
-  }
-
   public void setData(Post post) {
     mPost = post;
 
-    setContent(post.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content);
-    setComment(String.valueOf(post.comments));
-    setPraise(String.valueOf(post.praise));
-    setSource(post.source);
-    //setLastComment(post.comment.toString());
+    if (mPost == null) {
+      return;
+    }
+
+    int color = Utils.monochromizing(Utils.strToColor(mPost.bgColor));
+
+    mTvComment.setTextColor(color);
+    mTvContent.setTextColor(color);
+    mTvPraise.setTextColor(color);
+    mTvSource.setTextColor(color);
+
+    String content = post.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content;
+
+    mTvContent.setText(content);
+    mTvComment.setText(String.valueOf(post.comments));
+    mTvPraise.setText(String.valueOf(post.praise));
+    mTvSource.setText(post.source);
+    mTvLastComment.setText(post.comment);
+    mTvLastCommentHead.setText(post.commentHead);
+    mTvLastCommentTail.setText(post.commentTail);
+
 
     if (!TextUtils.isEmpty(post.bgUrl)) {
       mAivBg.setUrl(post.bgUrl);
@@ -149,9 +155,9 @@ public class FeedPostView extends RelativeLayout {
     }
 
     if (TextUtils.isEmpty(post.comment)) {
-      mTvLastComment.setVisibility(GONE);
+      mLlComment.setVisibility(GONE);
     } else {
-      mTvLastComment.setVisibility(VISIBLE);
+      mLlComment.setVisibility(VISIBLE);
     }
   }
 

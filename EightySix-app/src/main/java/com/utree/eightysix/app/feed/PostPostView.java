@@ -75,6 +75,13 @@ public class PostPostView extends FrameLayout {
       return;
     }
 
+    int color = Utils.monochromizing(Utils.strToColor(mPost.bgColor));
+
+    mTvComment.setTextColor(color);
+    mTvContent.setTextColor(color);
+    mTvPraise.setTextColor(color);
+    mTvSource.setTextColor(color);
+
     mTvContent.setText(mPost.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content);
     mTvComment.setText(String.valueOf(post.comments));
     mTvPraise.setText(String.valueOf(post.praise));

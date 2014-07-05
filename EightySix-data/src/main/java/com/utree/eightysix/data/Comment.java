@@ -17,16 +17,17 @@ public class Comment implements Serializable {
   public long timestamp;
 
   @SerializedName ("id")
-  public int id;
+  public String id;
 
   @SerializedName ("userAvatar")
   public String avatar;
 
-  public char portrait;
+  @SerializedName("avatarColor")
+  public String avatarColor;
 
-  public int portraitColor;
-
+  @SerializedName("selfPraise")
   public int praised;
 
+  @SerializedName("self")
   public int isHost;
 }

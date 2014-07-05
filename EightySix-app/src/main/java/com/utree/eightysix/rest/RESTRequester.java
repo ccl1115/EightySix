@@ -153,8 +153,8 @@ public class RESTRequester {
 
   public RequestHandle post(String api, Header[] headers, RequestParams params, String contentType, ResponseHandlerInterface handler) {
     Log.d(C.TAG.RR, "  post: " + mHost + api);
-    Log.d(C.TAG.RR, "params: " + params.toString());
     putBaseParams(params);
+    Log.d(C.TAG.RR, "params: " + params.toString());
     return mAsyncHttpClient.post(U.getContext(), mHost + api, headers, params, contentType, handler);
   }
 

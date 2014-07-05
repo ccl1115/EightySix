@@ -104,6 +104,6 @@ public class MsgActivity extends BaseActivity {
 
   @Subscribe
   public void onItemClicked(Post post) {
-    PostActivity.start(this, post);
+    //PostActivity.start(this, post);
   }
 }

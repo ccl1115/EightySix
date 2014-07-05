@@ -43,6 +43,7 @@ import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.InputValidator;
+import com.utree.eightysix.utils.Utils;
 import com.utree.eightysix.widget.PostEditText;
 import com.utree.eightysix.widget.TopBar;
 import com.utree.eightysix.widget.panel.Item;
@@ -386,8 +387,8 @@ public class PublishActivity extends BaseActivity {
     for (TypedValue tv : item.getValues()) {
       if (tv.type == TypedValue.TYPE_INT_COLOR_ARGB8) {
         mIvPostBg.setImageDrawable(new ColorDrawable(tv.data));
-        mPostEditText.setTextColor(monochromizing(tv.data));
-        mTvPostTip.setTextColor(monochromizing(tv.data));
+        mPostEditText.setTextColor(Utils.monochromizing(tv.data));
+        mTvPostTip.setTextColor(Utils.monochromizing(tv.data));
         mBgColor = tv.data;
       }
     }
@@ -457,11 +458,6 @@ public class PublishActivity extends BaseActivity {
       U.getAnalyser().reportException(this, e);
       return false;
     }
-  }
-
-  private int monochromizing(int color) {
-    return (color & 0xff) > 0x88 && ((color >> 8) & 0xff) > 0x88 && ((color >> 16) & 0xff) > 0x88
-        ? Color.BLACK : Color.WHITE;
   }
 
   private void requestPost() {
