@@ -180,29 +180,29 @@ public class FeedFragment extends BaseFragment {
 
   @Subscribe
   public void onFeedPostPraiseEvent(final FeedPostPraiseEvent event) {
-    getBaseActivity().request(new PraisePostRequest(mCircle.id, event.getPost().id), new OnResponse<Response>() {
-      @Override
-      public void onResponse(Response response) {
-        if (response == null || response.code != 0) {
-          event.getPost().praised = 0;
-          event.getPost().praise--;
-          U.getBus().post(new AdapterDataSetChangedEvent());
+    if (event.isCancel()) {
+      getBaseActivity().request(new CancelPraisePostRequest(mCircle.id, event.getPost().id), new OnResponse<Response>() {
+        @Override
+        public void onResponse(Response response) {
+          if (response == null || response.code != 0) {
+            event.getPost().praised = 1;
+            event.getPost().praise++;
+            U.getBus().post(new AdapterDataSetChangedEvent());
+          }
         }
-      }
-    }, Response.class);
+      }, Response.class);
+    } else {
+      getBaseActivity().request(new PraisePostRequest(mCircle.id, event.getPost().id), new OnResponse<Response>() {
+        @Override
+        public void onResponse(Response response) {
+          if (response == null || response.code != 0) {
+            event.getPost().praised = 0;
+            event.getPost().praise--;
+            U.getBus().post(new AdapterDataSetChangedEvent());
+          }
+        }
+      }, Response.class);
+    }
   }
 
-  @Subscribe
-  public void onFeedPostCancelPraiseEvent(final FeedPostCancelPraiseEvent event) {
-    getBaseActivity().request(new CancelPraisePostRequest(mCircle.id, event.getPost().id), new OnResponse<Response>() {
-      @Override
-      public void onResponse(Response response) {
-        if (response == null || response.code != 0) {
-          event.getPost().praised = 1;
-          event.getPost().praise++;
-          U.getBus().post(new AdapterDataSetChangedEvent());
-        }
-      }
-    }, Response.class);
-  }
 }

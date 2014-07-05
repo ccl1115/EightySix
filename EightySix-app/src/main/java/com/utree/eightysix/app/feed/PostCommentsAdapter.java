@@ -12,6 +12,7 @@ import butterknife.InjectView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
+import com.utree.eightysix.app.feed.event.PostCommentPraiseEvent;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
@@ -119,8 +120,10 @@ class PostCommentsAdapter extends BaseAdapter {
         comment.praised = comment.praised == 1 ? 0 : 1;
         if (comment.praised == 1) {
           comment.praise++;
+          U.getBus().post(new PostCommentPraiseEvent(comment, false));
         } else {
           comment.praise--;
+          U.getBus().post(new PostCommentPraiseEvent(comment, true));
         }
         U.getBus().post(new AdapterDataSetChangedEvent());
       }

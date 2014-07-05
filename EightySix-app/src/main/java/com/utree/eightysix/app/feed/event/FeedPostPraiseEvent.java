@@ -8,8 +8,15 @@ import com.utree.eightysix.data.Post;
 public class FeedPostPraiseEvent {
   private Post mPost;
 
-  public FeedPostPraiseEvent(Post post) {
+  private boolean mCancel;
+
+  public FeedPostPraiseEvent(Post post, boolean cancel) {
     mPost = post;
+    mCancel = cancel;
+  }
+
+  public boolean isCancel() {
+    return mCancel;
   }
 
   public Post getPost() {

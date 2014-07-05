@@ -178,7 +178,7 @@ public class FeedPostView extends RelativeLayout {
       unlikeAnimator.start();
       mPost.praised = 0;
       mPost.praise--;
-      U.getBus().post(new FeedPostCancelPraiseEvent(mPost));
+      U.getBus().post(new FeedPostPraiseEvent(mPost, true));
     } else {
       AnimatorSet praiseAnimator = new AnimatorSet();
       praiseAnimator.setDuration(800);
@@ -189,7 +189,7 @@ public class FeedPostView extends RelativeLayout {
       praiseAnimator.start();
       mPost.praised = 1;
       mPost.praise++;
-      U.getBus().post(new FeedPostPraiseEvent(mPost));
+      U.getBus().post(new FeedPostPraiseEvent(mPost, false));
     }
     U.getBus().post(new AdapterDataSetChangedEvent());
   }

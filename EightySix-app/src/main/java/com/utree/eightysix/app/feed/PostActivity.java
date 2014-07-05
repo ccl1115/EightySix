@@ -20,10 +20,12 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.feed.event.PostCommentPraiseEvent;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.request.PostCommentsRequest;
+import com.utree.eightysix.request.PraiseCommentRequest;
 import com.utree.eightysix.request.PublishCommentRequest;
 import com.utree.eightysix.response.PostCommentsResponse;
 import com.utree.eightysix.response.PublishCommentResponse;
@@ -140,24 +142,7 @@ public class PostActivity extends BaseActivity {
     mPostCommentsAdapter = new PostCommentsAdapter(mPost, new ArrayList<Comment>());
     mLvComments.setAdapter(mPostCommentsAdapter);
 
-    mLvComments.setLoadMoreCallback(new LoadMoreCallback() {
-      @Override
-      public View getLoadMoreView(ViewGroup parent) {
-        return LayoutInflater.from(PostActivity.this).inflate(R.layout.footer_load_more, parent, false);
-      }
-
-      @Override
-      public boolean hasMore() {
-        return mPostCommentsAdapter.getCount() <= 1;
-      }
-
-      @Override
-      public boolean onLoadMoreStart() {
-        return true;
-      }
-    });
-
-    requestComment(1);
+    cacheOutComments(1);
   }
 
   @Override
@@ -189,9 +174,8 @@ public class PostActivity extends BaseActivity {
         if (response != null && response.code == 0 && response.object != null) {
           mPostCommentsAdapter.setPost(response.object.post);
           mPostCommentsAdapter.add(response.object.comments.lists);
-          mLvComments.stopLoadMore();
-          hideProgressBar();
         }
+        hideProgressBar();
       }
     }, PostCommentsResponse.class);
   }
@@ -219,5 +203,40 @@ public class PostActivity extends BaseActivity {
             mLvComments.stopLoadMore();
           }
         }, PublishCommentResponse.class);
+  }
+
+  private void cacheOutComments(final int page) {
+    cacheOut(new PostCommentsRequest(mFactoryId, mPost.id, page), new OnResponse<PostCommentsResponse>() {
+      @Override
+      public void onResponse(PostCommentsResponse response) {
+        if (response != null && response.code == 0 && response.object != null) {
+          mPostCommentsAdapter.setPost(response.object.post);
+          mPostCommentsAdapter.add(response.object.comments.lists);
+        } else {
+          showProgressBar();
+        }
+        requestComment(page);
+      }
+    }, PostCommentsResponse.class);
+  }
+
+  @Subscribe
+  public void onPostCommentPraiseEvent(final PostCommentPraiseEvent event) {
+    if (event.isCancel()) {
+
+    } else {
+      request(new PraiseCommentRequest(mPost.id, event.getComment().id), new OnResponse<Response>() {
+        @Override
+        public void onResponse(Response response) {
+          if (response != null && response.code == 0) {
+
+          } else {
+            event.getComment().praised = 0;
+            event.getComment().praise--;
+            U.getBus().post(new AdapterDataSetChangedEvent());
+          }
+        }
+      }, Response.class);
+    }
   }
 }
