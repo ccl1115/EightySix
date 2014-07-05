@@ -160,7 +160,7 @@ class FeedAdapter extends BaseAdapter {
   private View getPlaceHolderView(View convertView, ViewGroup parent) {
     if (convertView == null) {
       convertView = new View(parent.getContext());
-      convertView.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, U.dp2px(5)));
+      convertView.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, U.dp2px(0)));
     }
     return convertView;
   }
