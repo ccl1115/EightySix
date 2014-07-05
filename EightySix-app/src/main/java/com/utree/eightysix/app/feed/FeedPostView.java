@@ -16,7 +16,6 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.app.feed.event.FeedPostCancelPraiseEvent;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.drawable.RoundRectDrawable;
@@ -59,7 +58,7 @@ public class FeedPostView extends RelativeLayout {
   @InjectView (R.id.aiv_bg)
   public AsyncImageView mAivBg;
 
-  @InjectView(R.id.ll_comment)
+  @InjectView (R.id.ll_comment)
   public LinearLayout mLlComment;
 
   private Post mPost;

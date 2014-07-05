@@ -12,14 +12,10 @@ import com.utree.eightysix.rest.Token;
 @Token
 public class PostPraiseRequest {
 
-  @Param ("factoryId")
-  public int factoryId;
-
   @Param ("postId")
   public String postId;
 
-  public PostPraiseRequest(int factoryId, String postId) {
-    this.factoryId = factoryId;
+  public PostPraiseRequest(String postId) {
     this.postId = postId;
   }
 }

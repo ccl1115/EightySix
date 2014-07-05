@@ -10,7 +10,6 @@ import butterknife.OnItemClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.app.feed.event.FeedPostCancelPraiseEvent;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
@@ -80,19 +79,17 @@ public class FeedFragment extends BaseFragment {
       }
     });
 
+    U.getBus().register(mLvFeed);
+
     cacheOutFeeds(1);
   }
 
   @Override
-  public void onResume() {
-    super.onResume();
-    U.getBus().register(mLvFeed);
-  }
+  public void onDestroy() {
+    super.onDestroy();
 
-  @Override
-  public void onPause() {
-    super.onPause();
     U.getBus().unregister(mLvFeed);
+    U.getBus().unregister(mFeedAdapter);
   }
 
   public Circle getCircle() {
@@ -138,6 +135,7 @@ public class FeedFragment extends BaseFragment {
         if (response != null && response.code == 0 && response.object != null) {
           if (page == 1) {
             mFeedAdapter = new FeedAdapter(response.object);
+            U.getBus().register(mFeedAdapter);
             mLvFeed.setAdapter(mFeedAdapter);
           } else if (mFeedAdapter != null) {
             mFeedAdapter.add(response.object.posts.lists);
@@ -162,6 +160,7 @@ public class FeedFragment extends BaseFragment {
         if (response != null && response.code == 0 && response.object != null) {
           if (page == 1) {
             mFeedAdapter = new FeedAdapter(response.object);
+            U.getBus().register(mFeedAdapter);
             mLvFeed.setAdapter(mFeedAdapter);
           } else if (mFeedAdapter != null) {
             mFeedAdapter.add(response.object.posts.lists);
@@ -181,7 +180,7 @@ public class FeedFragment extends BaseFragment {
   @Subscribe
   public void onFeedPostPraiseEvent(final FeedPostPraiseEvent event) {
     if (event.isCancel()) {
-      getBaseActivity().request(new PostPraiseCancelRequest(mCircle.id, event.getPost().id), new OnResponse<Response>() {
+      getBaseActivity().request(new PostPraiseCancelRequest(event.getPost().id), new OnResponse<Response>() {
         @Override
         public void onResponse(Response response) {
           if (response == null || response.code != 0) {
@@ -192,7 +191,7 @@ public class FeedFragment extends BaseFragment {
         }
       }, Response.class);
     } else {
-      getBaseActivity().request(new PostPraiseRequest(mCircle.id, event.getPost().id), new OnResponse<Response>() {
+      getBaseActivity().request(new PostPraiseRequest(event.getPost().id), new OnResponse<Response>() {
         @Override
         public void onResponse(Response response) {
           if (response == null || response.code != 0) {

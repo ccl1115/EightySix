@@ -48,7 +48,20 @@ public class Post implements Serializable {
   @SerializedName("praised")
   public int praised;
 
-  public int permission;
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
 
+    Post post = (Post) o;
 
+    if (!id.equals(post.id)) return false;
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return id.hashCode();
+  }
 }

@@ -17,6 +17,7 @@ import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.utils.ShareUtils;
@@ -160,6 +161,7 @@ public class PostPostView extends FrameLayout {
       unlikeAnimator.start();
       mPost.praised = 0;
       mPost.praise--;
+      U.getBus().post(new PostPostPraiseEvent(mPost, true));
     } else {
       AnimatorSet praiseAnimator = new AnimatorSet();
       praiseAnimator.setDuration(800);
@@ -170,6 +172,7 @@ public class PostPostView extends FrameLayout {
       praiseAnimator.start();
       mPost.praised = 1;
       mPost.praise++;
+      U.getBus().post(new PostPostPraiseEvent(mPost, false));
     }
     U.getBus().post(new AdapterDataSetChangedEvent());
   }

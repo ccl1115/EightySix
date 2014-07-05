@@ -247,16 +247,13 @@ public class FeedActivity extends BaseActivity {
   @Override
   protected void onResume() {
     super.onResume();
-
     U.getBus().register(mLvSideCircles);
   }
 
   @Override
   protected void onPause() {
     super.onPause();
-
     U.getBus().unregister(mLvSideCircles);
-
     Env.setLastCircle(mFeedFragment.getCircle());
   }
 

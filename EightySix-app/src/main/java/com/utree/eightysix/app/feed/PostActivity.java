@@ -18,12 +18,15 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.feed.event.PostCommentPraiseEvent;
+import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.request.CommentPraiseCancelRequest;
 import com.utree.eightysix.request.CommentPraiseRequest;
 import com.utree.eightysix.request.PostCommentsRequest;
+import com.utree.eightysix.request.PostPraiseCancelRequest;
+import com.utree.eightysix.request.PostPraiseRequest;
 import com.utree.eightysix.request.PublishCommentRequest;
 import com.utree.eightysix.response.PostCommentsResponse;
 import com.utree.eightysix.response.PublishCommentResponse;
@@ -135,9 +138,6 @@ public class PostActivity extends BaseActivity {
       mPost = U.getFixture(Post.class, "valid");
     }
 
-    mPostCommentsAdapter = new PostCommentsAdapter(mPost, new ArrayList<Comment>());
-    mLvComments.setAdapter(mPostCommentsAdapter);
-
     cacheOutComments(1);
   }
 
@@ -168,10 +168,29 @@ public class PostActivity extends BaseActivity {
       @Override
       public void onResponse(PostCommentsResponse response) {
         if (response != null && response.code == 0 && response.object != null) {
-          mPostCommentsAdapter.setPost(response.object.post);
-          mPostCommentsAdapter.add(response.object.comments.lists);
+          mPostCommentsAdapter = new PostCommentsAdapter(response.object.post, response.object.comments.lists);
+          mLvComments.setAdapter(mPostCommentsAdapter);
+
+          mPost = response.object.post;
+          U.getBus().post(mPost);
         }
         hideProgressBar();
+      }
+    }, PostCommentsResponse.class);
+  }
+
+  private void cacheOutComments(final int page) {
+    cacheOut(new PostCommentsRequest(mFactoryId, mPost.id, page), new OnResponse<PostCommentsResponse>() {
+      @Override
+      public void onResponse(PostCommentsResponse response) {
+        if (response != null && response.code == 0 && response.object != null) {
+          mPostCommentsAdapter = new PostCommentsAdapter(response.object.post, response.object.comments.lists);
+          mLvComments.setAdapter(mPostCommentsAdapter);
+          mPost = response.object.post;
+        } else {
+          showProgressBar();
+        }
+        requestComment(page);
       }
     }, PostCommentsResponse.class);
   }
@@ -191,6 +210,10 @@ public class PostActivity extends BaseActivity {
               comment.content = mEtPostContent.getText().toString();
               mPostCommentsAdapter.add(comment);
             }
+
+            mPost.comments++;
+            U.getBus().post(mPost);
+
             hideProgressBar();
             mEtPostContent.setText("");
             mEtPostContent.setEnabled(true);
@@ -201,26 +224,10 @@ public class PostActivity extends BaseActivity {
         }, PublishCommentResponse.class);
   }
 
-  private void cacheOutComments(final int page) {
-    cacheOut(new PostCommentsRequest(mFactoryId, mPost.id, page), new OnResponse<PostCommentsResponse>() {
-      @Override
-      public void onResponse(PostCommentsResponse response) {
-        if (response != null && response.code == 0 && response.object != null) {
-          mPostCommentsAdapter.setPost(response.object.post);
-          mPostCommentsAdapter.add(response.object.comments.lists);
-        } else {
-          showProgressBar();
-        }
-        requestComment(page);
-      }
-    }, PostCommentsResponse.class);
-  }
-
   @Subscribe
   public void onPostCommentPraiseEvent(final PostCommentPraiseEvent event) {
     if (event.isCancel()) {
       request(new CommentPraiseCancelRequest(mPost.id, event.getComment().id), new OnResponse<Response>() {
-
         @Override
         public void onResponse(Response response) {
           if (response == null || response.code != 0) {
@@ -238,6 +245,37 @@ public class PostActivity extends BaseActivity {
             event.getComment().praised = 0;
             event.getComment().praise--;
             U.getBus().post(new AdapterDataSetChangedEvent());
+          }
+        }
+      }, Response.class);
+    }
+  }
+
+  @Subscribe
+  public void onPostPostPraiseEvent(final PostPostPraiseEvent event) {
+    if (event.isCancel()) {
+      request(new PostPraiseCancelRequest(event.getPost().id), new OnResponse<Response>() {
+        @Override
+        public void onResponse(Response response) {
+          if (response == null || response.code != 0) {
+            event.getPost().praised = 0;
+            event.getPost().praise--;
+            U.getBus().post(new AdapterDataSetChangedEvent());
+          } else {
+            U.getBus().post(event.getPost());
+          }
+        }
+      }, Response.class);
+    } else {
+      request(new PostPraiseRequest(event.getPost().id), new OnResponse<Response>() {
+        @Override
+        public void onResponse(Response response) {
+          if(response == null || response.code != 0) {
+            event.getPost().praised = 1;
+            event.getPost().praise--;
+            U.getBus().post(new AdapterDataSetChangedEvent());
+          } else {
+            U.getBus().post(event.getPost());
           }
         }
       }, Response.class);

@@ -13,6 +13,7 @@ import butterknife.OnClick;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
@@ -20,6 +21,7 @@ import com.utree.eightysix.app.feed.event.InviteClickedEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
 import com.utree.eightysix.data.Feeds;
 import com.utree.eightysix.data.Post;
+import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.widget.RoundedButton;
 import java.util.List;
 
@@ -211,6 +213,20 @@ class FeedAdapter extends BaseAdapter {
       holder = (SelectViewHolder) convertView.getTag();
     }
     return convertView;
+  }
+
+  @Subscribe
+  public void onPostEvent(Post post) {
+    for (Post p : mFeeds.posts.lists) {
+      if (p == null) continue;
+      if (p.equals(post)) {
+        p.praise = post.praise;
+        p.praised = post.praised;
+        p.comments = post.comments;
+        U.getBus().post(new AdapterDataSetChangedEvent());
+        break;
+      }
+    }
   }
 
   @Keep
