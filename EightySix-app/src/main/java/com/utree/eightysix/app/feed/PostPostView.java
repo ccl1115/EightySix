@@ -17,6 +17,7 @@ import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.data.Post;
@@ -140,7 +141,7 @@ public class PostPostView extends FrameLayout {
                     onTvPraiseClicked();
                     break;
                   case 3:
-                    U.showToast("TODO delete");
+                    U.getBus().post(new PostDeleteEvent(mPost));
                     break;
                 }
               }

@@ -13,12 +13,13 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.feed.event.PostCommentPraiseEvent;
-import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
+import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.utils.Utils;
 import com.utree.eightysix.widget.FontPortraitView;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -97,6 +98,18 @@ class PostCommentsAdapter extends BaseAdapter {
     return 2;
   }
 
+  public void remove(String commentId) {
+    for (Iterator<Comment> iterator = mComments.iterator(); iterator.hasNext(); ) {
+      Comment c = iterator.next();
+      if (c == null) continue;
+      if (c.id.equals(commentId)) {
+        iterator.remove();
+        U.getBus().post(new AdapterDataSetChangedEvent());
+        break;
+      }
+    }
+  }
+
   private View getCommentView(int position, View convertView, final ViewGroup parent) {
     CommentViewHolder holder;
     if (convertView == null) {
@@ -130,7 +143,7 @@ class PostCommentsAdapter extends BaseAdapter {
     });
     holder.mTvComment.setText(comment.content);
     final String floor;
-    if (comment.isHost == 1) {
+    if (comment.owner == 1) {
       floor = "楼主";
       int color = resources.getColor(R.color.apptheme_primary_light_color);
       holder.mTvComment.setTextColor(color);

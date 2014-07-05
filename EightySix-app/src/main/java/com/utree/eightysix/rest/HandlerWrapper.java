@@ -2,6 +2,7 @@ package com.utree.eightysix.rest;
 
 import android.widget.Toast;
 import com.loopj.android.http.BaseJsonHttpResponseHandler;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.C;
 import com.utree.eightysix.R;
@@ -81,6 +82,9 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
 
   private void handleObjectError(T response) {
     if (response.code != 0) {
+      if (response.code == 0x11014) {
+        Account.inst().logout();
+      }
       if (BuildConfig.DEBUG) {
         Toast.makeText(U.getContext(), String.format("%s(%h)", response.message, response.code), Toast.LENGTH_SHORT).show();
       } else {
