@@ -18,13 +18,16 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.feed.event.PostCommentPraiseEvent;
+import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.request.CommentPraiseCancelRequest;
 import com.utree.eightysix.request.CommentPraiseRequest;
+import com.utree.eightysix.request.PostCommentDeleteRequest;
 import com.utree.eightysix.request.PostCommentsRequest;
+import com.utree.eightysix.request.PostDeleteRequest;
 import com.utree.eightysix.request.PostPraiseCancelRequest;
 import com.utree.eightysix.request.PostPraiseRequest;
 import com.utree.eightysix.request.PublishCommentRequest;
@@ -32,10 +35,9 @@ import com.utree.eightysix.response.PostCommentsResponse;
 import com.utree.eightysix.response.PublishCommentResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.Response;
-import com.utree.eightysix.utils.ShareUtils;
+import com.utree.eightysix.utils.Utils;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.RoundedButton;
-import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -54,7 +56,9 @@ public class PostActivity extends BaseActivity {
   public RoundedButton mRbPost;
 
   private Post mPost;
+
   private int mFactoryId;
+
   private PostCommentsAdapter mPostCommentsAdapter;
 
   public static void start(Context context, int factoryId, Post post) {
@@ -87,8 +91,15 @@ public class PostActivity extends BaseActivity {
     final Comment comment = (Comment) mLvComments.getAdapter().getItem(position);
     if (comment == null) return;
 
+    String[] items;
+    String like = comment.praised == 1 ? getString(R.string.unlike) : getString(R.string.like);
+    if (comment.self == 1) {
+      items = new String[]{like, getString(R.string.report), getString(R.string.delete)};
+    } else {
+      items = new String[]{like, getString(R.string.report)};
+    }
     new AlertDialog.Builder(this).setTitle(getString(R.string.comment_action))
-        .setItems(new String[]{comment.praised == 1 ? getString(R.string.unlike) : getString(R.string.like), getString(R.string.report), getString(R.string.share)},
+        .setItems(items,
             new DialogInterface.OnClickListener() {
               @Override
               public void onClick(DialogInterface dialog, int which) {
@@ -97,8 +108,10 @@ public class PostActivity extends BaseActivity {
                     comment.praised = comment.praised == 1 ? 0 : 1;
                     if (comment.praised == 1) {
                       comment.praise++;
+                      U.getBus().post(new PostCommentPraiseEvent(comment, false));
                     } else {
                       comment.praise--;
+                      U.getBus().post(new PostCommentPraiseEvent(comment, true));
                     }
                     U.getBus().post(new AdapterDataSetChangedEvent());
                     break;
@@ -106,7 +119,7 @@ public class PostActivity extends BaseActivity {
                     showToast("TODO report");
                     break;
                   case 2:
-                    if (mPost != null) ShareUtils.sharePostToQQ(PostActivity.this, mPost);
+                    U.getBus().post(new PostCommentDeleteRequest(mPost.id, comment.id));
                     break;
                 }
               }
@@ -205,7 +218,7 @@ public class PostActivity extends BaseActivity {
               comment.avatar = "\ue801";
               comment.avatarColor = "ff837827";
               comment.id = response.object.id;
-              comment.isHost = 0;
+              comment.self = 0;
               comment.timestamp = new Date().getTime();
               comment.content = mEtPostContent.getText().toString();
               mPostCommentsAdapter.add(comment);
@@ -257,12 +270,12 @@ public class PostActivity extends BaseActivity {
       request(new PostPraiseCancelRequest(event.getPost().id), new OnResponse<Response>() {
         @Override
         public void onResponse(Response response) {
-          if (response == null || response.code != 0) {
+          if (Utils.responseOk(response)) {
+            U.getBus().post(event.getPost());
+          } else {
             event.getPost().praised = 0;
             event.getPost().praise--;
             U.getBus().post(new AdapterDataSetChangedEvent());
-          } else {
-            U.getBus().post(event.getPost());
           }
         }
       }, Response.class);
@@ -280,5 +293,29 @@ public class PostActivity extends BaseActivity {
         }
       }, Response.class);
     }
+  }
+
+  @Subscribe
+  public void onPostDeleteEvent(final PostDeleteEvent event) {
+    request(new PostDeleteRequest(mPost.id), new OnResponse<Response>() {
+      @Override
+      public void onResponse(Response response) {
+        if (Utils.responseOk(response)) {
+          finish();
+        }
+      }
+    }, Response.class);
+  }
+
+  @Subscribe
+  public void onPostCommentDeleteEvent(final PostCommentDeleteRequest request) {
+    request(request, new OnResponse<Response>() {
+      @Override
+      public void onResponse(Response response) {
+        if (Utils.responseOk(response)) {
+          mPostCommentsAdapter.remove(request.commentId);
+        }
+      }
+    }, Response.class);
   }
 }

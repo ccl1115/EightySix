@@ -22,12 +22,32 @@ public class Comment implements Serializable {
   @SerializedName ("userAvatar")
   public String avatar;
 
-  @SerializedName("avatarColor")
+  @SerializedName ("avatarColor")
   public String avatarColor;
 
-  @SerializedName("selfPraise")
+  @SerializedName ("selfPraise")
   public int praised;
 
-  @SerializedName("self")
-  public int isHost;
+  @SerializedName ("self")
+  public int self;
+
+  @SerializedName ("owner")
+  public int owner;
+
+  @Override
+  public int hashCode() {
+    return id.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Comment comment = (Comment) o;
+
+    if (!id.equals(comment.id)) return false;
+
+    return true;
+  }
 }
