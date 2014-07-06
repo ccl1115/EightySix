@@ -34,11 +34,10 @@ import com.utree.eightysix.request.PublishCommentRequest;
 import com.utree.eightysix.response.PostCommentsResponse;
 import com.utree.eightysix.response.PublishCommentResponse;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
-import com.utree.eightysix.utils.Utils;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.RoundedButton;
-import java.util.Date;
 
 /**
  * @author simon
@@ -176,6 +175,78 @@ public class PostActivity extends BaseActivity {
     finish();
   }
 
+  @Subscribe
+  public void onPostCommentPraiseEvent(final PostCommentPraiseEvent event) {
+    if (event.isCancel()) {
+      request(new CommentPraiseCancelRequest(mPost.id, event.getComment().id), new OnResponse<Response>() {
+        @Override
+        public void onResponse(Response response) {
+          if (response == null || response.code != 0) {
+            event.getComment().praised = 1;
+            event.getComment().praise++;
+            U.getBus().post(new AdapterDataSetChangedEvent());
+          }
+        }
+      }, Response.class);
+    } else {
+      request(new CommentPraiseRequest(mPost.id, event.getComment().id), new OnResponse<Response>() {
+        @Override
+        public void onResponse(Response response) {
+          if (response == null || response.code != 0) {
+            event.getComment().praised = 0;
+            event.getComment().praise--;
+            U.getBus().post(new AdapterDataSetChangedEvent());
+          }
+        }
+      }, Response.class);
+    }
+  }
+
+  @Subscribe
+  public void onPostPostPraiseEvent(final PostPostPraiseEvent event) {
+    if (event.isCancel()) {
+      request(new PostPraiseCancelRequest(event.getPost().id), new OnResponse<Response>() {
+        @Override
+        public void onResponse(Response response) {
+          if (RESTRequester.responseOk(response)) {
+            U.getBus().post(event.getPost());
+          } else {
+            event.getPost().praised = 0;
+            event.getPost().praise--;
+            U.getBus().post(new AdapterDataSetChangedEvent());
+          }
+        }
+      }, Response.class);
+    } else {
+      request(new PostPraiseRequest(event.getPost().id), new OnResponse<Response>() {
+        @Override
+        public void onResponse(Response response) {
+          if (response == null || response.code != 0) {
+            event.getPost().praised = 1;
+            event.getPost().praise--;
+            U.getBus().post(new AdapterDataSetChangedEvent());
+          } else {
+            U.getBus().post(event.getPost());
+          }
+        }
+      }, Response.class);
+    }
+  }
+
+  @Subscribe
+  public void onPostCommentDeleteRequest(final PostCommentDeleteRequest request) {
+    request(request, new OnResponse<Response>() {
+      @Override
+      public void onResponse(Response response) {
+        if (RESTRequester.responseOk(response)) {
+          mPostCommentsAdapter.remove(request.commentId);
+          mPost.comments = Math.max(0, mPost.comments - 1);
+          U.getBus().post(mPost);
+        }
+      }
+    }, Response.class);
+  }
+
   private void requestComment(final int page) {
     request(new PostCommentsRequest(mFactoryId, mPost.id, page), new OnResponse<PostCommentsResponse>() {
       @Override
@@ -214,18 +285,10 @@ public class PostActivity extends BaseActivity {
           @Override
           public void onResponse(PublishCommentResponse response) {
             if (response != null && response.code == 0 && response.object != null) {
-              Comment comment = new Comment();
-              comment.avatar = "\ue801";
-              comment.avatarColor = "ff837827";
-              comment.id = response.object.id;
-              comment.self = 0;
-              comment.timestamp = new Date().getTime();
-              comment.content = mEtPostContent.getText().toString();
-              mPostCommentsAdapter.add(comment);
+              mPostCommentsAdapter.add(response.object);
+              mPost.comments++;
+              U.getBus().post(mPost);
             }
-
-            mPost.comments++;
-            U.getBus().post(mPost);
 
             hideProgressBar();
             mEtPostContent.setText("");
@@ -237,83 +300,13 @@ public class PostActivity extends BaseActivity {
         }, PublishCommentResponse.class);
   }
 
-  @Subscribe
-  public void onPostCommentPraiseEvent(final PostCommentPraiseEvent event) {
-    if (event.isCancel()) {
-      request(new CommentPraiseCancelRequest(mPost.id, event.getComment().id), new OnResponse<Response>() {
-        @Override
-        public void onResponse(Response response) {
-          if (response == null || response.code != 0) {
-            event.getComment().praised = 1;
-            event.getComment().praise++;
-            U.getBus().post(new AdapterDataSetChangedEvent());
-          }
-        }
-      }, Response.class);
-    } else {
-      request(new CommentPraiseRequest(mPost.id, event.getComment().id), new OnResponse<Response>() {
-        @Override
-        public void onResponse(Response response) {
-          if (response == null || response.code != 0) {
-            event.getComment().praised = 0;
-            event.getComment().praise--;
-            U.getBus().post(new AdapterDataSetChangedEvent());
-          }
-        }
-      }, Response.class);
-    }
-  }
-
-  @Subscribe
-  public void onPostPostPraiseEvent(final PostPostPraiseEvent event) {
-    if (event.isCancel()) {
-      request(new PostPraiseCancelRequest(event.getPost().id), new OnResponse<Response>() {
-        @Override
-        public void onResponse(Response response) {
-          if (Utils.responseOk(response)) {
-            U.getBus().post(event.getPost());
-          } else {
-            event.getPost().praised = 0;
-            event.getPost().praise--;
-            U.getBus().post(new AdapterDataSetChangedEvent());
-          }
-        }
-      }, Response.class);
-    } else {
-      request(new PostPraiseRequest(event.getPost().id), new OnResponse<Response>() {
-        @Override
-        public void onResponse(Response response) {
-          if(response == null || response.code != 0) {
-            event.getPost().praised = 1;
-            event.getPost().praise--;
-            U.getBus().post(new AdapterDataSetChangedEvent());
-          } else {
-            U.getBus().post(event.getPost());
-          }
-        }
-      }, Response.class);
-    }
-  }
-
-  @Subscribe
-  public void onPostDeleteEvent(final PostDeleteEvent event) {
+  private void requestDeletePost() {
     request(new PostDeleteRequest(mPost.id), new OnResponse<Response>() {
       @Override
       public void onResponse(Response response) {
-        if (Utils.responseOk(response)) {
+        if (RESTRequester.responseOk(response)) {
+          U.getBus().post(new PostDeleteEvent(mPost));
           finish();
-        }
-      }
-    }, Response.class);
-  }
-
-  @Subscribe
-  public void onPostCommentDeleteEvent(final PostCommentDeleteRequest request) {
-    request(request, new OnResponse<Response>() {
-      @Override
-      public void onResponse(Response response) {
-        if (Utils.responseOk(response)) {
-          mPostCommentsAdapter.remove(request.commentId);
         }
       }
     }, Response.class);

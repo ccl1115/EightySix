@@ -27,10 +27,13 @@ import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.drawable.RoundRectDrawable;
+import com.utree.eightysix.request.CircleSetRequest;
 import com.utree.eightysix.request.MyCirclesRequest;
 import com.utree.eightysix.request.SelectCirclesRequest;
 import com.utree.eightysix.response.CirclesResponse;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.EmotionOnRefreshListener;
 import com.utree.eightysix.widget.LoadMoreCallback;
@@ -107,9 +110,7 @@ public class BaseCirclesActivity extends BaseActivity {
             .setPositiveButton("确认", new DialogInterface.OnClickListener() {
               @Override
               public void onClick(DialogInterface dialog, int which) {
-                circle.selected = true;
-                FeedActivity.start(BaseCirclesActivity.this, circle,
-                    (ArrayList<Circle>) mCircleListAdapter.getCircles());
+                requestCircleSet(circle);
               }
             })
             .setNegativeButton("重新选择", new DialogInterface.OnClickListener() {
@@ -327,5 +328,17 @@ public class BaseCirclesActivity extends BaseActivity {
         if (mRefreshed) mRefresherView.hideHeader();
       }
     }, CirclesResponse.class);
+  }
+
+  private void requestCircleSet(final Circle circle) {
+    request(new CircleSetRequest(circle.id), new OnResponse<Response>() {
+      @Override
+      public void onResponse(Response response) {
+        if (RESTRequester.responseOk(response)) {
+          FeedActivity.start(BaseCirclesActivity.this, circle);
+          finish();
+        }
+      }
+    }, Response.class);
   }
 }

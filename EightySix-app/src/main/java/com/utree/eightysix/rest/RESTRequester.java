@@ -55,6 +55,10 @@ public class RESTRequester {
     return MD5Util.getMD5String((api + params.toString()).getBytes()).toLowerCase();
   }
 
+  public static boolean responseOk(Response response) {
+    return response != null && response.code == 0;
+  }
+
   public String getHost() {
     return mHost;
   }

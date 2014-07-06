@@ -24,7 +24,4 @@ public class Utils {
         ? Color.BLACK : Color.WHITE;
   }
 
-  public static boolean responseOk(Response response) {
-    return response != null && response.code == 0;
-  }
 }

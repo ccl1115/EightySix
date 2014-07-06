@@ -29,6 +29,7 @@ public class C {
   public static final String API_FACTORY_FIND = "/factory/find.do";
   public static final String API_FACTORY_SEARCH = "/factory/search.do";
   public static final String API_FACTORY_ADD = "/factory/add.do";
+  public static final String API_FACTORY_SET = "/factory/set.do";
 
   public static final String API_UPLOAD_CONTACTS = "/friend/upContacts.do";
 

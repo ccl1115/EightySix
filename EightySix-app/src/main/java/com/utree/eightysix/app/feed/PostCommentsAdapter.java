@@ -147,13 +147,17 @@ class PostCommentsAdapter extends BaseAdapter {
       floor = "楼主";
       int color = resources.getColor(R.color.apptheme_primary_light_color);
       holder.mTvComment.setTextColor(color);
-      holder.mFpvPortrait.setEmotion('楼');
+      holder.mFpvPortrait.setEmotion('\ue800');
       holder.mFpvPortrait.setEmotionColor(color);
     } else {
       floor = position + "楼";
       holder.mTvComment.setTextColor(resources.getColor(android.R.color.black));
-      //holder.mFpvPortrait.setEmotion(comment.avatar.charAt(0));
-      //holder.mFpvPortrait.setEmotionColor(Utils.strToColor(comment.avatarColor));
+      if (comment.avatar != null && comment.avatar.length() == 1) {
+        holder.mFpvPortrait.setEmotion(comment.avatar.charAt(0));
+      }
+      if (comment.avatarColor != null) {
+        holder.mFpvPortrait.setEmotionColor(Utils.strToColor(comment.avatarColor));
+      }
     }
     holder.mTvInfo.setText(String.format("%s | %s | 赞(%d)", floor, U.timestamp(comment.timestamp), comment.praise));
     return convertView;

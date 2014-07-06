@@ -18,11 +18,13 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
+import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
 import com.utree.eightysix.data.Feeds;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.widget.RoundedButton;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -223,6 +225,19 @@ class FeedAdapter extends BaseAdapter {
         p.praise = post.praise;
         p.praised = post.praised;
         p.comments = post.comments;
+        U.getBus().post(new AdapterDataSetChangedEvent());
+        break;
+      }
+    }
+  }
+
+  @Subscribe
+  public void onPostDeleteEvent(PostDeleteEvent event) {
+    for (Iterator<Post> iterator = mFeeds.posts.lists.iterator(); iterator.hasNext(); ) {
+      Post p = iterator.next();
+      if (p == null) continue;
+      if (p.equals(event.getPost())) {
+        iterator.remove();
         U.getBus().post(new AdapterDataSetChangedEvent());
         break;
       }

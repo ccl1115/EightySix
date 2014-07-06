@@ -203,5 +203,4 @@ public class FeedFragment extends BaseFragment {
       }, Response.class);
     }
   }
-
 }

@@ -15,7 +15,7 @@ public class PostCommentDeleteRequest {
   @Param("postId")
   public String postId;
 
-  @Param ("commendId")
+  @Param ("commentId")
   public String commentId;
 
   public PostCommentDeleteRequest(String postId, String commentId) {

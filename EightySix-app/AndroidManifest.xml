@@ -159,6 +159,7 @@
         <activity
                 android:name=".app.feed.PostActivity"
                 android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+                android:windowSoftInputMode="stateHidden"
                 android:exported="@bool/exported"/>
 
         <activity

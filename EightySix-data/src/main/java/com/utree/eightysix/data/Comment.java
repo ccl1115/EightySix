@@ -31,7 +31,7 @@ public class Comment implements Serializable {
   @SerializedName ("self")
   public int self;
 
-  @SerializedName ("owner")
+  @SerializedName ("poster")
   public int owner;
 
   @Override
