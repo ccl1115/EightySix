@@ -98,11 +98,7 @@ public class BaseCirclesActivity extends BaseActivity {
     if (circle != null) {
       if (mMode == MODE_MY) {
         circle.selected = true;
-        if (mRefreshed && mCircleListAdapter != null) {
-          FeedActivity.start(this, circle, new ArrayList<Circle>(mCircleListAdapter.getCircles().subList(0, 10)));
-        } else {
-          FeedActivity.start(this, circle);
-        }
+        FeedActivity.start(this, circle);
       } else if (mMode == MODE_SELECT) {
         AlertDialog dialog = new AlertDialog.Builder(this)
             .setTitle(String.format("确认在%s上班么？", circle.name))
@@ -254,14 +250,7 @@ public class BaseCirclesActivity extends BaseActivity {
   @Override
   protected void onActionLeftOnClicked() {
     if (mMode == MODE_MY) {
-      if (mRefreshed && mCircleListAdapter != null) {
-        FeedActivity.start(this, null, new ArrayList<Circle>(mCircleListAdapter.getCircles().subList(0, 10)));
-      } else {
-        FeedActivity.start(this);
-      }
       finish();
-    } else if (mMode == MODE_SELECT) {
-      getQuitConfirmDialog().show();
     }
   }
 

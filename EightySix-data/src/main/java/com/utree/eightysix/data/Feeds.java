@@ -9,6 +9,9 @@ public class Feeds {
   @SerializedName ("myPraiseCount")
   public int myPraiseCount;
 
+  @SerializedName("factoryView")
+  public Circle circle;
+
   /**
    * 是否被锁定
    *

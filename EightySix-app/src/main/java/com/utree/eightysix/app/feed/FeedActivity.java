@@ -103,13 +103,6 @@ public class FeedActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
-  public static void start(Context context, Circle circle, ArrayList<Circle> side) {
-    Intent intent = new Intent(context, FeedActivity.class);
-    intent.putExtra("circle", circle);
-    intent.putParcelableArrayListExtra("side", side);
-    context.startActivity(intent);
-  }
-
   public static void start(Context context, int id) {
     Intent intent = new Intent(context, FeedActivity.class);
     intent.putExtra("id", id);
@@ -294,7 +287,9 @@ public class FeedActivity extends BaseActivity {
     //region 标题栏数据处理
     Circle circle = intent.getParcelableExtra("circle");
 
-    mFeedFragment.setCircle(circle);
+    if (circle != null) {
+      mFeedFragment.setCircle(circle);
+    }
 
     if (mFeedFragment.getCircle() != null) {
       setTitle(mFeedFragment.getCircle());
@@ -485,10 +480,6 @@ public class FeedActivity extends BaseActivity {
         }
       }
     }, CirclesResponse.class);
-  }
-
-  private void cacheInSideCircle(String string) {
-    cacheIn(new MyCirclesRequest("", 1), string);
   }
 
   private void requestSideCircle() {

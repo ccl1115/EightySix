@@ -28,7 +28,7 @@ import com.utree.eightysix.widget.LoadMoreCallback;
 /**
  * @author simon
  */
-public class FeedFragment extends BaseFragment {
+class FeedFragment extends BaseFragment {
 
   private FeedAdapter mFeedAdapter;
   private Circle mCircle;
@@ -71,9 +71,9 @@ public class FeedFragment extends BaseFragment {
       @Override
       public boolean onLoadMoreStart() {
         if (mRefreshed) {
-          requestFeeds(mPageInfo == null ? 1 : mPageInfo.currPage + 1);
+          requestFeeds(mCircle.id, mPageInfo == null ? 1 : mPageInfo.currPage + 1);
         } else {
-          cacheOutFeeds(mPageInfo == null ? 1 : mPageInfo.currPage + 1);
+          cacheOutFeeds(mCircle.id, mPageInfo == null ? 1 : mPageInfo.currPage + 1);
         }
         return true;
       }
@@ -81,15 +81,19 @@ public class FeedFragment extends BaseFragment {
 
     U.getBus().register(mLvFeed);
 
-    cacheOutFeeds(1);
   }
 
   @Override
   public void onDestroy() {
     super.onDestroy();
 
-    U.getBus().unregister(mLvFeed);
-    U.getBus().unregister(mFeedAdapter);
+    if (mLvFeed != null) {
+      U.getBus().unregister(mLvFeed);
+    }
+
+    if (mFeedAdapter != null) {
+      U.getBus().unregister(mFeedAdapter);
+    }
   }
 
   public Circle getCircle() {
@@ -113,27 +117,40 @@ public class FeedFragment extends BaseFragment {
     }
 
     if (mCircle != null) {
-      mCircle.selected = true;
+      if (mLvFeed != null) mLvFeed.setAdapter(null);
+      U.getBus().post(new AdapterDataSetChangedEvent());
+
+      if (isAdded()) {
+        cacheOutFeeds(mCircle.id, 1);
+      }
+    }
+  }
+
+  public void setCircle(int id) {
+    if (mCircle.id != id) {
       if (mLvFeed != null) mLvFeed.setAdapter(null);
       U.getBus().post(new AdapterDataSetChangedEvent());
     }
 
     if (isAdded()) {
-      refresh();
+      cacheOutFeeds(id, 1);
     }
   }
 
   public void refresh() {
-    requestFeeds(1);
+    requestFeeds(mCircle.id, 1);
   }
 
-  private void requestFeeds(final int page) {
-    if (mCircle == null) return;
-    getBaseActivity().request(new FeedsRequest(mCircle.id, page), new OnResponse<FeedsResponse>() {
+  private void requestFeeds(int id, final int page) {
+    getBaseActivity().showProgressBar();
+
+    getBaseActivity().request(new FeedsRequest(id, page), new OnResponse<FeedsResponse>() {
       @Override
       public void onResponse(FeedsResponse response) {
         if (response != null && response.code == 0 && response.object != null) {
           if (page == 1) {
+            mCircle = response.object.circle;
+            U.getBus().post(mCircle);
             mFeedAdapter = new FeedAdapter(response.object);
             U.getBus().register(mFeedAdapter);
             mLvFeed.setAdapter(mFeedAdapter);
@@ -150,15 +167,16 @@ public class FeedFragment extends BaseFragment {
     }, FeedsResponse.class);
   }
 
-  private void cacheOutFeeds(final int page) {
-    if (mCircle == null) return;
+  private void cacheOutFeeds(final int id, final int page) {
     getBaseActivity().showProgressBar();
 
-    getBaseActivity().cacheOut(new FeedsRequest(mCircle.id, page), new OnResponse<FeedsResponse>() {
+    getBaseActivity().cacheOut(new FeedsRequest(id, page), new OnResponse<FeedsResponse>() {
       @Override
       public void onResponse(FeedsResponse response) {
         if (response != null && response.code == 0 && response.object != null) {
           if (page == 1) {
+            mCircle = response.object.circle;
+            U.getBus().post(mCircle);
             mFeedAdapter = new FeedAdapter(response.object);
             U.getBus().register(mFeedAdapter);
             mLvFeed.setAdapter(mFeedAdapter);
@@ -170,7 +188,7 @@ public class FeedFragment extends BaseFragment {
           mLvFeed.stopLoadMore();
           getBaseActivity().hideProgressBar();
         } else {
-          requestFeeds(page);
+          requestFeeds(id, page);
         }
       }
     }, FeedsResponse.class);
