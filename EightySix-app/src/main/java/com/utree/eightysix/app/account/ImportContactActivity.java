@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.account;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Message;
@@ -103,7 +104,8 @@ public class ImportContactActivity extends BaseActivity {
             }
           }, 5000);
         } else {
-          ContactsSyncService.start(ImportContactActivity.this, true);
+          startService(new Intent(ImportContactActivity.this, ContactsSyncService.class));
+          //ContactsSyncService.start(ImportContactActivity.this, true);
         }
 
       }
