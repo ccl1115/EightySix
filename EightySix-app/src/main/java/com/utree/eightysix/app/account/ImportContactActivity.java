@@ -104,8 +104,8 @@ public class ImportContactActivity extends BaseActivity {
             }
           }, 5000);
         } else {
-          startService(new Intent(ImportContactActivity.this, ContactsSyncService.class));
-          //ContactsSyncService.start(ImportContactActivity.this, true);
+          //startService(new Intent(ImportContactActivity.this, ContactsSyncService.class));
+          ContactsSyncService.start(ImportContactActivity.this, true);
         }
 
       }

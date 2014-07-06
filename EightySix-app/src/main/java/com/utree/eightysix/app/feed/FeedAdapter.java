@@ -17,6 +17,7 @@ import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
+import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
@@ -253,7 +254,7 @@ class FeedAdapter extends BaseAdapter {
 
     @OnClick (R.id.rb_select)
     public void onRbSelectClicked(View view) {
-
+      BaseCirclesActivity.startSelect(view.getContext());
     }
   }
 

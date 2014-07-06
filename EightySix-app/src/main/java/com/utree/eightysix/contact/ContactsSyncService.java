@@ -28,6 +28,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -98,7 +99,12 @@ public class ContactsSyncService extends IntentService {
   }
 
   private boolean checkTimestamp() {
-    return new Date().getTime() - Env.getTimestamp(TIMESTAMP_KEY) > U.DAY_IN_MS;
+    Calendar target = Calendar.getInstance();
+    target.setTimeInMillis(Env.getTimestamp(TIMESTAMP_KEY));
+    Calendar now = Calendar.getInstance();
+
+    return now.get(Calendar.YEAR) == target.get(Calendar.YEAR) &&
+        now.get(Calendar.DAY_OF_YEAR) - target.get(Calendar.DAY_OF_YEAR) >= 1;
   }
 
   private void uploadContact(final List<Contact> contacts) {
