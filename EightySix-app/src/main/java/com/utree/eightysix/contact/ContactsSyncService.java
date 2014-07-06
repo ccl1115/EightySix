@@ -13,6 +13,7 @@ import static android.provider.ContactsContract.CommonDataKinds.Phone.RAW_CONTAC
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonWriter;
 import com.jakewharton.disklrucache.DiskLruCache;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.U;
 import com.utree.eightysix.request.ImportContactsRequest;
 import com.utree.eightysix.rest.HandlerWrapper;
@@ -119,6 +120,7 @@ public class ContactsSyncService extends IntentService {
               Env.setTimestamp(TIMESTAMP_KEY);
               U.getBus().post(new ContactsSyncEvent(true));
             } else {
+              cacheContacts(new ArrayList<Contact>());
               U.getBus().post(new ContactsSyncEvent(false));
             }
           }
@@ -131,7 +133,7 @@ public class ContactsSyncService extends IntentService {
     List<Contact> contacts = new ArrayList<Contact>();
     DiskLruCache.Snapshot snapshot = null;
     try {
-      snapshot = U.getContactsCache().get("contacts");
+      snapshot = U.getContactsCache().get(String.format("contacts_%s", Account.inst().getUserId()));
       if (snapshot == null) {
         return null;
       }
@@ -164,7 +166,7 @@ public class ContactsSyncService extends IntentService {
     OutputStreamWriter out = null;
     JsonWriter writer = null;
     try {
-      DiskLruCache.Editor editor = U.getContactsCache().edit("contacts");
+      DiskLruCache.Editor editor = U.getContactsCache().edit(String.format("contacts_%s", Account.inst().getUserId()));
       stream = editor.newOutputStream(0);
       out = new OutputStreamWriter(stream);
       writer = new JsonWriter(out);
