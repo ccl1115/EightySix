@@ -52,7 +52,7 @@ public class RESTRequester {
   }
 
   public static String genCacheKey(String api, RequestParams params) {
-    return MD5Util.getMD5String((api + params.toString()).getBytes()).toLowerCase();
+    return MD5Util.getMD5String((api + params.toString() + Account.inst().getUserId()).getBytes()).toLowerCase();
   }
 
   public static boolean responseOk(Response response) {
