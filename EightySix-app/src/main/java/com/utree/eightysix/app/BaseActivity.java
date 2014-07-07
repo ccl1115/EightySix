@@ -77,9 +77,12 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
 
   private FrameLayout mProgressBar;
   private FrameLayout mFlLoadingWrapper;
+
   private Toast mToast;
+
   private boolean mResumed;
   private boolean mFillContent;
+  private Toast mInActivityToast;
 
   @Override
   public void onClick(View v) {
@@ -134,11 +137,16 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
       mToast.cancel();
     }
 
+    if (mInActivityToast != null) {
+      mInActivityToast.cancel();
+    }
+
     if (inActivity) {
+      mInActivityToast = Toast.makeText(this, string, Toast.LENGTH_SHORT);
+      mInActivityToast.show();
+    } else {
       mToast = Toast.makeText(this, string, Toast.LENGTH_SHORT);
       mToast.show();
-    } else {
-      Toast.makeText(this, string, Toast.LENGTH_SHORT).show();
     }
   }
 
@@ -217,6 +225,8 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
     //  overridePendingTransition(R.anim.activity_enter_in, R.anim.activity_enter_out);
     //}
     mResumed = true;
+
+    if (mInActivityToast != null) mInActivityToast.cancel();
   }
 
   @Override
@@ -229,7 +239,6 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
   protected void onDestroy() {
     cancelAll();
 
-    if (mToast != null) mToast.cancel();
 
     U.getBus().unregister(this);
 
