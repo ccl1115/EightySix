@@ -14,15 +14,11 @@ import com.utree.eightysix.rest.Token;
 @Cache
 public class PostCommentsRequest extends Paginate {
 
-  @Param ("factoryID")
-  public int factoryId;
-
   @Param ("postId")
   public String postId;
 
-  public PostCommentsRequest(int factoryId, String postId, int page) {
+  public PostCommentsRequest(String postId, int page) {
     super(page);
-    this.factoryId = factoryId;
     this.postId = postId;
   }
 }
