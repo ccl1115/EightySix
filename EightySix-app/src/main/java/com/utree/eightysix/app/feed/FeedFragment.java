@@ -183,6 +183,10 @@ class FeedFragment extends BaseFragment {
     }
   }
 
+  public int getCurrFriends() {
+    return mFeedAdapter.getFeeds().currFactoryFriends;
+  }
+
   public void refresh() {
     requestFeeds(mCircle.id, 1);
   }

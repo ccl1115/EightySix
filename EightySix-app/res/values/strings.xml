@@ -100,7 +100,8 @@
     <string name="invite_people_to_unlock">邀请好友，即可解锁</string>
 
     <!-- PostActivity -->
-    <string name="post">发表</string>
+    <string name="publish_content">发表内容</string>
+    <string name="publish">发帖</string>
     <string name="who_will_see_this_secret">谁会看到这条秘密</string>
     <string name="add_photo">添加照片</string>
     <string name="post_description">你在厂里的朋友会看到这条秘密，并知道是厂里面认识的人发的，但是无法猜到谁是作者。\n\n如果秘密被赞的数量较多，将自动转发到其他打工圈，让更多的人看到！</string>
@@ -147,7 +148,7 @@
 
     <!-- FeedActivity -->
     <string name="select_circle">选择工友圈</string>
-    <string name="friends_info">朋友(%1$d) | 工友(%2$d)</string>
+    <string name="friends_info">认识的人(%1$d) | 工友(%2$d)</string>
     <string name="hidden_friends_feed">朋友发的%1$d条匿名贴被隐藏</string>
     <string name="unlock_to_view">解锁查看</string>
     <string name="introduce_to_friends">介绍给朋友</string>

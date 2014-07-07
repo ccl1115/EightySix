@@ -51,7 +51,7 @@ import java.io.File;
 
 /**
  */
-@TopTitle (R.string.post)
+@TopTitle (R.string.publish_content)
 public class PublishActivity extends BaseActivity {
 
   private static final String FIRST_RUN_KEY = "post_activity";
@@ -265,7 +265,7 @@ public class PublishActivity extends BaseActivity {
     getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
       @Override
       public String getTitle(int position) {
-        return getString(R.string.post);
+        return getString(R.string.publish);
       }
 
       @Override
