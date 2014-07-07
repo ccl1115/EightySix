@@ -57,20 +57,23 @@
         <item name="android:shadowColor">#FF333333</item>
         <item name="android:shadowDx">0</item>
         <item name="android:shadowDy">0</item>
-        <item name="android:shadowRadius">2</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:gravity">center</item>
-        <item name="android:padding">16dp</item>
+        <item name="android:shadowRadius">1</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="TextView.PostStyle">
+        <item name="android:textSize">20sp</item>
+        <item name="android:maxLines">10</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:gravity">center</item>
+    </style>
 
     <style name="Widget.ListView.Apptheme" parent="android:Widget.ListView">
         <item name="android:listSelector">@drawable/apptheme_primary_list_selector</item>
         <item name="android:fadingEdge">none</item>
         <item name="android:divider">@null</item>
         <item name="android:dividerHeight">0dp</item>
-        <item name="android:overScrollMode">never</item>
+        <item name="android:overScrollMode">ifContentScrolls</item>
     </style>
 
     <style name="TextView"/>

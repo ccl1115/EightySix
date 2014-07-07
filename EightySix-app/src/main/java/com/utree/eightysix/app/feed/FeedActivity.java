@@ -91,6 +91,7 @@ public class FeedActivity extends BaseActivity {
   private ThemedDialog mNoPermDialog;
 
   private boolean mRefreshed;
+  private MenuViewHolder mMenuViewHolder;
 
   public static void start(Context context) {
     Intent intent = new Intent(context, FeedActivity.class);
@@ -154,24 +155,25 @@ public class FeedActivity extends BaseActivity {
 
     setActionLeftDrawable(getResources().getDrawable(R.drawable.ic_drawer));
 
+    if (mPopupMenu == null) {
+      mMenu = (LinearLayout) View.inflate(FeedActivity.this, R.layout.widget_feed_menu, null);
+      mPopupMenu = new PopupWindow(mMenu, dp2px(190), dp2px(225) + 4);
+      mMenuViewHolder = new MenuViewHolder(mMenu);
+      mPopupMenu.setFocusable(true);
+      mPopupMenu.setOutsideTouchable(true);
+      mPopupMenu.setBackgroundDrawable(new BitmapDrawable(getResources()));
+      mPopupMenu.setOnDismissListener(new PopupWindow.OnDismissListener() {
+        @Override
+        public void onDismiss() {
+          hideMask();
+        }
+      });
+    }
+
+
     getTopBar().setOnActionOverflowClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        if (mPopupMenu == null) {
-          mMenu = (LinearLayout) View.inflate(FeedActivity.this, R.layout.widget_feed_menu, null);
-          mPopupMenu = new PopupWindow(mMenu, dp2px(190), dp2px(225) + 4);
-          new MenuViewHolder(mMenu);
-          mPopupMenu.setFocusable(true);
-          mPopupMenu.setOutsideTouchable(true);
-          mPopupMenu.setBackgroundDrawable(new BitmapDrawable(getResources()));
-          mPopupMenu.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-              hideMask();
-            }
-          });
-        }
-
         if (!mPopupMenu.isShowing()) {
           mPopupMenu.showAsDropDown(getTopBar().mActionOverFlow);
           showMask();
@@ -527,6 +529,10 @@ public class FeedActivity extends BaseActivity {
     }
   }
 
+  void setMyPraiseCount(int count) {
+    mMenuViewHolder.mTvPraiseCount.setText(String.format("%d个赞", count));
+  }
+
   private void setSideHighlight(Circle circle) {
     for (Circle c : mSideCircles) {
       c.selected = circle.equals(c);
@@ -549,10 +555,12 @@ public class FeedActivity extends BaseActivity {
   @Keep
   class MenuViewHolder {
 
-
     MenuViewHolder(View view) {
       ButterKnife.inject(this, view);
     }
+
+    @InjectView(R.id.tv_praise_count)
+    TextView mTvPraiseCount;
 
     @OnClick (R.id.ll_invite)
     void onLlInviteClicked() {

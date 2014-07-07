@@ -127,7 +127,11 @@ public class FeedPostView extends RelativeLayout {
     String content = post.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content;
 
     mTvContent.setText(content);
-    mTvComment.setText(String.valueOf(post.comments));
+    if (post.comments > 0) {
+      mTvComment.setText(String.valueOf(post.comments));
+    } else {
+      mTvComment.setText("");
+    }
     mTvPraise.setText(String.valueOf(post.praise));
     mTvSource.setText(post.source);
     mTvLastComment.setText(post.comment);

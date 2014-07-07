@@ -10,14 +10,10 @@
             android:scaleType="centerCrop"/>
 
     <TextView
+            android:id="@+id/tv_content"
+            style="@style/TextView.PostStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/tv_content"
-            android:textSize="20sp"
-            android:textColor="@android:color/white"
-            android:gravity="center"
-            android:paddingLeft="40dp"
-            android:paddingRight="40dp"
             android:shadowColor="@android:color/black"
             android:shadowRadius="2"
             android:background="@android:color/transparent"/>

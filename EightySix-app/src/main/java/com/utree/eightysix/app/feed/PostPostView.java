@@ -92,7 +92,11 @@ public class PostPostView extends FrameLayout {
     }
 
     mTvContent.setText(mPost.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content);
-    mTvComment.setText(String.valueOf(post.comments));
+    if (post.comments > 0) {
+      mTvComment.setText(String.valueOf(post.comments));
+    } else {
+      mTvComment.setText("");
+    }
     mTvPraise.setText(String.valueOf(post.praise));
     mTvSource.setText(mPost.source);
 
@@ -103,6 +107,7 @@ public class PostPostView extends FrameLayout {
       mAivBg.setUrl(null);
       mTvContent.setBackgroundColor(Utils.strToColor(mPost.bgColor));
     }
+
 
     if (mPost.praised == 1) {
       mTvPraise.setCompoundDrawablesWithIntrinsicBounds(U.gd(R.drawable.ic_heart_red_pressed), null, null, null);

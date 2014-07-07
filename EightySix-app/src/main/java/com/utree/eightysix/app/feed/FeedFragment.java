@@ -148,7 +148,6 @@ class FeedFragment extends BaseFragment {
   }
 
   public void setCircle(Circle circle) {
-
     if (circle == null || !circle.equals(mCircle)) {
       if (mLvFeed != null) mLvFeed.setAdapter(null);
     }
@@ -246,6 +245,7 @@ class FeedFragment extends BaseFragment {
           } else if (mFeedAdapter != null) {
             mFeedAdapter.add(response.object.posts.lists);
           }
+          ((FeedActivity)getBaseActivity()).setMyPraiseCount(response.object.myPraiseCount);
           mPageInfo = response.object.posts.page;
         } else {
           mLvFeed.setAdapter(null);
@@ -273,8 +273,8 @@ class FeedFragment extends BaseFragment {
             mFeedAdapter.add(response.object.posts.lists);
           }
           mPageInfo = response.object.posts.page;
-
           mLvFeed.stopLoadMore();
+          ((FeedActivity)getBaseActivity()).setMyPraiseCount(response.object.myPraiseCount);
           getBaseActivity().hideProgressBar();
         } else {
           requestFeeds(id, page);
