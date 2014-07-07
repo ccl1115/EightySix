@@ -107,6 +107,9 @@ class FeedAdapter extends BaseAdapter {
         convertView = getSelectView(convertView, parent);
         break;
     }
+
+    animateConvertView(position, convertView);
+
     return convertView;
   }
 
@@ -143,6 +146,11 @@ class FeedAdapter extends BaseAdapter {
       convertView = new FeedPostView(parent.getContext());
     }
 
+    ((FeedPostView) convertView).setData(getItem(position));
+    return convertView;
+  }
+
+  private void animateConvertView(int position, View convertView) {
     if (!mAnimated.get(position, false)) {
       AnimatorSet set = new AnimatorSet();
       set.playTogether(
@@ -156,10 +164,6 @@ class FeedAdapter extends BaseAdapter {
       ViewHelper.setTranslationY(convertView, 0);
       ViewHelper.setRotationX(convertView, 0);
     }
-
-    FeedPostView feedPostView = (FeedPostView) convertView;
-    feedPostView.setData(getItem(position));
-    return convertView;
   }
 
   private View getPlaceHolderView(View convertView, ViewGroup parent) {
