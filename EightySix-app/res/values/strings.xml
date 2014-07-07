@@ -191,5 +191,7 @@
     <string name="no_perm_to_publish">你还没有发帖的权限</string>
     <string name="find_friends">找出圈子里的朋友，看他们都在说什么？</string>
     <string name="not_select_circle">你还没有选择在职工厂</string>
+    <string name="circle_unlocked_tip">你还没有解锁这个圈子</string>
+    <string name="unlock">解锁</string>
 
 </resources>

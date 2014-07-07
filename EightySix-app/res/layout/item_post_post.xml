@@ -14,8 +14,8 @@
             style="@style/TextView.PostStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:shadowColor="@android:color/black"
-            android:shadowRadius="2"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
             android:background="@android:color/transparent"/>
 
     <LinearLayout

@@ -3,7 +3,7 @@
 <panel row="4" column="5" itemWidth="50" itemHeight="40" spaceHorizontal="10" spaceVertical="10">
     <page>
         <item>
-            <color>#ffffaeaa</color>
+            <color>#ffffffff</color>
         </item>
         <item>
             <color>#ffd4706a</color>
