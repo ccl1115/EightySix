@@ -101,6 +101,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="2dp"
                 android:layout_gravity="right|center_vertical"
+                android:visibility="invisible"
                 android:src="@drawable/ic_close"/>
 
     </FrameLayout>
