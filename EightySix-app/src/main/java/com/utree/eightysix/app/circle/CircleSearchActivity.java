@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.circle;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -63,8 +64,8 @@ public class CircleSearchActivity extends BaseActivity {
 
   @OnClick (R.id.rb_create_circle)
   public void onRbCreateCircleClicked() {
-    // TODO start create circle activity
-    if (BuildConfig.DEBUG) showToast("TODO start create circle activity");
+    startActivity(new Intent(this, CircleCreateActivity.class));
+    finish();
   }
 
   @OnItemClick (R.id.lv_history)
