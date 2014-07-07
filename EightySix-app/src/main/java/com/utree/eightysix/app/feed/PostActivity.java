@@ -4,13 +4,22 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.OnTextChanged;
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.AnimatorSet;
+import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
@@ -59,15 +68,17 @@ public class PostActivity extends BaseActivity {
   private int mFactoryId;
 
   private PostCommentsAdapter mPostCommentsAdapter;
+  private boolean mResumed;
 
-  public static void start(Context context, int factoryId, Post post) {
+  public static void start(Context context, int factoryId, Post post, Rect rect) {
     Intent intent = new Intent(context, PostActivity.class);
     intent.putExtra("post", post);
     intent.putExtra("factoryId", factoryId);
+    intent.putExtra("rect", rect);
     context.startActivity(intent);
   }
 
-  public static void start(Context context, int factoryId, int postId) {
+  public static void start(Context context, int factoryId, String postId) {
     Intent intent = new Intent(context, PostActivity.class);
     intent.putExtra("id", postId);
     intent.putExtra("factoryId", factoryId);
@@ -140,23 +151,72 @@ public class PostActivity extends BaseActivity {
     hideTopBar(false);
 
     mPost = (Post) getIntent().getSerializableExtra("post");
-    mFactoryId = getIntent().getIntExtra("factoryId", -1);
-
-    if (mFactoryId == -1) {
-      finish();
-    }
 
     if (mPost == null && U.useFixture()) {
       mPost = U.getFixture(Post.class, "valid");
+    } else {
+      mPostCommentsAdapter = new PostCommentsAdapter(mPost, null);
+      mLvComments.setAdapter(mPostCommentsAdapter);
     }
 
-    cacheOutComments(1);
   }
 
   @Override
   protected void onResume() {
     super.onResume();
     U.getBus().register(mLvComments);
+
+    if (!mResumed) {
+      overridePendingTransition(0, 0);
+      Rect rect = getIntent().getParcelableExtra("rect");
+
+      if (rect != null) {
+        final int screenWidth = getResources().getDisplayMetrics().widthPixels;
+        mLvComments.setVisibility(View.INVISIBLE);
+        final PostPostView tmp = (PostPostView) mPostCommentsAdapter.getView(0, null, mLvComments);
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(rect.width(), rect.height());
+        lp.gravity = Gravity.CENTER_HORIZONTAL;
+        ((ViewGroup) findViewById(android.R.id.content)).addView(tmp, lp);
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(
+            ObjectAnimator.ofFloat(tmp, "scaleX", 1f, screenWidth / (float) rect.width()),
+            ObjectAnimator.ofFloat(tmp, "scaleY", 1f, screenWidth / (float) rect.height()),
+            ObjectAnimator.ofFloat(tmp, "translationY", rect.top - U.dp2px(22), U.dp2px(8))
+        );
+        set.setDuration(500);
+        set.addListener(new Animator.AnimatorListener() {
+          @Override
+          public void onAnimationStart(Animator animation) {
+
+          }
+
+          @Override
+          public void onAnimationEnd(Animator animation) {
+            ((ViewGroup) findViewById(android.R.id.content)).removeView(tmp);
+            mLvComments.setVisibility(View.VISIBLE);
+
+            if (mPost != null) {
+              cacheOutComments(mPost.id, 1);
+            } else {
+              cacheOutComments(getIntent().getStringExtra("id"), 1);
+            }
+          }
+
+          @Override
+          public void onAnimationCancel(Animator animation) {
+
+          }
+
+          @Override
+          public void onAnimationRepeat(Animator animation) {
+
+          }
+        });
+        set.start();
+      }
+    }
+    mResumed = true;
+
   }
 
   @Override
@@ -247,14 +307,26 @@ public class PostActivity extends BaseActivity {
     }, Response.class);
   }
 
+  @Subscribe
+  public void onPostDeleteRequest(PostDeleteRequest request) {
+    request(request, new OnResponse<Response>() {
+      @Override
+      public void onResponse(Response response) {
+        if (RESTRequester.responseOk(response)) {
+          U.getBus().post(new PostDeleteEvent(mPost));
+          finish();
+        }
+      }
+    }, Response.class);
+  }
+
   private void requestComment(final int page) {
-    request(new PostCommentsRequest(mFactoryId, mPost.id, page), new OnResponse<PostCommentsResponse>() {
+    request(new PostCommentsRequest(mPost.id, page), new OnResponse<PostCommentsResponse>() {
       @Override
       public void onResponse(PostCommentsResponse response) {
         if (response != null && response.code == 0 && response.object != null) {
           mPostCommentsAdapter = new PostCommentsAdapter(response.object.post, response.object.comments.lists);
           mLvComments.setAdapter(mPostCommentsAdapter);
-
           mPost = response.object.post;
           U.getBus().post(mPost);
         }
@@ -263,14 +335,14 @@ public class PostActivity extends BaseActivity {
     }, PostCommentsResponse.class);
   }
 
-  private void cacheOutComments(final int page) {
-    cacheOut(new PostCommentsRequest(mFactoryId, mPost.id, page), new OnResponse<PostCommentsResponse>() {
+  private void cacheOutComments(final String id, final int page) {
+    cacheOut(new PostCommentsRequest(id, page), new OnResponse<PostCommentsResponse>() {
       @Override
       public void onResponse(PostCommentsResponse response) {
         if (response != null && response.code == 0 && response.object != null) {
           mPostCommentsAdapter = new PostCommentsAdapter(response.object.post, response.object.comments.lists);
           mLvComments.setAdapter(mPostCommentsAdapter);
-          mPost = response.object.post;
+          if (mPost == null) mPost = response.object.post;
         } else {
           showProgressBar();
         }
@@ -298,18 +370,5 @@ public class PostActivity extends BaseActivity {
             mLvComments.stopLoadMore();
           }
         }, PublishCommentResponse.class);
-  }
-
-  @Subscribe
-  public void onPostDeleteRequest(PostDeleteRequest request) {
-    request(request, new OnResponse<Response>() {
-      @Override
-      public void onResponse(Response response) {
-        if (RESTRequester.responseOk(response)) {
-          U.getBus().post(new PostDeleteEvent(mPost));
-          finish();
-        }
-      }
-    }, Response.class);
   }
 }

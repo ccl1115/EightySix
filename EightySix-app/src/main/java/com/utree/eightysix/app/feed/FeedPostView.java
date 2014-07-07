@@ -211,8 +211,11 @@ public class FeedPostView extends RelativeLayout {
 
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    final int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-    super.onMeasure(widthMeasureSpec, widthSize + MeasureSpec.EXACTLY);
+    int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+    if (mLlComment.getVisibility() == VISIBLE) {
+      widthSize += mLlComment.getMeasuredHeight();
+    }
+    super.onMeasure(widthMeasureSpec, widthSize - U.dp2px(16) + MeasureSpec.EXACTLY);
   }
 
   @Override

@@ -180,7 +180,7 @@ public class PostPostView extends FrameLayout {
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
     final int widthSize = widthMeasureSpec & ~(0x3 << 30);
-    super.onMeasure(widthMeasureSpec, (int) (widthSize * 1.1f) + MeasureSpec.EXACTLY);
+    super.onMeasure(widthMeasureSpec, widthSize + MeasureSpec.EXACTLY);
   }
 
   private void clear() {

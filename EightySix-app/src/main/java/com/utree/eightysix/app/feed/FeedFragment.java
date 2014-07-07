@@ -1,9 +1,11 @@
 package com.utree.eightysix.app.feed;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
@@ -16,6 +18,7 @@ import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
+import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
 import com.utree.eightysix.request.FeedsRequest;
 import com.utree.eightysix.request.PostPraiseCancelRequest;
 import com.utree.eightysix.request.PostPraiseRequest;
@@ -51,10 +54,18 @@ class FeedFragment extends BaseFragment {
   private boolean mRefreshed;
 
   @OnItemClick (R.id.lv_feed)
-  public void onLvFeedItemClicked(int position) {
+  public void onLvFeedItemClicked(int position, View view) {
     Object item = mLvFeed.getAdapter().getItem(position);
     if (item == null) return;
-    PostActivity.start(getActivity(), mCircle.id, (Post) item);
+    Rect rect = new Rect();
+    int[] xy = new int[2];
+    View target= view.findViewById(R.id.tv_content);
+    target.getLocationInWindow(xy);
+    rect.left = xy[0];
+    rect.top = xy[1];
+    rect.right = rect.left + target.getMeasuredWidth();
+    rect.bottom = rect.top + target.getMeasuredHeight();
+    PostActivity.start(getActivity(), mCircle.id, (Post) item, rect);
   }
 
   @Override
@@ -101,6 +112,20 @@ class FeedFragment extends BaseFragment {
         super.onPreRefresh();
         mRefreshed = true;
         requestFeeds(mCircle.id, 1);
+      }
+    });
+
+    mLvFeed.setOnScrollListener(new AbsListView.OnScrollListener() {
+      @Override
+      public void onScrollStateChanged(AbsListView view, int scrollState) {
+        if (scrollState == SCROLL_STATE_IDLE) {
+          U.getBus().post(new ListViewScrollStateIdledEvent());
+        }
+      }
+
+      @Override
+      public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
       }
     });
   }
