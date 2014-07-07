@@ -365,7 +365,6 @@ public class PostActivity extends BaseActivity {
             hideProgressBar();
             mEtPostContent.setText("");
             mEtPostContent.setEnabled(true);
-            mRbPost.setEnabled(true);
             mLvComments.setSelection(mLvComments.getCount());
             mLvComments.stopLoadMore();
           }

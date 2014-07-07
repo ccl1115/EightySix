@@ -238,8 +238,10 @@ public class PublishActivity extends BaseActivity {
       public void onTextChanged(CharSequence s, int start, int before, int count) {
         if (s.length() == 0) {
           mTvPostTip.setVisibility(View.VISIBLE);
+          getTopBar().getActionView(0).setEnabled(false);
         } else {
           mTvPostTip.setVisibility(View.INVISIBLE);
+          getTopBar().getActionView(0).setEnabled(true);
         }
 
         if (s.length() > U.getConfigInt("post.length")) {
