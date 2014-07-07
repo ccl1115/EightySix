@@ -18,6 +18,8 @@
             android:gravity="center"
             android:paddingLeft="40dp"
             android:paddingRight="40dp"
+            android:shadowColor="@android:color/black"
+            android:shadowRadius="2"
             android:background="@android:color/transparent"/>
 
     <LinearLayout

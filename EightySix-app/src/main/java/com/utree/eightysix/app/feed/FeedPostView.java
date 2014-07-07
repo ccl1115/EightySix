@@ -118,6 +118,12 @@ public class FeedPostView extends RelativeLayout {
     mTvPraise.setTextColor(color);
     mTvSource.setTextColor(color);
 
+    if (color == Color.WHITE) {
+      mLlComment.setBackgroundColor(Color.WHITE);
+    } else if (color == Color.BLACK) {
+      mLlComment.setBackgroundColor(0xfff0f0f0);
+    }
+
     String content = post.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content;
 
     mTvContent.setText(content);

@@ -11,6 +11,7 @@ import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
+import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.data.Post;
@@ -24,6 +25,7 @@ import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
+import java.util.Iterator;
 
 /**
  * @author simon
@@ -221,4 +223,19 @@ class FeedFragment extends BaseFragment {
       }, Response.class);
     }
   }
+
+  @Subscribe
+  public void onPostDeleteEvent(PostDeleteEvent event) {
+    if (mFeedAdapter == null || mFeedAdapter.getFeeds() == null) return;
+    for (Iterator<Post> iterator = mFeedAdapter.getFeeds().posts.lists.iterator(); iterator.hasNext(); ) {
+      Post p = iterator.next();
+      if (p == null) continue;
+      if (p.equals(event.getPost())) {
+        iterator.remove();
+        U.getBus().post(new AdapterDataSetChangedEvent());
+        break;
+      }
+    }
+  }
+
 }

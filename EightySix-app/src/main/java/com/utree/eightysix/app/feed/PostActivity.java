@@ -300,8 +300,9 @@ public class PostActivity extends BaseActivity {
         }, PublishCommentResponse.class);
   }
 
-  private void requestDeletePost() {
-    request(new PostDeleteRequest(mPost.id), new OnResponse<Response>() {
+  @Subscribe
+  public void onPostDeleteRequest(PostDeleteRequest request) {
+    request(request, new OnResponse<Response>() {
       @Override
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {

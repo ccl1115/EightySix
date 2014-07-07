@@ -38,6 +38,7 @@ import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.Circle;
+import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.request.MyCirclesRequest;
 import com.utree.eightysix.response.CirclesResponse;
 import com.utree.eightysix.rest.OnResponse;
@@ -46,7 +47,6 @@ import com.utree.eightysix.utils.ShareUtils;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TopBar;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -134,7 +134,7 @@ public class FeedActivity extends BaseActivity {
       }
 
       mFeedFragment.setCircle(circle);
-      setTitle(circle);
+      setSideHighlight(circle);
     }
     hideSide();
     hideMask();
@@ -292,7 +292,7 @@ public class FeedActivity extends BaseActivity {
     }
 
     if (mFeedFragment.getCircle() != null) {
-      setTitle(mFeedFragment.getCircle());
+      setSideHighlight(mFeedFragment.getCircle());
     }
     //endregion
 
@@ -304,7 +304,7 @@ public class FeedActivity extends BaseActivity {
       mSideCircles = circles;
       if (mFeedFragment.getCircle() == null && mSideCircles.size() > 0) {
         mFeedFragment.setCircle(mSideCircles.get(0));
-        setTitle(mFeedFragment.getCircle());
+        setSideHighlight(mFeedFragment.getCircle());
       }
     }
 
@@ -334,6 +334,16 @@ public class FeedActivity extends BaseActivity {
         hideMask();
       }
     }, 1000);
+  }
+
+  @Subscribe
+  public void onInviteClicked(InviteClickedEvent event) {
+    startActivity(new Intent(this, ImportContactActivity.class));
+  }
+
+  @Subscribe
+  public void onUnlockClicked(UnlockClickedEvent event) {
+    showInviteDialog();
   }
 
   private void showNoPermDialog() {
@@ -468,7 +478,7 @@ public class FeedActivity extends BaseActivity {
           mSideCircles = response.object.lists.subList(0, 10);
           if (mFeedFragment.getCircle() == null && mSideCircles.size() > 0) {
             mFeedFragment.setCircle(mSideCircles.get(0));
-            setTitle(mFeedFragment.getCircle());
+            setSideHighlight(mFeedFragment.getCircle());
           }
           selectSideCircle(mSideCircles);
 
@@ -491,7 +501,7 @@ public class FeedActivity extends BaseActivity {
           mSideCircles = response.object.lists.subList(0, 10);
           if (mFeedFragment.getCircle() == null && mSideCircles.size() > 0) {
             mFeedFragment.setCircle(mSideCircles.get(0));
-            setTitle(mFeedFragment.getCircle());
+            setSideHighlight(mFeedFragment.getCircle());
           }
           selectSideCircle(mSideCircles);
 
@@ -502,7 +512,6 @@ public class FeedActivity extends BaseActivity {
       }
     }, CirclesResponse.class);
   }
-
 
   private void showInviteDialog() {
     if (mInviteDialog == null) {
@@ -518,14 +527,12 @@ public class FeedActivity extends BaseActivity {
     }
   }
 
-  @Subscribe
-  public void onInviteClicked(InviteClickedEvent event) {
-    startActivity(new Intent(this, ImportContactActivity.class));
-  }
-
-  @Subscribe
-  public void onUnlockClicked(UnlockClickedEvent event) {
-    showInviteDialog();
+  private void setSideHighlight(Circle circle) {
+    for (Circle c : mSideCircles) {
+      c.selected = circle.equals(c);
+    }
+    setTitle(circle);
+    U.getBus().post(new AdapterDataSetChangedEvent());
   }
 
   @Keep

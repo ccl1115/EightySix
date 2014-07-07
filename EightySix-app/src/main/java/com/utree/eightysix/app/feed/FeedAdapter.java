@@ -73,6 +73,10 @@ class FeedAdapter extends BaseAdapter {
     notifyDataSetChanged();
   }
 
+  public Feeds getFeeds() {
+    return mFeeds;
+  }
+
   @Override
   public int getCount() {
     return mFeeds.posts.lists == null ? 0 : mFeeds.posts.lists.size();
@@ -230,19 +234,6 @@ class FeedAdapter extends BaseAdapter {
         p.praise = post.praise;
         p.praised = post.praised;
         p.comments = post.comments;
-        U.getBus().post(new AdapterDataSetChangedEvent());
-        break;
-      }
-    }
-  }
-
-  @Subscribe
-  public void onPostDeleteEvent(PostDeleteEvent event) {
-    for (Iterator<Post> iterator = mFeeds.posts.lists.iterator(); iterator.hasNext(); ) {
-      Post p = iterator.next();
-      if (p == null) continue;
-      if (p.equals(event.getPost())) {
-        iterator.remove();
         U.getBus().post(new AdapterDataSetChangedEvent());
         break;
       }

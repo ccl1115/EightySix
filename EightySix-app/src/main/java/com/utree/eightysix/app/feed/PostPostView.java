@@ -19,8 +19,9 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
-import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.data.Post;
+import com.utree.eightysix.event.AdapterDataSetChangedEvent;
+import com.utree.eightysix.request.PostDeleteRequest;
 import com.utree.eightysix.utils.ShareUtils;
 import com.utree.eightysix.utils.Utils;
 import com.utree.eightysix.widget.AsyncImageView;
@@ -84,6 +85,12 @@ public class PostPostView extends FrameLayout {
     mTvPraise.setTextColor(color);
     mTvSource.setTextColor(color);
 
+    if (color == Color.WHITE) {
+
+    } else if (color == Color.BLACK) {
+
+    }
+
     mTvContent.setText(mPost.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content);
     mTvComment.setText(String.valueOf(post.comments));
     mTvPraise.setText(String.valueOf(post.praise));
@@ -105,14 +112,6 @@ public class PostPostView extends FrameLayout {
       mTvPraise.setText("");
       mTvPraise.setCompoundDrawablesWithIntrinsicBounds(U.gd(R.drawable.ic_heart_outline_normal), null, null, null);
     }
-  }
-
-  private void clear() {
-    mTvContent.setText("");
-    mTvComment.setBackgroundColor(Color.WHITE);
-    mTvComment.setText("");
-    mTvPraise.setText("");
-    mTvSource.setText("");
   }
 
   @OnClick (R.id.iv_close)
@@ -141,7 +140,7 @@ public class PostPostView extends FrameLayout {
                     onTvPraiseClicked();
                     break;
                   case 3:
-                    U.getBus().post(new PostDeleteEvent(mPost));
+                    U.getBus().post(new PostDeleteRequest(mPost.id));
                     break;
                 }
               }
@@ -182,6 +181,14 @@ public class PostPostView extends FrameLayout {
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
     final int widthSize = widthMeasureSpec & ~(0x3 << 30);
     super.onMeasure(widthMeasureSpec, (int) (widthSize * 1.1f) + MeasureSpec.EXACTLY);
+  }
+
+  private void clear() {
+    mTvContent.setText("");
+    mTvComment.setBackgroundColor(Color.WHITE);
+    mTvComment.setText("");
+    mTvPraise.setText("");
+    mTvSource.setText("");
   }
 
 
