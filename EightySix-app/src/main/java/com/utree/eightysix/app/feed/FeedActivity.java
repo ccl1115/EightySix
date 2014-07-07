@@ -328,14 +328,8 @@ public class FeedActivity extends BaseActivity {
     }
     //endregion
 
-
-    getHandler().postDelayed(new Runnable() {
-      @Override
-      public void run() {
-        hideSide();
-        hideMask();
-      }
-    }, 1000);
+    hideSide();
+    hideMask();
   }
 
   @Subscribe
