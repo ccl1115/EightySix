@@ -87,6 +87,7 @@
                 android:drawablePadding="4dp"
                 android:hint="@string/enter_search_keyword"
                 android:textColor="@android:color/white"
+                android:paddingRight="56dp"
                 android:singleLine="true"
                 android:lines="1"
                 android:paddingBottom="10dp"

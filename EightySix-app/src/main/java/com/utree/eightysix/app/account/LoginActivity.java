@@ -71,6 +71,8 @@ public class LoginActivity extends BaseActivity {
 
   private int mPhoneNumberLength = U.getConfigInt("account.phone.length");
 
+  private boolean mRequesting = false;
+
   @OnClick (R.id.btn_login)
   public void onBtnLoginClicked() {
     requestLogin();
@@ -85,6 +87,11 @@ public class LoginActivity extends BaseActivity {
   public void onBtnFixtureClicked() {
     FeedActivity.start(this, null);
     finish();
+  }
+
+  @OnClick (R.id.iv_captcha)
+  public void onIvCaptchaClicked() {
+    requestCaptcha();
   }
 
   public void onCreate(Bundle savedInstanceState) {
@@ -226,6 +233,8 @@ public class LoginActivity extends BaseActivity {
   }
 
   private void requestCaptcha() {
+    if (mRequesting) return;
+    mRequesting = true;
     U.getRESTRequester().post(C.API_VALICODE_FIND_PWD, null,
         new RequestParams("phone", mEtPhoneNumber.getText().toString()), null,
         new FileAsyncHttpResponseHandler(IOUtils.createTmpFile("valicode.png")) {
@@ -235,6 +244,7 @@ public class LoginActivity extends BaseActivity {
             if (file != null) {
               file.delete();
             }
+            mRequesting = false;
           }
 
           @Override
@@ -243,6 +253,7 @@ public class LoginActivity extends BaseActivity {
             if (response != null) {
               response.delete();
             }
+            mRequesting = false;
           }
         }
     );

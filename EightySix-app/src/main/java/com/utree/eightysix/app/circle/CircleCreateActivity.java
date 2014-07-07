@@ -60,6 +60,8 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
   @InjectView (R.id.ctv_invite)
   public CheckedTextView mCtvInvite;
 
+  private boolean mRequesting;
+
   @OnClick (R.id.ctv_invite)
   public void onCtvInviteClicked() {
     mCtvInvite.setChecked(!mCtvInvite.isChecked());
@@ -73,6 +75,11 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
       mEtCircleName.setText(t.subSequence(0, length));
       mEtCircleName.setSelection(length);
     }
+  }
+
+  @OnClick (R.id.iv_captcha)
+  public void onIvCaptchaClicked() {
+    requestCaptcha();
   }
 
   @OnTextChanged (R.id.et_circle_abbreviation)
@@ -102,22 +109,6 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
     requestCaptcha();
   }
 
-  private void requestCaptcha() {
-    U.getRESTRequester().post(C.API_VALICODE_CREATE_FACTORY, null,
-        U.getRESTRequester().addAuthParams(null), null,
-        new FileAsyncHttpResponseHandler(IOUtils.createTmpFile("valicode.jpg")) {
-          @Override
-          public void onSuccess(File file) {
-            mIvCaptcha.setImageURI(Uri.fromFile(file));
-          }
-
-          @Override
-          public void onFailure(Throwable e, File response) {
-            if (BuildConfig.DEBUG) Log.d("CircleCreateActivity", e.getMessage());
-          }
-        });
-  }
-
   @Override
   protected void onResume() {
     super.onResume();
@@ -141,6 +132,11 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
   }
 
   @Override
+  protected void onActionLeftOnClicked() {
+    finish();
+  }
+
+  @Override
   public void onResult(Location.Result result) {
     if (result != null) {
       mTvLocation.setText(result.address);
@@ -160,6 +156,26 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
     finish();
   }
 
+  private void requestCaptcha() {
+    if (mRequesting) return;
+    mRequesting = true;
+    U.getRESTRequester().post(C.API_VALICODE_CREATE_FACTORY, null,
+        U.getRESTRequester().addAuthParams(null), null,
+        new FileAsyncHttpResponseHandler(IOUtils.createTmpFile("valicode.jpg")) {
+          @Override
+          public void onSuccess(File file) {
+            mIvCaptcha.setImageURI(Uri.fromFile(file));
+            mRequesting = false;
+          }
+
+          @Override
+          public void onFailure(Throwable e, File response) {
+            if (BuildConfig.DEBUG) Log.d("CircleCreateActivity", e.getMessage());
+            mRequesting = false;
+          }
+        });
+  }
+
   private void requestCreateFactory() {
     CreateCircleRequest request = new CreateCircleRequest(mEtCircleName.getText().toString(),
         CreateCircleRequest.TYPE_FACTORY,
@@ -175,10 +191,5 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
         }
       }
     }, Response.class);
-  }
-
-  @Override
-  protected void onActionLeftOnClicked() {
-    finish();
   }
 }
