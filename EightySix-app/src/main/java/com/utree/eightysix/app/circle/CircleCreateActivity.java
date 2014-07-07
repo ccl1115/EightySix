@@ -129,7 +129,6 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
       public void run() {
         U.getLocation().requestLocation();
         mTvLocation.setText(getString(R.string.locating));
-        showProgressBar();
       }
     }, 1000);
   }
@@ -148,7 +147,6 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
     } else {
       mTvLocation.setText(getString(R.string.locating_failed));
     }
-    hideProgressBar();
   }
 
   /**
