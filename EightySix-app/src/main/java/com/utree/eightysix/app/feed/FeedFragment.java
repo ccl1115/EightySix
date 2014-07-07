@@ -16,15 +16,19 @@ import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
-import com.utree.eightysix.request.PostPraiseCancelRequest;
 import com.utree.eightysix.request.FeedsRequest;
+import com.utree.eightysix.request.PostPraiseCancelRequest;
 import com.utree.eightysix.request.PostPraiseRequest;
 import com.utree.eightysix.response.FeedsResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
+import com.utree.eightysix.widget.EmotionOnRefreshListener;
+import com.utree.eightysix.widget.FontPortraitView;
+import com.utree.eightysix.widget.IRefreshable;
 import com.utree.eightysix.widget.LoadMoreCallback;
+import com.utree.eightysix.widget.RefresherView;
 import java.util.Iterator;
 
 /**
@@ -32,15 +36,19 @@ import java.util.Iterator;
  */
 class FeedFragment extends BaseFragment {
 
-  private FeedAdapter mFeedAdapter;
-  private Circle mCircle;
-
-  private Paginate.Page mPageInfo;
-
-  private boolean mRefreshed;
-
   @InjectView (R.id.lv_feed)
   public AdvancedListView mLvFeed;
+
+  @InjectView (R.id.refresh_view)
+  public RefresherView mRefresherView;
+
+  @InjectView (R.id.fpv_head)
+  public FontPortraitView mFontPortraitView;
+
+  private FeedAdapter mFeedAdapter;
+  private Circle mCircle;
+  private Paginate.Page mPageInfo;
+  private boolean mRefreshed;
 
   @OnItemClick (R.id.lv_feed)
   public void onLvFeedItemClicked(int position) {
@@ -83,6 +91,18 @@ class FeedFragment extends BaseFragment {
 
     U.getBus().register(mLvFeed);
 
+    mRefresherView.setOnRefreshListener(new EmotionOnRefreshListener(mFontPortraitView) {
+      @Override
+      public void onRefreshData() {
+      }
+
+      @Override
+      public void onPreRefresh() {
+        super.onPreRefresh();
+        mRefreshed = true;
+        requestFeeds(mCircle.id, 1);
+      }
+    });
   }
 
   @Override
@@ -143,60 +163,6 @@ class FeedFragment extends BaseFragment {
     requestFeeds(mCircle.id, 1);
   }
 
-  private void requestFeeds(int id, final int page) {
-    getBaseActivity().showProgressBar();
-
-    getBaseActivity().request(new FeedsRequest(id, page), new OnResponse<FeedsResponse>() {
-      @Override
-      public void onResponse(FeedsResponse response) {
-        if (response != null && response.code == 0 && response.object != null) {
-          if (page == 1) {
-            mCircle = response.object.circle;
-            U.getBus().post(mCircle);
-            mFeedAdapter = new FeedAdapter(response.object);
-            U.getBus().register(mFeedAdapter);
-            mLvFeed.setAdapter(mFeedAdapter);
-          } else if (mFeedAdapter != null) {
-            mFeedAdapter.add(response.object.posts.lists);
-          }
-          mPageInfo = response.object.posts.page;
-        } else {
-          mLvFeed.setAdapter(null);
-        }
-        mLvFeed.stopLoadMore();
-        getBaseActivity().hideProgressBar();
-      }
-    }, FeedsResponse.class);
-  }
-
-  private void cacheOutFeeds(final int id, final int page) {
-    getBaseActivity().showProgressBar();
-
-    getBaseActivity().cacheOut(new FeedsRequest(id, page), new OnResponse<FeedsResponse>() {
-      @Override
-      public void onResponse(FeedsResponse response) {
-        if (response != null && response.code == 0 && response.object != null) {
-          if (page == 1) {
-            mCircle = response.object.circle;
-            U.getBus().post(mCircle);
-            mFeedAdapter = new FeedAdapter(response.object);
-            U.getBus().register(mFeedAdapter);
-            mLvFeed.setAdapter(mFeedAdapter);
-          } else if (mFeedAdapter != null) {
-            mFeedAdapter.add(response.object.posts.lists);
-          }
-          mPageInfo = response.object.posts.page;
-
-          mLvFeed.stopLoadMore();
-          getBaseActivity().hideProgressBar();
-        } else {
-          requestFeeds(id, page);
-        }
-      }
-    }, FeedsResponse.class);
-  }
-
-
   @Subscribe
   public void onFeedPostPraiseEvent(final FeedPostPraiseEvent event) {
     if (event.isCancel()) {
@@ -236,6 +202,60 @@ class FeedFragment extends BaseFragment {
         break;
       }
     }
+  }
+
+  private void requestFeeds(int id, final int page) {
+    getBaseActivity().showProgressBar();
+
+    getBaseActivity().request(new FeedsRequest(id, page), new OnResponse<FeedsResponse>() {
+      @Override
+      public void onResponse(FeedsResponse response) {
+        if (response != null && response.code == 0 && response.object != null) {
+          if (page == 1) {
+            mCircle = response.object.circle;
+            U.getBus().post(mCircle);
+            mFeedAdapter = new FeedAdapter(response.object);
+            U.getBus().register(mFeedAdapter);
+            mLvFeed.setAdapter(mFeedAdapter);
+            mRefresherView.hideHeader();
+          } else if (mFeedAdapter != null) {
+            mFeedAdapter.add(response.object.posts.lists);
+          }
+          mPageInfo = response.object.posts.page;
+        } else {
+          mLvFeed.setAdapter(null);
+        }
+        mLvFeed.stopLoadMore();
+        getBaseActivity().hideProgressBar();
+      }
+    }, FeedsResponse.class);
+  }
+
+  private void cacheOutFeeds(final int id, final int page) {
+    getBaseActivity().showProgressBar();
+
+    getBaseActivity().cacheOut(new FeedsRequest(id, page), new OnResponse<FeedsResponse>() {
+      @Override
+      public void onResponse(FeedsResponse response) {
+        if (response != null && response.code == 0 && response.object != null) {
+          if (page == 1) {
+            mCircle = response.object.circle;
+            U.getBus().post(mCircle);
+            mFeedAdapter = new FeedAdapter(response.object);
+            U.getBus().register(mFeedAdapter);
+            mLvFeed.setAdapter(mFeedAdapter);
+          } else if (mFeedAdapter != null) {
+            mFeedAdapter.add(response.object.posts.lists);
+          }
+          mPageInfo = response.object.posts.page;
+
+          mLvFeed.stopLoadMore();
+          getBaseActivity().hideProgressBar();
+        } else {
+          requestFeeds(id, page);
+        }
+      }
+    }, FeedsResponse.class);
   }
 
 }

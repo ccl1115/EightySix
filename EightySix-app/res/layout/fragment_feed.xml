@@ -1,12 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<com.utree.eightysix.widget.AdvancedListView
+<com.utree.eightysix.widget.RefresherView
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
+        android:id="@+id/refresh_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/lv_feed"
-        android:dividerHeight="8dp"
-        android:smoothScrollbar="true"
         android:background="#ffd8dbdb"
-        android:listSelector="@drawable/transparent"/>
+        app:direction="top"
+        app:refresher_content="@+id/lv_feed"
+        app:refresher_head="@+id/fpv_head"
+        app:empty_view="@+id/tv_empty_text"
+        app:max_height="300dp"
+        app:threshold_height="150dp">
+
+
+    <com.utree.eightysix.widget.FontPortraitView
+            android:id="@+id/fpv_head"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="40sp"
+            android:layout_marginBottom="15dp"/>
+
+    <com.utree.eightysix.widget.AdvancedListView
+            android:id="@+id/lv_feed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:dividerHeight="8dp"
+            android:smoothScrollbar="true"
+            android:listSelector="@drawable/transparent"/>
+
+    <TextView
+            android:id="@+id/tv_empty_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+</com.utree.eightysix.widget.RefresherView>

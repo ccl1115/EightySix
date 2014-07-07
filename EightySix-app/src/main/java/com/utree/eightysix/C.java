@@ -24,6 +24,7 @@ public class C {
   public static final String API_FIND_PWD_2 = "/login/step2.do";
   public static final String API_FIND_PWD_3 = "/login/step3.do";
   public static final String API_LOGOUT = "/login/logout.do";
+  public static final String API_VALICODE_FIND_PWD = "/login/valiCode.do";
 
   public static final String API_FACTORY_MY = "/factory/my.do";
   public static final String API_FACTORY_FIND = "/factory/find.do";
@@ -31,6 +32,7 @@ public class C {
   public static final String API_FACTORY_ADD = "/factory/add.do";
   public static final String API_FACTORY_SET = "/factory/set.do";
   public static final String API_FACTORY_SIDE = "/factory/side.do";
+  public static final String API_VALICODE_CREATE_FACTORY = "/factory/valiCode.do";
 
   public static final String API_UPLOAD_CONTACTS = "/friend/upContacts.do";
 
@@ -46,9 +48,9 @@ public class C {
   public static final String API_COMMENT_PRAISE = "/comment/praise.do";
   public static final String API_COMMENT_PRAISE_CANCEL = "/comment/cancelPraise.do";
 
-  public static final String API_VALICODE_FIND_PWD = "/login/valiCode.do";
-
-  public static final String API_VALICODE_CREATE_FACTORY = "/factory/valiCode.do";
+  public static final String API_NOTIFICATION = "";
+  public static final String API_MSG_LIST = "";
+  public static final String API_PRAISE_LIST = "";
 
 
   public static String IMEI = "";
