@@ -22,7 +22,7 @@ public class MainSettingsActivity extends BaseActivity {
   @OnClick (R.id.rb_logout)
   public void onRbLogoutClicked() {
     AlertDialog dialog = new AlertDialog.Builder(this)
-        .setTitle("确认要注销账号么？")
+        .setTitle("确认要注销帐号么？")
         .setPositiveButton("注销", new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
