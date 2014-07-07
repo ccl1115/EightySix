@@ -11,4 +11,5 @@
     <color name="apptheme_primary_dark_color">#FFA2A2A2</color>
 
     <color name="apptheme_progress_bar_bg">#88000000</color>
+    <color name="apptheme_mandatory_mask_color">#cc000000</color>
 </resources>

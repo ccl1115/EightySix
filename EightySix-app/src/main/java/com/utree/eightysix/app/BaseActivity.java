@@ -1,6 +1,5 @@
 package com.utree.eightysix.app;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -18,6 +17,9 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
 import com.nineoldandroids.animation.Animator;
@@ -38,7 +40,6 @@ import com.utree.eightysix.rest.RequestData;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.TopBar;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -82,15 +83,207 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
 
   private boolean mResumed;
   private boolean mFillContent;
+  private boolean mMandatory;
+
   private Toast mInActivityToast;
 
-  @Override
   public void onClick(View v) {
-    switch (v.getId()) {
-      case R.id.tb_rl_left:
-        onActionLeftOnClicked();
-        break;
+
+  }
+
+  @InjectView(R.id.v_progress_mask)
+  public View mVMask;
+
+  @OnClick (R.id.tb_rl_left)
+  public void onRlLeftClicked() {
+    onActionLeftOnClicked();
+  }
+
+  @OnClick (R.id.v_progress_mask)
+  public void onVMaskClicked() {
+    if (!mMandatory) {
+      hideProgressMask();
     }
+  }
+
+  protected void showProgressMask(boolean mandatory) {
+    mMandatory = mandatory;
+
+    if (mVMask.getVisibility() == View.VISIBLE) return;
+
+    mVMask.setVisibility(View.VISIBLE);
+    ObjectAnimator animator = ObjectAnimator.ofFloat(mVMask, "alpha", 0f, 1f);
+    animator.setDuration(150);
+    animator.start();
+  }
+
+  protected void hideProgressMask() {
+    if (mVMask.getVisibility() == View.INVISIBLE) return;
+
+    ObjectAnimator animator = ObjectAnimator.ofFloat(mVMask, "alpha", 1f, 0f);
+    animator.setDuration(150);
+    animator.addListener(new Animator.AnimatorListener() {
+      @Override
+      public void onAnimationStart(Animator animation) {
+        onHideMaskStart();
+      }
+
+      @Override
+      public void onAnimationEnd(Animator animation) {
+        mVMask.setVisibility(View.INVISIBLE);
+        onHideMaskEnd();
+      }
+
+      @Override
+      public void onAnimationCancel(Animator animation) {
+
+      }
+
+      @Override
+      public void onAnimationRepeat(Animator animation) {
+
+      }
+    });
+    animator.start();
+  }
+
+  protected void onHideMaskStart() {
+
+  }
+
+  protected void onHideMaskEnd() {
+
+  }
+
+  @Override
+  public final void setContentView(int layoutResID) {
+    View content = mBaseView.findViewById(R.id.content);
+    if (content != null) {
+      mBaseView.removeView(content);
+    }
+    View inflate = View.inflate(this, layoutResID, null);
+    inflate.setId(R.id.content);
+    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.MATCH_PARENT);
+    params.topMargin = mFillContent ? 0 : getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
+
+    mBaseView.addView(inflate, 0, params);
+
+    U.viewBinding(inflate, this);
+
+    TopTitle topTitle = getClass().getAnnotation(TopTitle.class);
+
+    if (topTitle != null) {
+      setTopTitle(getString(topTitle.value()));
+    }
+  }
+
+  @Override
+  public final void setContentView(View contentView) {
+    View content = mBaseView.findViewById(R.id.content);
+    if (content != null) {
+      mBaseView.removeView(content);
+    }
+    contentView.setId(R.id.content);
+    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.MATCH_PARENT);
+    params.topMargin = mFillContent ? 0 : getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
+
+    mBaseView.addView(contentView, 0, params);
+
+    ButterKnife.inject(this, this);
+
+    TopTitle topTitle = getClass().getAnnotation(TopTitle.class);
+
+    if (topTitle != null) {
+      setTopTitle(getString(topTitle.value()));
+    }
+  }
+
+  @Override
+  public final void setContentView(View contentView, ViewGroup.LayoutParams layoutParams) {
+    View content = mBaseView.findViewById(R.id.content);
+    if (content != null) {
+      mBaseView.removeView(content);
+    }
+    contentView.setId(R.id.content);
+    mBaseView.addView(contentView, layoutParams);
+  }
+
+  @Override
+  public final void addContentView(View view, ViewGroup.LayoutParams params) {
+    throw new RuntimeException("Call setContentView.");
+  }
+
+  public final void showProgressBar() {
+    mProgressBar.setVisibility(View.VISIBLE);
+    if (mShowProgressBarAnimator == null) {
+      mShowProgressBarAnimator = new AnimatorSet();
+      mShowProgressBarAnimator.playTogether(
+          ObjectAnimator.ofFloat(mFlLoadingWrapper,
+              "translationY",
+              (getTranslationY(mFlLoadingWrapper) == 0) ?
+                  mFlLoadingWrapper.getMeasuredHeight() : getTranslationY(mFlLoadingWrapper),
+              0),
+          ObjectAnimator.ofFloat(mFlLoadingWrapper, "alpha", 0f, 1f)
+      );
+      mShowProgressBarAnimator.setDuration(500);
+    }
+    if (mHideProgressBarAnimator != null) mHideProgressBarAnimator.cancel();
+    mShowProgressBarAnimator.start();
+  }
+
+  public final void hideProgressBar() {
+    if (mHideProgressBarAnimator == null) {
+      mHideProgressBarAnimator = new AnimatorSet();
+      mHideProgressBarAnimator.playTogether(
+          ObjectAnimator.ofFloat(mFlLoadingWrapper,
+              "translationY",
+              getTranslationY(mFlLoadingWrapper),
+              mFlLoadingWrapper.getMeasuredHeight()),
+          ObjectAnimator.ofFloat(mFlLoadingWrapper, "alpha", 1f, 0f)
+      );
+      mHideProgressBarAnimator.setDuration(500);
+      mHideProgressBarAnimator.addListener(new Animator.AnimatorListener() {
+        @Override
+        public void onAnimationStart(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animation) {
+          mProgressBar.setVisibility(View.INVISIBLE);
+          ViewHelper.setTranslationY(mFlLoadingWrapper, 0);
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationRepeat(Animator animation) {
+
+        }
+      });
+    }
+    if (mShowProgressBarAnimator != null) mShowProgressBarAnimator.cancel();
+    mHideProgressBarAnimator.start();
+  }
+
+  public final <T extends Response> void request(Object request, OnResponse<T> onResponse, Class<T> clz) {
+    RequestData data = U.getRESTRequester().convert(request);
+
+    if (isRequesting(data.getApi(), data.getParams())) return;
+
+    RequestHandle handle = U.getRESTRequester().request(request, new HandlerWrapper<T>(data, onResponse, clz));
+    mRequestHandles.put(RESTRequester.genCacheKey(data.getApi(), data.getParams()), handle);
+  }
+
+  public final <T extends Response> void cacheOut(Object request, OnResponse<T> onResponse, Class<T> clz) {
+    RequestData data = U.getRESTRequester().convert(request);
+
+    new CacheOutWorker<T>(RESTRequester.genCacheKey(data.getApi(), data.getParams()), onResponse, clz).execute();
   }
 
   protected boolean isFillContent() {
@@ -163,6 +356,7 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
     super.onCreate(savedInstanceState);
 
     mBaseView = (ViewGroup) View.inflate(this, R.layout.activity_base, null);
+
     super.setContentView(mBaseView);
 
     mTopBar = (TopBar) mBaseView.findViewById(R.id.top_bar);
@@ -216,26 +410,6 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
   }
 
   @Override
-  protected void onResume() {
-    super.onResume();
-    U.getAnalyser().onResume(this);
-    //if (mResumed) {
-    //  overridePendingTransition(R.anim.activity_exit_in, R.anim.activity_exit_out);
-    //} else {
-    //  overridePendingTransition(R.anim.activity_enter_in, R.anim.activity_enter_out);
-    //}
-    mResumed = true;
-
-    if (mInActivityToast != null) mInActivityToast.cancel();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    U.getAnalyser().onPause(this);
-  }
-
-  @Override
   protected void onDestroy() {
     cancelAll();
 
@@ -248,63 +422,23 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
   }
 
   @Override
-  public final void setContentView(int layoutResID) {
-    View content = mBaseView.findViewById(R.id.content);
-    if (content != null) {
-      mBaseView.removeView(content);
-    }
-    View inflate = View.inflate(this, layoutResID, null);
-    inflate.setId(R.id.content);
-    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-        ViewGroup.LayoutParams.MATCH_PARENT);
-    params.topMargin = mFillContent ? 0 : getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
-
-    mBaseView.addView(inflate, 0, params);
-
-    U.viewBinding(inflate, this);
-
-    TopTitle topTitle = getClass().getAnnotation(TopTitle.class);
-
-    if (topTitle != null) {
-      setTopTitle(getString(topTitle.value()));
-    }
+  protected void onPause() {
+    super.onPause();
+    U.getAnalyser().onPause(this);
   }
 
   @Override
-  public final void setContentView(View contentView) {
-    View content = mBaseView.findViewById(R.id.content);
-    if (content != null) {
-      mBaseView.removeView(content);
-    }
-    contentView.setId(R.id.content);
-    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-        ViewGroup.LayoutParams.MATCH_PARENT);
-    params.topMargin = mFillContent ? 0 : getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
+  protected void onResume() {
+    super.onResume();
+    U.getAnalyser().onResume(this);
+    //if (mResumed) {
+    //  overridePendingTransition(R.anim.activity_exit_in, R.anim.activity_exit_out);
+    //} else {
+    //  overridePendingTransition(R.anim.activity_enter_in, R.anim.activity_enter_out);
+    //}
+    mResumed = true;
 
-    mBaseView.addView(contentView, 0, params);
-
-    U.viewBinding(contentView, this);
-
-    TopTitle topTitle = getClass().getAnnotation(TopTitle.class);
-
-    if (topTitle != null) {
-      setTopTitle(getString(topTitle.value()));
-    }
-  }
-
-  @Override
-  public final void setContentView(View contentView, ViewGroup.LayoutParams layoutParams) {
-    View content = mBaseView.findViewById(R.id.content);
-    if (content != null) {
-      mBaseView.removeView(content);
-    }
-    contentView.setId(R.id.content);
-    mBaseView.addView(contentView, layoutParams);
-  }
-
-  @Override
-  public final void addContentView(View view, ViewGroup.LayoutParams params) {
-    throw new RuntimeException("Call setContentView.");
+    if (mInActivityToast != null) mInActivityToast.cancel();
   }
 
   protected final void hideTopBar(boolean animate) {
@@ -352,79 +486,8 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
     mTopBar.setSubTitle(title);
   }
 
-  public final void showProgressBar() {
-    mProgressBar.setVisibility(View.VISIBLE);
-    if (mShowProgressBarAnimator == null) {
-      mShowProgressBarAnimator = new AnimatorSet();
-      mShowProgressBarAnimator.playTogether(
-          ObjectAnimator.ofFloat(mFlLoadingWrapper,
-              "translationY",
-              (getTranslationY(mFlLoadingWrapper) == 0) ?
-                  mFlLoadingWrapper.getMeasuredHeight() : getTranslationY(mFlLoadingWrapper),
-              0),
-          ObjectAnimator.ofFloat(mFlLoadingWrapper, "alpha", 0f, 1f)
-      );
-      mShowProgressBarAnimator.setDuration(500);
-    }
-    if (mHideProgressBarAnimator != null) mHideProgressBarAnimator.cancel();
-    mShowProgressBarAnimator.start();
-  }
-
-  public final void hideProgressBar() {
-    if (mHideProgressBarAnimator == null) {
-      mHideProgressBarAnimator = new AnimatorSet();
-      mHideProgressBarAnimator.playTogether(
-          ObjectAnimator.ofFloat(mFlLoadingWrapper,
-              "translationY",
-              getTranslationY(mFlLoadingWrapper),
-              mFlLoadingWrapper.getMeasuredHeight()),
-          ObjectAnimator.ofFloat(mFlLoadingWrapper, "alpha", 1f, 0f)
-      );
-      mHideProgressBarAnimator.setDuration(500);
-      mHideProgressBarAnimator.addListener(new Animator.AnimatorListener() {
-        @Override
-        public void onAnimationStart(Animator animation) {
-
-        }
-
-        @Override
-        public void onAnimationEnd(Animator animation) {
-          mProgressBar.setVisibility(View.INVISIBLE);
-          ViewHelper.setTranslationY(mFlLoadingWrapper, 0);
-        }
-
-        @Override
-        public void onAnimationCancel(Animator animation) {
-
-        }
-
-        @Override
-        public void onAnimationRepeat(Animator animation) {
-
-        }
-      });
-    }
-    if (mShowProgressBarAnimator != null) mShowProgressBarAnimator.cancel();
-    mHideProgressBarAnimator.start();
-  }
-
   protected final TopBar getTopBar() {
     return mTopBar;
-  }
-
-  public final <T extends Response> void request(Object request, OnResponse<T> onResponse, Class<T> clz) {
-    RequestData data = U.getRESTRequester().convert(request);
-
-    if (isRequesting(data.getApi(), data.getParams())) return;
-
-    RequestHandle handle = U.getRESTRequester().request(request, new HandlerWrapper<T>(data, onResponse, clz));
-    mRequestHandles.put(RESTRequester.genCacheKey(data.getApi(), data.getParams()), handle);
-  }
-
-  public final <T extends Response> void cacheOut(Object request, OnResponse<T> onResponse, Class<T> clz) {
-    RequestData data = U.getRESTRequester().convert(request);
-
-    new CacheOutWorker<T>(RESTRequester.genCacheKey(data.getApi(), data.getParams()), onResponse, clz).execute();
   }
 
   protected final void cacheIn(Object request, InputStream is) {
