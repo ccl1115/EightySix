@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">蓝莓</string>
+    <string name="app_name">蓝莓圈</string>
     <string name="app_url"><a href="http://1886.me">1886.me</a></string>
 
     <!-- AndroidLockPattern -->
@@ -12,7 +12,7 @@
 
     <!-- General -->
     <string name="phone_number">手机号码</string>
-    <string name="account">账号</string>
+    <string name="account">帐号</string>
     <string name="password">密码</string>
     <string name="okay">确定</string>
     <string name="quit">放弃</string>
@@ -31,7 +31,7 @@
     <string name="share">分享</string>
     <string name="fixture">假数据</string>
     <string name="login">登录</string>
-    <string name="logout">登出</string>
+    <string name="logout">退出</string>
 
     <string name="server_error">服务器错误</string>
     <string name="server_object_error">服务器返回对象解析错误</string>
@@ -52,10 +52,10 @@
 
 
     <!-- IntroActivity -->
-    <string name="intro_1">劳动者自己的匿名工友圈</string>
+    <string name="intro_1">打工之路有酸有甜</string>
     <string name="intro_2">介绍人发给你的手势密码</string>
     <string name="get_pattern">获取手势密码</string>
-    <string name="other_login">其他账号登录</string>
+    <string name="other_login">其他帐号登录</string>
     <string name="wrong_pattern">解锁手势输入错误</string>
 
 
