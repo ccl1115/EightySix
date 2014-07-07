@@ -109,7 +109,7 @@ public class CircleSearchActivity extends BaseActivity {
         return;
       }
     }
-    mSearchHistory.add(keyword);
+    mSearchHistory.add(0, keyword);
     Account.inst().setSearchHistory(mSearchHistory);
     updateHistoryData();
     //endregion
