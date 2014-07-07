@@ -213,6 +213,7 @@ public class LoginActivity extends BaseActivity {
           }
         }
         mBtnLogin.setEnabled(true);
+        mEtCaptcha.setText("");
         hideProgressBar();
       }
     };

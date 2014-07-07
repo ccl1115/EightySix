@@ -189,7 +189,11 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
           showToast(getString(R.string.success_created), false);
           finish();
         }
+        mEtCaptcha.setText("");
+        mRbCreate.setEnabled(true);
       }
     }, Response.class);
+
+    mRbCreate.setEnabled(false);
   }
 }
