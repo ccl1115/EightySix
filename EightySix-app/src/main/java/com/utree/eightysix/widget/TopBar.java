@@ -347,10 +347,10 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
   @Override
   protected void dispatchDraw(Canvas canvas) {
-    super.dispatchDraw(canvas);
-
     // draw top line
     canvas.drawLine(0, 0, getMeasuredWidth(), 0, mTopLinePaint);
     canvas.drawLine(0, getMeasuredHeight() - 1, getMeasuredWidth(), getMeasuredHeight() - 1, mBotLinePaint);
+
+    super.dispatchDraw(canvas);
   }
 }
