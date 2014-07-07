@@ -27,6 +27,5 @@
             android:layout_gravity="center_horizontal"
             android:selectAllOnFocus="true"
             android:imeOptions="actionGo"
-            android:imeActionLabel="@string/login"
-            />
+            android:imeActionLabel="@string/login"/>
 </LinearLayout>
