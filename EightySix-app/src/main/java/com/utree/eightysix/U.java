@@ -24,7 +24,6 @@ import com.utree.eightysix.statistics.MtaAnalyserImpl;
 import com.utree.eightysix.storage.Storage;
 import com.utree.eightysix.storage.oss.OSSImpl;
 import com.utree.eightysix.utils.CacheUtils;
-import com.utree.eightysix.rest.EventRequester;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -59,6 +58,8 @@ public class U {
   private static Fixture sFixture;
 
   private static EventRequester sEventRequester;
+
+  private static Toast sToast;
 
   static {
     sEventRequester = new EventRequester();
@@ -274,7 +275,11 @@ public class U {
    * @param string the string to show
    */
   public static void showToast(String string) {
-    Toast.makeText(getContext(), string, Toast.LENGTH_SHORT).show();
+    if (sToast != null) {
+      sToast.cancel();
+    }
+    sToast = Toast.makeText(getContext(), string, Toast.LENGTH_SHORT);
+    sToast.show();
   }
 
   public static boolean useFixture() {
