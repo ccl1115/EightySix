@@ -232,7 +232,7 @@ public class U {
     final long now = new Date().getTime();
     final long t = now - timestamp;
     if (t < 0) {
-      return "未来";
+      return "刚刚";
     } else if (t < MINUTE_IN_MS) {
       return (t / SECOND_IN_MS) + "秒前";
     } else if (t < HOUR_IN_MS) {
