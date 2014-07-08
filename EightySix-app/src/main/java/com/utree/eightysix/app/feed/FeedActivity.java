@@ -40,6 +40,7 @@ import com.utree.eightysix.app.settings.MainSettingsActivity;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
+import com.utree.eightysix.request.CircleSideRequest;
 import com.utree.eightysix.request.MyCirclesRequest;
 import com.utree.eightysix.response.CirclesResponse;
 import com.utree.eightysix.rest.OnResponse;
@@ -469,7 +470,7 @@ public class FeedActivity extends BaseActivity {
   }
 
   private void cacheOutSideCircle() {
-    cacheOut(new MyCirclesRequest("", 1), new OnResponse<CirclesResponse>() {
+    cacheOut(new CircleSideRequest("", 1), new OnResponse<CirclesResponse>() {
       @Override
       public void onResponse(CirclesResponse response) {
         if (response != null && response.code == 0 && response.object != null) {
@@ -488,10 +489,12 @@ public class FeedActivity extends BaseActivity {
         }
       }
     }, CirclesResponse.class);
+
+    showProgressBar();
   }
 
   private void requestSideCircle() {
-    request(new MyCirclesRequest("", 1), new OnResponse<CirclesResponse>() {
+    request(new CircleSideRequest("", 1), new OnResponse<CirclesResponse>() {
 
       @Override
       public void onResponse(CirclesResponse response) {

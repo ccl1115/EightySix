@@ -312,7 +312,13 @@ public class PublishActivity extends BaseActivity {
     });
 
     List<Item> itemsByPage = mGpColor.getItemsByPage(0);
-    U.getBus().post(itemsByPage.get(new Random().nextInt(itemsByPage.size())));
+    Item item = itemsByPage.get(new Random().nextInt(itemsByPage.size()));
+    int color = item.getValues().get(0).data;
+    mPostEditText.setTextColor(Utils.monochromizing(color));
+    mTvPostTip.setTextColor(Utils.monochromizing(color));
+    mIvPostBg.setImageDrawable(null);
+    mIvPostBg.setBackgroundColor(color);
+    mBgColor = color;
   }
 
   @Override
