@@ -18,8 +18,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnClick;
 import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
 import com.nineoldandroids.animation.Animator;
@@ -65,16 +63,12 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
       BaseActivity.this.onHandleMessage(msg);
     }
   };
-
-
+  public View mVProgressMask;
   private Map<String, RequestHandle> mRequestHandles = new HashMap<String, RequestHandle>();
-
   private FrameLayout mProgressBar;
   private FrameLayout mFlLoadingWrapper;
   private ViewGroup mBaseView;
   private TopBar mTopBar;
-  public View mVProgressMask;
-
   private ObjectAnimator mHideTopBarAnimator;
   private ObjectAnimator mShowTopBarAnimator;
   private AnimatorSet mShowProgressBarAnimator;
@@ -85,7 +79,6 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
 
   private boolean mResumed;
   private boolean mFillContent;
-  private boolean mMandatory;
 
   public void onClick(View v) {
     final int id = v.getId();
@@ -93,11 +86,6 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
       case R.id.tb_rl_left:
         onActionLeftOnClicked();
         break;
-      case R.id.v_progress_mask:
-        if (!mMandatory) {
-          hideProgressMask();
-          hideProgressBar();
-        }
     }
   }
 
@@ -205,6 +193,8 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
     }
     if (mShowProgressBarAnimator != null) mShowProgressBarAnimator.cancel();
     mHideProgressBarAnimator.start();
+
+    hideProgressMask();
   }
 
   public final <T extends Response> void request(Object request, OnResponse<T> onResponse, Class<T> clz) {
@@ -222,8 +212,7 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
     new CacheOutWorker<T>(RESTRequester.genCacheKey(data.getApi(), data.getParams()), onResponse, clz).execute();
   }
 
-  protected void showProgressMask(boolean mandatory) {
-    mMandatory = mandatory;
+  protected void showProgressMask() {
 
     if (mVProgressMask.getVisibility() == View.VISIBLE) return;
 
@@ -261,6 +250,13 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
       }
     });
     animator.start();
+  }
+
+  protected final void showProgressBar(boolean mandatory) {
+    showProgressBar();
+    if (mandatory) {
+      showProgressMask();
+    }
   }
 
   protected void onHideMaskStart() {
