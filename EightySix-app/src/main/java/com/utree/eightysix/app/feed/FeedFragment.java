@@ -29,7 +29,6 @@ import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.EmotionOnRefreshListener;
 import com.utree.eightysix.widget.FontPortraitView;
-import com.utree.eightysix.widget.IRefreshable;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RefresherView;
 import java.util.Iterator;
@@ -65,7 +64,7 @@ class FeedFragment extends BaseFragment {
     rect.top = xy[1];
     rect.right = rect.left + target.getMeasuredWidth();
     rect.bottom = rect.top + target.getMeasuredHeight();
-    PostActivity.start(getActivity(), mCircle.id, (Post) item, rect);
+    PostActivity.start(getActivity(), (Post) item, rect);
   }
 
   @Override

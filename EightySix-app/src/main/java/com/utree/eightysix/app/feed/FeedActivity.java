@@ -33,6 +33,7 @@ import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
 import com.utree.eightysix.app.msg.MsgActivity;
+import com.utree.eightysix.app.msg.PraiseActivity;
 import com.utree.eightysix.app.publish.FeedbackActivity;
 import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
@@ -565,7 +566,7 @@ public class FeedActivity extends BaseActivity {
 
     @OnClick (R.id.ll_praise_count)
     void onLlPraiseCountClicked() {
-      startActivity(new Intent(FeedActivity.this, PraiseStaticActivity.class));
+      startActivity(new Intent(FeedActivity.this, PraiseActivity.class));
       mPopupMenu.dismiss();
     }
 

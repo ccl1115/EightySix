@@ -48,9 +48,9 @@ public class C {
   public static final String API_COMMENT_PRAISE = "/comment/praise.do";
   public static final String API_COMMENT_PRAISE_CANCEL = "/comment/cancelPraise.do";
 
-  public static final String API_NOTIFICATION = "";
-  public static final String API_MSG_LIST = "";
-  public static final String API_PRAISE_LIST = "";
+  public static final String API_NOTIFICATION = "/notice/notice.do";
+  public static final String API_MSG_LIST = "/remind/list.do";
+  public static final String API_PRAISE_LIST = "/remind/praiseList.do";
 
 
   public static String IMEI = "";

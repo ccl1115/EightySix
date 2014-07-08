@@ -70,18 +70,16 @@ public class PostActivity extends BaseActivity {
   private PostCommentsAdapter mPostCommentsAdapter;
   private boolean mResumed;
 
-  public static void start(Context context, int factoryId, Post post, Rect rect) {
+  public static void start(Context context, Post post, Rect rect) {
     Intent intent = new Intent(context, PostActivity.class);
     intent.putExtra("post", post);
-    intent.putExtra("factoryId", factoryId);
     intent.putExtra("rect", rect);
     context.startActivity(intent);
   }
 
-  public static void start(Context context, int factoryId, String postId) {
+  public static void start(Context context, String postId) {
     Intent intent = new Intent(context, PostActivity.class);
     intent.putExtra("id", postId);
-    intent.putExtra("factoryId", factoryId);
     context.startActivity(intent);
   }
 
@@ -167,10 +165,9 @@ public class PostActivity extends BaseActivity {
     U.getBus().register(mLvComments);
 
     if (!mResumed) {
-      overridePendingTransition(0, 0);
       Rect rect = getIntent().getParcelableExtra("rect");
-
       if (rect != null) {
+        overridePendingTransition(0, 0);
         final int screenWidth = getResources().getDisplayMetrics().widthPixels;
         mLvComments.setVisibility(View.INVISIBLE);
         final PostPostView tmp = (PostPostView) mPostCommentsAdapter.getView(0, null, mLvComments);
@@ -213,6 +210,12 @@ public class PostActivity extends BaseActivity {
           }
         });
         set.start();
+      } else {
+        if (mPost != null) {
+          cacheOutComments(mPost.id, 1);
+        } else {
+          cacheOutComments(getIntent().getStringExtra("id"), 1);
+        }
       }
     }
     mResumed = true;

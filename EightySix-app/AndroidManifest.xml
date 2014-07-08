@@ -204,6 +204,7 @@
                 android:name=".app.settings.UpgradeActivity"
                 android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
                 android:exported="@bool/exported"/>
+        <activity android:name=".app.msg.PraiseActivity"/>
 
         <service
                 android:name="com.baidu.location.f"
@@ -258,6 +259,7 @@
             </intent-filter>
         </service>
         <service android:name=".app.SyncService"/>
+        <service android:name=".app.msg.PullNotificationService"/>
         <!-- push结束 -->
 
     </application>

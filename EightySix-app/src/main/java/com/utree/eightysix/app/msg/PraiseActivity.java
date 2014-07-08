@@ -13,16 +13,16 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.data.Paginate;
+import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.MsgsRequest;
+import com.utree.eightysix.request.PraisesRequest;
 import com.utree.eightysix.response.FeedsResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.widget.EmotionOnRefreshListener;
-import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.TopTitle;
-import com.utree.eightysix.data.Post;
 import com.utree.eightysix.widget.AdvancedListView;
+import com.utree.eightysix.widget.EmotionOnRefreshListener;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RefresherView;
 import java.util.List;
@@ -32,8 +32,7 @@ import java.util.Random;
  * @author simon
  */
 @Layout (R.layout.activity_msg)
-@TopTitle (R.string.messages)
-public class MsgActivity extends BaseActivity {
+public class PraiseActivity extends BaseActivity {
 
   private static final int MSG_ANIMATE = 0x1;
   @InjectView (R.id.refresh_view)
@@ -72,17 +71,17 @@ public class MsgActivity extends BaseActivity {
               mTvNoNewMsg.setVisibility(View.INVISIBLE);
             }
           }
-          mAlvMsg.setAdapter(new MsgAdapter<CommentMsgItemView>(valid) {
+          mAlvMsg.setAdapter(new MsgAdapter<PraiseMsgItemView>(valid) {
             @Override
-            protected CommentMsgItemView newView(Context context) {
-              return new CommentMsgItemView(context);
+            protected PraiseMsgItemView newView(Context context) {
+              return new PraiseMsgItemView(context);
             }
           });
           hideProgressBar();
         }
       }, 1000);
     } else {
-      cacheOutMsg(1);
+      cacheOutPraises(1);
     }
 
     mAlvMsg.setLoadMoreCallback(new LoadMoreCallback() {
@@ -99,9 +98,9 @@ public class MsgActivity extends BaseActivity {
       @Override
       public boolean onLoadMoreStart() {
         if (mRefreshed) {
-          requestMsgs(mPageInfo.currPage + 1);
+          requestPraises(mPageInfo.currPage + 1);
         } else {
-          cacheOutMsg(mPageInfo.currPage + 1);
+          cacheOutPraises(mPageInfo.currPage + 1);
         }
         return true;
       }
@@ -111,7 +110,7 @@ public class MsgActivity extends BaseActivity {
       @Override
       public void onPreRefresh() {
         mRefreshed = true;
-        requestMsgs(1);
+        requestPraises(1);
       }
 
       @Override
@@ -143,16 +142,16 @@ public class MsgActivity extends BaseActivity {
     finish();
   }
 
-  private void requestMsgs(final int page) {
-    request(new MsgsRequest(page), new OnResponse<FeedsResponse>() {
+  private void requestPraises(final int page) {
+    request(new PraisesRequest(page), new OnResponse<FeedsResponse>() {
       @Override
       public void onResponse(FeedsResponse response) {
         if (RESTRequester.responseOk(response)) {
           if (page == 1) {
-            mMsgAdapter = new MsgAdapter<CommentMsgItemView>(response.object.posts.lists) {
+            mMsgAdapter = new MsgAdapter<PraiseMsgItemView>(response.object.posts.lists) {
               @Override
-              protected CommentMsgItemView newView(Context context) {
-                return new CommentMsgItemView(context);
+              protected PraiseMsgItemView newView(Context context) {
+                return new PraiseMsgItemView(context);
               }
             };
             mAlvMsg.setAdapter(mMsgAdapter);
@@ -170,16 +169,16 @@ public class MsgActivity extends BaseActivity {
     showProgressBar();
   }
 
-  private void cacheOutMsg(final int page) {
-    cacheOut(new MsgsRequest(page), new OnResponse<FeedsResponse>() {
+  private void cacheOutPraises(final int page) {
+    cacheOut(new PraisesRequest(page), new OnResponse<FeedsResponse>() {
       @Override
       public void onResponse(FeedsResponse response) {
         if (RESTRequester.responseOk(response)) {
           if (page == 1) {
-            mMsgAdapter = new MsgAdapter<CommentMsgItemView>(response.object.posts.lists) {
+            mMsgAdapter = new MsgAdapter<PraiseMsgItemView>(response.object.posts.lists) {
               @Override
-              protected CommentMsgItemView newView(Context context) {
-                return new CommentMsgItemView(context);
+              protected PraiseMsgItemView newView(Context context) {
+                return new PraiseMsgItemView(context);
               }
             };
             mAlvMsg.setAdapter(mMsgAdapter);
@@ -191,7 +190,7 @@ public class MsgActivity extends BaseActivity {
           mAlvMsg.stopLoadMore();
           mRvMsg.hideHeader();
         } else {
-          requestMsgs(page);
+          requestPraises(page);
         }
       }
     }, FeedsResponse.class);
