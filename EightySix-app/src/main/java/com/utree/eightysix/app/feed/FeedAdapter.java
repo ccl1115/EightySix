@@ -159,9 +159,9 @@ class FeedAdapter extends BaseAdapter {
       AnimatorSet set = new AnimatorSet();
       set.playTogether(
           ObjectAnimator.ofFloat(convertView, "translationY", U.dp2px(350), 0),
-          ObjectAnimator.ofFloat(convertView, "rotationX", 15, 0)
+          ObjectAnimator.ofFloat(convertView, "rotationX", 5, 0)
       );
-      set.setDuration(500);
+      set.setDuration(300);
       set.start();
       mAnimated.put(position, true);
     } else {

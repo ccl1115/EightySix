@@ -66,93 +66,39 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
     }
   };
 
+
   private Map<String, RequestHandle> mRequestHandles = new HashMap<String, RequestHandle>();
 
+  private FrameLayout mProgressBar;
+  private FrameLayout mFlLoadingWrapper;
   private ViewGroup mBaseView;
   private TopBar mTopBar;
+  public View mVProgressMask;
 
   private ObjectAnimator mHideTopBarAnimator;
   private ObjectAnimator mShowTopBarAnimator;
   private AnimatorSet mShowProgressBarAnimator;
   private AnimatorSet mHideProgressBarAnimator;
 
-  private FrameLayout mProgressBar;
-  private FrameLayout mFlLoadingWrapper;
-
   private Toast mToast;
+  private Toast mInActivityToast;
 
   private boolean mResumed;
   private boolean mFillContent;
   private boolean mMandatory;
 
-  private Toast mInActivityToast;
-
   public void onClick(View v) {
-
-  }
-
-  @InjectView(R.id.v_progress_mask)
-  public View mVMask;
-
-  @OnClick (R.id.tb_rl_left)
-  public void onRlLeftClicked() {
-    onActionLeftOnClicked();
-  }
-
-  @OnClick (R.id.v_progress_mask)
-  public void onVMaskClicked() {
-    if (!mMandatory) {
-      hideProgressMask();
+    final int id = v.getId();
+    switch (id) {
+      case R.id.tb_rl_left:
+        onActionLeftOnClicked();
+        break;
+      case R.id.v_progress_mask:
+        if (!mMandatory) {
+          hideProgressMask();
+          hideProgressBar();
+        }
     }
-  }
-
-  protected void showProgressMask(boolean mandatory) {
-    mMandatory = mandatory;
-
-    if (mVMask.getVisibility() == View.VISIBLE) return;
-
-    mVMask.setVisibility(View.VISIBLE);
-    ObjectAnimator animator = ObjectAnimator.ofFloat(mVMask, "alpha", 0f, 1f);
-    animator.setDuration(150);
-    animator.start();
-  }
-
-  protected void hideProgressMask() {
-    if (mVMask.getVisibility() == View.INVISIBLE) return;
-
-    ObjectAnimator animator = ObjectAnimator.ofFloat(mVMask, "alpha", 1f, 0f);
-    animator.setDuration(150);
-    animator.addListener(new Animator.AnimatorListener() {
-      @Override
-      public void onAnimationStart(Animator animation) {
-        onHideMaskStart();
-      }
-
-      @Override
-      public void onAnimationEnd(Animator animation) {
-        mVMask.setVisibility(View.INVISIBLE);
-        onHideMaskEnd();
-      }
-
-      @Override
-      public void onAnimationCancel(Animator animation) {
-
-      }
-
-      @Override
-      public void onAnimationRepeat(Animator animation) {
-
-      }
-    });
-    animator.start();
-  }
-
-  protected void onHideMaskStart() {
-
-  }
-
-  protected void onHideMaskEnd() {
-
   }
 
   @Override
@@ -169,7 +115,7 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
 
     mBaseView.addView(inflate, 0, params);
 
-    U.viewBinding(inflate, this);
+    ButterKnife.inject(this, this);
 
     TopTitle topTitle = getClass().getAnnotation(TopTitle.class);
 
@@ -198,16 +144,6 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
     if (topTitle != null) {
       setTopTitle(getString(topTitle.value()));
     }
-  }
-
-  @Override
-  public final void setContentView(View contentView, ViewGroup.LayoutParams layoutParams) {
-    View content = mBaseView.findViewById(R.id.content);
-    if (content != null) {
-      mBaseView.removeView(content);
-    }
-    contentView.setId(R.id.content);
-    mBaseView.addView(contentView, layoutParams);
   }
 
   @Override
@@ -286,6 +222,55 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
     new CacheOutWorker<T>(RESTRequester.genCacheKey(data.getApi(), data.getParams()), onResponse, clz).execute();
   }
 
+  protected void showProgressMask(boolean mandatory) {
+    mMandatory = mandatory;
+
+    if (mVProgressMask.getVisibility() == View.VISIBLE) return;
+
+    mVProgressMask.setVisibility(View.VISIBLE);
+    ObjectAnimator animator = ObjectAnimator.ofFloat(mVProgressMask, "alpha", 0f, 1f);
+    animator.setDuration(150);
+    animator.start();
+  }
+
+  protected void hideProgressMask() {
+    if (mVProgressMask.getVisibility() == View.INVISIBLE) return;
+
+    ObjectAnimator animator = ObjectAnimator.ofFloat(mVProgressMask, "alpha", 1f, 0f);
+    animator.setDuration(150);
+    animator.addListener(new Animator.AnimatorListener() {
+      @Override
+      public void onAnimationStart(Animator animation) {
+        onHideMaskStart();
+      }
+
+      @Override
+      public void onAnimationEnd(Animator animation) {
+        mVProgressMask.setVisibility(View.INVISIBLE);
+        onHideMaskEnd();
+      }
+
+      @Override
+      public void onAnimationCancel(Animator animation) {
+
+      }
+
+      @Override
+      public void onAnimationRepeat(Animator animation) {
+
+      }
+    });
+    animator.start();
+  }
+
+  protected void onHideMaskStart() {
+
+  }
+
+  protected void onHideMaskEnd() {
+
+  }
+
   protected boolean isFillContent() {
     return mFillContent;
   }
@@ -361,8 +346,13 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
 
     mTopBar = (TopBar) mBaseView.findViewById(R.id.top_bar);
 
+
     mProgressBar = (FrameLayout) mBaseView.findViewById(R.id.progress_bar);
+    mVProgressMask = mBaseView.findViewById(R.id.v_progress_mask);
     mFlLoadingWrapper = (FrameLayout) mBaseView.findViewById(R.id.fl_loading_wrapper);
+
+    mTopBar.setOnActionLeftClickListener(this);
+    mVProgressMask.setOnClickListener(this);
 
     mFlLoadingWrapper.setBackgroundDrawable(
         new RoundRectDrawable(dp2px(15), getResources().getColor(R.color.apptheme_progress_bar_bg)));
@@ -401,8 +391,6 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
 
       }
     });
-
-    mTopBar.setOnActionLeftClickListener(this);
 
     initAnimator();
 

@@ -57,14 +57,7 @@ public class U {
   private static Properties sConfiguration;
   private static Fixture sFixture;
 
-  private static EventRequester sEventRequester;
-
   private static Toast sToast;
-
-  static {
-    sEventRequester = new EventRequester();
-    getBus().register(sEventRequester);
-  }
 
   public static Gson getGson() {
     return sGson;
