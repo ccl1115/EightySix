@@ -45,9 +45,13 @@ public class CacheUtils {
   }
 
   private File getOrCreateCacheDir(String key) {
-    final String path;
+    String path;
     if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-      path = U.getContext().getExternalFilesDir(null).getAbsolutePath() + File.separator + key;
+      try {
+        path = U.getContext().getExternalFilesDir(null).getAbsolutePath() + File.separator + key;
+      } catch (Exception e) {
+        path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + U.getContext().getPackageName() + File.separator + key;
+      }
     } else {
       path = U.getContext().getFilesDir().getAbsolutePath() + File.separator + key;
     }
