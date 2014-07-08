@@ -85,7 +85,7 @@ class LoadMoreAdapterWrapper extends BaseAdapter {
 
   @Override
   public int getViewTypeCount() {
-    return (hasMore() ? 1 : 0) + mListAdapter.getViewTypeCount();
+    return 1 + mListAdapter.getViewTypeCount();
   }
 
   public void stopLoadMore() {
