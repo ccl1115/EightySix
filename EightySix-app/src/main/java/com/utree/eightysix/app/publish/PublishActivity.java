@@ -265,7 +265,7 @@ public class PublishActivity extends BaseActivity {
     getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
       @Override
       public String getTitle(int position) {
-        return getString(R.string.publish);
+        return getString(R.string.publish_post);
       }
 
       @Override
