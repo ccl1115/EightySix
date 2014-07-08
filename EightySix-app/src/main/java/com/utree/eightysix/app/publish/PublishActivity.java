@@ -29,6 +29,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.ArgbEvaluator;
+import com.nineoldandroids.animation.ValueAnimator;
+import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
@@ -46,8 +50,11 @@ import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.utils.Utils;
 import com.utree.eightysix.widget.PostEditText;
 import com.utree.eightysix.widget.TopBar;
+import com.utree.eightysix.widget.panel.GridPanel;
 import com.utree.eightysix.widget.panel.Item;
 import java.io.File;
+import java.util.List;
+import java.util.Random;
 
 /**
  */
@@ -75,6 +82,9 @@ public class PublishActivity extends BaseActivity {
   @InjectView (R.id.ll_bottom)
   public LinearLayout mLlBottom;
 
+  @InjectView (R.id.gp_color)
+  public GridPanel mGpColor;
+
   protected PublishLayout mPublishLayout;
 
   private Dialog mCameraDialog;
@@ -84,7 +94,6 @@ public class PublishActivity extends BaseActivity {
   private File mOutputFile;
 
   private boolean mIsOpened;
-  private boolean mToastShown;
   private boolean mRequestStarted;
   private boolean mImageUploadFinished;
   private boolean mUseColor = true;
@@ -301,6 +310,9 @@ public class PublishActivity extends BaseActivity {
             ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
       }
     });
+
+    List<Item> itemsByPage = mGpColor.getItemsByPage(0);
+    U.getBus().post(itemsByPage.get(new Random().nextInt(itemsByPage.size())));
   }
 
   @Override
@@ -321,9 +333,58 @@ public class PublishActivity extends BaseActivity {
     finish();
   }
 
-  @Override
-  public void onBackPressed() {
-    confirmFinish();
+  @Subscribe
+  public void onImageUploaded(ImageUtils.ImageUploadedEvent event) {
+    if (event.getHash().equals(mFileHash)) {
+      mImageUploadFinished = true;
+      mImageUploadUrl = event.getUrl();
+    }
+
+    if (mRequestStarted) {
+      requestPost();
+    }
+  }
+
+  @Subscribe
+  public void onGridPanelItemClicked(Item item) {
+    for (final TypedValue tv : item.getValues()) {
+      if (tv.type == TypedValue.TYPE_INT_COLOR_ARGB8) {
+        ValueAnimator.clearAllAnimations();
+        ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), mBgColor, tv.data);
+        animator.setDuration(500);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+          @Override
+          public void onAnimationUpdate(ValueAnimator animation) {
+            mIvPostBg.setBackgroundColor((Integer) animation.getAnimatedValue());
+          }
+        });
+        animator.addListener(new Animator.AnimatorListener() {
+          @Override
+          public void onAnimationStart(Animator animation) {
+
+          }
+
+          @Override
+          public void onAnimationEnd(Animator animation) {
+            mPostEditText.setTextColor(Utils.monochromizing(tv.data));
+            mTvPostTip.setTextColor(Utils.monochromizing(tv.data));
+            mBgColor = tv.data;
+          }
+
+          @Override
+          public void onAnimationCancel(Animator animation) {
+
+          }
+
+          @Override
+          public void onAnimationRepeat(Animator animation) {
+
+          }
+        });
+        animator.start();
+        mIvPostBg.setImageDrawable(null);
+      }
+    }
   }
 
   @Override
@@ -372,28 +433,9 @@ public class PublishActivity extends BaseActivity {
     }
   }
 
-  @Subscribe
-  public void onImageUploaded(ImageUtils.ImageUploadedEvent event) {
-    if (event.getHash().equals(mFileHash)) {
-      mImageUploadFinished = true;
-      mImageUploadUrl = event.getUrl();
-    }
-
-    if (mRequestStarted) {
-      requestPost();
-    }
-  }
-
-  @Subscribe
-  public void onGridPanelItemClicked(Item item) {
-    for (TypedValue tv : item.getValues()) {
-      if (tv.type == TypedValue.TYPE_INT_COLOR_ARGB8) {
-        mIvPostBg.setImageDrawable(new ColorDrawable(tv.data));
-        mPostEditText.setTextColor(Utils.monochromizing(tv.data));
-        mTvPostTip.setTextColor(Utils.monochromizing(tv.data));
-        mBgColor = tv.data;
-      }
-    }
+  @Override
+  public void onBackPressed() {
+    confirmFinish();
   }
 
   private void confirmFinish() {
