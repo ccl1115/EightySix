@@ -24,6 +24,7 @@ import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.drawable.GearsDrawable;
 import com.utree.eightysix.drawable.RoundRectDrawable;
+import com.utree.eightysix.drawable.SmallGearsDrawable;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
 import com.utree.eightysix.utils.ImageUtils;
@@ -78,7 +79,7 @@ public class FeedPostView extends RelativeLayout {
 
   private Post mPost;
 
-  private GearsDrawable mGearsDrawable;
+  private SmallGearsDrawable mGearsDrawable;
 
   public FeedPostView(Context context) {
     this(context, null, 0);
@@ -98,7 +99,7 @@ public class FeedPostView extends RelativeLayout {
 
     U.getBus().register(this);
 
-    mGearsDrawable = new GearsDrawable();
+    mGearsDrawable = new SmallGearsDrawable();
   }
 
   @Subscribe

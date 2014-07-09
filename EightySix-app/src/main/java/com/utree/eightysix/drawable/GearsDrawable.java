@@ -18,12 +18,9 @@ public class GearsDrawable extends Drawable {
   private static final int ANIMATION_FRAME_DURATION = 16;
   private static final int MSG_ANIMATE = 0x1;
 
-  private final int mIntrinsicWidth;
-  private final int mIntrinsicHeight;
-
-  private BitmapDrawable mGear5;
-  private BitmapDrawable mGear6;
-  private BitmapDrawable mGear8;
+  protected BitmapDrawable mGear5;
+  protected BitmapDrawable mGear6;
+  protected BitmapDrawable mGear8;
 
   private final Rect mG8R = new Rect();
   private final Rect mG6R = new Rect();
@@ -39,12 +36,8 @@ public class GearsDrawable extends Drawable {
 
   public GearsDrawable() {
 
-    mGear5 = (BitmapDrawable) U.gd(R.drawable.gear5);
-    mGear6 = (BitmapDrawable) U.gd(R.drawable.gear6);
-    mGear8 = (BitmapDrawable) U.gd(R.drawable.gear8);
+    setDrawables();
 
-    mIntrinsicWidth = U.dp2px(128);
-    mIntrinsicHeight = U.dp2px(128);
 
     resetRect();
 
@@ -62,6 +55,12 @@ public class GearsDrawable extends Drawable {
     });
   }
 
+  protected void setDrawables() {
+    mGear5 = (BitmapDrawable) U.gd(R.drawable.gear5);
+    mGear6 = (BitmapDrawable) U.gd(R.drawable.gear6);
+    mGear8 = (BitmapDrawable) U.gd(R.drawable.gear8);
+  }
+
   private void resetRect() {
     mG8R.set(0, 0, mGear8.getIntrinsicWidth(), mGear8.getIntrinsicHeight());
     mG6R.set(0, 0, mGear6.getIntrinsicWidth(), mGear6.getIntrinsicHeight());
@@ -70,12 +69,12 @@ public class GearsDrawable extends Drawable {
 
   @Override
   public int getIntrinsicWidth() {
-    return mIntrinsicWidth;
+    return U.dp2px(128);
   }
 
   @Override
   public int getIntrinsicHeight() {
-    return mIntrinsicHeight;
+    return U.dp2px(128);
   }
 
   @Override
