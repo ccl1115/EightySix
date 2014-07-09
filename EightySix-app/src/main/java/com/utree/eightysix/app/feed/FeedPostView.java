@@ -5,12 +5,14 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.aliyun.android.util.MD5Util;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
@@ -18,9 +20,11 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.data.Post;
+import com.utree.eightysix.drawable.GearsDrawable;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
+import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.ShareUtils;
 import com.utree.eightysix.utils.Utils;
 import com.utree.eightysix.widget.AsyncImageView;
@@ -61,7 +65,18 @@ public class FeedPostView extends RelativeLayout {
   @InjectView (R.id.ll_comment)
   public LinearLayout mLlComment;
 
+  @InjectView (R.id.ll_panel)
+  public LinearLayout mLlPanel;
+
+  @InjectView (R.id.ll_item)
+  public LinearLayout mLlItem;
+
+  @InjectView (R.id.fl_content)
+  public FrameLayout mFlContent;
+
   private Post mPost;
+
+  private GearsDrawable mGearsDrawable;
 
   public FeedPostView(Context context) {
     this(context, null, 0);
@@ -78,6 +93,21 @@ public class FeedPostView extends RelativeLayout {
 
     mIvShare.setBackgroundDrawable(
         new RoundRectDrawable(U.dp2px(2), getResources().getColorStateList(R.color.apptheme_transparent_bg)));
+
+    U.getBus().register(this);
+
+    mGearsDrawable = new GearsDrawable();
+  }
+
+  @Subscribe
+  public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
+    if (mPost.bgUrl != null) {
+      if (MD5Util.getMD5String(mPost.bgUrl.getBytes()).toLowerCase().equals(event.getHash())) {
+        mFlContent.setVisibility(VISIBLE);
+        mLlComment.setVisibility(VISIBLE);
+        mLlItem.setBackgroundDrawable(null);
+      }
+    }
   }
 
   public ImageView getIvShare() {
@@ -121,7 +151,6 @@ public class FeedPostView extends RelativeLayout {
     if (color == Color.WHITE) {
       mLlComment.setBackgroundColor(Color.WHITE);
     } else if (color == Color.BLACK) {
-      mLlComment.setBackgroundColor(0xfff0f0f0);
     }
 
     String content = post.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content;
@@ -140,11 +169,17 @@ public class FeedPostView extends RelativeLayout {
 
 
     if (!TextUtils.isEmpty(post.bgUrl)) {
-      mAivBg.setUrl(post.bgUrl);
+      mFlContent.setVisibility(INVISIBLE);
+      mLlComment.setVisibility(INVISIBLE);
+      mLlItem.setBackgroundDrawable(mGearsDrawable);
       mTvContent.setBackgroundColor(Color.TRANSPARENT);
+      mAivBg.setUrl(post.bgUrl);
     } else {
-      mAivBg.setUrl(null);
+      mFlContent.setVisibility(VISIBLE);
+      mLlComment.setVisibility(VISIBLE);
       mTvContent.setBackgroundColor(Utils.strToColor(post.bgColor));
+      mLlItem.setBackgroundDrawable(null);
+      mAivBg.setUrl(null);
     }
 
     if (post.praised == 1) {
@@ -211,6 +246,12 @@ public class FeedPostView extends RelativeLayout {
       animator.setDuration(500);
       animator.start();
     }
+  }
+
+  @Override
+  protected void finalize() throws Throwable {
+    super.finalize();
+    U.getBus().unregister(this);
   }
 
   @Override

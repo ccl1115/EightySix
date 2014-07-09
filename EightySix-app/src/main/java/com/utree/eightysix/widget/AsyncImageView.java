@@ -1,6 +1,5 @@
 package com.utree.eightysix.widget;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ImageView;
@@ -8,7 +7,6 @@ import com.aliyun.android.util.MD5Util;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.U;
 import com.utree.eightysix.utils.ImageUtils;
-import de.akquinet.android.androlog.Log;
 
 /**
  */
@@ -45,7 +43,6 @@ public class AsyncImageView extends ImageView {
   public void setUrl(String url) {
     if (url == null) {
       setImageBitmap(null);
-      url = null;
       mUrl = null;
       return;
     }
