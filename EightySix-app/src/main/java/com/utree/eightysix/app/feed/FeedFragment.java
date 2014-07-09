@@ -232,7 +232,7 @@ class FeedFragment extends BaseFragment {
   }
 
   private void requestFeeds(int id, final int page) {
-    getBaseActivity().showProgressBar();
+    if (page == 1) getBaseActivity().showProgressBar();
 
     getBaseActivity().request(new FeedsRequest(id, page), new OnResponse<FeedsResponse>() {
       @Override
@@ -260,7 +260,7 @@ class FeedFragment extends BaseFragment {
   }
 
   private void cacheOutFeeds(final int id, final int page) {
-    getBaseActivity().showProgressBar();
+    if (page == 1) getBaseActivity().showProgressBar();
 
     getBaseActivity().cacheOut(new FeedsRequest(id, page), new OnResponse<FeedsResponse>() {
       @Override
