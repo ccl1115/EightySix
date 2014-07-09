@@ -104,7 +104,7 @@ class PostCommentsAdapter extends BaseAdapter {
       if (c == null) continue;
       if (c.id.equals(commentId)) {
         iterator.remove();
-        U.getBus().post(new AdapterDataSetChangedEvent());
+        notifyDataSetChanged();
         break;
       }
     }
@@ -138,7 +138,7 @@ class PostCommentsAdapter extends BaseAdapter {
           comment.praise--;
           U.getBus().post(new PostCommentPraiseEvent(comment, true));
         }
-        U.getBus().post(new AdapterDataSetChangedEvent());
+        notifyDataSetChanged();
       }
     });
     holder.mTvComment.setText(comment.content);

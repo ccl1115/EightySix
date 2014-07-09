@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -179,7 +181,7 @@ public class PostPostView extends FrameLayout {
       mPost.praise++;
       U.getBus().post(new PostPostPraiseEvent(mPost, false));
     }
-    U.getBus().post(new AdapterDataSetChangedEvent());
+    ((BaseAdapter) ((AdapterView) getParent()).getAdapter()).notifyDataSetChanged();
   }
 
   @Override

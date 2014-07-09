@@ -537,7 +537,7 @@ public class FeedActivity extends BaseActivity {
       c.selected = circle.equals(c);
     }
     setTitle(circle);
-    U.getBus().post(new AdapterDataSetChangedEvent());
+    if (mSideCirclesAdapter != null) mSideCirclesAdapter.notifyDataSetChanged();
   }
 
   @Keep

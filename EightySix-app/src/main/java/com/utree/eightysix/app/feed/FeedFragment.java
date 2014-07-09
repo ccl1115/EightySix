@@ -163,7 +163,6 @@ class FeedFragment extends BaseFragment {
 
     if (mCircle != null) {
       if (mLvFeed != null) mLvFeed.setAdapter(null);
-      U.getBus().post(new AdapterDataSetChangedEvent());
 
       if (isAdded()) {
         cacheOutFeeds(mCircle.id, 1);
@@ -174,7 +173,6 @@ class FeedFragment extends BaseFragment {
   public void setCircle(int id) {
     if (mCircle.id != id) {
       if (mLvFeed != null) mLvFeed.setAdapter(null);
-      U.getBus().post(new AdapterDataSetChangedEvent());
     }
 
     if (isAdded()) {
@@ -199,7 +197,7 @@ class FeedFragment extends BaseFragment {
           if (response == null || response.code != 0) {
             event.getPost().praised = 1;
             event.getPost().praise++;
-            U.getBus().post(new AdapterDataSetChangedEvent());
+            mFeedAdapter.notifyDataSetChanged();
           }
         }
       }, Response.class);
@@ -210,7 +208,7 @@ class FeedFragment extends BaseFragment {
           if (response == null || response.code != 0) {
             event.getPost().praised = 0;
             event.getPost().praise--;
-            U.getBus().post(new AdapterDataSetChangedEvent());
+            mFeedAdapter.notifyDataSetChanged();
           }
         }
       }, Response.class);
@@ -225,7 +223,7 @@ class FeedFragment extends BaseFragment {
       if (p == null) continue;
       if (p.equals(event.getPost())) {
         iterator.remove();
-        U.getBus().post(new AdapterDataSetChangedEvent());
+        mFeedAdapter.notifyDataSetChanged();
         break;
       }
     }

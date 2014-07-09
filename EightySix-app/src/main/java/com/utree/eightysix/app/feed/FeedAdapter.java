@@ -240,7 +240,7 @@ class FeedAdapter extends BaseAdapter {
         p.praise = post.praise;
         p.praised = post.praised;
         p.comments = post.comments;
-        U.getBus().post(new AdapterDataSetChangedEvent());
+        notifyDataSetChanged();
         break;
       }
     }

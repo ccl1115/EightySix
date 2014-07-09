@@ -197,6 +197,10 @@ public class ImageUtils {
     }
   }
 
+  public static Bitmap getFromMem(String hash) {
+    return sLruCache.get(hash);
+  }
+
   /**
    * Upload a image file asynchronously
    * <p/>

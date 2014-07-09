@@ -121,7 +121,7 @@ public class PostActivity extends BaseActivity {
                       comment.praise--;
                       U.getBus().post(new PostCommentPraiseEvent(comment, true));
                     }
-                    U.getBus().post(new AdapterDataSetChangedEvent());
+                    mPostCommentsAdapter.notifyDataSetChanged();
                     break;
                   case 1:
                     showToast("TODO report");
@@ -247,7 +247,7 @@ public class PostActivity extends BaseActivity {
           if (response == null || response.code != 0) {
             event.getComment().praised = 1;
             event.getComment().praise++;
-            U.getBus().post(new AdapterDataSetChangedEvent());
+            mPostCommentsAdapter.notifyDataSetChanged();
           }
         }
       }, Response.class);
@@ -258,7 +258,7 @@ public class PostActivity extends BaseActivity {
           if (response == null || response.code != 0) {
             event.getComment().praised = 0;
             event.getComment().praise--;
-            U.getBus().post(new AdapterDataSetChangedEvent());
+            mPostCommentsAdapter.notifyDataSetChanged();
           }
         }
       }, Response.class);
@@ -276,7 +276,7 @@ public class PostActivity extends BaseActivity {
           } else {
             event.getPost().praised = 0;
             event.getPost().praise--;
-            U.getBus().post(new AdapterDataSetChangedEvent());
+            mPostCommentsAdapter.notifyDataSetChanged();
           }
         }
       }, Response.class);
@@ -287,7 +287,7 @@ public class PostActivity extends BaseActivity {
           if (response == null || response.code != 0) {
             event.getPost().praised = 1;
             event.getPost().praise--;
-            U.getBus().post(new AdapterDataSetChangedEvent());
+            mPostCommentsAdapter.notifyDataSetChanged();
           } else {
             U.getBus().post(event.getPost());
           }

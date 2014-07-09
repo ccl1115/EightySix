@@ -5,6 +5,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -104,7 +106,13 @@ public class FeedPostView extends RelativeLayout {
     if (mPost.bgUrl != null) {
       if (MD5Util.getMD5String(mPost.bgUrl.getBytes()).toLowerCase().equals(event.getHash())) {
         mFlContent.setVisibility(VISIBLE);
-        mLlComment.setVisibility(VISIBLE);
+
+        if (TextUtils.isEmpty(mPost.comment)) {
+          mLlComment.setVisibility(GONE);
+        } else {
+          mLlComment.setVisibility(VISIBLE);
+        }
+
         mLlItem.setBackgroundDrawable(null);
       }
     }
@@ -169,9 +177,11 @@ public class FeedPostView extends RelativeLayout {
 
 
     if (!TextUtils.isEmpty(post.bgUrl)) {
-      mFlContent.setVisibility(INVISIBLE);
-      mLlComment.setVisibility(INVISIBLE);
-      mLlItem.setBackgroundDrawable(mGearsDrawable);
+      if (ImageUtils.getFromMem(MD5Util.getMD5String(post.bgUrl.getBytes()).toLowerCase()) == null) {
+        mFlContent.setVisibility(INVISIBLE);
+        mLlComment.setVisibility(INVISIBLE);
+        mLlItem.setBackgroundDrawable(mGearsDrawable);
+      }
       mTvContent.setBackgroundColor(Color.TRANSPARENT);
       mAivBg.setUrl(post.bgUrl);
     } else {
@@ -235,7 +245,7 @@ public class FeedPostView extends RelativeLayout {
       mPost.praise++;
       U.getBus().post(new FeedPostPraiseEvent(mPost, false));
     }
-    U.getBus().post(new AdapterDataSetChangedEvent());
+    ((BaseAdapter) ((AdapterView) getParent()).getAdapter()).notifyDataSetChanged();
   }
 
   @Subscribe

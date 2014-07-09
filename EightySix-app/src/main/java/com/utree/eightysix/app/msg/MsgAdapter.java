@@ -31,7 +31,7 @@ abstract class MsgAdapter<T extends BaseMsgItemView> extends BaseAdapter {
 
   public void remove(Post post) {
     if (mPosts.remove(post)) {
-      U.getBus().post(new AdapterDataSetChangedEvent());
+      notifyDataSetChanged();
     }
   }
 
