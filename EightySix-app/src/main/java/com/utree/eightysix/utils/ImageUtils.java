@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import com.aliyun.android.util.MD5Util;
 import com.jakewharton.disklrucache.DiskLruCache;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
@@ -13,6 +14,8 @@ import com.utree.eightysix.storage.Storage;
 import de.akquinet.android.androlog.Log;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -209,21 +212,7 @@ public class ImageUtils {
    * @param file the file
    */
   public static void asyncUpload(File file) {
-    final String hash = IOUtils.fileHash(file);
-    final String path = hash.substring(0, 1) + File.separator + hash.substring(2, 4) + File.separator;
-    final String key = hash.substring(5);
-    U.getCloudStorage().aPut(U.getConfig("storage.image.bucket.name"), path, key, file,
-        new Storage.OnResult() {
-          @Override
-          public void onResult(Storage.Result result) {
-            if (result.error == 0 && TextUtils.isEmpty(result.msg)) {
-              U.getBus().post(new ImageUploadedEvent(hash, U.getCloudStorage().getUrl(
-                  U.getConfig("storage.image.bucket.name"), path, key)));
-            } else {
-              Log.d(TAG, "upload error : " + result.msg);
-            }
-          }
-        });
+    new UploadWorker(file).execute();
   }
 
   /**
@@ -231,8 +220,76 @@ public class ImageUtils {
    *
    * @param file the file to be cache
    */
-  public static void cacheImage(File file) {
-    new ImageRemoteDecodeWorker(IOUtils.fileHash(file), file).execute();
+  public static void cacheImage(String hash, File file) {
+    new ImageRemoteDecodeWorker(hash, file).execute();
+  }
+
+  private static class UploadWorker extends AsyncTask<Void, Void, Void> {
+
+    private Bitmap mBitmap;
+    private File mFile;
+    private String mFileHash;
+    private String mUrl;
+
+    UploadWorker(Bitmap bitmap) {
+      mBitmap = bitmap;
+    }
+
+    UploadWorker(File file) {
+      mFile = file;
+    }
+
+    @Override
+    protected Void doInBackground(Void... params) {
+      if (mFile != null) {
+        mBitmap = safeDecodeBitmap(mFile);
+      }
+
+      if (mBitmap == null) {
+        return null;
+      }
+
+      File file = IOUtils.createTmpFile(String.valueOf(System.currentTimeMillis()));
+
+      FileOutputStream fos = null;
+
+      try {
+        fos = new FileOutputStream(file);
+        mBitmap.compress(Bitmap.CompressFormat.JPEG, 75, fos);
+      } catch (FileNotFoundException ignored) {
+      } finally {
+        if (fos != null) {
+          try {
+            fos.close();
+          } catch (IOException ignored) {
+          }
+        }
+      }
+
+      final String hash = IOUtils.fileHash(file);
+      final String path = hash.substring(0, 1) + File.separator + hash.substring(2, 4) + File.separator;
+      final String key = hash.substring(5);
+      Storage.Result result = U.getCloudStorage().put(U.getConfig("storage.image.bucket.name"), path, key, file);
+      if (result.error == 0 && TextUtils.isEmpty(result.msg)) {
+        String url = U.getCloudStorage().getUrl(U.getConfig("storage.image.bucket.name"), path, key);
+        cacheImage(MD5Util.getMD5String(url.getBytes()).toLowerCase(), file);
+        mFileHash = hash;
+        mUrl = url;
+      } else {
+        Log.d(TAG, "upload error : " + result.msg);
+      }
+
+      return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+      Log.d(TAG, "mHash = " + mFileHash);
+      Log.d(TAG, "mUrl = " + mUrl);
+      if (mFileHash != null && mUrl != null) {
+        U.getBus().post(new ImageUploadedEvent(mFileHash, mUrl));
+      }
+    }
   }
 
   /**
@@ -388,6 +445,8 @@ public class ImageUtils {
       if (bitmap != null) {
         sLruCache.put(mHash, bitmap);
       }
+
+      mFile.delete();
 
       U.getBus().post(new ImageLoadedEvent(mHash, bitmap));
     }

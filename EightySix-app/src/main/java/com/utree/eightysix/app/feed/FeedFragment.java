@@ -67,6 +67,8 @@ class FeedFragment extends BaseFragment {
     PostActivity.start(getActivity(), (Post) item, rect);
   }
 
+  public FeedFragment() {}
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     return inflater.inflate(R.layout.fragment_feed, container, false);

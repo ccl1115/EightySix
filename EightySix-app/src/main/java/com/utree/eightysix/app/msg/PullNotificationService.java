@@ -3,6 +3,7 @@ package com.utree.eightysix.app.msg;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
 import com.utree.eightysix.U;
 import com.utree.eightysix.request.PullNotificationRequest;
@@ -17,6 +18,8 @@ import com.utree.eightysix.rest.Response;
  * @author simon
  */
 public class PullNotificationService extends IntentService {
+
+  private Handler mHandler = new Handler();
 
   public PullNotificationService() {
     super("PullNotificationService");
@@ -41,14 +44,20 @@ public class PullNotificationService extends IntentService {
     requestPullNotification(type, seq);
   }
 
-  private void requestPullNotification(int type, String seq) {
-    RequestData data = U.getRESTRequester().convert(new PullNotificationRequest(type, seq));
-    U.getRESTRequester().request(data, new HandlerWrapper<Response>(data, new OnResponse<Response>() {
+  private void requestPullNotification(final int type, final String seq) {
 
+    mHandler.post(new Runnable() {
       @Override
-      public void onResponse(Response response) {
+      public void run() {
+        RequestData data = U.getRESTRequester().convert(new PullNotificationRequest(type, seq));
+        U.getRESTRequester().request(data, new HandlerWrapper<Response>(data, new OnResponse<Response>() {
 
+          @Override
+          public void onResponse(Response response) {
+
+          }
+        }, Response.class));
       }
-    }, Response.class));
+    });
   }
 }

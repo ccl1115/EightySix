@@ -52,6 +52,7 @@ import com.utree.eightysix.widget.PostEditText;
 import com.utree.eightysix.widget.TopBar;
 import com.utree.eightysix.widget.panel.GridPanel;
 import com.utree.eightysix.widget.panel.Item;
+import de.akquinet.android.androlog.Log;
 import java.io.File;
 import java.util.List;
 import java.util.Random;
@@ -341,6 +342,7 @@ public class PublishActivity extends BaseActivity {
 
   @Subscribe
   public void onImageUploaded(ImageUtils.ImageUploadedEvent event) {
+    Log.d("PublishActivity", "mFileHash = " + mFileHash);
     if (event.getHash().equals(mFileHash)) {
       mImageUploadFinished = true;
       mImageUploadUrl = event.getUrl();

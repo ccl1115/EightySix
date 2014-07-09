@@ -84,7 +84,6 @@ public class U {
   }
 
   public static Storage getCloudStorage() {
-    checkThread();
     if (sCloudStorage == null) {
       sCloudStorage = new OSSImpl();
     }

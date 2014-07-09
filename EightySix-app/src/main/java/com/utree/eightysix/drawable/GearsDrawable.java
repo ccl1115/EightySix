@@ -37,12 +37,10 @@ public class GearsDrawable extends Drawable {
   public GearsDrawable() {
 
     setDrawables();
-
-
     resetRect();
 
     mDegreeAnimator = ValueAnimator.ofInt(0, 360);
-    mDegreeAnimator.setDuration(2000);
+    mDegreeAnimator.setDuration(3000);
     mDegreeAnimator.setInterpolator(new LinearInterpolator());
     mDegreeAnimator.setRepeatCount(Integer.MAX_VALUE);
     mDegreeAnimator.setRepeatMode(ValueAnimator.INFINITE);
@@ -102,7 +100,7 @@ public class GearsDrawable extends Drawable {
     final int g8l = cx - mG8R.width();
     final int g8t = cy - g8r;
 
-    final int d_g6_g8 = (int) ((g8r + g6r - U.dp2px(5)) / Math.sqrt(2));
+    final int d_g6_g8 = (int) ((g8r + g6r - U.dp2px(3)) / Math.sqrt(2));
 
     final int g6cx = g8cx + d_g6_g8;
     final int g6cy = g8cy - d_g6_g8;
@@ -113,7 +111,7 @@ public class GearsDrawable extends Drawable {
     final int g6l = g6cx - g6r;
     final int g6t = g6cy - g6r;
 
-    final int d_g5_g8 = (int) ((g8r + g5r - U.dp2px(5)) / Math.sqrt(2));
+    final int d_g5_g8 = (int) ((g8r + g5r - U.dp2px(3)) / Math.sqrt(2));
 
     final int g5cx = g8cx + d_g5_g8;
     final int g5cy = g8cy + d_g5_g8;
