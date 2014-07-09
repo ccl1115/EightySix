@@ -96,9 +96,9 @@ public class BaseMsgItemView extends LinearLayout {
         mTvContentRight.setTextColor(Utils.monochromizing(color));
       }
       if (right.read == 1) {
-        mVMaskRight.setVisibility(VISIBLE);
-      } else {
         mVMaskRight.setVisibility(INVISIBLE);
+      } else {
+        mVMaskRight.setVisibility(VISIBLE);
       }
     } else {
       mFlRight.setVisibility(INVISIBLE);
@@ -119,9 +119,9 @@ public class BaseMsgItemView extends LinearLayout {
         mTvContentLeft.setTextColor(Utils.monochromizing(color));
       }
       if (left.read == 1) {
-        mVMaskLeft.setVisibility(VISIBLE);
-      } else {
         mVMaskLeft.setVisibility(INVISIBLE);
+      } else {
+        mVMaskLeft.setVisibility(VISIBLE);
       }
     } else {
       mFlLeft.setVisibility(INVISIBLE);

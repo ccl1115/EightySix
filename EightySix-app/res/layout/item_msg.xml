@@ -12,7 +12,6 @@
             android:layout_weight="1"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="0dp"
             android:layout_marginRight="4dp">
 
 
@@ -29,7 +28,7 @@
                 android:gravity="center"
                 android:padding="10dp"
                 android:textSize="12sp"
-                android:textColor="@android:color/white"/>
+                android:maxLines="10"/>
 
         <FrameLayout
                 android:layout_width="match_parent"
@@ -62,8 +61,7 @@
             android:layout_weight="1"
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginBottom="0dp">
+            android:layout_marginLeft="4dp">
 
         <com.utree.eightysix.widget.AsyncImageView
                 android:id="@+id/aiv_bg_right"
@@ -78,7 +76,7 @@
                 android:gravity="center"
                 android:padding="10dp"
                 android:textSize="12sp"
-                android:textColor="@android:color/white"/>
+                android:maxLines="10"/>
 
         <FrameLayout
                 android:layout_width="match_parent"
