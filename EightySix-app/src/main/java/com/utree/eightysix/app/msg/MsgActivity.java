@@ -13,6 +13,7 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.request.MsgsRequest;
 import com.utree.eightysix.response.FeedsResponse;
@@ -119,6 +120,15 @@ public class MsgActivity extends BaseActivity {
 
       }
     });
+
+    U.getBus().register(mAlvMsg);
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+
+    U.getBus().unregister(mAlvMsg);
   }
 
   @Override
@@ -197,5 +207,12 @@ public class MsgActivity extends BaseActivity {
     }, FeedsResponse.class);
 
     showProgressBar();
+  }
+
+  @Subscribe
+  public void onPostDeleteEvent(PostDeleteEvent event) {
+    if (mMsgAdapter != null) {
+      mMsgAdapter.remove(event.getPost());
+    }
   }
 }

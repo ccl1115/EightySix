@@ -4,7 +4,9 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import com.utree.eightysix.U;
 import com.utree.eightysix.data.Post;
+import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import java.util.List;
 
 /**
@@ -25,6 +27,12 @@ abstract class MsgAdapter<T extends BaseMsgItemView> extends BaseAdapter {
       mPosts.addAll(posts);
     }
     notifyDataSetChanged();
+  }
+
+  public void remove(Post post) {
+    if (mPosts.remove(post)) {
+      U.getBus().post(new AdapterDataSetChangedEvent());
+    }
   }
 
   @Override
