@@ -25,6 +25,7 @@ class CircleBaseListAdapter extends BaseAdapter {
 
   public void add(Collection<Circle> list) {
     mBaseCircles.addAll(list);
+    notifyDataSetChanged();
   }
 
   @Override

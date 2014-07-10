@@ -1,5 +1,8 @@
 package com.utree.eightysix.app.circle;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,16 +18,20 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
-import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.feed.FeedActivity;
+import com.utree.eightysix.data.Circle;
+import com.utree.eightysix.data.Paginate;
+import com.utree.eightysix.request.CircleSetRequest;
 import com.utree.eightysix.request.SearchCircleRequest;
 import com.utree.eightysix.response.CirclesResponse;
-import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RoundedButton;
@@ -60,7 +67,17 @@ public class CircleSearchActivity extends BaseActivity {
 
   private CircleBaseListAdapter mResultAdapter;
 
-  private List<Circle> mData;
+  private Paginate.Page mPageInfo;
+
+  private String mLastKeyword;
+
+  private boolean mSelectMode;
+
+  public static void start(Context context, boolean select) {
+    Intent intent = new Intent(context, CircleSearchActivity.class);
+    intent.putExtra("select", select);
+    context.startActivity(intent);
+  }
 
   @OnClick (R.id.rb_create_circle)
   public void onRbCreateCircleClicked() {
@@ -70,13 +87,28 @@ public class CircleSearchActivity extends BaseActivity {
 
   @OnItemClick (R.id.lv_history)
   public void onHistoryItemClicked(int position) {
-    getTopBar().getSearchEditText().setText(mSearchHistory.get(position));
-    requestSearch(1, mSearchHistory.get(position));
+    String keyword = mSearchHistory.get(position);
+    getTopBar().getSearchEditText().setText(keyword);
+    mLastKeyword = keyword;
+    requestSearch(1, keyword);
+  }
+
+  @OnItemClick(R.id.lv_result)
+  public void onResultItemClicked(int position) {
+    final Circle circle = mResultAdapter.getItem(position);
+    if (mSelectMode) {
+      showCircleSetDialog(circle);
+    } else {
+      FeedActivity.start(this, circle);
+      finish();
+    }
   }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    mSelectMode = getIntent().getBooleanExtra("select", false);
 
     getTopBar().enterSearch();
 
@@ -92,17 +124,31 @@ public class CircleSearchActivity extends BaseActivity {
     showHistory();
 
     mLvResult.setEmptyView(mLlEmptyResult);
-  }
 
-  @Override
-  protected void onActionLeftOnClicked() {
-    finish();
+    mLvResult.setLoadMoreCallback(new LoadMoreCallback() {
+      @Override
+      public View getLoadMoreView(ViewGroup parent) {
+        return LayoutInflater.from(CircleSearchActivity.this).inflate(R.layout.footer_load_more, parent, false);
+      }
+
+      @Override
+      public boolean hasMore() {
+        return mPageInfo != null && mPageInfo.currPage < mPageInfo.countPage;
+      }
+
+      @Override
+      public boolean onLoadMoreStart() {
+        requestSearch(mPageInfo.currPage + 1, mLastKeyword);
+        return true;
+      }
+    });
   }
 
   @Override
   protected void onSearchActionGo(String keyword) {
-    requestSearch(1, keyword);
 
+    mLastKeyword = keyword;
+    requestSearch(1, keyword);
 
     //region load history keyword
     for (String k : mSearchHistory) {
@@ -114,11 +160,6 @@ public class CircleSearchActivity extends BaseActivity {
     Account.inst().setSearchHistory(mSearchHistory);
     updateHistoryData();
     //endregion
-
-
-    mData = new ArrayList<Circle>();
-    mResultAdapter = new CircleBaseListAdapter(mData);
-
   }
 
   @Override
@@ -126,6 +167,21 @@ public class CircleSearchActivity extends BaseActivity {
     if (TextUtils.isEmpty(newKeyword)) {
       showHistory();
     }
+  }
+
+  @Override
+  protected void onActionLeftOnClicked() {
+    finish();
+  }
+
+  /**
+   * When LogoutEvent fired, finish myself
+   *
+   * @param event the logout event
+   */
+  @Subscribe
+  public void onLogout(Account.LogoutEvent event) {
+    finish();
   }
 
   private void updateHistoryData() {
@@ -162,55 +218,61 @@ public class CircleSearchActivity extends BaseActivity {
     mLvHistory.setVisibility(View.VISIBLE);
   }
 
-  private void showSearchResult() {
-    mLvResult.setVisibility(View.VISIBLE);
-    mLvHistory.setVisibility(View.GONE);
-
-
-    if (U.useFixture()) {
-      mResultAdapter = new CircleBaseListAdapter(U.getFixture(Circle.class, 20, "valid"));
-      mLvResult.setAdapter(mResultAdapter);
-      mLvResult.setLoadMoreCallback(new LoadMoreCallback() {
-        @Override
-        public View getLoadMoreView(ViewGroup parent) {
-          return LayoutInflater.from(CircleSearchActivity.this).inflate(R.layout.footer_load_more, parent, false);
-        }
-
-        @Override
-        public boolean hasMore() {
-          return true;
-        }
-
-        @Override
-        public boolean onLoadMoreStart() {
-          getHandler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-              mResultAdapter.add(U.getFixture(Circle.class, 20, "valid"));
-              mLvResult.stopLoadMore();
-            }
-          }, 2000);
-          return true;
-        }
-      });
-    } else {
-      //TODO request more data
-    }
-  }
-
-  private void requestSearch(int page, String keyword) {
+  private void requestSearch(final int page, final String keyword) {
     request(new SearchCircleRequest(page, keyword), new OnResponse<CirclesResponse>() {
-
       @Override
       public void onResponse(CirclesResponse response) {
-        //if (response != null) {
-          showSearchResult();
-        //}
+        if (RESTRequester.responseOk(response)) {
+          if (page == 1) {
+            mLvResult.setVisibility(View.VISIBLE);
+            mLvHistory.setVisibility(View.GONE);
+
+            mResultAdapter = new CircleBaseListAdapter(response.object.lists);
+            mLvResult.setAdapter(mResultAdapter);
+            mPageInfo = response.object.page;
+          } else {
+            mResultAdapter.add(response.object.lists);
+            mPageInfo = response.object.page;
+          }
+        } else {
+          mTvEmptyText.setText(String.format(getString(R.string.no_search_result), keyword));
+        }
         hideProgressBar();
       }
     }, CirclesResponse.class);
-    mTvEmptyText.setText(String.format(getString(R.string.no_search_result), keyword));
     showProgressBar();
+  }
+
+  private void requestCircleSet(final Circle circle) {
+    request(new CircleSetRequest(circle.id), new OnResponse<Response>() {
+      @Override
+      public void onResponse(Response response) {
+        if (RESTRequester.responseOk(response)) {
+          FeedActivity.start(CircleSearchActivity.this, circle);
+          finish();
+        }
+      }
+    }, Response.class);
+  }
+
+  protected void showCircleSetDialog(final Circle circle) {
+    AlertDialog dialog = new AlertDialog.Builder(this)
+        .setTitle(String.format("确认在%s上班么？", circle.name))
+        .setMessage("15天之内不能修改在职工厂")
+        .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            requestCircleSet(circle);
+          }
+        })
+        .setNegativeButton("重新选择", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            dialog.dismiss();
+          }
+        }).create();
+
+    dialog.show();
   }
 
   @Keep
@@ -222,16 +284,6 @@ public class CircleSearchActivity extends BaseActivity {
     public void onRbClearHistory() {
       clearHistory();
     }
-  }
-
-  /**
-   * When LogoutEvent fired, finish myself
-   *
-   * @param event the logout event
-   */
-  @Subscribe
-  public void onLogout(Account.LogoutEvent event) {
-    finish();
   }
 
 }

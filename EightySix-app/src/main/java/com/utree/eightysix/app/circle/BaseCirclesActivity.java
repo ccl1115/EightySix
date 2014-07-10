@@ -89,7 +89,11 @@ public class BaseCirclesActivity extends BaseActivity {
 
   @OnClick ({R.id.fl_search, R.id.tv_search_hint})
   public void onFlSearchClicked() {
-    startActivity(new Intent(this, CircleSearchActivity.class));
+    if (mMode == MODE_MY) {
+      CircleSearchActivity.start(this, false);
+    } else if (mMode == MODE_SELECT) {
+      CircleSearchActivity.start(this, true);
+    }
   }
 
   @OnItemClick (R.id.alv_refresh)
@@ -100,23 +104,7 @@ public class BaseCirclesActivity extends BaseActivity {
         circle.selected = true;
         FeedActivity.start(this, circle);
       } else if (mMode == MODE_SELECT) {
-        AlertDialog dialog = new AlertDialog.Builder(this)
-            .setTitle(String.format("确认在%s上班么？", circle.name))
-            .setMessage("15天之内不能修改在职工厂")
-            .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                requestCircleSet(circle);
-              }
-            })
-            .setNegativeButton("重新选择", new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-              }
-            }).create();
-
-        dialog.show();
+        showCircleSetDialog(circle);
       }
     }
   }
@@ -126,27 +114,31 @@ public class BaseCirclesActivity extends BaseActivity {
     final Circle circle = mCircleListAdapter.getItem(position);
     if (circle != null) {
       if (mMode == MODE_MY) {
-        AlertDialog dialog = new AlertDialog.Builder(this)
-            .setTitle(String.format("确认在%s上班么？", circle.name))
-            .setMessage("15天之内不能修改在职工厂")
-            .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                requestCircleSet(circle);
-              }
-            })
-            .setNegativeButton("重新选择", new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-              }
-            }).create();
-
-        dialog.show();
+        showCircleSetDialog(circle);
         return true;
       }
     }
     return false;
+  }
+
+  protected void showCircleSetDialog(final Circle circle) {
+    AlertDialog dialog = new AlertDialog.Builder(this)
+        .setTitle(String.format("确认在%s上班么？", circle.name))
+        .setMessage("15天之内不能修改在职工厂")
+        .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            requestCircleSet(circle);
+          }
+        })
+        .setNegativeButton("重新选择", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            dialog.dismiss();
+          }
+        }).create();
+
+    dialog.show();
   }
 
   @Override
