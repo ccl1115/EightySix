@@ -187,6 +187,7 @@ class FeedFragment extends BaseFragment {
   }
 
   public void refresh() {
+    mRefreshed = true;
     requestFeeds(mCircle.id, 1);
   }
 

@@ -80,7 +80,7 @@ public final class PushMessageReceiver extends FrontiaPushMessageReceiver {
       builder.setTicker("PushService Debug");
       builder.setSmallIcon(R.drawable.ic_app_icon);
       builder.setDefaults(Notification.DEFAULT_ALL);
-      ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(0x1, builder.build());
+      ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(0x100, builder.build());
 
       Date date = new Date();
 

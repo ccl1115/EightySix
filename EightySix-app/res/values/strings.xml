@@ -204,6 +204,7 @@
     <string name="notification_new_comments">你关注的%d条秘密有了新的评论</string>
     <string name="notification_new_friend">新朋友加入</string>
     <string name="notification_new_friend_tip">%s的朋友数＋1，能猜到他是谁吗</string>
+    <string name="notification_new_friend_tip_plural">%1$s的朋友数＋%2$d，能猜到他们是谁吗</string>
     <string name="notification_circle_create_approve">圈子审核通过</string>
     <string name="notification_circle_create_approve_tip">你申请创建的圈子“%1$s”已经解锁了</string>
 

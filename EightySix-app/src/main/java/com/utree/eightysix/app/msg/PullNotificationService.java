@@ -6,7 +6,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import com.utree.eightysix.Account;
@@ -84,24 +83,29 @@ public class PullNotificationService extends Service {
   }
 
   private Notification buildPost(String postId) {
-    NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-    builder.setContentTitle(postId);
-    builder.setContentText(getString(R.string.notification_friend_new_post));
-    builder.setContentIntent(PendingIntent.getActivity(this, 0, PostActivity.getIntent(this, postId), Intent.FLAG_ACTIVITY_NEW_TASK));
-    return builder.build();
+    return new NotificationCompat.Builder(this)
+        .setTicker(getString(R.string.notification_friend_new_post))
+        .setSmallIcon(R.drawable.ic_app_icon)
+        .setContentTitle(postId)
+        .setContentText(getString(R.string.notification_friend_new_post))
+        .setContentIntent(PendingIntent.getActivity(this, 0, PostActivity.getIntent(this, postId), Intent.FLAG_ACTIVITY_NEW_TASK))
+        .build();
   }
 
   private Notification buildUnlockCircle(String circleId, String circleName) {
-    NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-    builder.setContentTitle(getString(R.string.notification_circle_unlocked));
-    builder.setContentText(String.format(getString(R.string.notification_circle_unlocked_tip), circleName));
-    builder.setContentIntent(PendingIntent.getActivity(this, 0, FeedActivity.getIntent(this, Integer.parseInt(circleId)), Intent.FLAG_ACTIVITY_NEW_TASK));
-    return builder.build();
+    return new NotificationCompat.Builder(this).setTicker(getString(R.string.notification_circle_unlocked))
+        .setSmallIcon(R.drawable.ic_app_icon)
+        .setContentTitle(getString(R.string.notification_circle_unlocked))
+        .setContentText(String.format(getString(R.string.notification_circle_unlocked_tip), circleName))
+        .setContentIntent(PendingIntent.getActivity(this, 0, FeedActivity.getIntent(this, Integer.parseInt(circleId)), Intent.FLAG_ACTIVITY_NEW_TASK))
+        .build();
   }
 
   private Notification buildComment(String[] ids) {
     NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-    builder.setContentTitle(getString(R.string.notification_new));
+    builder.setContentTitle(getString(R.string.notification_new))
+        .setTicker(getString(R.string.notification_new))
+        .setSmallIcon(R.drawable.ic_app_icon);
     if (ids.length == 1) {
       builder.setContentText(getString(R.string.notification_new_comment));
       builder.setContentIntent(PendingIntent.getActivity(this, 0, PostActivity.getIntent(this, ids[0]), Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -113,19 +117,24 @@ public class PullNotificationService extends Service {
   }
 
   private Notification buildApprove(String circleId, String circleName) {
-    NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-    builder.setContentTitle(getString(R.string.notification_circle_create_approve));
-    builder.setContentText(String.format(getString(R.string.notification_circle_create_approve_tip), circleName));
-    builder.setContentIntent(PendingIntent.getActivity(this, 0, FeedActivity.getIntent(this, Integer.parseInt(circleId)), Intent.FLAG_ACTIVITY_NEW_TASK));
-    return builder.build();
+    return new NotificationCompat.Builder(this).setDefaults(Notification.DEFAULT_ALL)
+        .setSmallIcon(R.drawable.ic_app_icon)
+        .setTicker(getString(R.string.notification_circle_create_approve))
+        .setContentTitle(getString(R.string.notification_circle_create_approve))
+        .setContentText(getString(R.string.notification_circle_create_approve_tip, circleName))
+        .setContentIntent(PendingIntent.getActivity(this, 0, FeedActivity.getIntent(this, Integer.parseInt(circleId)), Intent.FLAG_ACTIVITY_NEW_TASK))
+        .build();
   }
 
-  private Notification buildFriendJoin(String circleId, String circleName) {
-    NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-    builder.setContentTitle(getString(R.string.notification_new_friend));
-    builder.setContentText(String.format(getString(R.string.notification_new_friend_tip), circleName));
-    builder.setContentIntent(PendingIntent.getActivity(this, 0, FeedActivity.getIntent(this, Integer.parseInt(circleId)), Intent.FLAG_ACTIVITY_NEW_TASK));
-    return builder.build();
+  private Notification buildFriendJoin(String circleId, String circleName, int count) {
+    return new NotificationCompat.Builder(this)
+        .setSmallIcon(R.drawable.ic_app_icon)
+        .setTicker(getString(R.string.notification_new_friend))
+        .setContentTitle(getString(R.string.notification_new_friend))
+        .setContentText(count > 1 ? getString(R.string.notification_new_friend_tip, circleName, count) :
+            getString(R.string.notification_new_friend_tip, circleName))
+        .setContentIntent(PendingIntent.getActivity(this, 0, FeedActivity.getIntent(this, Integer.parseInt(circleId)), Intent.FLAG_ACTIVITY_NEW_TASK))
+        .build();
   }
 
   private void handleResponse(PullNotificationResponse response) {
@@ -142,7 +151,7 @@ public class PullNotificationService extends Service {
         break;
       case TYPE_FRIEND_L1_JOIN:
         for (String id : response.object.ids) {
-          getNM().notify(id, ID_FRIEND_L1_JOIN, buildFriendJoin(id, "测试"));
+          getNM().notify(id, ID_FRIEND_L1_JOIN, buildFriendJoin(id, "测试", 10));
         }
         break;
       case TYPE_COMMENT:
