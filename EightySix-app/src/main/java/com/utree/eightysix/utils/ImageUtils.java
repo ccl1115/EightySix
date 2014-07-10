@@ -280,8 +280,6 @@ public class ImageUtils {
 
     @Override
     protected void onPostExecute(Void aVoid) {
-      Log.d(TAG, "mHash = " + mFileHash);
-      Log.d(TAG, "mUrl = " + mUrl);
       if (mFileHash != null && mUrl != null) {
         U.getBus().post(new ImageUploadedEvent(mFileHash, mUrl));
       }

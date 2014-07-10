@@ -1,6 +1,7 @@
 package com.utree.eightysix.push;
 
 import android.content.Context;
+import android.text.format.Time;
 import com.baidu.frontia.api.FrontiaPushMessageReceiver;
 import com.google.gson.annotations.SerializedName;
 import com.utree.eightysix.Account;
@@ -15,7 +16,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import org.apache.commons.math.ode.jacobians.FirstOrderIntegratorWithJacobians;
 
@@ -71,12 +74,14 @@ public final class PushMessageReceiver extends FrontiaPushMessageReceiver {
       try {
         os = new FileWriter(file, true);
         os.write("\n\n");
-        os.write(Calendar.getInstance().toString());
+        os.write(DateFormat.getInstance().format(new Date()));
         os.write("\n\n");
-        os.write("userId = " + Account.inst().getUserId());
-        os.write("message = " + message);
-        os.write("type = " + m.type);
-        os.write("pushSeq = " + m.pushSeq);
+        os.write("\nuserId = " + Account.inst().getUserId());
+        os.write("\nmessage = " + message);
+        os.write("\ntype = " + m.type);
+        os.write("\npushSeq = " + m.pushSeq);
+        os.write("\n");
+        os.flush();
       } catch (FileNotFoundException ignored) {
       } catch (IOException ignored) {
       } finally {

@@ -1,12 +1,10 @@
 package com.utree.eightysix.utils;
 
 import android.os.Environment;
-import com.aliyun.android.util.MD5Util;
 import com.jakewharton.disklrucache.DiskLruCache;
-import com.loopj.android.http.RequestParams;
 import com.utree.eightysix.U;
+import de.akquinet.android.androlog.Log;
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +35,7 @@ public class CacheUtils {
       try {
         cache = DiskLruCache.open(getOrCreateCacheDir(dir), version, count, size);
         mDiskLruCache.put(dir, cache);
-      } catch (IOException e) {
+      } catch (Exception e) {
         U.getAnalyser().reportException(U.getContext(), e);
       }
     }
@@ -45,28 +43,7 @@ public class CacheUtils {
   }
 
   private File getOrCreateCacheDir(String key) {
-    String path;
-    if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-      try {
-        path = U.getContext().getExternalFilesDir(null).getAbsolutePath() + File.separator + key;
-      } catch (Exception e) {
-        path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + U.getContext().getPackageName() + File.separator + key;
-      }
-    } else {
-      path = U.getContext().getFilesDir().getAbsolutePath() + File.separator + key;
-    }
-
-    File file = new File(path);
-    if (file.exists()) {
-      if (file.isFile()) {
-        if (file.delete()) {
-          if (file.mkdirs()) return file;
-        }
-      } else if (file.isDirectory()) return file;
-    } else {
-      if (file.mkdirs()) return file;
-    }
-    return null;
+    return new File(IOUtils.getAvailableAppDir().getAbsolutePath() + File.separator + key);
   }
 
 }

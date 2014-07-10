@@ -342,7 +342,6 @@ public class PublishActivity extends BaseActivity {
 
   @Subscribe
   public void onImageUploaded(ImageUtils.ImageUploadedEvent event) {
-    Log.d("PublishActivity", "mFileHash = " + mFileHash);
     if (event.getHash().equals(mFileHash)) {
       mImageUploadFinished = true;
       mImageUploadUrl = event.getUrl();

@@ -60,4 +60,8 @@ public class PullNotificationService extends IntentService {
       }
     });
   }
+
+  private void handleResponse(Response response) {
+
+  }
 }

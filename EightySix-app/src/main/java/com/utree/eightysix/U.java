@@ -64,7 +64,6 @@ public class U {
   }
 
   public static Analyser getAnalyser() {
-    checkThread();
     if (sStatistics == null) {
       sStatistics = new MtaAnalyserImpl();
     }
