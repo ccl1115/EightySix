@@ -1,11 +1,16 @@
 package com.utree.eightysix.push;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
-import android.text.format.Time;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.support.v4.app.NotificationCompat;
 import com.baidu.frontia.api.FrontiaPushMessageReceiver;
 import com.google.gson.annotations.SerializedName;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.BuildConfig;
+import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.msg.PullNotificationService;
 import com.utree.eightysix.utils.Env;
@@ -13,14 +18,11 @@ import com.utree.eightysix.utils.IOUtils;
 import de.akquinet.android.androlog.Log;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import org.apache.commons.math.ode.jacobians.FirstOrderIntegratorWithJacobians;
 
 /**
  */
@@ -62,24 +64,37 @@ public final class PushMessageReceiver extends FrontiaPushMessageReceiver {
 
   @Override
   public void onMessage(Context context, String message, String customContentString) {
-    Message m = U.getGson().fromJson(message, Message.class);
+    Message m;
+    try {
+      m = U.getGson().fromJson(message, Message.class);
+    } catch (Exception e) {
+      return;
+    }
 
     if (BuildConfig.DEBUG) {
-      Log.d("PushService", "            message = " + message);
-      Log.d("PushService", "customContentString = " + customContentString);
+      Log.d("PushService", "message = " + message);
 
-      File file = IOUtils.createTmpFile("push_message_log");
+      NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+      builder.setContentTitle("PushService Debug");
+      builder.setContentText(message);
+      builder.setTicker("PushService Debug");
+      builder.setSmallIcon(R.drawable.ic_app_icon);
+      builder.setDefaults(Notification.DEFAULT_ALL);
+      ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(0x1, builder.build());
+
+      Date date = new Date();
+
+      File file = IOUtils.createTmpFile("push_message_log_" + DateFormat.getDateInstance(DateFormat.SHORT).format(date));
 
       FileWriter os = null;
       try {
         os = new FileWriter(file, true);
         os.write("\n\n");
-        os.write(DateFormat.getInstance().format(new Date()));
-        os.write("\n\n");
+        os.write(String.format("[%s]", DateFormat.getInstance().format(date)));
         os.write("\nuserId = " + Account.inst().getUserId());
         os.write("\nmessage = " + message);
         os.write("\ntype = " + m.type);
-        os.write("\npushSeq = " + m.pushSeq);
+        os.write("\npushFlag = " + m.pushFlag);
         os.write("\n");
         os.flush();
       } catch (FileNotFoundException ignored) {
@@ -94,7 +109,7 @@ public final class PushMessageReceiver extends FrontiaPushMessageReceiver {
       }
     }
 
-    PullNotificationService.start(context, m.type, m.pushSeq);
+    PullNotificationService.start(context, m.type, m.pushFlag);
   }
 
   @Override
@@ -108,8 +123,8 @@ public final class PushMessageReceiver extends FrontiaPushMessageReceiver {
     @SerializedName("type")
     int type;
 
-    @SerializedName("pushSeq")
-    String pushSeq;
+    @SerializedName("pushFlag")
+    String pushFlag;
   }
 
 }

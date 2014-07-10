@@ -1,6 +1,7 @@
 package com.utree.eightysix.app.msg;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.LayoutInflater;
@@ -13,17 +14,17 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.data.Paginate;
+import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.MsgsRequest;
 import com.utree.eightysix.response.FeedsResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.widget.EmotionOnRefreshListener;
-import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.TopTitle;
-import com.utree.eightysix.data.Post;
 import com.utree.eightysix.widget.AdvancedListView;
+import com.utree.eightysix.widget.EmotionOnRefreshListener;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RefresherView;
 import java.util.List;
@@ -43,7 +44,7 @@ public class MsgActivity extends BaseActivity {
   @InjectView (R.id.tv_no_new_msg)
   public TextView mTvNoNewMsg;
 
-  @InjectView(R.id.tv_no_msg)
+  @InjectView (R.id.tv_no_msg)
   public TextView mTvNoMsg;
 
   @InjectView (R.id.alv_refresh)
@@ -58,6 +59,10 @@ public class MsgActivity extends BaseActivity {
 
   private boolean mRefreshed;
 
+  public static Intent getIntent(Context context) {
+    return new Intent(context, MsgActivity.class);
+  }
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -67,8 +72,7 @@ public class MsgActivity extends BaseActivity {
         @Override
         public void run() {
           List<Post> valid = U.getFixture(Post.class, 23, "valid");
-          for (Post p : valid)
-          {
+          for (Post p : valid) {
             if (p.read == 0) {
               mTvNoNewMsg.setVisibility(View.INVISIBLE);
             }
@@ -132,12 +136,6 @@ public class MsgActivity extends BaseActivity {
   }
 
   @Override
-  @Subscribe
-  public void onLogout(Account.LogoutEvent event) {
-    finish();
-  }
-
-  @Override
   protected void onHandleMessage(Message message) {
     switch (message.what) {
       case MSG_ANIMATE:
@@ -151,6 +149,19 @@ public class MsgActivity extends BaseActivity {
   @Override
   protected void onActionLeftOnClicked() {
     finish();
+  }
+
+  @Override
+  @Subscribe
+  public void onLogout(Account.LogoutEvent event) {
+    finish();
+  }
+
+  @Subscribe
+  public void onPostDeleteEvent(PostDeleteEvent event) {
+    if (mMsgAdapter != null) {
+      mMsgAdapter.remove(event.getPost());
+    }
   }
 
   private void requestMsgs(final int page) {
@@ -207,12 +218,5 @@ public class MsgActivity extends BaseActivity {
     }, FeedsResponse.class);
 
     showProgressBar();
-  }
-
-  @Subscribe
-  public void onPostDeleteEvent(PostDeleteEvent event) {
-    if (mMsgAdapter != null) {
-      mMsgAdapter.remove(event.getPost());
-    }
   }
 }

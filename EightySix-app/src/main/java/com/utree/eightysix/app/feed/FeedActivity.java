@@ -28,7 +28,6 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.ContactsActivity;
 import com.utree.eightysix.app.account.ImportContactActivity;
-import com.utree.eightysix.app.account.PraiseStaticActivity;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
@@ -39,14 +38,15 @@ import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.Circle;
-import com.utree.eightysix.event.AdapterDataSetChangedEvent;
+import com.utree.eightysix.event.HasNewPraiseEvent;
+import com.utree.eightysix.event.NewCommentCountEvent;
 import com.utree.eightysix.request.CircleSideRequest;
-import com.utree.eightysix.request.MyCirclesRequest;
 import com.utree.eightysix.response.CirclesResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.ShareUtils;
 import com.utree.eightysix.widget.AdvancedListView;
+import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TopBar;
 import java.util.Iterator;
@@ -110,6 +110,12 @@ public class FeedActivity extends BaseActivity {
     Intent intent = new Intent(context, FeedActivity.class);
     intent.putExtra("id", id);
     context.startActivity(intent);
+  }
+
+  public static Intent getIntent(Context context, int id) {
+    Intent intent = new Intent(context, FeedActivity.class);
+    intent.putExtra("id", id);
+    return intent;
   }
 
   @OnClick (R.id.ib_send)
@@ -214,6 +220,7 @@ public class FeedActivity extends BaseActivity {
       public void onClick(View view, int position) {
         if (position == 0) {
           startActivity(new Intent(FeedActivity.this, MsgActivity.class));
+          getTopBar().getActionView(0).setCount(0);
         } else if (position == 1) {
           mFeedFragment.refresh();
         }
@@ -242,9 +249,9 @@ public class FeedActivity extends BaseActivity {
   }
 
   @Override
-  protected void onResume() {
-    super.onResume();
-    U.getBus().register(mLvSideCircles);
+  protected void onDestroy() {
+    Env.setFirstRun(FIRST_RUN_KEY, false);
+    super.onDestroy();
   }
 
   @Override
@@ -255,9 +262,9 @@ public class FeedActivity extends BaseActivity {
   }
 
   @Override
-  protected void onDestroy() {
-    Env.setFirstRun(FIRST_RUN_KEY, false);
-    super.onDestroy();
+  protected void onResume() {
+    super.onResume();
+    U.getBus().register(mLvSideCircles);
   }
 
   @Override
@@ -275,6 +282,17 @@ public class FeedActivity extends BaseActivity {
   @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();
+  }
+
+  @Subscribe
+  public void onNewCommentCountEvent(NewCommentCountEvent event) {
+    getTopBar().getActionView(0).setCount(event.getCount());
+  }
+
+  @Subscribe
+  public void onHasNewPraiseEvent(HasNewPraiseEvent event) {
+    getTopBar().getActionOverflow().setHasNew(true);
+    mMenuViewHolder.mRbNewPraiseDot.setVisibility(View.VISIBLE);
   }
 
   @Override
@@ -333,6 +351,9 @@ public class FeedActivity extends BaseActivity {
 
     hideSide();
     hideMask();
+
+    setHasNewPraise();
+    setNewCommentCount();
   }
 
   @Subscribe
@@ -528,16 +549,25 @@ public class FeedActivity extends BaseActivity {
     }
   }
 
-  void setMyPraiseCount(int count) {
-    mMenuViewHolder.mTvPraiseCount.setText(String.format("%d个赞", count));
-  }
-
   private void setSideHighlight(Circle circle) {
     for (Circle c : mSideCircles) {
       c.selected = circle.equals(c);
     }
     setTitle(circle);
     if (mSideCirclesAdapter != null) mSideCirclesAdapter.notifyDataSetChanged();
+  }
+
+  void setMyPraiseCount(int count) {
+    mMenuViewHolder.mTvPraiseCount.setText(String.format("%d个赞", count));
+  }
+
+  private void setHasNewPraise() {
+    mMenuViewHolder.mRbNewPraiseDot.setVisibility(Account.inst().getHasNewPraise() ? View.VISIBLE : View.INVISIBLE);
+    getTopBar().getActionOverflow().setHasNew(Account.inst().getHasNewPraise());
+  }
+
+  private void setNewCommentCount() {
+    getTopBar().getActionView(0).setCount(Account.inst().getNewCommentCount());
   }
 
   @Keep
@@ -554,12 +584,15 @@ public class FeedActivity extends BaseActivity {
   @Keep
   class MenuViewHolder {
 
+    @InjectView (R.id.tv_praise_count)
+    TextView mTvPraiseCount;
+
+    @InjectView (R.id.rb_new_praise_dot)
+    RoundedButton mRbNewPraiseDot;
+
     MenuViewHolder(View view) {
       ButterKnife.inject(this, view);
     }
-
-    @InjectView(R.id.tv_praise_count)
-    TextView mTvPraiseCount;
 
     @OnClick (R.id.ll_invite)
     void onLlInviteClicked() {
@@ -570,6 +603,9 @@ public class FeedActivity extends BaseActivity {
     @OnClick (R.id.ll_praise_count)
     void onLlPraiseCountClicked() {
       startActivity(new Intent(FeedActivity.this, PraiseActivity.class));
+      getTopBar().getActionOverflow().setHasNew(false);
+      mRbNewPraiseDot.setVisibility(View.INVISIBLE);
+      Account.inst().setHasNewPraise(false);
       mPopupMenu.dismiss();
     }
 

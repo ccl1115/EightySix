@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
               android:orientation="vertical"
               android:layout_width="190dp"
               android:layout_height="wrap_content"
@@ -23,15 +24,6 @@
                 android:text="@string/introduce_to_friends"
                 android:textSize="16sp"
                 android:textColor="@android:color/black"/>
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:paddingRight="15dp"
-                android:text="送话费"
-                android:textSize="14sp"
-                android:textColor="@color/apptheme_primary_light_color"/>
     </LinearLayout>
 
     <View
@@ -46,13 +38,21 @@
             android:background="@drawable/apptheme_primary_list_selector"
             android:orientation="horizontal">
 
+        <com.utree.eightysix.widget.RoundedButton
+                android:id="@+id/rb_new_praise_dot"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_gravity="center_vertical"
+                android:visibility="invisible"
+                app:radius="5dp"
+                app:background="@color/apptheme_secondary_light_color"/>
+
         <TextView
                 style="@style/TextView.SingleLine"
                 android:id="@+id/tv_praise_count"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:paddingLeft="15dp"
                 android:gravity="center_vertical"
                 android:textSize="16sp"
                 android:textColor="@android:color/black"/>
@@ -63,7 +63,7 @@
                 android:gravity="center_vertical"
                 android:paddingRight="15dp"
                 android:textSize="14sp"
-                android:textColor="#ffef5724"/>
+                android:textColor="@color/apptheme_secondary_light_color"/>
 
     </LinearLayout>
 

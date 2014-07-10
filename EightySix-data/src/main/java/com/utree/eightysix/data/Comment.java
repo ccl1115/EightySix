@@ -13,6 +13,9 @@ public class Comment implements Serializable {
   @SerializedName ("countPraise")
   public int praise;
 
+  @SerializedName ("ownerPraise")
+  public int ownerPraise;
+
   @SerializedName ("createTime")
   public long timestamp;
 

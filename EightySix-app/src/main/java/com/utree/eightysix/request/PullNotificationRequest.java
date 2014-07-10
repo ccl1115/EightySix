@@ -2,6 +2,7 @@ package com.utree.eightysix.request;
 
 import com.utree.eightysix.C;
 import com.utree.eightysix.rest.Api;
+import com.utree.eightysix.rest.Param;
 import com.utree.eightysix.rest.Token;
 
 /**
@@ -18,8 +19,10 @@ public class PullNotificationRequest {
    * 4 NEW_COMMENT
    * 5 NEW_PRAISE
    */
+  @Param("type")
   public int type;
 
+  @Param("pushSeq")
   public String pushSeq;
 
   public PullNotificationRequest(int type, String pushSeq) {
