@@ -42,6 +42,7 @@
                 android:id="@+id/rb_new_praise_dot"
                 android:layout_width="8dp"
                 android:layout_height="8dp"
+                android:layout_marginLeft="3dp"
                 android:layout_gravity="center_vertical"
                 android:visibility="invisible"
                 app:radius="5dp"
@@ -53,6 +54,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:paddingLeft="4dp"
                 android:gravity="center_vertical"
                 android:textSize="16sp"
                 android:textColor="@android:color/black"/>

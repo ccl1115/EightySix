@@ -59,8 +59,16 @@ public class MsgActivity extends BaseActivity {
 
   private boolean mRefreshed;
 
-  public static Intent getIntent(Context context) {
-    return new Intent(context, MsgActivity.class);
+  public static void start(Context context, boolean refresh) {
+    Intent intent = new Intent(context, MsgActivity.class);
+    intent.putExtra("refresh", refresh);
+    context.startActivity(intent);
+  }
+
+  public static Intent getIntent(Context context, boolean refresh) {
+    Intent intent = new Intent(context, MsgActivity.class);
+    intent.putExtra("refresh", refresh);
+    return intent;
   }
 
   @Override
@@ -87,7 +95,12 @@ public class MsgActivity extends BaseActivity {
         }
       }, 1000);
     } else {
-      cacheOutMsg(1);
+      mRefreshed = getIntent().getBooleanExtra("refresh", false);
+      if (mRefreshed) {
+        requestMsgs(1);
+      } else {
+        cacheOutMsg(1);
+      }
     }
 
     mAlvMsg.setLoadMoreCallback(new LoadMoreCallback() {

@@ -1,6 +1,7 @@
 package com.utree.eightysix.app.msg;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ import java.util.Random;
 public class PraiseActivity extends BaseActivity {
 
   private static final int MSG_ANIMATE = 0x1;
+
   @InjectView (R.id.refresh_view)
   public RefresherView mRvMsg;
 
@@ -56,6 +58,12 @@ public class PraiseActivity extends BaseActivity {
   private Paginate.Page mPageInfo;
 
   private boolean mRefreshed;
+
+  public static void start(Context context, boolean refresh) {
+    Intent intent = new Intent(context, PraiseActivity.class);
+    intent.putExtra("refresh", refresh);
+    context.startActivity(intent);
+  }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -82,7 +90,12 @@ public class PraiseActivity extends BaseActivity {
         }
       }, 1000);
     } else {
-      cacheOutPraises(1);
+      mRefreshed = getIntent().getBooleanExtra("refresh", false);
+      if (mRefreshed) {
+        requestPraises(1);
+      } else {
+        cacheOutPraises(1);
+      }
     }
 
     mAlvMsg.setLoadMoreCallback(new LoadMoreCallback() {

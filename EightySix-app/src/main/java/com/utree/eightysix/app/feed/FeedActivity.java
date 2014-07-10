@@ -602,7 +602,7 @@ public class FeedActivity extends BaseActivity {
 
     @OnClick (R.id.ll_praise_count)
     void onLlPraiseCountClicked() {
-      startActivity(new Intent(FeedActivity.this, PraiseActivity.class));
+      PraiseActivity.start(FeedActivity.this, Account.inst().getHasNewPraise());
       getTopBar().getActionOverflow().setHasNew(false);
       mRbNewPraiseDot.setVisibility(View.INVISIBLE);
       Account.inst().setHasNewPraise(false);

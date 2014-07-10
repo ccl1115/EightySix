@@ -106,7 +106,7 @@ public class PullNotificationService extends Service {
       builder.setContentIntent(PendingIntent.getActivity(this, 0, PostActivity.getIntent(this, ids[0]), Intent.FLAG_ACTIVITY_NEW_TASK));
     } else {
       builder.setContentText(String.format("你关注的%d条秘密有了新的评论", ids.length));
-      builder.setContentIntent(PendingIntent.getActivity(this, 0, MsgActivity.getIntent(this), Intent.FLAG_ACTIVITY_NEW_TASK));
+      builder.setContentIntent(PendingIntent.getActivity(this, 0, MsgActivity.getIntent(this, true), Intent.FLAG_ACTIVITY_NEW_TASK));
     }
     return builder.build();
   }
