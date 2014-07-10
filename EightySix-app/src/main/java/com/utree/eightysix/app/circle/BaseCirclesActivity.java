@@ -17,6 +17,7 @@ import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import butterknife.OnItemLongClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
@@ -39,7 +40,6 @@ import com.utree.eightysix.widget.EmotionOnRefreshListener;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RefresherView;
 import com.utree.eightysix.widget.TopBar;
-import java.util.ArrayList;
 
 /**
  */
@@ -103,7 +103,7 @@ public class BaseCirclesActivity extends BaseActivity {
         AlertDialog dialog = new AlertDialog.Builder(this)
             .setTitle(String.format("确认在%s上班么？", circle.name))
             .setMessage("15天之内不能修改在职工厂")
-            .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
               @Override
               public void onClick(DialogInterface dialog, int which) {
                 requestCircleSet(circle);
@@ -119,6 +119,34 @@ public class BaseCirclesActivity extends BaseActivity {
         dialog.show();
       }
     }
+  }
+
+  @OnItemLongClick (R.id.alv_refresh)
+  public boolean onLvCirclesItemLongClicked(int position) {
+    final Circle circle = mCircleListAdapter.getItem(position);
+    if (circle != null) {
+      if (mMode == MODE_MY) {
+        AlertDialog dialog = new AlertDialog.Builder(this)
+            .setTitle(String.format("确认在%s上班么？", circle.name))
+            .setMessage("15天之内不能修改在职工厂")
+            .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                requestCircleSet(circle);
+              }
+            })
+            .setNegativeButton("重新选择", new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+              }
+            }).create();
+
+        dialog.show();
+        return true;
+      }
+    }
+    return false;
   }
 
   @Override
