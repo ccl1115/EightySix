@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.app.feed.PostActivity;
@@ -34,14 +35,14 @@ public class PullNotificationService extends Service {
   private static final int TYPE_FRIEND_L1_JOIN = 3;
   private static final int TYPE_COMMENT = 4;
   private static final int TYPE_PRAISE = 5;
+  private static final int TYPE_CIRCLE_CREATION_APPROVE = 6;
 
   private static final int ID_POST = 0x1000;
   private static final int ID_UNLOCK_FACTORY = 0x2000;
   private static final int ID_FRIEND_L1_JOIN = 0x3000;
   private static final int ID_COMMENT = 0x4000;
   private static final int ID_PRAISE = 0x5000;
-
-  private Handler mHandler = new Handler();
+  private static final int ID_APPROVE = 0x6000;
 
   public static void start(Context context, int type, String seq) {
     Intent intent = new Intent(context, PullNotificationService.class);
@@ -85,36 +86,44 @@ public class PullNotificationService extends Service {
   private Notification buildPost(String postId) {
     NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
     builder.setContentTitle(postId);
-    builder.setContentText("你的朋友发了一条新帖子");
+    builder.setContentText(getString(R.string.notification_friend_new_post));
     builder.setContentIntent(PendingIntent.getActivity(this, 0, PostActivity.getIntent(this, postId), Intent.FLAG_ACTIVITY_NEW_TASK));
     return builder.build();
   }
 
   private Notification buildUnlockCircle(String circleId, String circleName) {
     NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-    builder.setContentTitle("新的工友圈解锁了！");
-    builder.setContentText(String.format("看看%s里的朋友发的秘密吧", circleName));
+    builder.setContentTitle(getString(R.string.notification_circle_unlocked));
+    builder.setContentText(String.format(getString(R.string.notification_circle_unlocked_tip), circleName));
     builder.setContentIntent(PendingIntent.getActivity(this, 0, FeedActivity.getIntent(this, Integer.parseInt(circleId)), Intent.FLAG_ACTIVITY_NEW_TASK));
     return builder.build();
   }
 
   private Notification buildComment(String[] ids) {
     NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-    builder.setContentTitle("新提醒");
+    builder.setContentTitle(getString(R.string.notification_new));
     if (ids.length == 1) {
-      builder.setContentText("你关注的秘密有了新的评论");
+      builder.setContentText(getString(R.string.notification_new_comment));
       builder.setContentIntent(PendingIntent.getActivity(this, 0, PostActivity.getIntent(this, ids[0]), Intent.FLAG_ACTIVITY_NEW_TASK));
     } else {
-      builder.setContentText(String.format("你关注的%d条秘密有了新的评论", ids.length));
+      builder.setContentText(String.format(getString(R.string.notification_new_comments), ids.length));
       builder.setContentIntent(PendingIntent.getActivity(this, 0, MsgActivity.getIntent(this, true), Intent.FLAG_ACTIVITY_NEW_TASK));
     }
     return builder.build();
   }
 
+  private Notification buildApprove(String circleId, String circleName) {
+    NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+    builder.setContentTitle(getString(R.string.notification_circle_create_approve));
+    builder.setContentText(String.format(getString(R.string.notification_circle_create_approve_tip), circleName));
+    builder.setContentIntent(PendingIntent.getActivity(this, 0, FeedActivity.getIntent(this, Integer.parseInt(circleId)), Intent.FLAG_ACTIVITY_NEW_TASK));
+    return builder.build();
+  }
+
   private Notification buildFriendJoin(String circleId, String circleName) {
     NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-    builder.setContentTitle("新朋友加入");
-    builder.setContentText(String.format("%s的朋友数＋1，能猜到他是谁吗", circleName));
+    builder.setContentTitle(getString(R.string.notification_new_friend));
+    builder.setContentText(String.format(getString(R.string.notification_new_friend_tip), circleName));
     builder.setContentIntent(PendingIntent.getActivity(this, 0, FeedActivity.getIntent(this, Integer.parseInt(circleId)), Intent.FLAG_ACTIVITY_NEW_TASK));
     return builder.build();
   }
@@ -144,6 +153,11 @@ public class PullNotificationService extends Service {
       case TYPE_PRAISE:
         Account.inst().setHasNewPraise(true);
         U.getBus().post(new HasNewPraiseEvent());
+        break;
+      case TYPE_CIRCLE_CREATION_APPROVE:
+        for (String id : response.object.ids) {
+          getNM().notify(id, ID_APPROVE, buildApprove(id, "测试"));
+        }
         break;
     }
   }

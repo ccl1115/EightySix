@@ -45,7 +45,6 @@
     <!-- Action -->
     <string name="action_settings">@string/settings</string>
 
-
     <!-- ContentDescription -->
     <string name="cd_action_overflow">action_overflow</string>
     <string name="cd_action_left">action_left</string>
@@ -195,5 +194,17 @@
     <string name="not_select_circle">你还没有选择在职工厂</string>
     <string name="circle_unlocked_tip">你还没有解锁这个圈子</string>
     <string name="unlock">解锁</string>
+
+    <!-- Notification -->
+    <string name="notification_friend_new_post">你的朋友发了一条新帖子</string>
+    <string name="notification_circle_unlocked">新的工友圈解锁了！</string>
+    <string name="notification_circle_unlocked_tip">看看%1$s里的朋友发的秘密吧</string>
+    <string name="notification_new">新提醒</string>
+    <string name="notification_new_comment">你关注的秘密有了新的评论</string>
+    <string name="notification_new_comments">你关注的%d条秘密有了新的评论</string>
+    <string name="notification_new_friend">新朋友加入</string>
+    <string name="notification_new_friend_tip">%s的朋友数＋1，能猜到他是谁吗</string>
+    <string name="notification_circle_create_approve">圈子审核通过</string>
+    <string name="notification_circle_create_approve_tip">你申请创建的圈子“%1$s”已经解锁了</string>
 
 </resources>

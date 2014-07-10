@@ -24,5 +24,8 @@ public class PullNotificationResponse extends Response {
 
     @SerializedName("praise")
     public int praise;
+
+    @SerializedName("shortName")
+    public String shortName;
   }
 }
