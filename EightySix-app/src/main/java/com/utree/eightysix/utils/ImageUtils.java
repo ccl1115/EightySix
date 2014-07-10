@@ -231,10 +231,6 @@ public class ImageUtils {
     private String mFileHash;
     private String mUrl;
 
-    UploadWorker(Bitmap bitmap) {
-      mBitmap = bitmap;
-    }
-
     UploadWorker(File file) {
       mFile = file;
     }
@@ -266,7 +262,7 @@ public class ImageUtils {
         }
       }
 
-      final String hash = IOUtils.fileHash(file);
+      final String hash = IOUtils.fileHash(mFile);
       final String path = hash.substring(0, 1) + File.separator + hash.substring(2, 4) + File.separator;
       final String key = hash.substring(5);
       Storage.Result result = U.getCloudStorage().put(U.getConfig("storage.image.bucket.name"), path, key, file);
