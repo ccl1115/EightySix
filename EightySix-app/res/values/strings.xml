@@ -65,7 +65,7 @@
 
 
     <!-- ForgetPwdActivity -->
-    <string name="receiving_captcha">你的手机%s会收到一条4位数字的验证码的短信</string>
+    <string name="receiving_captcha">你的手机%s会收到一条6位数字的验证码的短信</string>
     <string name="get_captcha">获取验证码</string>
     <string name="reget_captcha">重新发送(%s)</string>
     <string name="find_password">找回密码</string>

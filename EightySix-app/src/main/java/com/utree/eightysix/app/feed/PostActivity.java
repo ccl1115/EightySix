@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.v4.text.TextUtilsCompat;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -47,6 +48,7 @@ import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.RoundedButton;
+import java.util.regex.Pattern;
 
 /**
  * @author simon
@@ -89,9 +91,11 @@ public class PostActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
+  private static final Pattern POST_CONTENT_PATTERN = Pattern.compile("[ \r\n]*");
+
   @OnTextChanged (R.id.et_post_content)
   public void onEtPostContentTextChanged(CharSequence text) {
-    if (TextUtils.isEmpty(text)) {
+    if (TextUtils.isEmpty(text) || POST_CONTENT_PATTERN.matcher(text).matches()) {
       mRbPost.setEnabled(false);
     } else {
       mRbPost.setEnabled(true);
@@ -333,7 +337,7 @@ public class PostActivity extends BaseActivity {
     request(new PostCommentsRequest(mPost.id, page), new OnResponse<PostCommentsResponse>() {
       @Override
       public void onResponse(PostCommentsResponse response) {
-        if (response != null && response.code == 0 && response.object != null) {
+        if (RESTRequester.responseOk(response)) {
           mPostCommentsAdapter = new PostCommentsAdapter(response.object.post, response.object.comments.lists);
           mLvComments.setAdapter(mPostCommentsAdapter);
           mPost = response.object.post;
@@ -365,7 +369,7 @@ public class PostActivity extends BaseActivity {
         new OnResponse<PublishCommentResponse>() {
           @Override
           public void onResponse(PublishCommentResponse response) {
-            if (response != null && response.code == 0 && response.object != null) {
+            if (RESTRequester.responseOk(response)) {
               mPostCommentsAdapter.add(response.object);
               mPost.comments++;
               U.getBus().post(mPost);
@@ -374,8 +378,7 @@ public class PostActivity extends BaseActivity {
             hideProgressBar();
             mEtPostContent.setText("");
             mEtPostContent.setEnabled(true);
-            mLvComments.setSelection(mLvComments.getCount());
-            mLvComments.stopLoadMore();
+            mLvComments.setSelection(Integer.MAX_VALUE);
           }
         }, PublishCommentResponse.class);
   }

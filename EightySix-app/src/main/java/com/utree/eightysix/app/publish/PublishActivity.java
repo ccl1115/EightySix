@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,7 +31,6 @@ import butterknife.OnClick;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ArgbEvaluator;
 import com.nineoldandroids.animation.ValueAnimator;
-import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
@@ -52,7 +50,6 @@ import com.utree.eightysix.widget.PostEditText;
 import com.utree.eightysix.widget.TopBar;
 import com.utree.eightysix.widget.panel.GridPanel;
 import com.utree.eightysix.widget.panel.Item;
-import de.akquinet.android.androlog.Log;
 import java.io.File;
 import java.util.List;
 import java.util.Random;
@@ -295,7 +292,7 @@ public class PublishActivity extends BaseActivity {
           if (mPostEditText.getText().length() == 0) {
             showToast(getString(R.string.cannot_post_empty_content));
           } else {
-            requestPost();
+            requestPublish();
           }
         }
       }
@@ -348,7 +345,7 @@ public class PublishActivity extends BaseActivity {
     }
 
     if (mRequestStarted) {
-      requestPost();
+      requestPublish();
     }
   }
 
@@ -511,7 +508,7 @@ public class PublishActivity extends BaseActivity {
     }
   }
 
-  private void requestPost() {
+  private void requestPublish() {
     mRequestStarted = true;
 
     if (mImageUploadFinished || mUseColor) {
@@ -526,8 +523,7 @@ public class PublishActivity extends BaseActivity {
             if (response.code == 0) {
               showToast(R.string.send_succeed, false);
 
-              InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-              imm.hideSoftInputFromWindow(mPostEditText.getWindowToken(), 0);
+              hideSoftKeyboard(mPostEditText);
 
               finish();
             }
@@ -537,6 +533,6 @@ public class PublishActivity extends BaseActivity {
       }, Response.class);
     }
 
-    showProgressBar();
+    showProgressBar(true);
   }
 }
