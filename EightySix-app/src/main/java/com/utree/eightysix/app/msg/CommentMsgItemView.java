@@ -23,7 +23,7 @@ public class CommentMsgItemView extends BaseMsgItemView {
     super.setLeftData(left);
 
     if (left != null) {
-      mTvCountLeft.setText(String.valueOf(left.praise));
+      mTvCountLeft.setText("+ " + String.valueOf(left.praise));
       mTvCountLeft.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_reply, 0, 0, 0);
       mTvCountLeft.setCompoundDrawablePadding(U.dp2px(8));
     }
@@ -34,7 +34,7 @@ public class CommentMsgItemView extends BaseMsgItemView {
     super.setRightData(right);
 
     if (right != null) {
-      mTvCountRight.setText(String.valueOf(right.praise));
+      mTvCountRight.setText("+ " + String.valueOf(right.praise));
       mTvCountRight.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_reply, 0, 0, 0);
       mTvCountRight.setCompoundDrawablePadding(U.dp2px(8));
     }
