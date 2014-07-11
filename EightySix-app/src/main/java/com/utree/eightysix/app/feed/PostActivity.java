@@ -12,6 +12,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import butterknife.InjectView;
@@ -27,6 +28,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.OverlayTipUtil;
 import com.utree.eightysix.app.feed.event.PostCommentPraiseEvent;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
@@ -46,9 +48,11 @@ import com.utree.eightysix.response.PublishCommentResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.ShareUtils;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.RoundedButton;
+import com.utree.eightysix.widget.guide.Guide;
 import java.util.regex.Pattern;
 
 /**
@@ -72,6 +76,7 @@ public class PostActivity extends BaseActivity {
 
   private PostCommentsAdapter mPostCommentsAdapter;
   private boolean mResumed;
+  private Guide mPortraitTip;
 
   public static void start(Context context, Post post, Rect rect) {
     Intent intent = new Intent(context, PostActivity.class);
@@ -234,6 +239,36 @@ public class PostActivity extends BaseActivity {
     }
     mResumed = true;
 
+
+    mLvComments.setOnScrollListener(new AbsListView.OnScrollListener() {
+      @Override
+      public void onScrollStateChanged(AbsListView view, int scrollState) {
+        if (scrollState == SCROLL_STATE_IDLE) {
+          if (view.getCount() == 0) return;
+
+          View last = view.getChildAt(view.getCount() >> 1);
+          if (last == null) return;
+          View portraitView = last.findViewById(R.id.fpv_portrait);
+          if (portraitView == null) return;
+
+          if (Env.firstRun("overlay_tip_portrait")) {
+            mPortraitTip = OverlayTipUtil.getPortraitTip(portraitView, new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                if (mPortraitTip != null) mPortraitTip.dismiss();
+              }
+            });
+            mPortraitTip.show(PostActivity.this);
+            Env.setFirstRun("overlay_tip_portrait", false);
+          }
+        }
+      }
+
+      @Override
+      public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+      }
+    });
   }
 
   @Override

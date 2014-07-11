@@ -194,7 +194,7 @@
     <string name="circle_unlocked_tip">你还没有解锁这个圈子</string>
     <string name="unlock">解锁</string>
 
-    <!-- Notification -->
+    <!-- Notifications -->
     <string name="notification_friend_new_post">你的朋友发了一条新帖子</string>
     <string name="notification_circle_unlocked">新的工友圈解锁了！</string>
     <string name="notification_circle_unlocked_tip">看看%1$s里的朋友发的秘密吧</string>
@@ -206,5 +206,11 @@
     <string name="notification_new_friend_tip_plural">%1$s的朋友数＋%2$d，能猜到他们是谁吗</string>
     <string name="notification_circle_create_approve">圈子审核通过</string>
     <string name="notification_circle_create_approve_tip">你申请创建的圈子“%1$s”已经解锁了</string>
+
+
+    <!-- Overlay Tips -->
+    <string name="overlay_tip_source">你肯定认识他们，但不会告诉你作者是谁。认识的人，包括你通讯录里的朋友以及他们在这个厂的朋友。</string>
+    <string name="overlay_tip_praise">赞，可以鼓励作者，并且当该秘密有更新时，你将收到提醒</string>
+    <string name="overlay_tip_portrait">每次评论新的秘密，你的头像都会不同。</string>
 
 </resources>

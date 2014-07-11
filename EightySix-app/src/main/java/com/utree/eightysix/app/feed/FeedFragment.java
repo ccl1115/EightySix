@@ -12,6 +12,7 @@ import butterknife.OnItemClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.OverlayTipUtil;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
@@ -34,6 +35,7 @@ import com.utree.eightysix.widget.FontPortraitView;
 import com.utree.eightysix.widget.IRefreshable;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RefresherView;
+import com.utree.eightysix.widget.guide.Guide;
 import java.util.Iterator;
 
 /**
@@ -51,6 +53,8 @@ class FeedFragment extends BaseFragment {
   private Circle mCircle;
   private Paginate.Page mPageInfo;
   private boolean mRefreshed;
+  private Guide mSourceTip;
+  private Guide mPraiseTip;
 
   @OnItemClick (R.id.lv_feed)
   public void onLvFeedItemClicked(int position, View view) {
@@ -128,6 +132,40 @@ class FeedFragment extends BaseFragment {
       public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (scrollState == SCROLL_STATE_IDLE) {
           U.getBus().post(new ListViewScrollStateIdledEvent());
+
+          if (Env.firstRun("overlay_tip_source")) {
+            if (view.getChildCount() <= 2) return;
+
+            View last = view.getChildAt(view.getChildCount() - 2);
+            if (last == null) return;
+            View sourceView = last.findViewById(R.id.tv_source);
+            if (sourceView == null || sourceView.getVisibility() != View.VISIBLE) return;
+
+            mSourceTip = OverlayTipUtil.getSourceTip(sourceView, new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                if (mSourceTip != null) mSourceTip.dismiss();
+              }
+            });
+            mSourceTip.show(getActivity());
+            Env.setFirstRun("overlay_tip_source", false);
+          } else if (Env.firstRun("overlay_tip_praise")) {
+            if (view.getChildCount() <= 2) return;
+
+            View last = view.getChildAt(view.getChildCount() - 2);
+            if (last == null) return;
+            View praiseView = last.findViewById(R.id.tv_praise);
+            if (praiseView == null || praiseView.getVisibility() != View.VISIBLE) return;
+
+            mPraiseTip = OverlayTipUtil.getPraiseTip(praiseView, new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                if (mPraiseTip != null) mPraiseTip.dismiss();
+              }
+            });
+            mPraiseTip.show(getActivity());
+            Env.setFirstRun("overlay_tip_praise", false);
+          }
         }
       }
 
