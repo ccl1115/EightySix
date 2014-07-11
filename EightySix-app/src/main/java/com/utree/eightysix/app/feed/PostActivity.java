@@ -135,7 +135,7 @@ public class PostActivity extends BaseActivity {
                     mPostCommentsAdapter.notifyDataSetChanged();
                     break;
                   case 1:
-                    ShareUtils.shareCommentToQQ(PostActivity.this, comment);
+                    ShareUtils.shareCommentToQQ(PostActivity.this, mPost.id, comment);
                     break;
                   case 2:
                     showToast("TODO report");

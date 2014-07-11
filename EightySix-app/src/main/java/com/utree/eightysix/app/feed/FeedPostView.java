@@ -252,11 +252,15 @@ public class FeedPostView extends RelativeLayout {
   @Subscribe
   public void onListViewScrollStateIdled(ListViewScrollStateIdledEvent event) {
     if (mIvShare.getVisibility() == INVISIBLE && getTop() >= 0) {
-      mIvShare.setVisibility(VISIBLE);
-      ObjectAnimator animator = ObjectAnimator.ofFloat(mIvShare, "alpha", 0f, 1f);
-      animator.setDuration(500);
-      animator.start();
+      showShareButton();
     }
+  }
+
+  protected void showShareButton() {
+    mIvShare.setVisibility(VISIBLE);
+    ObjectAnimator animator = ObjectAnimator.ofFloat(mIvShare, "alpha", 0f, 1f);
+    animator.setDuration(500);
+    animator.start();
   }
 
   @Override
