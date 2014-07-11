@@ -9,10 +9,11 @@
 
     <com.utree.eightysix.widget.FontPortraitView
             android:id="@+id/fpv_portrait"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_marginTop="5dp"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginRight="10dp"
+            android:gravity="center"/>
 
     <TextView
             android:id="@+id/tv_comment"

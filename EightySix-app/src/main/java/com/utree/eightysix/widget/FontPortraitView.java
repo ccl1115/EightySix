@@ -1,12 +1,12 @@
 package com.utree.eightysix.widget;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.TextView;
 import com.utree.eightysix.U;
-import java.util.Random;
+import com.utree.eightysix.drawable.RoundRectDrawable;
 
 /**
  * @author simon
@@ -26,7 +26,17 @@ public class FontPortraitView extends TextView {
   public FontPortraitView(Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
     setTypeface(sTypeface);
-    setTextSize(30);
+    setTextSize(20);
+  }
+
+  @Override
+  public void setTextColor(int color) {
+    super.setTextColor(color);
+    setBackgroundDrawable(new RoundRectDrawable(U.dp2px(15),
+        Color.argb(0xff,
+            Math.min(0xff, Color.red(color) + 88),
+            Math.min(0xff, Color.green(color) + 88),
+            Math.min(0xff, Color.blue(color) + 88))));
   }
 
   public void setEmotion(char c) {
