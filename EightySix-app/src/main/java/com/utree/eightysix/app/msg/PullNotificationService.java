@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+import android.text.TextUtils;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -140,21 +141,25 @@ public class PullNotificationService extends Service {
   private void handleResponse(PullNotificationResponse response) {
     switch (response.object.type) {
       case TYPE_POST:
+        if (response.object.ids == null || response.object.ids.length == 0) break;
         for (String id : response.object.ids) {
           getNM().notify(id, ID_POST, buildPost(id));
         }
         break;
       case TYPE_UNLOCK_CIRCLE:
+        if (response.object.ids == null || response.object.ids.length == 0) break;
         for (String id : response.object.ids) {
           getNM().notify(id, ID_UNLOCK_FACTORY, buildUnlockCircle(id, "测试"));
         }
         break;
       case TYPE_FRIEND_L1_JOIN:
+        if (response.object.ids == null || response.object.ids.length == 0) break;
         for (String id : response.object.ids) {
           getNM().notify(id, ID_FRIEND_L1_JOIN, buildFriendJoin(id, "测试", 10));
         }
         break;
       case TYPE_COMMENT:
+        if (response.object.ids == null || response.object.ids.length == 0) break;
         getNM().notify(ID_COMMENT, buildComment(response.object.ids));
         Account.inst().setNewCommentCount(response.object.ids.length);
         U.getBus().post(new NewCommentCountEvent(response.object.ids.length));
@@ -164,6 +169,7 @@ public class PullNotificationService extends Service {
         U.getBus().post(new HasNewPraiseEvent());
         break;
       case TYPE_CIRCLE_CREATION_APPROVE:
+        if (response.object.ids == null || response.object.ids.length == 0) break;
         for (String id : response.object.ids) {
           getNM().notify(id, ID_APPROVE, buildApprove(id, "测试"));
         }
