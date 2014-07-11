@@ -32,6 +32,7 @@
                 android:layout_marginRight="5dp"/>
 
         <TextView
+                style="@style/TextView.SingleLine"
                 android:id="@+id/tv_location"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"

@@ -9,8 +9,7 @@
             android:id="@+id/tb_rl_left"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@drawable/apptheme_primary_btn_dark"
-            android:paddingRight="10dp">
+            android:background="@drawable/apptheme_primary_btn_dark">
 
         <ImageView
                 android:id="@+id/tb_iv_action_left"
