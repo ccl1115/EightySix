@@ -46,6 +46,7 @@ import com.utree.eightysix.response.PublishCommentResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.utils.ShareUtils;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.RoundedButton;
 import java.util.regex.Pattern;
@@ -112,9 +113,9 @@ public class PostActivity extends BaseActivity {
     String[] items;
     String like = comment.praised == 1 ? getString(R.string.unlike) : getString(R.string.like);
     if (comment.self == 1) {
-      items = new String[]{like, getString(R.string.report), getString(R.string.delete)};
+      items = new String[]{like, getString(R.string.share), getString(R.string.report), getString(R.string.delete)};
     } else {
-      items = new String[]{like, getString(R.string.report)};
+      items = new String[]{like, getString(R.string.share), getString(R.string.report)};
     }
     new AlertDialog.Builder(this).setTitle(getString(R.string.comment_action))
         .setItems(items,
@@ -134,9 +135,12 @@ public class PostActivity extends BaseActivity {
                     mPostCommentsAdapter.notifyDataSetChanged();
                     break;
                   case 1:
-                    showToast("TODO report");
+                    ShareUtils.shareCommentToQQ(PostActivity.this, comment);
                     break;
                   case 2:
+                    showToast("TODO report");
+                    break;
+                  case 3:
                     U.getBus().post(new PostCommentDeleteRequest(mPost.id, comment.id));
                     break;
                 }

@@ -34,9 +34,9 @@ public class FontPortraitView extends TextView {
     super.setTextColor(color);
     setBackgroundDrawable(new RoundRectDrawable(U.dp2px(15),
         Color.argb(0xff,
-            Math.min(0xff, Color.red(color) + 88),
-            Math.min(0xff, Color.green(color) + 88),
-            Math.min(0xff, Color.blue(color) + 88))));
+            Math.min(0xff, Color.red(color) + 0x88),
+            Math.min(0xff, Color.green(color) + 0x88),
+            Math.min(0xff, Color.blue(color) + 0x88))));
   }
 
   public void setEmotion(char c) {

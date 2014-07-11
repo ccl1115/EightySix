@@ -10,6 +10,7 @@ import com.tencent.tauth.UiError;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 
 /**
@@ -27,9 +28,38 @@ public class ShareUtils {
 
   public static void shareAppToQQ(final Activity activity) {
     Bundle data = new Bundle();
-    data.putString(QQShare.SHARE_TO_QQ_TITLE, "分享蓝莓应用");
+    data.putString(QQShare.SHARE_TO_QQ_TITLE, "分享蓝莓圈");
     data.putString(QQShare.SHARE_TO_QQ_SUMMARY, "匿名的蓝领社交圈");
-    data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "http://www.baidu.com");
+    data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "http://www.lanmeiquan.com");
+    data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
+    shareToQQ(activity, data, new IUiListener() {
+      @Override
+      public void onComplete(Object o) {
+        if (BuildConfig.DEBUG) Toast.makeText(activity, "onComplete", Toast.LENGTH_LONG).show();
+      }
+
+      @Override
+      public void onError(UiError uiError) {
+        if (BuildConfig.DEBUG)
+          Toast.makeText(activity,
+              String.format("%d: %s - %s", uiError.errorCode, uiError.errorMessage, uiError.errorDetail),
+              Toast.LENGTH_LONG).show();
+      }
+
+      @Override
+      public void onCancel() {
+        if (BuildConfig.DEBUG) Toast.makeText(activity, "onCancel", Toast.LENGTH_LONG).show();
+      }
+    });
+  }
+
+  public static void shareCommentToQQ(final Activity activity, String postId, Comment comment) {
+    Bundle data = new Bundle();
+    // TODO 文案
+    data.putString(QQShare.SHARE_TO_QQ_TITLE, "来自蓝莓圈的评论");
+    data.putString(QQShare.SHARE_TO_QQ_SUMMARY, comment.content);
+    data.putString(QQShare.SHARE_TO_QQ_TARGET_URL,
+        String.format("http://www.lanmeiquan.com/post/%s/comment/%s", postId, comment.id));
     data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
     shareToQQ(activity, data, new IUiListener() {
       @Override
@@ -54,9 +84,11 @@ public class ShareUtils {
 
   public static void sharePostToQQ(final Activity activity, Post post) {
     Bundle data = new Bundle();
-    data.putString(QQShare.SHARE_TO_QQ_TITLE, "分享个秘密");
+    // TODO 文案
+    data.putString(QQShare.SHARE_TO_QQ_TITLE, "来自蓝莓圈的帖子");
     data.putString(QQShare.SHARE_TO_QQ_SUMMARY, post.content);
-    data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "http://www.baidu.com");
+    data.putString(QQShare.SHARE_TO_QQ_TARGET_URL,
+        String.format("http://www.lanmeiquan.com/post/%s", post.id));
     data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
     shareToQQ(activity, data, new IUiListener() {
       @Override
