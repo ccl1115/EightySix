@@ -550,6 +550,7 @@ public class FeedActivity extends BaseActivity {
   }
 
   private void setSideHighlight(Circle circle) {
+    if (mSideCircles == null) return;
     for (Circle c : mSideCircles) {
       c.selected = circle.equals(c);
     }
