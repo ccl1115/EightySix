@@ -252,15 +252,13 @@ class FeedFragment extends BaseFragment {
             mFeedAdapter = new FeedAdapter(response.object);
             U.getBus().register(mFeedAdapter);
             mLvFeed.setAdapter(mFeedAdapter);
-            mRefresherView.hideHeader();
           } else if (mFeedAdapter != null) {
             mFeedAdapter.add(response.object.posts.lists);
           }
           ((FeedActivity)getBaseActivity()).setMyPraiseCount(response.object.myPraiseCount);
           mPageInfo = response.object.posts.page;
-        } else {
-          mLvFeed.setAdapter(null);
         }
+        mRefresherView.hideHeader();
         mLvFeed.stopLoadMore();
         getBaseActivity().hideProgressBar();
       }
