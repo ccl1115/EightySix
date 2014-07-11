@@ -73,6 +73,11 @@ class FeedAdapter extends BaseAdapter {
     notifyDataSetChanged();
   }
 
+  public void add(Post post) {
+    mFeeds.posts.lists.add(1, post);
+    notifyDataSetChanged();
+  }
+
   public Feeds getFeeds() {
     return mFeeds;
   }

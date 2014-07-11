@@ -21,7 +21,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,10 +36,13 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.app.publish.event.PostPublishedEvent;
+import com.utree.eightysix.data.Post;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.request.PublishRequest;
+import com.utree.eightysix.response.PublishPostResponse;
 import com.utree.eightysix.rest.OnResponse;
-import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
@@ -516,21 +518,26 @@ public class PublishActivity extends BaseActivity {
       final PublishRequest request = new PublishRequest(mFactoryId, mPostEditText.getText().toString(),
           mUseColor ? String.format("%h", mBgColor) : "", mImageUploadUrl);
 
-      request(request, new OnResponse<Response>() {
+      request(request, new OnResponse<PublishPostResponse>() {
         @Override
-        public void onResponse(Response response) {
-          if (response != null) {
-            if (response.code == 0) {
-              showToast(R.string.send_succeed, false);
+        public void onResponse(PublishPostResponse response) {
+          if (RESTRequester.responseOk(response)) {
+            showToast(R.string.send_succeed, false);
 
-              hideSoftKeyboard(mPostEditText);
+            hideSoftKeyboard(mPostEditText);
+            Post post = new Post();
+            post.bgColor = String.format("%h", mBgColor);
+            post.bgUrl = mImageUploadUrl;
+            post.id = response.object.id;
+            post.content = mPostEditText.getText().toString();
+            post.source = "认识的人";
+            U.getBus().post(new PostPublishedEvent(post));
 
-              finish();
-            }
+            finish();
           }
           hideProgressBar();
         }
-      }, Response.class);
+      }, PublishPostResponse.class);
     }
 
     showProgressBar(true);

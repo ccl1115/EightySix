@@ -14,6 +14,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
+import com.utree.eightysix.app.publish.event.PostPublishedEvent;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Feeds;
 import com.utree.eightysix.data.Paginate;
@@ -216,6 +217,13 @@ class FeedFragment extends BaseFragment {
           }
         }
       }, Response.class);
+    }
+  }
+
+  @Subscribe
+  public void onPostPublishedEvent(PostPublishedEvent event) {
+    if (mFeedAdapter != null) {
+      mFeedAdapter.add(event.getPost());
     }
   }
 
