@@ -31,6 +31,7 @@ import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.EmotionOnRefreshListener;
 import com.utree.eightysix.widget.FontPortraitView;
+import com.utree.eightysix.widget.IRefreshable;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RefresherView;
 import java.util.Iterator;
@@ -45,9 +46,6 @@ class FeedFragment extends BaseFragment {
 
   @InjectView (R.id.refresh_view)
   public RefresherView mRefresherView;
-
-  @InjectView (R.id.fpv_head)
-  public FontPortraitView mFontPortraitView;
 
   private FeedAdapter mFeedAdapter;
   private Circle mCircle;
@@ -105,9 +103,17 @@ class FeedFragment extends BaseFragment {
 
     U.getBus().register(mLvFeed);
 
-    mRefresherView.setOnRefreshListener(new EmotionOnRefreshListener(mFontPortraitView) {
+    mRefresherView.setOnRefreshListener(new IRefreshable.OnRefreshListener() {
       @Override
       public void onRefreshData() {
+      }
+
+      @Override
+      public void onRefreshUI() {
+      }
+
+      @Override
+      public void onStateChanged(IRefreshable.State state) {
       }
 
       @Override

@@ -87,7 +87,6 @@
     <string name="find_friend">寻找朋友</string>
     <string name="import_contact_1">通讯录里的朋友，现在都在哪个厂上班？他们正在这些厂里匿名说什么？</string>
     <string name="import_contact_2">通过手机通讯录，找出和你一个厂的朋友</string>
-    <string name="import_contact_3">是认识的人，为什么还要匿名</string>
     <string name="sync_contact_failed">同步通讯录失败，请尝试重新同步</string>
 
 

@@ -37,6 +37,7 @@ import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.EmotionOnRefreshListener;
+import com.utree.eightysix.widget.IRefreshable;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RefresherView;
 import com.utree.eightysix.widget.TopBar;
@@ -60,9 +61,6 @@ public class BaseCirclesActivity extends BaseActivity {
 
   @InjectView (R.id.tv_empty_text)
   public TextView mTvEmptyText;
-
-  @InjectView (R.id.tv_head)
-  public TextView mTvHead;
 
   @InjectView (R.id.tv_search_hint)
   public EditText mRbSearchHint;
@@ -241,11 +239,14 @@ public class BaseCirclesActivity extends BaseActivity {
         }
       });
 
-      mRefresherView.setOnRefreshListener(new EmotionOnRefreshListener(mTvHead) {
+      mRefresherView.setOnRefreshListener(new IRefreshable.OnRefreshListener() {
+
+        @Override
+        public void onStateChanged(IRefreshable.State state) {
+        }
 
         @Override
         public void onPreRefresh() {
-          super.onPreRefresh();
           mRefreshed = true;
           requestCircles(1);
         }
@@ -253,15 +254,10 @@ public class BaseCirclesActivity extends BaseActivity {
         @Override
         public void onRefreshData() {
         }
-      });
-    }
 
-    if (U.useFixture()) {
-      mRefresherView.setOnRefreshListener(new EmotionOnRefreshListener(mTvHead) {
         @Override
-        public void onRefreshData() {
-          mCircleListAdapter = new CircleListAdapter(U.getFixture(Circle.class, 20, "valid"));
-          mLvCircles.setAdapter(mCircleListAdapter);
+        public void onRefreshUI() {
+
         }
       });
     }

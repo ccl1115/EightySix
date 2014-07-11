@@ -25,6 +25,7 @@ import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.EmotionOnRefreshListener;
+import com.utree.eightysix.widget.IRefreshable;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RefresherView;
 import java.util.List;
@@ -49,9 +50,6 @@ public class MsgActivity extends BaseActivity {
 
   @InjectView (R.id.alv_refresh)
   public AdvancedListView mAlvMsg;
-
-  @InjectView (R.id.tv_head)
-  public TextView mTvHead;
 
   private Random mRandom = new Random();
   private MsgAdapter mMsgAdapter;
@@ -125,7 +123,11 @@ public class MsgActivity extends BaseActivity {
       }
     });
 
-    mRvMsg.setOnRefreshListener(new EmotionOnRefreshListener(mTvHead) {
+    mRvMsg.setOnRefreshListener(new IRefreshable.OnRefreshListener() {
+      @Override
+      public void onStateChanged(IRefreshable.State state) {
+      }
+
       @Override
       public void onPreRefresh() {
         mRefreshed = true;
@@ -134,7 +136,10 @@ public class MsgActivity extends BaseActivity {
 
       @Override
       public void onRefreshData() {
+      }
 
+      @Override
+      public void onRefreshUI() {
       }
     });
 
@@ -146,17 +151,6 @@ public class MsgActivity extends BaseActivity {
     super.onDestroy();
 
     U.getBus().unregister(mAlvMsg);
-  }
-
-  @Override
-  protected void onHandleMessage(Message message) {
-    switch (message.what) {
-      case MSG_ANIMATE:
-        mTvHead.setText(String.format("%c", (char) (0xe801 + mRandom.nextInt(14))));
-        mRvMsg.invalidate();
-        getHandler().sendEmptyMessageDelayed(MSG_ANIMATE, 500);
-        break;
-    }
   }
 
   @Override

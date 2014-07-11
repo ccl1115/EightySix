@@ -524,7 +524,6 @@ public class PublishActivity extends BaseActivity {
           if (RESTRequester.responseOk(response)) {
             showToast(R.string.send_succeed, false);
 
-            hideSoftKeyboard(mPostEditText);
             Post post = new Post();
             post.bgColor = String.format("%h", mBgColor);
             post.bgUrl = mImageUploadUrl;
@@ -540,6 +539,7 @@ public class PublishActivity extends BaseActivity {
       }, PublishPostResponse.class);
     }
 
+    hideSoftKeyboard(mPostEditText);
     showProgressBar(true);
   }
 }

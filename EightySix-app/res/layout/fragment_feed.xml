@@ -16,13 +16,10 @@
         app:threshold_height="150dp">
 
 
-    <com.utree.eightysix.widget.FontPortraitView
+    <com.utree.eightysix.widget.GearsView
             android:id="@+id/fpv_head"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="40sp"
-            android:layout_marginBottom="15dp"/>
+            android:layout_width="80dp"
+            android:layout_height="80dp"/>
 
     <com.utree.eightysix.widget.AdvancedListView
             android:id="@+id/lv_feed"
