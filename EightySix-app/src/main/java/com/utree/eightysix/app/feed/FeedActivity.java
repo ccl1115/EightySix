@@ -120,12 +120,10 @@ public class FeedActivity extends BaseActivity {
 
   @OnClick (R.id.ib_send)
   public void onIbSendClicked() {
-    if (mFeedFragment.getCircle() != null) {
-      if (mFeedFragment.getCircle().lock == 1) {
-        showNoPermDialog();
-      } else {
-        PublishActivity.start(this, mFeedFragment.getCircle().id);
-      }
+    if (mFeedFragment.isLocked()) {
+      showNoPermDialog();
+    } else {
+      PublishActivity.start(this, mFeedFragment.getCircle().id);
     }
   }
 
@@ -376,6 +374,7 @@ public class FeedActivity extends BaseActivity {
       mNoPermDialog.setPositive(R.string.invite_people, new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+          mNoPermDialog.dismiss();
           showInviteDialog();
         }
       });
@@ -558,10 +557,6 @@ public class FeedActivity extends BaseActivity {
     if (mSideCirclesAdapter != null) mSideCirclesAdapter.notifyDataSetChanged();
   }
 
-  void setMyPraiseCount(int count) {
-    mMenuViewHolder.mTvPraiseCount.setText(String.format("%d个赞", count));
-  }
-
   private void setHasNewPraise() {
     mMenuViewHolder.mRbNewPraiseDot.setVisibility(Account.inst().getHasNewPraise() ? View.VISIBLE : View.INVISIBLE);
     getTopBar().getActionOverflow().setHasNew(Account.inst().getHasNewPraise());
@@ -569,6 +564,10 @@ public class FeedActivity extends BaseActivity {
 
   private void setNewCommentCount() {
     getTopBar().getActionView(0).setCount(Account.inst().getNewCommentCount());
+  }
+
+  void setMyPraiseCount(int count) {
+    mMenuViewHolder.mTvPraiseCount.setText(String.format("%d个赞", count));
   }
 
   @Keep

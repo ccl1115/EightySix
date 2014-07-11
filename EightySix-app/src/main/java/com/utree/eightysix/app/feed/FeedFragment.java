@@ -15,6 +15,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.data.Circle;
+import com.utree.eightysix.data.Feeds;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
@@ -110,7 +111,6 @@ class FeedFragment extends BaseFragment {
 
       @Override
       public void onPreRefresh() {
-        super.onPreRefresh();
         mRefreshed = true;
         requestFeeds(mCircle.id, 1);
       }
@@ -188,6 +188,7 @@ class FeedFragment extends BaseFragment {
 
   public void refresh() {
     mRefreshed = true;
+    getBaseActivity().showProgressBar();
     requestFeeds(mCircle.id, 1);
   }
 
@@ -233,8 +234,6 @@ class FeedFragment extends BaseFragment {
   }
 
   private void requestFeeds(int id, final int page) {
-    if (page == 1) getBaseActivity().showProgressBar();
-
     getBaseActivity().request(new FeedsRequest(id, page), new OnResponse<FeedsResponse>() {
       @Override
       public void onResponse(FeedsResponse response) {
@@ -261,8 +260,6 @@ class FeedFragment extends BaseFragment {
   }
 
   private void cacheOutFeeds(final int id, final int page) {
-    if (page == 1) getBaseActivity().showProgressBar();
-
     getBaseActivity().cacheOut(new FeedsRequest(id, page), new OnResponse<FeedsResponse>() {
       @Override
       public void onResponse(FeedsResponse response) {
@@ -287,4 +284,11 @@ class FeedFragment extends BaseFragment {
     }, FeedsResponse.class);
   }
 
+  boolean isLocked() {
+    if (mFeedAdapter != null) {
+      Feeds feeds = mFeedAdapter.getFeeds();
+      if (feeds != null) return feeds.lock == 1;
+    }
+    return false;
+  }
 }
