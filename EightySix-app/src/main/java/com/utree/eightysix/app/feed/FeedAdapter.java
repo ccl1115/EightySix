@@ -48,25 +48,23 @@ class FeedAdapter extends BaseAdapter {
 
   FeedAdapter(Feeds feeds) {
     mFeeds = feeds;
-    mFeeds.posts.lists.add(0, null); // for placeholder view
     mShowUnlock = mFeeds.lock == 1;
     mShowInvite = mFeeds.upContact != 1;
     mShowSelect = mFeeds.selectFactory != 1;
     if (mShowUnlock) {
-      mFeeds.posts.lists.add(1, null);
+      mFeeds.posts.lists.add(0, null);
     }
     if (mShowInvite) {
-      mFeeds.posts.lists.add(1, null);
+      mFeeds.posts.lists.add(0, null);
     }
     if (mShowSelect) {
-      mFeeds.posts.lists.add(1, null);
+      mFeeds.posts.lists.add(0, null);
     }
   }
 
   public void add(List<Post> posts) {
     if (mFeeds.posts.lists == null) {
       mFeeds.posts.lists = posts;
-      mFeeds.posts.lists.add(0, null); // for placeholder view
     } else {
       mFeeds.posts.lists.addAll(posts);
     }
@@ -74,7 +72,7 @@ class FeedAdapter extends BaseAdapter {
   }
 
   public void add(Post post) {
-    mFeeds.posts.lists.add(1, post);
+    mFeeds.posts.lists.add(0, post);
     notifyDataSetChanged();
   }
 
@@ -84,12 +82,12 @@ class FeedAdapter extends BaseAdapter {
 
   @Override
   public int getCount() {
-    return mFeeds.posts.lists == null ? 0 : mFeeds.posts.lists.size();
+    return mFeeds.posts.lists == null ? 0 : mFeeds.posts.lists.size() + 2; // top/bot padding item
   }
 
   @Override
   public Post getItem(int position) {
-    return mFeeds.posts.lists.get(position);
+    return mFeeds.posts.lists.get(position - 1);
   }
 
   @Override
@@ -124,24 +122,25 @@ class FeedAdapter extends BaseAdapter {
 
   @Override
   public int getItemViewType(int position) {
-    switch (position) {
-      case 0:
-        return TYPE_PLACEHOLDER;
-      case 1:
-        if (mShowInvite) return TYPE_INVITE;
-        else if (mShowUnlock) return TYPE_UNLOCK;
-        else if (mShowSelect) return TYPE_SELECT;
-        else return TYPE_POST;
-      case 2:
-        if (mShowInvite && mShowUnlock) return TYPE_UNLOCK;
-        else if (mShowInvite && mShowSelect) return TYPE_SELECT;
-        else if (mShowUnlock && mShowSelect) return TYPE_SELECT;
-        else return TYPE_POST;
-      case 3:
-        if (mShowInvite && mShowUnlock && mShowSelect) return TYPE_SELECT;
-        else return TYPE_POST;
-      default:
-        return TYPE_POST;
+    if (position == 0) {
+      return TYPE_PLACEHOLDER;
+    } else if (position == 1) {
+      if (mShowInvite) return TYPE_INVITE;
+      else if (mShowUnlock) return TYPE_UNLOCK;
+      else if (mShowSelect) return TYPE_SELECT;
+      else return TYPE_POST;
+    } else if (position == 2) {
+      if (mShowInvite && mShowUnlock) return TYPE_UNLOCK;
+      else if (mShowInvite && mShowSelect) return TYPE_SELECT;
+      else if (mShowUnlock && mShowSelect) return TYPE_SELECT;
+      else return TYPE_POST;
+    } else if (position == 3) {
+      if (mShowInvite && mShowUnlock && mShowSelect) return TYPE_SELECT;
+      else return TYPE_POST;
+    } else if (position == getCount() - 1) {
+      return TYPE_PLACEHOLDER;
+    } else {
+      return TYPE_POST;
     }
   }
 
