@@ -271,6 +271,16 @@ public class PostActivity extends BaseActivity {
     });
   }
 
+
+  @Override
+  public void onBackPressed() {
+    if (mPortraitTip != null && mPortraitTip.isShowing()) {
+      mPortraitTip.dismiss();
+    } else {
+      super.onBackPressed();
+    }
+  }
+
   @Override
   protected void onPause() {
     super.onPause();

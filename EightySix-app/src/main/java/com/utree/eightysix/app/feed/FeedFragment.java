@@ -176,6 +176,30 @@ class FeedFragment extends BaseFragment {
     });
   }
 
+  boolean hidePraiseTip() {
+    if (mPraiseTip != null) {
+      if (mPraiseTip.isShowing()) {
+        mPraiseTip.dismiss();
+        return true;
+      }
+    }
+    return false;
+  }
+
+  boolean hideSourceTip() {
+    if (mSourceTip != null) {
+      if (mSourceTip.isShowing()) {
+        mSourceTip.dismiss();
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public boolean onBackPressed() {
+    return hidePraiseTip() || hideSourceTip();
+  }
+
   @Override
   public void onDestroy() {
     super.onDestroy();

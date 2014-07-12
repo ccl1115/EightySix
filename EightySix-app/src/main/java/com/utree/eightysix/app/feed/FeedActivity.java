@@ -296,6 +296,10 @@ public class FeedActivity extends BaseActivity {
 
   @Override
   public void onBackPressed() {
+    if (mFeedFragment.onBackPressed()) {
+      return;
+    }
+
     if (mSideShown) {
       hideSide();
       hideMask();
