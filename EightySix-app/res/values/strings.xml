@@ -212,5 +212,6 @@
     <string name="overlay_tip_source">你肯定认识他们，但不会告诉你作者是谁。认识的人，包括你通讯录里的朋友以及他们在这个厂的朋友。</string>
     <string name="overlay_tip_praise">赞，可以鼓励作者，并且当该秘密有更新时，你将收到提醒</string>
     <string name="overlay_tip_portrait">每次评论新的秘密，你的头像都会不同。</string>
+    <string name="search">搜索</string>
 
 </resources>

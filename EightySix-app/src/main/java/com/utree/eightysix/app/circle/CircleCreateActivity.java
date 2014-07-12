@@ -132,7 +132,7 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
   }
 
   @Override
-  protected void onActionLeftOnClicked() {
+  public void onActionLeftClicked() {
     finish();
   }
 

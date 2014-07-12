@@ -145,8 +145,15 @@ public class CircleSearchActivity extends BaseActivity {
   }
 
   @Override
-  protected void onSearchActionGo(String keyword) {
+  public void onSearchTextChanged(CharSequence cs) {
+    if (TextUtils.isEmpty(cs)) {
+      showHistory();
+    }
+  }
 
+  @Override
+  public void onActionSearchClicked(CharSequence cs) {
+    String keyword = cs.toString();
     mLastKeyword = keyword;
     requestSearch(1, keyword);
 
@@ -163,14 +170,7 @@ public class CircleSearchActivity extends BaseActivity {
   }
 
   @Override
-  protected void onSearchTextChanged(String newKeyword) {
-    if (TextUtils.isEmpty(newKeyword)) {
-      showHistory();
-    }
-  }
-
-  @Override
-  protected void onActionLeftOnClicked() {
+  public void onActionLeftClicked() {
     finish();
   }
 

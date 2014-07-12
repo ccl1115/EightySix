@@ -157,7 +157,7 @@ public class PraiseActivity extends BaseActivity {
   }
 
   @Override
-  protected void onActionLeftOnClicked() {
+  public void onActionLeftClicked() {
     finish();
   }
 

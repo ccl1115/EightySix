@@ -260,7 +260,7 @@ public class ForgetPwdActivity extends BaseActivity {
   }
 
   @Override
-  protected void onActionLeftOnClicked() {
+  public void onActionLeftClicked() {
     finish();
   }
 }

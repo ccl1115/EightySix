@@ -264,7 +264,7 @@ public class BaseCirclesActivity extends BaseActivity {
   }
 
   @Override
-  protected void onActionLeftOnClicked() {
+  public void onActionLeftClicked() {
     if (mMode == MODE_MY) {
       finish();
     }

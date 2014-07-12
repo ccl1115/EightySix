@@ -67,7 +67,7 @@ public class MainSettingsActivity extends BaseActivity {
   }
 
   @Override
-  protected void onActionLeftOnClicked() {
+  public void onActionLeftClicked() {
     finish();
   }
 

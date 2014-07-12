@@ -159,7 +159,7 @@ public class RegisterActivity extends BaseActivity {
   }
 
   @Override
-  protected void onActionLeftOnClicked() {
+  public void onActionLeftClicked() {
     finish();
   }
 

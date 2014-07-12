@@ -288,7 +288,7 @@ public class PostActivity extends BaseActivity {
   }
 
   @Override
-  protected void onActionLeftOnClicked() {
+  public void onActionLeftClicked() {
   }
 
   @Override

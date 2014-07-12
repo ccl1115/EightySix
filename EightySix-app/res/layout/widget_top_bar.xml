@@ -68,40 +68,59 @@
             android:scaleType="centerInside"
             android:contentDescription="@string/cd_action_overflow"/>
 
-    <FrameLayout
-            android:id="@+id/tb_fl_search"
-            android:visibility="gone"
+
+    <LinearLayout
+            android:id="@+id/tb_ll_search"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#ff363940">
+            android:visibility="gone"
+            android:orientation="horizontal">
 
-        <EditText
-                android:id="@+id/tb_et_search"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:drawableLeft="@drawable/ic_search"
-                android:drawablePadding="4dp"
-                android:hint="@string/enter_search_keyword"
-                android:textColor="@android:color/white"
-                android:paddingRight="56dp"
-                android:singleLine="true"
-                android:lines="1"
-                android:paddingBottom="10dp"
-                android:imeOptions="actionGo|actionDone"/>
+        <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginRight="8dp"
+                android:background="#ff363940">
+
+            <EditText
+                    android:id="@+id/tb_et_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:drawableLeft="@drawable/ic_search"
+                    android:drawablePadding="4dp"
+                    android:hint="@string/enter_search_keyword"
+                    android:textColor="@android:color/white"
+                    android:paddingRight="56dp"
+                    android:singleLine="true"
+                    android:lines="1"
+                    android:paddingBottom="10dp"
+                    android:imeOptions="actionGo|actionDone"/>
 
 
-        <ImageView
-                android:id="@+id/tb_iv_search_close"
+            <ImageView
+                    android:id="@+id/tb_iv_search_close"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:visibility="invisible"
+                    android:src="@drawable/ic_close"/>
+
+        </FrameLayout>
+
+        <com.utree.eightysix.widget.RoundedButton
+                android:id="@+id/tb_rb_search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="2dp"
-                android:layout_gravity="right|center_vertical"
-                android:visibility="invisible"
-                android:src="@drawable/ic_close"/>
-
-    </FrameLayout>
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="8dp"
+                android:minHeight="0dp"
+                android:padding="8dp"
+                android:text="@string/search"/>
+    </LinearLayout>
 </merge>

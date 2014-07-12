@@ -329,7 +329,7 @@ public class PublishActivity extends BaseActivity {
   }
 
   @Override
-  protected void onActionLeftOnClicked() {
+  public void onActionLeftClicked() {
     confirmFinish();
   }
 

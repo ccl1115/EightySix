@@ -35,7 +35,6 @@ import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.msg.PraiseActivity;
 import com.utree.eightysix.app.publish.FeedbackActivity;
 import com.utree.eightysix.app.publish.PublishActivity;
-import com.utree.eightysix.app.publish.event.PostPublishedEvent;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.Circle;
@@ -155,6 +154,32 @@ public class FeedActivity extends BaseActivity {
   }
 
   @Override
+  public void onActionLeftClicked() {
+    if (mSideShown) {
+      hideSide();
+      hideMask();
+    } else {
+      showSide();
+      showMask();
+    }
+  }
+
+  @Override
+  public void onActionOverflowClicked() {
+
+    if (!mPopupMenu.isShowing()) {
+      mPopupMenu.showAsDropDown(getTopBar().mActionOverFlow);
+      showMask();
+      hideSide();
+    }
+  }
+
+  @Override
+  public boolean showActionOverflow() {
+    return true;
+  }
+
+  @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
@@ -176,19 +201,6 @@ public class FeedActivity extends BaseActivity {
         }
       });
     }
-
-
-    getTopBar().setOnActionOverflowClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        if (!mPopupMenu.isShowing()) {
-          mPopupMenu.showAsDropDown(getTopBar().mActionOverFlow);
-          showMask();
-          hideSide();
-        }
-
-      }
-    });
 
     //getTopBar().mTitle.setCompoundDrawablesWithIntrinsicBounds(null, null,
     //    getResources().getDrawable(R.drawable.top_bar_arrow_down), null);
@@ -264,17 +276,6 @@ public class FeedActivity extends BaseActivity {
   protected void onResume() {
     super.onResume();
     U.getBus().register(mLvSideCircles);
-  }
-
-  @Override
-  protected void onActionLeftOnClicked() {
-    if (mSideShown) {
-      hideSide();
-      hideMask();
-    } else {
-      showSide();
-      showMask();
-    }
   }
 
   @Override

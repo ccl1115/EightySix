@@ -25,6 +25,7 @@ import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import static com.nineoldandroids.view.ViewHelper.getTranslationY;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.drawable.RoundRectDrawable;
@@ -55,7 +56,7 @@ import java.util.Map;
  * <li>Automatically finish itself when LogoutEventFired, override onLogout() to prevent this</li>
  * </ul>
  */
-public abstract class BaseActivity extends FragmentActivity implements View.OnClickListener, LogoutListener {
+public abstract class BaseActivity extends FragmentActivity implements LogoutListener, TopBar.Callback {
 
   private final Handler mHandler = new Handler() {
     @Override
@@ -79,15 +80,6 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
 
   private boolean mResumed;
   private boolean mFillContent;
-
-  public void onClick(View v) {
-    final int id = v.getId();
-    switch (id) {
-      case R.id.tb_rl_left:
-        onActionLeftOnClicked();
-        break;
-    }
-  }
 
   @Override
   public final void setContentView(int layoutResID) {
@@ -210,6 +202,41 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
     RequestData data = U.getRESTRequester().convert(request);
 
     new CacheOutWorker<T>(RESTRequester.genCacheKey(data.getApi(), data.getParams()), onResponse, clz).execute();
+  }
+
+  @Override
+  public void onActionLeftClicked() {
+
+  }
+
+  @Override
+  public void onActionOverflowClicked() {
+
+  }
+
+  @Override
+  public boolean showActionOverflow() {
+    return false;
+  }
+
+  @Override
+  public void onEnterSearch() {
+
+  }
+
+  @Override
+  public void onExitSearch() {
+
+  }
+
+  @Override
+  public void onSearchTextChanged(CharSequence cs) {
+
+  }
+
+  @Override
+  public void onActionSearchClicked(CharSequence cs) {
+
   }
 
   protected void showProgressMask() {
@@ -347,8 +374,7 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
     mVProgressMask = mBaseView.findViewById(R.id.v_progress_mask);
     mFlLoadingWrapper = (FrameLayout) mBaseView.findViewById(R.id.fl_loading_wrapper);
 
-    mTopBar.setOnActionLeftClickListener(this);
-    mVProgressMask.setOnClickListener(this);
+    mTopBar.setCallback(this);
 
     mFlLoadingWrapper.setBackgroundDrawable(
         new RoundRectDrawable(dp2px(15), getResources().getColor(R.color.apptheme_progress_bar_bg)));
@@ -363,28 +389,10 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
       @Override
       public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_DONE) {
-          onSearchActionGo(v.getText().toString());
+          onActionSearchClicked(v.getText().toString());
           return true;
         }
         return false;
-      }
-    });
-
-    mTopBar.getSearchEditText().addTextChangedListener(new TextWatcher() {
-      @Override
-      public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-      }
-
-      @Override
-      public void onTextChanged(CharSequence s, int start, int before, int count) {
-        getTopBar().mIvSearchClose.setVisibility(s.length() == 0 ? View.INVISIBLE : View.VISIBLE);
-        onSearchTextChanged(s.toString());
-      }
-
-      @Override
-      public void afterTextChanged(Editable s) {
-
       }
     });
 
@@ -522,15 +530,6 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
 
   }
 
-  protected void onSearchActionGo(String keyword) {
-
-  }
-
-  protected void onSearchTextChanged(String newKeyword) {
-
-  }
-
-  protected abstract void onActionLeftOnClicked();
 
   protected void hideSoftKeyboard(View view) {
     ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
