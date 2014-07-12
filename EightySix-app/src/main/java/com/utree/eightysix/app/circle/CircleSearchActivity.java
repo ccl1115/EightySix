@@ -26,6 +26,7 @@ import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
+import com.utree.eightysix.location.Location;
 import com.utree.eightysix.request.CircleSetRequest;
 import com.utree.eightysix.request.SearchCircleRequest;
 import com.utree.eightysix.response.CirclesResponse;
@@ -73,6 +74,9 @@ public class CircleSearchActivity extends BaseActivity {
 
   private boolean mSelectMode;
 
+  private boolean mLocatingFinished;
+  private boolean mRequestSearchStarted;
+
   public static void start(Context context, boolean select) {
     Intent intent = new Intent(context, CircleSearchActivity.class);
     intent.putExtra("select", select);
@@ -93,7 +97,7 @@ public class CircleSearchActivity extends BaseActivity {
     requestSearch(1, keyword);
   }
 
-  @OnItemClick(R.id.lv_result)
+  @OnItemClick (R.id.lv_result)
   public void onResultItemClicked(int position) {
     final Circle circle = mResultAdapter.getItem(position);
     if (mSelectMode) {
@@ -102,6 +106,36 @@ public class CircleSearchActivity extends BaseActivity {
       FeedActivity.start(this, circle);
       finish();
     }
+  }
+
+  @Override
+  public void onActionLeftClicked() {
+    finish();
+  }
+
+  @Override
+  public void onSearchTextChanged(CharSequence cs) {
+    if (TextUtils.isEmpty(cs)) {
+      showHistory();
+    }
+  }
+
+  @Override
+  public void onActionSearchClicked(CharSequence cs) {
+    String keyword = cs.toString();
+    mLastKeyword = keyword;
+    requestSearch(1, keyword);
+
+    //region load history keyword
+    for (String k : mSearchHistory) {
+      if (k.equals(keyword)) {
+        return;
+      }
+    }
+    mSearchHistory.add(0, keyword);
+    Account.inst().setSearchHistory(mSearchHistory);
+    updateHistoryData();
+    //endregion
   }
 
   @Override
@@ -142,36 +176,16 @@ public class CircleSearchActivity extends BaseActivity {
         return true;
       }
     });
-  }
 
-  @Override
-  public void onSearchTextChanged(CharSequence cs) {
-    if (TextUtils.isEmpty(cs)) {
-      showHistory();
-    }
-  }
-
-  @Override
-  public void onActionSearchClicked(CharSequence cs) {
-    String keyword = cs.toString();
-    mLastKeyword = keyword;
-    requestSearch(1, keyword);
-
-    //region load history keyword
-    for (String k : mSearchHistory) {
-      if (k.equals(keyword)) {
-        return;
+    U.getLocation().requestLocation(new Location.OnResult() {
+      @Override
+      public void onResult(Location.Result result) {
+        mLocatingFinished = true;
+        if (mRequestSearchStarted) {
+          requestSearch(1, mLastKeyword);
+        }
       }
-    }
-    mSearchHistory.add(0, keyword);
-    Account.inst().setSearchHistory(mSearchHistory);
-    updateHistoryData();
-    //endregion
-  }
-
-  @Override
-  public void onActionLeftClicked() {
-    finish();
+    });
   }
 
   /**
@@ -182,6 +196,26 @@ public class CircleSearchActivity extends BaseActivity {
   @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();
+  }
+
+  protected void showCircleSetDialog(final Circle circle) {
+    AlertDialog dialog = new AlertDialog.Builder(this)
+        .setTitle(String.format("确认在%s上班么？", circle.name))
+        .setMessage("15天之内不能修改在职工厂")
+        .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            requestCircleSet(circle);
+          }
+        })
+        .setNegativeButton("重新选择", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            dialog.dismiss();
+          }
+        }).create();
+
+    dialog.show();
   }
 
   private void updateHistoryData() {
@@ -219,27 +253,30 @@ public class CircleSearchActivity extends BaseActivity {
   }
 
   private void requestSearch(final int page, final String keyword) {
-    request(new SearchCircleRequest(page, keyword), new OnResponse<CirclesResponse>() {
-      @Override
-      public void onResponse(CirclesResponse response) {
-        if (RESTRequester.responseOk(response)) {
-          if (page == 1) {
-            mLvResult.setVisibility(View.VISIBLE);
-            mLvHistory.setVisibility(View.GONE);
+    mRequestSearchStarted = true;
+    if (mLocatingFinished) {
+      request(new SearchCircleRequest(page, keyword), new OnResponse<CirclesResponse>() {
+        @Override
+        public void onResponse(CirclesResponse response) {
+          if (RESTRequester.responseOk(response)) {
+            if (page == 1) {
+              mLvResult.setVisibility(View.VISIBLE);
+              mLvHistory.setVisibility(View.GONE);
 
-            mResultAdapter = new CircleBaseListAdapter(response.object.lists);
-            mLvResult.setAdapter(mResultAdapter);
-            mPageInfo = response.object.page;
+              mResultAdapter = new CircleBaseListAdapter(response.object.lists);
+              mLvResult.setAdapter(mResultAdapter);
+              mPageInfo = response.object.page;
+            } else {
+              mResultAdapter.add(response.object.lists);
+              mPageInfo = response.object.page;
+            }
           } else {
-            mResultAdapter.add(response.object.lists);
-            mPageInfo = response.object.page;
+            mTvEmptyText.setText(String.format(getString(R.string.no_search_result), keyword));
           }
-        } else {
-          mTvEmptyText.setText(String.format(getString(R.string.no_search_result), keyword));
+          hideProgressBar();
         }
-        hideProgressBar();
-      }
-    }, CirclesResponse.class);
+      }, CirclesResponse.class);
+    }
     showProgressBar();
   }
 
@@ -253,26 +290,6 @@ public class CircleSearchActivity extends BaseActivity {
         }
       }
     }, Response.class);
-  }
-
-  protected void showCircleSetDialog(final Circle circle) {
-    AlertDialog dialog = new AlertDialog.Builder(this)
-        .setTitle(String.format("确认在%s上班么？", circle.name))
-        .setMessage("15天之内不能修改在职工厂")
-        .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
-            requestCircleSet(circle);
-          }
-        })
-        .setNegativeButton("重新选择", new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
-            dialog.dismiss();
-          }
-        }).create();
-
-    dialog.show();
   }
 
   @Keep

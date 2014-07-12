@@ -11,6 +11,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.utils.Env;
 import de.akquinet.android.androlog.Log;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -75,20 +76,26 @@ public class BdLocationImpl implements Location, BDLocationListener {
   public void onReceiveLocation(BDLocation bdLocation) {
     if (bdLocation != null) {
       Log.d(this, "getLocTypeError: " + bdLocation.getLocType());
+      final Result result;
       mHandler.removeMessages(MSG_REQ_TIMEOUT);
       if (bdLocation.getLocType() == BDLocation.TypeCriteriaException
           || bdLocation.getLocType() == BDLocation.TypeNetWorkException
           || bdLocation.getLocType() == BDLocation.TypeOffLineLocationFail
           || bdLocation.getLocType() == BDLocation.TypeOffLineLocationNetworkFail
           || bdLocation.getLocType() > BDLocation.TypeNetWorkLocation) {
-        return;
+        result = null;
+      } else {
+        result = new Result();
+        result.address = bdLocation.getAddrStr();
+        result.city = bdLocation.getCity();
+        result.latitude = bdLocation.getLatitude();
+        result.longitude = bdLocation.getLongitude();
+        result.poi = bdLocation.getPoi();
+
+        Env.setLastLatitude(result.latitude);
+        Env.setLastLongitude(result.longitude);
+        Env.setLastCity(result.city);
       }
-      final Result result = new Result();
-      result.address = bdLocation.getAddrStr();
-      result.city = bdLocation.getCity();
-      result.latitude = bdLocation.getLatitude();
-      result.longitude = bdLocation.getLongitude();
-      result.poi = bdLocation.getPoi();
 
       for (OnResult onResult : mOnResults) {
         onResult.onResult(result);
@@ -99,10 +106,6 @@ public class BdLocationImpl implements Location, BDLocationListener {
       }
 
       mTransientOnResult.clear();
-
-      Env.setLastLatitude(result.latitude);
-      Env.setLastLongitude(result.longitude);
-      Env.setLastCity(result.city);
     }
   }
 

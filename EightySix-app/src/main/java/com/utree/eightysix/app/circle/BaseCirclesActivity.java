@@ -28,6 +28,7 @@ import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.drawable.RoundRectDrawable;
+import com.utree.eightysix.location.Location;
 import com.utree.eightysix.request.CircleSetRequest;
 import com.utree.eightysix.request.MyCirclesRequest;
 import com.utree.eightysix.request.SelectCirclesRequest;
@@ -72,6 +73,8 @@ public class BaseCirclesActivity extends BaseActivity {
   private boolean mRefreshed;
 
   private Paginate.Page mPageInfo;
+  private boolean mLocatingFinished;
+  private boolean mRequestStarted;
 
   public static void startSelect(Context context) {
     Intent intent = new Intent(context, BaseCirclesActivity.class);
@@ -261,6 +264,16 @@ public class BaseCirclesActivity extends BaseActivity {
         }
       });
     }
+
+    U.getLocation().requestLocation(new Location.OnResult() {
+      @Override
+      public void onResult(Location.Result result) {
+        mLocatingFinished = true;
+        if (mRequestStarted) {
+          requestCircles(1);
+        }
+      }
+    });
   }
 
   @Override
@@ -314,25 +327,28 @@ public class BaseCirclesActivity extends BaseActivity {
   }
 
   private void requestCircles(final int page) {
-    request(mMode == MODE_MY ? new MyCirclesRequest("", page) : new SelectCirclesRequest("", page), new OnResponse<CirclesResponse>() {
-      @Override
-      public void onResponse(CirclesResponse response) {
-        if (response != null && response.code == 0) {
-          if (page == 1) {
-            mCircleListAdapter = new CircleListAdapter(response.object.lists);
-            mLvCircles.setAdapter(mCircleListAdapter);
-          } else if (mCircleListAdapter != null) {
-            mCircleListAdapter.add(response.object.lists);
+    mRequestStarted = true;
+    if (mLocatingFinished) {
+      request(mMode == MODE_MY ? new MyCirclesRequest("", page) : new SelectCirclesRequest("", page), new OnResponse<CirclesResponse>() {
+        @Override
+        public void onResponse(CirclesResponse response) {
+          if (response != null && response.code == 0) {
+            if (page == 1) {
+              mCircleListAdapter = new CircleListAdapter(response.object.lists);
+              mLvCircles.setAdapter(mCircleListAdapter);
+            } else if (mCircleListAdapter != null) {
+              mCircleListAdapter.add(response.object.lists);
+            }
+            mPageInfo = response.object.page;
+          } else {
+            mTvEmptyText.setText(getString(R.string.no_circles));
           }
-          mPageInfo = response.object.page;
-        } else {
-          mTvEmptyText.setText(getString(R.string.no_circles));
+          mLvCircles.stopLoadMore();
+          hideProgressBar();
+          if (mRefreshed) mRefresherView.hideHeader();
         }
-        mLvCircles.stopLoadMore();
-        hideProgressBar();
-        if (mRefreshed) mRefresherView.hideHeader();
-      }
-    }, CirclesResponse.class);
+      }, CirclesResponse.class);
+    }
   }
 
   private void requestCircleSet(final Circle circle) {
