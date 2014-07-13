@@ -72,6 +72,7 @@ public class BaseItemDeserializer implements JsonDeserializer<BaseItem> {
     promotion.activeStartTime = safeGetAsString(jObj.get("activeStartTime"));
     promotion.activeUrl = safeGetAsString(jObj.get("activeUrl"));
     promotion.title = safeGetAsString(jObj.get("title"));
+    promotion.activeWebViewName = safeGetAsString(jObj.get("activeWebViewName"));
 
     return promotion;
   }

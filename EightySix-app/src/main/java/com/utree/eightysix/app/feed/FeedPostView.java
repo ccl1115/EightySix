@@ -10,7 +10,6 @@ import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -22,10 +21,8 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.data.Post;
-import com.utree.eightysix.drawable.GearsDrawable;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.drawable.SmallGearsDrawable;
-import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.ShareUtils;
@@ -77,6 +74,7 @@ public class FeedPostView extends FrameLayout {
   @InjectView (R.id.fl_content)
   public FrameLayout mFlContent;
 
+  private int mFactoryId;
   private Post mPost;
 
   private SmallGearsDrawable mGearsDrawable;
@@ -143,7 +141,8 @@ public class FeedPostView extends FrameLayout {
     return mTvLastComment;
   }
 
-  public void setData(Post post) {
+  public void setData(int factoryId, Post post) {
+    mFactoryId = factoryId;
     mPost = post;
 
     if (mPost == null) {

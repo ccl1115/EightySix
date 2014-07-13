@@ -24,6 +24,9 @@ public class Promotion extends BaseItem implements Parcelable {
   @SerializedName ("activeStartTime")
   public String activeStartTime;
 
+  @SerializedName("activeWebViewName")
+  public String activeWebViewName;
+
   @Override
   public int describeContents() {
     return 0;
@@ -33,6 +36,7 @@ public class Promotion extends BaseItem implements Parcelable {
   public void writeToParcel(Parcel dest, int flags) {
     dest.writeString(this.activeUrl);
     dest.writeString(this.title);
+    dest.writeString(this.activeWebViewName);
     dest.writeString(this.activeName);
     dest.writeString(this.activeRemark);
     dest.writeString(this.activeStartTime);
@@ -48,6 +52,7 @@ public class Promotion extends BaseItem implements Parcelable {
   private Promotion(Parcel in) {
     this.activeUrl = in.readString();
     this.title = in.readString();
+    this.activeWebViewName = in.readString();
     this.activeName = in.readString();
     this.activeRemark = in.readString();
     this.activeStartTime = in.readString();

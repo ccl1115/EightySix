@@ -6,12 +6,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.v4.text.TextUtilsCompat;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -34,7 +32,6 @@ import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
-import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.request.CommentPraiseCancelRequest;
 import com.utree.eightysix.request.CommentPraiseRequest;
 import com.utree.eightysix.request.PostCommentDeleteRequest;
@@ -140,7 +137,7 @@ public class PostActivity extends BaseActivity {
                     mPostCommentsAdapter.notifyDataSetChanged();
                     break;
                   case 1:
-                    ShareUtils.shareCommentToQQ(PostActivity.this, mPost.id, comment);
+                    ShareUtils.sharePostToQQ(PostActivity.this, mPost);
                     break;
                   case 2:
                     showToast("TODO report");
@@ -167,7 +164,7 @@ public class PostActivity extends BaseActivity {
 
     hideTopBar(false);
 
-    mPost = (Post) getIntent().getSerializableExtra("post");
+    mPost = getIntent().getParcelableExtra("post");
 
     if (mPost == null && U.useFixture()) {
       mPost = U.getFixture(Post.class, "valid");

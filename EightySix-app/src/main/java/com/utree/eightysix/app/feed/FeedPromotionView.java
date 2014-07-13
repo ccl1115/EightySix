@@ -1,9 +1,7 @@
 package com.utree.eightysix.app.feed;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -13,8 +11,11 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.utree.eightysix.Account;
+import com.utree.eightysix.C;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.web.BaseWebActivity;
 import com.utree.eightysix.data.Promotion;
 import com.utree.eightysix.utils.Utils;
 import com.utree.eightysix.widget.AsyncImageView;
@@ -42,8 +43,10 @@ public class FeedPromotionView extends FrameLayout {
   @InjectView (R.id.aiv_bg)
   public AsyncImageView mAivBg;
 
-  @InjectView(R.id.ll_bottom)
+  @InjectView (R.id.ll_bottom)
   public LinearLayout mLlBottom;
+
+  private int mFactoryId;
 
   private Promotion mPromotion;
 
@@ -63,7 +66,8 @@ public class FeedPromotionView extends FrameLayout {
     ButterKnife.inject(this, this);
   }
 
-  public void setData(Promotion promotion) {
+  public void setData(int factoryId, Promotion promotion) {
+    mFactoryId = factoryId;
     mPromotion = promotion;
 
     if (mPromotion != null) {
@@ -82,12 +86,6 @@ public class FeedPromotionView extends FrameLayout {
     }
   }
 
-  @OnClick(R.id.tv_content)
-  void onTvContentClicked(View view) {
-    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mPromotion.activeUrl));
-    view.getContext().startActivity(intent);
-  }
-
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
     int widthSize = MeasureSpec.getSize(widthMeasureSpec);
@@ -95,5 +93,12 @@ public class FeedPromotionView extends FrameLayout {
       widthSize += mLlBottom.getMeasuredHeight();
     }
     super.onMeasure(widthMeasureSpec, widthSize - U.dp2px(16) + MeasureSpec.EXACTLY);
+  }
+
+  @OnClick (R.id.tv_content)
+  public void onTvContentClicked(View view) {
+    BaseWebActivity.start(view.getContext(), mPromotion.activeWebViewName,
+        String.format("%s%s?userid=%s&factoryid=%d", U.getConfig("api.host"),
+            C.API_PROMOTION, Account.inst().getUserId(), mFactoryId));
   }
 }

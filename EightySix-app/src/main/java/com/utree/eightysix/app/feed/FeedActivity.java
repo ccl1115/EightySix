@@ -657,7 +657,7 @@ public class FeedActivity extends BaseActivity {
 
     @OnClick (R.id.tv_qq_friends)
     void onQQFriendsClicked() {
-      ShareUtils.shareAppToQQ(FeedActivity.this);
+      ShareUtils.shareAppToQQ(FeedActivity.this, mFeedFragment.getCircle().id);
     }
   }
 }

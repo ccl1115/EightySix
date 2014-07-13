@@ -162,7 +162,7 @@ class FeedAdapter extends BaseAdapter {
       convertView = new FeedPostView(parent.getContext());
     }
 
-    ((FeedPostView) convertView).setData((Post) getItem(position));
+    ((FeedPostView) convertView).setData(mFeeds.circle.id, (Post) getItem(position));
     return convertView;
   }
 
@@ -171,7 +171,7 @@ class FeedAdapter extends BaseAdapter {
       convertView = new FeedPromotionView(parent.getContext());
     }
 
-    ((FeedPromotionView) convertView).setData((Promotion) getItem(position));
+    ((FeedPromotionView) convertView).setData(mFeeds.circle.id, (Promotion) getItem(position));
     return convertView;
   }
 

@@ -214,5 +214,6 @@
     <string name="overlay_tip_portrait">每次评论新的秘密，你的头像都会不同。</string>
     <string name="search">搜索</string>
     <string name="ask_question">我要提问</string>
+    <string name="web_load_failed">页面加载失败</string>
 
 </resources>

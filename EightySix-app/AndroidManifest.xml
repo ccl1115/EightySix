@@ -223,6 +223,13 @@
 
         <activity
                 android:screenOrientation="portrait"
+                android:name=".app.web.BaseWebActivity"
+                android:windowSoftInputMode="stateHidden"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+                android:exported="@bool/exported"/>
+
+        <activity
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.Dialog"
                 android:name=".app.settings.UpgradeActivity"
                 android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
