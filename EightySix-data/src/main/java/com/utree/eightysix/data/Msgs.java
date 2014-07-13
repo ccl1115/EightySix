@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  */
-public class Feeds {
+public class Msgs {
 
   @SerializedName ("myPraiseCount")
   public int myPraiseCount;
@@ -61,5 +61,5 @@ public class Feeds {
   public int selectFactory;
 
   @SerializedName ("posts")
-  public Paginate<BaseItem> posts;
+  public Paginate<Post> posts;
 }

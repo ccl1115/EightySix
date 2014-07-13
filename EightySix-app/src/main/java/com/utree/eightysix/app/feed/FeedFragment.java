@@ -16,6 +16,7 @@ import com.utree.eightysix.app.OverlayTipUtil;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
+import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Feeds;
 import com.utree.eightysix.data.Paginate;
@@ -59,7 +60,7 @@ class FeedFragment extends BaseFragment {
   @OnItemClick (R.id.lv_feed)
   public void onLvFeedItemClicked(int position, View view) {
     Object item = mLvFeed.getAdapter().getItem(position);
-    if (item == null) return;
+    if (item == null || !(item instanceof Post)) return;
     Rect rect = new Rect();
     int[] xy = new int[2];
     View target= view.findViewById(R.id.tv_content);
@@ -298,13 +299,15 @@ class FeedFragment extends BaseFragment {
   @Subscribe
   public void onPostDeleteEvent(PostDeleteEvent event) {
     if (mFeedAdapter == null || mFeedAdapter.getFeeds() == null) return;
-    for (Iterator<Post> iterator = mFeedAdapter.getFeeds().posts.lists.iterator(); iterator.hasNext(); ) {
-      Post p = iterator.next();
-      if (p == null) continue;
-      if (p.equals(event.getPost())) {
-        iterator.remove();
-        mFeedAdapter.notifyDataSetChanged();
-        break;
+    for (Iterator<BaseItem> iterator = mFeedAdapter.getFeeds().posts.lists.iterator(); iterator.hasNext(); ) {
+      BaseItem item = iterator.next();
+      if (item != null && item instanceof Post) {
+        Post p = ((Post) item);
+        if (p.equals(event.getPost())) {
+          iterator.remove();
+          mFeedAdapter.notifyDataSetChanged();
+          break;
+        }
       }
     }
   }

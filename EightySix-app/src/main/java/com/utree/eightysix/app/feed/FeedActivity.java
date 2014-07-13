@@ -30,6 +30,7 @@ import com.utree.eightysix.app.account.ContactsActivity;
 import com.utree.eightysix.app.account.ImportContactActivity;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
+import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
 import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.msg.PraiseActivity;
@@ -389,6 +390,15 @@ public class FeedActivity extends BaseActivity {
 
     if (!mNoPermDialog.isShowing()) {
       mNoPermDialog.show();
+    }
+  }
+
+  @Subscribe
+  public void onStartPublishActivity(StartPublishActivityEvent event) {
+    if (mFeedFragment.isLocked()) {
+      showNoPermDialog();
+    } else {
+      PublishActivity.start(this, mFeedFragment.getCircle().id);
     }
   }
 

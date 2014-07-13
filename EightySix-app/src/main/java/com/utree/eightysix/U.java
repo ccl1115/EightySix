@@ -13,11 +13,12 @@ import com.jakewharton.disklrucache.DiskLruCache;
 import com.squareup.otto.Bus;
 import com.squareup.otto.ThreadEnforcer;
 import com.utree.eightysix.app.BaseApplication;
+import com.utree.eightysix.app.feed.BaseItemDeserializer;
+import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.location.BdLocationImpl;
 import com.utree.eightysix.location.Location;
 import com.utree.eightysix.push.PushHelper;
 import com.utree.eightysix.push.PushHelperImpl;
-import com.utree.eightysix.rest.EventRequester;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.statistics.Analyser;
 import com.utree.eightysix.statistics.MtaAnalyserImpl;
@@ -52,7 +53,7 @@ public class U {
 
   private static PushHelper sPushHelper;
 
-  private static Gson sGson = new GsonBuilder().create();
+  private static Gson sGson ;
 
   private static Properties sConfiguration;
   private static Fixture sFixture;
@@ -60,6 +61,12 @@ public class U {
   private static Toast sToast;
 
   public static Gson getGson() {
+    if (sGson == null) {
+      GsonBuilder builder = new GsonBuilder();
+      builder.setPrettyPrinting();
+      builder.registerTypeHierarchyAdapter(BaseItem.class, new BaseItemDeserializer());
+      sGson = builder.create();
+    }
     return sGson;
   }
 

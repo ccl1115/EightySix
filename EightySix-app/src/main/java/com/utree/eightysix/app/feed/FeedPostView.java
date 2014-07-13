@@ -34,7 +34,7 @@ import com.utree.eightysix.widget.AsyncImageView;
 
 /**
  */
-public class FeedPostView extends RelativeLayout {
+public class FeedPostView extends FrameLayout {
 
   private static int sPostLength = U.getConfigInt("post.length");
 

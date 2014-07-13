@@ -20,7 +20,7 @@ import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.MsgsRequest;
-import com.utree.eightysix.response.FeedsResponse;
+import com.utree.eightysix.response.MsgsResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.widget.AdvancedListView;
@@ -172,9 +172,9 @@ public class MsgActivity extends BaseActivity {
   }
 
   private void requestMsgs(final int page) {
-    request(new MsgsRequest(page), new OnResponse<FeedsResponse>() {
+    request(new MsgsRequest(page), new OnResponse<MsgsResponse>() {
       @Override
-      public void onResponse(FeedsResponse response) {
+      public void onResponse(MsgsResponse response) {
         if (RESTRequester.responseOk(response)) {
           if (page == 1) {
             mMsgAdapter = new MsgAdapter<CommentMsgItemView>(response.object.posts.lists) {
@@ -193,15 +193,15 @@ public class MsgActivity extends BaseActivity {
         mAlvMsg.stopLoadMore();
         mRvMsg.hideHeader();
       }
-    }, FeedsResponse.class);
+    }, MsgsResponse.class);
 
     showProgressBar();
   }
 
   private void cacheOutMsg(final int page) {
-    cacheOut(new MsgsRequest(page), new OnResponse<FeedsResponse>() {
+    cacheOut(new MsgsRequest(page), new OnResponse<MsgsResponse>() {
       @Override
-      public void onResponse(FeedsResponse response) {
+      public void onResponse(MsgsResponse response) {
         if (RESTRequester.responseOk(response)) {
           if (page == 1) {
             mMsgAdapter = new MsgAdapter<CommentMsgItemView>(response.object.posts.lists) {
@@ -222,7 +222,7 @@ public class MsgActivity extends BaseActivity {
           requestMsgs(page);
         }
       }
-    }, FeedsResponse.class);
+    }, MsgsResponse.class);
 
     showProgressBar();
   }

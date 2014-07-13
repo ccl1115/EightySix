@@ -19,50 +19,50 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
-import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
+import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.data.Feeds;
 import com.utree.eightysix.data.Post;
-import com.utree.eightysix.event.AdapterDataSetChangedEvent;
+import com.utree.eightysix.data.Promotion;
+import com.utree.eightysix.data.QuestionSet;
 import com.utree.eightysix.widget.RoundedButton;
-import java.util.Iterator;
 import java.util.List;
 
 /**
  */
 class FeedAdapter extends BaseAdapter {
 
-  public static final int TYPE_COUNT = 5;
-  private static final int TYPE_POST = 0;
-  private static final int TYPE_PLACEHOLDER = 1;
-  private static final int TYPE_UNLOCK = 2;
-  private static final int TYPE_INVITE = 3;
-  private static final int TYPE_SELECT = 4;
+  public static final int TYPE_COUNT = 8;
+  private static final int TYPE_PLACEHOLDER = 0;
+  private static final int TYPE_UNLOCK = 1;
+  private static final int TYPE_INVITE = 2;
+  private static final int TYPE_SELECT = 3;
+  private static final int TYPE_UNKNOWN = 4;
+  private static final int TYPE_POST = 5;
+  private static final int TYPE_PROMO = 6;
+  private static final int TYPE_QUESTION = 7;
+
   private SparseBooleanArray mAnimated = new SparseBooleanArray();
 
   private Feeds mFeeds;
 
-  private boolean mShowInvite;
-  private boolean mShowUnlock;
-  private boolean mShowSelect;
-
   FeedAdapter(Feeds feeds) {
     mFeeds = feeds;
-    mShowUnlock = mFeeds.lock == 1;
-    mShowInvite = mFeeds.upContact != 1;
-    mShowSelect = mFeeds.selectFactory != 1;
-    if (mShowUnlock) {
-      mFeeds.posts.lists.add(0, null);
+    boolean showUnlock = mFeeds.lock == 1;
+    boolean showInvite = mFeeds.upContact != 1;
+    boolean showSelect = mFeeds.selectFactory != 1;
+    if (showUnlock) {
+      mFeeds.posts.lists.add(0, new BaseItem(TYPE_UNLOCK));
     }
-    if (mShowInvite) {
-      mFeeds.posts.lists.add(0, null);
+    if (showInvite) {
+      mFeeds.posts.lists.add(0, new BaseItem(TYPE_INVITE));
     }
-    if (mShowSelect) {
-      mFeeds.posts.lists.add(0, null);
+    if (showSelect) {
+      mFeeds.posts.lists.add(0, new BaseItem(TYPE_SELECT));
     }
   }
 
-  public void add(List<Post> posts) {
+  public void add(List<BaseItem> posts) {
     if (mFeeds.posts.lists == null) {
       mFeeds.posts.lists = posts;
     } else {
@@ -71,7 +71,7 @@ class FeedAdapter extends BaseAdapter {
     notifyDataSetChanged();
   }
 
-  public void add(Post post) {
+  public void add(BaseItem post) {
     mFeeds.posts.lists.add(0, post);
     notifyDataSetChanged();
   }
@@ -86,7 +86,7 @@ class FeedAdapter extends BaseAdapter {
   }
 
   @Override
-  public Post getItem(int position) {
+  public BaseItem getItem(int position) {
     return mFeeds.posts.lists.get(position - 1);
   }
 
@@ -113,6 +113,15 @@ class FeedAdapter extends BaseAdapter {
       case TYPE_SELECT:
         convertView = getSelectView(convertView, parent);
         break;
+      case TYPE_PROMO:
+        convertView = getPromoView(position, convertView, parent);
+        break;
+      case TYPE_QUESTION:
+        convertView = getQuestionView(position, convertView, parent);
+        break;
+      case TYPE_UNKNOWN:
+        convertView = getUnknownView(convertView, parent);
+        break;
     }
 
     animateConvertView(position, convertView);
@@ -122,25 +131,24 @@ class FeedAdapter extends BaseAdapter {
 
   @Override
   public int getItemViewType(int position) {
-    if (position == 0) {
-      return TYPE_PLACEHOLDER;
-    } else if (position == 1) {
-      if (mShowInvite) return TYPE_INVITE;
-      else if (mShowUnlock) return TYPE_UNLOCK;
-      else if (mShowSelect) return TYPE_SELECT;
-      else return TYPE_POST;
-    } else if (position == 2) {
-      if (mShowInvite && mShowUnlock) return TYPE_UNLOCK;
-      else if (mShowInvite && mShowSelect) return TYPE_SELECT;
-      else if (mShowUnlock && mShowSelect) return TYPE_SELECT;
-      else return TYPE_POST;
-    } else if (position == 3) {
-      if (mShowInvite && mShowUnlock && mShowSelect) return TYPE_SELECT;
-      else return TYPE_POST;
-    } else if (position == getCount() - 1) {
+    if (position == 0 || position == getCount() - 1) {
       return TYPE_PLACEHOLDER;
     } else {
-      return TYPE_POST;
+      final int type = getItem(position).type;
+      switch (type) {
+        case BaseItem.TYPE_POST:
+          return TYPE_POST;
+        case BaseItem.TYPE_PROMOTION:
+          return TYPE_PROMO;
+        case BaseItem.TYPE_QUESTION_SET:
+          return TYPE_QUESTION;
+        case TYPE_INVITE:
+        case TYPE_UNLOCK:
+        case TYPE_SELECT:
+          return type;
+        default:
+          return TYPE_UNKNOWN;
+      }
     }
   }
 
@@ -154,7 +162,34 @@ class FeedAdapter extends BaseAdapter {
       convertView = new FeedPostView(parent.getContext());
     }
 
-    ((FeedPostView) convertView).setData(getItem(position));
+    ((FeedPostView) convertView).setData((Post) getItem(position));
+    return convertView;
+  }
+
+  private View getPromoView(int position, View convertView, ViewGroup parent) {
+    if (convertView == null) {
+      convertView = new FeedPromotionView(parent.getContext());
+    }
+
+    ((FeedPromotionView) convertView).setData((Promotion) getItem(position));
+    return convertView;
+  }
+
+  private View getQuestionView(int position, View convertView, ViewGroup parent) {
+    if (convertView == null) {
+      convertView = new FeedQuestionView(parent.getContext());
+    }
+
+    ((FeedQuestionView) convertView).setData((QuestionSet) getItem(position));
+    return convertView;
+  }
+
+  private View getUnknownView(View convertView, ViewGroup parent) {
+    if (convertView == null) {
+      TextView tv = new TextView(parent.getContext());
+      tv.setText("未知的条目，请升级客户端");
+      convertView = tv;
+    }
     return convertView;
   }
 
@@ -238,8 +273,9 @@ class FeedAdapter extends BaseAdapter {
 
   @Subscribe
   public void onPostEvent(Post post) {
-    for (Post p : mFeeds.posts.lists) {
-      if (p == null) continue;
+    for (BaseItem item : mFeeds.posts.lists) {
+      if (item == null || !(item instanceof Post)) continue;
+      Post p = ((Post) item);
       if (p.equals(post)) {
         p.praise = post.praise;
         p.praised = post.praised;
