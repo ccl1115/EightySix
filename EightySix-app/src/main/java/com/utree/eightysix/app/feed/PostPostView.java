@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -51,6 +52,12 @@ public class PostPostView extends FrameLayout {
   @InjectView (R.id.tv_praise)
   public TextView mTvPraise;
 
+  @InjectView (R.id.iv_close)
+  public ImageView mIvClose;
+
+  @InjectView (R.id.iv_more)
+  public ImageView mIvMore;
+
   private Post mPost;
 
   private AlertDialog mPostContextDialog;
@@ -85,11 +92,25 @@ public class PostPostView extends FrameLayout {
     mTvPraise.setTextColor(color);
     mTvSource.setTextColor(color);
 
+    int heartOutline, heart, comment, close, more;
     if (color == Color.WHITE) {
-
-    } else if (color == Color.BLACK) {
-
+      heartOutline = R.drawable.ic_heart_outline_normal;
+      heart = R.drawable.ic_heart_white_normal;
+      close = R.drawable.ic_action_post_close;
+      more = R.drawable.ic_action_post_more;
+      comment = R.drawable.ic_reply;
+    } else {
+      heartOutline = R.drawable.ic_black_heart_outline_normal;
+      heart = R.drawable.ic_black_heart_white_normal;
+      close = R.drawable.ic_black_action_post_close;
+      more = R.drawable.ic_black_action_post_more;
+      comment = R.drawable.ic_black_reply;
     }
+
+    mTvComment.setCompoundDrawablesWithIntrinsicBounds(comment, 0, 0, 0);
+
+    mIvClose.setImageResource(close);
+    mIvMore.setImageResource(more);
 
     mTvContent.setText(mPost.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content);
     if (post.comments > 0) {
@@ -112,10 +133,10 @@ public class PostPostView extends FrameLayout {
     if (mPost.praised == 1) {
       mTvPraise.setCompoundDrawablesWithIntrinsicBounds(U.gd(R.drawable.ic_heart_red_pressed), null, null, null);
     } else if (mPost.praise > 0) {
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(U.gd(R.drawable.ic_heart_white_normal), null, null, null);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(U.gd(heart), null, null, null);
     } else {
       mTvPraise.setText("");
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(U.gd(R.drawable.ic_heart_outline_normal), null, null, null);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(U.gd(heartOutline), null, null, null);
     }
   }
 

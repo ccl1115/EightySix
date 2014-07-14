@@ -156,10 +156,6 @@ public class FeedPostView extends FrameLayout {
     mTvPraise.setTextColor(color);
     mTvSource.setTextColor(color);
 
-    if (color == Color.WHITE) {
-      mLlComment.setBackgroundColor(Color.WHITE);
-    } else if (color == Color.BLACK) {
-    }
 
     String content = post.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content;
 
@@ -192,17 +188,27 @@ public class FeedPostView extends FrameLayout {
       mAivBg.setUrl(null);
     }
 
+    final int heartOutline, heart, comment;
+    if (color == Color.WHITE) {
+      heart = R.drawable.ic_heart_white_normal;
+      heartOutline = R.drawable.ic_heart_outline_normal;
+      comment = R.drawable.ic_reply;
+    } else {
+      heart = R.drawable.ic_black_heart_white_normal;
+      heartOutline = R.drawable.ic_black_heart_outline_normal;
+      comment = R.drawable.ic_black_reply;
+    }
+
     if (post.praised == 1) {
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(
-          getResources().getDrawable(R.drawable.ic_heart_red_pressed), null, null, null);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_red_pressed, 0, 0, 0);
     } else if (post.praise > 0) {
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(
-          getResources().getDrawable(R.drawable.ic_heart_white_normal), null, null, null);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(heart, 0, 0, 0);
     } else {
       mTvPraise.setText("");
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(
-          getResources().getDrawable(R.drawable.ic_heart_outline_normal), null, null, null);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(heartOutline, 0, 0, 0);
     }
+
+    mTvComment.setCompoundDrawablesWithIntrinsicBounds(comment, 0, 0, 0);
 
     if (getTop() <= 0) {
       mIvShare.setVisibility(INVISIBLE);
