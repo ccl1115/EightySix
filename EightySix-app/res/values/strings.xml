@@ -32,6 +32,7 @@
     <string name="fixture">假数据</string>
     <string name="login">登录</string>
     <string name="logout">退出</string>
+    <string name="search">搜索</string>
 
     <string name="server_error">服务器错误</string>
     <string name="server_object_error">服务器返回对象解析错误</string>
@@ -166,6 +167,8 @@
 
     <!-- PraiseStaticActivity -->
     <string name="praise_count_static">被赞次数统计</string>
+    <string name="praise_count_obtained">已获%1$d赞</string>
+    <string name="praise_status">%1$d个帖子 %2$d个评论被赞 超过全国%3$s的工友</string>
 
     <!-- MsgActivity -->
     <string name="messages">消息</string>
@@ -212,8 +215,10 @@
     <string name="overlay_tip_source">你肯定认识他们，但不会告诉你作者是谁。认识的人，包括你通讯录里的朋友以及他们在这个厂的朋友。</string>
     <string name="overlay_tip_praise">赞，可以鼓励作者，并且当该秘密有更新时，你将收到提醒</string>
     <string name="overlay_tip_portrait">每次评论新的秘密，你的头像都会不同。</string>
-    <string name="search">搜索</string>
+
     <string name="ask_question">我要提问</string>
+
+    <!-- BaseWebActivity -->
     <string name="web_load_failed">页面加载失败</string>
 
 </resources>

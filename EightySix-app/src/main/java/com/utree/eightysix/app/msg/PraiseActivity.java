@@ -38,8 +38,6 @@ import java.util.Random;
 @Layout (R.layout.activity_msg)
 public class PraiseActivity extends BaseActivity {
 
-  private static final int MSG_ANIMATE = 0x1;
-
   @InjectView (R.id.refresh_view)
   public RefresherView mRvMsg;
 
@@ -52,7 +50,6 @@ public class PraiseActivity extends BaseActivity {
   @InjectView (R.id.alv_refresh)
   public AdvancedListView mAlvMsg;
 
-  private Random mRandom = new Random();
   private MsgAdapter mMsgAdapter;
   private Paginate.Page mPageInfo;
 
@@ -95,6 +92,16 @@ public class PraiseActivity extends BaseActivity {
       } else {
         cacheOutPraises(1);
       }
+    }
+
+    final int count = getIntent().getIntExtra("praiseCount", -1);
+    if (count != -1) {
+    }
+
+    final int percent = getIntent().getIntExtra("praisePercent", -1);
+    final int postCount = getIntent().getIntExtra("postCount", -1);
+    final int commentCount = getIntent().getIntExtra("commentCount", -1);
+    if (percent != -1 || postCount == -1 || commentCount == -1) {
     }
 
     mAlvMsg.setLoadMoreCallback(new LoadMoreCallback() {
@@ -175,6 +182,9 @@ public class PraiseActivity extends BaseActivity {
               }
             };
             mAlvMsg.setAdapter(mMsgAdapter);
+            setTopTitle(getString(R.string.praise_count_obtained, response.object.myPraiseCount));
+            setTopSubTitle(getString(R.string.praise_status,
+                response.object.postCount, response.object.commentCount, response.object.percent));
           } else {
             mMsgAdapter.add(response.object.posts.lists);
           }
@@ -202,6 +212,9 @@ public class PraiseActivity extends BaseActivity {
               }
             };
             mAlvMsg.setAdapter(mMsgAdapter);
+            setTopTitle(getString(R.string.praise_count_obtained, response.object.myPraiseCount));
+            setTopSubTitle(getString(R.string.praise_status,
+                response.object.postCount, response.object.commentCount, response.object.percent));
           } else {
             mMsgAdapter.add(response.object.posts.lists);
           }

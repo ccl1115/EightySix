@@ -6,8 +6,17 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Msgs {
 
-  @SerializedName ("myPraiseCount")
+  @SerializedName ("countPraise")
   public int myPraiseCount;
+
+  @SerializedName("postPraiseCount")
+  public int postCount;
+
+  @SerializedName("commentPraiseCount")
+  public int commentCount;
+
+  @SerializedName("percent")
+  public String percent;
 
   @SerializedName("factoryView")
   public Circle circle;

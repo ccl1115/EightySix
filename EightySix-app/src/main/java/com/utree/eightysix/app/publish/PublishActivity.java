@@ -37,6 +37,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
+import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.request.PublishRequest;
@@ -530,6 +531,7 @@ public class PublishActivity extends BaseActivity {
             post.id = response.object.id;
             post.content = mPostEditText.getText().toString();
             post.source = "认识的人";
+            post.type = BaseItem.TYPE_POST;
             U.getBus().post(new PostPublishedEvent(post));
 
             finish();

@@ -21,7 +21,6 @@ import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Feeds;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.data.Post;
-import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
 import com.utree.eightysix.request.FeedsRequest;
 import com.utree.eightysix.request.PostPraiseCancelRequest;
@@ -31,8 +30,6 @@ import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.EmotionOnRefreshListener;
-import com.utree.eightysix.widget.FontPortraitView;
 import com.utree.eightysix.widget.IRefreshable;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RefresherView;
@@ -57,13 +54,16 @@ class FeedFragment extends BaseFragment {
   private Guide mSourceTip;
   private Guide mPraiseTip;
 
+  public FeedFragment() {
+  }
+
   @OnItemClick (R.id.lv_feed)
   public void onLvFeedItemClicked(int position, View view) {
     Object item = mLvFeed.getAdapter().getItem(position);
     if (item == null || !(item instanceof Post)) return;
     Rect rect = new Rect();
     int[] xy = new int[2];
-    View target= view.findViewById(R.id.tv_content);
+    View target = view.findViewById(R.id.tv_content);
     target.getLocationInWindow(xy);
     rect.left = xy[0];
     rect.top = xy[1];
@@ -71,8 +71,6 @@ class FeedFragment extends BaseFragment {
     rect.bottom = rect.top + target.getMeasuredHeight();
     PostActivity.start(getActivity(), (Post) item, rect);
   }
-
-  public FeedFragment() {}
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -110,14 +108,6 @@ class FeedFragment extends BaseFragment {
 
     mRefresherView.setOnRefreshListener(new IRefreshable.OnRefreshListener() {
       @Override
-      public void onRefreshData() {
-      }
-
-      @Override
-      public void onRefreshUI() {
-      }
-
-      @Override
       public void onStateChanged(IRefreshable.State state) {
       }
 
@@ -125,6 +115,14 @@ class FeedFragment extends BaseFragment {
       public void onPreRefresh() {
         mRefreshed = true;
         requestFeeds(mCircle.id, 1);
+      }
+
+      @Override
+      public void onRefreshData() {
+      }
+
+      @Override
+      public void onRefreshUI() {
       }
     });
 
@@ -177,30 +175,6 @@ class FeedFragment extends BaseFragment {
     });
   }
 
-  boolean hidePraiseTip() {
-    if (mPraiseTip != null) {
-      if (mPraiseTip.isShowing()) {
-        mPraiseTip.dismiss();
-        return true;
-      }
-    }
-    return false;
-  }
-
-  boolean hideSourceTip() {
-    if (mSourceTip != null) {
-      if (mSourceTip.isShowing()) {
-        mSourceTip.dismiss();
-        return true;
-      }
-    }
-    return false;
-  }
-
-  public boolean onBackPressed() {
-    return hidePraiseTip() || hideSourceTip();
-  }
-
   @Override
   public void onDestroy() {
     super.onDestroy();
@@ -214,8 +188,20 @@ class FeedFragment extends BaseFragment {
     }
   }
 
+  public boolean onBackPressed() {
+    return hidePraiseTip() || hideSourceTip();
+  }
+
   public Circle getCircle() {
     return mCircle;
+  }
+
+  public void setCircle(int id) {
+    if (mCircle.id != id) {
+      if (mLvFeed != null) mLvFeed.setAdapter(null);
+    }
+
+    cacheOutFeeds(id, 1);
   }
 
   public void setCircle(Circle circle) {
@@ -236,19 +222,7 @@ class FeedFragment extends BaseFragment {
     if (mCircle != null) {
       if (mLvFeed != null) mLvFeed.setAdapter(null);
 
-      if (isAdded()) {
-        cacheOutFeeds(mCircle.id, 1);
-      }
-    }
-  }
-
-  public void setCircle(int id) {
-    if (mCircle.id != id) {
-      if (mLvFeed != null) mLvFeed.setAdapter(null);
-    }
-
-    if (isAdded()) {
-      cacheOutFeeds(id, 1);
+      cacheOutFeeds(mCircle.id, 1);
     }
   }
 
@@ -326,12 +300,16 @@ class FeedFragment extends BaseFragment {
           } else if (mFeedAdapter != null) {
             mFeedAdapter.add(response.object.posts.lists);
           }
-          ((FeedActivity)getBaseActivity()).setMyPraiseCount(response.object.myPraiseCount);
+          if (isAdded()) {
+            ((FeedActivity) getBaseActivity()).setMyPraiseCount(response.object.myPraiseCount);
+          }
           mPageInfo = response.object.posts.page;
         }
         mRefresherView.hideHeader();
         mLvFeed.stopLoadMore();
-        getBaseActivity().hideProgressBar();
+        if (isAdded()) {
+          getBaseActivity().hideProgressBar();
+        }
       }
     }, FeedsResponse.class);
   }
@@ -352,13 +330,35 @@ class FeedFragment extends BaseFragment {
           }
           mPageInfo = response.object.posts.page;
           mLvFeed.stopLoadMore();
-          ((FeedActivity)getBaseActivity()).setMyPraiseCount(response.object.myPraiseCount);
-          getBaseActivity().hideProgressBar();
+          if (isAdded()) {
+            ((FeedActivity) getBaseActivity()).setMyPraiseCount(response.object.myPraiseCount);
+            getBaseActivity().hideProgressBar();
+          }
         } else {
           requestFeeds(id, page);
         }
       }
     }, FeedsResponse.class);
+  }
+
+  boolean hidePraiseTip() {
+    if (mPraiseTip != null) {
+      if (mPraiseTip.isShowing()) {
+        mPraiseTip.dismiss();
+        return true;
+      }
+    }
+    return false;
+  }
+
+  boolean hideSourceTip() {
+    if (mSourceTip != null) {
+      if (mSourceTip.isShowing()) {
+        mSourceTip.dismiss();
+        return true;
+      }
+    }
+    return false;
   }
 
   boolean isLocked() {
