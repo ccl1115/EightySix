@@ -8,6 +8,7 @@ import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.ResponseHandlerInterface;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.C;
 import com.utree.eightysix.U;
 import com.utree.eightysix.utils.Env;
@@ -142,7 +143,9 @@ public class RESTRequester {
       }
     } catch (Throwable t) {
       U.getAnalyser().reportException(U.getContext(), t);
-      throw new IllegalArgumentException("Request object parse failed", t);
+      if (BuildConfig.DEBUG) {
+        throw new IllegalArgumentException("Request object parse failed", t);
+      }
     }
 
     return data;

@@ -313,6 +313,7 @@ class FeedFragment extends BaseFragment {
             mFeedAdapter = new FeedAdapter(response.object);
             U.getBus().register(mFeedAdapter);
             mLvFeed.setAdapter(mFeedAdapter);
+            ((FeedActivity) getBaseActivity()).setTitle(mCircle);
           } else if (mFeedAdapter != null) {
             mFeedAdapter.add(response.object.posts.lists);
           }
@@ -337,6 +338,7 @@ class FeedFragment extends BaseFragment {
             mFeedAdapter = new FeedAdapter(response.object);
             U.getBus().register(mFeedAdapter);
             mLvFeed.setAdapter(mFeedAdapter);
+            ((FeedActivity) getBaseActivity()).setTitle(mCircle);
           } else if (mFeedAdapter != null) {
             mFeedAdapter.add(response.object.posts.lists);
           }

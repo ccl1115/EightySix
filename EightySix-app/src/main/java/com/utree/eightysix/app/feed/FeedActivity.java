@@ -453,7 +453,7 @@ public class FeedActivity extends BaseActivity {
     }
   }
 
-  private void setTitle(Circle circle) {
+  void setTitle(Circle circle) {
     if (circle == null) return;
 
     setTopTitle(circle.shortName);

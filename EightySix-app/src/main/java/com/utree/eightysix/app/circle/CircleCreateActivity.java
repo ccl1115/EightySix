@@ -92,6 +92,12 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
     }
   }
 
+  @OnClick(R.id.tv_location)
+  public void onTvLocationClicked() {
+    U.getLocation().requestLocation();
+    mTvLocation.setText(R.string.locating);
+  }
+
   @OnClick (R.id.rb_reget_captcha)
   public void onRbRegetCaptchaClicked() {
     showToast("TODO renew captcha");

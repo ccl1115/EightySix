@@ -80,7 +80,7 @@ public class BaseItemDeserializer implements JsonDeserializer<BaseItem> {
   protected Post getPost(JsonObject jObj) {
     Post post = new Post();
     serializeBaseItem(jObj, post);
-    post.comment = safeGetAsString(jObj.get("comment"));
+    post.comment = safeGetAsString(jObj.get("commentMsg"));
     post.commentHead = safeGetAsString(jObj.get("commentHead"));
     post.comments = safeGetAsInt(jObj.get("countComment"));
     post.commentTail = safeGetAsString(jObj.get("commentTail"));
