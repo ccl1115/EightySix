@@ -172,11 +172,23 @@ public class U {
     checkThread();
     sConfiguration = new Properties();
     File file = new File(Environment.getExternalStorageDirectory().getAbsoluteFile() + "/configuration.properties");
+    if (!file.exists()) {
+      file = new File("/sdcard/configuration.properties");
+    }
     if (file.exists() && file.isFile()) {
+      FileReader in = null;
       try {
-        sConfiguration.load(new FileReader(file));
+        in = new FileReader(file);
+        sConfiguration.load(in);
       } catch (Exception e) {
         loadInternalConfig();
+      } finally {
+        if (in != null) {
+          try {
+            in.close();
+          } catch (IOException ignored) {
+          }
+        }
       }
     } else {
       loadInternalConfig();
