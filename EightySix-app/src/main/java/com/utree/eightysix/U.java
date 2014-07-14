@@ -7,8 +7,13 @@ import android.os.Looper;
 import android.view.View;
 import android.widget.Toast;
 import butterknife.ButterKnife;
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
 import com.jakewharton.disklrucache.DiskLruCache;
 import com.squareup.otto.Bus;
 import com.squareup.otto.ThreadEnforcer;
@@ -64,7 +69,7 @@ public class U {
     if (sGson == null) {
       GsonBuilder builder = new GsonBuilder();
       builder.setPrettyPrinting();
-      builder.registerTypeHierarchyAdapter(BaseItem.class, new BaseItemDeserializer());
+      builder.registerTypeAdapter(BaseItem.class, new BaseItemDeserializer());
       sGson = builder.create();
     }
     return sGson;

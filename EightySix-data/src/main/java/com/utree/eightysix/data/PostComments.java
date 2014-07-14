@@ -1,6 +1,7 @@
 package com.utree.eightysix.data;
 
 import com.google.gson.annotations.SerializedName;
+import java.util.List;
 
 /**
  * @author simon
@@ -11,6 +12,11 @@ public class PostComments {
   public Post post;
 
   @SerializedName("comments")
-  public Paginate<Comment> comments;
+  public Comments comments;
 
+  public static class Comments {
+
+    @SerializedName("lists")
+    public List<Comment> lists;
+  }
 }

@@ -21,7 +21,7 @@ public class BaseItemDeserializer implements JsonDeserializer<BaseItem> {
 
   @Override
   public BaseItem deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-    Log.d("GSON", "deserialize BaseItem");
+    Log.d("GSON", "deserialize BaseItem: " + typeOfT.toString());
     if (json.isJsonObject()) {
       JsonObject jObj = (JsonObject) json;
       if (jObj.has("type")) {

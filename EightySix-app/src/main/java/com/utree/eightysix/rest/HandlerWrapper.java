@@ -1,6 +1,7 @@
 package com.utree.eightysix.rest;
 
 import android.widget.Toast;
+import com.google.gson.Gson;
 import com.loopj.android.http.BaseJsonHttpResponseHandler;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.BuildConfig;
@@ -21,6 +22,7 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
   private OnResponse<T> mOnResponse;
   private RequestData mRequestData;
   private Class<T> mClz;
+  private Gson mGson;
 
   /**
    * No cache constructor
@@ -33,6 +35,12 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
     mRequestData = data;
     mClz = clz;
   }
+
+  public HandlerWrapper(RequestData data, OnResponse<T> onResponse, Class<T> clz, Gson customGson) {
+    this(data, onResponse, clz);
+    mGson = customGson;
+  }
+
 
   @Override
   public void onSuccess(int statusCode, org.apache.http.Header[] headers, String rawResponse, T response) {
@@ -77,7 +85,11 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
   @Override
   public T parseResponse(String responseBody) throws Throwable {
     if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "response: " + responseBody);
-    return U.getGson().fromJson(responseBody, mClz);
+    if (mGson == null) {
+      return U.getGson().fromJson(responseBody, mClz);
+    } else {
+      return mGson.fromJson(responseBody, mClz);
+    }
   }
 
   private void handleObjectError(T response) {
