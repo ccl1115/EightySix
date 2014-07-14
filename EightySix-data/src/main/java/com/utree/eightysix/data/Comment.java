@@ -37,6 +37,9 @@ public class Comment implements Serializable {
   @SerializedName ("poster")
   public int owner;
 
+  @SerializedName("commentViewTime")
+  public String time;
+
   @Override
   public int hashCode() {
     return id.hashCode();

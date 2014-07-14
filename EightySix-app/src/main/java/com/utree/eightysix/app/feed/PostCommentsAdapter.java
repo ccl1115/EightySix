@@ -159,7 +159,7 @@ class PostCommentsAdapter extends BaseAdapter {
         holder.mFpvPortrait.setEmotionColor(Utils.strToColor(comment.avatarColor));
       }
     }
-    holder.mTvInfo.setText(String.format("%s | %s | 赞(%d)", floor, U.timestamp(comment.timestamp), comment.praise));
+    holder.mTvInfo.setText(String.format("%s | %s | 赞(%d)", floor, comment.time, comment.praise));
     return convertView;
   }
 
