@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.feed;
 
+import android.app.Activity;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -222,7 +223,22 @@ class FeedFragment extends BaseFragment {
     if (mCircle != null) {
       if (mLvFeed != null) mLvFeed.setAdapter(null);
 
-      cacheOutFeeds(mCircle.id, 1);
+      if (isAdded()) {
+        cacheOutFeeds(mCircle.id, 1);
+      }
+    }
+  }
+
+  @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
+
+    if (mCircle != null) {
+      if (mLvFeed != null) mLvFeed.setAdapter(null);
+
+      if (isAdded()) {
+        cacheOutFeeds(mCircle.id, 1);
+      }
     }
   }
 
@@ -300,16 +316,12 @@ class FeedFragment extends BaseFragment {
           } else if (mFeedAdapter != null) {
             mFeedAdapter.add(response.object.posts.lists);
           }
-          if (isAdded()) {
-            ((FeedActivity) getBaseActivity()).setMyPraiseCount(response.object.myPraiseCount);
-          }
+          ((FeedActivity) getBaseActivity()).setMyPraiseCount(response.object.myPraiseCount);
           mPageInfo = response.object.posts.page;
         }
         mRefresherView.hideHeader();
         mLvFeed.stopLoadMore();
-        if (isAdded()) {
-          getBaseActivity().hideProgressBar();
-        }
+        getBaseActivity().hideProgressBar();
       }
     }, FeedsResponse.class);
   }
@@ -330,10 +342,8 @@ class FeedFragment extends BaseFragment {
           }
           mPageInfo = response.object.posts.page;
           mLvFeed.stopLoadMore();
-          if (isAdded()) {
-            ((FeedActivity) getBaseActivity()).setMyPraiseCount(response.object.myPraiseCount);
-            getBaseActivity().hideProgressBar();
-          }
+          ((FeedActivity) getBaseActivity()).setMyPraiseCount(response.object.myPraiseCount);
+          getBaseActivity().hideProgressBar();
         } else {
           requestFeeds(id, page);
         }
@@ -361,10 +371,10 @@ class FeedFragment extends BaseFragment {
     return false;
   }
 
-  boolean isLocked() {
+  boolean canPublish() {
     if (mFeedAdapter != null) {
       Feeds feeds = mFeedAdapter.getFeeds();
-      if (feeds != null) return feeds.lock == 1;
+      if (feeds != null) return feeds.current == 1 || feeds.lock == 0;
     }
     return false;
   }

@@ -121,7 +121,7 @@ public class FeedActivity extends BaseActivity {
 
   @OnClick (R.id.ib_send)
   public void onIbSendClicked() {
-    if (mFeedFragment.isLocked()) {
+    if (!mFeedFragment.canPublish()) {
       showNoPermDialog();
     } else {
       PublishActivity.start(this, mFeedFragment.getCircle().id);
@@ -395,7 +395,7 @@ public class FeedActivity extends BaseActivity {
 
   @Subscribe
   public void onStartPublishActivity(StartPublishActivityEvent event) {
-    if (mFeedFragment.isLocked()) {
+    if (!mFeedFragment.canPublish()) {
       showNoPermDialog();
     } else {
       PublishActivity.start(this, mFeedFragment.getCircle().id);
