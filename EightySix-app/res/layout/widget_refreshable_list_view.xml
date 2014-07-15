@@ -10,7 +10,7 @@
         app:direction="top"
         app:refresher_content="@+id/alv_refresh"
         app:refresher_head="@+id/tv_head"
-        app:empty_view="@+id/tv_no_msg"
+        app:empty_view="@+id/tv_empty_text"
         app:max_height="200dp"
         app:threshold_height="150dp">
 
@@ -24,11 +24,9 @@
             android:layout_width="80dp"
             android:layout_height="80dp"/>
 
-    <TextView
-            android:id="@+id/tv_no_msg"
+    <com.utree.eightysix.widget.RandomSceneTextView
+            android:id="@+id/tv_empty_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textSize="24sp"
-            android:visibility="invisible"/>
+            android:visibility="gone"/>
 </com.utree.eightysix.widget.RefresherView>

@@ -3,7 +3,6 @@ package com.utree.eightysix.app.msg;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,6 @@ import com.utree.eightysix.response.MsgsResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.EmotionOnRefreshListener;
 import com.utree.eightysix.widget.IRefreshable;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RefresherView;
@@ -45,8 +43,8 @@ public class MsgActivity extends BaseActivity {
   @InjectView (R.id.tv_no_new_msg)
   public TextView mTvNoNewMsg;
 
-  @InjectView (R.id.tv_no_msg)
-  public TextView mTvNoMsg;
+  @InjectView (R.id.tv_empty_text)
+  public TextView mTvEmptyText;
 
   @InjectView (R.id.alv_refresh)
   public AdvancedListView mAlvMsg;
@@ -184,10 +182,31 @@ public class MsgActivity extends BaseActivity {
               }
             };
             mAlvMsg.setAdapter(mMsgAdapter);
+
+            mTvNoNewMsg.setVisibility(View.VISIBLE);
+
+            if (response.object.posts.lists.size() == 0) {
+              mTvEmptyText.setVisibility(View.VISIBLE);
+              mTvEmptyText.setText(getString(R.string.msg_no_msg));
+              mTvNoNewMsg.setVisibility(View.GONE);
+            } else {
+              mTvEmptyText.setVisibility(View.GONE);
+            }
+
+            for (Post post : response.object.posts.lists) {
+              if (post.read == 0) {
+                mTvNoNewMsg.setVisibility(View.GONE);
+                break;
+              }
+            }
           } else {
             mMsgAdapter.add(response.object.posts.lists);
           }
           mPageInfo = response.object.posts.page;
+        } else {
+          mTvEmptyText.setVisibility(View.VISIBLE);
+          mTvEmptyText.setText(getString(R.string.msg_no_msg));
+          mTvNoNewMsg.setVisibility(View.GONE);
         }
         hideProgressBar();
         mAlvMsg.stopLoadMore();
@@ -211,6 +230,23 @@ public class MsgActivity extends BaseActivity {
               }
             };
             mAlvMsg.setAdapter(mMsgAdapter);
+
+            mTvNoNewMsg.setVisibility(View.VISIBLE);
+
+            if (response.object.posts.lists.size() == 0) {
+              mTvEmptyText.setVisibility(View.VISIBLE);
+              mTvEmptyText.setText(getString(R.string.msg_no_msg));
+              mTvNoNewMsg.setVisibility(View.GONE);
+            } else {
+              mTvEmptyText.setVisibility(View.GONE);
+            }
+
+            for (Post post : response.object.posts.lists) {
+              if (post.read == 0) {
+                mTvNoNewMsg.setVisibility(View.GONE);
+                break;
+              }
+            }
           } else {
             mMsgAdapter.add(response.object.posts.lists);
           }

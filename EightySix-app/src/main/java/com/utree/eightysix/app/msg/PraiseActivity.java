@@ -3,7 +3,6 @@ package com.utree.eightysix.app.msg;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,19 +17,15 @@ import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.data.Post;
-import com.utree.eightysix.request.MsgsRequest;
 import com.utree.eightysix.request.PraisesRequest;
-import com.utree.eightysix.response.FeedsResponse;
 import com.utree.eightysix.response.MsgsResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.EmotionOnRefreshListener;
 import com.utree.eightysix.widget.IRefreshable;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RefresherView;
 import java.util.List;
-import java.util.Random;
 
 /**
  * @author simon
@@ -44,11 +39,11 @@ public class PraiseActivity extends BaseActivity {
   @InjectView (R.id.tv_no_new_msg)
   public TextView mTvNoNewMsg;
 
-  @InjectView(R.id.tv_no_msg)
-  public TextView mTvNoMsg;
-
   @InjectView (R.id.alv_refresh)
   public AdvancedListView mAlvMsg;
+
+  @InjectView(R.id.tv_empty_text)
+  public TextView mTvEmptyText;
 
   private MsgAdapter mMsgAdapter;
   private Paginate.Page mPageInfo;
@@ -188,7 +183,29 @@ public class PraiseActivity extends BaseActivity {
           } else {
             mMsgAdapter.add(response.object.posts.lists);
           }
+
+          mTvNoNewMsg.setVisibility(View.VISIBLE);
+
+          if (response.object.posts.lists.size() == 0) {
+            mTvEmptyText.setVisibility(View.VISIBLE);
+            mTvEmptyText.setText(R.string.praise_no_praise);
+            mTvNoNewMsg.setVisibility(View.GONE);
+          } else {
+            mTvEmptyText.setVisibility(View.GONE);
+          }
+
+          for (Post post : response.object.posts.lists) {
+            if (post.read == 0) {
+              mTvNoNewMsg.setVisibility(View.GONE);
+              break;
+            }
+          }
+
           mPageInfo = response.object.posts.page;
+        } else {
+          mTvEmptyText.setVisibility(View.VISIBLE);
+          mTvEmptyText.setText(getString(R.string.msg_no_msg));
+          mTvNoNewMsg.setVisibility(View.GONE);
         }
         hideProgressBar();
         mAlvMsg.stopLoadMore();
@@ -212,9 +229,28 @@ public class PraiseActivity extends BaseActivity {
               }
             };
             mAlvMsg.setAdapter(mMsgAdapter);
+
+
             setTopTitle(getString(R.string.praise_count_obtained, response.object.myPraiseCount));
             setTopSubTitle(getString(R.string.praise_status,
                 response.object.postCount, response.object.commentCount, response.object.percent));
+
+            mTvNoNewMsg.setVisibility(View.VISIBLE);
+
+            if (response.object.posts.lists.size() == 0) {
+              mTvEmptyText.setVisibility(View.VISIBLE);
+              mTvEmptyText.setText(R.string.praise_no_praise);
+              mTvNoNewMsg.setVisibility(View.GONE);
+            } else {
+              mTvEmptyText.setVisibility(View.GONE);
+            }
+
+            for (Post post : response.object.posts.lists) {
+              if (post.read == 0) {
+                mTvNoNewMsg.setVisibility(View.GONE);
+                break;
+              }
+            }
           } else {
             mMsgAdapter.add(response.object.posts.lists);
           }

@@ -72,7 +72,16 @@ class FeedAdapter extends BaseAdapter {
   }
 
   public void add(BaseItem post) {
-    mFeeds.posts.lists.add(0, post);
+    List<BaseItem> lists = mFeeds.posts.lists;
+    for (int i = 0, listsSize = lists.size(); i < listsSize; i++) {
+      BaseItem item = lists.get(i);
+      if (item instanceof Post) {
+        mFeeds.posts.lists.add(i, post);
+        notifyDataSetChanged();
+        return;
+      }
+    }
+    lists.add(post);
     notifyDataSetChanged();
   }
 

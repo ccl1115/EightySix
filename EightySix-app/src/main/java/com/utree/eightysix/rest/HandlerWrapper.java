@@ -44,7 +44,6 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
 
   @Override
   public void onSuccess(int statusCode, org.apache.http.Header[] headers, String rawResponse, T response) {
-    if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "response: " + rawResponse);
 
     if (response != null) {
       handleObjectError(response);
@@ -86,6 +85,8 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
 
   @Override
   public T parseResponse(String responseBody) throws Throwable {
+    if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "response: " + responseBody);
+
     if (mGson == null) {
       return U.getGson().fromJson(responseBody, mClz);
     } else {

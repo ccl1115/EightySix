@@ -188,8 +188,6 @@ public class BaseCirclesActivity extends BaseActivity {
       }
     });
 
-    mLvCircles.setEmptyView(mTvEmptyText);
-
     if (U.useFixture()) {
       mCircleListAdapter = new CircleListAdapter(U.getFixture(Circle.class, 20, "valid"));
       mLvCircles.setAdapter(mCircleListAdapter);

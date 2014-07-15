@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
@@ -28,6 +29,7 @@ import com.utree.eightysix.request.PostPraiseCancelRequest;
 import com.utree.eightysix.request.PostPraiseRequest;
 import com.utree.eightysix.response.FeedsResponse;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
@@ -48,10 +50,15 @@ class FeedFragment extends BaseFragment {
   @InjectView (R.id.refresh_view)
   public RefresherView mRefresherView;
 
+  @InjectView (R.id.tv_empty_text)
+  public TextView mTvEmptyText;
+
   private FeedAdapter mFeedAdapter;
   private Circle mCircle;
   private Paginate.Page mPageInfo;
+
   private boolean mRefreshed;
+
   private Guide mSourceTip;
   private Guide mPraiseTip;
 
@@ -197,14 +204,6 @@ class FeedFragment extends BaseFragment {
     return mCircle;
   }
 
-  public void setCircle(int id) {
-    if (mCircle.id != id) {
-      if (mLvFeed != null) mLvFeed.setAdapter(null);
-    }
-
-    cacheOutFeeds(id, 1);
-  }
-
   public void setCircle(Circle circle) {
     if (circle == null || !circle.equals(mCircle)) {
       if (mLvFeed != null) mLvFeed.setAdapter(null);
@@ -227,6 +226,14 @@ class FeedFragment extends BaseFragment {
         cacheOutFeeds(mCircle.id, 1);
       }
     }
+  }
+
+  public void setCircle(int id) {
+    if (mCircle.id != id) {
+      if (mLvFeed != null) mLvFeed.setAdapter(null);
+    }
+
+    cacheOutFeeds(id, 1);
   }
 
   @Override
@@ -306,19 +313,31 @@ class FeedFragment extends BaseFragment {
     getBaseActivity().request(new FeedsRequest(id, page), new OnResponse<FeedsResponse>() {
       @Override
       public void onResponse(FeedsResponse response) {
-        if (response != null && response.code == 0 && response.object != null) {
+        if (RESTRequester.responseOk(response)) {
           if (page == 1) {
             mCircle = response.object.circle;
             U.getBus().post(mCircle);
+
+            if (response.object.posts.lists.size() == 0) {
+              mTvEmptyText.setVisibility(View.VISIBLE);
+              mTvEmptyText.setText(R.string.circle_no_post);
+            } else {
+              mTvEmptyText.setVisibility(View.GONE);
+            }
+
             mFeedAdapter = new FeedAdapter(response.object);
             U.getBus().register(mFeedAdapter);
             mLvFeed.setAdapter(mFeedAdapter);
+
             ((FeedActivity) getBaseActivity()).setTitle(mCircle);
           } else if (mFeedAdapter != null) {
             mFeedAdapter.add(response.object.posts.lists);
           }
           ((FeedActivity) getBaseActivity()).setMyPraiseCount(response.object.myPraiseCount);
           mPageInfo = response.object.posts.page;
+        } else {
+          mTvEmptyText.setVisibility(View.VISIBLE);
+          mTvEmptyText.setText(R.string.circle_not_found);
         }
         mRefresherView.hideHeader();
         mLvFeed.stopLoadMore();
@@ -335,9 +354,18 @@ class FeedFragment extends BaseFragment {
           if (page == 1) {
             mCircle = response.object.circle;
             U.getBus().post(mCircle);
+
+            if (response.object.posts.lists.size() == 0) {
+              mTvEmptyText.setVisibility(View.VISIBLE);
+              mTvEmptyText.setText(R.string.circle_no_post);
+            } else {
+              mTvEmptyText.setVisibility(View.INVISIBLE);
+            }
+
             mFeedAdapter = new FeedAdapter(response.object);
             U.getBus().register(mFeedAdapter);
             mLvFeed.setAdapter(mFeedAdapter);
+
             ((FeedActivity) getBaseActivity()).setTitle(mCircle);
           } else if (mFeedAdapter != null) {
             mFeedAdapter.add(response.object.posts.lists);

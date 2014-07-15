@@ -69,7 +69,7 @@ public class PostActivity extends BaseActivity {
 
   private Post mPost;
 
-  private int mFactoryId;
+  private String mPostId;
 
   private PostCommentsAdapter mPostCommentsAdapter;
   private boolean mResumed;
@@ -166,8 +166,11 @@ public class PostActivity extends BaseActivity {
 
     mPost = getIntent().getParcelableExtra("post");
 
-    if (mPost == null && U.useFixture()) {
-      mPost = U.getFixture(Post.class, "valid");
+    mPostId = getIntent().getStringExtra("id");
+
+    if (mPost == null && mPostId == null) {
+      showToast(getString(R.string.post_not_found), false);
+      finish();
     } else {
       mPostCommentsAdapter = new PostCommentsAdapter(mPost, null);
       mLvComments.setAdapter(mPostCommentsAdapter);
@@ -380,7 +383,8 @@ public class PostActivity extends BaseActivity {
   }
 
   private void requestComment(final int page) {
-    request(new PostCommentsRequest(mPost.id, page), new OnResponse<PostCommentsResponse>() {
+    final String id = mPost == null ? mPostId : mPost.id;
+    request(new PostCommentsRequest(id, page), new OnResponse<PostCommentsResponse>() {
       @Override
       public void onResponse(PostCommentsResponse response) {
         if (RESTRequester.responseOk(response)) {
@@ -411,7 +415,7 @@ public class PostActivity extends BaseActivity {
   }
 
   private void requestPublishComment() {
-    request(new PublishCommentRequest(mEtPostContent.getText().toString(), mFactoryId, mPost.id),
+    request(new PublishCommentRequest(mEtPostContent.getText().toString(), mPost.id),
         new OnResponse<PublishCommentResponse>() {
           @Override
           public void onResponse(PublishCommentResponse response) {

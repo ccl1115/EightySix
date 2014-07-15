@@ -15,15 +15,11 @@ public class PublishCommentRequest {
   @Param ("content")
   public String content;
 
-  @Param ("factoryId")
-  public int factoryId;
-
   @Param ("postId")
   public String postId;
 
-  public PublishCommentRequest(String content, int factoryId, String postId) {
+  public PublishCommentRequest(String content, String postId) {
     this.content = content;
-    this.factoryId = factoryId;
     this.postId = postId;
   }
 }

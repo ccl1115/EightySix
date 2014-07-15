@@ -220,5 +220,9 @@
 
     <!-- BaseWebActivity -->
     <string name="web_load_failed">页面加载失败</string>
+    <string name="post_not_found">没有找到帖子</string>
+    <string name="circle_no_post">这个工友圈暂时还没有帖子</string>
+    <string name="msg_no_msg">你还没有消息</string>
+    <string name="praise_no_praise">你还没有收到赞</string>
 
 </resources>

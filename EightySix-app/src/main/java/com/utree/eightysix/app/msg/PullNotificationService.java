@@ -14,6 +14,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.app.feed.PostActivity;
+import com.utree.eightysix.data.PullNotification;
 import com.utree.eightysix.event.HasNewPraiseEvent;
 import com.utree.eightysix.event.NewCommentCountEvent;
 import com.utree.eightysix.request.PullNotificationRequest;
@@ -83,11 +84,11 @@ public class PullNotificationService extends Service {
     return (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
   }
 
-  private Notification buildPost(String postId) {
+  private Notification buildPost(String postId, String shortName) {
     return new NotificationCompat.Builder(this)
         .setTicker(getString(R.string.notification_friend_new_post))
         .setSmallIcon(R.drawable.ic_app_icon)
-        .setContentTitle(postId)
+        .setContentTitle(shortName)
         .setContentText(getString(R.string.notification_friend_new_post))
         .setContentIntent(PendingIntent.getActivity(this, 0, PostActivity.getIntent(this, postId), Intent.FLAG_ACTIVITY_NEW_TASK))
         .build();
@@ -102,16 +103,16 @@ public class PullNotificationService extends Service {
         .build();
   }
 
-  private Notification buildComment(String[] ids) {
+  private Notification buildComment(int count, String id) {
     NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
     builder.setContentTitle(getString(R.string.notification_new))
         .setTicker(getString(R.string.notification_new))
         .setSmallIcon(R.drawable.ic_app_icon);
-    if (ids.length == 1) {
+    if (count == 0) {
       builder.setContentText(getString(R.string.notification_new_comment));
-      builder.setContentIntent(PendingIntent.getActivity(this, 0, PostActivity.getIntent(this, ids[0]), Intent.FLAG_ACTIVITY_NEW_TASK));
+      builder.setContentIntent(PendingIntent.getActivity(this, 0, PostActivity.getIntent(this, id), Intent.FLAG_ACTIVITY_NEW_TASK));
     } else {
-      builder.setContentText(String.format(getString(R.string.notification_new_comments), ids.length));
+      builder.setContentText(String.format(getString(R.string.notification_new_comments), count));
       builder.setContentIntent(PendingIntent.getActivity(this, 0, MsgActivity.getIntent(this, true), Intent.FLAG_ACTIVITY_NEW_TASK));
     }
     return builder.build();
@@ -141,37 +142,47 @@ public class PullNotificationService extends Service {
   private void handleResponse(PullNotificationResponse response) {
     switch (response.object.type) {
       case TYPE_POST:
-        if (response.object.ids == null || response.object.ids.length == 0) break;
-        for (String id : response.object.ids) {
-          getNM().notify(id, ID_POST, buildPost(id));
+        if (response.object.lists == null || response.object.lists.size() == 0) break;
+        for (PullNotification.Item item : response.object.lists) {
+          getNM().notify(item.value, ID_POST, buildPost(item.value, item.shortName));
         }
         break;
       case TYPE_UNLOCK_CIRCLE:
-        if (response.object.ids == null || response.object.ids.length == 0) break;
-        for (String id : response.object.ids) {
-          getNM().notify(id, ID_UNLOCK_FACTORY, buildUnlockCircle(id, "测试"));
+        if (response.object.lists == null || response.object.lists.size() == 0) break;
+        for (PullNotification.Item item : response.object.lists) {
+          getNM().notify(item.value, ID_UNLOCK_FACTORY, buildUnlockCircle(item.value, item.shortName));
         }
         break;
       case TYPE_FRIEND_L1_JOIN:
-        if (response.object.ids == null || response.object.ids.length == 0) break;
-        for (String id : response.object.ids) {
-          getNM().notify(id, ID_FRIEND_L1_JOIN, buildFriendJoin(id, "测试", 10));
+        if (response.object.lists == null || response.object.lists.size() == 0) break;
+        for (PullNotification.Item item : response.object.lists) {
+          getNM().notify(item.value, ID_FRIEND_L1_JOIN, buildFriendJoin(item.value, item.shortName, item.friendCount));
         }
         break;
       case TYPE_COMMENT:
-        if (response.object.ids == null || response.object.ids.length == 0) break;
-        getNM().notify(ID_COMMENT, buildComment(response.object.ids));
-        Account.inst().setNewCommentCount(response.object.ids.length);
-        U.getBus().post(new NewCommentCountEvent(response.object.ids.length));
+        if (response.object.lists == null || response.object.lists.size() == 0) break;
+        int count = 0;
+        try {
+          count = Integer.parseInt(response.object.msg);
+        } catch (NumberFormatException ignored) {
+
+        }
+        if (count == 1) {
+          getNM().notify(ID_COMMENT, buildComment(count, response.object.lists.get(0).value));
+        } else {
+          getNM().notify(ID_COMMENT, buildComment(count, null));
+        }
+        Account.inst().setNewCommentCount(response.object.lists.size());
+        U.getBus().post(new NewCommentCountEvent(count));
         break;
       case TYPE_PRAISE:
         Account.inst().setHasNewPraise(true);
         U.getBus().post(new HasNewPraiseEvent());
         break;
       case TYPE_CIRCLE_CREATION_APPROVE:
-        if (response.object.ids == null || response.object.ids.length == 0) break;
-        for (String id : response.object.ids) {
-          getNM().notify(id, ID_APPROVE, buildApprove(id, "测试"));
+        if (response.object.lists == null || response.object.lists.size() == 0) break;
+        for (PullNotification.Item item : response.object.lists) {
+          getNM().notify(item.value, ID_APPROVE, buildApprove(item.value, item.shortName));
         }
         break;
     }

@@ -200,7 +200,7 @@ public class CircleSearchActivity extends BaseActivity {
 
   protected void showCircleSetDialog(final Circle circle) {
     AlertDialog dialog = new AlertDialog.Builder(this)
-        .setTitle(String.format("确认在%s上班么？", circle.name))
+        .setTitle(String.format("确认［%s］上班么？", circle.name))
         .setMessage("15天之内不能修改在职工厂")
         .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
           @Override

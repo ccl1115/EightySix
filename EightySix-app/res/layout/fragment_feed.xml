@@ -29,9 +29,10 @@
             android:smoothScrollbar="true"
             android:listSelector="@drawable/transparent"/>
 
-    <TextView
+    <com.utree.eightysix.widget.RandomSceneTextView
             android:id="@+id/tv_empty_text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
 
 </com.utree.eightysix.widget.RefresherView>
