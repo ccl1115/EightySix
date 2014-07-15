@@ -335,7 +335,9 @@ class FeedFragment extends BaseFragment {
           ((FeedActivity) getBaseActivity()).setMyPraiseCount(response.object.myPraiseCount);
           mPageInfo = response.object.posts.page;
         } else {
-          mRstvEmpty.setVisibility(View.VISIBLE);
+          if (mFeedAdapter != null && mFeedAdapter.getCount() == 0) {
+            mRstvEmpty.setVisibility(View.VISIBLE);
+          }
         }
         mRefresherView.hideHeader();
         mLvFeed.stopLoadMore();

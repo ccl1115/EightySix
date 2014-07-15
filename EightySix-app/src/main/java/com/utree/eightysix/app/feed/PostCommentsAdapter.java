@@ -15,9 +15,9 @@ import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.feed.event.PostCommentPraiseEvent;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
-import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import com.utree.eightysix.utils.Utils;
 import com.utree.eightysix.widget.FontPortraitView;
+import com.utree.eightysix.widget.RandomSceneTextView;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -29,6 +29,7 @@ class PostCommentsAdapter extends BaseAdapter {
 
   private static final int TYPE_POST = 0;
   private static final int TYPE_COMMENT = 1;
+  private static final int TYPE_NOT_FOUND = 2;
 
   private Post mPost;
   private List<Comment> mComments;
@@ -62,12 +63,29 @@ class PostCommentsAdapter extends BaseAdapter {
 
   @Override
   public int getCount() {
-    return 1 + (mComments == null ? 0 : mComments.size());
+    int count = 0;
+    if (mComments != null) {
+      if (mComments.size() == 0) {
+        count = 1;
+      } else {
+        count = mComments.size();
+      }
+    }
+    return count + 1;
   }
 
   @Override
   public Object getItem(int position) {
-    return position == 0 ? mPost : (mComments == null ? null : mComments.get(position - 1));
+    if (position == 0) {
+      return mPost;
+    } else if (mComments != null) {
+      if (mComments.size() == 0) {
+        return null;
+      } else {
+        return mComments.get(position - 1);
+      }
+    }
+    return null;
   }
 
   @Override
@@ -84,18 +102,23 @@ class PostCommentsAdapter extends BaseAdapter {
       case TYPE_COMMENT:
         convertView = getCommentView(position, convertView, parent);
         break;
+      case TYPE_NOT_FOUND:
+        convertView = getNotFoundView(convertView, parent);
+        break;
     }
     return convertView;
   }
 
   @Override
   public int getItemViewType(int position) {
-    return position == 0 ? TYPE_POST : TYPE_COMMENT;
+    if (position == 0) return TYPE_POST;
+    else if (mComments != null && mComments.size() == 0) return TYPE_NOT_FOUND;
+    else return TYPE_COMMENT;
   }
 
   @Override
   public int getViewTypeCount() {
-    return 2;
+    return 3;
   }
 
   public void remove(String commentId) {
@@ -171,6 +194,18 @@ class PostCommentsAdapter extends BaseAdapter {
     Post post = (Post) getItem(position);
     PostPostView feedPostView = (PostPostView) convertView;
     feedPostView.setData(post);
+
+    return convertView;
+  }
+
+  private View getNotFoundView(View convertView, ViewGroup parent) {
+    if (convertView == null) {
+      convertView = new RandomSceneTextView(parent.getContext());
+    }
+
+    RandomSceneTextView view = (RandomSceneTextView) convertView;
+    view.setDrawable(R.drawable.scene_6);
+    view.setSubText(R.string.not_found_comment);
 
     return convertView;
   }

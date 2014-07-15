@@ -86,7 +86,7 @@ public class RandomSceneTextView extends LinearLayout {
     mIv.setImageDrawable(drawable);
   }
 
-  public void setIv(int res) {
+  public void setDrawable(int res) {
     Drawable drawable = getResources().getDrawable(res);
     setDrawable(drawable);
   }
