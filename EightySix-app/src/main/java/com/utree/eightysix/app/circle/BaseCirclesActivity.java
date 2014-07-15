@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
@@ -37,9 +36,9 @@ import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.EmotionOnRefreshListener;
 import com.utree.eightysix.widget.IRefreshable;
 import com.utree.eightysix.widget.LoadMoreCallback;
+import com.utree.eightysix.widget.RandomSceneTextView;
 import com.utree.eightysix.widget.RefresherView;
 import com.utree.eightysix.widget.TopBar;
 
@@ -60,8 +59,8 @@ public class BaseCirclesActivity extends BaseActivity {
   @InjectView (R.id.refresh_view)
   public RefresherView mRefresherView;
 
-  @InjectView (R.id.tv_empty_text)
-  public TextView mTvEmptyText;
+  @InjectView (R.id.rstv_empty)
+  public RandomSceneTextView mRstvEmpty;
 
   @InjectView (R.id.tv_search_hint)
   public EditText mRbSearchHint;
@@ -147,8 +146,6 @@ public class BaseCirclesActivity extends BaseActivity {
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.activity_base_circles);
-
-    mTvEmptyText.setText("");
 
     mRbSearchHint.setHint(R.string.search_circles);
     mRbSearchHint.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(2), Color.WHITE));
@@ -322,6 +319,12 @@ public class BaseCirclesActivity extends BaseActivity {
           if (page == 1) {
             mCircleListAdapter = new CircleListAdapter(response.object.lists);
             mLvCircles.setAdapter(mCircleListAdapter);
+
+            if (response.object.lists.size() == 0) {
+              mRstvEmpty.setVisibility(View.VISIBLE);
+            } else {
+              mRstvEmpty.setVisibility(View.GONE);
+            }
           } else if (mCircleListAdapter != null) {
             mCircleListAdapter.add(response.object.lists);
           }
@@ -345,12 +348,18 @@ public class BaseCirclesActivity extends BaseActivity {
             if (page == 1) {
               mCircleListAdapter = new CircleListAdapter(response.object.lists);
               mLvCircles.setAdapter(mCircleListAdapter);
+
+              if (response.object.lists.size() == 0) {
+                mRstvEmpty.setVisibility(View.VISIBLE);
+              } else {
+                mRstvEmpty.setVisibility(View.GONE);
+              }
             } else if (mCircleListAdapter != null) {
               mCircleListAdapter.add(response.object.lists);
             }
             mPageInfo = response.object.page;
           } else {
-            mTvEmptyText.setText(getString(R.string.no_circles));
+            mRstvEmpty.setVisibility(View.VISIBLE);
           }
           mLvCircles.stopLoadMore();
           hideProgressBar();

@@ -35,6 +35,7 @@ import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
+import com.utree.eightysix.widget.RandomSceneTextView;
 import com.utree.eightysix.widget.RoundedButton;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,6 +63,9 @@ public class CircleSearchActivity extends BaseActivity {
 
   @InjectView (R.id.tv_empty_text)
   public TextView mTvEmptyText;
+
+  @InjectView(R.id.rstv_empty)
+  public RandomSceneTextView mRstvHistoryEmpty;
 
   private List<String> mSearchHistory;
   private View mFooterClearSearch;
@@ -229,6 +233,12 @@ public class CircleSearchActivity extends BaseActivity {
       item.put(from[0], search);
 
       data.add(item);
+    }
+
+    if (data.size() == 0) {
+      mRstvHistoryEmpty.setVisibility(View.VISIBLE);
+    } else {
+      mRstvHistoryEmpty.setVisibility(View.GONE);
     }
 
     mLvHistory.setAdapter(new SimpleAdapter(this, data, R.layout.item_circle_simple, from, to));

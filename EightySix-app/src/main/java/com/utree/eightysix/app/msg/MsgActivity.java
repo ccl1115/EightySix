@@ -25,6 +25,7 @@ import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.IRefreshable;
 import com.utree.eightysix.widget.LoadMoreCallback;
+import com.utree.eightysix.widget.RandomSceneTextView;
 import com.utree.eightysix.widget.RefresherView;
 import java.util.List;
 import java.util.Random;
@@ -44,7 +45,7 @@ public class MsgActivity extends BaseActivity {
   public TextView mTvNoNewMsg;
 
   @InjectView (R.id.tv_empty_text)
-  public TextView mTvEmptyText;
+  public RandomSceneTextView mRstvEmpty;
 
   @InjectView (R.id.alv_refresh)
   public AdvancedListView mAlvMsg;
@@ -142,6 +143,9 @@ public class MsgActivity extends BaseActivity {
     });
 
     U.getBus().register(mAlvMsg);
+
+    mRstvEmpty.setText(R.string.not_found_msg);
+    mRstvEmpty.setSubText(R.string.not_found_msg_tip);
   }
 
   @Override
@@ -186,15 +190,14 @@ public class MsgActivity extends BaseActivity {
             mTvNoNewMsg.setVisibility(View.VISIBLE);
 
             if (response.object.posts.lists.size() == 0) {
-              mTvEmptyText.setVisibility(View.VISIBLE);
-              mTvEmptyText.setText(getString(R.string.msg_no_msg));
+              mRstvEmpty.setVisibility(View.VISIBLE);
               mTvNoNewMsg.setVisibility(View.GONE);
             } else {
-              mTvEmptyText.setVisibility(View.GONE);
+              mRstvEmpty.setVisibility(View.GONE);
             }
 
             for (Post post : response.object.posts.lists) {
-              if (post.read == 0) {
+              if (post.read == 1) {
                 mTvNoNewMsg.setVisibility(View.GONE);
                 break;
               }
@@ -204,8 +207,7 @@ public class MsgActivity extends BaseActivity {
           }
           mPageInfo = response.object.posts.page;
         } else {
-          mTvEmptyText.setVisibility(View.VISIBLE);
-          mTvEmptyText.setText(getString(R.string.msg_no_msg));
+          mRstvEmpty.setVisibility(View.VISIBLE);
           mTvNoNewMsg.setVisibility(View.GONE);
         }
         hideProgressBar();
@@ -234,15 +236,14 @@ public class MsgActivity extends BaseActivity {
             mTvNoNewMsg.setVisibility(View.VISIBLE);
 
             if (response.object.posts.lists.size() == 0) {
-              mTvEmptyText.setVisibility(View.VISIBLE);
-              mTvEmptyText.setText(getString(R.string.msg_no_msg));
+              mRstvEmpty.setVisibility(View.VISIBLE);
               mTvNoNewMsg.setVisibility(View.GONE);
             } else {
-              mTvEmptyText.setVisibility(View.GONE);
+              mRstvEmpty.setVisibility(View.GONE);
             }
 
             for (Post post : response.object.posts.lists) {
-              if (post.read == 0) {
+              if (post.read == 1) {
                 mTvNoNewMsg.setVisibility(View.GONE);
                 break;
               }

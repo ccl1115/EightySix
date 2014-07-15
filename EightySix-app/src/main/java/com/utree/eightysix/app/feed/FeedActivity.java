@@ -510,7 +510,9 @@ public class FeedActivity extends BaseActivity {
       @Override
       public void onResponse(CirclesResponse response) {
         if (response != null && response.code == 0 && response.object != null) {
-          mSideCircles = response.object.lists.subList(0, 10);
+          mSideCircles = response.object.lists.size() > 10 ?
+              response.object.lists.subList(0, 10) : response.object.lists;
+
           if (mFeedFragment.getCircle() == null && mSideCircles.size() > 0) {
             mFeedFragment.setCircle(mSideCircles.get(0));
             setSideHighlight(mFeedFragment.getCircle());
@@ -535,7 +537,9 @@ public class FeedActivity extends BaseActivity {
       @Override
       public void onResponse(CirclesResponse response) {
         if (response != null && response.code == 0 && response.object != null) {
-          mSideCircles = response.object.lists.subList(0, 10);
+          mSideCircles = response.object.lists.size() > 10 ?
+              response.object.lists.subList(0, 10) : response.object.lists;
+
           if (mFeedFragment.getCircle() == null && mSideCircles.size() > 0) {
             mFeedFragment.setCircle(mSideCircles.get(0));
             setSideHighlight(mFeedFragment.getCircle());

@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
@@ -35,6 +34,7 @@ import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.IRefreshable;
 import com.utree.eightysix.widget.LoadMoreCallback;
+import com.utree.eightysix.widget.RandomSceneTextView;
 import com.utree.eightysix.widget.RefresherView;
 import com.utree.eightysix.widget.guide.Guide;
 import java.util.Iterator;
@@ -51,7 +51,7 @@ class FeedFragment extends BaseFragment {
   public RefresherView mRefresherView;
 
   @InjectView (R.id.tv_empty_text)
-  public TextView mTvEmptyText;
+  public RandomSceneTextView mRstvEmpty;
 
   private FeedAdapter mFeedAdapter;
   private Circle mCircle;
@@ -319,10 +319,9 @@ class FeedFragment extends BaseFragment {
             U.getBus().post(mCircle);
 
             if (response.object.posts.lists.size() == 0) {
-              mTvEmptyText.setVisibility(View.VISIBLE);
-              mTvEmptyText.setText(R.string.circle_no_post);
+              mRstvEmpty.setVisibility(View.VISIBLE);
             } else {
-              mTvEmptyText.setVisibility(View.GONE);
+              mRstvEmpty.setVisibility(View.GONE);
             }
 
             mFeedAdapter = new FeedAdapter(response.object);
@@ -336,8 +335,7 @@ class FeedFragment extends BaseFragment {
           ((FeedActivity) getBaseActivity()).setMyPraiseCount(response.object.myPraiseCount);
           mPageInfo = response.object.posts.page;
         } else {
-          mTvEmptyText.setVisibility(View.VISIBLE);
-          mTvEmptyText.setText(R.string.circle_not_found);
+          mRstvEmpty.setVisibility(View.VISIBLE);
         }
         mRefresherView.hideHeader();
         mLvFeed.stopLoadMore();
@@ -356,10 +354,9 @@ class FeedFragment extends BaseFragment {
             U.getBus().post(mCircle);
 
             if (response.object.posts.lists.size() == 0) {
-              mTvEmptyText.setVisibility(View.VISIBLE);
-              mTvEmptyText.setText(R.string.circle_no_post);
+              mRstvEmpty.setVisibility(View.VISIBLE);
             } else {
-              mTvEmptyText.setVisibility(View.INVISIBLE);
+              mRstvEmpty.setVisibility(View.INVISIBLE);
             }
 
             mFeedAdapter = new FeedAdapter(response.object);

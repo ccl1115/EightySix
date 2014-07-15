@@ -33,6 +33,8 @@
             android:id="@+id/tv_empty_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:text="@string/not_found_post"
+            app:subText="@string/not_found_post_tip"/>
 
 </com.utree.eightysix.widget.RefresherView>

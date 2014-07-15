@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
@@ -52,4 +53,13 @@
             android:layout_height="match_parent"
             android:background="@android:color/white"/>
 
+    <com.utree.eightysix.widget.RandomSceneTextView
+            android:id="@+id/rstv_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:text="@string/not_found_history"
+            app:subText="@string/not_found_history_tip">
+
+    </com.utree.eightysix.widget.RandomSceneTextView>
 </FrameLayout>

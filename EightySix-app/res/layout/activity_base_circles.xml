@@ -8,10 +8,35 @@
 
     <include layout="@layout/widget_search"/>
 
-    <include
-            layout="@layout/widget_refreshable_list_view"
+    <com.utree.eightysix.widget.RefresherView
+            android:id="@+id/refresh_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            app:direction="top"
+            app:refresher_content="@+id/alv_refresh"
+            app:refresher_head="@+id/tv_head"
+            app:empty_view="@+id/rstv_empty"
+            app:max_height="200dp"
+            app:threshold_height="150dp"
+            android:layout_weight="1">
+
+        <com.utree.eightysix.widget.AdvancedListView
+                android:id="@+id/alv_refresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        <com.utree.eightysix.widget.GearsView
+                android:id="@+id/tv_head"
+                android:layout_width="80dp"
+                android:layout_height="80dp"/>
+
+        <com.utree.eightysix.widget.RandomSceneTextView
+                android:id="@+id/rstv_empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:text="@string/not_found_circle"
+                app:subText="@string/not_found_circle_tip"
+                android:visibility="gone"/>
+    </com.utree.eightysix.widget.RefresherView>
 
 </LinearLayout>

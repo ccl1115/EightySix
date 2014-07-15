@@ -24,6 +24,7 @@ import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.IRefreshable;
 import com.utree.eightysix.widget.LoadMoreCallback;
+import com.utree.eightysix.widget.RandomSceneTextView;
 import com.utree.eightysix.widget.RefresherView;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class PraiseActivity extends BaseActivity {
   public AdvancedListView mAlvMsg;
 
   @InjectView(R.id.tv_empty_text)
-  public TextView mTvEmptyText;
+  public RandomSceneTextView mRstvEmpty;
 
   private MsgAdapter mMsgAdapter;
   private Paginate.Page mPageInfo;
@@ -144,6 +145,9 @@ public class PraiseActivity extends BaseActivity {
     });
 
     U.getBus().register(mAlvMsg);
+
+    mRstvEmpty.setText(R.string.not_found_praise);
+    mRstvEmpty.setSubText(R.string.not_found_praise_tip);
   }
 
   @Override
@@ -187,15 +191,14 @@ public class PraiseActivity extends BaseActivity {
           mTvNoNewMsg.setVisibility(View.VISIBLE);
 
           if (response.object.posts.lists.size() == 0) {
-            mTvEmptyText.setVisibility(View.VISIBLE);
-            mTvEmptyText.setText(R.string.praise_no_praise);
+            mRstvEmpty.setVisibility(View.VISIBLE);
             mTvNoNewMsg.setVisibility(View.GONE);
           } else {
-            mTvEmptyText.setVisibility(View.GONE);
+            mRstvEmpty.setVisibility(View.GONE);
           }
 
           for (Post post : response.object.posts.lists) {
-            if (post.read == 0) {
+            if (post.read == 1) {
               mTvNoNewMsg.setVisibility(View.GONE);
               break;
             }
@@ -203,8 +206,7 @@ public class PraiseActivity extends BaseActivity {
 
           mPageInfo = response.object.posts.page;
         } else {
-          mTvEmptyText.setVisibility(View.VISIBLE);
-          mTvEmptyText.setText(getString(R.string.msg_no_msg));
+          mRstvEmpty.setVisibility(View.VISIBLE);
           mTvNoNewMsg.setVisibility(View.GONE);
         }
         hideProgressBar();
@@ -238,15 +240,14 @@ public class PraiseActivity extends BaseActivity {
             mTvNoNewMsg.setVisibility(View.VISIBLE);
 
             if (response.object.posts.lists.size() == 0) {
-              mTvEmptyText.setVisibility(View.VISIBLE);
-              mTvEmptyText.setText(R.string.praise_no_praise);
+              mRstvEmpty.setVisibility(View.VISIBLE);
               mTvNoNewMsg.setVisibility(View.GONE);
             } else {
-              mTvEmptyText.setVisibility(View.GONE);
+              mRstvEmpty.setVisibility(View.GONE);
             }
 
             for (Post post : response.object.posts.lists) {
-              if (post.read == 0) {
+              if (post.read == 1) {
                 mTvNoNewMsg.setVisibility(View.GONE);
                 break;
               }

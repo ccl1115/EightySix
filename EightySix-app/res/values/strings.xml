@@ -39,6 +39,20 @@
     <string name="server_connection_exception">无法访问服务器，请检查你的网络设置</string>
     <string name="server_500">服务器内部错误</string>
 
+    <!-- Not found -->
+    <string name="not_found_circle">还没有跟你相关的工友圈</string>
+    <string name="not_found_circle_tip">你可以搜索或者创建一个</string>
+    <string name="not_found_history">你还没有所搜历史</string>
+    <string name="not_found_history_tip">搜索跟你相关的工友圈把</string>
+    <string name="not_found_post">还没有帖子浏览</string>
+    <string name="not_found_post_tip">点击右下角按钮，抢先发帖吧</string>
+    <string name="not_found_comment">还没有人评论，抢个沙发吧</string>
+    <string name="not_found_msg">还没有新消息哦</string>
+    <string name="not_found_msg_tip">多多发帖，互动，和大家畅快的交流吧</string>
+    <string name="not_found_praise">还没有赞信息哦</string>
+    <string name="not_found_praise_tip">多多发帖，回帖，积累赞数吧</string>
+
+
     <!-- Locate -->
     <string name="locating">定位中…</string>
     <string name="locating_failed">定位失败</string>
@@ -159,7 +173,6 @@
     <string name="anonymously_comment">匿名发表评论</string>
     <string name="comment_action">评论操作</string>
     <string name="post_action">帖子操作</string>
-    <string name="circle_not_found">没有找到工友圈</string>
     <string name="success_created">创建成功</string>
 
     <!-- FeedbackActivity -->
