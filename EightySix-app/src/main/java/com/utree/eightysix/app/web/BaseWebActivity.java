@@ -56,6 +56,11 @@ public class BaseWebActivity extends BaseActivity {
   }
 
   @Override
+  public void onActionLeftClicked() {
+    finish();
+  }
+
+  @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 

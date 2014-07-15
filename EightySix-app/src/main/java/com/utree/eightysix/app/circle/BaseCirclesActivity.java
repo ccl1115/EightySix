@@ -288,6 +288,13 @@ public class BaseCirclesActivity extends BaseActivity {
   }
 
   @Override
+  public void onBackPressed() {
+    if (mMode != MODE_SELECT) {
+      super.onBackPressed();
+    }
+  }
+
+  @Override
   @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();

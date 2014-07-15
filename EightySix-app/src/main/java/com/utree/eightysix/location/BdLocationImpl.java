@@ -107,6 +107,8 @@ public class BdLocationImpl implements Location, BDLocationListener {
 
       mTransientOnResult.clear();
     }
+
+    mLocationClient.stop();
   }
 
   @Override

@@ -9,7 +9,8 @@
             android:id="@+id/tb_rl_left"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@drawable/apptheme_primary_btn_dark">
+            android:background="@drawable/apptheme_primary_btn_dark"
+            android:paddingRight="8dp">
 
         <ImageView
                 android:id="@+id/tb_iv_action_left"
@@ -120,7 +121,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="8dp"
                 android:minHeight="0dp"
-                android:padding="8dp"
-                android:text="@string/search"/>
+                android:padding="5dp"
+                android:text="@string/search"
+                android:textSize="14sp"/>
     </LinearLayout>
 </merge>

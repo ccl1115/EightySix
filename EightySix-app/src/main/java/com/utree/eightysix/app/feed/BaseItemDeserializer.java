@@ -89,7 +89,7 @@ public class BaseItemDeserializer implements JsonDeserializer<BaseItem> {
     post.praise = safeGetAsInt(jObj.get("countPraise"));
     post.praised = safeGetAsInt(jObj.get("praised"));
     post.read = safeGetAsInt(jObj.get("readed"));
-    post.source = safeGetAsString(jObj.get("source"));
+    post.source = safeGetAsString(jObj.get("postSource"));
     post.whoAtMe = safeGetAsString(jObj.get("whoAtMe"));
     return post;
   }
