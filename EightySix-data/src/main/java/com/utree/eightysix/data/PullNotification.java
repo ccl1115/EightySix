@@ -11,9 +11,6 @@ public class PullNotification {
   @SerializedName ("type")
   public int type;
 
-  @SerializedName("ids")
-  public String[] ids;
-
   @SerializedName("msg")
   public String msg;
 
