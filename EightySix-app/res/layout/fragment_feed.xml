@@ -34,6 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            app:drawable="@drawable/scene_4"
             app:text="@string/not_found_post"
             app:subText="@string/not_found_post_tip"/>
 

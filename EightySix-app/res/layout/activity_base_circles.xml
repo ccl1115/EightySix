@@ -36,6 +36,7 @@
                 android:layout_height="wrap_content"
                 app:text="@string/not_found_circle"
                 app:subText="@string/not_found_circle_tip"
+                app:drawable="@drawable/scene_1"
                 android:visibility="gone"/>
     </com.utree.eightysix.widget.RefresherView>
 

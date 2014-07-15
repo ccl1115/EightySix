@@ -59,7 +59,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             app:text="@string/not_found_history"
-            app:subText="@string/not_found_history_tip">
-
-    </com.utree.eightysix.widget.RandomSceneTextView>
+            app:subText="@string/not_found_history_tip"
+            app:drawable="@drawable/scene_2"/>
 </FrameLayout>
