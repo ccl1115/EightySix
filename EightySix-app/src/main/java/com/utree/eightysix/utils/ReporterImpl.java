@@ -1,5 +1,6 @@
 package com.utree.eightysix.utils;
 
+import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.U;
 import com.utree.eightysix.rest.RequestData;
 import java.util.Properties;
@@ -14,7 +15,6 @@ public class ReporterImpl implements Reporter {
       @Override
       public void uncaughtException(Thread thread, Throwable ex) {
         reportAppCrash(ex);
-
       }
     });
   }
@@ -35,7 +35,13 @@ public class ReporterImpl implements Reporter {
 
   @Override
   public void reportAppCrash(Throwable t) {
-    U.getAnalyser().reportException(U.getContext(), t);
+    if (BuildConfig.DEBUG) {
+      if (U.getConfigBoolean("report.debug")) {
+        U.getAnalyser().reportException(U.getContext(), t);
+      }
+    } else {
+      U.getAnalyser().reportException(U.getContext(), t);
+    }
   }
 
   private Properties fromRequestData(RequestData data) {
