@@ -67,4 +67,81 @@
         </item>
     </page>
 
+    <page>
+        <item>
+            <bg-image>bg_1.png</bg-image>
+        </item>
+
+        <item>
+            <bg-image>bg_2.png</bg-image>
+        </item>
+        <item>
+            <bg-image>bg_3.png</bg-image>
+        </item>
+        <item>
+            <bg-image>bg_4.png</bg-image>
+        </item>
+        <item>
+            <bg-image>bg_5.png</bg-image>
+        </item>
+        <item>
+            <bg-image>bg_6.png</bg-image>
+        </item>
+        <item>
+            <bg-image>bg_7.png</bg-image>
+        </item>
+
+        <item>
+            <bg-image>bg_8.png</bg-image>
+        </item>
+
+        <item>
+            <bg-image>bg_9.png</bg-image>
+        </item>
+
+        <item>
+            <bg-image>bg_10.png</bg-image>
+        </item>
+
+        <item>
+            <bg-image>bg_11.png</bg-image>
+        </item>
+
+        <item>
+            <bg-image>bg_12.png</bg-image>
+        </item>
+
+        <item>
+            <bg-image>bg_13.png</bg-image>
+        </item>
+
+        <item>
+            <bg-image>bg_14.png</bg-image>
+        </item>
+
+        <item>
+            <bg-image>bg_15.png</bg-image>
+        </item>
+
+        <item>
+            <bg-image>bg_16.png</bg-image>
+        </item>
+
+        <item>
+            <bg-image>bg_17.png</bg-image>
+        </item>
+
+        <item>
+            <bg-image>bg_18.png</bg-image>
+        </item>
+
+        <item>
+            <bg-image>bg_19.png</bg-image>
+        </item>
+
+        <item>
+            <bg-image>bg_20.png</bg-image>
+        </item>
+    </page>
+
 </panel>

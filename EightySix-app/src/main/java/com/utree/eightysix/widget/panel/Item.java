@@ -1,6 +1,7 @@
 package com.utree.eightysix.widget.panel;
 
 import android.util.TypedValue;
+import com.utree.eightysix.U;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +19,11 @@ public class Item {
     return mParent;
   }
 
-  public List<TypedValue> getValues() {
-    return mValues;
+  public TypedValue getValue() {
+    return mValue;
   }
 
-  private List<TypedValue> mValues = new ArrayList<TypedValue>();
+  private TypedValue mValue;
 
   public Item(Page parent, XmlPullParser parser) throws XmlPullParserException, IOException {
     mParent = parent;
@@ -30,12 +31,24 @@ public class Item {
     while((eventType = parser.getEventType()) != XmlPullParser.END_TAG) {
       if (eventType == XmlPullParser.START_TAG) {
         if ("color".equals(parser.getName())) {
-          TypedValue value = parseColor(parser);
-          if (value != null) mValues.add(value);
+          mValue = parseColor(parser);
+        } else if ("bg-image".equals(parser.getName())) {
+          mValue = parseBgImage(parser);
         }
       }
       parser.next();
     }
+  }
+
+  private TypedValue parseBgImage(XmlPullParser parser) throws XmlPullParserException, IOException {
+    parser.next();
+    final String url = String.format("http://%s.%s/%s", U.getConfig("storage.bg.bucket.name"), U.getConfig("storage.host"), parser.getText());
+    TypedValue tv = new TypedValue();
+    tv.string = url;
+    tv.type = TypedValue.TYPE_STRING;
+    parser.next();
+    parser.next();
+    return tv;
   }
 
   private TypedValue parseColor(XmlPullParser parser) throws XmlPullParserException, IOException {
@@ -58,7 +71,7 @@ public class Item {
   public String toString() {
     return "Item{" +
         "mParent=" + mParent +
-        ", mValues=" + mValues +
+        ", mValue=" + mValue +
         '}';
   }
 }
