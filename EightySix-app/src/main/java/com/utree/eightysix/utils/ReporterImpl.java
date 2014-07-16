@@ -8,6 +8,17 @@ import java.util.Properties;
  * @author simon
  */
 public class ReporterImpl implements Reporter {
+
+  public ReporterImpl() {
+    Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+      @Override
+      public void uncaughtException(Thread thread, Throwable ex) {
+        reportAppCrash(ex);
+
+      }
+    });
+  }
+
   @Override
   public void reportRequestError(RequestData requestData, Throwable t) {
     Properties properties = fromRequestData(requestData);
@@ -24,7 +35,7 @@ public class ReporterImpl implements Reporter {
 
   @Override
   public void reportAppCrash(Throwable t) {
-
+    U.getAnalyser().reportException(U.getContext(), t);
   }
 
   private Properties fromRequestData(RequestData data) {
