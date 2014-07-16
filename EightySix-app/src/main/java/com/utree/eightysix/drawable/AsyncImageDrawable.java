@@ -11,14 +11,13 @@ import com.aliyun.android.util.MD5Util;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.U;
 import com.utree.eightysix.utils.ImageUtils;
-import de.akquinet.android.androlog.Log;
 
 /**
  * @author simon
  */
 public class AsyncImageDrawable extends Drawable {
 
-  private final String mUrlHash;
+  private final String mHash;
   private Resources mResources;
   private String mUrl;
 
@@ -28,14 +27,12 @@ public class AsyncImageDrawable extends Drawable {
     mResources = res;
     mUrl = url;
 
-    mUrlHash = MD5Util.getMD5String(url.getBytes()).toLowerCase();
-
-
+    mHash = MD5Util.getMD5String(url.getBytes()).toLowerCase();
   }
 
   @Subscribe
   public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
-    if (mUrlHash.equals(event.getHash())) {
+    if (mHash.equals(event.getHash())) {
       mBitmapDrawable = new BitmapDrawable(mResources, event.getBitmap());
       mBitmapDrawable.setBounds(getBounds());
       mBitmapDrawable.invalidateSelf();
@@ -56,7 +53,7 @@ public class AsyncImageDrawable extends Drawable {
   @Override
   public void draw(Canvas canvas) {
     if (!mLoaded) {
-      ImageUtils.asyncLoad(mUrl, mUrlHash);
+      ImageUtils.asyncLoad(mUrl, mHash, U.dp2px(40), U.dp2px(30));
       mLoaded = true;
     }
 
