@@ -1,8 +1,11 @@
-package com.utree.eightysix.utils;
+package com.utree.eightysix.report;
 
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.U;
 import com.utree.eightysix.rest.RequestData;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Properties;
 
 /**
@@ -11,13 +14,40 @@ import java.util.Properties;
 public class ReporterImpl implements Reporter {
 
   public ReporterImpl() {
+  }
+
+  @Override
+  public void init() {
     Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
       @Override
       public void uncaughtException(Thread thread, Throwable ex) {
         reportAppCrash(ex);
+        StringWriter wr = null;
+        PrintWriter writer = null;
+        try {
+          wr = new StringWriter();
+          writer = new PrintWriter(wr);
+          ex.printStackTrace(writer);
+          ReporterActivity.start(U.getContext(), wr.toString());
+        } finally {
+          if (writer != null) {
+            writer.close();
+          }
+
+          if (wr != null) {
+            try {
+              wr.close();
+            } catch (IOException ignored) {
+            }
+          }
+
+        }
+
+        System.exit(-1);
       }
     });
   }
+
 
   @Override
   public void reportRequestError(RequestData requestData, Throwable t) {

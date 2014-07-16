@@ -25,6 +25,7 @@ public class IntroActivity extends BaseActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+
     setContentView(R.layout.activity_intro);
 
     // start push service in main entry activity
@@ -57,5 +58,9 @@ public class IntroActivity extends BaseActivity {
 
   @Override
   public void onActionLeftClicked() {
+  }
+
+  @Override
+  public void onBackPressed() {
   }
 }

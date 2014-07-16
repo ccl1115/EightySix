@@ -27,15 +27,14 @@ public class BaseApplication extends FrontiaApplication {
     Log.activateLogging();
     Log.setDefaultLogLevel(Constants.VERBOSE);
 
-
     long last = Env.getTimestamp("last_location");
-
     Calendar lastCal = Calendar.getInstance();
     lastCal.setTimeInMillis(last);
     if (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) != lastCal.get(Calendar.DAY_OF_YEAR)) {
       U.getLocation().requestLocation();
       Env.setTimestamp("last_location");
     }
-  }
 
+    U.getReporter().init();
+  }
 }

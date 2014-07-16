@@ -1,4 +1,4 @@
-package com.utree.eightysix.utils;
+package com.utree.eightysix.report;
 
 import com.utree.eightysix.rest.RequestData;
 
@@ -11,4 +11,6 @@ public interface Reporter {
   void reportRequestStatusCode(RequestData requestData, int statusCode);
 
   void reportAppCrash(Throwable t);
+
+  void init();
 }
