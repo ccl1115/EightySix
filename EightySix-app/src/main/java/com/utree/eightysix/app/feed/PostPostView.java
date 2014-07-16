@@ -9,9 +9,11 @@ import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -23,6 +25,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
 import com.utree.eightysix.data.Post;
+import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
 import com.utree.eightysix.request.PostDeleteRequest;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.ImageUtils;
@@ -94,10 +97,12 @@ public class PostPostView extends BasePostView {
 
   @Subscribe
   public void onThemedColorEvent(ColorUtil.ThemedColorEvent event) {
-    Bitmap fromMemByUrl = ImageUtils.getFromMemByUrl(mPost.bgUrl);
-    Log.d("PostPostView", "bitmap == null is" + (fromMemByUrl == null));
-    if (event.getBitmap().equals(fromMemByUrl)) {
+    if (event.getBitmap().equals(ImageUtils.getFromMemByUrl(mPost.bgUrl))) {
       setPostTheme(event.getColor());
+      ListView parent = (ListView) getParent();
+      if (parent != null) {
+        ((BaseAdapter) parent.getAdapter()).notifyDataSetChanged();
+      }
     }
   }
 
@@ -111,6 +116,11 @@ public class PostPostView extends BasePostView {
 
     if (mPost.bgUrl == null) {
       setPostTheme(ColorUtil.strToColor(mPost.bgColor));
+    } else {
+      mTvComment.setTextColor(Color.TRANSPARENT);
+      mTvPraise.setTextColor(Color.TRANSPARENT);
+      mTvContent.setTextColor(Color.TRANSPARENT);
+      mTvSource.setTextColor(Color.TRANSPARENT);
     }
 
     mIvClose.setImageResource(mCloseRes);
@@ -218,6 +228,11 @@ public class PostPostView extends BasePostView {
       mCloseRes = R.drawable.ic_action_post_close;
       mMoreRes = R.drawable.ic_action_post_more;
     }
+
+    mTvComment.setTextColor(mMonoColor);
+    mTvContent.setTextColor(mMonoColor);
+    mTvPraise.setTextColor(mMonoColor);
+    mTvSource.setTextColor(mMonoColor);
   }
 
   @Override

@@ -2,6 +2,7 @@ package com.utree.eightysix.app.feed;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -10,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -28,6 +30,7 @@ import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.ShareUtils;
 import com.utree.eightysix.widget.AsyncImageView;
+import de.akquinet.android.androlog.Log;
 
 /**
  */
@@ -120,11 +123,24 @@ public class FeedPostView extends BasePostView {
 
   @Subscribe
   public void onThemedColorEvent(ColorUtil.ThemedColorEvent event) {
-    Bitmap fromMemByUrl = ImageUtils.getFromMemByUrl(mPost.bgUrl);
-    Log.d("PostPostView", "bitmap == null is" + (fromMemByUrl == null));
-    if (event.getBitmap().equals(fromMemByUrl)) {
+    if (event.getBitmap().equals(ImageUtils.getFromMemByUrl(mPost.bgUrl))) {
       setPostTheme(event.getColor());
+      ListView parent = (ListView) getParent();
+      if (parent != null) {
+        ((BaseAdapter) parent.getAdapter()).notifyDataSetChanged();
+      }
     }
+
+  }
+
+  @Override
+  protected void setPostTheme(int color) {
+    super.setPostTheme(color);
+
+    mTvComment.setTextColor(mMonoColor);
+    mTvContent.setTextColor(mMonoColor);
+    mTvPraise.setTextColor(mMonoColor);
+    mTvSource.setTextColor(mMonoColor);
   }
 
   public ImageView getIvShare() {
@@ -161,12 +177,12 @@ public class FeedPostView extends BasePostView {
 
     if (mPost.bgUrl == null) {
       setPostTheme(ColorUtil.strToColor(mPost.bgColor));
+    } else {
+      mTvComment.setTextColor(Color.TRANSPARENT);
+      mTvPraise.setTextColor(Color.TRANSPARENT);
+      mTvContent.setTextColor(Color.TRANSPARENT);
+      mTvSource.setTextColor(Color.TRANSPARENT);
     }
-
-    mTvComment.setTextColor(mMonoColor);
-    mTvContent.setTextColor(mMonoColor);
-    mTvPraise.setTextColor(mMonoColor);
-    mTvSource.setTextColor(mMonoColor);
 
     String content = post.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content;
 

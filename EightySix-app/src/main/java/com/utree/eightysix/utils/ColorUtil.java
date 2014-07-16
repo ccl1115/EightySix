@@ -34,14 +34,10 @@ public class ColorUtil {
         Math.min(0xff, Color.blue(color) + 0x88));
   }
 
-  private static int themedColor(Bitmap bitmap) {
-    if (mCachedColor.containsKey(String.valueOf(bitmap.hashCode()))) {
-      return mCachedColor.get(String.valueOf(bitmap.hashCode()));
-    } else {
-      int color = new ColorArt(bitmap).getBackgroundColor();
-      mCachedColor.put(String.valueOf(bitmap.hashCode()), color);
-      return color;
-    }
+  private static int themedColor(final Bitmap bitmap) {
+    final int color = new ColorArt(bitmap).getBackgroundColor();
+    mCachedColor.put(String.valueOf(bitmap.hashCode()), color);
+    return color;
   }
 
   private static class ThemedColorWorker extends AsyncTask<Void, Void, Integer> {
@@ -62,8 +58,12 @@ public class ColorUtil {
     }
   }
 
-  public static void asyncThemedColor(Bitmap bitmap) {
-    new ThemedColorWorker(bitmap).execute();
+  public static void asyncThemedColor(final Bitmap bitmap) {
+    if (mCachedColor.containsKey(String.valueOf(bitmap.hashCode()))) {
+      U.getBus().post(new ThemedColorEvent(bitmap, mCachedColor.get(String.valueOf(bitmap.hashCode()))));
+    } else {
+      new ThemedColorWorker(bitmap).execute();
+    }
   }
 
   public static class ThemedColorEvent {
