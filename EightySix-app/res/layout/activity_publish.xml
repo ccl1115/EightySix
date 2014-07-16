@@ -32,6 +32,8 @@
                 android:id="@+id/et_post_content"
                 android:layout_gravity="center"
                 android:layout_width="match_parent"
+                android:paddingLeft = "24dp"
+                android:paddingRight = "24dp"
                 android:layout_height="wrap_content"/>
 
     </FrameLayout>
