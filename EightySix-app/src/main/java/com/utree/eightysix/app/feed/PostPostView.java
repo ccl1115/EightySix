@@ -4,13 +4,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -18,14 +18,17 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.PostDeleteRequest;
 import com.utree.eightysix.utils.ColorUtil;
+import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.ShareUtils;
 import com.utree.eightysix.widget.AsyncImageView;
+import de.akquinet.android.androlog.Log;
 
 /**
  * This is the post view in PostActivity
@@ -33,7 +36,7 @@ import com.utree.eightysix.widget.AsyncImageView;
  * @author simon
  * @see com.utree.eightysix.app.feed.PostActivity
  */
-public class PostPostView extends FrameLayout {
+public class PostPostView extends BasePostView {
 
   private static int sPostLength = U.getConfigInt("post.length");
 
@@ -60,7 +63,8 @@ public class PostPostView extends FrameLayout {
 
   private Post mPost;
 
-  private AlertDialog mPostContextDialog;
+  private int mCloseRes;
+  private int mMoreRes;
 
   public PostPostView(Context context) {
     this(context, null, 0);
@@ -77,40 +81,40 @@ public class PostPostView extends FrameLayout {
     ButterKnife.inject(this, this);
   }
 
+  @Subscribe
+  public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
+    if (mPost.bgUrl != null) {
+      if (ImageUtils.getUrlHash(mPost.bgUrl).equals(event.getHash())) {
+        mAivBg.setVisibility(VISIBLE);
+
+        ColorUtil.asyncThemedColor(event.getBitmap());
+      }
+    }
+  }
+
+  @Subscribe
+  public void onThemedColorEvent(ColorUtil.ThemedColorEvent event) {
+    Bitmap fromMemByUrl = ImageUtils.getFromMemByUrl(mPost.bgUrl);
+    Log.d("PostPostView", "bitmap == null is" + (fromMemByUrl == null));
+    if (event.getBitmap().equals(fromMemByUrl)) {
+      setPostTheme(event.getColor());
+    }
+  }
+
   public void setData(Post post) {
     mPost = post;
 
-    if (post == null) {
+    if (mPost == null) {
       clear();
       return;
     }
 
-    int color = ColorUtil.monochromizing(ColorUtil.strToColor(mPost.bgColor));
-
-    mTvComment.setTextColor(color);
-    mTvContent.setTextColor(color);
-    mTvPraise.setTextColor(color);
-    mTvSource.setTextColor(color);
-
-    int heartOutline, heart, comment, close, more;
-    if (color == Color.WHITE) {
-      heartOutline = R.drawable.ic_heart_outline_normal;
-      heart = R.drawable.ic_heart_white_normal;
-      close = R.drawable.ic_action_post_close;
-      more = R.drawable.ic_action_post_more;
-      comment = R.drawable.ic_reply;
-    } else {
-      heartOutline = R.drawable.ic_black_heart_outline_normal;
-      heart = R.drawable.ic_black_heart_white_normal;
-      close = R.drawable.ic_black_action_post_close;
-      more = R.drawable.ic_black_action_post_more;
-      comment = R.drawable.ic_black_reply;
+    if (mPost.bgUrl == null) {
+      setPostTheme(ColorUtil.strToColor(mPost.bgColor));
     }
 
-    mTvComment.setCompoundDrawablesWithIntrinsicBounds(comment, 0, 0, 0);
-
-    mIvClose.setImageResource(close);
-    mIvMore.setImageResource(more);
+    mIvClose.setImageResource(mCloseRes);
+    mIvMore.setImageResource(mMoreRes);
 
     mTvContent.setText(mPost.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content);
     if (post.comments > 0) {
@@ -131,12 +135,12 @@ public class PostPostView extends FrameLayout {
 
 
     if (mPost.praised == 1) {
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(U.gd(R.drawable.ic_heart_red_pressed), null, null, null);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_red_pressed, 0, 0, 0);
     } else if (mPost.praise > 0) {
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(U.gd(heart), null, null, null);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartRes, 0, 0, 0);
     } else {
       mTvPraise.setText("");
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(U.gd(heartOutline), null, null, null);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartOutlineRes, 0, 0, 0);
     }
   }
 
@@ -201,6 +205,19 @@ public class PostPostView extends FrameLayout {
       U.getBus().post(new PostPostPraiseEvent(mPost, false));
     }
     ((BaseAdapter) ((AdapterView) getParent()).getAdapter()).notifyDataSetChanged();
+  }
+
+  @Override
+  protected void setPostTheme(int color) {
+    super.setPostTheme(color);
+
+    if (mMonoColor == Color.WHITE) {
+      mCloseRes = R.drawable.ic_black_action_post_close;
+      mMoreRes = R.drawable.ic_black_action_post_more;
+    } else {
+      mCloseRes = R.drawable.ic_action_post_close;
+      mMoreRes = R.drawable.ic_action_post_more;
+    }
   }
 
   @Override

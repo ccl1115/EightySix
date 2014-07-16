@@ -285,6 +285,15 @@ public class ImageUtils {
     return sLruCache.get(hash);
   }
 
+  public static Bitmap getFromMemByUrl(String url) {
+    return sLruCache.get(getUrlHash(url));
+  }
+
+  public static String getUrlHash(String url) {
+    return MD5Util.getMD5String(url.getBytes()).toLowerCase();
+  }
+
+
   /**
    * Upload a image file asynchronously
    * <p/>
@@ -349,7 +358,7 @@ public class ImageUtils {
       Storage.Result result = U.getCloudStorage().put(U.getConfig("storage.image.bucket.name"), path, key, file);
       if (result.error == 0 && TextUtils.isEmpty(result.msg)) {
         String url = U.getCloudStorage().getUrl(U.getConfig("storage.image.bucket.name"), path, key);
-        cacheImage(MD5Util.getMD5String(url.getBytes()).toLowerCase(), file);
+        cacheImage(getUrlHash(url), file);
         mFileHash = hash;
         mUrl = url;
       } else {

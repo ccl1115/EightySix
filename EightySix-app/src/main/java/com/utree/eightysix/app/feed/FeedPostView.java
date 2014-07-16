@@ -31,7 +31,7 @@ import com.utree.eightysix.widget.AsyncImageView;
 
 /**
  */
-public class FeedPostView extends FrameLayout {
+public class FeedPostView extends BasePostView {
 
   private static int sPostLength = U.getConfigInt("post.length");
 
@@ -75,7 +75,6 @@ public class FeedPostView extends FrameLayout {
   public FrameLayout mFlContent;
 
   private int mFactoryId;
-  private Post mPost;
 
   private SmallGearsDrawable mGearsDrawable;
 
@@ -103,7 +102,7 @@ public class FeedPostView extends FrameLayout {
   @Subscribe
   public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
     if (mPost.bgUrl != null) {
-      if (MD5Util.getMD5String(mPost.bgUrl.getBytes()).toLowerCase().equals(event.getHash())) {
+      if (ImageUtils.getUrlHash(mPost.bgUrl).equals(event.getHash())) {
         mFlContent.setVisibility(VISIBLE);
 
         if (TextUtils.isEmpty(mPost.comment)) {
@@ -113,7 +112,18 @@ public class FeedPostView extends FrameLayout {
         }
 
         mLlItem.setBackgroundDrawable(null);
+
+        ColorUtil.asyncThemedColor(event.getBitmap());
       }
+    }
+  }
+
+  @Subscribe
+  public void onThemedColorEvent(ColorUtil.ThemedColorEvent event) {
+    Bitmap fromMemByUrl = ImageUtils.getFromMemByUrl(mPost.bgUrl);
+    Log.d("PostPostView", "bitmap == null is" + (fromMemByUrl == null));
+    if (event.getBitmap().equals(fromMemByUrl)) {
+      setPostTheme(event.getColor());
     }
   }
 
@@ -149,13 +159,14 @@ public class FeedPostView extends FrameLayout {
       return;
     }
 
-    int color = ColorUtil.monochromizing(ColorUtil.strToColor(mPost.bgColor));
+    if (mPost.bgUrl == null) {
+      setPostTheme(ColorUtil.strToColor(mPost.bgColor));
+    }
 
-    mTvComment.setTextColor(color);
-    mTvContent.setTextColor(color);
-    mTvPraise.setTextColor(color);
-    mTvSource.setTextColor(color);
-
+    mTvComment.setTextColor(mMonoColor);
+    mTvContent.setTextColor(mMonoColor);
+    mTvPraise.setTextColor(mMonoColor);
+    mTvSource.setTextColor(mMonoColor);
 
     String content = post.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content;
 
@@ -188,27 +199,16 @@ public class FeedPostView extends FrameLayout {
       mAivBg.setUrl(null);
     }
 
-    final int heartOutline, heart, comment;
-    if (color == Color.WHITE) {
-      heart = R.drawable.ic_heart_white_normal;
-      heartOutline = R.drawable.ic_heart_outline_normal;
-      comment = R.drawable.ic_reply;
-    } else {
-      heart = R.drawable.ic_black_heart_white_normal;
-      heartOutline = R.drawable.ic_black_heart_outline_normal;
-      comment = R.drawable.ic_black_reply;
-    }
-
     if (post.praised == 1) {
       mTvPraise.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_red_pressed, 0, 0, 0);
     } else if (post.praise > 0) {
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(heart, 0, 0, 0);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartRes, 0, 0, 0);
     } else {
       mTvPraise.setText("");
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(heartOutline, 0, 0, 0);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartOutlineRes, 0, 0, 0);
     }
 
-    mTvComment.setCompoundDrawablesWithIntrinsicBounds(comment, 0, 0, 0);
+    mTvComment.setCompoundDrawablesWithIntrinsicBounds(mCommentRes, 0, 0, 0);
 
     if (getTop() <= 0) {
       mIvShare.setVisibility(INVISIBLE);
