@@ -52,6 +52,12 @@ public class CacheOutWorker<T extends Response> extends AsyncTask<Void, Void, T>
 
   @Override
   protected void onPostExecute(T t) {
-    mOnResponse.onResponse(t);
+    try {
+      mOnResponse.onResponse(t);
+    } catch (Exception e) {
+      if (mOnResponse instanceof OnResponse2) {
+        ((OnResponse2) mOnResponse).onResponseError(e);
+      }
+    }
   }
 }

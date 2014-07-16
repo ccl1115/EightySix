@@ -359,7 +359,9 @@ public class BaseCirclesActivity extends BaseActivity {
             }
             mPageInfo = response.object.page;
           } else {
-            mRstvEmpty.setVisibility(View.VISIBLE);
+            if (mCircleListAdapter == null || mCircleListAdapter.getCount() == 0) {
+              mRstvEmpty.setVisibility(View.VISIBLE);
+            }
           }
           mLvCircles.stopLoadMore();
           hideProgressBar();

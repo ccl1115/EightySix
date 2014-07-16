@@ -207,8 +207,10 @@ public class PraiseActivity extends BaseActivity {
 
           mPageInfo = response.object.posts.page;
         } else {
-          mRstvEmpty.setVisibility(View.VISIBLE);
-          mTvNoNewMsg.setVisibility(View.GONE);
+          if (mMsgAdapter == null || mMsgAdapter.getCount() == 0) {
+            mRstvEmpty.setVisibility(View.VISIBLE);
+            mTvNoNewMsg.setVisibility(View.GONE);
+          }
         }
         hideProgressBar();
         mAlvMsg.stopLoadMore();

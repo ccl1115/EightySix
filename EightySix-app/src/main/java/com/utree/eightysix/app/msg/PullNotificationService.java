@@ -87,6 +87,7 @@ public class PullNotificationService extends Service {
   private Notification buildPost(String postId, String shortName) {
     return new NotificationCompat.Builder(this)
         .setTicker(getString(R.string.notification_friend_new_post))
+        .setAutoCancel(true)
         .setSmallIcon(R.drawable.ic_app_icon)
         .setContentTitle(shortName)
         .setContentText(getString(R.string.notification_friend_new_post))
@@ -97,8 +98,9 @@ public class PullNotificationService extends Service {
   private Notification buildUnlockCircle(String circleId, String circleName) {
     return new NotificationCompat.Builder(this).setTicker(getString(R.string.notification_circle_unlocked))
         .setSmallIcon(R.drawable.ic_app_icon)
+        .setAutoCancel(true)
         .setContentTitle(getString(R.string.notification_circle_unlocked))
-        .setContentText(String.format(getString(R.string.notification_circle_unlocked_tip), circleName))
+        .setContentText(getString(R.string.notification_circle_unlocked_tip, circleName))
         .setContentIntent(PendingIntent.getActivity(this, 0, FeedActivity.getIntent(this, Integer.parseInt(circleId)), Intent.FLAG_ACTIVITY_NEW_TASK))
         .build();
   }
@@ -106,9 +108,10 @@ public class PullNotificationService extends Service {
   private Notification buildComment(int count, String id) {
     NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
     builder.setContentTitle(getString(R.string.notification_new))
+        .setAutoCancel(true)
         .setTicker(getString(R.string.notification_new))
         .setSmallIcon(R.drawable.ic_app_icon);
-    if (count == 0) {
+    if (count == 1) {
       builder.setContentText(getString(R.string.notification_new_comment));
       builder.setContentIntent(PendingIntent.getActivity(this, 0, PostActivity.getIntent(this, id), Intent.FLAG_ACTIVITY_NEW_TASK));
     } else {
@@ -121,6 +124,7 @@ public class PullNotificationService extends Service {
   private Notification buildApprove(String circleId, String circleName) {
     return new NotificationCompat.Builder(this).setDefaults(Notification.DEFAULT_ALL)
         .setSmallIcon(R.drawable.ic_app_icon)
+        .setAutoCancel(true)
         .setTicker(getString(R.string.notification_circle_create_approve))
         .setContentTitle(getString(R.string.notification_circle_create_approve))
         .setContentText(getString(R.string.notification_circle_create_approve_tip, circleName))
@@ -131,6 +135,7 @@ public class PullNotificationService extends Service {
   private Notification buildFriendJoin(String circleId, String circleName, int count) {
     return new NotificationCompat.Builder(this)
         .setSmallIcon(R.drawable.ic_app_icon)
+        .setAutoCancel(true)
         .setTicker(getString(R.string.notification_new_friend))
         .setContentTitle(getString(R.string.notification_new_friend))
         .setContentText(count > 1 ? getString(R.string.notification_new_friend_tip, circleName, count) :
@@ -160,7 +165,6 @@ public class PullNotificationService extends Service {
         }
         break;
       case TYPE_COMMENT:
-        if (response.object.lists == null || response.object.lists.size() == 0) break;
         int count = 0;
         try {
           count = Integer.parseInt(response.object.msg);
