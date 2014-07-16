@@ -59,7 +59,13 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
         Toast.makeText(U.getContext(), "HttpStatus: " + statusCode, Toast.LENGTH_SHORT).show();
       }
     }
-    mOnResponse.onResponse(response);
+    try {
+      mOnResponse.onResponse(response);
+    } catch (Throwable t) {
+      if (mOnResponse instanceof OnResponse2) {
+        ((OnResponse2) mOnResponse).onResponseError(t);
+      }
+    }
   }
 
   @Override
@@ -80,7 +86,13 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
         U.showToast(U.gs(R.string.server_500));
       }
     }
-    mOnResponse.onResponse(null);
+    try {
+      mOnResponse.onResponse(null);
+    } catch (Throwable t) {
+      if (mOnResponse instanceof OnResponse2) {
+        ((OnResponse2) mOnResponse).onResponseError(t);
+      }
+    }
   }
 
   @Override

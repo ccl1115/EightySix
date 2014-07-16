@@ -5,5 +5,5 @@ package com.utree.eightysix.rest;
  */
 public interface OnResponse2<RES> extends OnResponse<RES> {
 
-  void onResponseError(Exception e);
+  void onResponseError(Throwable e);
 }
