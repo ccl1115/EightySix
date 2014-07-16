@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,9 +13,8 @@ import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
-import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.data.QuestionSet;
-import com.utree.eightysix.utils.Utils;
+import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.RoundedButton;
 
@@ -78,7 +76,7 @@ public class FeedQuestionView extends FrameLayout {
     mContent.setText(question.content);
     if (TextUtils.isEmpty(question.bgUrl)) {
       mAivBg.setUrl(null);
-      mContent.setBackgroundColor(Utils.strToColor(question.bgColor));
+      mContent.setBackgroundColor(ColorUtil.strToColor(question.bgColor));
     } else {
       mAivBg.setUrl(question.bgUrl);
       mContent.setBackgroundColor(Color.TRANSPARENT);

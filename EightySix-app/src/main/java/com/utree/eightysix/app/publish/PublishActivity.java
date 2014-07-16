@@ -44,11 +44,11 @@ import com.utree.eightysix.request.PublishRequest;
 import com.utree.eightysix.response.PublishPostResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.InputValidator;
-import com.utree.eightysix.utils.Utils;
 import com.utree.eightysix.widget.PostEditText;
 import com.utree.eightysix.widget.TopBar;
 import com.utree.eightysix.widget.panel.GridPanel;
@@ -315,8 +315,8 @@ public class PublishActivity extends BaseActivity {
     List<Item> itemsByPage = mGpColor.getItemsByPage(0);
     Item item = itemsByPage.get(new Random().nextInt(itemsByPage.size()));
     int color = item.getValues().get(0).data;
-    mPostEditText.setTextColor(Utils.monochromizing(color));
-    mTvPostTip.setTextColor(Utils.monochromizing(color));
+    mPostEditText.setTextColor(ColorUtil.monochromizing(color));
+    mTvPostTip.setTextColor(ColorUtil.monochromizing(color));
     mIvPostBg.setImageDrawable(null);
     mIvPostBg.setBackgroundColor(color);
     mBgColor = color;
@@ -373,8 +373,8 @@ public class PublishActivity extends BaseActivity {
 
           @Override
           public void onAnimationEnd(Animator animation) {
-            mPostEditText.setTextColor(Utils.monochromizing(tv.data));
-            mTvPostTip.setTextColor(Utils.monochromizing(tv.data));
+            mPostEditText.setTextColor(ColorUtil.monochromizing(tv.data));
+            mTvPostTip.setTextColor(ColorUtil.monochromizing(tv.data));
             mBgColor = tv.data;
           }
 

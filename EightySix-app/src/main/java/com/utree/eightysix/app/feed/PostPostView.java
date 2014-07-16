@@ -23,8 +23,8 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.PostDeleteRequest;
+import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.ShareUtils;
-import com.utree.eightysix.utils.Utils;
 import com.utree.eightysix.widget.AsyncImageView;
 
 /**
@@ -85,7 +85,7 @@ public class PostPostView extends FrameLayout {
       return;
     }
 
-    int color = Utils.monochromizing(Utils.strToColor(mPost.bgColor));
+    int color = ColorUtil.monochromizing(ColorUtil.strToColor(mPost.bgColor));
 
     mTvComment.setTextColor(color);
     mTvContent.setTextColor(color);
@@ -126,7 +126,7 @@ public class PostPostView extends FrameLayout {
       mTvContent.setBackgroundColor(Color.TRANSPARENT);
     } else {
       mAivBg.setUrl(null);
-      mTvContent.setBackgroundColor(Utils.strToColor(mPost.bgColor));
+      mTvContent.setBackgroundColor(ColorUtil.strToColor(mPost.bgColor));
     }
 
 

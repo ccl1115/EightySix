@@ -15,7 +15,7 @@ import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.feed.event.PostCommentPraiseEvent;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
-import com.utree.eightysix.utils.Utils;
+import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.widget.FontPortraitView;
 import com.utree.eightysix.widget.RandomSceneTextView;
 import java.util.ArrayList;
@@ -179,7 +179,7 @@ class PostCommentsAdapter extends BaseAdapter {
         holder.mFpvPortrait.setEmotion(comment.avatar.charAt(0));
       }
       if (comment.avatarColor != null) {
-        holder.mFpvPortrait.setEmotionColor(Utils.strToColor(comment.avatarColor));
+        holder.mFpvPortrait.setEmotionColor(ColorUtil.strToColor(comment.avatarColor));
       }
     }
     holder.mTvInfo.setText(String.format("%s | %s | 赞(%d)", floor, comment.time, comment.praise));

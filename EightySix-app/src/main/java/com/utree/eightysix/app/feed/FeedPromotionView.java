@@ -17,7 +17,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.web.BaseWebActivity;
 import com.utree.eightysix.data.Promotion;
-import com.utree.eightysix.utils.Utils;
+import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.widget.AsyncImageView;
 
 /**
@@ -77,7 +77,7 @@ public class FeedPromotionView extends FrameLayout {
       mTvBotRight.setText(mPromotion.activeStartTime);
       mTvContent.setText(mPromotion.content);
       if (TextUtils.isEmpty(mPromotion.bgUrl)) {
-        mTvContent.setBackgroundColor(Utils.strToColor(mPromotion.bgColor));
+        mTvContent.setBackgroundColor(ColorUtil.strToColor(mPromotion.bgColor));
         mAivBg.setUrl(null);
       } else {
         mTvContent.setBackgroundColor(Color.TRANSPARENT);

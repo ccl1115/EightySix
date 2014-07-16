@@ -30,6 +30,8 @@ import com.utree.eightysix.statistics.MtaAnalyserImpl;
 import com.utree.eightysix.storage.Storage;
 import com.utree.eightysix.storage.oss.OSSImpl;
 import com.utree.eightysix.utils.CacheUtils;
+import com.utree.eightysix.utils.Reporter;
+import com.utree.eightysix.utils.ReporterImpl;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -55,6 +57,7 @@ public class U {
   private static RESTRequester sRESTRequester;
   private static CacheUtils sCacheUtils;
   private static Bus sBus;
+  private static Reporter sReporter;
 
   private static PushHelper sPushHelper;
 
@@ -65,19 +68,34 @@ public class U {
 
   private static Toast sToast;
 
+  private static final Object lock = new Object();
+
+  public static Reporter getReporter() {
+    if (sReporter == null) {
+      synchronized (lock) {
+        sReporter = new ReporterImpl();
+      }
+    }
+    return sReporter;
+  }
+
   public static Gson getGson() {
     if (sGson == null) {
-      GsonBuilder builder = new GsonBuilder();
-      builder.setPrettyPrinting();
-      builder.registerTypeAdapter(BaseItem.class, new BaseItemDeserializer());
-      sGson = builder.create();
+      synchronized (lock) {
+        GsonBuilder builder = new GsonBuilder();
+        builder.setPrettyPrinting();
+        builder.registerTypeAdapter(BaseItem.class, new BaseItemDeserializer());
+        sGson = builder.create();
+      }
     }
     return sGson;
   }
 
   public static Analyser getAnalyser() {
     if (sStatistics == null) {
-      sStatistics = new MtaAnalyserImpl();
+      synchronized (lock) {
+        sStatistics = new MtaAnalyserImpl();
+      }
     }
     return sStatistics;
   }

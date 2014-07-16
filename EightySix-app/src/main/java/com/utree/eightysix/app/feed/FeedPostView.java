@@ -24,9 +24,9 @@ import com.utree.eightysix.data.Post;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.drawable.SmallGearsDrawable;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
+import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.ShareUtils;
-import com.utree.eightysix.utils.Utils;
 import com.utree.eightysix.widget.AsyncImageView;
 
 /**
@@ -149,7 +149,7 @@ public class FeedPostView extends FrameLayout {
       return;
     }
 
-    int color = Utils.monochromizing(Utils.strToColor(mPost.bgColor));
+    int color = ColorUtil.monochromizing(ColorUtil.strToColor(mPost.bgColor));
 
     mTvComment.setTextColor(color);
     mTvContent.setTextColor(color);
@@ -183,7 +183,7 @@ public class FeedPostView extends FrameLayout {
     } else {
       mFlContent.setVisibility(VISIBLE);
       mLlComment.setVisibility(VISIBLE);
-      mTvContent.setBackgroundColor(Utils.strToColor(post.bgColor));
+      mTvContent.setBackgroundColor(ColorUtil.strToColor(post.bgColor));
       mLlItem.setBackgroundDrawable(null);
       mAivBg.setUrl(null);
     }

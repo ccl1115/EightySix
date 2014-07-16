@@ -14,7 +14,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.PostActivity;
 import com.utree.eightysix.data.Post;
-import com.utree.eightysix.utils.Utils;
+import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.widget.AsyncImageView;
 
 /**
@@ -91,9 +91,9 @@ public class BaseMsgItemView extends LinearLayout {
         mTvContentRight.setBackgroundColor(Color.TRANSPARENT);
       } else {
         mAivBgRight.setUrl(null);
-        final int color = Utils.strToColor(right.bgColor);
+        final int color = ColorUtil.strToColor(right.bgColor);
         mTvContentRight.setBackgroundColor(color);
-        mTvContentRight.setTextColor(Utils.monochromizing(color));
+        mTvContentRight.setTextColor(ColorUtil.monochromizing(color));
       }
       if (right.read == 1) {
         mVMaskRight.setVisibility(INVISIBLE);
@@ -114,9 +114,9 @@ public class BaseMsgItemView extends LinearLayout {
         mTvContentLeft.setBackgroundColor(Color.TRANSPARENT);
       } else {
         mAivBgLeft.setUrl(null);
-        final int color = Utils.strToColor(left.bgColor);
+        final int color = ColorUtil.strToColor(left.bgColor);
         mTvContentLeft.setBackgroundColor(color);
-        mTvContentLeft.setTextColor(Utils.monochromizing(color));
+        mTvContentLeft.setTextColor(ColorUtil.monochromizing(color));
       }
       if (left.read == 1) {
         mVMaskLeft.setVisibility(INVISIBLE);

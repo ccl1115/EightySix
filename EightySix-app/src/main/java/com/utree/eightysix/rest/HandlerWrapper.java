@@ -10,6 +10,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import de.akquinet.android.androlog.Log;
 import java.net.ConnectException;
+import java.util.Properties;
 import org.apache.http.HttpStatus;
 
 /**
@@ -76,6 +77,8 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
       }
       if (BuildConfig.DEBUG) {
         e.printStackTrace();
+      } else {
+        reportRequestError(mRequestData);
       }
     }
 
@@ -84,6 +87,11 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
         Toast.makeText(U.getContext(), "HttpStatus: " + statusCode, Toast.LENGTH_SHORT).show();
       } else {
         U.showToast(U.gs(R.string.server_500));
+        Properties properties = new Properties();
+        properties.setProperty("host", U.getConfig("api.host"));
+        properties.setProperty("api", mRequestData.api);
+        properties.setProperty("status", String.valueOf(statusCode));
+        U.getAnalyser().trackKVEvent(U.getContext(), "request error", properties);
       }
     }
     try {
@@ -93,6 +101,14 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
         ((OnResponse2) mOnResponse).onResponseError(t);
       }
     }
+  }
+
+  protected static void reportRequestError(RequestData data) {
+    Properties properties = new Properties();
+    properties.setProperty("host", U.getConfig("api.host"));
+    properties.setProperty("api", data.api);
+    properties.setProperty("params", data.params.toString());
+    U.getAnalyser().trackKVEvent(U.getContext(), "request error", properties);
   }
 
   @Override

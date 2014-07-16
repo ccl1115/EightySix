@@ -9,7 +9,7 @@ import java.util.Date;
 /**
  * @author simon
  */
-public class Utils {
+public class ColorUtil {
 
   public static int strToColor(String color) {
     try {
