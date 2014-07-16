@@ -149,6 +149,9 @@ public class PraiseActivity extends BaseActivity {
     mRstvEmpty.setText(R.string.not_found_praise);
     mRstvEmpty.setSubText(R.string.not_found_praise_tip);
     mRstvEmpty.setDrawable(R.drawable.scene_5);
+
+    // clear account new praise
+    Account.inst().setHasNewPraise(false);
   }
 
   @Override

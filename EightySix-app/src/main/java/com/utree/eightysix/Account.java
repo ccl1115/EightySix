@@ -7,6 +7,8 @@ import android.text.TextUtils;
 import com.google.gson.reflect.TypeToken;
 import com.utree.eightysix.app.account.LoginActivity;
 import com.utree.eightysix.data.User;
+import com.utree.eightysix.event.HasNewPraiseEvent;
+import com.utree.eightysix.event.NewCommentCountEvent;
 import java.util.List;
 
 /**
@@ -75,6 +77,7 @@ public class Account {
   }
 
   public void setHasNewPraise(boolean has) {
+    U.getBus().post(new HasNewPraiseEvent(has));
     getAccountSharedPreferences().edit().putBoolean("new_praise", has).apply();
   }
 
@@ -83,6 +86,7 @@ public class Account {
   }
 
   public void setNewCommentCount(int count) {
+    U.getBus().post(new NewCommentCountEvent(count));
     getAccountSharedPreferences().edit().putInt("new_comment_count", count).apply();
   }
 

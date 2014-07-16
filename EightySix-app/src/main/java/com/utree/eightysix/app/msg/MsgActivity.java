@@ -147,6 +147,9 @@ public class MsgActivity extends BaseActivity {
     mRstvEmpty.setText(R.string.not_found_msg);
     mRstvEmpty.setSubText(R.string.not_found_msg_tip);
     mRstvEmpty.setDrawable(R.drawable.scene_3);
+
+    // clear account msg new count
+    Account.inst().setNewCommentCount(0);
   }
 
   @Override

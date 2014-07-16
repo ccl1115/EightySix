@@ -177,11 +177,9 @@ public class PullNotificationService extends Service {
           getNM().notify(ID_COMMENT, buildComment(count, null));
         }
         Account.inst().setNewCommentCount(response.object.lists.size());
-        U.getBus().post(new NewCommentCountEvent(count));
         break;
       case TYPE_PRAISE:
         Account.inst().setHasNewPraise(true);
-        U.getBus().post(new HasNewPraiseEvent());
         break;
       case TYPE_CIRCLE_CREATION_APPROVE:
         if (response.object.lists == null || response.object.lists.size() == 0) break;

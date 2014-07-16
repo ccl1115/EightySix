@@ -6,4 +6,14 @@ package com.utree.eightysix.event;
  * @author simon
  */
 public class HasNewPraiseEvent {
+  private boolean mHas;
+
+  public boolean has() {
+    return mHas;
+  }
+
+  public HasNewPraiseEvent(boolean has) {
+
+    mHas = has;
+  }
 }

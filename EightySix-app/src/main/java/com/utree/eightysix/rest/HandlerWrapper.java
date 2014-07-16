@@ -113,7 +113,12 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
   private void handleObjectError(T response) {
     if (response.code != 0) {
       if (response.code == 0x11014) {
+        // 用户token失效，退出客户端
         Account.inst().logout();
+      }
+      if (response.code == 0x12501) {
+        // 拉通知接口错误不弹Toast
+        return;
       }
       if (BuildConfig.DEBUG) {
         Toast.makeText(U.getContext(), String.format("%s(%h)", response.message, response.code), Toast.LENGTH_SHORT).show();

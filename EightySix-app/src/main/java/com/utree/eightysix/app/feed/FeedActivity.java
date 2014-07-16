@@ -231,8 +231,7 @@ public class FeedActivity extends BaseActivity {
       @Override
       public void onClick(View view, int position) {
         if (position == 0) {
-          startActivity(new Intent(FeedActivity.this, MsgActivity.class));
-          getTopBar().getActionView(0).setCount(0);
+          MsgActivity.start(FeedActivity.this, Account.inst().getNewCommentCount() > 0);
         } else if (position == 1) {
           mFeedFragment.refresh();
         }
@@ -292,8 +291,12 @@ public class FeedActivity extends BaseActivity {
 
   @Subscribe
   public void onHasNewPraiseEvent(HasNewPraiseEvent event) {
-    getTopBar().getActionOverflow().setHasNew(true);
-    mMenuViewHolder.mRbNewPraiseDot.setVisibility(View.VISIBLE);
+    getTopBar().getActionOverflow().setHasNew(event.has());
+    if (event.has()) {
+      mMenuViewHolder.mRbNewPraiseDot.setVisibility(View.VISIBLE);
+    } else {
+      mMenuViewHolder.mRbNewPraiseDot.setVisibility(View.INVISIBLE);
+    }
   }
 
   @Override
@@ -623,9 +626,6 @@ public class FeedActivity extends BaseActivity {
     @OnClick (R.id.ll_praise_count)
     void onLlPraiseCountClicked() {
       PraiseActivity.start(FeedActivity.this, Account.inst().getHasNewPraise());
-      getTopBar().getActionOverflow().setHasNew(false);
-      mRbNewPraiseDot.setVisibility(View.INVISIBLE);
-      Account.inst().setHasNewPraise(false);
       mPopupMenu.dismiss();
     }
 
