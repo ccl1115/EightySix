@@ -17,7 +17,7 @@ import com.utree.eightysix.utils.ImageUtils;
  */
 public class AsyncImageDrawable extends Drawable {
 
-  private final String mHash;
+  private String mHash;
   private Resources mResources;
   private String mUrl;
 
@@ -26,13 +26,12 @@ public class AsyncImageDrawable extends Drawable {
   public AsyncImageDrawable(Resources res, String url) {
     mResources = res;
     mUrl = url;
-
-    mHash = MD5Util.getMD5String(url.getBytes()).toLowerCase();
+    mHash = MD5Util.getMD5String(mUrl.getBytes()).toLowerCase();
   }
 
   @Subscribe
   public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
-    if (mHash.equals(event.getHash())) {
+    if (mHash != null && mHash.equals(event.getHash())) {
       mBitmapDrawable = new BitmapDrawable(mResources, event.getBitmap());
       mBitmapDrawable.setBounds(getBounds());
       mBitmapDrawable.invalidateSelf();
@@ -53,7 +52,7 @@ public class AsyncImageDrawable extends Drawable {
   @Override
   public void draw(Canvas canvas) {
     if (!mLoaded) {
-      ImageUtils.asyncLoad(mUrl, mHash, U.dp2px(40), U.dp2px(30));
+      ImageUtils.asyncLoadThumbnail(mUrl, mHash);
       mLoaded = true;
     }
 

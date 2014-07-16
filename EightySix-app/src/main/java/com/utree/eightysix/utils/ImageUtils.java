@@ -1,5 +1,7 @@
 package com.utree.eightysix.utils;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -26,10 +28,22 @@ import org.apache.http.Header;
 public class ImageUtils {
   private static final String TAG = "ImageUtils";
 
-  private static LruSoftCache<String, Bitmap> sLruCache = new LruSoftCache<String, Bitmap>(1024 * 1024 * 30) {
+  private static LruSoftCache<String, Bitmap> sLruCache = new LruSoftCache<String, Bitmap>(
+      (((ActivityManager) U.getContext().getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass() >> 2) * 1024 * 1024) {
     @Override
     protected void entryRemoved(boolean evicted, String key, Bitmap oldValue, Bitmap newValue) {
-      Log.d(TAG, "evicted");
+      Log.d(TAG, "evicted: " + key);
+    }
+
+    @Override
+    protected int sizeOf(String key, Bitmap value) {
+      if (value != null) {
+        int sizeOf = value.getRowBytes() * value.getHeight();
+        Log.d(TAG, String.format("m: %d s: %d a: %d i: %f", maxSize(), size() / 1024, sizeOf / 1024, sizeOf / (float) maxSize()));
+        return sizeOf;
+      } else {
+        return 0;
+      }
     }
   };
 
@@ -186,6 +200,10 @@ public class ImageUtils {
         return null;
       }
     }
+  }
+
+  public static void asyncLoadThumbnail(final String url, final String hash) {
+    asyncLoad(url, hash, U.dp2px(48), U.dp2px(48));
   }
 
   public static void asyncLoad(final String url, final String hash, final int width, final int height) {
