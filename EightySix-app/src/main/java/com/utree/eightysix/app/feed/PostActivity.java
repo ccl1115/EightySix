@@ -45,8 +45,8 @@ import com.utree.eightysix.response.PublishCommentResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.share.ShareManager;
 import com.utree.eightysix.utils.Env;
-import com.utree.eightysix.utils.ShareUtils;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.guide.Guide;
@@ -137,7 +137,7 @@ public class PostActivity extends BaseActivity {
                     mPostCommentsAdapter.notifyDataSetChanged();
                     break;
                   case 1:
-                    ShareUtils.sharePostToQQ(PostActivity.this, mPost);
+                    U.getShareManager().sharePostDialog(PostActivity.this, mPost);
                     break;
                   case 2:
                     showToast("TODO report");

@@ -20,6 +20,7 @@ import com.utree.eightysix.location.Location;
 import com.utree.eightysix.push.PushHelper;
 import com.utree.eightysix.push.PushHelperImpl;
 import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.share.ShareManager;
 import com.utree.eightysix.statistics.Analyser;
 import com.utree.eightysix.statistics.MtaAnalyserImpl;
 import com.utree.eightysix.storage.Storage;
@@ -53,6 +54,7 @@ public class U {
   private static CacheUtils sCacheUtils;
   private static Bus sBus;
   private static Reporter sReporter;
+  private static ShareManager sShareManager;
 
   private static PushHelper sPushHelper;
 
@@ -64,6 +66,15 @@ public class U {
   private static Toast sToast;
 
   private static final Object lock = new Object();
+
+  public static ShareManager getShareManager() {
+    if (sShareManager == null) {
+      synchronized (lock) {
+        sShareManager = new ShareManager();
+      }
+    }
+    return sShareManager;
+  }
 
   public static Reporter getReporter() {
     if (sReporter == null) {

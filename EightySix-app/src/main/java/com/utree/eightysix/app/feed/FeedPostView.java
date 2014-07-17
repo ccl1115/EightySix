@@ -2,7 +2,6 @@ package com.utree.eightysix.app.feed;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -11,7 +10,6 @@ import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -26,11 +24,10 @@ import com.utree.eightysix.data.Post;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.drawable.SmallGearsDrawable;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
+import com.utree.eightysix.share.ShareManager;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.ImageUtils;
-import com.utree.eightysix.utils.ShareUtils;
 import com.utree.eightysix.widget.AsyncImageView;
-import de.akquinet.android.androlog.Log;
 
 /**
  */
@@ -255,7 +252,7 @@ public class FeedPostView extends BasePostView {
 
   @OnClick (R.id.iv_share)
   public void onIvShareClicked() {
-    ShareUtils.sharePostDialog((Activity) getContext(), mPost);
+    U.getShareManager().sharePostDialog((Activity) getContext(), mPost);
   }
 
   @OnClick (R.id.tv_praise)

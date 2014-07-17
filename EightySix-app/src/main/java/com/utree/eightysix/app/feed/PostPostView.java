@@ -4,18 +4,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -27,13 +22,11 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
 import com.utree.eightysix.data.Post;
-import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
 import com.utree.eightysix.request.PostDeleteRequest;
+import com.utree.eightysix.share.ShareManager;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.ImageUtils;
-import com.utree.eightysix.utils.ShareUtils;
 import com.utree.eightysix.widget.AsyncImageView;
-import de.akquinet.android.androlog.Log;
 
 /**
  * This is the post view in PostActivity
@@ -174,7 +167,7 @@ public class PostPostView extends BasePostView {
               public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                   case 0:
-                    ShareUtils.sharePostDialog(((Activity) getContext()), mPost);
+                    U.getShareManager().sharePostDialog(((Activity) getContext()), mPost);
                     break;
                   case 1:
                     U.showToast("TODO report");

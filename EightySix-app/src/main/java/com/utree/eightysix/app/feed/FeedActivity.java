@@ -26,7 +26,6 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.account.ContactsActivity;
 import com.utree.eightysix.app.account.ImportContactActivity;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
@@ -44,13 +43,12 @@ import com.utree.eightysix.event.NewCommentCountEvent;
 import com.utree.eightysix.request.CircleSideRequest;
 import com.utree.eightysix.response.CirclesResponse;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.share.ShareManager;
 import com.utree.eightysix.utils.Env;
-import com.utree.eightysix.utils.ShareUtils;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TopBar;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -550,7 +548,7 @@ public class FeedActivity extends BaseActivity {
 
   private void showInviteDialog() {
     if (mInviteDialog == null) {
-      mInviteDialog = ShareUtils.shareAppDialog(this, mFeedFragment.getCircle().id);
+      mInviteDialog = U.getShareManager().shareAppDialog(this, mFeedFragment.getCircle().id);
     }
     if (!mInviteDialog.isShowing()) {
       mInviteDialog.show();
