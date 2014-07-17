@@ -307,6 +307,7 @@ class FeedFragment extends BaseFragment {
   public void onPostPublishedEvent(PostPublishedEvent event) {
     if (mFeedAdapter != null) {
       mFeedAdapter.add(event.getPost());
+      mRstvEmpty.setVisibility(View.INVISIBLE);
     }
   }
 
