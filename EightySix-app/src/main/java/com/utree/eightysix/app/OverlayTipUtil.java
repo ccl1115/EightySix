@@ -20,8 +20,6 @@ public class OverlayTipUtil {
   public static Guide getSourceTip(View target, final View.OnClickListener listener) {
     return new GuideBuilder()
         .setAlpha(0x88)
-        .setEnterAnimationId(R.anim.overlay_tip_enter)
-        .setExitAnimationId(R.anim.overlay_tip_exit)
         .setAutoDismiss(false)
         .setTargetView(target)
         .addComponent(new Component() {
@@ -58,8 +56,6 @@ public class OverlayTipUtil {
   public static Guide getPraiseTip(View target, final View.OnClickListener listener) {
     return new GuideBuilder()
         .setAlpha(0x88)
-        .setEnterAnimationId(R.anim.overlay_tip_enter)
-        .setExitAnimationId(R.anim.overlay_tip_exit)
         .setAutoDismiss(false)
         .setTargetView(target)
         .addComponent(new Component() {
@@ -96,8 +92,6 @@ public class OverlayTipUtil {
   public static Guide getPortraitTip(View target, final View.OnClickListener listener) {
     return new GuideBuilder()
         .setAlpha(0x88)
-        .setEnterAnimationId(R.anim.overlay_tip_enter)
-        .setExitAnimationId(R.anim.overlay_tip_exit)
         .setAutoDismiss(false)
         .setTargetView(target)
         .addComponent(new Component() {
