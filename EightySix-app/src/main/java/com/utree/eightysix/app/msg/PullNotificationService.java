@@ -8,15 +8,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
-import android.text.TextUtils;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.app.feed.PostActivity;
 import com.utree.eightysix.data.PullNotification;
-import com.utree.eightysix.event.HasNewPraiseEvent;
-import com.utree.eightysix.event.NewCommentCountEvent;
 import com.utree.eightysix.request.PullNotificationRequest;
 import com.utree.eightysix.response.PullNotificationResponse;
 import com.utree.eightysix.rest.HandlerWrapper;
@@ -53,6 +51,12 @@ public class PullNotificationService extends Service {
   }
 
   @Override
+  public void onCreate() {
+    super.onCreate();
+    U.getBus().register(this);
+  }
+
+  @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
     int type = intent.getIntExtra("type", 0);
     String seq = intent.getStringExtra("seq");
@@ -63,8 +67,19 @@ public class PullNotificationService extends Service {
   }
 
   @Override
+  public void onDestroy() {
+    super.onDestroy();
+    U.getBus().unregister(this);
+  }
+
+  @Override
   public IBinder onBind(Intent intent) {
     return null;
+  }
+
+  @Subscribe
+  public void onLogoutEvent(Account.LogoutEvent event) {
+    getNM().cancelAll();
   }
 
   private void requestPullNotification(final int type, final String seq) {
@@ -145,6 +160,7 @@ public class PullNotificationService extends Service {
   }
 
   private void handleResponse(PullNotificationResponse response) {
+    if (!Account.inst().isLogin()) return;
     switch (response.object.type) {
       case TYPE_POST:
         if (response.object.lists == null || response.object.lists.size() == 0) break;
