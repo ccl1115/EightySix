@@ -2,6 +2,7 @@ package com.utree.eightysix.app.feed;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -10,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -28,10 +30,11 @@ import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.ShareUtils;
 import com.utree.eightysix.widget.AsyncImageView;
+import de.akquinet.android.androlog.Log;
 
 /**
  */
-public class FeedPostView extends FrameLayout {
+public class FeedPostView extends BasePostView {
 
   private static int sPostLength = U.getConfigInt("post.length");
 
@@ -75,7 +78,6 @@ public class FeedPostView extends FrameLayout {
   public FrameLayout mFlContent;
 
   private int mFactoryId;
-  private Post mPost;
 
   private SmallGearsDrawable mGearsDrawable;
 
@@ -102,8 +104,8 @@ public class FeedPostView extends FrameLayout {
 
   @Subscribe
   public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
-    if (mPost.bgUrl != null) {
-      if (MD5Util.getMD5String(mPost.bgUrl.getBytes()).toLowerCase().equals(event.getHash())) {
+    if (!TextUtils.isEmpty(mPost.bgUrl)) {
+      if (ImageUtils.getUrlHash(mPost.bgUrl).equals(event.getHash())) {
         mFlContent.setVisibility(VISIBLE);
 
         if (TextUtils.isEmpty(mPost.comment)) {
@@ -113,8 +115,33 @@ public class FeedPostView extends FrameLayout {
         }
 
         mLlItem.setBackgroundDrawable(null);
+
+        ColorUtil.asyncThemedColor(event.getBitmap());
       }
     }
+  }
+
+  @Subscribe
+  public void onThemedColorEvent(ColorUtil.ThemedColorEvent event) {
+    if (!TextUtils.isEmpty(mPost.bgUrl)) {
+      if (event.getBitmap().equals(ImageUtils.getFromMemByUrl(mPost.bgUrl))) {
+        setPostTheme(event.getColor());
+        ListView parent = (ListView) getParent();
+        if (parent != null) {
+          ((BaseAdapter) parent.getAdapter()).notifyDataSetChanged();
+        }
+      }
+    }
+  }
+
+  @Override
+  protected void setPostTheme(int color) {
+    super.setPostTheme(color);
+
+    mTvComment.setTextColor(mMonoColor);
+    mTvContent.setTextColor(mMonoColor);
+    mTvPraise.setTextColor(mMonoColor);
+    mTvSource.setTextColor(mMonoColor);
   }
 
   public ImageView getIvShare() {
@@ -143,19 +170,30 @@ public class FeedPostView extends FrameLayout {
 
   public void setData(int factoryId, Post post) {
     mFactoryId = factoryId;
+
+    if (mPost != null && mPost.equals(post)) {
+      return;
+    }
+
     mPost = post;
 
     if (mPost == null) {
       return;
     }
 
-    int color = ColorUtil.monochromizing(ColorUtil.strToColor(mPost.bgColor));
-
-    mTvComment.setTextColor(color);
-    mTvContent.setTextColor(color);
-    mTvPraise.setTextColor(color);
-    mTvSource.setTextColor(color);
-
+    if (TextUtils.isEmpty(mPost.bgUrl)) {
+      setPostTheme(ColorUtil.strToColor(mPost.bgColor));
+    } else {
+      Bitmap fromMemByUrl = ImageUtils.getFromMemByUrl(mPost.bgUrl);
+      if (fromMemByUrl != null) {
+        ColorUtil.asyncThemedColor(fromMemByUrl);
+      } else {
+        mTvComment.setTextColor(Color.TRANSPARENT);
+        mTvPraise.setTextColor(Color.TRANSPARENT);
+        mTvContent.setTextColor(Color.TRANSPARENT);
+        mTvSource.setTextColor(Color.TRANSPARENT);
+      }
+    }
 
     String content = post.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content;
 
@@ -188,27 +226,16 @@ public class FeedPostView extends FrameLayout {
       mAivBg.setUrl(null);
     }
 
-    final int heartOutline, heart, comment;
-    if (color == Color.WHITE) {
-      heart = R.drawable.ic_heart_white_normal;
-      heartOutline = R.drawable.ic_heart_outline_normal;
-      comment = R.drawable.ic_reply;
-    } else {
-      heart = R.drawable.ic_black_heart_white_normal;
-      heartOutline = R.drawable.ic_black_heart_outline_normal;
-      comment = R.drawable.ic_black_reply;
-    }
-
     if (post.praised == 1) {
       mTvPraise.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_red_pressed, 0, 0, 0);
     } else if (post.praise > 0) {
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(heart, 0, 0, 0);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartRes, 0, 0, 0);
     } else {
       mTvPraise.setText("");
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(heartOutline, 0, 0, 0);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartOutlineRes, 0, 0, 0);
     }
 
-    mTvComment.setCompoundDrawablesWithIntrinsicBounds(comment, 0, 0, 0);
+    mTvComment.setCompoundDrawablesWithIntrinsicBounds(mCommentRes, 0, 0, 0);
 
     if (getTop() <= 0) {
       mIvShare.setVisibility(INVISIBLE);

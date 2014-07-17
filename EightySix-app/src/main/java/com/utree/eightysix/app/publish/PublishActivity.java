@@ -49,10 +49,12 @@ import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.InputValidator;
+import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.PostEditText;
 import com.utree.eightysix.widget.TopBar;
 import com.utree.eightysix.widget.panel.GridPanel;
 import com.utree.eightysix.widget.panel.Item;
+import de.akquinet.android.androlog.Log;
 import java.io.File;
 import java.util.List;
 import java.util.Random;
@@ -74,8 +76,8 @@ public class PublishActivity extends BaseActivity {
   @InjectView (R.id.tv_bottom)
   public TextView mTvBottom;
 
-  @InjectView (R.id.iv_post_bg)
-  public ImageView mIvPostBg;
+  @InjectView (R.id.aiv_post_bg)
+  public AsyncImageView mAivPostBg;
 
   @InjectView (R.id.tv_post_tip)
   public TextView mTvPostTip;
@@ -136,6 +138,11 @@ public class PublishActivity extends BaseActivity {
   @OnClick (R.id.iv_camera)
   public void onIvCameraClicked() {
     mCameraDialog.show();
+  }
+
+  @Override
+  public void onActionLeftClicked() {
+    confirmFinish();
   }
 
   @Override
@@ -314,24 +321,19 @@ public class PublishActivity extends BaseActivity {
 
     List<Item> itemsByPage = mGpColor.getItemsByPage(0);
     Item item = itemsByPage.get(new Random().nextInt(itemsByPage.size()));
-    int color = item.getValues().get(0).data;
+    int color = item.getValue().data;
     mPostEditText.setTextColor(ColorUtil.monochromizing(color));
     mTvPostTip.setTextColor(ColorUtil.monochromizing(color));
-    mIvPostBg.setImageDrawable(null);
-    mIvPostBg.setBackgroundColor(color);
+    mAivPostBg.setImageDrawable(null);
+    mAivPostBg.setBackgroundColor(color);
     mBgColor = color;
   }
 
   @Override
   protected void onDestroy() {
+    Log.d("ImageUtils", "onDestroy PublishActivity");
     Env.setFirstRun(FIRST_RUN_KEY, false);
-
     super.onDestroy();
-  }
-
-  @Override
-  public void onActionLeftClicked() {
-    confirmFinish();
   }
 
   @Override
@@ -354,44 +356,66 @@ public class PublishActivity extends BaseActivity {
 
   @Subscribe
   public void onGridPanelItemClicked(Item item) {
-    for (final TypedValue tv : item.getValues()) {
-      if (tv.type == TypedValue.TYPE_INT_COLOR_ARGB8) {
-        ValueAnimator.clearAllAnimations();
-        ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), mBgColor, tv.data);
-        animator.setDuration(500);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-          @Override
-          public void onAnimationUpdate(ValueAnimator animation) {
-            mIvPostBg.setBackgroundColor((Integer) animation.getAnimatedValue());
-          }
-        });
-        animator.addListener(new Animator.AnimatorListener() {
-          @Override
-          public void onAnimationStart(Animator animation) {
+    final TypedValue tv = item.getValue();
+    if (tv.type == TypedValue.TYPE_INT_COLOR_ARGB8) {
+      ValueAnimator.clearAllAnimations();
+      ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), mBgColor, tv.data);
+      animator.setDuration(500);
+      animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        @Override
+        public void onAnimationUpdate(ValueAnimator animation) {
+          mAivPostBg.setBackgroundColor((Integer) animation.getAnimatedValue());
+        }
+      });
+      animator.addListener(new Animator.AnimatorListener() {
+        @Override
+        public void onAnimationStart(Animator animation) {
 
-          }
+        }
 
-          @Override
-          public void onAnimationEnd(Animator animation) {
-            mPostEditText.setTextColor(ColorUtil.monochromizing(tv.data));
-            mTvPostTip.setTextColor(ColorUtil.monochromizing(tv.data));
-            mBgColor = tv.data;
-          }
+        @Override
+        public void onAnimationEnd(Animator animation) {
+          mPostEditText.setTextColor(ColorUtil.monochromizing(tv.data));
+          mTvPostTip.setTextColor(ColorUtil.monochromizing(tv.data));
+          mBgColor = tv.data;
+        }
 
-          @Override
-          public void onAnimationCancel(Animator animation) {
+        @Override
+        public void onAnimationCancel(Animator animation) {
 
-          }
+        }
 
-          @Override
-          public void onAnimationRepeat(Animator animation) {
+        @Override
+        public void onAnimationRepeat(Animator animation) {
 
-          }
-        });
-        animator.start();
-        mIvPostBg.setImageDrawable(null);
+        }
+      });
+      animator.start();
+      mAivPostBg.setImageDrawable(null);
+    } else if (tv.type == TypedValue.TYPE_STRING) {
+      mAivPostBg.setBackgroundColor(Color.TRANSPARENT);
+      mAivPostBg.setUrl(tv.string.toString());
+      mImageUploadFinished = true;
+      mImageUploadUrl = tv.string.toString();
+      mUseColor = false;
+      mBgColor = Color.WHITE;
+    }
+  }
+
+  @Subscribe
+  public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
+    if (!TextUtils.isEmpty(mImageUploadUrl)) {
+      if (event.getHash().equals(ImageUtils.getUrlHash(mImageUploadUrl))) {
+        ColorUtil.asyncThemedColor(event.getBitmap());
       }
     }
+  }
+
+  @Subscribe
+  public void onThemedColorEvent(ColorUtil.ThemedColorEvent event) {
+    int monochromizing = ColorUtil.monochromizing(event.getColor());
+    mPostEditText.setTextColor(monochromizing);
+    mTvPostTip.setTextColor(monochromizing);
   }
 
   @Override
@@ -461,8 +485,8 @@ public class PublishActivity extends BaseActivity {
     mPostEditText.setTextColor(Color.WHITE);
     mPostEditText.setShadowLayer(2, 0, 0, Color.BLACK);
     mTvPostTip.setTextColor(Color.WHITE);
-    mIvPostBg.setImageBitmap(bitmap);
-    mIvPostBg.setScaleType(ImageView.ScaleType.CENTER_CROP);
+    mAivPostBg.setImageBitmap(bitmap);
+    mAivPostBg.setScaleType(ImageView.ScaleType.CENTER_CROP);
     mUseColor = false;
     mImageUploadFinished = false;
   }

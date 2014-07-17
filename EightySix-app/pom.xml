@@ -29,12 +29,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>mta-sdk</groupId>
             <artifactId>mta-sdk</artifactId>
         </dependency>
@@ -92,6 +86,12 @@
         <dependency>
             <groupId>com.jakewharton</groupId>
             <artifactId>butterknife</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.michaelevans.colorart</groupId>
+            <artifactId>library</artifactId>
+            <type>aar</type>
         </dependency>
 
         <dependency>

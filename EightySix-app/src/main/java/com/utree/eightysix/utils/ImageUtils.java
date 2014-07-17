@@ -1,5 +1,7 @@
 package com.utree.eightysix.utils;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -26,10 +28,22 @@ import org.apache.http.Header;
 public class ImageUtils {
   private static final String TAG = "ImageUtils";
 
-  private static LruSoftCache<String, Bitmap> sLruCache = new LruSoftCache<String, Bitmap>(1024 * 1024 * 30) {
+  private static LruSoftCache<String, Bitmap> sLruCache = new LruSoftCache<String, Bitmap>(
+      (((ActivityManager) U.getContext().getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass() >> 2) * 1024 * 1024) {
     @Override
     protected void entryRemoved(boolean evicted, String key, Bitmap oldValue, Bitmap newValue) {
-      Log.d(TAG, "evicted");
+      Log.d(TAG, "evicted: " + key);
+    }
+
+    @Override
+    protected int sizeOf(String key, Bitmap value) {
+      if (value != null) {
+        int sizeOf = value.getRowBytes() * value.getHeight();
+        Log.d(TAG, String.format("m: %d s: %d a: %d i: %f", maxSize(), size() / 1024, sizeOf / 1024, sizeOf / (float) maxSize()));
+        return sizeOf;
+      } else {
+        return 0;
+      }
     }
   };
 
@@ -141,6 +155,19 @@ public class ImageUtils {
     }
   }
 
+  public static Bitmap safeDecodeBitmap(File file, int width, int height) {
+    try {
+      return decodeBitmap(file, width, height);
+    } catch (OutOfMemoryError e) {
+      sLruCache.evictAll();
+      try {
+        return decodeBitmap(file, width, height);
+      } catch (OutOfMemoryError ne) {
+        return null;
+      }
+    }
+  }
+
   /**
    * Decode bitmap file with catch clause and always decode bitmap into a size that smaller than screen width.
    *
@@ -159,6 +186,60 @@ public class ImageUtils {
       } catch (OutOfMemoryError ne) {
         return null;
       }
+    }
+  }
+
+  public static Bitmap safeDecodeBitmap(String hash, int width, int height) {
+    try {
+      return decodeBitmap(hash, width, height);
+    } catch (OutOfMemoryError e) {
+      sLruCache.evictAll();
+      try {
+        return decodeBitmap(hash, width, height);
+      } catch (OutOfMemoryError ne) {
+        return null;
+      }
+    }
+  }
+
+  public static void asyncLoadThumbnail(final String url, final String hash) {
+    asyncLoad(url, hash, U.dp2px(48), U.dp2px(48));
+  }
+
+  public static void asyncLoad(final String url, final String hash, final int width, final int height) {
+    Bitmap bitmap = sLruCache.get(String.format("%s_%d_%d", url, width, height));
+    if (bitmap == null) {
+      try {
+        final DiskLruCache.Snapshot snapshot = U.getImageCache().get(hash);
+        if (snapshot != null) {
+          new ImageDiskDecodeWorker(url, hash, snapshot, width, height).execute();
+        } else {
+          sClient.get(U.getContext(), url, new FileAsyncHttpResponseHandler(IOUtils.createTmpFile(hash)) {
+            @Override
+            public void onSuccess(File file) {
+              Log.d(TAG, "onSuccess");
+              new ImageRemoteDecodeWorker(hash, file, width, height).execute();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] binaryData, Throwable error) {
+              Log.d(TAG, "onFailure");
+              if (error != null) {
+                Log.d(TAG, "Get remote error: " + error.getMessage());
+                if (BuildConfig.DEBUG) {
+                  error.printStackTrace();
+                }
+              }
+            }
+          });
+        }
+      } catch (IOException ignored) {
+        Log.e(TAG, "Get snapshot IOException: " + ignored.getMessage());
+      } catch (OutOfMemoryError e) {
+        U.getAnalyser().reportException(U.getContext(), e);
+      }
+    } else {
+      U.getBus().post(new ImageLoadedEvent(hash, bitmap));
     }
   }
 
@@ -203,6 +284,15 @@ public class ImageUtils {
   public static Bitmap getFromMem(String hash) {
     return sLruCache.get(hash);
   }
+
+  public static Bitmap getFromMemByUrl(String url) {
+    return sLruCache.get(getUrlHash(url));
+  }
+
+  public static String getUrlHash(String url) {
+    return MD5Util.getMD5String(url.getBytes()).toLowerCase();
+  }
+
 
   /**
    * Upload a image file asynchronously
@@ -268,7 +358,7 @@ public class ImageUtils {
       Storage.Result result = U.getCloudStorage().put(U.getConfig("storage.image.bucket.name"), path, key, file);
       if (result.error == 0 && TextUtils.isEmpty(result.msg)) {
         String url = U.getCloudStorage().getUrl(U.getConfig("storage.image.bucket.name"), path, key);
-        cacheImage(MD5Util.getMD5String(url.getBytes()).toLowerCase(), file);
+        cacheImage(getUrlHash(url), file);
         mFileHash = hash;
         mUrl = url;
       } else {
@@ -332,6 +422,9 @@ public class ImageUtils {
     private DiskLruCache.Snapshot mSnapshot;
     private String mHash;
     private String mUrl;
+    private int mWidth = -1;
+    private int mHeight = -1;
+
 
     private ImageDiskDecodeWorker(String url, String hash, DiskLruCache.Snapshot snapshot) {
       mHash = hash;
@@ -339,12 +432,22 @@ public class ImageUtils {
       mUrl = url;
     }
 
+    private ImageDiskDecodeWorker(String url, String hash, DiskLruCache.Snapshot snapshot, int width, int height) {
+      this(url, hash, snapshot);
+      mWidth = width;
+      mHeight = height;
+    }
+
     @Override
     protected Bitmap doInBackground(Void... params) {
       if (mSnapshot != null) {
         // Here we get bitmap from disk cache
         try {
-          return safeDecodeBitmap(mHash);
+          if (mWidth > 0 && mHeight > 0) {
+            return safeDecodeBitmap(mHash, mWidth, mHeight);
+          } else {
+            return safeDecodeBitmap(mHash);
+          }
         } catch (OutOfMemoryError e) {
           U.getAnalyser().reportException(U.getContext(), e);
           return null;
@@ -360,7 +463,11 @@ public class ImageUtils {
       }
 
       if (bitmap != null) {
-        sLruCache.put(mHash, bitmap);
+        if (mWidth > 0 && mHeight > 0) {
+          sLruCache.put(String.format("%s_%d_%d", mUrl, mWidth, mHeight), bitmap);
+        } else {
+          sLruCache.put(mHash, bitmap);
+        }
         U.getBus().post(new ImageLoadedEvent(mHash, bitmap));
       } else {
         sClient.get(U.getContext(), mUrl, new FileAsyncHttpResponseHandler(IOUtils.createTmpFile(mHash)) {
@@ -390,10 +497,18 @@ public class ImageUtils {
   private static class ImageRemoteDecodeWorker extends AsyncTask<Void, Void, Bitmap> {
     private String mHash;
     private File mFile;
+    private int mWidth = -1;
+    private int mHeight = -1;
 
     private ImageRemoteDecodeWorker(String hash, File file) {
       mHash = hash;
       mFile = file;
+    }
+
+    private ImageRemoteDecodeWorker(String hash, File file, int width, int height) {
+      this(hash, file);
+      mWidth = width;
+      mHeight = height;
     }
 
     @Override
@@ -424,7 +539,11 @@ public class ImageUtils {
           }
         }
         try {
-          return safeDecodeBitmap(mFile);
+          if (mWidth > 0 && mHeight > 0) {
+            return safeDecodeBitmap(mFile, mWidth, mHeight);
+          } else {
+            return safeDecodeBitmap(mFile);
+          }
         } catch (OutOfMemoryError e) {
           U.getAnalyser().reportException(U.getContext(), e);
           return null;
@@ -437,7 +556,11 @@ public class ImageUtils {
     @Override
     protected void onPostExecute(Bitmap bitmap) {
       if (bitmap != null) {
-        sLruCache.put(mHash, bitmap);
+        if (mWidth > 0 && mHeight > 0) {
+          sLruCache.put(String.format("%s_%d_%d", mHash, mWidth, mHeight), bitmap);
+        } else {
+          sLruCache.put(mHash, bitmap);
+        }
       }
 
       mFile.delete();

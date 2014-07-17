@@ -33,7 +33,7 @@ public class Feeds {
   /**
    * 圈子朋友数
    */
-  @SerializedName("currFactoryFriends")
+  @SerializedName("currFactoryGoodFriends")
   public int currFactoryFriends;
 
   /**

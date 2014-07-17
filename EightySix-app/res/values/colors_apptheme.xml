@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="apptheme_primary_light_color">#FF825096</color>
-    <color name="apptheme_primary_light_color_pressed">#ff4d2f59</color>
+    <color name="apptheme_primary_light_color">#FF30b200</color>
+    <color name="apptheme_primary_light_color_pressed">#ff228000</color>
     <color name="apptheme_primary_light_color_disabled">#fff0f0f0</color>
 
     <color name="apptheme_secondary_light_color">#ffe64545</color>
