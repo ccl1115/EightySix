@@ -21,6 +21,7 @@ public class OverlayTipUtil {
         .setAlpha(0x88)
         .setAutoDismiss(false)
         .setTargetView(target)
+        .setOverlayTarget(true)
         .addComponent(new Component() {
           @Override
           public View getView(LayoutInflater inflater) {
@@ -57,6 +58,7 @@ public class OverlayTipUtil {
         .setAlpha(0x88)
         .setAutoDismiss(false)
         .setTargetView(target)
+        .setOverlayTarget(true)
         .addComponent(new Component() {
           @Override
           public View getView(LayoutInflater inflater) {
@@ -93,6 +95,7 @@ public class OverlayTipUtil {
         .setAlpha(0x88)
         .setAutoDismiss(false)
         .setTargetView(target)
+        .setOverlayTarget(true)
         .addComponent(new Component() {
           @Override
           public View getView(LayoutInflater inflater) {
@@ -129,6 +132,7 @@ public class OverlayTipUtil {
         .setAlpha(0x88)
         .setAutoDismiss(false)
         .setTargetView(target)
+        .setOverlayTarget(true)
         .addComponent(new Component() {
           @Override
           public View getView(LayoutInflater inflater) {

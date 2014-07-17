@@ -114,7 +114,7 @@ public class BaseCirclesActivity extends BaseActivity {
   public boolean onLvCirclesItemLongClicked(int position) {
     final Circle circle = mCircleListAdapter.getItem(position);
     if (circle != null) {
-      if (mMode == MODE_MY) {
+      if (mMode == MODE_MY && !circle.viewGroupType.equals("在职企业")) {
         showCircleSetDialog(circle);
         return true;
       }

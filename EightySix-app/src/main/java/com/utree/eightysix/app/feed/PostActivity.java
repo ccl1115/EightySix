@@ -131,7 +131,7 @@ public class PostActivity extends BaseActivity {
                       comment.praise++;
                       U.getBus().post(new PostCommentPraiseEvent(comment, false));
                     } else {
-                      comment.praise--;
+                      comment.praise = Math.max(0, comment.praise - 1);
                       U.getBus().post(new PostCommentPraiseEvent(comment, true));
                     }
                     mPostCommentsAdapter.notifyDataSetChanged();
@@ -316,7 +316,7 @@ public class PostActivity extends BaseActivity {
         public void onResponse(Response response) {
           if (response == null || response.code != 0) {
             event.getComment().praised = 0;
-            event.getComment().praise--;
+            event.getComment().praise = Math.max(0, event.getComment().praise - 1);
             mPostCommentsAdapter.notifyDataSetChanged();
           }
         }
@@ -334,7 +334,7 @@ public class PostActivity extends BaseActivity {
             U.getBus().post(event.getPost());
           } else {
             event.getPost().praised = 0;
-            event.getPost().praise--;
+            event.getPost().praise++;
             mPostCommentsAdapter.notifyDataSetChanged();
           }
         }
@@ -345,7 +345,7 @@ public class PostActivity extends BaseActivity {
         public void onResponse(Response response) {
           if (response == null || response.code != 0) {
             event.getPost().praised = 1;
-            event.getPost().praise--;
+            event.getPost().praise = Math.max(0, event.getPost().praise - 1);
             mPostCommentsAdapter.notifyDataSetChanged();
           } else {
             U.getBus().post(event.getPost());

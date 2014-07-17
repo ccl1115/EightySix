@@ -13,13 +13,13 @@
         app:refresher_head="@+id/fpv_head"
         app:empty_view="@+id/tv_empty_text"
         app:max_height="300dp"
-        app:threshold_height="150dp">
+        app:threshold_height="200dp">
 
 
     <com.utree.eightysix.widget.GearsView
             android:id="@+id/fpv_head"
-            android:layout_width="80dp"
-            android:layout_height="80dp"/>
+            android:layout_width="100dp"
+            android:layout_height="100dp"/>
 
     <com.utree.eightysix.widget.AdvancedListView
             android:id="@+id/lv_feed"

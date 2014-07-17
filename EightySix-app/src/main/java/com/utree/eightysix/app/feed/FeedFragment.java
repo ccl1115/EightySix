@@ -1,7 +1,6 @@
 package com.utree.eightysix.app.feed;
 
 import android.app.Activity;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -295,7 +294,7 @@ class FeedFragment extends BaseFragment {
         public void onResponse(Response response) {
           if (response == null || response.code != 0) {
             event.getPost().praised = 0;
-            event.getPost().praise--;
+            event.getPost().praise = Math.max(0, event.getPost().praise - 1);
             mFeedAdapter.notifyDataSetChanged();
           }
         }

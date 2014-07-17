@@ -11,8 +11,8 @@
         app:refresher_content="@+id/alv_refresh"
         app:refresher_head="@+id/tv_head"
         app:empty_view="@+id/tv_empty_text"
-        app:max_height="200dp"
-        app:threshold_height="150dp">
+        app:max_height="300dp"
+        app:threshold_height="200dp">
 
     <com.utree.eightysix.widget.AdvancedListView
             android:id="@+id/alv_refresh"
@@ -21,8 +21,8 @@
 
     <com.utree.eightysix.widget.GearsView
             android:id="@+id/tv_head"
-            android:layout_width="80dp"
-            android:layout_height="80dp"/>
+            android:layout_width="100dp"
+            android:layout_height="100dp"/>
 
     <com.utree.eightysix.widget.RandomSceneTextView
             android:id="@+id/tv_empty_text"
