@@ -42,6 +42,11 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
     mGson = customGson;
   }
 
+  @Override
+  public void onStart() {
+    super.onStart();
+    Log.d(C.TAG.RR, "request starting:" + mRequestData.api);
+  }
 
   @Override
   public void onSuccess(int statusCode, org.apache.http.Header[] headers, String rawResponse, T response) {

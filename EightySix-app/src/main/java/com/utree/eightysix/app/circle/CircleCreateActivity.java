@@ -167,17 +167,19 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
     mRequesting = true;
     U.getRESTRequester().post(C.API_VALICODE_CREATE_FACTORY, null,
         U.getRESTRequester().addAuthParams(null), null,
-        new FileAsyncHttpResponseHandler(IOUtils.createTmpFile("valicode.jpg")) {
+        new FileAsyncHttpResponseHandler(IOUtils.createTmpFile("valicode_" + System.currentTimeMillis())) {
           @Override
           public void onSuccess(File file) {
             mIvCaptcha.setImageURI(Uri.fromFile(file));
             mRequesting = false;
+            if (file != null) file.delete();
           }
 
           @Override
           public void onFailure(Throwable e, File response) {
             if (BuildConfig.DEBUG) Log.d("CircleCreateActivity", e.getMessage());
             mRequesting = false;
+            if (response != null) response.delete();
           }
         });
   }

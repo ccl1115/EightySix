@@ -238,7 +238,7 @@ public class LoginActivity extends BaseActivity {
     mRequesting = true;
     U.getRESTRequester().post(C.API_VALICODE_FIND_PWD, null,
         new RequestParams("phone", mEtPhoneNumber.getText().toString()), null,
-        new FileAsyncHttpResponseHandler(IOUtils.createTmpFile("valicode.png")) {
+        new FileAsyncHttpResponseHandler(IOUtils.createTmpFile("valicode_" + System.currentTimeMillis())) {
           @Override
           public void onSuccess(File file) {
             mIvCaptcha.setImageURI(Uri.fromFile(file));
