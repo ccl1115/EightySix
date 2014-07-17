@@ -65,7 +65,7 @@ public class BaseMsgItemView extends LinearLayout {
     PostActivity.start(view.getContext(), mPosts[1], null);
   }
 
-  private Post[] mPosts;
+  protected Post[] mPosts;
 
   public BaseMsgItemView(Context context) {
     this(context, null);
@@ -87,44 +87,6 @@ public class BaseMsgItemView extends LinearLayout {
     }
   }
 
-  @Subscribe
-  public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
-    if (mPosts != null && mPosts.length == 2) {
-      if (mPosts[0] != null) {
-        if (!TextUtils.isEmpty(mPosts[0].bgUrl)) {
-          if (event.getHash().equals(ImageUtils.getUrlHash(mPosts[0].bgUrl))) {
-            ColorUtil.asyncThemedColor(event.getBitmap());
-          }
-        }
-      }
-
-      if (mPosts[1] != null) {
-        if (!TextUtils.isEmpty(mPosts[1].bgUrl)) {
-          if (event.getHash().equals(ImageUtils.getUrlHash(mPosts[1].bgUrl))) {
-            ColorUtil.asyncThemedColor(event.getBitmap());
-          }
-        }
-      }
-    }
-  }
-
-  @Subscribe
-  public void onThemedColorEvent(ColorUtil.ThemedColorEvent event) {
-    if (mPosts != null && mPosts.length == 2) {
-      if (mPosts[0] != null && !TextUtils.isEmpty(mPosts[0].bgUrl)) {
-        if (event.getBitmap().equals(ImageUtils.getFromMemByUrl(mPosts[0].bgUrl))) {
-          setLeftThemedColor(event.getColor());
-        }
-      }
-
-      if (mPosts[1] != null && !TextUtils.isEmpty(mPosts[1].bgUrl)) {
-        if (event.getBitmap().equals(ImageUtils.getFromMemByUrl(mPosts[1].bgUrl))) {
-          setRightThemedColor(event.getColor());
-        }
-      }
-    }
-  }
-
   protected void setLeftThemedColor(int color) {
     int monoColor = ColorUtil.monochromizing(color);
     mTvContentLeft.setTextColor(monoColor);
@@ -142,11 +104,11 @@ public class BaseMsgItemView extends LinearLayout {
 
       if (TextUtils.isEmpty(right.bgUrl)) {
         setRightThemedColor(ColorUtil.strToColor(right.bgColor));
-      } else {
-        Bitmap fromMemByUrl = ImageUtils.getFromMemByUrl(right.bgUrl);
-        if (fromMemByUrl != null) {
-          ColorUtil.asyncThemedColor(fromMemByUrl);
-        }
+      //} else {
+      //  Bitmap fromMemByUrl = ImageUtils.getFromMemByUrl(right.bgUrl);
+      //  if (fromMemByUrl != null) {
+      //    ColorUtil.asyncThemedColor(fromMemByUrl);
+      //  }
       }
       mFlRight.setVisibility(VISIBLE);
       mTvContentRight.setText(right.content);
@@ -172,11 +134,11 @@ public class BaseMsgItemView extends LinearLayout {
 
       if (TextUtils.isEmpty(left.bgUrl)) {
         setLeftThemedColor(ColorUtil.strToColor(left.bgColor));
-      } else {
-        Bitmap fromMemByUrl = ImageUtils.getFromMemByUrl(left.bgUrl);
-        if (fromMemByUrl != null) {
-          ColorUtil.asyncThemedColor(fromMemByUrl);
-        }
+      //} else {
+      //  Bitmap fromMemByUrl = ImageUtils.getFromMemByUrl(left.bgUrl);
+      //  if (fromMemByUrl != null) {
+      //    ColorUtil.asyncThemedColor(fromMemByUrl);
+      //  }
       }
 
       mFlLeft.setVisibility(VISIBLE);

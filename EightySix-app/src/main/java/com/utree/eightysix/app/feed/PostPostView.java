@@ -115,16 +115,16 @@ public class PostPostView extends BasePostView {
 
     if (TextUtils.isEmpty(mPost.bgUrl)) {
       setPostTheme(ColorUtil.strToColor(mPost.bgColor));
-    } else {
-      Bitmap fromMemByUrl = ImageUtils.getFromMemByUrl(mPost.bgUrl);
-      if (fromMemByUrl != null) {
-        ColorUtil.asyncThemedColor(fromMemByUrl);
-      } else {
-        mTvComment.setTextColor(Color.TRANSPARENT);
-        mTvPraise.setTextColor(Color.TRANSPARENT);
-        mTvContent.setTextColor(Color.TRANSPARENT);
-        mTvSource.setTextColor(Color.TRANSPARENT);
-      }
+    //} else {
+    //  Bitmap fromMemByUrl = ImageUtils.getFromMemByUrl(mPost.bgUrl);
+    //  if (fromMemByUrl != null) {
+    //    ColorUtil.asyncThemedColor(fromMemByUrl);
+    //  } else {
+    //    mTvComment.setTextColor(Color.TRANSPARENT);
+    //    mTvPraise.setTextColor(Color.TRANSPARENT);
+    //    mTvContent.setTextColor(Color.TRANSPARENT);
+    //    mTvSource.setTextColor(Color.TRANSPARENT);
+    //  }
     }
 
 
