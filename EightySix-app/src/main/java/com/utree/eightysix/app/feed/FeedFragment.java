@@ -61,6 +61,7 @@ class FeedFragment extends BaseFragment {
 
   private Guide mSourceTip;
   private Guide mPraiseTip;
+  private Guide mShareTip;
 
   public FeedFragment() {
   }
@@ -172,6 +173,22 @@ class FeedFragment extends BaseFragment {
             });
             mPraiseTip.show(getActivity());
             Env.setFirstRun("overlay_tip_praise", false);
+          } else if (Env.firstRun("overlay_tip_share")) {
+            if (view.getChildCount() <= 2) return;
+
+            View last = view.getChildAt(view.getChildCount() - 2);
+            if (last == null) return;
+            View shareView = last.findViewById(R.id.iv_share);
+            if (shareView == null || shareView.getVisibility() != View.VISIBLE) return;
+
+            mShareTip = OverlayTipUtil.getShareTip(shareView, new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                if (mShareTip != null) mShareTip.dismiss();
+              }
+            });
+            mShareTip.show(getActivity());
+            Env.setFirstRun("overlay_tip_share", false);
           }
         }
       }
@@ -197,7 +214,7 @@ class FeedFragment extends BaseFragment {
   }
 
   public boolean onBackPressed() {
-    return hidePraiseTip() || hideSourceTip();
+    return hidePraiseTip() || hideSourceTip() || hideShareTip();
   }
 
   public Circle getCircle() {
@@ -394,6 +411,16 @@ class FeedFragment extends BaseFragment {
     if (mSourceTip != null) {
       if (mSourceTip.isShowing()) {
         mSourceTip.dismiss();
+        return true;
+      }
+    }
+    return false;
+  }
+
+  boolean hideShareTip() {
+    if (mShareTip != null) {
+      if (mShareTip.isShowing()) {
+        mShareTip.dismiss();
         return true;
       }
     }

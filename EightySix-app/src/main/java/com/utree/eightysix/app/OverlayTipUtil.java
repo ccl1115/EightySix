@@ -1,10 +1,9 @@
 package com.utree.eightysix.app;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.TextView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.drawable.RoundRectDrawable;
@@ -116,6 +115,42 @@ public class OverlayTipUtil {
           @Override
           public int getXOffset() {
             return -16;
+          }
+
+          @Override
+          public int getYOffset() {
+            return -4;
+          }
+        }).createGuide();
+  }
+
+  public static Guide getShareTip(View target, final View.OnClickListener listener) {
+    return new GuideBuilder()
+        .setAlpha(0x88)
+        .setAutoDismiss(false)
+        .setTargetView(target)
+        .addComponent(new Component() {
+          @Override
+          public View getView(LayoutInflater inflater) {
+            View view = inflater.inflate(R.layout.overlay_tip_share, null, false);
+            view.findViewById(R.id.ll_tip).setBackgroundDrawable(new RoundRectDrawable(U.dp2px(4), Color.WHITE));
+            view.setOnClickListener(listener);
+            return view;
+          }
+
+          @Override
+          public int getAnchor() {
+            return ANCHOR_TOP;
+          }
+
+          @Override
+          public int getFitPosition() {
+            return FIT_END;
+          }
+
+          @Override
+          public int getXOffset() {
+            return 18;
           }
 
           @Override

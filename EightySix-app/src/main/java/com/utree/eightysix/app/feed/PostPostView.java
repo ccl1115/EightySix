@@ -90,7 +90,7 @@ public class PostPostView extends BasePostView {
 
   @Subscribe
   public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
-    if (mPost.bgUrl != null) {
+    if (mPost != null && mPost.bgUrl != null) {
       if (ImageUtils.getUrlHash(mPost.bgUrl).equals(event.getHash())) {
         ColorUtil.asyncThemedColor(event.getBitmap());
       }
@@ -99,7 +99,7 @@ public class PostPostView extends BasePostView {
 
   @Subscribe
   public void onThemedColorEvent(ColorUtil.ThemedColorEvent event) {
-    if (!TextUtils.isEmpty(mPost.bgUrl)) {
+    if (mPost != null && !TextUtils.isEmpty(mPost.bgUrl)) {
       if (event.getBitmap().equals(ImageUtils.getFromMemByUrl(mPost.bgUrl))) {
         setPostTheme(event.getColor());
       }

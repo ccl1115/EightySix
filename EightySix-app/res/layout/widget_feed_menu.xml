@@ -38,16 +38,6 @@
             android:background="@drawable/apptheme_primary_list_selector"
             android:orientation="horizontal">
 
-        <com.utree.eightysix.widget.RoundedButton
-                android:id="@+id/rb_new_praise_dot"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:layout_marginLeft="3dp"
-                android:layout_gravity="center_vertical"
-                android:visibility="invisible"
-                app:radius="5dp"
-                app:background="@color/apptheme_secondary_light_color"/>
-
         <TextView
                 style="@style/TextView.SingleLine"
                 android:id="@+id/tv_praise_count"
@@ -59,13 +49,15 @@
                 android:textSize="16sp"
                 android:textColor="@android:color/black"/>
 
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:paddingRight="15dp"
-                android:textSize="14sp"
-                android:textColor="@color/apptheme_secondary_light_color"/>
+        <com.utree.eightysix.widget.RoundedButton
+                android:id="@+id/rb_new_praise_dot"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_gravity="center_vertical"
+                android:visibility="invisible"
+                app:radius="5dp"
+                app:background="@color/apptheme_secondary_light_color"/>
 
     </LinearLayout>
 
