@@ -16,6 +16,7 @@ import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import butterknife.OnItemLongClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
@@ -104,11 +105,21 @@ public class CircleSearchActivity extends BaseActivity {
   @OnItemClick (R.id.lv_result)
   public void onResultItemClicked(int position) {
     final Circle circle = mResultAdapter.getItem(position);
-    if (mSelectMode) {
+    if (circle != null) {
+      if (mSelectMode) {
+        showCircleSetDialog(circle);
+      } else {
+        FeedActivity.start(this, circle);
+        finish();
+      }
+    }
+  }
+
+  @OnItemLongClick(R.id.lv_result)
+  public void onLvResultItemLongClicked(int position) {
+    final Circle circle = mResultAdapter.getItem(position);
+    if (circle != null) {
       showCircleSetDialog(circle);
-    } else {
-      FeedActivity.start(this, circle);
-      finish();
     }
   }
 

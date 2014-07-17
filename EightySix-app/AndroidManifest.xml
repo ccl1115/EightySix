@@ -162,6 +162,7 @@
                 android:screenOrientation="portrait"
                 android:name=".app.circle.CircleSearchActivity"
                 android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+                android:windowSoftInputMode="adjustNothing"
                 android:exported="@bool/exported"/>
 
         <activity

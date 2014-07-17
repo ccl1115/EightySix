@@ -58,8 +58,15 @@ class CircleBaseListAdapter extends BaseAdapter {
 
     Circle item = getItem(position);
 
-    final String info =
-        String.format("%.1fkm | 朋友(%d) | 工友(%d)", item.distance / 1000f, item.friendCount, item.workmateCount);
+
+    final String info;
+    if (item.distance < 100) {
+      info = String.format("小于100米 | 朋友(%d) | 工友(%d)", item.friendCount, item.workmateCount);
+    } else if (item.distance < 1000) {
+      info = String.format("%d米 | 朋友(%d) | 工友(%d)", 100 * (item.distance / 100), item.friendCount, item.workmateCount);
+    } else {
+      info = String.format("%.1f千米 | 朋友(%d) | 工友(%d)", item.distance / 1000f, item.friendCount, item.workmateCount);
+    }
 
     viewHolder.mTvCircleInfo.setText(info);
     viewHolder.mTvCircleName.setText(item.name);
