@@ -329,32 +329,23 @@ public class FeedActivity extends BaseActivity {
 
 
     //region 侧边栏数据处理
-    List<Circle> circles = intent.getParcelableArrayListExtra("side");
-
-    if (circles != null) {
-      mSideCircles = circles;
-      if (mFeedFragment.getCircle() == null && mSideCircles.size() > 0) {
-        mFeedFragment.setCircle(mSideCircles.get(0));
-        setSideHighlight(mFeedFragment.getCircle());
-      }
-    }
-
-    if (mSideCircles != null) {
-      for (Iterator<Circle> iterator = mSideCircles.iterator(); iterator.hasNext(); ) {
-        Circle c = iterator.next();
-        if (c == null) iterator.remove();
-      }
-      selectSideCircle(mSideCircles);
-      mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
-      mLvSideCircles.setAdapter(mSideCirclesAdapter);
-    } else if (U.useFixture()) {
-      mSideCircles = U.getFixture(Circle.class, 10, "valid");
-      selectSideCircle(mSideCircles);
-      mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
-      mLvSideCircles.setAdapter(mSideCirclesAdapter);
-    } else {
-      cacheOutSideCircle();
-    }
+    requestSideCircle();
+    //if (mSideCircles != null) {
+    //  for (Iterator<Circle> iterator = mSideCircles.iterator(); iterator.hasNext(); ) {
+    //    Circle c = iterator.next();
+    //    if (c == null) iterator.remove();
+    //  }
+    //  selectSideCircle(mSideCircles);
+    //  mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
+    //  mLvSideCircles.setAdapter(mSideCirclesAdapter);
+    //} else if (U.useFixture()) {
+    //  mSideCircles = U.getFixture(Circle.class, 10, "valid");
+    //  selectSideCircle(mSideCircles);
+    //  mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
+    //  mLvSideCircles.setAdapter(mSideCirclesAdapter);
+    //} else {
+    //  cacheOutSideCircle();
+    //}
     //endregion
 
     hideSide();
