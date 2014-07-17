@@ -238,5 +238,7 @@
     <string name="msg_no_msg">你还没有消息</string>
     <string name="praise_no_praise">你还没有收到赞</string>
     <string name="overlay_tip_share">分享，可以让身边的朋友快速加入，你和他们的秘密都会被更多地倾听和回应</string>
+    <string name="loading_more">正在加载更多</string>
+    <string name="no_new_praise">没有新赞</string>
 
 </resources>

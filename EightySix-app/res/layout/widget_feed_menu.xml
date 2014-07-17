@@ -44,7 +44,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:paddingLeft="4dp"
+                android:paddingLeft="15dp"
                 android:gravity="center_vertical"
                 android:textSize="16sp"
                 android:textColor="@android:color/black"/>
