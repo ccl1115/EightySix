@@ -69,15 +69,15 @@ class FeedFragment extends BaseFragment {
   public void onLvFeedItemClicked(int position, View view) {
     Object item = mLvFeed.getAdapter().getItem(position);
     if (item == null || !(item instanceof Post)) return;
-    Rect rect = new Rect();
-    int[] xy = new int[2];
-    View target = view.findViewById(R.id.tv_content);
-    target.getLocationInWindow(xy);
-    rect.left = xy[0];
-    rect.top = xy[1];
-    rect.right = rect.left + target.getMeasuredWidth();
-    rect.bottom = rect.top + target.getMeasuredHeight();
-    PostActivity.start(getActivity(), (Post) item, rect);
+    //Rect rect = new Rect();
+    //int[] xy = new int[2];
+    //View target = view.findViewById(R.id.tv_content);
+    //target.getLocationInWindow(xy);
+    //rect.left = xy[0];
+    //rect.top = xy[1];
+    //rect.right = rect.left + target.getMeasuredWidth();
+    //rect.bottom = rect.top + target.getMeasuredHeight();
+    PostActivity.start(getActivity(), (Post) item, null);
   }
 
   @Override

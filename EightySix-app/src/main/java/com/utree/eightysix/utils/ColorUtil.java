@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import com.utree.eightysix.U;
+import de.akquinet.android.androlog.Log;
 import java.util.HashMap;
 import org.michaelevans.colorart.library.ColorArt;
 
@@ -11,6 +12,7 @@ import org.michaelevans.colorart.library.ColorArt;
  * @author simon
  */
 public class ColorUtil {
+  private static final String TAG = "ColorUtil";
 
   private static HashMap<String, Integer> mCachedColor = new HashMap<String, Integer>();
 
@@ -34,6 +36,16 @@ public class ColorUtil {
         Math.min(0xff, Color.blue(color) + 0x88));
   }
 
+  public static void asyncThemedColor(final Bitmap bitmap) {
+    if (mCachedColor.containsKey(String.valueOf(bitmap.hashCode()))) {
+      Log.d(TAG, "Get color from cache");
+      U.getBus().post(new ThemedColorEvent(bitmap, mCachedColor.get(String.valueOf(bitmap.hashCode()))));
+    } else {
+      Log.d(TAG, "Get color from ColorArt");
+      new ThemedColorWorker(bitmap).execute();
+    }
+  }
+
   private static int themedColor(final Bitmap bitmap) {
     final int color = new ColorArt(bitmap).getBackgroundColor();
     mCachedColor.put(String.valueOf(bitmap.hashCode()), color);
@@ -55,14 +67,6 @@ public class ColorUtil {
     @Override
     protected void onPostExecute(Integer integer) {
       U.getBus().post(new ThemedColorEvent(mBitmap, integer));
-    }
-  }
-
-  public static void asyncThemedColor(final Bitmap bitmap) {
-    if (mCachedColor.containsKey(String.valueOf(bitmap.hashCode()))) {
-      U.getBus().post(new ThemedColorEvent(bitmap, mCachedColor.get(String.valueOf(bitmap.hashCode()))));
-    } else {
-      new ThemedColorWorker(bitmap).execute();
     }
   }
 

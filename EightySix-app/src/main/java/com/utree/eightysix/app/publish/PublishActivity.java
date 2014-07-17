@@ -402,6 +402,22 @@ public class PublishActivity extends BaseActivity {
     }
   }
 
+  @Subscribe
+  public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
+    if (!TextUtils.isEmpty(mImageUploadUrl)) {
+      if (event.getHash().equals(ImageUtils.getUrlHash(mImageUploadUrl))) {
+        ColorUtil.asyncThemedColor(event.getBitmap());
+      }
+    }
+  }
+
+  @Subscribe
+  public void onThemedColorEvent(ColorUtil.ThemedColorEvent event) {
+    int monochromizing = ColorUtil.monochromizing(event.getColor());
+    mPostEditText.setTextColor(monochromizing);
+    mTvPostTip.setTextColor(monochromizing);
+  }
+
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     if (resultCode == Activity.RESULT_CANCELED) return;

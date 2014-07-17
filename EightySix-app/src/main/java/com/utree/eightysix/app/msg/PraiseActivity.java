@@ -90,16 +90,6 @@ public class PraiseActivity extends BaseActivity {
       }
     }
 
-    final int count = getIntent().getIntExtra("praiseCount", -1);
-    if (count != -1) {
-    }
-
-    final int percent = getIntent().getIntExtra("praisePercent", -1);
-    final int postCount = getIntent().getIntExtra("postCount", -1);
-    final int commentCount = getIntent().getIntExtra("commentCount", -1);
-    if (percent != -1 || postCount == -1 || commentCount == -1) {
-    }
-
     mAlvMsg.setLoadMoreCallback(new LoadMoreCallback() {
       @Override
       public View getLoadMoreView(ViewGroup parent) {

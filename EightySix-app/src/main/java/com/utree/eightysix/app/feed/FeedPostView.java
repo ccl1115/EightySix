@@ -104,7 +104,7 @@ public class FeedPostView extends BasePostView {
 
   @Subscribe
   public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
-    if (mPost.bgUrl != null) {
+    if (!TextUtils.isEmpty(mPost.bgUrl)) {
       if (ImageUtils.getUrlHash(mPost.bgUrl).equals(event.getHash())) {
         mFlContent.setVisibility(VISIBLE);
 
@@ -123,14 +123,15 @@ public class FeedPostView extends BasePostView {
 
   @Subscribe
   public void onThemedColorEvent(ColorUtil.ThemedColorEvent event) {
-    if (event.getBitmap().equals(ImageUtils.getFromMemByUrl(mPost.bgUrl))) {
-      setPostTheme(event.getColor());
-      ListView parent = (ListView) getParent();
-      if (parent != null) {
-        ((BaseAdapter) parent.getAdapter()).notifyDataSetChanged();
+    if (!TextUtils.isEmpty(mPost.bgUrl)) {
+      if (event.getBitmap().equals(ImageUtils.getFromMemByUrl(mPost.bgUrl))) {
+        setPostTheme(event.getColor());
+        ListView parent = (ListView) getParent();
+        if (parent != null) {
+          ((BaseAdapter) parent.getAdapter()).notifyDataSetChanged();
+        }
       }
     }
-
   }
 
   @Override
@@ -169,19 +170,29 @@ public class FeedPostView extends BasePostView {
 
   public void setData(int factoryId, Post post) {
     mFactoryId = factoryId;
+
+    if (mPost != null && mPost.equals(post)) {
+      return;
+    }
+
     mPost = post;
 
     if (mPost == null) {
       return;
     }
 
-    if (mPost.bgUrl == null) {
+    if (TextUtils.isEmpty(mPost.bgUrl)) {
       setPostTheme(ColorUtil.strToColor(mPost.bgColor));
     } else {
-      mTvComment.setTextColor(Color.TRANSPARENT);
-      mTvPraise.setTextColor(Color.TRANSPARENT);
-      mTvContent.setTextColor(Color.TRANSPARENT);
-      mTvSource.setTextColor(Color.TRANSPARENT);
+      Bitmap fromMemByUrl = ImageUtils.getFromMemByUrl(mPost.bgUrl);
+      if (fromMemByUrl != null) {
+        ColorUtil.asyncThemedColor(fromMemByUrl);
+      } else {
+        mTvComment.setTextColor(Color.TRANSPARENT);
+        mTvPraise.setTextColor(Color.TRANSPARENT);
+        mTvContent.setTextColor(Color.TRANSPARENT);
+        mTvSource.setTextColor(Color.TRANSPARENT);
+      }
     }
 
     String content = post.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content;

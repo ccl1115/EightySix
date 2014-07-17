@@ -10,8 +10,10 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -82,14 +84,14 @@ public class PostPostView extends BasePostView {
 
     LayoutInflater.from(context).inflate(R.layout.item_post_post, this);
     ButterKnife.inject(this, this);
+
+    U.getBus().register(this);
   }
 
   @Subscribe
   public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
     if (mPost.bgUrl != null) {
       if (ImageUtils.getUrlHash(mPost.bgUrl).equals(event.getHash())) {
-        mAivBg.setVisibility(VISIBLE);
-
         ColorUtil.asyncThemedColor(event.getBitmap());
       }
     }
@@ -97,37 +99,47 @@ public class PostPostView extends BasePostView {
 
   @Subscribe
   public void onThemedColorEvent(ColorUtil.ThemedColorEvent event) {
-    if (event.getBitmap().equals(ImageUtils.getFromMemByUrl(mPost.bgUrl))) {
-      setPostTheme(event.getColor());
-      ListView parent = (ListView) getParent();
-      if (parent != null) {
-        ((BaseAdapter) parent.getAdapter()).notifyDataSetChanged();
+    if (!TextUtils.isEmpty(mPost.bgUrl)) {
+      if (event.getBitmap().equals(ImageUtils.getFromMemByUrl(mPost.bgUrl))) {
+        setPostTheme(event.getColor());
+        ListView parent = (ListView) getParent();
+        if (parent != null) {
+          ((BaseAdapter) parent.getAdapter()).notifyDataSetChanged();
+        }
       }
     }
   }
 
   public void setData(Post post) {
-    mPost = post;
-
-    if (mPost == null) {
-      clear();
+    if (mPost != null && mPost.equals(post)) {
       return;
     }
 
-    if (mPost.bgUrl == null) {
+    mPost = post;
+
+    if (mPost == null) {
+      return;
+    }
+
+    if (TextUtils.isEmpty(mPost.bgUrl)) {
       setPostTheme(ColorUtil.strToColor(mPost.bgColor));
     } else {
-      mTvComment.setTextColor(Color.TRANSPARENT);
-      mTvPraise.setTextColor(Color.TRANSPARENT);
-      mTvContent.setTextColor(Color.TRANSPARENT);
-      mTvSource.setTextColor(Color.TRANSPARENT);
+      Bitmap fromMemByUrl = ImageUtils.getFromMemByUrl(mPost.bgUrl);
+      if (fromMemByUrl != null) {
+        ColorUtil.asyncThemedColor(fromMemByUrl);
+      } else {
+        mTvComment.setTextColor(Color.TRANSPARENT);
+        mTvPraise.setTextColor(Color.TRANSPARENT);
+        mTvContent.setTextColor(Color.TRANSPARENT);
+        mTvSource.setTextColor(Color.TRANSPARENT);
+      }
     }
 
     mIvClose.setImageResource(mCloseRes);
     mIvMore.setImageResource(mMoreRes);
 
     mTvContent.setText(mPost.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content);
-    if (post.comments > 0) {
+    if (mPost.comments > 0) {
       mTvComment.setText(String.valueOf(post.comments));
     } else {
       mTvComment.setText("");
@@ -143,6 +155,7 @@ public class PostPostView extends BasePostView {
       mTvContent.setBackgroundColor(ColorUtil.strToColor(mPost.bgColor));
     }
 
+    mTvComment.setCompoundDrawablesWithIntrinsicBounds(mCommentRes, 0, 0, 0);
 
     if (mPost.praised == 1) {
       mTvPraise.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_red_pressed, 0, 0, 0);
@@ -185,7 +198,6 @@ public class PostPostView extends BasePostView {
                 }
               }
             }).create().show();
-
   }
 
   @OnClick (R.id.tv_praise)
@@ -222,11 +234,11 @@ public class PostPostView extends BasePostView {
     super.setPostTheme(color);
 
     if (mMonoColor == Color.WHITE) {
-      mCloseRes = R.drawable.ic_black_action_post_close;
-      mMoreRes = R.drawable.ic_black_action_post_more;
-    } else {
       mCloseRes = R.drawable.ic_action_post_close;
       mMoreRes = R.drawable.ic_action_post_more;
+    } else {
+      mCloseRes = R.drawable.ic_black_action_post_close;
+      mMoreRes = R.drawable.ic_black_action_post_more;
     }
 
     mTvComment.setTextColor(mMonoColor);
@@ -241,13 +253,10 @@ public class PostPostView extends BasePostView {
     super.onMeasure(widthMeasureSpec, widthSize + MeasureSpec.EXACTLY);
   }
 
-  private void clear() {
-    mTvContent.setText("");
-    mTvComment.setBackgroundColor(Color.WHITE);
-    mTvComment.setText("");
-    mTvPraise.setText("");
-    mTvSource.setText("");
+
+  @Override
+  protected void finalize() throws Throwable {
+    super.finalize();
+    U.getBus().unregister(this);
   }
-
-
 }
