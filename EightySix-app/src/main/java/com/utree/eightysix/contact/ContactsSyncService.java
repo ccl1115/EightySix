@@ -16,8 +16,10 @@ import com.jakewharton.disklrucache.DiskLruCache;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.U;
 import com.utree.eightysix.request.ImportContactsRequest;
+import com.utree.eightysix.rest.ContactsSyncResponse;
 import com.utree.eightysix.rest.HandlerWrapper;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.RequestData;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
@@ -78,7 +80,7 @@ public class ContactsSyncService extends IntentService {
         mHandler.post(new Runnable() {
           @Override
           public void run() {
-            U.getBus().post(new ContactsSyncEvent(false));
+            U.getBus().post(new ContactsSyncEvent(false, 0));
           }
         });
         return;
@@ -113,24 +115,25 @@ public class ContactsSyncService extends IntentService {
       public void run() {
         final ImportContactsRequest request = new ImportContactsRequest();
         RequestData data = U.getRESTRequester().convert(request);
-        for (int i = 0; i < contacts.size(); i++) {
-          Contact contact = contacts.get(i);
-          data.getParams().add(String.format("c[%d].name", i), contact.name);
-          data.getParams().add(String.format("c[%d].phone", i), contact.phone);
+        StringBuilder builder = new StringBuilder();
+        for (Contact contact : contacts) {
+          builder.append(contact.phone).append("___").append(contact.name).append(";;;");
         }
 
-        U.getRESTRequester().request(data, new HandlerWrapper<Response>(data, new OnResponse<Response>() {
+        data.getParams().add("contacts", builder.toString());
+
+        U.getRESTRequester().request(data, new HandlerWrapper<ContactsSyncResponse>(data, new OnResponse<ContactsSyncResponse>() {
           @Override
-          public void onResponse(Response response) {
-            if (response != null && response.code == 0) {
+          public void onResponse(ContactsSyncResponse response) {
+            if (RESTRequester.responseOk(response)) {
               Env.setTimestamp(TIMESTAMP_KEY);
-              U.getBus().post(new ContactsSyncEvent(true));
+              U.getBus().post(new ContactsSyncEvent(true, response.object.friendCount));
             } else {
               cacheContacts(new ArrayList<Contact>());
-              U.getBus().post(new ContactsSyncEvent(false));
+              U.getBus().post(new ContactsSyncEvent(false, 0));
             }
           }
-        }, Response.class));
+        }, ContactsSyncResponse.class));
       }
     });
   }

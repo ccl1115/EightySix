@@ -201,8 +201,13 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     if (mCallback != null) mCallback.onActionSearchClicked(mEtSearch.getText());
   }
 
-  @OnTextChanged (R.id.tb_rb_search)
-  public void onRbSearchTextChanged(CharSequence cs) {
+  @OnTextChanged (R.id.tb_et_search)
+  public void onEtSearchTextChanged(CharSequence cs) {
+    if (cs.length() == 0) {
+      mIvSearchClose.setVisibility(INVISIBLE);
+    } else {
+      mIvSearchClose.setVisibility(VISIBLE);
+    }
     if (mCallback != null) mCallback.onSearchTextChanged(cs);
   }
 

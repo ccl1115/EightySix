@@ -33,6 +33,7 @@ import com.utree.eightysix.request.MyCirclesRequest;
 import com.utree.eightysix.request.SelectCirclesRequest;
 import com.utree.eightysix.response.CirclesResponse;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.AdvancedListView;
@@ -341,10 +342,10 @@ public class BaseCirclesActivity extends BaseActivity {
   private void requestCircles(final int page) {
     mRequestStarted = true;
     if (mLocatingFinished) {
-      request(mMode == MODE_MY ? new MyCirclesRequest("", page) : new SelectCirclesRequest("", page), new OnResponse<CirclesResponse>() {
+      request(mMode == MODE_MY ? new MyCirclesRequest("", page) : new SelectCirclesRequest("", page), new OnResponse2<CirclesResponse>() {
         @Override
         public void onResponse(CirclesResponse response) {
-          if (response != null && response.code == 0) {
+          if (RESTRequester.responseOk(response)) {
             if (page == 1) {
               mCircleListAdapter = new CircleListAdapter(response.object.lists);
               mLvCircles.setAdapter(mCircleListAdapter);
@@ -365,7 +366,15 @@ public class BaseCirclesActivity extends BaseActivity {
           }
           mLvCircles.stopLoadMore();
           hideProgressBar();
-          if (mRefreshed) mRefresherView.hideHeader();
+          mRefresherView.hideHeader();
+        }
+
+        @Override
+        public void onResponseError(Throwable e) {
+          mLvCircles.stopLoadMore();
+          hideProgressBar();
+          mRefresherView.hideHeader();
+          mRstvEmpty.setVisibility(View.VISIBLE);
         }
       }, CirclesResponse.class);
     }
