@@ -28,7 +28,11 @@ public class PraiseMsgItemView extends BaseMsgItemView {
     super.setLeftData(left);
 
     if (left != null) {
-      mTvCountLeft.setText(String.valueOf(left.praise));
+      if (left.praise == 0) {
+        mTvCountLeft.setText("");
+      } else {
+        mTvCountLeft.setText(String.valueOf(left.praise));
+      }
     }
   }
 
@@ -37,7 +41,11 @@ public class PraiseMsgItemView extends BaseMsgItemView {
     super.setRightData(right);
 
     if (right != null) {
-      mTvCountRight.setText(String.valueOf(right.praise));
+      if (right.praise == 0) {
+        mTvCountRight.setText("");
+      } else {
+        mTvCountRight.setText(String.valueOf(right.praise));
+      }
     }
   }
 
