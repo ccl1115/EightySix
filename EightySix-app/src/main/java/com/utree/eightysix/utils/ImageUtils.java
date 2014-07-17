@@ -39,7 +39,7 @@ public class ImageUtils {
     protected int sizeOf(String key, Bitmap value) {
       if (value != null) {
         int sizeOf = value.getRowBytes() * value.getHeight();
-        Log.d(TAG, String.format("m: %d s: %d a: %d i: %f", maxSize(), size() / 1024, sizeOf / 1024, sizeOf / (float) maxSize()));
+        Log.d(TAG, String.format("m: %d s: %d a: %d i: %f", maxSize() / 1024, size() / 1024, sizeOf / 1024, sizeOf / (float) maxSize()));
         return sizeOf;
       } else {
         return 0;

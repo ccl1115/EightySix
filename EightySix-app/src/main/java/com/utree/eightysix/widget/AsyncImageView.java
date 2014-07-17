@@ -50,8 +50,9 @@ public class AsyncImageView extends ImageView {
     if (url.equals(mUrl)) return;
 
     mUrl = url;
-
     mUrlHash = MD5Util.getMD5String(url.getBytes()).toLowerCase();
+
+    setImageBitmap(null);
 
     ImageUtils.asyncLoad(url, mUrlHash);
   }
