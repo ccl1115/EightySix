@@ -72,6 +72,8 @@ public class BaseMsgItemView extends LinearLayout {
     super(context, attrs);
     inflate(context, R.layout.item_msg, this);
     U.viewBinding(this, this);
+
+    U.getBus().register(this);
   }
 
   public void setData(Post[] posts) {
@@ -133,5 +135,11 @@ public class BaseMsgItemView extends LinearLayout {
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
     final int widthSize = widthMeasureSpec & ~(0x3 << 30);
     super.onMeasure(widthMeasureSpec, (widthSize >> 1) + MeasureSpec.EXACTLY);
+  }
+
+  @Override
+  protected void finalize() throws Throwable {
+    super.finalize();
+    U.getBus().unregister(this);
   }
 }

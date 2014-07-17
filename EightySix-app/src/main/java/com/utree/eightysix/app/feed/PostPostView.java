@@ -102,19 +102,11 @@ public class PostPostView extends BasePostView {
     if (!TextUtils.isEmpty(mPost.bgUrl)) {
       if (event.getBitmap().equals(ImageUtils.getFromMemByUrl(mPost.bgUrl))) {
         setPostTheme(event.getColor());
-        ListView parent = (ListView) getParent();
-        if (parent != null) {
-          ((BaseAdapter) parent.getAdapter()).notifyDataSetChanged();
-        }
       }
     }
   }
 
   public void setData(Post post) {
-    if (mPost != null && mPost.equals(post)) {
-      return;
-    }
-
     mPost = post;
 
     if (mPost == null) {
@@ -135,8 +127,6 @@ public class PostPostView extends BasePostView {
       }
     }
 
-    mIvClose.setImageResource(mCloseRes);
-    mIvMore.setImageResource(mMoreRes);
 
     mTvContent.setText(mPost.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content);
     if (mPost.comments > 0) {
@@ -245,6 +235,20 @@ public class PostPostView extends BasePostView {
     mTvContent.setTextColor(mMonoColor);
     mTvPraise.setTextColor(mMonoColor);
     mTvSource.setTextColor(mMonoColor);
+
+    if (mPost.praised == 1) {
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_red_pressed, 0, 0, 0);
+    } else if (mPost.praise > 0) {
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartRes, 0, 0, 0);
+    } else {
+      mTvPraise.setText("");
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartOutlineRes, 0, 0, 0);
+    }
+
+    mTvComment.setCompoundDrawablesWithIntrinsicBounds(mCommentRes, 0, 0, 0);
+
+    mIvClose.setImageResource(mCloseRes);
+    mIvMore.setImageResource(mMoreRes);
   }
 
   @Override

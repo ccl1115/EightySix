@@ -126,10 +126,6 @@ public class FeedPostView extends BasePostView {
     if (!TextUtils.isEmpty(mPost.bgUrl)) {
       if (event.getBitmap().equals(ImageUtils.getFromMemByUrl(mPost.bgUrl))) {
         setPostTheme(event.getColor());
-        ListView parent = (ListView) getParent();
-        if (parent != null) {
-          ((BaseAdapter) parent.getAdapter()).notifyDataSetChanged();
-        }
       }
     }
   }
@@ -142,6 +138,19 @@ public class FeedPostView extends BasePostView {
     mTvContent.setTextColor(mMonoColor);
     mTvPraise.setTextColor(mMonoColor);
     mTvSource.setTextColor(mMonoColor);
+
+    if (mPost.praised == 1) {
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_red_pressed, 0, 0, 0);
+    } else if (mPost.praise > 0) {
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartRes, 0, 0, 0);
+    } else {
+      mTvPraise.setText("");
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartOutlineRes, 0, 0, 0);
+    }
+
+    mTvComment.setCompoundDrawablesWithIntrinsicBounds(mCommentRes, 0, 0, 0);
+
+    invalidate();
   }
 
   public ImageView getIvShare() {
@@ -170,10 +179,6 @@ public class FeedPostView extends BasePostView {
 
   public void setData(int factoryId, Post post) {
     mFactoryId = factoryId;
-
-    if (mPost != null && mPost.equals(post)) {
-      return;
-    }
 
     mPost = post;
 
@@ -226,9 +231,9 @@ public class FeedPostView extends BasePostView {
       mAivBg.setUrl(null);
     }
 
-    if (post.praised == 1) {
+    if (mPost.praised == 1) {
       mTvPraise.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_red_pressed, 0, 0, 0);
-    } else if (post.praise > 0) {
+    } else if (mPost.praise > 0) {
       mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartRes, 0, 0, 0);
     } else {
       mTvPraise.setText("");
