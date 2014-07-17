@@ -116,11 +116,13 @@ public class CircleSearchActivity extends BaseActivity {
   }
 
   @OnItemLongClick(R.id.lv_result)
-  public void onLvResultItemLongClicked(int position) {
+  public boolean onLvResultItemLongClicked(int position) {
     final Circle circle = mResultAdapter.getItem(position);
     if (circle != null) {
       showCircleSetDialog(circle);
+      return true;
     }
+    return false;
   }
 
   @Override
