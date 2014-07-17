@@ -1,6 +1,7 @@
 package com.utree.eightysix.app.account;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -47,6 +48,12 @@ public class ContactsActivity extends BaseActivity {
 
   private ContactsAdapter mContactsAdapter;
 
+  public static void start(Context context, String textToShare) {
+    Intent intent = new Intent(context, ContactsActivity.class);
+    intent.putExtra("textToShare", textToShare);
+    context.startActivity(intent);
+  }
+
   @Subscribe
   public void onContactCheckedChanged(ContactCheckedCountChanged changed) {
     ((TextActionButton) getTopBar().getActionView(0)).setText(String.format("完成(%d)", changed.getCount()));
@@ -80,7 +87,7 @@ public class ContactsActivity extends BaseActivity {
       @Override
       public void onClick(View view, int position) {
         for (Contact contact : mContactsAdapter.getChecked()) {
-          sendSMS(contact.phone, "来自蓝莓");
+          sendSMS(contact.phone, getIntent().getStringExtra("textToShare"));
         }
         finish();
       }

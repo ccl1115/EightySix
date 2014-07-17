@@ -174,7 +174,7 @@ public class PostPostView extends BasePostView {
               public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                   case 0:
-                    ShareUtils.sharePostToQQ(((Activity) getContext()), mPost);
+                    ShareUtils.sharePostDialog(((Activity) getContext()), mPost);
                     break;
                   case 1:
                     U.showToast("TODO report");

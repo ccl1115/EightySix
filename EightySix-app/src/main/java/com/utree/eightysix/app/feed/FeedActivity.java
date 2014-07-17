@@ -550,12 +550,7 @@ public class FeedActivity extends BaseActivity {
 
   private void showInviteDialog() {
     if (mInviteDialog == null) {
-      mInviteDialog = new ThemedDialog(this);
-      mInviteDialog.setTitle("分享给厂里的朋友");
-      mInviteDialog.setCanceledOnTouchOutside(true);
-      View view = getLayoutInflater().inflate(R.layout.dialog_content_share, null);
-      mInviteDialog.setContent(view);
-      new ShareViewHolder(view);
+      mInviteDialog = ShareUtils.shareAppDialog(this, mFeedFragment.getCircle().id);
     }
     if (!mInviteDialog.isShowing()) {
       mInviteDialog.show();
@@ -639,20 +634,4 @@ public class FeedActivity extends BaseActivity {
     }
   }
 
-  @Keep
-  class ShareViewHolder {
-    ShareViewHolder(View view) {
-      ButterKnife.inject(this, view);
-    }
-
-    @OnClick (R.id.tv_sms)
-    void onTvSmsClicked() {
-      startActivity(new Intent(FeedActivity.this, ContactsActivity.class));
-    }
-
-    @OnClick (R.id.tv_qq_friends)
-    void onQQFriendsClicked() {
-      ShareUtils.shareAppToQQ(FeedActivity.this, mFeedFragment.getCircle().id);
-    }
-  }
 }

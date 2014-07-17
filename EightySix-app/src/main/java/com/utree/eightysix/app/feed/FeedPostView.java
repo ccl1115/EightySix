@@ -255,7 +255,7 @@ public class FeedPostView extends BasePostView {
 
   @OnClick (R.id.iv_share)
   public void onIvShareClicked() {
-    ShareUtils.sharePostToQQ((Activity) getContext(), mPost);
+    ShareUtils.sharePostDialog((Activity) getContext(), mPost);
   }
 
   @OnClick (R.id.tv_praise)
