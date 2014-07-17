@@ -284,7 +284,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void onClick(View view, int position) {
       if (position == 0) {
-        startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+        RegisterActivity.start(LoginActivity.this, mEtPhoneNumber.getText().toString());
       }
     }
 

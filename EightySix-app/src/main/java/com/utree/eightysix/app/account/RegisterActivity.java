@@ -1,9 +1,12 @@
 package com.utree.eightysix.app.account;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +48,12 @@ public class RegisterActivity extends BaseActivity {
   private boolean mCorrectPhoneNumber;
   private boolean mCorrectPwd;
 
+  public static void start(Context context, String number) {
+    Intent intent = new Intent(context, RegisterActivity.class);
+    intent.putExtra("phoneNumber", number);
+    context.startActivity(intent);
+  }
+
   @OnClick (R.id.btn_register)
   public void onBtnRegisterClicked() {
     requestRegister();
@@ -60,6 +69,15 @@ public class RegisterActivity extends BaseActivity {
     setContentView(R.layout.activity_register);
 
     setTopTitle(getString(R.string.register) + getString(R.string.app_name));
+
+    String phoneNumber = getIntent().getStringExtra("phoneNumber");
+
+    if (TextUtils.isEmpty(phoneNumber)) {
+      TelephonyManager manager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+      mEtPhoneNumber.setText(manager.getLine1Number());
+    } else {
+      mEtPhoneNumber.setText(phoneNumber);
+    }
 
     mRbImportContact.setVisibility(U.useFixture() ? View.VISIBLE : View.GONE);
 
