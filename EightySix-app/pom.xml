@@ -167,24 +167,6 @@
         </profile>
 
         <profile>
-            <id>debug</id>
-
-            <dependencies>
-                <dependency>
-                    <groupId>com.utree.eightysix</groupId>
-                    <artifactId>EightySix-fixture</artifactId>
-                    <version>1.0-SNAPSHOT</version>
-                    <exclusions>
-                        <exclusion>
-                            <groupId>com.utree.eightysix</groupId>
-                            <artifactId>EightySix-data</artifactId>
-                        </exclusion>
-                    </exclusions>
-                </dependency>
-            </dependencies>
-        </profile>
-
-        <profile>
             <id>test</id>
 
 
