@@ -23,7 +23,6 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.PostDeleteRequest;
-import com.utree.eightysix.share.ShareManager;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.widget.AsyncImageView;

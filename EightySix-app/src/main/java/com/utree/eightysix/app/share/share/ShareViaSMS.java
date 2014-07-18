@@ -1,7 +1,6 @@
-package com.utree.eightysix.share;
+package com.utree.eightysix.app.share.share;
 
 import android.app.Activity;
-import android.provider.ContactsContract;
 import com.utree.eightysix.app.account.ContactsActivity;
 import com.utree.eightysix.data.Post;
 

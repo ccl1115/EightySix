@@ -43,7 +43,6 @@ import com.utree.eightysix.event.NewCommentCountEvent;
 import com.utree.eightysix.request.CircleSideRequest;
 import com.utree.eightysix.response.CirclesResponse;
 import com.utree.eightysix.rest.OnResponse;
-import com.utree.eightysix.share.ShareManager;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.RoundedButton;

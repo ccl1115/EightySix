@@ -1,4 +1,4 @@
-package com.utree.eightysix.share;
+package com.utree.eightysix.app.share.share;
 
 import android.app.Activity;
 import android.view.View;
@@ -6,7 +6,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.annotations.Keep;
-import com.utree.eightysix.app.account.ContactsActivity;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.widget.ThemedDialog;
 

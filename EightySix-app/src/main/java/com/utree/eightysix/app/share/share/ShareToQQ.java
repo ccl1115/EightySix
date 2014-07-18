@@ -1,4 +1,4 @@
-package com.utree.eightysix.share;
+package com.utree.eightysix.app.share.share;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -7,7 +7,6 @@ import com.tencent.connect.share.QQShare;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
-import com.utree.eightysix.Account;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
