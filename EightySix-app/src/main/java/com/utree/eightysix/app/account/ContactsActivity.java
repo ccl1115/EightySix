@@ -56,7 +56,14 @@ public class ContactsActivity extends BaseActivity {
 
   @Subscribe
   public void onContactCheckedChanged(ContactCheckedCountChanged changed) {
-    ((TextActionButton) getTopBar().getActionView(0)).setText(String.format("完成(%d)", changed.getCount()));
+    TextActionButton actionView = (TextActionButton) getTopBar().getActionView(0);
+    if (changed.getCount() == 0) {
+      actionView.setEnabled(false);
+      actionView.setText("完成");
+    } else {
+      actionView.setEnabled(true);
+      actionView.setText(String.format("完成(%d)", changed.getCount()));
+    }
   }
 
   @Override
@@ -105,6 +112,8 @@ public class ContactsActivity extends BaseActivity {
             ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
       }
     });
+
+    getTopBar().getActionView(0).setEnabled(false);
 
     ContactsSyncService.start(this, true);
   }

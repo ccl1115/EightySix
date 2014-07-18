@@ -44,16 +44,6 @@ public class ContactsAdapter extends BaseAdapter {
     return ret;
   }
 
-  public int getCheckedCount() {
-    int ret = 0;
-    for (int i = 0, size = mContacts.size(); i < size; i++) {
-      if (mChecked.get(i)) {
-        ret++;
-      }
-    }
-    return ret;
-  }
-
   public void add(List<Contact> contacts) {
     if (mContacts == null) {
       mContacts = contacts;
@@ -120,6 +110,10 @@ public class ContactsAdapter extends BaseAdapter {
     return 2;
   }
 
+  public int getCheckedCount() {
+    return mCheckedCount;
+  }
+
   public class ContactViewHolder {
     @InjectView (R.id.tv_name)
     public TextView mTvName;
@@ -138,9 +132,16 @@ public class ContactsAdapter extends BaseAdapter {
 
     @OnCheckedChanged (R.id.cb_check)
     public void onCbCheckChecked(boolean c) {
+      if (mChecked.get(mPosition) != c) {
+        if (c) {
+          mCheckedCount++;
+        } else {
+          mCheckedCount--;
+        }
+        U.getBus().post(new ContactsActivity.ContactCheckedCountChanged(mCheckedCount));
+      }
+
       mChecked.put(mPosition, c);
-      mCheckedCount = c ? mCheckedCount + 1 : mCheckedCount - 1;
-      U.getBus().post(new ContactsActivity.ContactCheckedCountChanged(mCheckedCount));
     }
   }
 
