@@ -174,7 +174,7 @@ public class RegisterActivity extends BaseActivity {
     } else {
       mEtPhoneNumber.setText(phoneNumber);
     }
-
+    mEtPhoneNumber.setSelection(mEtPhoneNumber.getText().length());
   }
 
   @Override

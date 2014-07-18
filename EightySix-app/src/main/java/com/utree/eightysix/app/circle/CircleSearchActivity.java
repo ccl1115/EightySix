@@ -32,6 +32,7 @@ import com.utree.eightysix.request.CircleSetRequest;
 import com.utree.eightysix.request.SearchCircleRequest;
 import com.utree.eightysix.response.CirclesResponse;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.AdvancedListView;
@@ -40,6 +41,7 @@ import com.utree.eightysix.widget.RandomSceneTextView;
 import com.utree.eightysix.widget.RoundedButton;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -100,6 +102,18 @@ public class CircleSearchActivity extends BaseActivity {
     getTopBar().getSearchEditText().setText(keyword);
     mLastKeyword = keyword;
     requestSearch(1, keyword);
+
+    //region load history keyword
+    for (Iterator<String> iterator = mSearchHistory.iterator(); iterator.hasNext(); ) {
+      String k = iterator.next();
+      if (k.equals(keyword)) {
+        iterator.remove();
+      }
+    }
+    mSearchHistory.add(0, keyword);
+    Account.inst().setSearchHistory(mSearchHistory);
+    //updateHistoryData();
+    //endregion
   }
 
   @OnItemClick (R.id.lv_result)
@@ -144,9 +158,10 @@ public class CircleSearchActivity extends BaseActivity {
     requestSearch(1, keyword);
 
     //region load history keyword
-    for (String k : mSearchHistory) {
+    for (Iterator<String> iterator = mSearchHistory.iterator(); iterator.hasNext(); ) {
+      String k = iterator.next();
       if (k.equals(keyword)) {
-        return;
+        iterator.remove();
       }
     }
     mSearchHistory.add(0, keyword);
@@ -297,6 +312,7 @@ public class CircleSearchActivity extends BaseActivity {
             mTvEmptyText.setText(String.format(getString(R.string.no_search_result), keyword));
           }
           hideProgressBar();
+          updateHistoryData();
         }
       }, CirclesResponse.class);
     }
