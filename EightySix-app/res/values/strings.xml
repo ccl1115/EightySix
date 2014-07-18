@@ -33,6 +33,7 @@
     <string name="login">登录</string>
     <string name="logout">退出</string>
     <string name="search">搜索</string>
+    <string name="pull_to_refresh">下拉刷新</string>
 
     <string name="server_error">服务器错误</string>
     <string name="server_object_error">服务器返回对象解析错误</string>
@@ -158,7 +159,7 @@
     <string name="invite_people_info">邀请好友进入（需要3个朋友加入，才可以开通）</string>
     <string name="circle_name_length_long">工友圈名字太长</string>
     <string name="circle_short_name_length_long">工友圈短名称太长</string>
-    <string name="pull_to_refresh">下拉刷新</string>
+    <string name="success_created">提交成功，若审核通过，我们会及时通知，请耐心等候</string>
 
     <!-- FeedActivity -->
     <string name="select_circle">选择工友圈</string>
@@ -173,7 +174,6 @@
     <string name="anonymously_comment">匿名发表评论</string>
     <string name="comment_action">评论操作</string>
     <string name="post_action">帖子操作</string>
-    <string name="success_created">创建成功</string>
 
     <!-- FeedbackActivity -->
     <string name="give_us_feedback">向我们提出建议</string>

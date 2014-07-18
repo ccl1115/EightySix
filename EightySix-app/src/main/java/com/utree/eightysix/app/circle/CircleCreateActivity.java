@@ -57,15 +57,7 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
   @InjectView (R.id.rb_create)
   public RoundedButton mRbCreate;
 
-  @InjectView (R.id.ctv_invite)
-  public CheckedTextView mCtvInvite;
-
   private boolean mRequesting;
-
-  @OnClick (R.id.ctv_invite)
-  public void onCtvInviteClicked() {
-    mCtvInvite.setChecked(!mCtvInvite.isChecked());
-  }
 
   @OnTextChanged (R.id.et_circle_name)
   public void onEtCircleNameTextChanged(CharSequence t) {
@@ -177,7 +169,6 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
 
           @Override
           public void onFailure(Throwable e, File response) {
-            if (BuildConfig.DEBUG) Log.d("", e.getMessage());
             mRequesting = false;
             if (response != null) response.delete();
           }
