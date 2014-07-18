@@ -1,4 +1,4 @@
-package com.utree.eightysix.app.share.share;
+package com.utree.eightysix.app.share;
 
 import android.app.Activity;
 import android.view.View;

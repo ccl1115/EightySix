@@ -1,4 +1,4 @@
-package com.utree.eightysix.app.report;
+package com.utree.eightysix.app.feed;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -15,7 +15,7 @@ import com.utree.eightysix.widget.ThemedDialog;
 /**
  * @author simon
  */
-public class ReportDialog extends ThemedDialog {
+class ReportDialog extends ThemedDialog {
 
   private String mPostId;
   private String mCommentId;

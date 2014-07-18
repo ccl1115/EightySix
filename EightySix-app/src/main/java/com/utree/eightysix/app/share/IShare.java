@@ -1,4 +1,4 @@
-package com.utree.eightysix.app.share.share;
+package com.utree.eightysix.app.share;
 
 import android.app.Activity;
 import com.utree.eightysix.Account;
@@ -8,7 +8,7 @@ import com.utree.eightysix.data.Post;
 /**
  * @author simon
  */
-public abstract class IShare {
+abstract class IShare {
   public abstract void shareApp(Activity activity, int circleId);
 
   public abstract void sharePost(Activity activity, Post post);

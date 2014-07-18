@@ -20,7 +20,7 @@ import com.utree.eightysix.location.Location;
 import com.utree.eightysix.push.PushHelper;
 import com.utree.eightysix.push.PushHelperImpl;
 import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.app.share.share.ShareManager;
+import com.utree.eightysix.app.share.ShareManager;
 import com.utree.eightysix.statistics.Analyser;
 import com.utree.eightysix.statistics.MtaAnalyserImpl;
 import com.utree.eightysix.storage.Storage;

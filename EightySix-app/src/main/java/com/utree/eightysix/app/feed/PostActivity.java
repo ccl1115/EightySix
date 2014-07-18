@@ -30,7 +30,6 @@ import com.utree.eightysix.app.OverlayTipUtil;
 import com.utree.eightysix.app.feed.event.PostCommentPraiseEvent;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
-import com.utree.eightysix.app.report.ReportDialog;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.CommentPraiseCancelRequest;
