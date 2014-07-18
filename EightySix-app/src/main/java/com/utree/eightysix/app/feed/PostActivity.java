@@ -137,7 +137,7 @@ public class PostActivity extends BaseActivity {
                     mPostCommentsAdapter.notifyDataSetChanged();
                     break;
                   case 1:
-                    U.getShareManager().sharePostDialog(PostActivity.this, mPost);
+                    U.getShareManager().shareCommentDialog(PostActivity.this, mPost, comment.id);
                     break;
                   case 2:
                     new ReportDialog(PostActivity.this, mPostId, comment.id).show();

@@ -166,7 +166,7 @@ public class PostPostView extends BasePostView {
               public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                   case 0:
-                    U.getShareManager().sharePostDialog(((Activity) getContext()), mPost);
+                    U.getShareManager().sharePostDialog(((Activity) getContext()), mPost).show();
                     break;
                   case 1:
                     new ReportDialog(getContext(), mPost.id).show();

@@ -18,107 +18,110 @@ public class ShareManager {
   private IShare mShareToQQ = new ShareToQQ();
   private IShare mShareViaSMS = new ShareViaSMS();
 
-  public ThemedDialog shareAppDialog(final Activity activity, int factoryId) {
-    ThemedDialog dialog;
-    dialog = new ThemedDialog(activity);
-    dialog.setTitle("分享给厂里的朋友");
-    dialog.setCanceledOnTouchOutside(true);
-    View view = activity.getLayoutInflater().inflate(R.layout.dialog_content_share, null, false);
-    dialog.setContent(view);
-    new ShareAppViewHolder(activity, view, factoryId);
-    dialog.show();
-    return dialog;
+  public ThemedDialog shareAppDialog(final Activity activity, final int factoryId) {
+    return new ShareDialog(activity) {
+      @Override
+      protected Object getViewHolder(ShareDialog dialog) {
+        return new ShareAppViewHolder(activity, dialog, factoryId);
+      }
+    };
   }
 
-  public ThemedDialog sharePostDialog(final Activity activity, Post post) {
-    ThemedDialog dialog;
-    dialog = new ThemedDialog(activity);
-    dialog.setTitle("分享给厂里的朋友");
-    dialog.setCanceledOnTouchOutside(true);
-    View view = activity.getLayoutInflater().inflate(R.layout.dialog_content_share, null, false);
-    dialog.setContent(view);
-    new SharePostViewHolder(activity, view, post);
-    dialog.show();
-    return dialog;
+  public ThemedDialog sharePostDialog(final Activity activity, final Post post) {
+    return new ShareDialog(activity) {
+      @Override
+      protected Object getViewHolder(ShareDialog dialog) {
+        return new SharePostViewHolder(activity, dialog, post);
+      }
+    };
   }
 
-  public ThemedDialog shareCommentDialog(final Activity activity, Post post, String comment) {
-    ThemedDialog dialog;
-    dialog = new ThemedDialog(activity);
-    dialog.setTitle("分享给厂里的朋友");
-    dialog.setCanceledOnTouchOutside(true);
-    View view = activity.getLayoutInflater().inflate(R.layout.dialog_content_share, null, false);
-    dialog.setContent(view);
-    new ShareCommentViewHolder(activity, view, post, comment);
-    dialog.show();
-    return dialog;
+  public ThemedDialog shareCommentDialog(final Activity activity, final Post post, final String comment) {
+    return new ShareDialog(activity) {
+      @Override
+      protected Object getViewHolder(ShareDialog dialog) {
+        return new ShareCommentViewHolder(activity, dialog, post, comment);
+      }
+    };
   }
 
   @Keep
   public class ShareCommentViewHolder {
     private Activity mActivity;
+    private ShareDialog mDialog;
     private Post mPost;
     private String mComment;
 
-    ShareCommentViewHolder(Activity activity, View view, Post post, String comment) {
+    ShareCommentViewHolder(Activity activity, ShareDialog dialog, Post post, String comment) {
       mActivity = activity;
+      mDialog = dialog;
       mPost = post;
       mComment = comment;
-      ButterKnife.inject(this, view);
+      ButterKnife.inject(this, dialog);
     }
 
     @OnClick (R.id.tv_sms)
     void onTvSmsClicked() {
       mShareViaSMS.shareComment(mActivity, mPost, mComment);
+      mDialog.dismiss();
     }
 
     @OnClick (R.id.tv_qq_friends)
     void onQQFriendsClicked() {
       mShareToQQ.shareComment(mActivity, mPost, mComment);
+      mDialog.dismiss();
     }
   }
 
   @Keep
   public class SharePostViewHolder {
     private Activity mActivity;
+    private ShareDialog mDialog;
     private Post mPost;
 
-    SharePostViewHolder(Activity activity, View view, Post post) {
+    SharePostViewHolder(Activity activity, ShareDialog dialog, Post post) {
       mActivity = activity;
+      mDialog = dialog;
       mPost = post;
-      ButterKnife.inject(this, view);
+      ButterKnife.inject(this, dialog);
     }
 
     @OnClick (R.id.tv_sms)
     void onTvSmsClicked() {
       mShareViaSMS.sharePost(mActivity, mPost);
+      mDialog.dismiss();
     }
 
     @OnClick (R.id.tv_qq_friends)
     void onQQFriendsClicked() {
       mShareToQQ.sharePost(mActivity, mPost);
+      mDialog.dismiss();
     }
   }
 
   @Keep
   public class ShareAppViewHolder {
     private Activity mActivity;
+    private ShareDialog mDialog;
     private int mFactoryId;
 
-    ShareAppViewHolder(Activity activity, View view, int factoryId) {
+    ShareAppViewHolder(Activity activity, ShareDialog dialog, int factoryId) {
       mActivity = activity;
+      mDialog = dialog;
       mFactoryId = factoryId;
-      ButterKnife.inject(this, view);
+      ButterKnife.inject(this, dialog);
     }
 
     @OnClick (R.id.tv_sms)
     void onTvSmsClicked() {
       mShareViaSMS.shareApp(mActivity, mFactoryId);
+      mDialog.dismiss();
     }
 
     @OnClick (R.id.tv_qq_friends)
     void onQQFriendsClicked() {
       mShareToQQ.shareApp(mActivity, mFactoryId);
+      mDialog.dismiss();
     }
   }
 }
