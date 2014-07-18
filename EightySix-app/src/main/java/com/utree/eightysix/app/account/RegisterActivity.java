@@ -70,15 +70,6 @@ public class RegisterActivity extends BaseActivity {
 
     setTopTitle(getString(R.string.register) + getString(R.string.app_name));
 
-    String phoneNumber = getIntent().getStringExtra("phoneNumber");
-
-    if (TextUtils.isEmpty(phoneNumber)) {
-      TelephonyManager manager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-      mEtPhoneNumber.setText(manager.getLine1Number());
-    } else {
-      mEtPhoneNumber.setText(phoneNumber);
-    }
-
     mRbImportContact.setVisibility(U.useFixture() ? View.VISIBLE : View.GONE);
 
     mEtPhoneNumber.addTextChangedListener(new TextWatcher() {
@@ -174,6 +165,16 @@ public class RegisterActivity extends BaseActivity {
         return new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
       }
     });
+
+    String phoneNumber = getIntent().getStringExtra("phoneNumber");
+
+    if (TextUtils.isEmpty(phoneNumber)) {
+      TelephonyManager manager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+      mEtPhoneNumber.setText(manager.getLine1Number());
+    } else {
+      mEtPhoneNumber.setText(phoneNumber);
+    }
+
   }
 
   @Override
