@@ -11,7 +11,6 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.utils.Env;
 import de.akquinet.android.androlog.Log;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -74,17 +73,14 @@ public class BdLocationImpl implements Location, BDLocationListener {
 
   @Override
   public void onReceiveLocation(BDLocation bdLocation) {
+    final Result result;
     if (bdLocation != null) {
-      Log.d(this, "getLocTypeError: " + bdLocation.getLocType());
-      final Result result;
       mHandler.removeMessages(MSG_REQ_TIMEOUT);
-      if (bdLocation.getLocType() == BDLocation.TypeCriteriaException
-          || bdLocation.getLocType() == BDLocation.TypeNetWorkException
-          || bdLocation.getLocType() == BDLocation.TypeOffLineLocationFail
-          || bdLocation.getLocType() == BDLocation.TypeOffLineLocationNetworkFail
-          || bdLocation.getLocType() > BDLocation.TypeNetWorkLocation) {
-        result = null;
-      } else {
+      if (bdLocation.getLocType() != BDLocation.TypeCriteriaException
+          && bdLocation.getLocType() != BDLocation.TypeNetWorkException
+          && bdLocation.getLocType() != BDLocation.TypeOffLineLocationFail
+          && bdLocation.getLocType() != BDLocation.TypeOffLineLocationNetworkFail
+          && bdLocation.getLocType() <= BDLocation.TypeNetWorkLocation) {
         result = new Result();
         result.address = bdLocation.getAddrStr();
         result.city = bdLocation.getCity();
@@ -95,18 +91,22 @@ public class BdLocationImpl implements Location, BDLocationListener {
         Env.setLastLatitude(result.latitude);
         Env.setLastLongitude(result.longitude);
         Env.setLastCity(result.city);
+      } else {
+        result = null;
       }
-
-      for (OnResult onResult : mOnResults) {
-        onResult.onResult(result);
-      }
-
-      for (OnResult onResult : mTransientOnResult) {
-        onResult.onResult(result);
-      }
-
-      mTransientOnResult.clear();
+    } else {
+      result = null;
     }
+
+    for (OnResult onResult : mOnResults) {
+      onResult.onResult(result);
+    }
+
+    for (OnResult onResult : mTransientOnResult) {
+      onResult.onResult(result);
+    }
+
+    mTransientOnResult.clear();
 
     mLocationClient.stop();
   }
