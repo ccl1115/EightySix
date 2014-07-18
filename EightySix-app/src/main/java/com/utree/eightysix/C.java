@@ -26,6 +26,8 @@ public class C {
   public static final String API_LOGOUT = "/login/logout.do";
   public static final String API_VALICODE_FIND_PWD = "/login/valiCode.do";
 
+  public static final String API_USER_REPORT = "/user/report.do";
+
   public static final String API_FACTORY_MY = "/factory/my.do";
   public static final String API_FACTORY_FIND = "/factory/find.do";
   public static final String API_FACTORY_SEARCH = "/factory/search.do";
@@ -41,6 +43,7 @@ public class C {
   public static final String API_FEED_LIST = "/feed/list.do";
   public static final String API_FEED_PRAISE = "/feed/praise.do";
   public static final String API_FEED_PRAISE_CANCEL = "/feed/cancelPraise.do";
+  public static final String API_FEED_REG_HOT = "/feed/regHot.do";
 
   public static final String API_COMMENT_ADD = "/comment/add.do";
   public static final String API_COMMENT_DELETE = "/comment/delete.do";
