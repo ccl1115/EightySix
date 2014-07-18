@@ -27,6 +27,7 @@ public class TextActionButton extends ActionButton {
     mTextAction.setLayoutParams(lp);
 
     addView(mTextAction, 0);
+    mTextAction.setDuplicateParentStateEnabled(true);
   }
 
   @Override

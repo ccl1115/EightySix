@@ -27,6 +27,8 @@ public class ImageActionButton extends ActionButton {
     mImageAction.setLayoutParams(lp);
 
     addView(mImageAction, 0);
+
+    mImageAction.setDuplicateParentStateEnabled(true);
   }
 
   @Override

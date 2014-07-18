@@ -338,7 +338,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     button.setTextSize(14);
     button.setText(text);
     button.setGravity(Gravity.CENTER);
-    button.setTextColor(Color.WHITE);
+    button.setTextColor(getResources().getColor(R.color.apptheme_primary_text_light));
     button.setSingleLine(true);
     button.setLines(1);
     button.setOnClickListener(this);
