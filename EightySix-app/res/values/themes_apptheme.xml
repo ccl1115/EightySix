@@ -15,10 +15,6 @@
         -->
     </style>
 
-    <style name="AppBaseTheme.Dialog" parent="android:Theme.DeviceDefault.Light.Dialog">
-
-    </style>
-
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->

@@ -30,6 +30,7 @@ import com.utree.eightysix.app.OverlayTipUtil;
 import com.utree.eightysix.app.feed.event.PostCommentPraiseEvent;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
+import com.utree.eightysix.app.report.ReportDialog;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.CommentPraiseCancelRequest;
@@ -40,6 +41,7 @@ import com.utree.eightysix.request.PostDeleteRequest;
 import com.utree.eightysix.request.PostPraiseCancelRequest;
 import com.utree.eightysix.request.PostPraiseRequest;
 import com.utree.eightysix.request.PublishCommentRequest;
+import com.utree.eightysix.request.ReportRequest;
 import com.utree.eightysix.response.PostCommentsResponse;
 import com.utree.eightysix.response.PublishCommentResponse;
 import com.utree.eightysix.rest.OnResponse;
@@ -139,7 +141,7 @@ public class PostActivity extends BaseActivity {
                     U.getShareManager().sharePostDialog(PostActivity.this, mPost);
                     break;
                   case 2:
-                    showToast("TODO report");
+                    new ReportDialog(PostActivity.this, mPostId, comment.id).show();
                     break;
                   case 3:
                     U.getBus().post(new PostCommentDeleteRequest(mPost.id, comment.id));
@@ -369,6 +371,18 @@ public class PostActivity extends BaseActivity {
   }
 
   @Subscribe
+  public void onReportRequest(final ReportRequest reportRequest) {
+    request(reportRequest, new OnResponse<Response>() {
+      @Override
+      public void onResponse(Response response) {
+        if (RESTRequester.responseOk(response)) {
+          showToast(getString(R.string.report_succeed));
+        }
+      }
+    }, Response.class);
+  }
+
+  @Subscribe
   public void onPostDeleteRequest(PostDeleteRequest request) {
     request(request, new OnResponse<Response>() {
       @Override
@@ -431,4 +445,5 @@ public class PostActivity extends BaseActivity {
           }
         }, PublishCommentResponse.class);
   }
+
 }

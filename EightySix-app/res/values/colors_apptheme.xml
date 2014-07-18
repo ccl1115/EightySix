@@ -8,6 +8,10 @@
     <color name="apptheme_secondary_light_color_pressed">#ffa23131</color>
     <color name="apptheme_secondary_light_color_disabled">#ff505050</color>
 
+    <color name="apptheme_primary_grey_color">#ffd8d8d8</color>
+    <color name="apptheme_primary_grey_color_pressed">#ff505050</color>
+    <color name="apptheme_primary_grey_color_disabled">#ffe4e4e4</color>
+
     <color name="apptheme_primary_dark_color">#FFA2A2A2</color>
 
     <color name="apptheme_progress_bar_bg">#88000000</color>

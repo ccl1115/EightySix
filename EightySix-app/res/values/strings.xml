@@ -240,5 +240,12 @@
     <string name="overlay_tip_share">分享，可以让身边的朋友快速加入，你和他们的秘密都会被更多地倾听和回应</string>
     <string name="loading_more">正在加载更多</string>
     <string name="no_new_praise">没有新赞</string>
+    <string name="report_succeed">举报成功</string>
+    <string name="report_type_1">色情暴力</string>
+    <string name="report_type_2">违法违规</string>
+    <string name="report_type_3">垃圾广告</string>
+    <string name="report_type_4">人身攻击</string>
+    <string name="report_type_5">虚假谣言</string>
+    <string name="report_type_6">其他信息</string>
 
 </resources>

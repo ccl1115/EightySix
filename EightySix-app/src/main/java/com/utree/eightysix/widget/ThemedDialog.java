@@ -64,6 +64,9 @@ public class ThemedDialog extends Dialog {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    setCancelable(true);
+    setCanceledOnTouchOutside(true);
+
     setContentView(mBase);
   }
 
