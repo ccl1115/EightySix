@@ -177,7 +177,7 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
 
           @Override
           public void onFailure(Throwable e, File response) {
-            if (BuildConfig.DEBUG) Log.d("CircleCreateActivity", e.getMessage());
+            if (BuildConfig.DEBUG) Log.d("", e.getMessage());
             mRequesting = false;
             if (response != null) response.delete();
           }
