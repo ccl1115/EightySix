@@ -89,6 +89,8 @@ public class ContactsActivity extends BaseActivity {
         for (Contact contact : mContactsAdapter.getChecked()) {
           sendSMS(contact.phone, getIntent().getStringExtra("textToShare"));
         }
+
+        showToast(getString(R.string.share_succeed), false);
         finish();
       }
 

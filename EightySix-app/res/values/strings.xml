@@ -247,5 +247,6 @@
     <string name="report_type_4">人身攻击</string>
     <string name="report_type_5">虚假谣言</string>
     <string name="report_type_6">其他信息</string>
+    <string name="share_succeed">分享成功</string>
 
 </resources>
