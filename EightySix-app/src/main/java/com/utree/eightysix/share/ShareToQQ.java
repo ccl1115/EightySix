@@ -16,7 +16,7 @@ import com.utree.eightysix.data.Post;
 /**
  * @author simon
  */
-class ShareToQQ implements IShare {
+class ShareToQQ extends IShare {
 
   private Tencent sTencent =
       Tencent.createInstance(U.getConfig("qq.app_id"), U.getContext().getApplicationContext());
@@ -29,10 +29,9 @@ class ShareToQQ implements IShare {
   @Override
   public void shareApp(Activity activity, int circleId) {
     Bundle data = new Bundle();
-    data.putString(QQShare.SHARE_TO_QQ_TITLE, "分享蓝莓圈");
-    data.putString(QQShare.SHARE_TO_QQ_SUMMARY, "匿名的蓝领社交圈");
-    data.putString(QQShare.SHARE_TO_QQ_TARGET_URL,
-        String.format("%s/shareapp.do?userId=%s&factoryId=%d", U.getConfig("api.host"), Account.inst().getUserId(), circleId));
+    data.putString(QQShare.SHARE_TO_QQ_TITLE, shareTitleForApp());
+    data.putString(QQShare.SHARE_TO_QQ_SUMMARY, shareContentForApp());
+    data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, shareLinkForApp(circleId));
     data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
     shareToQQ(activity, data, defaultListener());
   }
@@ -40,12 +39,9 @@ class ShareToQQ implements IShare {
   @Override
   public void sharePost(Activity activity, Post post) {
     Bundle data = new Bundle();
-    // TODO 文案
-    data.putString(QQShare.SHARE_TO_QQ_TITLE, "来自蓝莓圈的帖子");
+    data.putString(QQShare.SHARE_TO_QQ_TITLE, shareTitleForPost());
     data.putString(QQShare.SHARE_TO_QQ_SUMMARY, post.content);
-    data.putString(QQShare.SHARE_TO_QQ_TARGET_URL,
-        String.format("%s/sharecontent.do?userId=%s&postVirtualId=%s",
-            U.getConfig("api.host"), Account.inst().getUserId(), post.id));
+    data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, shareLinkForPost(post.id));
     data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
     shareToQQ(activity, data, defaultListener());
   }
@@ -53,11 +49,9 @@ class ShareToQQ implements IShare {
   @Override
   public void shareComment(Activity activity, Post post, String comment) {
     Bundle data = new Bundle();
-    data.putString(QQShare.SHARE_TO_QQ_TITLE, "来自蓝莓圈的评论");
+    data.putString(QQShare.SHARE_TO_QQ_TITLE, shareTitleForComment());
     data.putString(QQShare.SHARE_TO_QQ_SUMMARY, comment);
-    data.putString(QQShare.SHARE_TO_QQ_TARGET_URL,
-        String.format("%s/sharecontent.do?userId=%s&postVirtualId=%s",
-            U.getConfig("api.host"), Account.inst().getUserId(), post.id));
+    data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, shareLinkForComment(post.id));
     data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
     shareToQQ(activity, data, defaultListener());
   }

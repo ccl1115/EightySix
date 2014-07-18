@@ -8,19 +8,19 @@ import com.utree.eightysix.data.Post;
 /**
  * @author simon
  */
-class ShareViaSMS implements IShare {
+class ShareViaSMS extends IShare {
   @Override
   public void shareApp(Activity activity, int circleId) {
-    ContactsActivity.start(activity, "to be implement");
+    ContactsActivity.start(activity, String.format("%s，%s", shareContentForApp(), shareLinkForApp(circleId)));
   }
 
   @Override
   public void sharePost(Activity activity, Post post) {
-    ContactsActivity.start(activity, "to be implement");
+    ContactsActivity.start(activity, String.format("“%s”，%s", post.content, shareLinkForPost(post.id)));
   }
 
   @Override
   public void shareComment(Activity activity, Post post, String comment) {
-    ContactsActivity.start(activity, "to be implement");
+    ContactsActivity.start(activity, String.format("“%s”，%s", comment, shareLinkForComment(post.id)));
   }
 }
