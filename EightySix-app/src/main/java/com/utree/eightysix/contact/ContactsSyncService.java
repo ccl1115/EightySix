@@ -117,6 +117,8 @@ public class ContactsSyncService extends IntentService {
         RequestData data = U.getRESTRequester().convert(request);
         StringBuilder builder = new StringBuilder();
         for (Contact contact : contacts) {
+          contact.name = contact.name.replaceAll(";;;|___", "");
+          contact.phone = contact.phone.replaceAll(";;;|___", "");
           builder.append(contact.phone).append("___").append(contact.name).append(";;;");
         }
 
