@@ -1,5 +1,6 @@
 package com.utree.eightysix.app;
 
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.U;
 import com.utree.eightysix.data.Sync;
 
@@ -14,6 +15,7 @@ public class SyncClient {
     U.getBus().register(this);
   }
 
+  @Subscribe
   public void onSyncEvent(Sync sync) {
     mSync = sync;
   }

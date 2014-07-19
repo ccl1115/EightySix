@@ -81,6 +81,9 @@ public class U {
   }
 
   public static SyncClient getSyncClient() {
+    if (sSyncClient == null) {
+      sSyncClient = new SyncClient();
+    }
     return sSyncClient;
   }
 
@@ -131,18 +134,6 @@ public class U {
       sCloudStorage = new OSSImpl();
     }
     return sCloudStorage;
-  }
-
-  public static <T> T viewBinding(View view, Class<T> holderClass) {
-    try {
-      T t = holderClass.newInstance();
-      ButterKnife.inject(holderClass, view);
-      return t;
-    } catch (InstantiationException e) {
-      return null;
-    } catch (IllegalAccessException e) {
-      return null;
-    }
   }
 
   public static void viewBinding(View view, Object target) {
