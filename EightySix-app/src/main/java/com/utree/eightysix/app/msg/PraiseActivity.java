@@ -20,6 +20,7 @@ import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.PraisesRequest;
 import com.utree.eightysix.response.MsgsResponse;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.IRefreshable;
@@ -165,7 +166,7 @@ public class PraiseActivity extends BaseActivity {
   }
 
   private void requestPraises(final int page) {
-    request(new PraisesRequest(page), new OnResponse<MsgsResponse>() {
+    request(new PraisesRequest(page), new OnResponse2<MsgsResponse>() {
       @Override
       public void onResponse(MsgsResponse response) {
         if (RESTRequester.responseOk(response)) {
@@ -211,13 +212,23 @@ public class PraiseActivity extends BaseActivity {
         mAlvMsg.stopLoadMore();
         mRvMsg.hideHeader();
       }
+
+      @Override
+      public void onResponseError(Throwable e) {
+        hideProgressBar();
+        mAlvMsg.stopLoadMore();
+        mRvMsg.hideHeader();
+        mRstvEmpty.setVisibility(View.VISIBLE);
+        mTvNoNewMsg.setVisibility(View.GONE);
+      }
+
     }, MsgsResponse.class);
 
     showProgressBar();
   }
 
   private void cacheOutPraises(final int page) {
-    cacheOut(new PraisesRequest(page), new OnResponse<MsgsResponse>() {
+    cacheOut(new PraisesRequest(page), new OnResponse2<MsgsResponse>() {
       @Override
       public void onResponse(MsgsResponse response) {
         if (RESTRequester.responseOk(response)) {
@@ -261,6 +272,16 @@ public class PraiseActivity extends BaseActivity {
           requestPraises(page);
         }
       }
+
+      @Override
+      public void onResponseError(Throwable e) {
+        hideProgressBar();
+        mAlvMsg.stopLoadMore();
+        mRvMsg.hideHeader();
+        mRstvEmpty.setVisibility(View.VISIBLE);
+        mTvNoNewMsg.setVisibility(View.GONE);
+      }
+
     }, MsgsResponse.class);
 
     showProgressBar();
