@@ -124,11 +124,11 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
       }
 
       switch (response.code & 0xf0000) {
-        case 1:
+        case 0x10000:
           // mta
           U.getReporter().reportRequestStatusCode(mRequestData, response.code);
           break;
-        case 2:
+        case 0x20000:
           // show
           if (BuildConfig.DEBUG) {
             U.showToast(String.format("%s(%h)", response.message, response.code));
@@ -136,7 +136,7 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
             U.showToast(response.message);
           }
           break;
-        case 3:
+        case 0x30000:
           // show + mta
           if (BuildConfig.DEBUG) {
             U.showToast(String.format("%s(%h)", response.message, response.code));
