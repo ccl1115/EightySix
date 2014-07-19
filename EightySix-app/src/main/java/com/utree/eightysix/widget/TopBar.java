@@ -135,7 +135,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
       ActionButton view;
       LayoutParams layoutParams = mActionAdapter.getLayoutParams(i);
       if (layoutParams == null)
-        layoutParams = new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        layoutParams = new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
       if (TextUtils.isEmpty(mActionAdapter.getTitle(i))) {
         view = buildActionItemView(mActionAdapter.getIcon(i), mActionAdapter.getBackgroundDrawable(i), layoutParams);
       } else {
@@ -230,7 +230,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     int widthLeft = widthSize;
 
     if (mCallback != null && mCallback.showActionOverflow()) {
-      mActionOverFlow.measure((int) (heightSize * 0.9f) + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
+      measureChild(mActionOverFlow, (int) (heightSize * 0.9f) + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
     }
 
     widthLeft -= mActionOverFlow.getMeasuredWidth();
@@ -260,15 +260,16 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
             switch (lp.width) {
               case LayoutParams.WRAP_CONTENT:
-                childWidthSpec = (int) (heightSize * 0.9f) + MeasureSpec.AT_MOST;
+                childWidthSpec = widthLeft + MeasureSpec.AT_MOST;
                 break;
               case LayoutParams.MATCH_PARENT:
                 childWidthSpec = (int) (heightSize * 0.9f) + MeasureSpec.EXACTLY;
                 break;
               default:
                 childWidthSpec = lp.width + MeasureSpec.EXACTLY;
+                break;
             }
-            view.measure(childWidthSpec, childHeightSpec);
+            measureChild(view, childWidthSpec, childHeightSpec);
           }
           widthLeft -= view.getMeasuredWidth();
         }
@@ -277,7 +278,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     measureChild(mRlTitle, widthLeft + MeasureSpec.AT_MOST, heightSize + MeasureSpec.EXACTLY);
 
-    mLlSearch.measure(widthSize - mIvAppIcon.getRight() + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
+    measureChild(mLlSearch, widthSize - mIvAppIcon.getRight() + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
 
 
     setMeasuredDimension(widthSize, heightSize);
@@ -307,11 +308,14 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     if (mCurCount != 0) {
       for (View child : mActionViews) {
+        MarginLayoutParams params = (MarginLayoutParams) child.getLayoutParams();
+        r -= params.rightMargin;
         r -= child.getMeasuredWidth();
         child.layout(r,
             (height - child.getMeasuredHeight()) >> 1,
             r + child.getMeasuredWidth(),
             (height + child.getMeasuredHeight()) >> 1);
+        r -= params.leftMargin;
       }
     }
   }
@@ -322,7 +326,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     final ImageActionButton imageView = new ImageActionButton(getContext());
     imageView.setImageDrawable(drawable);
     imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-    imageView.setActionLayoutParams((FrameLayout.LayoutParams) layoutParams);
+    imageView.setLayoutParams(layoutParams);
     imageView.setActionBackgroundDrawable(backgroundDrawable);
     imageView.setOnClickListener(this);
 
@@ -333,7 +337,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     if (TextUtils.isEmpty(text)) return null;
 
     final TextActionButton button = new TextActionButton(getContext());
-    button.setActionLayoutParams((FrameLayout.LayoutParams) layoutParams);
+    button.setLayoutParams(layoutParams);
     button.setActionBackgroundDrawable(backgroundDrawable);
     button.setTextSize(14);
     button.setText(text);
@@ -346,6 +350,21 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     final int vPadding = U.dp2px(4);
     button.setActionPadding(hPadding, vPadding, hPadding, vPadding);
     return button;
+  }
+
+  @Override
+  protected LayoutParams generateDefaultLayoutParams() {
+    return new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+  }
+
+  @Override
+  public LayoutParams generateLayoutParams(AttributeSet attrs) {
+    return new MarginLayoutParams(getContext(), attrs);
+  }
+
+  @Override
+  protected LayoutParams generateLayoutParams(LayoutParams p) {
+    return new MarginLayoutParams(p);
   }
 
   public interface ActionAdapter {

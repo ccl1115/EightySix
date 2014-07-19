@@ -19,11 +19,9 @@ public class TextActionButton extends ActionButton {
 
   public TextActionButton(Context context, AttributeSet attrs) {
     super(context, attrs);
-
     setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
     mTextAction = new TextView(context, attrs);
-    LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+    LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     mTextAction.setLayoutParams(lp);
 
     addView(mTextAction, 0);
