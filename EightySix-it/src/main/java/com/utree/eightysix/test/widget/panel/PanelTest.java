@@ -10,7 +10,6 @@ import org.xmlpull.v1.XmlPullParserFactory;
 /**
  * @author simon
  */
-@SmallTest
 public class PanelTest extends BaseAndroidTestCase {
 
   public void testNewPanel() throws Exception {
