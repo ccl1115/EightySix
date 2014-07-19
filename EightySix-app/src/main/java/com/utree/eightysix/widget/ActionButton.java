@@ -55,7 +55,7 @@ public abstract class ActionButton extends FrameLayout {
     params.gravity = Gravity.RIGHT;
     mCountIndicator.setLayoutParams(params);
     addView(mCountIndicator);
-    mCountIndicator.setVisibility(INVISIBLE);
+    mCountIndicator.setVisibility(GONE);
   }
 
   public abstract void setActionLayoutParams(LayoutParams params);
@@ -73,7 +73,7 @@ public abstract class ActionButton extends FrameLayout {
     if (c > 0) {
       mCountIndicator.setVisibility(VISIBLE);
     } else {
-      mCountIndicator.setVisibility(INVISIBLE);
+      mCountIndicator.setVisibility(GONE);
     }
     requestLayout();
     invalidate();

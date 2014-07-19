@@ -248,7 +248,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
             measureChild(view, MeasureSpec.EXACTLY, heightSize + MeasureSpec.AT_MOST);
           } else {
             LayoutParams lp = (LayoutParams) view.getLayoutParams();
-            int childHeightSpec = 0, childWidthSpec = 0;
+            int childHeightSpec, childWidthSpec;
             switch (lp.height) {
               case LayoutParams.WRAP_CONTENT:
                 childHeightSpec = heightSize + MeasureSpec.AT_MOST;
@@ -288,15 +288,6 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
   }
 
   @Override
-  protected void dispatchDraw(Canvas canvas) {
-    // draw top line
-    canvas.drawLine(0, 0, getMeasuredWidth(), 0, mTopLinePaint);
-    canvas.drawLine(0, getMeasuredHeight() - 1, getMeasuredWidth(), getMeasuredHeight() - 1, mBotLinePaint);
-
-    super.dispatchDraw(canvas);
-  }
-
-  @Override
   protected void onLayout(boolean changed, int l, int t, int r, int b) {
 
     final int height = b - t;
@@ -323,6 +314,15 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     }
   }
 
+  @Override
+  protected void dispatchDraw(Canvas canvas) {
+    // draw top line
+    canvas.drawLine(0, 0, getMeasuredWidth(), 0, mTopLinePaint);
+    canvas.drawLine(0, getMeasuredHeight() - 1, getMeasuredWidth(), getMeasuredHeight() - 1, mBotLinePaint);
+
+    super.dispatchDraw(canvas);
+  }
+
   private ActionButton buildActionItemView(Drawable drawable, Drawable backgroundDrawable, LayoutParams layoutParams) {
     if (drawable == null) return null;
 
@@ -341,6 +341,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     final TextActionButton button = new TextActionButton(getContext());
     button.setActionBackgroundDrawable(backgroundDrawable);
+    button.setLayoutParams(layoutParams);
     button.setTextSize(14);
     button.setText(text);
     button.setGravity(Gravity.CENTER);
