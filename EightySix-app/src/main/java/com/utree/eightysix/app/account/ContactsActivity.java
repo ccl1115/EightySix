@@ -115,8 +115,6 @@ public class ContactsActivity extends BaseActivity {
       }
     });
 
-    getTopBar().getActionView(0).setEnabled(false);
-
     ContactsSyncService.start(this, true);
   }
 

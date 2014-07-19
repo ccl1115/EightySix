@@ -37,7 +37,6 @@ public class TextActionButton extends ActionButton {
 
   @Override
   public void setLayoutParams(ViewGroup.LayoutParams params) {
-    Log.d("TextActionButton", String.format("LayoutParams=(%d,%d)", params.width, params.height));
     mTextAction.setLayoutParams(new LayoutParams(params));
     super.setLayoutParams(params);
   }
