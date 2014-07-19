@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import de.akquinet.android.androlog.Log;
 
 /**
  * @author simon
@@ -19,11 +20,7 @@ public class TextActionButton extends ActionButton {
 
   public TextActionButton(Context context, AttributeSet attrs) {
     super(context, attrs);
-    setLayoutParams(new MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     mTextAction = new TextView(context, attrs);
-    LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-    mTextAction.setLayoutParams(lp);
-
     addView(mTextAction, 0);
     mTextAction.setDuplicateParentStateEnabled(true);
   }
@@ -38,6 +35,11 @@ public class TextActionButton extends ActionButton {
     mTextAction.setBackgroundDrawable(drawable);
   }
 
+  @Override
+  public void setLayoutParams(ViewGroup.LayoutParams params) {
+    mTextAction.setLayoutParams(new LayoutParams(params));
+    super.setLayoutParams(params);
+  }
 
   public void setGravity(int gravity) {
     mTextAction.setGravity(gravity);
