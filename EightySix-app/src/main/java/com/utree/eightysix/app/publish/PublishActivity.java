@@ -313,9 +313,9 @@ public class PublishActivity extends BaseActivity {
       }
 
       @Override
-      public FrameLayout.LayoutParams getLayoutParams(int position) {
-        return new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
+      public TopBar.LayoutParams getLayoutParams(int position) {
+        return new TopBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT);
       }
     });
 

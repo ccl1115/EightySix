@@ -181,8 +181,8 @@ public class BaseCirclesActivity extends BaseActivity {
       }
 
       @Override
-      public FrameLayout.LayoutParams getLayoutParams(int position) {
-        return new FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT);
+      public TopBar.LayoutParams getLayoutParams(int position) {
+        return new TopBar.LayoutParams(MATCH_PARENT, MATCH_PARENT);
       }
     });
 

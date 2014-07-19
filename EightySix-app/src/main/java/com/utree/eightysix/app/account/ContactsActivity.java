@@ -107,9 +107,9 @@ public class ContactsActivity extends BaseActivity {
       }
 
       @Override
-      public FrameLayout.LayoutParams getLayoutParams(int position) {
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
+      public TopBar.LayoutParams getLayoutParams(int position) {
+        TopBar.LayoutParams layoutParams = new TopBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.rightMargin = U.dp2px(8);
         return layoutParams;
       }

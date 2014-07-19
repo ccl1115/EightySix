@@ -161,8 +161,8 @@ public class RegisterActivity extends BaseActivity {
       }
 
       @Override
-      public FrameLayout.LayoutParams getLayoutParams(int position) {
-        return new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+      public TopBar.LayoutParams getLayoutParams(int position) {
+        return new TopBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
       }
     });
 

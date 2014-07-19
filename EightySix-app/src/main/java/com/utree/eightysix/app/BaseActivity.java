@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -88,7 +89,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     if (content != null) {
       mBaseView.removeView(content);
     }
-    View inflate = View.inflate(this, layoutResID, null);
+    View inflate = LayoutInflater.from(this).inflate(layoutResID, mBaseView, false);
     inflate.setId(R.id.content);
     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
         ViewGroup.LayoutParams.MATCH_PARENT);
@@ -364,12 +365,12 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    mBaseView = (ViewGroup) View.inflate(this, R.layout.activity_base, null);
+    mBaseView = (ViewGroup) LayoutInflater.from(this)
+        .inflate(R.layout.activity_base, (ViewGroup) findViewById(android.R.id.content), false);
 
     super.setContentView(mBaseView);
 
     mTopBar = (TopBar) mBaseView.findViewById(R.id.top_bar);
-
 
     mProgressBar = (FrameLayout) mBaseView.findViewById(R.id.progress_bar);
     mVProgressMask = mBaseView.findViewById(R.id.v_progress_mask);

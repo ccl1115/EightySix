@@ -1,5 +1,6 @@
 package com.utree.eightysix.widget;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -22,6 +23,8 @@ import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.Layout;
+import de.akquinet.android.androlog.Log;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,7 +72,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
   private int mCurCount;
 
   public TopBar(Context context) {
-    this(context, null);
+    this(context, null, R.attr.topBarStyle);
   }
 
   public TopBar(Context context, AttributeSet attrs) {
@@ -135,7 +138,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
       ActionButton view;
       LayoutParams layoutParams = mActionAdapter.getLayoutParams(i);
       if (layoutParams == null)
-        layoutParams = new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
       if (TextUtils.isEmpty(mActionAdapter.getTitle(i))) {
         view = buildActionItemView(mActionAdapter.getIcon(i), mActionAdapter.getBackgroundDrawable(i), layoutParams);
       } else {
@@ -242,9 +245,9 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
       if (mCurCount != 0) {
         for (View view : mActionViews) {
           if (widthLeft < heightSize) {
-            view.measure(MeasureSpec.EXACTLY, heightSize + MeasureSpec.AT_MOST);
+            measureChild(view, MeasureSpec.EXACTLY, heightSize + MeasureSpec.AT_MOST);
           } else {
-            LayoutParams lp = view.getLayoutParams();
+            LayoutParams lp = (LayoutParams) view.getLayoutParams();
             int childHeightSpec = 0, childWidthSpec = 0;
             switch (lp.height) {
               case LayoutParams.WRAP_CONTENT:
@@ -337,7 +340,6 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     if (TextUtils.isEmpty(text)) return null;
 
     final TextActionButton button = new TextActionButton(getContext());
-    button.setLayoutParams(layoutParams);
     button.setActionBackgroundDrawable(backgroundDrawable);
     button.setTextSize(14);
     button.setText(text);
@@ -354,17 +356,40 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
   @Override
   protected LayoutParams generateDefaultLayoutParams() {
-    return new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    Log.d("TopBar", "generateDefaultLayoutParams");
+    return new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
   }
 
   @Override
   public LayoutParams generateLayoutParams(AttributeSet attrs) {
-    return new MarginLayoutParams(getContext(), attrs);
+    Log.d("TopBar", "generateLayoutParams from attrs");
+    return new LayoutParams(getContext(), attrs);
   }
 
   @Override
-  protected LayoutParams generateLayoutParams(LayoutParams p) {
-    return new MarginLayoutParams(p);
+  protected LayoutParams generateLayoutParams(ViewGroup.LayoutParams p) {
+    Log.d("TopBar", "generateLayoutParams from source");
+    return new LayoutParams(p);
+  }
+
+  @Override
+  protected boolean checkLayoutParams(ViewGroup.LayoutParams p) {
+    return p instanceof LayoutParams;
+  }
+
+  public static class LayoutParams extends MarginLayoutParams {
+
+    public LayoutParams(Context c, AttributeSet attrs) {
+      super(c, attrs);
+    }
+
+    public LayoutParams(int width, int height) {
+      super(width, height);
+    }
+
+    public LayoutParams(ViewGroup.LayoutParams source) {
+      super(source);
+    }
   }
 
   public interface ActionAdapter {
@@ -378,7 +403,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     int getCount();
 
-    FrameLayout.LayoutParams getLayoutParams(int position);
+    LayoutParams getLayoutParams(int position);
   }
 
   public interface Callback {
