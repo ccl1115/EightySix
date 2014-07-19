@@ -57,6 +57,8 @@ public class C {
 
   public static final String API_PROMOTION = "/activity.do";
 
+  public static final String API_SYNC = "/system/sync.do";
+
 
   public static String IMEI = "";
 
