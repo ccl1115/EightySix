@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -67,7 +68,9 @@ public class ContactsActivity extends BaseActivity {
 
   @OnTextChanged (R.id.tv_search_hint)
   public void onEtSearchHintTextChanged(CharSequence cs) {
-    mContactsAdapter.setFilter(cs);
+    if (mContactsAdapter != null) {
+      mContactsAdapter.setFilter(cs);
+    }
   }
 
   @Override
@@ -81,7 +84,6 @@ public class ContactsActivity extends BaseActivity {
 
     mEtSearchHint.setHint(R.string.search_contact);
     mEtSearchHint.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(2), Color.WHITE));
-    mEtSearchHint.setEnabled(true);
 
     showProgressBar();
 

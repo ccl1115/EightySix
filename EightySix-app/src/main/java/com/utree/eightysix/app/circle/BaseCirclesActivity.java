@@ -51,9 +51,6 @@ public class BaseCirclesActivity extends BaseActivity {
   private static final int MODE_SELECT = 1;
   private static final int MODE_MY = 2;
 
-  @InjectView (R.id.fl_search)
-  public FrameLayout mFlSearch;
-
   @InjectView (R.id.alv_refresh)
   public AdvancedListView mLvCircles;
 
