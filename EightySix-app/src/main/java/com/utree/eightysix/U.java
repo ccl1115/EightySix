@@ -13,8 +13,10 @@ import com.jakewharton.disklrucache.DiskLruCache;
 import com.squareup.otto.Bus;
 import com.squareup.otto.ThreadEnforcer;
 import com.utree.eightysix.app.BaseApplication;
+import com.utree.eightysix.app.SyncClient;
 import com.utree.eightysix.app.feed.BaseItemDeserializer;
 import com.utree.eightysix.data.BaseItem;
+import com.utree.eightysix.data.Sync;
 import com.utree.eightysix.location.BdLocationImpl;
 import com.utree.eightysix.location.Location;
 import com.utree.eightysix.push.PushHelper;
@@ -65,6 +67,8 @@ public class U {
 
   private static Toast sToast;
 
+  private static SyncClient sSyncClient;
+
   private static final Object lock = new Object();
 
   public static ShareManager getShareManager() {
@@ -74,6 +78,10 @@ public class U {
       }
     }
     return sShareManager;
+  }
+
+  public static SyncClient getSyncClient() {
+    return sSyncClient;
   }
 
   public static Reporter getReporter() {
