@@ -7,13 +7,12 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.telephony.SmsManager;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import butterknife.InjectView;
+import butterknife.OnTextChanged;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
@@ -44,7 +43,7 @@ public class ContactsActivity extends BaseActivity {
   public TextView mTvEmptyView;
 
   @InjectView (R.id.tv_search_hint)
-  public EditText mRbSearchHint;
+  public EditText mEtSearchHint;
 
   private ContactsAdapter mContactsAdapter;
 
@@ -66,12 +65,23 @@ public class ContactsActivity extends BaseActivity {
     }
   }
 
+  @OnTextChanged (R.id.tv_search_hint)
+  public void onEtSearchHintTextChanged(CharSequence cs) {
+    mContactsAdapter.setFilter(cs);
+  }
+
+  @Override
+  public void onActionLeftClicked() {
+    finish();
+  }
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    mRbSearchHint.setHint(R.string.search_contact);
-    mRbSearchHint.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(2), Color.WHITE));
+    mEtSearchHint.setHint(R.string.search_contact);
+    mEtSearchHint.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(2), Color.WHITE));
+    mEtSearchHint.setEnabled(true);
 
     showProgressBar();
 
@@ -118,11 +128,6 @@ public class ContactsActivity extends BaseActivity {
     getTopBar().getActionView(0).setEnabled(false);
 
     ContactsSyncService.start(this, true);
-  }
-
-  @Override
-  public void onActionLeftClicked() {
-    finish();
   }
 
   @Override

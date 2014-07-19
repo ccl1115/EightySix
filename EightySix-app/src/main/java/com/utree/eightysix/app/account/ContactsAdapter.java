@@ -14,6 +14,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.contact.Contact;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -26,11 +27,14 @@ public class ContactsAdapter extends BaseAdapter {
 
   private List<Contact> mContacts;
 
+  private List<Contact> mFiltered;
+
   private SparseBooleanArray mChecked;
   private int mCheckedCount = 0;
 
   public ContactsAdapter(List<Contact> contact) {
     mContacts = contact;
+    mFiltered = mContacts;
     mChecked = new SparseBooleanArray();
   }
 
@@ -55,12 +59,12 @@ public class ContactsAdapter extends BaseAdapter {
 
   @Override
   public int getCount() {
-    return mContacts == null ? 0 : mContacts.size() + 1;
+    return mFiltered == null ? 0 : mFiltered.size() + 1;
   }
 
   @Override
   public Contact getItem(int i) {
-    return i == 0 ? null : mContacts.get(i - 1);
+    return i == 0 ? null : mFiltered.get(i - 1);
   }
 
   @Override
@@ -112,6 +116,17 @@ public class ContactsAdapter extends BaseAdapter {
 
   public int getCheckedCount() {
     return mCheckedCount;
+  }
+
+  public void setFilter(CharSequence cs) {
+    final List<Contact> list = new LinkedList<Contact>();
+    for (Contact contact : mContacts) {
+      if (contact.name.contains(cs)) {
+        list.add(contact);
+      }
+    }
+    mFiltered = list;
+    notifyDataSetChanged();
   }
 
   public class ContactViewHolder {
