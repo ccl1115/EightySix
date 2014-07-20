@@ -14,6 +14,7 @@ import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.squareup.otto.Subscribe;
+import com.utree.eightysix.C;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
@@ -25,6 +26,10 @@ import com.utree.eightysix.data.Feeds;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.data.Promotion;
 import com.utree.eightysix.data.QuestionSet;
+import com.utree.eightysix.request.FeedsRequest;
+import com.utree.eightysix.rest.CacheInWorker;
+import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.RequestData;
 import com.utree.eightysix.widget.RoundedButton;
 import java.util.List;
 
@@ -272,7 +277,7 @@ class FeedAdapter extends BaseAdapter {
     SelectViewHolder holder;
     if (convertView == null) {
       convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_select, parent, false);
-      holder = new SelectViewHolder(convertView);
+      holder = new SelectViewHolder(convertView, mFeeds.circle.id);
       convertView.setTag(holder);
     } else {
       holder = (SelectViewHolder) convertView.getTag();
@@ -298,12 +303,17 @@ class FeedAdapter extends BaseAdapter {
   @Keep
   static class SelectViewHolder {
 
-    public SelectViewHolder(View view) {
+    private int mId;
+
+    public SelectViewHolder(View view, int id) {
+      mId = id;
       ButterKnife.inject(this, view);
     }
 
     @OnClick (R.id.rb_select)
     public void onRbSelectClicked(View view) {
+      RequestData data = U.getRESTRequester().convert(new FeedsRequest(mId, 1));
+      new CacheInWorker(RESTRequester.genCacheKey(data.getApi(), data.getParams()), "").execute();
       BaseCirclesActivity.startSelect(view.getContext());
     }
   }

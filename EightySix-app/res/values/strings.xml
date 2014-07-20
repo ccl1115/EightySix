@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">蓝莓圈</string>
-    <string name="app_url"><a href="http://1886.me">1886.me</a></string>
+    <string name="app_url"><a href="http://lanmeiquan.com">lanmeiquan.com</a></string>
 
     <!-- AndroidLockPattern -->
     <string name="alp_lockscreen_access_pattern_cell_added">Cell added</string>
