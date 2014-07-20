@@ -92,6 +92,8 @@ public class FeedActivity extends BaseActivity {
 
   private boolean mRefreshed;
   private MenuViewHolder mMenuViewHolder;
+  private ObjectAnimator mHideSideAnimator;
+  private Animator mShowSideAnimator;
 
   public static void start(Context context) {
     Intent intent = new Intent(context, FeedActivity.class);
@@ -164,7 +166,6 @@ public class FeedActivity extends BaseActivity {
 
   @Override
   public void onActionOverflowClicked() {
-
     if (!mPopupMenu.isShowing()) {
       mPopupMenu.showAsDropDown(getTopBar().mActionOverFlow);
       showMask();
@@ -394,16 +395,21 @@ public class FeedActivity extends BaseActivity {
   }
 
   private void showMask() {
+    if (mVMask.getVisibility() == View.VISIBLE) return;
+
     mVMask.setVisibility(View.VISIBLE);
-    ObjectAnimator animator = ObjectAnimator.ofFloat(mVMask, "alpha", 0f, 1f);
-    animator.setDuration(150);
-    animator.start();
+    mVMask.setClickable(true);
+    ObjectAnimator showMaskAnimator = ObjectAnimator.ofFloat(mVMask, "alpha", 0f, 1f);
+    showMaskAnimator.setDuration(150);
+    showMaskAnimator.start();
   }
 
   private void hideMask() {
-    ObjectAnimator animator = ObjectAnimator.ofFloat(mVMask, "alpha", 1f, 0f);
-    animator.setDuration(150);
-    animator.addListener(new Animator.AnimatorListener() {
+    if (mVMask.getVisibility() == View.GONE) return;
+
+    ObjectAnimator hideMaskAnimator = ObjectAnimator.ofFloat(mVMask, "alpha", 1f, 0f);
+    hideMaskAnimator.setDuration(150);
+    hideMaskAnimator.addListener(new Animator.AnimatorListener() {
       @Override
       public void onAnimationStart(Animator animation) {
 
@@ -411,7 +417,8 @@ public class FeedActivity extends BaseActivity {
 
       @Override
       public void onAnimationEnd(Animator animation) {
-        mVMask.setVisibility(View.INVISIBLE);
+        mVMask.setVisibility(View.GONE);
+        mVMask.setClickable(false);
       }
 
       @Override
@@ -424,7 +431,7 @@ public class FeedActivity extends BaseActivity {
 
       }
     });
-    animator.start();
+    hideMaskAnimator.start();
   }
 
   private void selectSideCircle(List<Circle> sideCircles) {
@@ -459,20 +466,25 @@ public class FeedActivity extends BaseActivity {
   }
 
   private void showSide() {
-    mSideShown = true;
 
+    if (mLlSide.getVisibility() == View.VISIBLE) return;
+
+    mSideShown = true;
     mLlSide.setVisibility(View.VISIBLE);
-    Animator animator = ObjectAnimator.ofFloat(mLlSide, "translationX", -mLvSideCircles.getMeasuredWidth(), 0f);
-    animator.setDuration(150);
-    animator.start();
+    mLlSide.setClickable(true);
+    mShowSideAnimator = ObjectAnimator.ofFloat(mLlSide, "x", -mLvSideCircles.getMeasuredWidth(), 0f);
+    mShowSideAnimator.setDuration(150);
+    mShowSideAnimator.start();
   }
 
   private void hideSide() {
-    mSideShown = false;
 
-    ObjectAnimator animator = ObjectAnimator.ofFloat(mLlSide, "translationX", 0f, -mLlSide.getMeasuredWidth());
-    animator.setDuration(150);
-    animator.addListener(new Animator.AnimatorListener() {
+    if (mLlSide.getVisibility() == View.GONE) return;
+
+    mSideShown = false;
+    mHideSideAnimator = ObjectAnimator.ofFloat(mLlSide, "x", 0f, -mLlSide.getMeasuredWidth());
+    mHideSideAnimator.setDuration(150);
+    mHideSideAnimator.addListener(new Animator.AnimatorListener() {
       @Override
       public void onAnimationStart(Animator animation) {
 
@@ -480,7 +492,8 @@ public class FeedActivity extends BaseActivity {
 
       @Override
       public void onAnimationEnd(Animator animation) {
-        mLlSide.setVisibility(View.INVISIBLE);
+        mLlSide.setVisibility(View.GONE);
+        mLlSide.setClickable(false);
       }
 
       @Override
@@ -493,7 +506,7 @@ public class FeedActivity extends BaseActivity {
 
       }
     });
-    animator.start();
+    mHideSideAnimator.start();
   }
 
   private void cacheOutSideCircle() {
