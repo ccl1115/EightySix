@@ -63,6 +63,8 @@
                 android:text="QQ好友"
                 android:textSize="12sp"
                 android:gravity="center"
+                android:drawablePadding="4dp"
+                android:drawableTop="@drawable/ic_share_qq"
                 android:background="@drawable/apptheme_primary_list_selector"/>
 
         <TextView
