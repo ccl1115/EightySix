@@ -106,7 +106,8 @@ public class PullNotificationService extends Service {
         .setSmallIcon(R.drawable.ic_app_icon)
         .setContentTitle(shortName)
         .setContentText(getString(R.string.notification_friend_new_post))
-        .setContentIntent(PendingIntent.getActivity(this, 0, PostActivity.getIntent(this, postId), Intent.FLAG_ACTIVITY_NEW_TASK))
+        .setContentIntent(PendingIntent.getActivity(this, 0,
+            PostActivity.getIntent(this, postId), PendingIntent.FLAG_ONE_SHOT))
         .build();
   }
 
@@ -116,7 +117,8 @@ public class PullNotificationService extends Service {
         .setAutoCancel(true)
         .setContentTitle(getString(R.string.notification_circle_unlocked))
         .setContentText(getString(R.string.notification_circle_unlocked_tip, circleName))
-        .setContentIntent(PendingIntent.getActivity(this, 0, FeedActivity.getIntent(this, Integer.parseInt(circleId)), Intent.FLAG_ACTIVITY_NEW_TASK))
+        .setContentIntent(PendingIntent.getActivity(this, 0,
+            FeedActivity.getIntent(this, Integer.parseInt(circleId)), PendingIntent.FLAG_ONE_SHOT))
         .build();
   }
 
@@ -128,10 +130,12 @@ public class PullNotificationService extends Service {
         .setSmallIcon(R.drawable.ic_app_icon);
     if (count == 1) {
       builder.setContentText(getString(R.string.notification_new_comment));
-      builder.setContentIntent(PendingIntent.getActivity(this, 0, PostActivity.getIntent(this, id), Intent.FLAG_ACTIVITY_NEW_TASK));
+      builder.setContentIntent(PendingIntent.getActivity(this, 0,
+          PostActivity.getIntent(this, id), PendingIntent.FLAG_ONE_SHOT));
     } else {
       builder.setContentText(String.format(getString(R.string.notification_new_comments), count));
-      builder.setContentIntent(PendingIntent.getActivity(this, 0, MsgActivity.getIntent(this, true), Intent.FLAG_ACTIVITY_NEW_TASK));
+      builder.setContentIntent(PendingIntent.getActivity(this, 0,
+          MsgActivity.getIntent(this, true), PendingIntent.FLAG_ONE_SHOT));
     }
     return builder.build();
   }
@@ -143,7 +147,8 @@ public class PullNotificationService extends Service {
         .setTicker(getString(R.string.notification_circle_create_approve))
         .setContentTitle(getString(R.string.notification_circle_create_approve))
         .setContentText(getString(R.string.notification_circle_create_approve_tip, circleName))
-        .setContentIntent(PendingIntent.getActivity(this, 0, FeedActivity.getIntent(this, Integer.parseInt(circleId)), Intent.FLAG_ACTIVITY_NEW_TASK))
+        .setContentIntent(PendingIntent.getActivity(this, 0,
+            FeedActivity.getIntent(this, Integer.parseInt(circleId)), PendingIntent.FLAG_ONE_SHOT))
         .build();
   }
 
@@ -155,7 +160,8 @@ public class PullNotificationService extends Service {
         .setContentTitle(getString(R.string.notification_new_friend))
         .setContentText(count > 1 ? getString(R.string.notification_new_friend_tip, circleName, count) :
             getString(R.string.notification_new_friend_tip, circleName))
-        .setContentIntent(PendingIntent.getActivity(this, 0, FeedActivity.getIntent(this, Integer.parseInt(circleId)), Intent.FLAG_ACTIVITY_NEW_TASK))
+        .setContentIntent(PendingIntent.getActivity(this, 0,
+            FeedActivity.getIntent(this, Integer.parseInt(circleId)), PendingIntent.FLAG_ONE_SHOT))
         .build();
   }
 
