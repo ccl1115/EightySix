@@ -117,7 +117,7 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
 
   private void handleObjectError(T response) {
     if (response.code != 0) {
-      if (response.code == 0x31014) {
+      if ((response.code & 0xffff) == 0x1014) {
         // 用户token失效，退出客户端
         Account.inst().logout();
       }

@@ -9,6 +9,12 @@ import com.utree.eightysix.app.account.LoginActivity;
 import com.utree.eightysix.data.User;
 import com.utree.eightysix.event.HasNewPraiseEvent;
 import com.utree.eightysix.event.NewCommentCountEvent;
+import com.utree.eightysix.request.LogoutRequest;
+import com.utree.eightysix.rest.HandlerWrapper;
+import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.RequestData;
+import com.utree.eightysix.rest.Response;
 import java.util.List;
 
 /**
@@ -138,6 +144,14 @@ public class Account {
      * When fire this event, start the login activity.
      */
     public LogoutEvent() {
+      RequestData data = U.getRESTRequester().convert(new LogoutRequest());
+      U.getRESTRequester().request(data, new HandlerWrapper<Response>(data, new OnResponse<Response>() {
+        @Override
+        public void onResponse(Response response) {
+          // We don't care about the response
+        }
+      }, Response.class));
+
       Intent intent = new Intent(U.getContext(), LoginActivity.class);
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       U.getContext().startActivity(intent);
