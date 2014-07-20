@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -17,8 +17,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
@@ -66,13 +64,12 @@ public class FeedActivity extends BaseActivity {
   @InjectView (R.id.ll_side)
   public LinearLayout mLlSide;
 
-  @InjectView (R.id.v_mask)
-  public View mVMask;
+  @InjectView (R.id.content)
+  public DrawerLayout mDlContent;
 
   private SideCirclesAdapter mSideCirclesAdapter;
 
   private PopupWindow mPopupMenu;
-  private LinearLayout mMenu;
 
   private boolean mSideShown;
 
@@ -92,8 +89,6 @@ public class FeedActivity extends BaseActivity {
 
   private boolean mRefreshed;
   private MenuViewHolder mMenuViewHolder;
-  private ObjectAnimator mHideSideAnimator;
-  private Animator mShowSideAnimator;
 
   public static void start(Context context) {
     Intent intent = new Intent(context, FeedActivity.class);
@@ -143,24 +138,14 @@ public class FeedActivity extends BaseActivity {
       mFeedFragment.setCircle(circle);
       setSideHighlight(circle);
     }
-    hideSide();
-    hideMask();
-  }
-
-  @OnClick (R.id.v_mask)
-  public void onVMaskClicked() {
-    hideSide();
-    hideMask();
   }
 
   @Override
   public void onActionLeftClicked() {
-    if (mSideShown) {
-      hideSide();
-      hideMask();
+    if (mDlContent.isDrawerOpen(mLlSide)) {
+      mDlContent.closeDrawer(mLlSide);
     } else {
-      showSide();
-      showMask();
+      mDlContent.openDrawer(mLlSide);
     }
   }
 
@@ -168,8 +153,7 @@ public class FeedActivity extends BaseActivity {
   public void onActionOverflowClicked() {
     if (!mPopupMenu.isShowing()) {
       mPopupMenu.showAsDropDown(getTopBar().mActionOverFlow);
-      showMask();
-      hideSide();
+      mDlContent.closeDrawer(mLlSide);
     }
   }
 
@@ -187,23 +171,16 @@ public class FeedActivity extends BaseActivity {
     setActionLeftDrawable(getResources().getDrawable(R.drawable.ic_drawer));
 
     if (mPopupMenu == null) {
-      mMenu = (LinearLayout) View.inflate(FeedActivity.this, R.layout.widget_feed_menu, null);
-      mPopupMenu = new PopupWindow(mMenu, dp2px(190), dp2px(225) + 4);
-      mMenuViewHolder = new MenuViewHolder(mMenu);
+      LinearLayout menu = (LinearLayout) View.inflate(FeedActivity.this, R.layout.widget_feed_menu, null);
+      mPopupMenu = new PopupWindow(menu, dp2px(190), dp2px(225) + 4);
+      mMenuViewHolder = new MenuViewHolder(menu);
       mPopupMenu.setFocusable(true);
       mPopupMenu.setOutsideTouchable(true);
       mPopupMenu.setBackgroundDrawable(new BitmapDrawable(getResources()));
-      mPopupMenu.setOnDismissListener(new PopupWindow.OnDismissListener() {
-        @Override
-        public void onDismiss() {
-          hideMask();
-        }
-      });
     }
 
     //getTopBar().mTitle.setCompoundDrawablesWithIntrinsicBounds(null, null,
     //    getResources().getDrawable(R.drawable.top_bar_arrow_down), null);
-
 
     getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
       @Override
@@ -303,12 +280,7 @@ public class FeedActivity extends BaseActivity {
       return;
     }
 
-    if (mSideShown) {
-      hideSide();
-      hideMask();
-    } else {
-      moveTaskToBack(true);
-    }
+    moveTaskToBack(true);
   }
 
   @Override
@@ -346,9 +318,6 @@ public class FeedActivity extends BaseActivity {
     //}
     //endregion
 
-    hideSide();
-    hideMask();
-
     setHasNewPraise();
     setNewCommentCount();
   }
@@ -361,6 +330,15 @@ public class FeedActivity extends BaseActivity {
   @Subscribe
   public void onUnlockClicked(UnlockClickedEvent event) {
     showInviteDialog();
+  }
+
+  @Subscribe
+  public void onStartPublishActivity(StartPublishActivityEvent event) {
+    if (!mFeedFragment.canPublish()) {
+      showNoPermDialog();
+    } else {
+      PublishActivity.start(this, mFeedFragment.getCircle().id);
+    }
   }
 
   private void showNoPermDialog() {
@@ -385,55 +363,6 @@ public class FeedActivity extends BaseActivity {
     }
   }
 
-  @Subscribe
-  public void onStartPublishActivity(StartPublishActivityEvent event) {
-    if (!mFeedFragment.canPublish()) {
-      showNoPermDialog();
-    } else {
-      PublishActivity.start(this, mFeedFragment.getCircle().id);
-    }
-  }
-
-  private void showMask() {
-    if (mVMask.getVisibility() == View.VISIBLE) return;
-
-    mVMask.setVisibility(View.VISIBLE);
-    mVMask.setClickable(true);
-    ObjectAnimator showMaskAnimator = ObjectAnimator.ofFloat(mVMask, "alpha", 0f, 1f);
-    showMaskAnimator.setDuration(150);
-    showMaskAnimator.start();
-  }
-
-  private void hideMask() {
-    if (mVMask.getVisibility() == View.GONE) return;
-
-    ObjectAnimator hideMaskAnimator = ObjectAnimator.ofFloat(mVMask, "alpha", 1f, 0f);
-    hideMaskAnimator.setDuration(150);
-    hideMaskAnimator.addListener(new Animator.AnimatorListener() {
-      @Override
-      public void onAnimationStart(Animator animation) {
-
-      }
-
-      @Override
-      public void onAnimationEnd(Animator animation) {
-        mVMask.setVisibility(View.GONE);
-        mVMask.setClickable(false);
-      }
-
-      @Override
-      public void onAnimationCancel(Animator animation) {
-
-      }
-
-      @Override
-      public void onAnimationRepeat(Animator animation) {
-
-      }
-    });
-    hideMaskAnimator.start();
-  }
-
   private void selectSideCircle(List<Circle> sideCircles) {
     if (sideCircles != null) {
       for (Circle c : sideCircles) {
@@ -449,64 +378,6 @@ public class FeedActivity extends BaseActivity {
         }
       }
     }
-  }
-
-  void setTitle(Circle circle) {
-    if (circle == null) return;
-
-    setTopTitle(circle.shortName);
-    setTopSubTitle(String.format(getString(R.string.friends_info), circle.friendCount, circle.workmateCount));
-    if (circle.lock == 1) {
-      getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(
-          getResources().getDrawable(R.drawable.ic_lock_small), null, null, null);
-      getTopBar().mSubTitle.setCompoundDrawablePadding(U.dp2px(5));
-    } else {
-      getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-    }
-  }
-
-  private void showSide() {
-
-    if (mLlSide.getVisibility() == View.VISIBLE) return;
-
-    mSideShown = true;
-    mLlSide.setVisibility(View.VISIBLE);
-    mLlSide.setClickable(true);
-    mShowSideAnimator = ObjectAnimator.ofFloat(mLlSide, "x", -mLvSideCircles.getMeasuredWidth(), 0f);
-    mShowSideAnimator.setDuration(150);
-    mShowSideAnimator.start();
-  }
-
-  private void hideSide() {
-
-    if (mLlSide.getVisibility() == View.GONE) return;
-
-    mSideShown = false;
-    mHideSideAnimator = ObjectAnimator.ofFloat(mLlSide, "x", 0f, -mLlSide.getMeasuredWidth());
-    mHideSideAnimator.setDuration(150);
-    mHideSideAnimator.addListener(new Animator.AnimatorListener() {
-      @Override
-      public void onAnimationStart(Animator animation) {
-
-      }
-
-      @Override
-      public void onAnimationEnd(Animator animation) {
-        mLlSide.setVisibility(View.GONE);
-        mLlSide.setClickable(false);
-      }
-
-      @Override
-      public void onAnimationCancel(Animator animation) {
-
-      }
-
-      @Override
-      public void onAnimationRepeat(Animator animation) {
-
-      }
-    });
-    mHideSideAnimator.start();
   }
 
   private void cacheOutSideCircle() {
@@ -585,6 +456,20 @@ public class FeedActivity extends BaseActivity {
     getTopBar().getActionView(0).setCount(Account.inst().getNewCommentCount());
   }
 
+  void setTitle(Circle circle) {
+    if (circle == null) return;
+
+    setTopTitle(circle.shortName);
+    setTopSubTitle(String.format(getString(R.string.friends_info), circle.friendCount, circle.workmateCount));
+    if (circle.lock == 1) {
+      getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(
+          getResources().getDrawable(R.drawable.ic_lock_small), null, null, null);
+      getTopBar().mSubTitle.setCompoundDrawablePadding(U.dp2px(5));
+    } else {
+      getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+    }
+  }
+
   void setMyPraiseCount(int count) {
     mMenuViewHolder.mTvPraiseCount.setText(String.format("%d个赞", count));
   }
@@ -595,7 +480,7 @@ public class FeedActivity extends BaseActivity {
     @InjectView (R.id.tv_friend_count)
     TextView mTvFriendCount;
 
-    @InjectView(R.id.tv_no_perm_tip)
+    @InjectView (R.id.tv_no_perm_tip)
     TextView mTvNoPermTip;
 
     NoPermViewHolder(View view) {
