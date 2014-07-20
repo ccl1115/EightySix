@@ -23,6 +23,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.SyncClient;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
@@ -122,7 +123,7 @@ public class BaseCirclesActivity extends BaseActivity {
   protected void showCircleSetDialog(final Circle circle) {
     AlertDialog dialog = new AlertDialog.Builder(this)
         .setTitle(String.format("确认在%s上班么？", circle.name))
-        .setMessage("15天之内不能修改在职工厂")
+        .setMessage((U.getSyncClient().getSync() != null ? U.getSyncClient().getSync().selectFactoryDays : 15) + "天之内不能修改在职工厂")
         .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {

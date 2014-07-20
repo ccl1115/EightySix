@@ -34,6 +34,7 @@
     <string name="logout">退出</string>
     <string name="search">搜索</string>
     <string name="pull_to_refresh">下拉刷新</string>
+    <string name="loading_more">正在加载更多</string>
 
     <string name="server_error">服务器错误</string>
     <string name="server_object_error">服务器返回对象解析错误</string>
@@ -53,10 +54,25 @@
     <string name="not_found_praise">还没有赞信息哦</string>
     <string name="not_found_praise_tip">多多发帖、回帖，积累赞数吧</string>
 
+    <!-- Report abuse -->
+    <string name="report_succeed">举报成功</string>
+    <string name="report_type_1">色情暴力</string>
+    <string name="report_type_2">违法违规</string>
+    <string name="report_type_3">垃圾广告</string>
+    <string name="report_type_4">人身攻击</string>
+    <string name="report_type_5">虚假谣言</string>
+    <string name="report_type_6">其他信息</string>
+    <string name="share_succeed">分享成功</string>
 
     <!-- Locate -->
     <string name="locating">定位中…</string>
     <string name="locating_failed">定位失败</string>
+
+    <!-- Upgrade -->
+    <string name="new_version_to_upgrade">升级提醒</string>
+    <string name="new_version">新版本: %s</string>
+    <string name="download_upgrade">下载并升级</string>
+    <string name="force_update_tip">你的客户端版本太旧，需要升级才能使用</string>
 
     <!-- Action -->
     <string name="action_settings">@string/settings</string>
@@ -65,14 +81,12 @@
     <string name="cd_action_overflow">action_overflow</string>
     <string name="cd_action_left">action_left</string>
 
-
     <!-- IntroActivity -->
     <string name="intro_1">打工之路有酸有甜</string>
     <string name="intro_2">介绍人发给你的手势密码</string>
     <string name="get_pattern">获取手势密码</string>
     <string name="other_login">其他帐号登录</string>
     <string name="wrong_pattern">解锁手势输入错误</string>
-
 
     <!-- RegisterActivity -->
     <string name="register_phone_intro">手机号仅用来识别你厂里认识的人</string>
@@ -130,7 +144,7 @@
     <string name="error_start_album">无法选择相册图片</string>
     <string name="send_succeed">发送成功</string>
     <string name="cannot_post_empty_content">不能发表空内容。</string>
-
+    <string name="post_not_found">没有找到帖子</string>
 
     <!-- BaseCirclesActivity -->
     <string name="search_circles">找工厂，找商圈，找企业</string>
@@ -168,6 +182,7 @@
     <string name="unlock_to_view">解锁查看</string>
     <string name="introduce_to_friends">介绍给朋友</string>
     <string name="about">蓝莓的故事</string>
+    <string name="no_publish_perm_tip">如果这里有%1$d个朋友在职，就能证明你也在这里工作过，就可以发帖啦。</string>
 
     <!-- PostActivity -->
     <string name="comment">评论</string>
@@ -182,6 +197,8 @@
     <string name="praise_count_static">被赞次数统计</string>
     <string name="praise_count_obtained">已获%1$d赞</string>
     <string name="praise_status">%1$d个帖子 %2$d个评论被赞 超过全国%3$s的工友</string>
+    <string name="no_new_praise">没有新赞</string>
+    <string name="praise_no_praise">你还没有收到赞</string>
 
     <!-- MsgActivity -->
     <string name="messages">消息</string>
@@ -200,10 +217,6 @@
     <string name="search_contact">搜人名</string>
     <string name="check_update">检查更新</string>
     <string name="help">使用帮助</string>
-    <string name="new_version_to_upgrade">升级提醒</string>
-    <string name="new_version">新版本: %s</string>
-    <string name="download_upgrade">下载并升级</string>
-    <string name="force_update_tip">你的客户端版本太旧，需要升级才能使用</string>
     <string name="no_perm_to_publish">你还没有发帖的权限</string>
     <string name="find_friends">找出圈子里的朋友，看他们都在说什么？</string>
     <string name="not_select_circle">你还没有选择在职工厂</string>
@@ -228,25 +241,11 @@
     <string name="overlay_tip_source">你肯定认识他们，但不会告诉你作者是谁。认识的人，包括你通讯录里的朋友以及他们在这个厂的朋友。</string>
     <string name="overlay_tip_praise">赞，可以鼓励作者，并且当该秘密有更新时，你将收到提醒</string>
     <string name="overlay_tip_portrait">每次评论新的秘密，你的头像都会不同。</string>
+    <string name="overlay_tip_share">分享，可以让身边的朋友快速加入，你和他们的秘密都会被更多地倾听和回应</string>
 
     <string name="ask_question">我要提问</string>
 
     <!-- BaseWebActivity -->
     <string name="web_load_failed">页面加载失败</string>
-    <string name="post_not_found">没有找到帖子</string>
-    <string name="circle_no_post">这个工友圈暂时还没有帖子</string>
-    <string name="msg_no_msg">你还没有消息</string>
-    <string name="praise_no_praise">你还没有收到赞</string>
-    <string name="overlay_tip_share">分享，可以让身边的朋友快速加入，你和他们的秘密都会被更多地倾听和回应</string>
-    <string name="loading_more">正在加载更多</string>
-    <string name="no_new_praise">没有新赞</string>
-    <string name="report_succeed">举报成功</string>
-    <string name="report_type_1">色情暴力</string>
-    <string name="report_type_2">违法违规</string>
-    <string name="report_type_3">垃圾广告</string>
-    <string name="report_type_4">人身攻击</string>
-    <string name="report_type_5">虚假谣言</string>
-    <string name="report_type_6">其他信息</string>
-    <string name="share_succeed">分享成功</string>
 
 </resources>
