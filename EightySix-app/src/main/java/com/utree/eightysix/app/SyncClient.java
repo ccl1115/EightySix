@@ -3,6 +3,7 @@ package com.utree.eightysix.app;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.U;
 import com.utree.eightysix.data.Sync;
+import de.akquinet.android.androlog.Log;
 
 /**
  * @author simon
@@ -17,6 +18,7 @@ public class SyncClient {
 
   @Subscribe
   public void onSyncEvent(Sync sync) {
+    Log.d("SyncClient", sync.toString());
     mSync = sync;
   }
 

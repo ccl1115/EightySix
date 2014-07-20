@@ -25,6 +25,14 @@ public class Sync {
 
     @SerializedName("version")
     public String version;
+
+    @Override
+    public String toString() {
+      return "Portrait{" +
+          "url='" + url + '\'' +
+          ", version='" + version + '\'' +
+          '}';
+    }
   }
 
   public static class Upgrade {
@@ -57,5 +65,26 @@ public class Sync {
      */
     @SerializedName("remind")
     public int remind;
+
+    @Override
+    public String toString() {
+      return "Upgrade{" +
+          "url='" + url + '\'' +
+          ", force=" + force +
+          ", info='" + info + '\'' +
+          ", version='" + version + '\'' +
+          ", remind=" + remind +
+          '}';
+    }
+  }
+
+  @Override
+  public String toString() {
+    return "Sync{" +
+        "upgrade=" + upgrade +
+        ", selectFactoryDays=" + selectFactoryDays +
+        ", unlockFriends=" + unlockFriends +
+        ", portrait=" + portrait +
+        '}';
   }
 }
