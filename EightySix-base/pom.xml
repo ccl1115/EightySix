@@ -15,5 +15,17 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.loopj.android</groupId>
+            <artifactId>android-async-http</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.1.1</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>

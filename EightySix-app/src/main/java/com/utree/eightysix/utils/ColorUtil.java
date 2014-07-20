@@ -37,6 +37,7 @@ public class ColorUtil {
   }
 
   public static void asyncThemedColor(final Bitmap bitmap) {
+    if (bitmap == null) return;
     if (mCachedColor.containsKey(String.valueOf(bitmap.hashCode()))) {
       Log.d(TAG, "Get color from cache");
       U.getBus().post(new ThemedColorEvent(bitmap, mCachedColor.get(String.valueOf(bitmap.hashCode()))));

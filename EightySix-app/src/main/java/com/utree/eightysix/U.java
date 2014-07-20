@@ -16,11 +16,11 @@ import com.utree.eightysix.app.BaseApplication;
 import com.utree.eightysix.app.SyncClient;
 import com.utree.eightysix.app.feed.BaseItemDeserializer;
 import com.utree.eightysix.data.BaseItem;
-import com.utree.eightysix.data.Sync;
 import com.utree.eightysix.location.BdLocationImpl;
 import com.utree.eightysix.location.Location;
 import com.utree.eightysix.push.PushHelper;
 import com.utree.eightysix.push.PushHelperImpl;
+import com.utree.eightysix.rest.IRESTRequester;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.app.share.ShareManager;
 import com.utree.eightysix.statistics.Analyser;
@@ -52,7 +52,7 @@ public class U {
   private static Analyser sStatistics;
   private static Location sLocation;
   private static Storage sCloudStorage;
-  private static RESTRequester sRESTRequester;
+  private static IRESTRequester sRESTRequester;
   private static CacheUtils sCacheUtils;
   private static Bus sBus;
   private static Reporter sReporter;
@@ -140,7 +140,7 @@ public class U {
     ButterKnife.inject(target, view);
   }
 
-  public static RESTRequester getRESTRequester() {
+  public static IRESTRequester getRESTRequester() {
     checkThread();
     if (sRESTRequester == null) {
       sRESTRequester = new RESTRequester(getConfig("api.host"));

@@ -1,7 +1,6 @@
 package com.utree.eightysix.rest;
 
 import android.os.Build;
-import com.aliyun.android.util.MD5Util;
 import com.baidu.android.common.util.CommonParam;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestHandle;
@@ -12,6 +11,7 @@ import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.C;
 import com.utree.eightysix.U;
 import com.utree.eightysix.utils.Env;
+import com.utree.eightysix.utils.MD5Util;
 import de.akquinet.android.androlog.Log;
 import java.io.File;
 import java.io.InputStream;
@@ -25,7 +25,7 @@ import org.apache.http.message.BasicHeader;
 
 /**
  */
-public class RESTRequester {
+public class RESTRequester implements IRESTRequester {
 
   private AsyncHttpClient mAsyncHttpClient;
 
@@ -60,19 +60,23 @@ public class RESTRequester {
     return response != null && response.code == 0;
   }
 
+  @Override
   public String getHost() {
     return mHost;
   }
 
+  @Override
   public AsyncHttpClient getClient() {
     return mAsyncHttpClient;
   }
 
+  @Override
   public RequestHandle request(Object request, ResponseHandlerInterface handler) {
     RequestData data = convert(request);
     return request(data, handler);
   }
 
+  @Override
   public RequestHandle request(RequestData data, ResponseHandlerInterface handler) {
     if (data.getMethod() == Method.GET) {
       return get(data.getApi(), data.getHeaders(), data.getParams(), handler);
@@ -82,6 +86,7 @@ public class RESTRequester {
     return null;
   }
 
+  @Override
   public RequestData convert(Object request) {
     RequestData data = new RequestData();
     Class<?> clz = request.getClass();
@@ -151,6 +156,7 @@ public class RESTRequester {
     return data;
   }
 
+  @Override
   public RequestHandle get(String api, Header[] headers, RequestParams params, ResponseHandlerInterface handler) {
     Log.d(C.TAG.RR, "   get: " + mHost + api);
     Log.d(C.TAG.RR, "params: " + params.toString());
@@ -158,6 +164,7 @@ public class RESTRequester {
     return mAsyncHttpClient.get(U.getContext(), mHost + api, headers, params, handler);
   }
 
+  @Override
   public RequestHandle post(String api, Header[] headers, RequestParams params, String contentType, ResponseHandlerInterface handler) {
     Log.d(C.TAG.RR, "  post: " + mHost + api);
     putBaseParams(params);
@@ -165,7 +172,7 @@ public class RESTRequester {
     return mAsyncHttpClient.post(U.getContext(), mHost + api, headers, params, contentType, handler);
   }
 
-  private void putBaseParams(RequestParams params) {
+  public void putBaseParams(RequestParams params) {
     if (params == null) {
       params = new RequestParams();
     }
@@ -195,6 +202,7 @@ public class RESTRequester {
     }
   }
 
+  @Override
   public RequestParams addAuthParams(RequestParams params) {
     if (params == null) params = new RequestParams();
     params.add("userId", Account.inst().getUserId());
