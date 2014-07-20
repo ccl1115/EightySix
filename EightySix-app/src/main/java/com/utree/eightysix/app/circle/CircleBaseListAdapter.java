@@ -9,6 +9,7 @@ import butterknife.InjectView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.data.Circle;
+import com.utree.eightysix.utils.*;
 import java.util.Collection;
 import java.util.List;
 
@@ -60,12 +61,13 @@ class CircleBaseListAdapter extends BaseAdapter {
 
 
     final String info;
+    final String distance = com.utree.eightysix.utils.Utils.getDisplayDistance(item.distance);
     if (item.distance < 100) {
-      info = String.format("小于100米 | 朋友(%d) | 工友(%d)", item.friendCount, item.workmateCount);
+      info = String.format("%s | 朋友(%d) | 工友(%d)", distance, item.friendCount, item.workmateCount);
     } else if (item.distance < 1000) {
-      info = String.format("%d米 | 朋友(%d) | 工友(%d)", 100 * (item.distance / 100), item.friendCount, item.workmateCount);
+      info = String.format("%s | 朋友(%d) | 工友(%d)", distance, item.friendCount, item.workmateCount);
     } else {
-      info = String.format("%.1f千米 | 朋友(%d) | 工友(%d)", item.distance / 1000f, item.friendCount, item.workmateCount);
+      info = String.format("%s | 朋友(%d) | 工友(%d)", distance, item.friendCount, item.workmateCount);
     }
 
     viewHolder.mTvCircleInfo.setText(info);

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -14,7 +15,6 @@ import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.squareup.otto.Subscribe;
-import com.utree.eightysix.C;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
@@ -171,6 +171,21 @@ class FeedAdapter extends BaseAdapter {
     return TYPE_COUNT;
   }
 
+  @Subscribe
+  public void onPostEvent(Post post) {
+    for (BaseItem item : mFeeds.posts.lists) {
+      if (item == null || !(item instanceof Post)) continue;
+      Post p = ((Post) item);
+      if (p.equals(post)) {
+        p.praise = post.praise;
+        p.praised = post.praised;
+        p.comments = post.comments;
+        notifyDataSetChanged();
+        break;
+      }
+    }
+  }
+
   private View getPostView(int position, View convertView, ViewGroup parent) {
     if (convertView == null) {
       convertView = new FeedPostView(parent.getContext());
@@ -262,10 +277,12 @@ class FeedAdapter extends BaseAdapter {
     });
 
     if (mFeeds.hiddenCount == 0) {
-      holder.mRbHidden.setText("!");
+      holder.mRbHidden.setText("");
+      holder.mIvHiddenCount.setVisibility(View.VISIBLE);
       holder.mTvHidden.setText(U.gs(R.string.circle_unlocked_tip));
       holder.mRbUnlock.setText(U.gs(R.string.unlock));
     } else {
+      holder.mIvHiddenCount.setVisibility(View.GONE);
       holder.mRbHidden.setText(String.valueOf(mFeeds.hiddenCount));
       holder.mTvHidden.setText(U.gfs(R.string.hidden_friends_feed, mFeeds.hiddenCount));
       holder.mRbUnlock.setText(U.gs(R.string.unlock_to_view));
@@ -284,21 +301,6 @@ class FeedAdapter extends BaseAdapter {
       holder = (SelectViewHolder) convertView.getTag();
     }
     return convertView;
-  }
-
-  @Subscribe
-  public void onPostEvent(Post post) {
-    for (BaseItem item : mFeeds.posts.lists) {
-      if (item == null || !(item instanceof Post)) continue;
-      Post p = ((Post) item);
-      if (p.equals(post)) {
-        p.praise = post.praise;
-        p.praised = post.praised;
-        p.comments = post.comments;
-        notifyDataSetChanged();
-        break;
-      }
-    }
   }
 
   @Keep
@@ -342,6 +344,9 @@ class FeedAdapter extends BaseAdapter {
 
     @InjectView (R.id.rb_hidden_count)
     public RoundedButton mRbHidden;
+
+    @InjectView (R.id.iv_hidden_count)
+    public ImageView mIvHiddenCount;
 
     public UnlockViewHolder(View view) {
       ButterKnife.inject(this, view);

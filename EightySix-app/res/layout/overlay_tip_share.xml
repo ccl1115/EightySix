@@ -23,7 +23,7 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:text="@string/overlay_tip_source"
+                android:text="@string/overlay_tip_share"
                 android:textSize="13sp"
                 android:textColor="#ff545454"/>
 
