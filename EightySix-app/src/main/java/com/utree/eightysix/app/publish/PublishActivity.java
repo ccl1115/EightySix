@@ -9,20 +9,18 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,7 +30,6 @@ import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ArgbEvaluator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.squareup.otto.Subscribe;
-import com.sun.org.apache.bcel.internal.generic.IMUL;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -52,6 +49,7 @@ import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.widget.AsyncImageView;
+import com.utree.eightysix.widget.IndicatorView;
 import com.utree.eightysix.widget.PostEditText;
 import com.utree.eightysix.widget.TopBar;
 import com.utree.eightysix.widget.panel.GridPanel;
@@ -87,8 +85,14 @@ public class PublishActivity extends BaseActivity {
   @InjectView (R.id.ll_bottom)
   public LinearLayout mLlBottom;
 
-  @InjectView (R.id.gp_color)
-  public GridPanel mGpColor;
+  @InjectView (R.id.gp_panel)
+  public GridPanel mGpPanel;
+
+  @InjectView (R.id.ll_panel)
+  public LinearLayout mLlPanel;
+
+  @InjectView(R.id.in_panel)
+  public IndicatorView mInPanel;
 
   protected PublishLayout mPublishLayout;
 
@@ -316,12 +320,14 @@ public class PublishActivity extends BaseActivity {
 
       @Override
       public TopBar.LayoutParams getLayoutParams(int position) {
-        return new TopBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+        TopBar.LayoutParams layoutParams = new TopBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.rightMargin = U.dp2px(8);
+        return layoutParams;
       }
     });
 
-    List<Item> itemsByPage = mGpColor.getItemsByPage(0);
+    List<Item> itemsByPage = mGpPanel.getItemsByPage(0);
     Item item = itemsByPage.get(new Random().nextInt(itemsByPage.size()));
     int color = item.getValue().data;
     mPostEditText.setTextColor(ColorUtil.monochromizing(color));
@@ -329,6 +335,23 @@ public class PublishActivity extends BaseActivity {
     mAivPostBg.setImageDrawable(null);
     mAivPostBg.setBackgroundColor(color);
     mBgColor = color;
+
+    mGpPanel.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+      @Override
+      public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        mInPanel.setPosition(position + positionOffset);
+      }
+
+      @Override
+      public void onPageSelected(int position) {
+
+      }
+
+      @Override
+      public void onPageScrollStateChanged(int state) {
+
+      }
+    });
   }
 
   @Override

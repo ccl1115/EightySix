@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<panel row="4" column="5" itemWidth="50" itemHeight="40" spaceHorizontal="10" spaceVertical="10">
+<panel row="4" column="5" itemWidth="50" itemHeight="30" spaceHorizontal="10" spaceVertical="10">
     <page>
         <item>
             <color>#ffffffff</color>
@@ -67,7 +67,7 @@
         </item>
     </page>
 
-    <page row="3" column="4" itemWidth="60" itemHeight="60" spaceHorizontal="10" spaceVertical="10">
+    <page row="3" column="4" itemWidth="60" itemHeight="40" spaceHorizontal="10" spaceVertical="15">
         <item>
             <local-image>bg_10</local-image>
         </item>
