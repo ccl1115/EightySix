@@ -35,6 +35,14 @@
                     app:radius="64dp"
                     app:background="#ff00b7ec"/>
 
+            <ImageView
+                    android:id="@+id/iv_hidden_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/symbol_alert"/>
+
         </FrameLayout>
 
         <LinearLayout

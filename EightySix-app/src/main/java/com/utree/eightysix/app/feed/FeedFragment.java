@@ -136,6 +136,7 @@ class FeedFragment extends BaseFragment {
         if (scrollState == SCROLL_STATE_IDLE) {
           U.getBus().post(new ListViewScrollStateIdledEvent());
 
+
           if (Env.firstRun("overlay_tip_source")) {
             if (view.getChildCount() <= 2) return;
 
@@ -148,9 +149,11 @@ class FeedFragment extends BaseFragment {
               @Override
               public void onClick(View v) {
                 if (mSourceTip != null) mSourceTip.dismiss();
+                mLvFeed.setEnabled(true);
               }
             });
             mSourceTip.show(getActivity());
+            mLvFeed.setEnabled(false);
             Env.setFirstRun("overlay_tip_source", false);
           } else if (Env.firstRun("overlay_tip_praise")) {
             if (view.getChildCount() <= 2) return;
@@ -164,9 +167,11 @@ class FeedFragment extends BaseFragment {
               @Override
               public void onClick(View v) {
                 if (mPraiseTip != null) mPraiseTip.dismiss();
+                mLvFeed.setEnabled(true);
               }
             });
             mPraiseTip.show(getActivity());
+            mLvFeed.setEnabled(false);
             Env.setFirstRun("overlay_tip_praise", false);
           } else if (Env.firstRun("overlay_tip_share")) {
             if (view.getChildCount() <= 2) return;
@@ -180,9 +185,11 @@ class FeedFragment extends BaseFragment {
               @Override
               public void onClick(View v) {
                 if (mShareTip != null) mShareTip.dismiss();
+                mLvFeed.setEnabled(true);
               }
             });
             mShareTip.show(getActivity());
+            mLvFeed.setEnabled(false);
             Env.setFirstRun("overlay_tip_share", false);
           }
         }

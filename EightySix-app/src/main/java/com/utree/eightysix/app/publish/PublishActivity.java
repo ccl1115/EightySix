@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ArgbEvaluator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.squareup.otto.Subscribe;
+import com.sun.org.apache.bcel.internal.generic.IMUL;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -397,6 +399,20 @@ public class PublishActivity extends BaseActivity {
       mAivPostBg.setUrl(tv.string.toString());
       mImageUploadFinished = true;
       mImageUploadUrl = tv.string.toString();
+      mUseColor = false;
+      mBgColor = Color.WHITE;
+    } else if (tv.type == TypedValue.TYPE_REFERENCE) {
+      mAivPostBg.setBackgroundColor(Color.TRANSPARENT);
+
+      mImageUploadUrl = U.getCloudStorage().getUrl(U.getConfig("storage.bg.bucket.name"),
+          "",
+          getResources().getResourceEntryName(tv.resourceId) + ".png");
+      mImageUploadFinished = true;
+
+      Bitmap bitmap = ImageUtils.syncLoadResourceBitmap(tv.resourceId, ImageUtils.getUrlHash(mImageUploadUrl));
+      mAivPostBg.setImageBitmap(bitmap);
+      ColorUtil.asyncThemedColor(bitmap);
+      //Log.d("PublishActivity", "URL: " + mImageUploadUrl);
       mUseColor = false;
       mBgColor = Color.WHITE;
     }

@@ -11,6 +11,7 @@ import android.view.View;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.drawable.AsyncImageDrawable;
+import com.utree.eightysix.utils.ImageUtils;
 import de.akquinet.android.androlog.Log;
 
 /**
@@ -49,7 +50,9 @@ public class ItemView extends View implements View.OnClickListener {
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
     super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-    mDrawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
+    if (mDrawable != null) {
+      mDrawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
+    }
     mSelectDrawableList.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
 
   }
@@ -61,7 +64,9 @@ public class ItemView extends View implements View.OnClickListener {
 
   @Override
   protected void dispatchDraw(Canvas canvas) {
-    mDrawable.draw(canvas);
+    if (mDrawable != null) {
+      mDrawable.draw(canvas);
+    }
     mSelectDrawableList.draw(canvas);
   }
 
@@ -69,18 +74,29 @@ public class ItemView extends View implements View.OnClickListener {
   protected void onAttachedToWindow() {
     super.onAttachedToWindow();
 
-    if (mItem.getValue().type == TypedValue.TYPE_INT_COLOR_ARGB8) {
-      mDrawable = new ColorDrawable(mItem.getValue().data);
-    } else if(mItem.getValue().type == TypedValue.TYPE_STRING) {
-      mDrawable = new AsyncImageDrawable(getResources(), mItem.getValue().string.toString());
+    TypedValue value = mItem.getValue();
+    if (value.type == TypedValue.TYPE_INT_COLOR_ARGB8) {
+      mDrawable = new ColorDrawable(value.data);
+    } else if(value.type == TypedValue.TYPE_STRING) {
+      mDrawable = new AsyncImageDrawable(getResources(), value.string.toString());
+    } else if (value.type == TypedValue.TYPE_REFERENCE) {
+      String imageUrl = U.getCloudStorage().getUrl(U.getConfig("storage.bg.bucket.name"),
+          "",
+          getResources().getResourceEntryName(value.resourceId) + ".png");
+      mDrawable = new BitmapDrawable(getResources(),
+          ImageUtils.syncLoadResourceBitmapThumbnail(value.resourceId, ImageUtils.getUrlHash(imageUrl)));
     }
-    U.getBus().register(mDrawable);
-    mDrawable.setCallback(this);
+    if (mDrawable != null) {
+      U.getBus().register(mDrawable);
+      mDrawable.setCallback(this);
+    }
   }
 
   @Override
   protected void onDetachedFromWindow() {
-    U.getBus().unregister(mDrawable);
+    if (mDrawable != null) {
+      U.getBus().unregister(mDrawable);
+    }
     super.onDetachedFromWindow();
   }
 

@@ -134,6 +134,18 @@ public class ImageUtils {
     return null;
   }
 
+  public static Bitmap decodeBitmap(int resId, int width, int height) {
+    BitmapFactory.Options options = new BitmapFactory.Options();
+    options.inJustDecodeBounds = true;
+    BitmapFactory.decodeResource(U.getContext().getResources(), resId, options);
+
+    // Calculate inSampleSize
+    options.inSampleSize = calculateInSampleSize(options, width, height);
+
+    options.inJustDecodeBounds = false;
+    return BitmapFactory.decodeResource(U.getContext().getResources(), resId, options);
+  }
+
   /**
    * Decode bitmap file with catch clause and always decode bitmap into a size that smaller than screen width.
    *
@@ -202,12 +214,67 @@ public class ImageUtils {
     }
   }
 
+  @SuppressWarnings ("SuspiciousNameCombination")
+  public static Bitmap safeDecodeBitmap(int resId) {
+    int widthPixels = (int) (U.getContext().getResources().getDisplayMetrics().widthPixels * 0.75);
+    try {
+      return decodeBitmap(resId, widthPixels, widthPixels);
+    } catch (OutOfMemoryError e) {
+      sLruCache.evictAll();
+      try {
+        return decodeBitmap(resId, widthPixels, widthPixels);
+      } catch (OutOfMemoryError ne) {
+        return null;
+      }
+    }
+  }
+
+  public static Bitmap safeDecodeBitmap(int resId, int width, int height) {
+    try {
+      return decodeBitmap(resId, width, height);
+    } catch (OutOfMemoryError e) {
+      sLruCache.evictAll();
+      try {
+        return decodeBitmap(resId, width, height);
+      } catch (OutOfMemoryError ne) {
+        return null;
+      }
+    }
+  }
+
+  public static Bitmap syncLoadResourceBitmap(int resId, final String hash) {
+    Bitmap bitmap = sLruCache.get(hash);
+    if (bitmap == null) {
+      Bitmap b = safeDecodeBitmap(resId);
+      sLruCache.put(hash, b);
+      return b;
+    } else {
+      return bitmap;
+    }
+  }
+
+  public static Bitmap syncLoadResourceBitmap(int resId, final String hash, int width, int height) {
+    String format = String.format("%s_%d_%d", hash, width, height);
+    Bitmap bitmap = sLruCache.get(format);
+    if (bitmap == null) {
+      Bitmap b = safeDecodeBitmap(resId, width, height);
+      sLruCache.put(format, b);
+      return b;
+    } else {
+      return bitmap;
+    }
+  }
+
+  public static Bitmap syncLoadResourceBitmapThumbnail(int resId, final String hash) {
+    return syncLoadResourceBitmap(resId, hash, U.dp2px(48), U.dp2px(48));
+  }
+
   public static void asyncLoadThumbnail(final String url, final String hash) {
     asyncLoad(url, hash, U.dp2px(48), U.dp2px(48));
   }
 
   public static void asyncLoad(final String url, final String hash, final int width, final int height) {
-    Bitmap bitmap = sLruCache.get(String.format("%s_%d_%d", url, width, height));
+    Bitmap bitmap = sLruCache.get(String.format("%s_%d_%d", hash, width, height));
     if (bitmap == null) {
       try {
         final DiskLruCache.Snapshot snapshot = U.getImageCache().get(hash);
@@ -223,9 +290,9 @@ public class ImageUtils {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] binaryData, Throwable error) {
-              Log.d(TAG, "onFailure");
+              Log.w(TAG, "onFailure");
               if (error != null) {
-                Log.d(TAG, "Get remote error: " + error.getMessage());
+                Log.e(TAG, "Get remote error: " + error.getMessage());
                 if (BuildConfig.DEBUG) {
                   error.printStackTrace();
                 }
@@ -312,6 +379,10 @@ public class ImageUtils {
    */
   public static void cacheImage(String hash, File file) {
     new ImageRemoteDecodeWorker(hash, file).execute();
+  }
+
+  public static void cacheImage(String hash, Bitmap bitmap) {
+    sLruCache.put(hash, bitmap);
   }
 
   private static class UploadWorker extends AsyncTask<Void, Void, Void> {
@@ -464,7 +535,7 @@ public class ImageUtils {
 
       if (bitmap != null) {
         if (mWidth > 0 && mHeight > 0) {
-          sLruCache.put(String.format("%s_%d_%d", mUrl, mWidth, mHeight), bitmap);
+          sLruCache.put(String.format("%s_%d_%d", mHash, mWidth, mHeight), bitmap);
         } else {
           sLruCache.put(mHash, bitmap);
         }

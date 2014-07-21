@@ -67,67 +67,43 @@
         </item>
     </page>
 
-    <page>
+    <page row="3" column="4" itemWidth="60" itemHeight="60" spaceHorizontal="10" spaceVertical="10">
         <item>
-            <bg-image>bg_1.png</bg-image>
+            <local-image>bg_10</local-image>
         </item>
 
         <item>
-            <bg-image>bg_2.png</bg-image>
+            <local-image>bg_16</local-image>
         </item>
         <item>
-            <bg-image>bg_3.png</bg-image>
+            <local-image>bg_21</local-image>
         </item>
         <item>
-            <bg-image>bg_4.png</bg-image>
+            <local-image>bg_27</local-image>
         </item>
         <item>
-            <bg-image>bg_5.png</bg-image>
+            <local-image>bg_29</local-image>
         </item>
         <item>
-            <bg-image>bg_6.png</bg-image>
+            <local-image>bg_33</local-image>
         </item>
         <item>
-            <bg-image>bg_7.png</bg-image>
+            <local-image>bg_37</local-image>
         </item>
         <item>
-            <bg-image>bg_8.png</bg-image>
+            <local-image>bg_40</local-image>
         </item>
         <item>
-            <bg-image>bg_9.png</bg-image>
+            <local-image>bg_42</local-image>
         </item>
         <item>
-            <bg-image>bg_10.png</bg-image>
+            <local-image>bg_43</local-image>
         </item>
         <item>
-            <bg-image>bg_11.png</bg-image>
+            <local-image>bg_64</local-image>
         </item>
         <item>
-            <bg-image>bg_12.png</bg-image>
-        </item>
-        <item>
-            <bg-image>bg_13.png</bg-image>
-        </item>
-        <item>
-            <bg-image>bg_14.png</bg-image>
-        </item>
-        <item>
-            <bg-image>bg_15.png</bg-image>
-        </item>
-        <item>
-            <bg-image>bg_16.png</bg-image>
-        </item>
-        <item>
-            <bg-image>bg_17.png</bg-image>
-        </item>
-        <item>
-            <bg-image>bg_18.png</bg-image>
-        </item>
-        <item>
-            <bg-image>bg_19.png</bg-image>
-        </item>
-        <item>
-            <bg-image>bg_20.png</bg-image>
+            <local-image>bg_65</local-image>
         </item>
     </page>
 

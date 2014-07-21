@@ -300,6 +300,7 @@ class FeedAdapter extends BaseAdapter {
     } else {
       holder = (SelectViewHolder) convertView.getTag();
     }
+
     return convertView;
   }
 
