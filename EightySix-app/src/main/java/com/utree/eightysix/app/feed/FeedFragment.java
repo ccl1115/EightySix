@@ -262,7 +262,11 @@ class FeedFragment extends BaseFragment {
   }
 
   public int getCurrFriends() {
-    return mFeedAdapter.getFeeds().currFactoryFriends;
+    if (mFeedAdapter != null && mFeedAdapter.getFeeds() != null) {
+      return mFeedAdapter.getFeeds().currFactoryFriends;
+    } else {
+      return 0;
+    }
   }
 
   public void refresh() {

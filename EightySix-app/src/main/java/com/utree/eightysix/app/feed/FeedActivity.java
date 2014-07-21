@@ -41,6 +41,7 @@ import com.utree.eightysix.event.NewCommentCountEvent;
 import com.utree.eightysix.request.CircleSideRequest;
 import com.utree.eightysix.response.CirclesResponse;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.RoundedButton;
@@ -410,7 +411,7 @@ public class FeedActivity extends BaseActivity {
   }
 
   void requestSideCircle() {
-    request(new CircleSideRequest("", 1), new OnResponse<CirclesResponse>() {
+    request(new CircleSideRequest("", 1), new OnResponse2<CirclesResponse>() {
 
       @Override
       public void onResponse(CirclesResponse response) {
@@ -428,6 +429,11 @@ public class FeedActivity extends BaseActivity {
           mLvSideCircles.setAdapter(mSideCirclesAdapter);
 
         }
+      }
+
+      @Override
+      public void onResponseError(Throwable e) {
+        e.printStackTrace();
       }
     }, CirclesResponse.class);
   }
