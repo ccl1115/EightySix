@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
               android:id="@+id/parent"
               android:orientation="vertical"
               android:layout_width="wrap_content"
@@ -37,32 +38,29 @@
 
     <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
         <com.utree.eightysix.widget.RoundedButton
                 android:id="@+id/rb_positive"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="35dp"
                 android:layout_weight="1"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:paddingLeft="50dp"
-                android:paddingRight="50dp"
                 android:textSize="16sp"
                 android:visibility="gone"/>
 
         <com.utree.eightysix.widget.RoundedButton
                 android:id="@+id/rb_negative"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="35dp"
                 android:layout_weight="1"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:paddingLeft="50dp"
-                android:paddingRight="50dp"
                 android:textSize="16sp"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                app:background="@color/apptheme_secondary_btn_light"/>
 
     </LinearLayout>
 </LinearLayout>

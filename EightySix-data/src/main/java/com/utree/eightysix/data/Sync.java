@@ -1,5 +1,7 @@
 package com.utree.eightysix.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -19,7 +21,9 @@ public class Sync {
   @SerializedName("portraite")
   public Portrait portrait;
 
-  public static class Portrait {
+  public static class Portrait implements Parcelable {
+
+
     @SerializedName("url")
     public String url;
 
@@ -33,9 +37,39 @@ public class Sync {
           ", version='" + version + '\'' +
           '}';
     }
+
+    @Override
+    public int describeContents() {
+      return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+      dest.writeString(this.url);
+      dest.writeString(this.version);
+    }
+
+    public Portrait() {
+    }
+
+    private Portrait(Parcel in) {
+      this.url = in.readString();
+      this.version = in.readString();
+    }
+
+    public static final Parcelable.Creator<Portrait> CREATOR = new Parcelable.Creator<Portrait>() {
+      public Portrait createFromParcel(Parcel source) {
+        return new Portrait(source);
+      }
+
+      public Portrait[] newArray(int size) {
+        return new Portrait[size];
+      }
+    };
   }
 
-  public static class Upgrade {
+  public static class Upgrade implements Parcelable {
+
     /**
      * 下载链接
      */
@@ -76,6 +110,41 @@ public class Sync {
           ", remind=" + remind +
           '}';
     }
+
+    @Override
+    public int describeContents() {
+      return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+      dest.writeString(this.url);
+      dest.writeInt(this.force);
+      dest.writeString(this.info);
+      dest.writeString(this.version);
+      dest.writeInt(this.remind);
+    }
+
+    public Upgrade() {
+    }
+
+    private Upgrade(Parcel in) {
+      this.url = in.readString();
+      this.force = in.readInt();
+      this.info = in.readString();
+      this.version = in.readString();
+      this.remind = in.readInt();
+    }
+
+    public static final Parcelable.Creator<Upgrade> CREATOR = new Parcelable.Creator<Upgrade>() {
+      public Upgrade createFromParcel(Parcel source) {
+        return new Upgrade(source);
+      }
+
+      public Upgrade[] newArray(int size) {
+        return new Upgrade[size];
+      }
+    };
   }
 
   @Override

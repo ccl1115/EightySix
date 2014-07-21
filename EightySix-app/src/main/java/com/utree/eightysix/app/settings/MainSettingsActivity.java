@@ -11,6 +11,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.data.Sync;
 
 /**
  * @author simon
@@ -42,17 +43,9 @@ public class MainSettingsActivity extends BaseActivity {
 
   @OnClick (R.id.tv_check_update)
   public void onTvCheckUpdateClicked() {
-    if (U.useFixture()) {
-      showProgressBar();
-      getHandler().postDelayed(new Runnable() {
-        @Override
-        public void run() {
-          hideProgressBar();
-          UpgradeActivity.start(MainSettingsActivity.this, "1.0.1", "新版本", false);
-        }
-      }, 2000);
-    } else {
-
+    Sync sync = U.getSyncClient().getSync();
+    if (sync != null && sync.upgrade != null) {
+      new UpgradeDialog(this, sync.upgrade).show();
     }
   }
 

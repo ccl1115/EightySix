@@ -7,15 +7,6 @@
               android:orientation="vertical">
 
     <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:text="@string/new_version_to_upgrade"
-            android:textSize="22sp"/>
-
-    <include layout="@layout/widget_primary_divider"/>
-
-    <TextView
             android:id="@+id/tv_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,56 +21,5 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:padding="10dp"/>
-
-    <include layout="@layout/widget_primary_divider"/>
-
-    <LinearLayout
-            android:id="@+id/ll_bottom"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        <com.utree.eightysix.widget.RoundedButton
-                android:id="@+id/rb_download_upgrade"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:text="@string/download_upgrade"
-                android:padding="10dp"
-                app:radius="4dp"
-                app:background="@color/apptheme_primary_btn_light"/>
-
-        <com.utree.eightysix.widget.RoundedButton
-                android:id="@+id/rb_cancel"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:text="@string/cancel"
-                android:padding="10dp"
-                app:radius="4dp"
-                app:background="@color/apptheme_secondary_btn_light"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-            android:id="@+id/ll_progress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone">
-
-        <com.utree.eightysix.widget.RoundedButton
-                android:id="@+id/rb_progress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="@string/cancel"
-                android:textColor="@android:color/white"
-                android:padding="10dp"
-                app:radius="4dp"
-                app:background="@android:color/darker_gray"/>
-
-    </LinearLayout>
 
 </LinearLayout>

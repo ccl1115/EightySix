@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,21 +24,24 @@ import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import static com.nineoldandroids.view.ViewHelper.getTranslationY;
-import com.utree.eightysix.Account;
+import com.utree.eightysix.C;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.settings.UpgradeDialog;
+import com.utree.eightysix.data.Sync;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.event.LogoutListener;
 import com.utree.eightysix.rest.CacheInWorker;
 import com.utree.eightysix.rest.CacheOutWorker;
 import com.utree.eightysix.rest.HandlerWrapper;
 import com.utree.eightysix.rest.OnResponse;
-import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.RequestData;
 import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.TopBar;
 import java.io.InputStream;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -401,6 +402,8 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     initAnimator();
 
     U.getBus().register(this);
+
+    checkUpgrade();
   }
 
   @Override
@@ -597,6 +600,31 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   private boolean isRequesting(String api, RequestParams params) {
     RequestHandle executed = mRequestHandles.get(RESTRequester.genCacheKey(api, params));
     return executed != null && !executed.isCancelled() && !executed.isFinished();
+  }
+
+  private void checkUpgrade() {
+    Sync sync = U.getSyncClient().getSync();
+    if (sync != null && sync.upgrade != null) {
+      int version;
+      try {
+        version = Integer.parseInt(sync.upgrade.version);
+      } catch (NumberFormatException e) {
+        version = -1;
+      }
+      if (version > C.VERSION) {
+        if (sync.upgrade.force == 1) {
+          new UpgradeDialog(this, sync.upgrade).show();
+        } else {
+          Calendar last = Calendar.getInstance();
+          last.setTimeInMillis(Env.getUpgradeCanceledTimestamp());
+
+          Calendar now = Calendar.getInstance();
+          if (last.get(Calendar.DAY_OF_YEAR) != now.get(Calendar.DAY_OF_YEAR)) {
+            new UpgradeDialog(this, sync.upgrade).show();
+          }
+        }
+      }
+    }
   }
 
   private boolean topBarShown() {

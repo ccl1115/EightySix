@@ -2,7 +2,9 @@ package com.utree.eightysix.app;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import com.baidu.frontia.FrontiaApplication;
+import com.utree.eightysix.C;
 import com.utree.eightysix.U;
 import com.utree.eightysix.utils.Env;
 import de.akquinet.android.androlog.Constants;
@@ -24,6 +26,12 @@ public class BaseApplication extends FrontiaApplication {
   public void onCreate() {
     super.onCreate();
     sContext = this;
+
+    try {
+      C.VERSION = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+    } catch (PackageManager.NameNotFoundException e) {
+      C.VERSION = -1;
+    }
 
     if (isMainProcess()) {
       Log.init(this);

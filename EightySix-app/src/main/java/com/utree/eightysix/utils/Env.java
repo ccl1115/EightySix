@@ -111,8 +111,9 @@ public class Env {
     return getSharedPreferences().getLong(String.format("upgrade_canceled_time_%d", C.VERSION), 0);
   }
 
-  public static void setUpgradeCanceledTimestamp(long timestamp) {
-    getSharedPreferences().edit().putLong(String.format("upgrade_canceled_time_%d", C.VERSION), timestamp).apply();
+  public static void setUpgradeCanceledTimestamp() {
+    getSharedPreferences().edit().putLong(String.format("upgrade_canceled_time_%d", C.VERSION),
+        System.currentTimeMillis()).apply();
   }
 
   public static void setLastCircle(Circle circle) {
@@ -128,11 +129,11 @@ public class Env {
   }
 
   public static void setTimestamp(String key) {
-    getSharedPreferences().edit().putLong(key, new Date().getTime()).apply();
+    getSharedPreferences().edit().putLong(key, System.currentTimeMillis()).apply();
   }
 
-  public static long getTimestamp(String key) {
-    return getSharedPreferences().getLong(key, new Date().getTime());
+  public static long getTimestamp(String key){
+    return getSharedPreferences().getLong(key, System.currentTimeMillis());
   }
 
   private static SharedPreferences getSharedPreferences() {

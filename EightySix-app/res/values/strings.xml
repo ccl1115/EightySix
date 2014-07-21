@@ -247,5 +247,6 @@
 
     <!-- BaseWebActivity -->
     <string name="web_load_failed">页面加载失败</string>
+    <string name="exit">退出</string>
 
 </resources>
