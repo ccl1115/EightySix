@@ -3,6 +3,7 @@ package com.utree.eightysix.app.msg;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,7 @@ import java.util.List;
 public class PraiseActivity extends BaseActivity {
 
   @InjectView (R.id.refresh_view)
-  public RefresherView mRvMsg;
+  public SwipeRefreshLayout mRvMsg;
 
   @InjectView (R.id.tv_no_new_msg)
   public TextView mTvNoNewMsg;
@@ -113,25 +114,11 @@ public class PraiseActivity extends BaseActivity {
       }
     });
 
-    mRvMsg.setOnRefreshListener(new IRefreshable.OnRefreshListener() {
+    mRvMsg.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override
-      public void onStateChanged(IRefreshable.State state) {
-      }
-
-      @Override
-      public void onPreRefresh() {
+      public void onRefresh() {
         mRefreshed = true;
         requestPraises(1);
-      }
-
-      @Override
-      public void onRefreshData() {
-
-      }
-
-      @Override
-      public void onRefreshUI() {
-
       }
     });
 
@@ -210,14 +197,14 @@ public class PraiseActivity extends BaseActivity {
         }
         hideProgressBar();
         mAlvMsg.stopLoadMore();
-        mRvMsg.hideHeader();
+        mRvMsg.setRefreshing(false);
       }
 
       @Override
       public void onResponseError(Throwable e) {
         hideProgressBar();
         mAlvMsg.stopLoadMore();
-        mRvMsg.hideHeader();
+        mRvMsg.setRefreshing(false);
         mRstvEmpty.setVisibility(View.VISIBLE);
         mTvNoNewMsg.setVisibility(View.GONE);
       }
@@ -267,7 +254,7 @@ public class PraiseActivity extends BaseActivity {
           mPageInfo = response.object.posts.page;
           hideProgressBar();
           mAlvMsg.stopLoadMore();
-          mRvMsg.hideHeader();
+          mRvMsg.setRefreshing(false);
         } else {
           requestPraises(page);
         }
@@ -277,14 +264,12 @@ public class PraiseActivity extends BaseActivity {
       public void onResponseError(Throwable e) {
         hideProgressBar();
         mAlvMsg.stopLoadMore();
-        mRvMsg.hideHeader();
+        mRvMsg.setRefreshing(false);
         mRstvEmpty.setVisibility(View.VISIBLE);
         mTvNoNewMsg.setVisibility(View.GONE);
       }
 
     }, MsgsResponse.class);
-
-    showProgressBar();
   }
 
   @Subscribe

@@ -3,6 +3,7 @@ package com.utree.eightysix.app.msg;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,8 +40,9 @@ import java.util.Random;
 public class MsgActivity extends BaseActivity {
 
   private static final int MSG_ANIMATE = 0x1;
+
   @InjectView (R.id.refresh_view)
-  public RefresherView mRvMsg;
+  public SwipeRefreshLayout mRvMsg;
 
   @InjectView (R.id.tv_no_new_msg)
   public TextView mTvNoNewMsg;
@@ -123,23 +125,11 @@ public class MsgActivity extends BaseActivity {
       }
     });
 
-    mRvMsg.setOnRefreshListener(new IRefreshable.OnRefreshListener() {
+    mRvMsg.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override
-      public void onStateChanged(IRefreshable.State state) {
-      }
-
-      @Override
-      public void onPreRefresh() {
+      public void onRefresh() {
         mRefreshed = true;
         requestMsgs(1);
-      }
-
-      @Override
-      public void onRefreshData() {
-      }
-
-      @Override
-      public void onRefreshUI() {
       }
     });
 
@@ -219,7 +209,7 @@ public class MsgActivity extends BaseActivity {
         }
         hideProgressBar();
         mAlvMsg.stopLoadMore();
-        mRvMsg.hideHeader();
+        mRvMsg.setRefreshing(false);
       }
 
       @Override
@@ -227,11 +217,9 @@ public class MsgActivity extends BaseActivity {
         mRstvEmpty.setVisibility(View.VISIBLE);
         hideProgressBar();
         mAlvMsg.stopLoadMore();
-        mRvMsg.hideHeader();
+        mRvMsg.setRefreshing(false);
       }
     }, MsgsResponse.class);
-
-    showProgressBar();
   }
 
   private void cacheOutMsg(final int page) {
@@ -269,7 +257,7 @@ public class MsgActivity extends BaseActivity {
           mPageInfo = response.object.posts.page;
           hideProgressBar();
           mAlvMsg.stopLoadMore();
-          mRvMsg.hideHeader();
+          mRvMsg.setRefreshing(false);
         } else {
           requestMsgs(page);
         }
@@ -281,7 +269,7 @@ public class MsgActivity extends BaseActivity {
         mTvNoNewMsg.setVisibility(View.GONE);
         hideProgressBar();
         mAlvMsg.stopLoadMore();
-        mRvMsg.hideHeader();
+        mRvMsg.setRefreshing(false);
       }
     }, MsgsResponse.class);
 

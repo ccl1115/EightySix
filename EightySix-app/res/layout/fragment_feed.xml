@@ -5,13 +5,24 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#ffd8dbdb">
+
+    <com.utree.eightysix.widget.RandomSceneTextView
+            android:id="@+id/tv_empty_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            app:drawable="@drawable/scene_4"
+            app:text="@string/not_found_post"
+            app:subText="@string/not_found_post_tip"/>
+
 
     <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/refresh_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#ffd8dbdb">
+            android:layout_height="match_parent">
 
         <com.utree.eightysix.widget.AdvancedListView
                 android:id="@+id/lv_feed"
@@ -21,15 +32,6 @@
                 android:smoothScrollbar="true"
                 android:listSelector="@drawable/transparent"/>
     </android.support.v4.widget.SwipeRefreshLayout>
-
-    <com.utree.eightysix.widget.RandomSceneTextView
-            android:id="@+id/tv_empty_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:drawable="@drawable/scene_4"
-            app:text="@string/not_found_post"
-            app:subText="@string/not_found_post_tip"/>
 
 </FrameLayout>
 

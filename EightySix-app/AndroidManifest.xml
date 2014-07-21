@@ -110,7 +110,7 @@
 
         <activity android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:exported="@bool/exported" android:name=".app.msg.MsgActivity" android:screenOrientation="portrait"/>
 
-        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:exported="@bool/exported" android:name=".app.circle.BaseCirclesActivity" android:screenOrientation="portrait"/>
+        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:exported="@bool/exported" android:name=".app.circle.BaseCirclesActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden"/>
 
         <activity android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:exported="@bool/exported" android:name=".app.settings.MainSettingsActivity" android:screenOrientation="portrait"/>
 

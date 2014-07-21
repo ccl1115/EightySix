@@ -21,8 +21,12 @@ import com.utree.eightysix.rest.Response;
  */
 public class SyncService extends Service {
 
+  private static boolean sSyncing;
+
   public static void start(Context context) {
-    context.startService(new Intent(context, SyncService.class));
+    if (!sSyncing) {
+      context.startService(new Intent(context, SyncService.class));
+    }
   }
 
   @Override
@@ -32,11 +36,14 @@ public class SyncService extends Service {
 
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
-    requestSync();
+    if (!sSyncing) {
+      requestSync();
+    }
     return START_NOT_STICKY;
   }
 
   private void requestSync() {
+    sSyncing = true;
     RequestData data = U.getRESTRequester().convert(new SyncRequest());
     U.getRESTRequester().request(data, new HandlerWrapper<SyncResponse>(data, new OnResponse2<SyncResponse>() {
       @Override
@@ -44,6 +51,7 @@ public class SyncService extends Service {
         if (BuildConfig.DEBUG) {
           U.showToast("Sync Error");
         }
+        sSyncing = false;
       }
 
       @Override
@@ -55,6 +63,7 @@ public class SyncService extends Service {
             U.showToast("Sync Error");
           }
         }
+        sSyncing = false;
       }
     }, SyncResponse.class));
   }

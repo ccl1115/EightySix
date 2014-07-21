@@ -137,6 +137,7 @@ public class FeedActivity extends BaseActivity {
 
       mFeedFragment.setCircle(circle);
       setSideHighlight(circle);
+      mDlContent.closeDrawer(mLlSide);
     }
   }
 
@@ -318,6 +319,8 @@ public class FeedActivity extends BaseActivity {
     //}
     //endregion
 
+    mDlContent.closeDrawer(mLlSide);
+
     setHasNewPraise();
     setNewCommentCount();
   }
@@ -406,7 +409,7 @@ public class FeedActivity extends BaseActivity {
     showProgressBar();
   }
 
-  private void requestSideCircle() {
+  void requestSideCircle() {
     request(new CircleSideRequest("", 1), new OnResponse<CirclesResponse>() {
 
       @Override
@@ -460,7 +463,7 @@ public class FeedActivity extends BaseActivity {
     if (circle == null) return;
 
     setTopTitle(circle.shortName);
-    setTopSubTitle(String.format(getString(R.string.friends_info), circle.currFactoryGoodFriends, circle.workmateCount));
+    setTopSubTitle(String.format(getString(R.string.friends_info), mFeedFragment.getCurrFriends(), circle.workmateCount));
     if (circle.lock == 1) {
       getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(
           getResources().getDrawable(R.drawable.ic_lock_small), null, null, null);

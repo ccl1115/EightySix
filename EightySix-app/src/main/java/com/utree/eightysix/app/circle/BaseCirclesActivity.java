@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +58,7 @@ public class BaseCirclesActivity extends BaseActivity {
   public AdvancedListView mLvCircles;
 
   @InjectView (R.id.refresh_view)
-  public RefresherView mRefresherView;
+  public SwipeRefreshLayout mRefresherView;
 
   @InjectView (R.id.rstv_empty)
   public RandomSceneTextView mRstvEmpty;
@@ -150,6 +152,9 @@ public class BaseCirclesActivity extends BaseActivity {
     mRbSearchHint.setHint(R.string.search_circles);
     mRbSearchHint.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(2), Color.WHITE));
 
+    mRefresherView.setColorScheme(R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed,
+        R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed);
+
     mMode = getIntent().getIntExtra("mode", MODE_MY);
     setTopTitle(mMode == MODE_MY ? getString(R.string.my_circles) : getString(R.string.select_circle));
 
@@ -237,25 +242,11 @@ public class BaseCirclesActivity extends BaseActivity {
         }
       });
 
-      mRefresherView.setOnRefreshListener(new IRefreshable.OnRefreshListener() {
-
+      mRefresherView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
         @Override
-        public void onStateChanged(IRefreshable.State state) {
-        }
-
-        @Override
-        public void onPreRefresh() {
+        public void onRefresh() {
           mRefreshed = true;
           requestCircles(1);
-        }
-
-        @Override
-        public void onRefreshData() {
-        }
-
-        @Override
-        public void onRefreshUI() {
-
         }
       });
     }
@@ -378,14 +369,14 @@ public class BaseCirclesActivity extends BaseActivity {
           }
           mLvCircles.stopLoadMore();
           hideProgressBar();
-          mRefresherView.hideHeader();
+          mRefresherView.setRefreshing(false);
         }
 
         @Override
         public void onResponseError(Throwable e) {
           mLvCircles.stopLoadMore();
           hideProgressBar();
-          mRefresherView.hideHeader();
+          mRefresherView.setRefreshing(false);
           mRstvEmpty.setVisibility(View.VISIBLE);
         }
       }, CirclesResponse.class);

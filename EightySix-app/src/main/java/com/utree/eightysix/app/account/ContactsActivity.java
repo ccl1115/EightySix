@@ -82,6 +82,7 @@ public class ContactsActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    mEtSearchHint.setInputType(InputType.TYPE_CLASS_TEXT);
     mEtSearchHint.setHint(R.string.search_contact);
     mEtSearchHint.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(2), Color.WHITE));
 

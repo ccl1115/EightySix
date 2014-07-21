@@ -223,7 +223,7 @@ class FeedAdapter extends BaseAdapter {
   }
 
   private void animateConvertView(int position, View convertView) {
-    if (!mAnimated.get(position, false)) {
+    if (position > 3 && !mAnimated.get(position, false)) {
       AnimatorSet set = new AnimatorSet();
       set.playTogether(
           ObjectAnimator.ofFloat(convertView, "translationY", U.dp2px(350), 0),

@@ -40,6 +40,7 @@ import com.utree.eightysix.rest.RequestData;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.TopBar;
+import de.akquinet.android.androlog.Log;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -68,7 +69,6 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     }
   };
   public View mVProgressMask;
-  private Map<String, RequestHandle> mRequestHandles = new HashMap<String, RequestHandle>();
   private FrameLayout mProgressBar;
   private FrameLayout mFlLoadingWrapper;
   private ViewGroup mBaseView;
@@ -195,10 +195,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   public final <T extends Response> void request(Object request, OnResponse<T> onResponse, Class<T> clz) {
     RequestData data = U.getRESTRequester().convert(request);
 
-    if (isRequesting(data.getApi(), data.getParams())) return;
-
-    RequestHandle handle = U.getRESTRequester().request(request, new HandlerWrapper<T>(data, onResponse, clz));
-    mRequestHandles.put(RESTRequester.genCacheKey(data.getApi(), data.getParams()), handle);
+    U.getRESTRequester().request(request, new HandlerWrapper<T>(data, onResponse, clz));
   }
 
   public final <T extends Response> void cacheOut(Object request, OnResponse<T> onResponse, Class<T> clz) {
@@ -498,19 +495,8 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   }
 
 
-  protected final void cancel(String api, RequestParams params) {
-    RequestHandle handle = mRequestHandles.get(RESTRequester.genCacheKey(api, params));
-    if (handle != null) {
-      handle.cancel(true);
-      mRequestHandles.remove(api);
-    }
-  }
 
   protected final void cancelAll() {
-    for (RequestHandle handle : mRequestHandles.values()) {
-      handle.cancel(true);
-    }
-    mRequestHandles.clear();
   }
 
   protected final int dp2px(int dp) {
@@ -595,11 +581,6 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
 
       }
     });
-  }
-
-  private boolean isRequesting(String api, RequestParams params) {
-    RequestHandle executed = mRequestHandles.get(RESTRequester.genCacheKey(api, params));
-    return executed != null && !executed.isCancelled() && !executed.isFinished();
   }
 
   private void checkUpgrade() {

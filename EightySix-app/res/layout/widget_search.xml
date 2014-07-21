@@ -27,6 +27,7 @@
             android:paddingRight="8dp"
             android:drawableLeft="@drawable/ic_search"
             android:drawablePadding="6dp"
-            android:enabled="false"/>
+            android:editable="false"
+            android:inputType="none"/>
 
 </FrameLayout>

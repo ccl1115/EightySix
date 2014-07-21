@@ -119,12 +119,16 @@ class FeedFragment extends BaseFragment {
       @Override
       public void onRefresh() {
         mRefreshed = true;
-        requestFeeds(mCircle.id, 1);
+        if (mCircle != null) {
+          requestFeeds(mCircle.id, 1);
+        } else {
+          ((FeedActivity) getBaseActivity()).requestSideCircle();
+        }
       }
     });
 
-    mRefresherView.setColorScheme(R.color.apptheme_primary_light_color, R.color.apptheme_secondary_light_color,
-        R.color.apptheme_primary_light_color_pressed, R.color.apptheme_secondary_light_color_pressed);
+    mRefresherView.setColorScheme(R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed,
+        R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed);
 
     mLvFeed.setOnScrollListener(new AbsListView.OnScrollListener() {
       @Override
