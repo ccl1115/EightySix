@@ -43,7 +43,7 @@ public class ReporterImpl implements Reporter {
 
         }
 
-        System.exit(-1);
+        android.os.Process.killProcess(android.os.Process.myPid());
       }
     });
   }
