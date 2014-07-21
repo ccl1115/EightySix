@@ -19,6 +19,9 @@ public class Circle extends BaseCircle implements Comparator<Circle>, Comparable
   @SerializedName ("distance")
   public int distance;
 
+  @SerializedName("currFactoryGoodFriends")
+  public int currFactoryGoodFriends;
+
   /**
    * 1 is Factory
    * 2 is Business

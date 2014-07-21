@@ -2,6 +2,7 @@ package com.utree.eightysix.app.feed;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +48,7 @@ class FeedFragment extends BaseFragment {
   public AdvancedListView mLvFeed;
 
   @InjectView (R.id.refresh_view)
-  public RefresherView mRefresherView;
+  public SwipeRefreshLayout mRefresherView;
 
   @InjectView (R.id.tv_empty_text)
   public RandomSceneTextView mRstvEmpty;
@@ -114,25 +115,16 @@ class FeedFragment extends BaseFragment {
 
     U.getBus().register(mLvFeed);
 
-    mRefresherView.setOnRefreshListener(new IRefreshable.OnRefreshListener() {
+    mRefresherView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override
-      public void onStateChanged(IRefreshable.State state) {
-      }
-
-      @Override
-      public void onPreRefresh() {
+      public void onRefresh() {
         mRefreshed = true;
         requestFeeds(mCircle.id, 1);
       }
-
-      @Override
-      public void onRefreshData() {
-      }
-
-      @Override
-      public void onRefreshUI() {
-      }
     });
+
+    mRefresherView.setColorScheme(R.color.apptheme_primary_light_color, R.color.apptheme_secondary_light_color,
+        R.color.apptheme_primary_light_color_pressed, R.color.apptheme_secondary_light_color_pressed);
 
     mLvFeed.setOnScrollListener(new AbsListView.OnScrollListener() {
       @Override
@@ -356,7 +348,7 @@ class FeedFragment extends BaseFragment {
             mRstvEmpty.setVisibility(View.VISIBLE);
           }
         }
-        mRefresherView.hideHeader();
+        mRefresherView.setRefreshing(false);
         mLvFeed.stopLoadMore();
         getBaseActivity().hideProgressBar();
       }

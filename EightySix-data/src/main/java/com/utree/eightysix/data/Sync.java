@@ -30,12 +30,18 @@ public class Sync {
     @SerializedName("version")
     public String version;
 
+    @SerializedName("md5")
+    public String md5;
+
     @Override
     public String toString() {
       return "Portrait{" +
           "url='" + url + '\'' +
           ", version='" + version + '\'' +
           '}';
+    }
+
+    public Portrait() {
     }
 
     @Override
@@ -47,17 +53,16 @@ public class Sync {
     public void writeToParcel(Parcel dest, int flags) {
       dest.writeString(this.url);
       dest.writeString(this.version);
-    }
-
-    public Portrait() {
+      dest.writeString(this.md5);
     }
 
     private Portrait(Parcel in) {
       this.url = in.readString();
       this.version = in.readString();
+      this.md5 = in.readString();
     }
 
-    public static final Parcelable.Creator<Portrait> CREATOR = new Parcelable.Creator<Portrait>() {
+    public static final Creator<Portrait> CREATOR = new Creator<Portrait>() {
       public Portrait createFromParcel(Parcel source) {
         return new Portrait(source);
       }
@@ -75,6 +80,9 @@ public class Sync {
      */
     @SerializedName("url")
     public String url;
+
+    @SerializedName("md5")
+    public String md5;
 
     /**
      * 是否强制升级
@@ -111,6 +119,9 @@ public class Sync {
           '}';
     }
 
+    public Upgrade() {
+    }
+
     @Override
     public int describeContents() {
       return 0;
@@ -119,24 +130,23 @@ public class Sync {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
       dest.writeString(this.url);
+      dest.writeString(this.md5);
       dest.writeInt(this.force);
       dest.writeString(this.info);
       dest.writeString(this.version);
       dest.writeInt(this.remind);
     }
 
-    public Upgrade() {
-    }
-
     private Upgrade(Parcel in) {
       this.url = in.readString();
+      this.md5 = in.readString();
       this.force = in.readInt();
       this.info = in.readString();
       this.version = in.readString();
       this.remind = in.readInt();
     }
 
-    public static final Parcelable.Creator<Upgrade> CREATOR = new Parcelable.Creator<Upgrade>() {
+    public static final Creator<Upgrade> CREATOR = new Creator<Upgrade>() {
       public Upgrade createFromParcel(Parcel source) {
         return new Upgrade(source);
       }

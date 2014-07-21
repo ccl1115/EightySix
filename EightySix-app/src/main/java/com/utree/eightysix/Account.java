@@ -61,9 +61,9 @@ public class Account {
   }
 
   public void logout() {
+    U.getBus().post(new LogoutEvent());
     if (!setUserId("") && !setToken("")) {
       mIsLogin = false;
-      U.getBus().post(new LogoutEvent());
     }
   }
 

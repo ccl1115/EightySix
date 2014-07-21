@@ -13,6 +13,11 @@
     <packaging>apk</packaging>
     <name>EightySix-app - Application</name>
 
+    <properties>
+        <android.manifest.versionCode>1</android.manifest.versionCode>
+        <android.manifest.versionName>${project.version}</android.manifest.versionName>
+    </properties>
+
     <dependencies>
 
         <dependency>
@@ -108,12 +113,20 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}-${project.version}</finalName>
+        <finalName>${project.artifactId}-${project.version}-${android.manifest.versionCode}</finalName>
         <plugins>
             <plugin>
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                 <artifactId>android-maven-plugin</artifactId>
                 <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>manifest-update</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
         </plugins>

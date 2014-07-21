@@ -73,6 +73,7 @@ public class BaseCirclesActivity extends BaseActivity {
   private Paginate.Page mPageInfo;
   private boolean mLocatingFinished;
   private boolean mRequestStarted;
+  private Location.OnResult mOnResult;
 
   public static void startSelect(Context context) {
     Intent intent = new Intent(context, BaseCirclesActivity.class);
@@ -259,7 +260,11 @@ public class BaseCirclesActivity extends BaseActivity {
       });
     }
 
-    U.getLocation().requestLocation(new Location.OnResult() {
+    if (mMode == MODE_SELECT) {
+      setActionLeftDrawable(null);
+    }
+
+    mOnResult = new Location.OnResult() {
       @Override
       public void onResult(Location.Result result) {
         mLocatingFinished = true;
@@ -267,11 +272,20 @@ public class BaseCirclesActivity extends BaseActivity {
           requestCircles(1);
         }
       }
-    });
+    };
+  }
 
-    if (mMode == MODE_SELECT) {
-      setActionLeftDrawable(null);
-    }
+  @Override
+  protected void onResume() {
+    super.onResume();
+    U.getLocation().onResume(mOnResult);
+    U.getLocation().requestLocation();
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    U.getLocation().onPause(mOnResult);
   }
 
   @Override

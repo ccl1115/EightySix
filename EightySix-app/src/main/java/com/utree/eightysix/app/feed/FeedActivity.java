@@ -460,7 +460,7 @@ public class FeedActivity extends BaseActivity {
     if (circle == null) return;
 
     setTopTitle(circle.shortName);
-    setTopSubTitle(String.format(getString(R.string.friends_info), circle.friendCount, circle.workmateCount));
+    setTopSubTitle(String.format(getString(R.string.friends_info), circle.currFactoryGoodFriends, circle.workmateCount));
     if (circle.lock == 1) {
       getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(
           getResources().getDrawable(R.drawable.ic_lock_small), null, null, null);
