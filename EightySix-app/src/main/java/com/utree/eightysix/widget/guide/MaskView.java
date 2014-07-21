@@ -214,11 +214,8 @@ class MaskView extends ViewGroup {
 	@Override
 	protected void dispatchDraw(Canvas canvas) {
 		final long drawingTime = getDrawingTime();
-		canvas.save();
-		// FIXME
-        canvas.clipRect(mTargetRect, Region.Op.DIFFERENCE);
+    //canvas.clipRect(mTargetRect, Region.Op.DIFFERENCE);
 		canvas.drawRect(mFullingRect, mFullingPaint);
-		canvas.restore();
 
 		try {
 			View child;
