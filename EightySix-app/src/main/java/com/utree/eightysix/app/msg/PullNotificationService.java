@@ -6,10 +6,12 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.C;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.FeedActivity;
@@ -21,6 +23,8 @@ import com.utree.eightysix.rest.HandlerWrapper;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.RequestData;
+import de.akquinet.android.androlog.Log;
+import java.util.List;
 
 /**
  * 拉通知
@@ -99,7 +103,8 @@ public class PullNotificationService extends Service {
     return (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
   }
 
-  private Notification buildPost(String postId, String shortName) {
+  private Notification buildPost(int i, String postId, String shortName) {
+    Log.d(C.TAG.NT, "build post: " + postId);
     return new NotificationCompat.Builder(this)
         .setTicker(getString(R.string.notification_friend_new_post))
         .setAutoCancel(true)
@@ -107,22 +112,24 @@ public class PullNotificationService extends Service {
         .setContentTitle(shortName)
         .setContentText(getString(R.string.notification_friend_new_post))
         .setContentIntent(PendingIntent.getActivity(this, 0,
-            PostActivity.getIntent(this, postId), PendingIntent.FLAG_ONE_SHOT))
+            PostActivity.getIntent(this, postId), PendingIntent.FLAG_UPDATE_CURRENT))
         .build();
   }
 
   private Notification buildUnlockCircle(String circleId, String circleName) {
+    Log.d(C.TAG.NT, "build unlock circle: " + circleId);
     return new NotificationCompat.Builder(this).setTicker(getString(R.string.notification_circle_unlocked))
         .setSmallIcon(R.drawable.ic_app_icon)
         .setAutoCancel(true)
         .setContentTitle(getString(R.string.notification_circle_unlocked))
         .setContentText(getString(R.string.notification_circle_unlocked_tip, circleName))
         .setContentIntent(PendingIntent.getActivity(this, 0,
-            FeedActivity.getIntent(this, Integer.parseInt(circleId)), PendingIntent.FLAG_ONE_SHOT))
+            FeedActivity.getIntent(this, Integer.parseInt(circleId)), PendingIntent.FLAG_UPDATE_CURRENT))
         .build();
   }
 
   private Notification buildComment(int count, String id) {
+    Log.d(C.TAG.NT, "build comment: " + count);
     NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
     builder.setContentTitle(getString(R.string.notification_new))
         .setAutoCancel(true)
@@ -141,6 +148,7 @@ public class PullNotificationService extends Service {
   }
 
   private Notification buildApprove(String circleId, String circleName) {
+    Log.d(C.TAG.NT, "build approve: " + circleId);
     return new NotificationCompat.Builder(this).setDefaults(Notification.DEFAULT_ALL)
         .setSmallIcon(R.drawable.ic_app_icon)
         .setAutoCancel(true)
@@ -148,11 +156,12 @@ public class PullNotificationService extends Service {
         .setContentTitle(getString(R.string.notification_circle_create_approve))
         .setContentText(getString(R.string.notification_circle_create_approve_tip, circleName))
         .setContentIntent(PendingIntent.getActivity(this, 0,
-            FeedActivity.getIntent(this, Integer.parseInt(circleId)), PendingIntent.FLAG_ONE_SHOT))
+            FeedActivity.getIntent(this, Integer.parseInt(circleId)), PendingIntent.FLAG_UPDATE_CURRENT))
         .build();
   }
 
   private Notification buildFriendJoin(String circleId, String circleName, int count) {
+    Log.d(C.TAG.NT, "build friend join: " + circleId);
     return new NotificationCompat.Builder(this)
         .setSmallIcon(R.drawable.ic_app_icon)
         .setAutoCancel(true)
@@ -161,7 +170,7 @@ public class PullNotificationService extends Service {
         .setContentText(count > 1 ? getString(R.string.notification_new_friend_tip, circleName, count) :
             getString(R.string.notification_new_friend_tip, circleName))
         .setContentIntent(PendingIntent.getActivity(this, 0,
-            FeedActivity.getIntent(this, Integer.parseInt(circleId)), PendingIntent.FLAG_ONE_SHOT))
+            FeedActivity.getIntent(this, Integer.parseInt(circleId)), PendingIntent.FLAG_UPDATE_CURRENT))
         .build();
   }
 
@@ -170,8 +179,10 @@ public class PullNotificationService extends Service {
     switch (response.object.type) {
       case TYPE_POST:
         if (response.object.lists == null || response.object.lists.size() == 0) break;
-        for (PullNotification.Item item : response.object.lists) {
-          getNM().notify(item.value, ID_POST, buildPost(item.value, item.shortName));
+        List<PullNotification.Item> lists = response.object.lists;
+        for (int i = 0, listsSize = lists.size(); i < listsSize; i++) {
+          PullNotification.Item item = lists.get(i);
+          getNM().notify(item.value, ID_POST, buildPost(i, item.value, item.shortName));
         }
         break;
       case TYPE_UNLOCK_CIRCLE:

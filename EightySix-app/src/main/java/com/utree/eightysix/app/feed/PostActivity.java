@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.feed;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -50,6 +51,7 @@ import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.guide.Guide;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 /**
@@ -84,14 +86,16 @@ public class PostActivity extends BaseActivity {
 
   public static Intent getIntent(Context context, String postId) {
     Intent intent = new Intent(context, PostActivity.class);
+    if (!(context instanceof Activity)) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+    intent.setAction(postId);
     intent.putExtra("id", postId);
     return intent;
   }
 
   public static void start(Context context, String postId) {
-    Intent intent = new Intent(context, PostActivity.class);
-    intent.putExtra("id", postId);
-    context.startActivity(intent);
+    context.startActivity(getIntent(context, postId));
   }
 
   private static final Pattern POST_CONTENT_PATTERN = Pattern.compile("[ \r\n]*");

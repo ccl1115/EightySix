@@ -77,5 +77,7 @@ public class C {
      * Tag for RESTRequest
      */
     public static final String RR = "RESTRequest";
+
+    public static final String NT = "Notification";
   }
 }

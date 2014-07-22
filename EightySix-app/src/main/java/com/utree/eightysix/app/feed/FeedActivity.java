@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.feed;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
@@ -111,6 +112,10 @@ public class FeedActivity extends BaseActivity {
   public static Intent getIntent(Context context, int id) {
     Intent intent = new Intent(context, FeedActivity.class);
     intent.putExtra("id", id);
+    if (!(context instanceof Activity)) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+    intent.setAction(String.valueOf(id));
     return intent;
   }
 
