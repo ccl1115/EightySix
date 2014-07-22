@@ -22,6 +22,20 @@ public class Feeds {
   public int lock;
 
   /**
+   * 赞百分比
+   */
+  @SerializedName("praisePercent")
+  public String praisePercent;
+
+  /**
+   * 1 上升
+   * 0 不变
+   * -1 下降
+   */
+  @SerializedName("upDown")
+  public int upDown;
+
+  /**
    * 是否是用户当前工厂
    *
    * 1 是

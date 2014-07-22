@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -415,34 +416,6 @@ public class FeedActivity extends BaseActivity {
     showProgressBar();
   }
 
-  void requestSideCircle() {
-    request(new CircleSideRequest("", 1), new OnResponse2<CirclesResponse>() {
-
-      @Override
-      public void onResponse(CirclesResponse response) {
-        if (response != null && response.code == 0 && response.object != null) {
-          mSideCircles = response.object.lists.size() > 10 ?
-              response.object.lists.subList(0, 10) : response.object.lists;
-
-          if (mFeedFragment.getCircle() == null && mSideCircles.size() > 0) {
-            mFeedFragment.setCircle(mSideCircles.get(0));
-            setSideHighlight(mFeedFragment.getCircle());
-          }
-          selectSideCircle(mSideCircles);
-
-          mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
-          mLvSideCircles.setAdapter(mSideCirclesAdapter);
-
-        }
-      }
-
-      @Override
-      public void onResponseError(Throwable e) {
-        e.printStackTrace();
-      }
-    }, CirclesResponse.class);
-  }
-
   private void showInviteDialog() {
     if (mInviteDialog == null) {
       mInviteDialog = U.getShareManager().shareAppDialog(this, mFeedFragment.getCircle().id);
@@ -470,6 +443,36 @@ public class FeedActivity extends BaseActivity {
     getTopBar().getActionView(0).setCount(Account.inst().getNewCommentCount());
   }
 
+  void requestSideCircle() {
+    request(new CircleSideRequest("", 1), new OnResponse2<CirclesResponse>() {
+
+      @Override
+      public void onResponseError(Throwable e) {
+        e.printStackTrace();
+      }
+
+      @Override
+      public void onResponse(CirclesResponse response) {
+        if (response != null && response.code == 0 && response.object != null) {
+          mSideCircles = response.object.lists.size() > 10 ?
+              response.object.lists.subList(0, 10) : response.object.lists;
+
+          if (mFeedFragment.getCircle() == null && mSideCircles.size() > 0) {
+            mFeedFragment.setCircle(mSideCircles.get(0));
+            setSideHighlight(mFeedFragment.getCircle());
+          }
+          selectSideCircle(mSideCircles);
+
+          mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
+          mLvSideCircles.setAdapter(mSideCirclesAdapter);
+
+        }
+      }
+
+
+    }, CirclesResponse.class);
+  }
+
   void setTitle(Circle circle) {
     if (circle == null) return;
 
@@ -484,11 +487,27 @@ public class FeedActivity extends BaseActivity {
     }
   }
 
-  void setMyPraiseCount(int count) {
+  void setMyPraiseCount(int count, String praisePercent, int variant) {
     if (count == 0) {
       mMenuViewHolder.mTvPraiseCount.setText("赞");
     } else {
       mMenuViewHolder.mTvPraiseCount.setText(String.format("%d个赞", count));
+    }
+
+    mMenuViewHolder.mTvPraisePercent.setText(praisePercent + "%");
+
+    switch (variant) {
+      case 1:
+        mMenuViewHolder.mIvPraiseArrow.setVisibility(View.VISIBLE);
+        mMenuViewHolder.mIvPraiseArrow.setImageResource(R.drawable.praise_up_arrow);
+        break;
+      case -1:
+        mMenuViewHolder.mIvPraiseArrow.setVisibility(View.VISIBLE);
+        mMenuViewHolder.mIvPraiseArrow.setImageResource(R.drawable.praise_down_arrow);
+        break;
+      default:
+        mMenuViewHolder.mIvPraiseArrow.setVisibility(View.GONE);
+        break;
     }
   }
 
@@ -514,6 +533,12 @@ public class FeedActivity extends BaseActivity {
 
     @InjectView (R.id.tv_praise_count)
     TextView mTvPraiseCount;
+
+    @InjectView (R.id.tv_praise_percent)
+    TextView mTvPraisePercent;
+
+    @InjectView (R.id.iv_arrow)
+    ImageView mIvPraiseArrow;
 
     @InjectView (R.id.rb_new_praise_dot)
     RoundedButton mRbNewPraiseDot;

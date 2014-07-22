@@ -32,10 +32,8 @@ import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.IRefreshable;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RandomSceneTextView;
-import com.utree.eightysix.widget.RefresherView;
 import com.utree.eightysix.widget.guide.Guide;
 import java.util.Iterator;
 
@@ -356,7 +354,8 @@ class FeedFragment extends BaseFragment {
           } else if (mFeedAdapter != null) {
             mFeedAdapter.add(response.object.posts.lists);
           }
-          ((FeedActivity) getBaseActivity()).setMyPraiseCount(response.object.myPraiseCount);
+          ((FeedActivity) getBaseActivity()).setMyPraiseCount(response.object.myPraiseCount,
+              response.object.praisePercent, response.object.upDown);
           mPageInfo = response.object.posts.page;
         } else {
           if (mFeedAdapter != null && mFeedAdapter.getCount() == 0) {
@@ -395,7 +394,8 @@ class FeedFragment extends BaseFragment {
           }
           mPageInfo = response.object.posts.page;
           mLvFeed.stopLoadMore();
-          ((FeedActivity) getBaseActivity()).setMyPraiseCount(response.object.myPraiseCount);
+          ((FeedActivity) getBaseActivity())
+              .setMyPraiseCount(response.object.myPraiseCount, response.object.praisePercent, response.object.upDown);
           getBaseActivity().hideProgressBar();
         } else {
           requestFeeds(id, page);
