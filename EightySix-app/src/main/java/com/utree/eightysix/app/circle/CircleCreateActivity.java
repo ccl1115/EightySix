@@ -92,7 +92,7 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
 
   @OnClick (R.id.rb_reget_captcha)
   public void onRbRegetCaptchaClicked() {
-    showToast("TODO renew captcha");
+    requestCaptcha();
   }
 
   @OnClick (R.id.rb_create)
