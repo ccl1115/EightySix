@@ -2,6 +2,7 @@ package com.utree.eightysix.app.circle;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -136,7 +137,7 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
 
   @Override
   public void onResult(Location.Result result) {
-    if (result != null) {
+    if (result != null && !TextUtils.isEmpty(result.address)) {
       mTvLocation.setText(result.address);
     } else {
       mTvLocation.setText(getString(R.string.locating_failed));
