@@ -86,7 +86,7 @@ public class UpgradeDialog extends ThemedDialog {
     if (mUpgrade.force == 1) {
       setCancelable(false);
       setCanceledOnTouchOutside(false);
-      setRbNegative(R.string.exit, new View.OnClickListener() {
+      setRbNegative(R.string.exit_app, new View.OnClickListener() {
         @Override
         public void onClick(View v) {
           android.os.Process.killProcess(android.os.Process.myPid());
@@ -95,7 +95,7 @@ public class UpgradeDialog extends ThemedDialog {
     } else {
       setCancelable(true);
       setCanceledOnTouchOutside(true);
-      setRbNegative(R.string.cancel, new View.OnClickListener() {
+      setRbNegative(R.string.later, new View.OnClickListener() {
         @Override
         public void onClick(View v) {
           dismiss();
