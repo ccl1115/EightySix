@@ -62,6 +62,10 @@ public class PraiseActivity extends BaseActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    mRvMsg.setColorScheme(R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed,
+        R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed);
+
     if (U.useFixture()) {
       showProgressBar();
       getHandler().postDelayed(new Runnable() {
