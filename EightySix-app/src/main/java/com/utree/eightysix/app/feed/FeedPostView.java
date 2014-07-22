@@ -238,10 +238,6 @@ public class FeedPostView extends BasePostView {
 
     mTvComment.setCompoundDrawablesWithIntrinsicBounds(mCommentRes, 0, 0, 0);
 
-    if (getTop() <= 0) {
-      mIvShare.setVisibility(INVISIBLE);
-    }
-
     if (TextUtils.isEmpty(post.comment)) {
       mLlComment.setVisibility(GONE);
     } else {
@@ -280,20 +276,6 @@ public class FeedPostView extends BasePostView {
       U.getBus().post(new FeedPostPraiseEvent(mPost, false));
     }
     ((BaseAdapter) ((AdapterView) getParent()).getAdapter()).notifyDataSetChanged();
-  }
-
-  @Subscribe
-  public void onListViewScrollStateIdled(ListViewScrollStateIdledEvent event) {
-    if (mIvShare.getVisibility() == INVISIBLE && getTop() >= 0) {
-      showShareButton();
-    }
-  }
-
-  protected void showShareButton() {
-    mIvShare.setVisibility(VISIBLE);
-    ObjectAnimator animator = ObjectAnimator.ofFloat(mIvShare, "alpha", 0f, 1f);
-    animator.setDuration(500);
-    animator.start();
   }
 
   @Override
