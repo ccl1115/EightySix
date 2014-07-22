@@ -485,7 +485,11 @@ public class FeedActivity extends BaseActivity {
   }
 
   void setMyPraiseCount(int count) {
-    mMenuViewHolder.mTvPraiseCount.setText(String.format("%d个赞", count));
+    if (count == 0) {
+      mMenuViewHolder.mTvPraiseCount.setText("赞");
+    } else {
+      mMenuViewHolder.mTvPraiseCount.setText(String.format("%d个赞", count));
+    }
   }
 
   @Keep
