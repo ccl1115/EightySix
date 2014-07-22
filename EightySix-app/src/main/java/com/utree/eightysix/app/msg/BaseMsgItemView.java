@@ -6,8 +6,10 @@ import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -57,11 +59,15 @@ public class BaseMsgItemView extends LinearLayout {
 
   @OnClick (R.id.fl_left)
   public void onFlLeftClicked(View view) {
+    mPosts[0].read = 1;
+    ((BaseAdapter) ((ListView) getParent()).getAdapter()).notifyDataSetChanged();
     PostActivity.start(view.getContext(), mPosts[0], null);
   }
 
   @OnClick(R.id.fl_right)
   public void onFlRightClicked(View view) {
+    mPosts[1].read = 1;
+    ((BaseAdapter) ((ListView) getParent()).getAdapter()).notifyDataSetChanged();
     PostActivity.start(view.getContext(), mPosts[1], null);
   }
 
@@ -119,7 +125,7 @@ public class BaseMsgItemView extends LinearLayout {
         mAivBgRight.setUrl(null);
         mTvContentRight.setBackgroundColor(ColorUtil.strToColor(right.bgColor));
       }
-      if (right.read != 1) {
+      if (right.read == 1) {
         mVMaskRight.setVisibility(VISIBLE);
       } else {
         mVMaskRight.setVisibility(INVISIBLE);
@@ -134,11 +140,6 @@ public class BaseMsgItemView extends LinearLayout {
 
       if (TextUtils.isEmpty(left.bgUrl)) {
         setLeftThemedColor(ColorUtil.strToColor(left.bgColor));
-      //} else {
-      //  Bitmap fromMemByUrl = ImageUtils.getFromMemByUrl(left.bgUrl);
-      //  if (fromMemByUrl != null) {
-      //    ColorUtil.asyncThemedColor(fromMemByUrl);
-      //  }
       }
 
       mFlLeft.setVisibility(VISIBLE);
@@ -150,7 +151,7 @@ public class BaseMsgItemView extends LinearLayout {
         mAivBgLeft.setUrl(null);
         mTvContentLeft.setBackgroundColor(ColorUtil.strToColor(left.bgColor));
       }
-      if (left.read != 1) {
+      if (left.read == 1) {
         mVMaskLeft.setVisibility(VISIBLE);
       } else {
         mVMaskLeft.setVisibility(INVISIBLE);
