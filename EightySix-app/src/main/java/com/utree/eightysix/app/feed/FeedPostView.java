@@ -306,7 +306,7 @@ public class FeedPostView extends BasePostView {
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
     int widthSize = MeasureSpec.getSize(widthMeasureSpec);
     if (mLlComment.getVisibility() == VISIBLE) {
-      widthSize += mLlComment.getMeasuredHeight();
+      widthSize += U.dp2px(44);
     }
     super.onMeasure(widthMeasureSpec, widthSize - U.dp2px(16) + MeasureSpec.EXACTLY);
   }

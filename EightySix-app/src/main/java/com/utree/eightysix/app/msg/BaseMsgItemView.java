@@ -119,10 +119,10 @@ public class BaseMsgItemView extends LinearLayout {
         mAivBgRight.setUrl(null);
         mTvContentRight.setBackgroundColor(ColorUtil.strToColor(right.bgColor));
       }
-      if (right.read == 1) {
-        mVMaskRight.setVisibility(INVISIBLE);
-      } else {
+      if (right.read != 1) {
         mVMaskRight.setVisibility(VISIBLE);
+      } else {
+        mVMaskRight.setVisibility(INVISIBLE);
       }
     } else {
       mFlRight.setVisibility(INVISIBLE);
@@ -150,10 +150,10 @@ public class BaseMsgItemView extends LinearLayout {
         mAivBgLeft.setUrl(null);
         mTvContentLeft.setBackgroundColor(ColorUtil.strToColor(left.bgColor));
       }
-      if (left.read == 1) {
-        mVMaskLeft.setVisibility(INVISIBLE);
-      } else {
+      if (left.read != 1) {
         mVMaskLeft.setVisibility(VISIBLE);
+      } else {
+        mVMaskLeft.setVisibility(INVISIBLE);
       }
     } else {
       mFlLeft.setVisibility(INVISIBLE);
