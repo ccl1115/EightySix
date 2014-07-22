@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="apptheme_primary_light_color">#FF825096</color>
+    <color name="apptheme_primary_light_color">#6d17e6</color>
     <color name="apptheme_primary_light_color_pressed">#ff4d2f59</color>
     <color name="apptheme_primary_light_color_disabled">#fff0f0f0</color>
 

@@ -24,7 +24,7 @@ public class Post extends BaseItem implements Parcelable {
   @SerializedName ("postSource")
   public String source;
 
-  @SerializedName ("readed")
+  @SerializedName ("read")
   public int read;
 
   @SerializedName ("commentMsg")
