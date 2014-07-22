@@ -45,7 +45,7 @@
     <string name="not_found_circle">还没有跟你相关的工友圈</string>
     <string name="not_found_circle_tip">你可以搜索或者创建一个</string>
     <string name="not_found_history">你还没有搜索历史</string>
-    <string name="not_found_history_tip">搜索跟你相关的工友圈把</string>
+    <string name="not_found_history_tip">搜索跟你相关的工友圈吧</string>
     <string name="not_found_post">还没有帖子浏览</string>
     <string name="not_found_post_tip">点击右下角按钮，抢先发帖吧</string>
     <string name="not_found_comment">还没有人评论，抢个沙发吧</string>
