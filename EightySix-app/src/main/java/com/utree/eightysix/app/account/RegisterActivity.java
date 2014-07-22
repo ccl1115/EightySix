@@ -170,7 +170,9 @@ public class RegisterActivity extends BaseActivity {
 
     if (TextUtils.isEmpty(phoneNumber)) {
       TelephonyManager manager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-      mEtPhoneNumber.setText(manager.getLine1Number());
+      String line1Number = manager.getLine1Number();
+      line1Number = line1Number.replace("+86", "");
+      mEtPhoneNumber.setText(line1Number);
     } else {
       mEtPhoneNumber.setText(phoneNumber);
     }
