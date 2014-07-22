@@ -101,16 +101,7 @@ class CircleListAdapter extends BaseAdapter {
 
     Circle item = getItem(position);
 
-    final String info;
-    if (item.distance < 100) {
-      info = String.format("小于100米 | 朋友(%d) | 工友(%d)", item.friendCount, item.workmateCount);
-    } else if (item.distance < 1000) {
-      info = String.format("%d米 | 朋友(%d) | 工友(%d)", 100 * (item.distance / 100), item.friendCount, item.workmateCount);
-    } else {
-      info = String.format("%.1f千米 | 朋友(%d) | 工友(%d)", item.distance / 1000f, item.friendCount, item.workmateCount);
-    }
-
-    holder.mTvCircleInfo.setText(info);
+    holder.mTvCircleInfo.setText(item.info);
     holder.mTvCircleName.setText(item.name);
     if (item.circleType == 1) {
       holder.mRbIcon.setText(U.gs(R.string.factory));

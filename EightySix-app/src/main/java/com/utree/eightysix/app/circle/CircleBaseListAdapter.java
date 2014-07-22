@@ -59,18 +59,7 @@ class CircleBaseListAdapter extends BaseAdapter {
 
     Circle item = getItem(position);
 
-
-    final String info;
-    final String distance = com.utree.eightysix.utils.Utils.getDisplayDistance(item.distance);
-    if (item.distance < 100) {
-      info = String.format("%s | 朋友(%d) | 工友(%d)", distance, item.friendCount, item.workmateCount);
-    } else if (item.distance < 1000) {
-      info = String.format("%s | 朋友(%d) | 工友(%d)", distance, item.friendCount, item.workmateCount);
-    } else {
-      info = String.format("%s | 朋友(%d) | 工友(%d)", distance, item.friendCount, item.workmateCount);
-    }
-
-    viewHolder.mTvCircleInfo.setText(info);
+    viewHolder.mTvCircleInfo.setText(item.info);
     viewHolder.mTvCircleName.setText(item.name);
 
     return convertView;
