@@ -104,7 +104,7 @@ public class UpgradeDialog extends ThemedDialog {
       });
     } else {
       setCancelable(true);
-      setCanceledOnTouchOutside(true);
+      setCanceledOnTouchOutside(false);
       setRbNegative(R.string.later, new View.OnClickListener() {
         @Override
         public void onClick(View v) {
