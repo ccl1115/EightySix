@@ -171,7 +171,7 @@ public class ImportContactActivity extends BaseActivity {
   public void onContactSync(ContactsSyncEvent event) {
     if (event.isSucceed()) {
       if (event.getFriendCount() == 0) {
-        mTvResult.setText(String.format(""));
+        mTvResult.setText(String.format("暂时没有在玩的朋友"));
       } else {
         mTvResult.setText(String.format("为你找到%d个朋友", event.getFriendCount()));
       }

@@ -302,9 +302,13 @@ public class PostActivity extends BaseActivity {
           if (RESTRequester.responseOk(response)) {
             U.getBus().post(event.getPost());
           } else {
-            event.getPost().praised = 0;
-            event.getPost().praise++;
-            mPostCommentsAdapter.notifyDataSetChanged();
+            if ((response.code & 0xffff) == 0x2286) {
+              event.getPost().praised = 0;
+            } else {
+              event.getPost().praised = 0;
+              event.getPost().praise++;
+              mPostCommentsAdapter.notifyDataSetChanged();
+            }
           }
         }
       }, Response.class);
@@ -313,11 +317,15 @@ public class PostActivity extends BaseActivity {
         @Override
         public void onResponse(Response response) {
           if (response == null || response.code != 0) {
-            event.getPost().praised = 1;
-            event.getPost().praise = Math.max(0, event.getPost().praise - 1);
-            mPostCommentsAdapter.notifyDataSetChanged();
-          } else {
             U.getBus().post(event.getPost());
+          } else {
+            if ((response.code & 0xffff) == 0x2286) {
+              event.getPost().praised = 1;
+            } else {
+              event.getPost().praised = 1;
+              event.getPost().praise = Math.max(0, event.getPost().praise - 1);
+              mPostCommentsAdapter.notifyDataSetChanged();
+            }
           }
         }
       }, Response.class);
