@@ -34,8 +34,8 @@ public abstract class ActionButton extends FrameLayout {
   public ActionButton(Context context, AttributeSet attrs) {
     super(context, attrs);
 
-    kIndicatorMargin = U.dp2px(10);
-    kIndicatorSize = U.dp2px(10);
+    kIndicatorMargin = U.dp2px(8);
+    kIndicatorSize = U.dp2px(8);
 
     mNewIndicator =
         new RoundRectDrawable(U.dp2px(10), getResources().getColor(R.color.apptheme_secondary_light_color));
@@ -44,7 +44,7 @@ public abstract class ActionButton extends FrameLayout {
     mCountIndicator.setSingleLine(true);
     mCountIndicator.setTextSize(12);
     mCountIndicator.setTextColor(Color.WHITE);
-    final int p = U.dp2px(4);
+    final int p = U.dp2px(5);
     mCountIndicator.setPadding(p, 0, p, 0);
     mCountIndicator.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(10),
         getResources().getColor(R.color.apptheme_secondary_light_color)));
