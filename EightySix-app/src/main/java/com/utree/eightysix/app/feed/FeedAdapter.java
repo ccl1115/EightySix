@@ -113,7 +113,7 @@ class FeedAdapter extends BaseAdapter {
   public View getView(int position, View convertView, ViewGroup parent) {
     switch (getItemViewType(position)) {
       case TYPE_PLACEHOLDER:
-        convertView = getPlaceHolderView(convertView, parent);
+        convertView = getPlaceHolderView(position, convertView, parent);
         break;
       case TYPE_POST:
         convertView = getPostView(position, convertView, parent);
@@ -238,9 +238,13 @@ class FeedAdapter extends BaseAdapter {
     }
   }
 
-  private View getPlaceHolderView(View convertView, ViewGroup parent) {
+  private View getPlaceHolderView(int position, View convertView, ViewGroup parent) {
     if (convertView == null) {
       convertView = new View(parent.getContext());
+    }
+    if (position == getCount() - 1) {
+      convertView.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, U.dp2px(48)));
+    } else {
       convertView.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, U.dp2px(0)));
     }
     return convertView;
