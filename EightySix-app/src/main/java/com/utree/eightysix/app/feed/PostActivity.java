@@ -1,6 +1,7 @@
 package com.utree.eightysix.app.feed;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -51,6 +52,7 @@ import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.guide.Guide;
+import de.akquinet.android.androlog.Log;
 import java.util.Random;
 import java.util.regex.Pattern;
 
@@ -168,82 +170,6 @@ public class PostActivity extends BaseActivity {
 
     hideTopBar(false);
 
-    mPost = getIntent().getParcelableExtra("post");
-
-    mPostId = getIntent().getStringExtra("id");
-
-    if (mPost == null && mPostId == null) {
-      showToast(getString(R.string.post_not_found), false);
-      finish();
-    } else {
-      mPostCommentsAdapter = new PostCommentsAdapter(mPost, null);
-      mLvComments.setAdapter(mPostCommentsAdapter);
-    }
-
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    U.getBus().register(mLvComments);
-
-    if (!mResumed) {
-      Rect rect = getIntent().getParcelableExtra("rect");
-      if (rect != null) {
-        overridePendingTransition(0, 0);
-        final int screenWidth = getResources().getDisplayMetrics().widthPixels;
-        mLvComments.setVisibility(View.INVISIBLE);
-        final PostPostView tmp = (PostPostView) mPostCommentsAdapter.getView(0, null, mLvComments);
-        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(rect.width(), rect.height());
-        lp.gravity = Gravity.CENTER_HORIZONTAL;
-        ((ViewGroup) findViewById(android.R.id.content)).addView(tmp, lp);
-        AnimatorSet set = new AnimatorSet();
-        set.playTogether(
-            ObjectAnimator.ofFloat(tmp, "scaleX", 1f, screenWidth / (float) rect.width()),
-            ObjectAnimator.ofFloat(tmp, "scaleY", 1f, screenWidth / (float) rect.height()),
-            ObjectAnimator.ofFloat(tmp, "translationY", rect.top - U.dp2px(22), U.dp2px(8))
-        );
-        set.setDuration(500);
-        set.addListener(new Animator.AnimatorListener() {
-          @Override
-          public void onAnimationStart(Animator animation) {
-
-          }
-
-          @Override
-          public void onAnimationEnd(Animator animation) {
-            ((ViewGroup) findViewById(android.R.id.content)).removeView(tmp);
-            mLvComments.setVisibility(View.VISIBLE);
-
-            if (mPost != null) {
-              cacheOutComments(mPost.id, 1);
-            } else {
-              cacheOutComments(getIntent().getStringExtra("id"), 1);
-            }
-          }
-
-          @Override
-          public void onAnimationCancel(Animator animation) {
-
-          }
-
-          @Override
-          public void onAnimationRepeat(Animator animation) {
-
-          }
-        });
-        set.start();
-      } else {
-        if (mPost != null) {
-          cacheOutComments(mPost.id, 1);
-        } else {
-          cacheOutComments(getIntent().getStringExtra("id"), 1);
-        }
-      }
-    }
-    mResumed = true;
-
-
     mLvComments.setOnScrollListener(new AbsListView.OnScrollListener() {
       @Override
       public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -274,15 +200,45 @@ public class PostActivity extends BaseActivity {
       }
     });
 
-    U.getMEnv().put("post_activity_foreground", mPost.id);
+    onNewIntent(getIntent());
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    U.getBus().register(mLvComments);
+
   }
 
   @Override
   protected void onPause() {
     super.onPause();
     U.getBus().unregister(mLvComments);
+  }
 
-    U.getMEnv().put("post_activity_foreground", "");
+  @Override
+  protected void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+
+    mPost = intent.getParcelableExtra("post");
+    mPostId = intent.getStringExtra("id");
+
+    Log.d("PostActivity", "postId: " + ((mPost != null) ? mPost.id : mPostId));
+
+    if (mPost == null && mPostId == null) {
+      showToast(getString(R.string.post_not_found), false);
+      finish();
+    } else {
+      mPostCommentsAdapter = new PostCommentsAdapter(mPost, null);
+      mLvComments.setAdapter(mPostCommentsAdapter);
+    }
+
+    if (mPost != null) {
+      cacheOutComments(mPost.id, 1);
+    } else if (mPostId != null) {
+      cacheOutComments(mPostId, 1);
+    }
+
   }
 
   @Override
@@ -430,7 +386,7 @@ public class PostActivity extends BaseActivity {
         if (response != null && response.code == 0 && response.object != null) {
           mPostCommentsAdapter = new PostCommentsAdapter(response.object.post, response.object.comments.lists);
           mLvComments.setAdapter(mPostCommentsAdapter);
-          if (mPost == null) mPost = response.object.post;
+          mPost = response.object.post;
         } else {
           showProgressBar();
         }

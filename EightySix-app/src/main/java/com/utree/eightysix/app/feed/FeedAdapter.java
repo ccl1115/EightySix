@@ -59,10 +59,9 @@ class FeedAdapter extends BaseAdapter {
     if (showUnlock) {
       mFeeds.posts.lists.add(0, new BaseItem(TYPE_UNLOCK));
     }
-    if (showInvite) {
+    if (showInvite && showSelect) {
       mFeeds.posts.lists.add(0, new BaseItem(TYPE_INVITE));
-    }
-    if (showSelect) {
+    } else if (!showInvite && showSelect) {
       mFeeds.posts.lists.add(0, new BaseItem(TYPE_SELECT));
     }
   }

@@ -89,9 +89,6 @@
 
         <activity android:configChanges="keyboardHidden|orientation|keyboard|screenSize" android:exported="@bool/exported" android:name=".app.account.ImportContactActivity" android:screenOrientation="portrait"/>
 
-        <activity android:exported="@bool/exported" android:name=".app.account.GetLockpatternActivity" android:screenOrientation="portrait"/>
-
-
         <activity android:configChanges="keyboardHidden|orientation|keyboard|screenSize" android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.feed.FeedActivity" android:screenOrientation="portrait"/>
 
         <activity android:configChanges="keyboardHidden|orientation|keyboard|screenSize" android:exported="@bool/exported" android:name=".app.intro.GuideActivity" android:screenOrientation="portrait"/>
@@ -102,7 +99,7 @@
 
         <activity android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:exported="@bool/exported" android:name=".app.circle.CircleCreateActivity" android:screenOrientation="portrait"/>
 
-        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:exported="@bool/exported" android:name=".app.feed.PostActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden"/>
+        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:exported="@bool/exported" android:name=".app.feed.PostActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden" android:launchMode="singleTask"/>
 
         <activity android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:exported="@bool/exported" android:name=".app.publish.FeedbackActivity" android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize"/>
 

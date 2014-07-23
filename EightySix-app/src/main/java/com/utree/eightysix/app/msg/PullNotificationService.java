@@ -129,7 +129,7 @@ public class PullNotificationService extends Service {
   }
 
   private Notification buildComment(int count, String id) {
-    Log.d(C.TAG.NT, "build comment: " + count);
+    Log.d(C.TAG.NT, String.format("build comment: count = %d id = %s", count, id));
     NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
     builder.setContentTitle(getString(R.string.notification_new))
         .setAutoCancel(true)
@@ -138,11 +138,11 @@ public class PullNotificationService extends Service {
     if (count == 1) {
       builder.setContentText(getString(R.string.notification_new_comment));
       builder.setContentIntent(PendingIntent.getActivity(this, 0,
-          PostActivity.getIntent(this, id), PendingIntent.FLAG_ONE_SHOT));
+          PostActivity.getIntent(this, id), PendingIntent.FLAG_UPDATE_CURRENT));
     } else {
       builder.setContentText(String.format(getString(R.string.notification_new_comments), count));
       builder.setContentIntent(PendingIntent.getActivity(this, 0,
-          MsgActivity.getIntent(this, true), PendingIntent.FLAG_ONE_SHOT));
+          MsgActivity.getIntent(this, true), PendingIntent.FLAG_UPDATE_CURRENT));
     }
     return builder.build();
   }

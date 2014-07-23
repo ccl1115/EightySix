@@ -13,10 +13,13 @@ import butterknife.InjectView;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.share.ShareDialog;
 import com.utree.eightysix.drawable.GearsDrawable;
 import com.utree.eightysix.widget.GearsView;
+import de.akquinet.android.androlog.Log;
 
 /**
  * @author simon
@@ -87,6 +90,24 @@ public class BaseWebActivity extends BaseActivity {
       public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
         super.onReceivedError(view, errorCode, description, failingUrl);
         mLlError.setVisibility(View.VISIBLE);
+      }
+
+      @Override
+      public boolean shouldOverrideUrlLoading(WebView view, String url) {
+        Log.d("BaseWebActivity", "overriding url loading: " + url);
+        if (url.contains("?")) {
+          String[] str = url.split("\\?")[1].split("&");
+          for (String s : str) {
+            String[] kv = s.split("=");
+            if (kv.length == 2) {
+              if (kv[0].equals("factoryId")) {
+                U.getShareManager().shareAppDialog(BaseWebActivity.this, Integer.parseInt(kv[1])).show();
+                return true;
+              }
+            }
+          }
+        }
+        return super.shouldOverrideUrlLoading(view, url);
       }
     };
 

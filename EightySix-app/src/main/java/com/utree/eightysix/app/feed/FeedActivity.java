@@ -521,14 +521,8 @@ public class FeedActivity extends BaseActivity {
     @InjectView (R.id.tv_friend_count)
     TextView mTvFriendCount;
 
-    @InjectView (R.id.tv_no_perm_tip)
-    TextView mTvNoPermTip;
-
     NoPermViewHolder(View view) {
       ButterKnife.inject(this, view);
-
-      mTvNoPermTip.setText(getString(R.string.no_perm_to_publish,
-          U.getSyncClient().getSync() == null ? 3 : U.getSyncClient().getSync().unlockFriends));
     }
   }
 

@@ -17,8 +17,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
-import com.loopj.android.http.RequestHandle;
-import com.loopj.android.http.RequestParams;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -40,11 +38,8 @@ import com.utree.eightysix.rest.RequestData;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.TopBar;
-import de.akquinet.android.androlog.Log;
 import java.io.InputStream;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Provides many base functionality to derived class
@@ -493,7 +488,6 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     RequestData data = U.getRESTRequester().convert(request);
     new CacheInWorker(RESTRequester.genCacheKey(data.getApi(), data.getParams()), string).execute();
   }
-
 
 
   protected final void cancelAll() {
