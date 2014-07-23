@@ -77,4 +77,8 @@
             android:background="@drawable/apptheme_transparent_bg"
             android:src="@drawable/ic_action_post_more"/>
 
+    <View android:layout_width="match_parent"
+          android:layout_height="1px"
+          android:layout_gravity="bottom"
+          android:background="#09000000"/>
 </FrameLayout>

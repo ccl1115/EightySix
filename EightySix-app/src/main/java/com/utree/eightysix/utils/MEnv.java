@@ -12,7 +12,7 @@ public class MEnv {
 
   public static final int MAX_SIZE = 32;
 
-  public ConcurrentHashMap<String, Object> mMEnv = new ConcurrentHashMap<String, Object>();
+  private ConcurrentHashMap<String, Object> mMEnv = new ConcurrentHashMap<String, Object>();
 
   public void put(String key, Object value) {
     if (mMEnv.contains(key)) {
@@ -23,6 +23,10 @@ public class MEnv {
   }
 
   public <T> T get(String key) {
-    return (T) mMEnv.get(key);
+    if (mMEnv.contains(key)) {
+      return (T) mMEnv.get(key);
+    } else {
+      return null;
+    }
   }
 }

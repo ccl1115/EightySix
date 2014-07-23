@@ -494,7 +494,7 @@ public class FeedActivity extends BaseActivity {
       mMenuViewHolder.mTvPraiseCount.setText(String.format("%d个赞", count));
     }
 
-    mMenuViewHolder.mTvPraisePercent.setText(praisePercent + "%");
+    mMenuViewHolder.mTvPraisePercent.setText(praisePercent);
 
     switch (variant) {
       case 1:

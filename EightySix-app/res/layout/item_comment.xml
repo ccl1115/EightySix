@@ -35,7 +35,7 @@
             android:layout_below="@+id/tv_comment"
             android:paddingBottom="6dp"
             android:textSize="12sp"
-            android:textColor="#ffe3e3e3"/>
+            android:textColor="@color/apptheme_primary_dark_color"/>
 
     <ImageView
             android:id="@+id/iv_heart"
@@ -48,5 +48,5 @@
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_alignParentBottom="true"
-            android:background="#ffe3e3e3"/>
+            android:background="#ffcccccc"/>
 </RelativeLayout>

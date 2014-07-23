@@ -273,8 +273,17 @@ public class PostActivity extends BaseActivity {
 
       }
     });
+
+    U.getMEnv().put("post_activity_foreground", mPost.id);
   }
 
+  @Override
+  protected void onPause() {
+    super.onPause();
+    U.getBus().unregister(mLvComments);
+
+    U.getMEnv().put("post_activity_foreground", "");
+  }
 
   @Override
   public void onBackPressed() {
@@ -283,12 +292,6 @@ public class PostActivity extends BaseActivity {
     } else {
       super.onBackPressed();
     }
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    U.getBus().unregister(mLvComments);
   }
 
   @Override
@@ -311,6 +314,9 @@ public class PostActivity extends BaseActivity {
             event.getComment().praised = 1;
             event.getComment().praise++;
             mPostCommentsAdapter.notifyDataSetChanged();
+          } else if ((response.code & 0xffff) == 0x2117) {
+            event.getComment().praised = 0;
+            mPostCommentsAdapter.notifyDataSetChanged();
           }
         }
       }, Response.class);
@@ -321,6 +327,9 @@ public class PostActivity extends BaseActivity {
           if (response == null || response.code != 0) {
             event.getComment().praised = 0;
             event.getComment().praise = Math.max(0, event.getComment().praise - 1);
+            mPostCommentsAdapter.notifyDataSetChanged();
+          } else if ((response.code & 0xffff) == 0x2117) {
+            event.getComment().praised = 1;
             mPostCommentsAdapter.notifyDataSetChanged();
           }
         }
