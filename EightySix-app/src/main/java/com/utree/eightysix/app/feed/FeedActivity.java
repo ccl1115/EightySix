@@ -326,10 +326,14 @@ public class FeedActivity extends BaseActivity {
     //}
     //endregion
 
-    mDlContent.closeDrawer(mLlSide);
-
     setHasNewPraise();
     setNewCommentCount();
+  }
+
+  @Override
+  protected void onStop() {
+    super.onStop();
+    mDlContent.closeDrawer(mLlSide);
   }
 
   @Subscribe
