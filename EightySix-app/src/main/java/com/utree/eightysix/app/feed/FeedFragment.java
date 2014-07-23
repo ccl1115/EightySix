@@ -60,6 +60,7 @@ class FeedFragment extends BaseFragment {
   private Guide mSourceTip;
   private Guide mPraiseTip;
   private Guide mShareTip;
+  private int mWorkerCount;
 
   public FeedFragment() {
   }
@@ -328,6 +329,14 @@ class FeedFragment extends BaseFragment {
           break;
         }
       }
+    }
+  }
+
+  public int getWorkerCount() {
+    if (mFeedAdapter != null && mFeedAdapter.getFeeds() != null) {
+      return mFeedAdapter.getFeeds().workerCount;
+    } else {
+      return 0;
     }
   }
 

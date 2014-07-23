@@ -3,7 +3,6 @@ package com.utree.eightysix.app.circle;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,8 +12,8 @@ import butterknife.OnTextChanged;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
-import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.C;
+import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
@@ -27,7 +26,6 @@ import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.widget.RoundedButton;
-import de.akquinet.android.androlog.Log;
 import java.io.File;
 
 /**
@@ -87,7 +85,7 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
 
   @OnClick(R.id.tv_location)
   public void onTvLocationClicked() {
-    U.getLocation().requestLocation();
+    M.getLocation().requestLocation();
     mTvLocation.setText(R.string.locating);
   }
 
@@ -112,12 +110,12 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
   protected void onResume() {
     super.onResume();
 
-    U.getLocation().onResume(this);
+    M.getLocation().onResume(this);
 
     getHandler().postDelayed(new Runnable() {
       @Override
       public void run() {
-        U.getLocation().requestLocation();
+        M.getLocation().requestLocation();
         mTvLocation.setText(getString(R.string.locating));
       }
     }, 1000);
@@ -127,7 +125,7 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
   protected void onPause() {
     super.onPause();
 
-    U.getLocation().onPause(this);
+    M.getLocation().onPause(this);
   }
 
   @Override

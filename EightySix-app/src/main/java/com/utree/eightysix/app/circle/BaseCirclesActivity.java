@@ -8,24 +8,22 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.SyncClient;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
@@ -40,10 +38,8 @@ import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.IRefreshable;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RandomSceneTextView;
-import com.utree.eightysix.widget.RefresherView;
 import com.utree.eightysix.widget.TopBar;
 
 /**
@@ -269,14 +265,14 @@ public class BaseCirclesActivity extends BaseActivity {
   @Override
   protected void onResume() {
     super.onResume();
-    U.getLocation().onResume(mOnResult);
-    U.getLocation().requestLocation();
+    M.getLocation().onResume(mOnResult);
+    M.getLocation().requestLocation();
   }
 
   @Override
   protected void onPause() {
     super.onPause();
-    U.getLocation().onPause(mOnResult);
+    M.getLocation().onPause(mOnResult);
   }
 
   @Override

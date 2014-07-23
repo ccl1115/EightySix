@@ -76,4 +76,7 @@ public class Feeds {
 
   @SerializedName ("posts")
   public Paginate<BaseItem> posts;
+
+  @SerializedName ("workerCount")
+  public int workerCount;
 }

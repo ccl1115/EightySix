@@ -1,5 +1,6 @@
 package com.utree.eightysix.location;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import com.baidu.location.BDLocation;
@@ -54,11 +55,11 @@ public class BdLocationImpl implements Location, BDLocationListener {
   };
   private final List<OnResult> mTransientOnResult;
 
-  public BdLocationImpl() {
-    mLocationClient = new LocationClient(U.getContext());
+  public BdLocationImpl(Context context) {
+    mLocationClient = new LocationClient(context.getApplicationContext());
     LocationClientOption option = new LocationClientOption();
     option.setOpenGps(true);
-    option.setProdName(U.getContext().getResources().getString(R.string.app_name));
+    option.setProdName("eightysix");
     option.setAddrType("all");// 返回的定位结果包含地址信息
     option.setCoorType("bd09ll");// 返回的定位结果是百度经纬度,默认值gcj02
     option.setScanSpan(2000);// 设置发起定位请求的间隔时间为500ms,一次定位

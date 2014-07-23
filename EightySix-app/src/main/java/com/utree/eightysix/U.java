@@ -3,7 +3,6 @@ package com.utree.eightysix;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
-import android.os.Looper;
 import android.view.View;
 import android.widget.Toast;
 import butterknife.ButterKnife;
@@ -16,8 +15,6 @@ import com.utree.eightysix.app.BaseApplication;
 import com.utree.eightysix.app.SyncClient;
 import com.utree.eightysix.app.feed.BaseItemDeserializer;
 import com.utree.eightysix.data.BaseItem;
-import com.utree.eightysix.location.BdLocationImpl;
-import com.utree.eightysix.location.Location;
 import com.utree.eightysix.push.PushHelper;
 import com.utree.eightysix.push.PushHelperImpl;
 import com.utree.eightysix.rest.IRESTRequester;
@@ -50,7 +47,6 @@ public class U {
   public static final int MINUTE_IN_MS = 60 * 1000;
 
   private static Analyser sStatistics;
-  private static Location sLocation;
   private static Storage sCloudStorage;
   private static IRESTRequester sRESTRequester;
   private static CacheUtils sCacheUtils;
@@ -117,14 +113,6 @@ public class U {
     return sStatistics;
   }
 
-  public static Location getLocation() {
-    checkThread();
-    if (sLocation == null) {
-      sLocation = new BdLocationImpl();
-    }
-    return sLocation;
-  }
-
   public static Context getContext() {
     return BaseApplication.getContext();
   }
@@ -141,7 +129,7 @@ public class U {
   }
 
   public static IRESTRequester getRESTRequester() {
-    checkThread();
+    M.checkThread();
     if (sRESTRequester == null) {
       sRESTRequester = new RESTRequester(getConfig("api.host"));
     }
@@ -156,7 +144,7 @@ public class U {
   }
 
   public static PushHelper getPushHelper() {
-    checkThread();
+    M.checkThread();
     if (sPushHelper == null) {
       sPushHelper = new PushHelperImpl();
     }
@@ -192,7 +180,7 @@ public class U {
   }
 
   private static void loadConfig() {
-    checkThread();
+    M.checkThread();
     sConfiguration = new Properties();
     File file = new File(Environment.getExternalStorageDirectory().getAbsoluteFile() + "/configuration.properties");
     if (!file.exists()) {
@@ -249,17 +237,11 @@ public class U {
   }
 
   public static Bus getBus() {
-    checkThread();
+    M.checkThread();
     if (sBus == null) {
       sBus = new Bus(ThreadEnforcer.MAIN);
     }
     return sBus;
-  }
-
-  private static void checkThread() {
-    if (Looper.myLooper() != Looper.getMainLooper()) {
-      throw new IllegalThreadStateException("This static method in U class must be invoked in main thread");
-    }
   }
 
   public static int dp2px(int dp) {

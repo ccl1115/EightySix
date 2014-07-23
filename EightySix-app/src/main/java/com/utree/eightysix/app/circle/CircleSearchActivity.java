@@ -19,6 +19,7 @@ import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
@@ -32,7 +33,6 @@ import com.utree.eightysix.request.CircleSetRequest;
 import com.utree.eightysix.request.SearchCircleRequest;
 import com.utree.eightysix.response.CirclesResponse;
 import com.utree.eightysix.rest.OnResponse;
-import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.AdvancedListView;
@@ -209,7 +209,7 @@ public class CircleSearchActivity extends BaseActivity {
       }
     });
 
-    U.getLocation().requestLocation(new Location.OnResult() {
+    M.getLocation().requestLocation(new Location.OnResult() {
       @Override
       public void onResult(Location.Result result) {
         mLocatingFinished = true;

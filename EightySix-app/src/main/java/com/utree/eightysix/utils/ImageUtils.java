@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.support.v4.util.LruCache;
 import android.text.TextUtils;
 import com.aliyun.android.util.MD5Util;
 import com.jakewharton.disklrucache.DiskLruCache;
@@ -28,7 +29,7 @@ import org.apache.http.Header;
 public class ImageUtils {
   private static final String TAG = "ImageUtils";
 
-  private static LruSoftCache<String, Bitmap> sLruCache = new LruSoftCache<String, Bitmap>(
+  private static LruCache<String, Bitmap> sLruCache = new LruCache<String, Bitmap>(
       (((ActivityManager) U.getContext().getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass() >> 2) * 1024 * 1024) {
     @Override
     protected void entryRemoved(boolean evicted, String key, Bitmap oldValue, Bitmap newValue) {
@@ -539,18 +540,19 @@ public class ImageUtils {
         } else {
           sLruCache.put(mHash, bitmap);
         }
+        Log.d(TAG, "onSuccess from disk");
         U.getBus().post(new ImageLoadedEvent(mHash, bitmap));
       } else {
+        Log.d(TAG, "onFailed from disk");
         sClient.get(U.getContext(), mUrl, new FileAsyncHttpResponseHandler(IOUtils.createTmpFile(mHash)) {
           @Override
           public void onSuccess(File file) {
-            Log.d(TAG, "onSuccess");
             new ImageRemoteDecodeWorker(mHash, file).execute();
           }
 
           @Override
           public void onFailure(int statusCode, Header[] headers, byte[] binaryData, Throwable error) {
-            Log.d(TAG, "onFailure");
+            Log.d(TAG, "onFailure from remote");
             if (error != null) {
               Log.d(TAG, "Get remote error: " + error.getMessage());
               if (BuildConfig.DEBUG) {
@@ -632,6 +634,9 @@ public class ImageUtils {
         } else {
           sLruCache.put(mHash, bitmap);
         }
+        Log.d(TAG, "onSuccess from remote");
+      } else {
+        Log.d(TAG, "onSuccess from remote decode in local");
       }
 
       mFile.delete();

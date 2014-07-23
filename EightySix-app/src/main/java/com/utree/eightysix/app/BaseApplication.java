@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import com.baidu.frontia.FrontiaApplication;
 import com.utree.eightysix.C;
+import com.utree.eightysix.M;
 import com.utree.eightysix.U;
 import com.utree.eightysix.utils.Env;
 import de.akquinet.android.androlog.Constants;
@@ -42,7 +43,7 @@ public class BaseApplication extends FrontiaApplication {
       Calendar lastCal = Calendar.getInstance();
       lastCal.setTimeInMillis(last);
       if (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) != lastCal.get(Calendar.DAY_OF_YEAR)) {
-        U.getLocation().requestLocation();
+        M.getLocation().requestLocation();
         Env.setTimestamp("last_location");
       }
 
