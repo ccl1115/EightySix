@@ -106,11 +106,6 @@ public class LoginActivity extends BaseActivity {
 
     setTopTitle(getString(R.string.login) + getString(R.string.app_name));
 
-    String phone = getIntent().getStringExtra("phone");
-    if (phone != null) {
-      mEtPhoneNumber.setText(phone);
-      mEtPhoneNumber.setSelection(phone.length());
-    }
 
     if (U.useFixture()) {
       mBtnFixture.setVisibility(View.VISIBLE);
@@ -189,6 +184,11 @@ public class LoginActivity extends BaseActivity {
 
     getTopBar().setActionAdapter(new ActionAdapter());
 
+    String phone = getIntent().getStringExtra("phone");
+    if (phone != null) {
+      mEtPhoneNumber.setText(phone);
+      mEtPhoneNumber.setSelection(phone.length());
+    }
   }
 
   @Override
