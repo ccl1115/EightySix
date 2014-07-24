@@ -26,7 +26,7 @@
     <com.utree.eightysix.widget.RoundedButton
             android:id="@+id/rb_join"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="48dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_centerHorizontal="true"
@@ -34,7 +34,7 @@
             android:textColor="@android:color/white"
             android:gravity="center"
             android:text="立即加入"
-            android:textSize="24sp"
+            android:textSize="16sp"
             app:radius="4dp"
             app:background="@color/apptheme_primary_transparent_btn"/>
 
@@ -47,7 +47,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="50dp"
             android:text="已有账号登录"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textColor="@android:color/white"/>
 
     <TextView
@@ -59,7 +59,7 @@
             android:layout_marginBottom="50dp"
             android:layout_alignParentBottom="true"
             android:text="@string/forget_pwd"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textColor="@android:color/white"/>
 
 </RelativeLayout>
