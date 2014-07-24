@@ -443,10 +443,10 @@ public class PostActivity extends BaseActivity {
               mPostCommentsAdapter.add(response.object);
               mPost.comments++;
               U.getBus().post(mPost);
+              mEtPostContent.setText("");
             }
 
             hideProgressBar();
-            mEtPostContent.setText("");
             mEtPostContent.setEnabled(true);
             mLvComments.setSelection(Integer.MAX_VALUE);
           }
