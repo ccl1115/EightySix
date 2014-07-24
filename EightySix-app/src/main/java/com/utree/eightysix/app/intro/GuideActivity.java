@@ -1,6 +1,6 @@
 package com.utree.eightysix.app.intro;
 
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -9,14 +9,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
+import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.nineoldandroids.animation.ArgbEvaluator;
 import com.nineoldandroids.animation.ValueAnimator;
+import com.nineoldandroids.view.ViewHelper;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.account.ForgetPwdActivity;
+import com.utree.eightysix.app.account.LoginActivity;
+import com.utree.eightysix.app.account.RegisterActivity;
+import com.utree.eightysix.utils.Env;
 
 /**
  */
@@ -37,6 +45,9 @@ public class GuideActivity extends BaseActivity {
 
   @InjectView (R.id.vp_guide)
   public ViewPager mVpGuide;
+
+  @InjectView (R.id.iv_bottom_wave)
+  public ImageView mIvWave;
 
   @Override
   public void onActionLeftClicked() {
@@ -59,11 +70,6 @@ public class GuideActivity extends BaseActivity {
       }
 
       @Override
-      public boolean isViewFromObject(View view, Object object) {
-        return view.equals(object);
-      }
-
-      @Override
       public Object instantiateItem(ViewGroup container, int position) {
         LayoutInflater inflater = LayoutInflater.from(GuideActivity.this);
         switch (position) {
@@ -79,6 +85,7 @@ public class GuideActivity extends BaseActivity {
           }
           case 2: {
             View inflate = inflater.inflate(R.layout.page_guide_3, container, false);
+            new Page3ViewHolder(inflate);
             container.addView(inflate);
             return inflate;
           }
@@ -90,6 +97,11 @@ public class GuideActivity extends BaseActivity {
       public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);
       }
+
+      @Override
+      public boolean isViewFromObject(View view, Object object) {
+        return view.equals(object);
+      }
     });
 
     mVpGuide.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -97,6 +109,12 @@ public class GuideActivity extends BaseActivity {
       public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         mPageColorAnimator.setCurrentPlayTime((long) (1000 * (position + positionOffset)));
         mVpGuide.setBackgroundColor((Integer) mPageColorAnimator.getAnimatedValue());
+
+        if (position == 1 && positionOffset > 0f) {
+          ViewHelper.setTranslationY(mIvWave, 40 * positionOffset);
+        } else if (position == 2 && positionOffset < 0f) {
+          ViewHelper.setTranslationY(mIvWave, 40 + (40 * positionOffset));
+        }
       }
 
       @Override
@@ -115,5 +133,32 @@ public class GuideActivity extends BaseActivity {
   @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    Env.setFirstRun(false);
+  }
+
+  public class Page3ViewHolder {
+    @OnClick (R.id.tv_login)
+    public void onTvLoginClicked() {
+      startActivity(new Intent(GuideActivity.this, LoginActivity.class));
+    }
+
+    @OnClick (R.id.rb_join)
+    public void onTvJoinClicked() {
+      startActivity(new Intent(GuideActivity.this, RegisterActivity.class));
+    }
+
+    @OnClick (R.id.tv_forget_pwd)
+    public void onTvForgetPwdClicked() {
+      startActivity(new Intent(GuideActivity.this, ForgetPwdActivity.class));
+    }
+
+    public Page3ViewHolder(View view) {
+      ButterKnife.inject(this, view);
+    }
   }
 }

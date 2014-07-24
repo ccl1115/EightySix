@@ -33,9 +33,9 @@
             android:textColor="@android:color/white"
             android:gravity="center"
             android:text="立即加入"
-            android:textSize="28sp"
+            android:textSize="24sp"
             app:radius="4dp"
-            app:background="#33000000"/>
+            app:background="@color/apptheme_primary_transparent_btn"/>
 
     <TextView
             android:id="@+id/tv_login"

@@ -20,6 +20,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.intro.IntroActivity;
 import com.utree.eightysix.data.User;
 import com.utree.eightysix.request.RegisterRequest;
 import com.utree.eightysix.response.UserResponse;
@@ -151,7 +152,7 @@ public class RegisterActivity extends BaseActivity {
       @Override
       public void onClick(View view, int position) {
         if (position == 0) {
-          startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+          LoginActivity.start(RegisterActivity.this, mEtPhoneNumber.getText().toString());
         }
       }
 

@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.account;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -73,6 +74,12 @@ public class LoginActivity extends BaseActivity {
 
   private boolean mRequesting = false;
 
+  public static void start(Context context, String phoneNumber) {
+    Intent intent = new Intent(context, LoginActivity.class);
+    intent.putExtra("phone", phoneNumber);
+    context.startActivity(intent);
+  }
+
   @OnClick (R.id.btn_login)
   public void onBtnLoginClicked() {
     requestLogin();
@@ -98,6 +105,12 @@ public class LoginActivity extends BaseActivity {
     super.onCreate(savedInstanceState);
 
     setTopTitle(getString(R.string.login) + getString(R.string.app_name));
+
+    String phone = getIntent().getStringExtra("phone");
+    if (phone != null) {
+      mEtPhoneNumber.setText(phone);
+      mEtPhoneNumber.setSelection(phone.length());
+    }
 
     if (U.useFixture()) {
       mBtnFixture.setVisibility(View.VISIBLE);

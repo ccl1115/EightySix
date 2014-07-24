@@ -5,7 +5,7 @@
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="#ff538dc5">
+                android:background="#ff36356e">
 
     <ImageView
             android:id="@+id/big_logo"
@@ -18,7 +18,7 @@
             android:layout_centerHorizontal="true"
             android:src="@drawable/large_logo"/>
 
-    <TextView
+    <ImageView
             android:id="@+id/app_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -26,11 +26,9 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/big_logo"
             android:layout_marginTop="56dp"
-            android:text="@string/app_name"
-            android:textSize="42sp"
-            android:textColor="@android:color/white"/>
+            android:src="@drawable/logo_app_name"/>
 
-    <TextView
+    <ImageView
             android:id="@+id/intro_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -38,8 +36,7 @@
             android:layout_below="@+id/app_title"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="15dp"
-            android:text="让漂泊的心有个家!"
-            android:textColor="@android:color/white"/>
+            android:src="@drawable/logo_slogan"/>
 
     <TextView
             android:id="@+id/intro_url"
@@ -66,9 +63,9 @@
             android:gravity="center"
             android:visibility="gone"
             android:text="立即加入"
-            android:textSize="28sp"
+            android:textSize="24sp"
             app:radius="4dp"
-            app:background="#33000000"/>
+            app:background="@color/apptheme_primary_transparent_btn"/>
 
     <TextView
             android:id="@+id/tv_login"
