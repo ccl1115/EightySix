@@ -5,7 +5,7 @@
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="#ff36356e">
+                android:background="@drawable/intro_gradient_background">
 
     <ImageView
             android:id="@+id/big_logo"
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="2014 lanmeiquan.com, all rights reserved"
+            android:text="2014 utree.cn, all rights reserved"
             android:textSize="12sp"
             android:textColor="#44ffffff"
             android:layout_marginBottom="10dp"

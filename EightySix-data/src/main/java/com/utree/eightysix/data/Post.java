@@ -113,4 +113,21 @@ public class Post extends BaseItem implements Parcelable {
       return new Post[size];
     }
   };
+
+  @Override
+  public String toString() {
+    return "Post{" +
+        "comments=" + comments +
+        ", praise=" + praise +
+        ", id='" + id + '\'' +
+        ", myPraiseCount=" + myPraiseCount +
+        ", source='" + source + '\'' +
+        ", read=" + read +
+        ", comment='" + comment + '\'' +
+        ", commentHead='" + commentHead + '\'' +
+        ", commentTail='" + commentTail + '\'' +
+        ", whoAtMe='" + whoAtMe + '\'' +
+        ", praised=" + praised +
+        '}';
+  }
 }

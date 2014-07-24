@@ -228,8 +228,10 @@
     <string name="notification_circle_unlocked">新的工友圈解锁了！</string>
     <string name="notification_circle_unlocked_tip">看看［%1$s］里的朋友发的秘密吧</string>
     <string name="notification_new">新提醒</string>
-    <string name="notification_new_comment">你关注的秘密有了新的评论</string>
-    <string name="notification_new_comments">你关注的%d条秘密有了新的评论</string>
+    <string name="notification_new_follow_comment">你关注的秘密有了新的评论</string>
+    <string name="notification_new_own_comment">你发布的秘密有了新的评论</string>
+    <string name="notification_new_follow_comments">你关注的%d条秘密有了新的评论</string>
+    <string name="notification_new_own_comments">你发布的%d条秘密有了新的评论</string>
     <string name="notification_new_friend">新朋友加入</string>
     <string name="notification_new_friend_tip">［%s］的朋友数＋1，能猜到他是谁吗</string>
     <string name="notification_new_friend_tip_plural">［%1$s］的朋友数＋%2$d，能猜到他们是谁吗</string>

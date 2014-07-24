@@ -18,6 +18,7 @@ import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.C;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
@@ -25,10 +26,13 @@ import com.utree.eightysix.app.account.ForgetPwdActivity;
 import com.utree.eightysix.app.account.LoginActivity;
 import com.utree.eightysix.app.account.RegisterActivity;
 import com.utree.eightysix.app.feed.PostPostView;
+import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.RegHotRequest;
+import com.utree.eightysix.response.PostResponse;
 import com.utree.eightysix.rest.OnResponse2;
-import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.utils.Env;
+import de.akquinet.android.androlog.Log;
 
 /**
  */
@@ -52,6 +56,8 @@ public class GuideActivity extends BaseActivity {
 
   @InjectView (R.id.iv_bottom_wave)
   public ImageView mIvWave;
+  private Page3ViewHolder mPage3ViewHolder;
+  private Post mPost;
 
   @Override
   public void onActionLeftClicked() {
@@ -89,7 +95,8 @@ public class GuideActivity extends BaseActivity {
           }
           case 2: {
             View inflate = inflater.inflate(R.layout.page_guide_3, container, false);
-            new Page3ViewHolder(inflate);
+            mPage3ViewHolder = new Page3ViewHolder(inflate);
+            mPage3ViewHolder.mPostPostView.setData(mPost);
             container.addView(inflate);
             return inflate;
           }
@@ -116,8 +123,10 @@ public class GuideActivity extends BaseActivity {
 
         if (position == 1 && positionOffset > 0f) {
           ViewHelper.setTranslationY(mIvWave, 40 * positionOffset);
+          ViewHelper.setAlpha(mPage3ViewHolder.mPostPostView, positionOffset);
         } else if (position == 2 && positionOffset < 0f) {
           ViewHelper.setTranslationY(mIvWave, 40 + (40 * positionOffset));
+          ViewHelper.setAlpha(mPage3ViewHolder.mPostPostView, 1 + positionOffset);
         }
       }
 
@@ -157,17 +166,20 @@ public class GuideActivity extends BaseActivity {
   }
 
   private void requestRegPost() {
-    request(new RegHotRequest(), new OnResponse2<Response>() {
+    request(new RegHotRequest(), new OnResponse2<PostResponse>() {
       @Override
       public void onResponseError(Throwable e) {
-
       }
 
       @Override
-      public void onResponse(Response response) {
-
+      public void onResponse(PostResponse response) {
+        if (RESTRequester.responseOk(response)) {
+          Log.d(C.TAG.RR, response.toString());
+          mPost = response.object;
+          mPage3ViewHolder.mPostPostView.setData(mPost);
+        }
       }
-    }, Response.class);
+    }, PostResponse.class);
   }
 
   public class Page3ViewHolder {
@@ -191,6 +203,8 @@ public class GuideActivity extends BaseActivity {
 
     public Page3ViewHolder(View view) {
       ButterKnife.inject(this, view);
+      mPostPostView.mIvClose.setVisibility(View.GONE);
+      mPostPostView.mIvMore.setVisibility(View.GONE);
     }
   }
 

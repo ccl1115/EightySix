@@ -17,6 +17,7 @@ public class C {
 
   public static final String API_ACCOUNT_LOGIN = "/login/login.do";
   public static final String API_ACCOUNT_REG = "/login/reg.do";
+  public static final String API_ACCOUNT_REG_HOT = "/login/regHot.do";
   public static final String API_ACCOUNT_SHOW_INFO = "/login/showInfo.do";
   public static final String API_INFO_BY_FRIEND = "/login/infoByFriend.do";
   public static final String API_FIND_FRIEND_INFO = "/login/infoFriendInfo.do";
@@ -43,7 +44,6 @@ public class C {
   public static final String API_FEED_LIST = "/feed/list.do";
   public static final String API_FEED_PRAISE = "/feed/praise.do";
   public static final String API_FEED_PRAISE_CANCEL = "/feed/cancelPraise.do";
-  public static final String API_FEED_REG_HOT = "/feed/regHot.do";
 
   public static final String API_COMMENT_ADD = "/comment/add.do";
   public static final String API_COMMENT_DELETE = "/comment/delete.do";

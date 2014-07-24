@@ -6,7 +6,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import com.squareup.otto.Subscribe;
@@ -33,19 +32,48 @@ import java.util.List;
  */
 public class PullNotificationService extends Service {
 
-  private static final int TYPE_POST = 1;
+  /**
+   * 新帖子
+   */
+  private static final int TYPE_NEW_POST = 1;
+
+  /**
+   * 圈子解锁
+   */
   private static final int TYPE_UNLOCK_CIRCLE = 2;
+
+  /**
+   * 新朋友加入
+   */
   private static final int TYPE_FRIEND_L1_JOIN = 3;
-  private static final int TYPE_COMMENT = 4;
+
+  /**
+   * 自己发布的帖子被评论
+   */
+  private static final int TYPE_FOLLOW_COMMENT = 4;
+
+  /**
+   * 被赞
+   */
   private static final int TYPE_PRAISE = 5;
+
+  /**
+   * 圈子创建审核通过
+   */
   private static final int TYPE_CIRCLE_CREATION_APPROVE = 6;
+
+  /**
+   * 关注的帖子被评论
+   */
+  private static final int TYPE_OWN_COMMENT = 7;
 
   private static final int ID_POST = 0x1000;
   private static final int ID_UNLOCK_FACTORY = 0x2000;
   private static final int ID_FRIEND_L1_JOIN = 0x3000;
-  private static final int ID_COMMENT = 0x4000;
+  private static final int ID_FOLLOW_COMMENT = 0x4000;
   private static final int ID_PRAISE = 0x5000;
   private static final int ID_APPROVE = 0x6000;
+  private static final int ID_OWN_COMMENT = 0x7000;
 
   public static void start(Context context, int type, String seq) {
     Intent intent = new Intent(context, PullNotificationService.class);
@@ -128,7 +156,7 @@ public class PullNotificationService extends Service {
         .build();
   }
 
-  private Notification buildComment(int count, String id) {
+  private Notification buildComment(int count, String id, int type) {
     Log.d(C.TAG.NT, String.format("build comment: count = %d id = %s", count, id));
     NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
     builder.setContentTitle(getString(R.string.notification_new))
@@ -136,11 +164,13 @@ public class PullNotificationService extends Service {
         .setTicker(getString(R.string.notification_new))
         .setSmallIcon(R.drawable.ic_app_icon);
     if (count == 1) {
-      builder.setContentText(getString(R.string.notification_new_comment));
+      builder.setContentText(getString(type == TYPE_FOLLOW_COMMENT ?
+          R.string.notification_new_follow_comment : R.string.notification_new_own_comment));
       builder.setContentIntent(PendingIntent.getActivity(this, 0,
           PostActivity.getIntent(this, id), PendingIntent.FLAG_UPDATE_CURRENT));
     } else {
-      builder.setContentText(String.format(getString(R.string.notification_new_comments), count));
+      builder.setContentText(getString(type == TYPE_FOLLOW_COMMENT ?
+          R.string.notification_new_follow_comments : R.string.notification_new_own_comments, count));
       builder.setContentIntent(PendingIntent.getActivity(this, 0,
           MsgActivity.getIntent(this, true), PendingIntent.FLAG_UPDATE_CURRENT));
     }
@@ -176,8 +206,9 @@ public class PullNotificationService extends Service {
 
   private void handleResponse(PullNotificationResponse response) {
     if (!Account.inst().isLogin()) return;
-    switch (response.object.type) {
-      case TYPE_POST:
+    final int type = response.object.type;
+    switch (type) {
+      case TYPE_NEW_POST:
         if (response.object.lists == null || response.object.lists.size() == 0) break;
         List<PullNotification.Item> lists = response.object.lists;
         for (int i = 0, listsSize = lists.size(); i < listsSize; i++) {
@@ -197,7 +228,8 @@ public class PullNotificationService extends Service {
           getNM().notify(item.value, ID_FRIEND_L1_JOIN, buildFriendJoin(item.value, item.shortName, item.friendCount));
         }
         break;
-      case TYPE_COMMENT:
+      case TYPE_OWN_COMMENT:
+      case TYPE_FOLLOW_COMMENT:
         int count = 0;
         try {
           count = Integer.parseInt(response.object.msg);
@@ -205,9 +237,11 @@ public class PullNotificationService extends Service {
 
         }
         if (count == 1) {
-          getNM().notify(ID_COMMENT, buildComment(count, response.object.lists.get(0).value));
+          getNM().notify(type == TYPE_FOLLOW_COMMENT ? ID_FOLLOW_COMMENT : ID_OWN_COMMENT,
+              buildComment(count, response.object.lists.get(0).value, type));
         } else {
-          getNM().notify(ID_COMMENT, buildComment(count, null));
+          getNM().notify(type == TYPE_FOLLOW_COMMENT ? ID_FOLLOW_COMMENT : ID_OWN_COMMENT,
+              buildComment(count, null, type));
         }
         Account.inst().setNewCommentCount(response.object.lists.size());
         break;

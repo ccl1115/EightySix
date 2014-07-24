@@ -6,6 +6,6 @@ import com.utree.eightysix.rest.Api;
 /**
  * @author simon
  */
-@Api(C.API_FEED_REG_HOT)
+@Api(C.API_ACCOUNT_REG_HOT)
 public class RegHotRequest {
 }
