@@ -144,7 +144,7 @@ public class OverlayTipUtil {
 
           @Override
           public int getAnchor() {
-            return ANCHOR_TOP;
+            return ANCHOR_BOTTOM;
           }
 
           @Override
@@ -159,7 +159,7 @@ public class OverlayTipUtil {
 
           @Override
           public int getYOffset() {
-            return -4;
+            return 4;
           }
         }).createGuide();
   }
