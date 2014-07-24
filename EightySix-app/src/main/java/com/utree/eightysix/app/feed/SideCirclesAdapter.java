@@ -14,7 +14,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.data.Circle;
-import com.utree.eightysix.utils.*;
+import com.utree.eightysix.utils.Utils;
 import java.util.List;
 
 /**
@@ -67,12 +67,12 @@ class SideCirclesAdapter extends BaseAdapter {
 
     viewHolder.mTvName.setText(circle.shortName);
     StringBuilder builder = new StringBuilder();
+    builder.append(Utils.getDisplayDistance(circle.distance)).append(" | ");
     if (circle.friendCount == 0) {
-      builder.append(Utils.getDisplayDistance(circle.distance));
+      builder.append("工友(").append(circle.workmateCount).append(")");
     } else {
-      builder.append("认识的人(").append(circle.friendCount).append(")");
+      builder.append("朋友(").append(circle.friendCount).append(")");
     }
-    builder.append(" | ").append("工友(").append(circle.workmateCount).append(")");
     viewHolder.mTvFriends.setText(builder.toString());
 
     Resources res = parent.getResources();
