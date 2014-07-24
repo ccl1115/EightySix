@@ -1,61 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent">
+                xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="#ff538dc5">
 
     <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
             android:id="@+id/big_logo"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/bpush_gray_logo"
-            android:layout_marginTop="40dp"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentTop="false"
-            android:layout_centerHorizontal="true"/>
-
-    <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:id="@+id/app_title"
             android:layout_gravity="center_horizontal"
-            android:textSize="42dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="96dp"
             android:layout_alignParentLeft="false"
             android:layout_alignParentTop="false"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/big_logo"/>
+            android:src="@drawable/large_logo"/>
 
     <TextView
+            android:id="@+id/app_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/intro_text"
             android:layout_gravity="center_horizontal"
-            android:text="@string/intro_1"
-            android:visibility="visible"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentTop="false"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/big_logo"
+            android:layout_marginTop="56dp"
+            android:text="@string/app_name"
+            android:textSize="42sp"
+            android:textColor="@android:color/white"/>
+
+    <TextView
+            android:id="@+id/intro_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_below="@+id/app_title"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            android:text="让漂泊的心有个家!"
+            android:textColor="@android:color/white"/>
 
     <TextView
+            android:id="@+id/intro_url"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/app_url"
-            android:id="@+id/intro_url"
             android:layout_gravity="center_horizontal"
-            android:gravity="bottom"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="2014 lanmeiquan.com, all rights reserved"
+            android:textSize="12sp"
+            android:textColor="#44ffffff"
             android:layout_marginBottom="10dp"
-            android:autoLink="web"
-            android:visibility="visible"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentTop="false"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"/>
 
+    <com.utree.eightysix.widget.RoundedButton
+            android:id="@+id/rb_join"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/tv_login"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="立即加入"
+            android:textSize="28sp"
+            app:radius="4dp"
+            app:background="#33000000"/>
+
+    <TextView
+            android:id="@+id/tv_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/rb_join"
+            android:layout_marginTop="16dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="50dp"
+            android:visibility="gone"
+            android:text="已有账号登录"
+            android:textSize="16sp"
+            android:textColor="@android:color/white"/>
+
+    <TextView
+            android:id="@+id/tv_forget_pwd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/rb_join"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="50dp"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone"
+            android:text="@string/forget_pwd"
+            android:textSize="16sp"
+            android:textColor="@android:color/white"/>
 </RelativeLayout>

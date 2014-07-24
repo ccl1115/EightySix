@@ -13,8 +13,8 @@
     <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="64dp"
-            android:layout_marginRight="64dp"
+            android:layout_marginLeft="58dp"
+            android:layout_marginRight="58dp"
             android:layout_marginBottom="16dp"
             android:layout_above="@+id/rb_join"
             android:gravity="center"
@@ -26,24 +26,25 @@
             android:id="@+id/rb_join"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:layout_above="@+id/iv_bottom_wave"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_centerHorizontal="true"
+            android:layout_above="@+id/tv_login"
             android:textColor="@android:color/white"
             android:gravity="center"
             android:text="立即加入"
             android:textSize="28sp"
             app:radius="4dp"
-            app:background="#66000000"/>
+            app:background="#33000000"/>
 
     <TextView
             android:id="@+id/tv_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/rb_join"
-            android:layout_marginBottom="16dp"
-            android:layout_below="@+id/rb_join"
+            android:layout_marginTop="16dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="50dp"
             android:text="已有账号登录"
             android:textSize="16sp"
             android:textColor="@android:color/white"/>
@@ -53,17 +54,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignRight="@+id/rb_join"
-            android:layout_below="@+id/rb_join"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="50dp"
+            android:layout_alignParentBottom="true"
             android:text="@string/forget_pwd"
             android:textSize="16sp"
             android:textColor="@android:color/white"/>
 
-    <ImageView
-            android:id="@+id/iv_bottom_wave"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="32dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/guide_bottom_wave"/>
 </RelativeLayout>

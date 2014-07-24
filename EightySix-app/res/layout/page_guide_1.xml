@@ -29,21 +29,12 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="55dp"
             android:layout_marginRight="55dp"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="100dp"
             android:layout_centerHorizontal="true"
-            android:layout_above="@+id/iv_bottom_wave"
+            android:layout_alignParentBottom="true"
             android:gravity="center"
             android:textSize="16sp"
             android:textColor="@android:color/black"
             android:text="圈里的人，都是你在厂里认识的朋友， 但互相无法知道身份"/>
-
-    <ImageView
-            android:id="@+id/iv_bottom_wave"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/guide_bottom_wave"/>
-
 
 </RelativeLayout>
