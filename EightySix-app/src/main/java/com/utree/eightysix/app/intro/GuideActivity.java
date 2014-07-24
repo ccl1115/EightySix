@@ -24,6 +24,10 @@ import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.ForgetPwdActivity;
 import com.utree.eightysix.app.account.LoginActivity;
 import com.utree.eightysix.app.account.RegisterActivity;
+import com.utree.eightysix.app.feed.PostPostView;
+import com.utree.eightysix.request.RegHotRequest;
+import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
 
 /**
@@ -127,6 +131,17 @@ public class GuideActivity extends BaseActivity {
 
       }
     });
+    getHandler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        requestRegPost();
+      }
+    }, 500);
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
   }
 
   @Override
@@ -139,6 +154,20 @@ public class GuideActivity extends BaseActivity {
   protected void onDestroy() {
     super.onDestroy();
     Env.setFirstRun(false);
+  }
+
+  private void requestRegPost() {
+    request(new RegHotRequest(), new OnResponse2<Response>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
+      @Override
+      public void onResponse(Response response) {
+
+      }
+    }, Response.class);
   }
 
   public class Page3ViewHolder {
@@ -157,8 +186,12 @@ public class GuideActivity extends BaseActivity {
       startActivity(new Intent(GuideActivity.this, ForgetPwdActivity.class));
     }
 
+    @InjectView(R.id.post_post_view)
+    public PostPostView mPostPostView;
+
     public Page3ViewHolder(View view) {
       ButterKnife.inject(this, view);
     }
   }
+
 }
