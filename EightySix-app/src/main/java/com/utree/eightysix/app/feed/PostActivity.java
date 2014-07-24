@@ -3,6 +3,7 @@ package com.utree.eightysix.app.feed;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -51,6 +52,7 @@ import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.RoundedButton;
+import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.guide.Guide;
 import de.akquinet.android.androlog.Log;
 import java.util.Random;
@@ -78,6 +80,7 @@ public class PostActivity extends BaseActivity {
   private PostCommentsAdapter mPostCommentsAdapter;
   private boolean mResumed;
   private Guide mPortraitTip;
+  private ThemedDialog mQuitConfirmDialog;
 
   public static void start(Context context, Post post, Rect rect) {
     Intent intent = new Intent(context, PostActivity.class);
@@ -246,7 +249,7 @@ public class PostActivity extends BaseActivity {
     if (mPortraitTip != null && mPortraitTip.isShowing()) {
       mPortraitTip.dismiss();
     } else {
-      super.onBackPressed();
+      finishOrShowQuitConfirmDialog();
     }
   }
 
@@ -259,6 +262,8 @@ public class PostActivity extends BaseActivity {
   public void onLogout(Account.LogoutEvent event) {
     finish();
   }
+
+
 
   @Subscribe
   public void onPostCommentPraiseEvent(final PostCommentPraiseEvent event) {
@@ -369,6 +374,32 @@ public class PostActivity extends BaseActivity {
         }
       }
     }, Response.class);
+  }
+
+  void finishOrShowQuitConfirmDialog() {
+    if (mEtPostContent.getText().length() == 0) {
+      finish();
+      return;
+    }
+    if (mQuitConfirmDialog == null) {
+      mQuitConfirmDialog = new ThemedDialog(this);
+      mQuitConfirmDialog.setTitle("你有内容未发表，确认离开？");
+      mQuitConfirmDialog.setPositive(R.string.okay, new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          finish();
+        }
+      });
+      mQuitConfirmDialog.setRbNegative(R.string.cancel, new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          mQuitConfirmDialog.dismiss();
+        }
+      });
+    }
+    if (!mQuitConfirmDialog.isShowing()) {
+      mQuitConfirmDialog.show();
+    }
   }
 
   private void requestComment(final int page) {

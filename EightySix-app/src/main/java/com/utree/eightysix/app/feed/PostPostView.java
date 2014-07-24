@@ -151,7 +151,7 @@ public class PostPostView extends BasePostView {
 
   @OnClick (R.id.iv_close)
   public void onIvCloseClicked() {
-    ((Activity) getContext()).finish();
+    ((PostActivity) getContext()).finishOrShowQuitConfirmDialog();
   }
 
   @OnClick (R.id.iv_more)
