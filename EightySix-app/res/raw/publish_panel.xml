@@ -1,26 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <panel row="4" column="5" itemWidth="50" itemHeight="30" spaceHorizontal="10" spaceVertical="10">
-    <page>
-        <item>
-            <color>#ffffffff</color>
-        </item>
-        <item>
-            <color>#ffd4706a</color>
-        </item>
-        <item>
-            <color>#ffaa3e39</color>
-        </item>
-        <item>
-            <color>#ff801b15</color>
-        </item>
-        <item>
-            <color>#ff550400</color>
-        </item>
-
-        <item>
-            <color>#ffffd7aa</color>
-        </item>
+    <page row="3" column="4" itemWidth="60" itemHeight="40" spaceHorizontal="10" spaceVertical="15">
         <item>
             <color>#ffd4a26a</color>
         </item>
@@ -35,9 +16,6 @@
         </item>
 
         <item>
-            <color>#ff6e91a1</color>
-        </item>
-        <item>
             <color>#ff467386</color>
         </item>
         <item>
@@ -50,9 +28,6 @@
             <color>#ff022636</color>
         </item>
 
-        <item>
-            <color>#ff84c68c</color>
-        </item>
         <item>
             <color>#ff52a55d</color>
         </item>
