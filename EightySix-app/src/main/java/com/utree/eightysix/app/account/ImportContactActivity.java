@@ -154,6 +154,12 @@ public class ImportContactActivity extends BaseActivity {
 
   @Override
   public void onBackPressed() {
+    if (mFlImport.getVisibility() == View.VISIBLE) {
+      mFlImport.setVisibility(View.GONE);
+    } else {
+      BaseCirclesActivity.startSelect(this);
+      super.onBackPressed();
+    }
   }
 
   /**
