@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Optional;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
@@ -25,27 +24,35 @@ class ReportDialog extends ThemedDialog {
     mCommentId = commentId;
   }
 
-  public String getPostId() {
-    return mPostId;
+  public ReportDialog(Context context, String postId) {
+    super(context);
+    mPostId = postId;
   }
 
-  public String getCommentId() {
-    return mCommentId;
+  public String getPostId() {
+    return mPostId;
   }
 
   public void setPostId(String postId) {
     mPostId = postId;
   }
 
+  public String getCommentId() {
+    return mCommentId;
+  }
+
   public void setCommentId(String commentId) {
     mCommentId = commentId;
   }
 
-  public ReportDialog(Context context, String postId) {
-    super(context);
-    mPostId = postId;
-  }
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setTitle("举报");
+    setContent(R.layout.dialog_report);
 
+    ButterKnife.inject(new ReportViewHolder(), this);
+  }
 
   @Keep
   public class ReportViewHolder {
@@ -87,15 +94,6 @@ class ReportDialog extends ThemedDialog {
       dismiss();
     }
 
-  }
-
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setTitle("举报");
-    setContent(R.layout.dialog_report);
-
-    ButterKnife.inject(new ReportViewHolder(), this);
   }
 
 }
