@@ -274,11 +274,10 @@ public class PostActivity extends BaseActivity {
           if (response == null || response.code != 0) {
             event.getComment().praised = 1;
             event.getComment().praise++;
-            mPostCommentsAdapter.notifyDataSetChanged();
           } else if ((response.code & 0xffff) == 0x2117) {
             event.getComment().praised = 0;
-            mPostCommentsAdapter.notifyDataSetChanged();
           }
+          mPostCommentsAdapter.notifyDataSetChanged();
         }
       }, Response.class);
     } else {
@@ -288,11 +287,10 @@ public class PostActivity extends BaseActivity {
           if (response == null || response.code != 0) {
             event.getComment().praised = 0;
             event.getComment().praise = Math.max(0, event.getComment().praise - 1);
-            mPostCommentsAdapter.notifyDataSetChanged();
           } else if ((response.code & 0xffff) == 0x2117) {
             event.getComment().praised = 1;
-            mPostCommentsAdapter.notifyDataSetChanged();
           }
+          mPostCommentsAdapter.notifyDataSetChanged();
         }
       }, Response.class);
     }
@@ -306,32 +304,28 @@ public class PostActivity extends BaseActivity {
         public void onResponse(Response response) {
           if (RESTRequester.responseOk(response)) {
             U.getBus().post(event.getPost());
+          } else if ((response.code & 0xffff) == 0x2286) {
+            event.getPost().praised = 0;
           } else {
-            if ((response.code & 0xffff) == 0x2286) {
-              event.getPost().praised = 0;
-            } else {
-              event.getPost().praised = 0;
-              event.getPost().praise++;
-              mPostCommentsAdapter.notifyDataSetChanged();
-            }
+            event.getPost().praised = 0;
+            event.getPost().praise++;
           }
+          mPostCommentsAdapter.notifyDataSetChanged();
         }
       }, Response.class);
     } else {
       request(new PostPraiseRequest(event.getPost().id), new OnResponse<Response>() {
         @Override
         public void onResponse(Response response) {
-          if (response == null || response.code != 0) {
+          if (RESTRequester.responseOk(response)) {
             U.getBus().post(event.getPost());
+          } else if ((response.code & 0xffff) == 0x2286) {
+            event.getPost().praised = 1;
           } else {
-            if ((response.code & 0xffff) == 0x2286) {
-              event.getPost().praised = 1;
-            } else {
-              event.getPost().praised = 1;
-              event.getPost().praise = Math.max(0, event.getPost().praise - 1);
-              mPostCommentsAdapter.notifyDataSetChanged();
-            }
+            event.getPost().praised = 1;
+            event.getPost().praise = Math.max(0, event.getPost().praise - 1);
           }
+          mPostCommentsAdapter.notifyDataSetChanged();
         }
       }, Response.class);
     }
