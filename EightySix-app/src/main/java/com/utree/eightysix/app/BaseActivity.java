@@ -395,7 +395,9 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
 
     U.getBus().register(this);
 
-    checkUpgrade();
+    if (shouldCheckUpgrade()) {
+      checkUpgrade();
+    }
   }
 
   @Override
@@ -575,6 +577,10 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
 
       }
     });
+  }
+
+  protected boolean shouldCheckUpgrade() {
+    return true;
   }
 
   private void checkUpgrade() {

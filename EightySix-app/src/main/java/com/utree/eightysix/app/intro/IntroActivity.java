@@ -42,12 +42,12 @@ public class IntroActivity extends BaseActivity {
     startActivity(new Intent(this, LoginActivity.class));
   }
 
-  @OnClick(R.id.rb_join)
+  @OnClick (R.id.rb_join)
   public void onRbJoinClicked() {
     startActivity(new Intent(this, RegisterActivity.class));
   }
 
-  @OnClick(R.id.tv_forget_pwd)
+  @OnClick (R.id.tv_forget_pwd)
   public void onTvForgetPwdClicked() {
     startActivity(new Intent(this, ForgetPwdActivity.class));
   }
@@ -93,6 +93,11 @@ public class IntroActivity extends BaseActivity {
       }
     }, U.getConfigInt("activity.intro.delay"));
 
+  }
+
+  @Override
+  protected boolean shouldCheckUpgrade() {
+    return false;
   }
 
   @Override

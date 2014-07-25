@@ -44,7 +44,8 @@ public class GuideActivity extends BaseActivity {
   private static final int PAGE_1_BACKGROUND_COLOR = 0xff43cf76;
   private static final int PAGE_2_BACKGROUND_COLOR = 0xff3f61a9;
   private static final int PAGE_3_BACKGROUND_COLOR = 0xff55b5c3;
-
+  private ValueAnimator mPageColorAnimator =
+      ValueAnimator.ofObject(new ArgbEvaluator(), PAGE_1_BACKGROUND_COLOR, PAGE_2_BACKGROUND_COLOR, PAGE_3_BACKGROUND_COLOR);
   private static final int[] RANDOM_BACKGROUND = {
       R.drawable.bg_43,
       R.drawable.bg_40,
@@ -55,10 +56,12 @@ public class GuideActivity extends BaseActivity {
       R.drawable.bg_16,
       R.drawable.bg_10
   };
-
-  private ValueAnimator mPageColorAnimator =
-      ValueAnimator.ofObject(new ArgbEvaluator(), PAGE_1_BACKGROUND_COLOR, PAGE_2_BACKGROUND_COLOR, PAGE_3_BACKGROUND_COLOR);
-
+  @InjectView (R.id.vp_guide)
+  public ViewPager mVpGuide;
+  @InjectView (R.id.iv_bottom_wave)
+  public ImageView mIvWave;
+  @InjectView (R.id.in_guide)
+  public IndicatorView mInGuide;
   private int mRandomBg;
 
   {
@@ -66,15 +69,6 @@ public class GuideActivity extends BaseActivity {
     mPageColorAnimator.setInterpolator(new LinearInterpolator());
     mRandomBg = RANDOM_BACKGROUND[new Random().nextInt(RANDOM_BACKGROUND.length)];
   }
-
-  @InjectView (R.id.vp_guide)
-  public ViewPager mVpGuide;
-
-  @InjectView (R.id.iv_bottom_wave)
-  public ImageView mIvWave;
-
-  @InjectView(R.id.in_guide)
-  public IndicatorView mInGuide;
 
   private Page3ViewHolder mPage3ViewHolder;
   private Post mPost;
@@ -173,8 +167,19 @@ public class GuideActivity extends BaseActivity {
   }
 
   @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    Env.setFirstRun(false);
+  }
+
+  @Override
   protected void onResume() {
     super.onResume();
+  }
+
+  @Override
+  protected boolean shouldCheckUpgrade() {
+    return false;
   }
 
   @Override
@@ -183,10 +188,9 @@ public class GuideActivity extends BaseActivity {
     finish();
   }
 
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    Env.setFirstRun(false);
+  @Subscribe
+  public void onLoginEvent(Account.LoginEvent event) {
+    finish();
   }
 
   private void requestRegPost() {
@@ -210,6 +214,15 @@ public class GuideActivity extends BaseActivity {
   }
 
   public class Page3ViewHolder {
+    @InjectView (R.id.post_post_view)
+    public PostPostView mPostPostView;
+
+    public Page3ViewHolder(View view) {
+      ButterKnife.inject(this, view);
+      mPostPostView.mIvClose.setVisibility(View.GONE);
+      mPostPostView.mIvMore.setVisibility(View.GONE);
+    }
+
     @OnClick (R.id.tv_login)
     public void onTvLoginClicked() {
       startActivity(new Intent(GuideActivity.this, LoginActivity.class));
@@ -224,19 +237,5 @@ public class GuideActivity extends BaseActivity {
     public void onTvForgetPwdClicked() {
       startActivity(new Intent(GuideActivity.this, ForgetPwdActivity.class));
     }
-
-    @InjectView(R.id.post_post_view)
-    public PostPostView mPostPostView;
-
-    public Page3ViewHolder(View view) {
-      ButterKnife.inject(this, view);
-      mPostPostView.mIvClose.setVisibility(View.GONE);
-      mPostPostView.mIvMore.setVisibility(View.GONE);
-    }
-  }
-
-  @Subscribe
-  public void onLoginEvent(Account.LoginEvent event) {
-    finish();
   }
 }
