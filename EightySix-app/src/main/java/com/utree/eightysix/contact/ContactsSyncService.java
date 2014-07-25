@@ -207,10 +207,9 @@ public class ContactsSyncService extends IntentService {
 
     String[] projections = {RAW_CONTACT_ID, DISPLAY_NAME, NUMBER};
 
-    String selection = String.format("%s=1", HAS_PHONE_NUMBER);
 
     Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-        projections, selection, null, null);
+        projections, null, null, null);
 
     if (cursor == null) return null;
     if (!cursor.moveToFirst()) return contacts;
