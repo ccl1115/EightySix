@@ -66,14 +66,7 @@ class SideCirclesAdapter extends BaseAdapter {
     Circle circle = getItem(position);
 
     viewHolder.mTvName.setText(circle.shortName);
-    StringBuilder builder = new StringBuilder();
-    builder.append(Utils.getDisplayDistance(circle.distance)).append(" | ");
-    if (circle.friendCount == 0) {
-      builder.append("工友(").append(circle.workmateCount).append(")");
-    } else {
-      builder.append("朋友(").append(circle.friendCount).append(")");
-    }
-    viewHolder.mTvFriends.setText(builder.toString());
+    viewHolder.mTvFriends.setText(circle.info);
 
     Resources res = parent.getResources();
     if (circle.selected) {

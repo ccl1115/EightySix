@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
@@ -16,4 +17,15 @@
             android:layout_gravity="bottom"
             android:scaleType="centerCrop"
             android:src="@drawable/guide_bottom_wave"/>
+
+    <com.utree.eightysix.widget.IndicatorView
+            android:id="@+id/in_guide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="55dp"
+            app:count="3"
+            app:selector="@drawable/apptheme_indicator_white_dot_selected"
+            app:drawable="@drawable/apptheme_indicator_white_dot"
+            app:spacing="8dp"/>
 </FrameLayout>

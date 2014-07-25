@@ -32,7 +32,9 @@ import com.utree.eightysix.response.PostResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.utils.Env;
+import com.utree.eightysix.widget.IndicatorView;
 import de.akquinet.android.androlog.Log;
+import java.util.Random;
 
 /**
  */
@@ -43,12 +45,26 @@ public class GuideActivity extends BaseActivity {
   private static final int PAGE_2_BACKGROUND_COLOR = 0xff3f61a9;
   private static final int PAGE_3_BACKGROUND_COLOR = 0xff55b5c3;
 
+  private static final int[] RANDOM_BACKGROUND = {
+      R.drawable.bg_43,
+      R.drawable.bg_40,
+      R.drawable.bg_33,
+      R.drawable.bg_29,
+      R.drawable.bg_27,
+      R.drawable.bg_21,
+      R.drawable.bg_16,
+      R.drawable.bg_10
+  };
+
   private ValueAnimator mPageColorAnimator =
       ValueAnimator.ofObject(new ArgbEvaluator(), PAGE_1_BACKGROUND_COLOR, PAGE_2_BACKGROUND_COLOR, PAGE_3_BACKGROUND_COLOR);
+
+  private int mRandomBg;
 
   {
     mPageColorAnimator.setDuration(2000);
     mPageColorAnimator.setInterpolator(new LinearInterpolator());
+    mRandomBg = RANDOM_BACKGROUND[new Random().nextInt(RANDOM_BACKGROUND.length)];
   }
 
   @InjectView (R.id.vp_guide)
@@ -56,6 +72,10 @@ public class GuideActivity extends BaseActivity {
 
   @InjectView (R.id.iv_bottom_wave)
   public ImageView mIvWave;
+
+  @InjectView(R.id.in_guide)
+  public IndicatorView mInGuide;
+
   private Page3ViewHolder mPage3ViewHolder;
   private Post mPost;
 
@@ -96,8 +116,9 @@ public class GuideActivity extends BaseActivity {
           case 2: {
             View inflate = inflater.inflate(R.layout.page_guide_3, container, false);
             mPage3ViewHolder = new Page3ViewHolder(inflate);
-            mPage3ViewHolder.mPostPostView.setData(mPost);
             container.addView(inflate);
+            mPage3ViewHolder.mPostPostView.setData(mPost);
+            mPage3ViewHolder.mPostPostView.mAivBg.setImageResource(mRandomBg);
             return inflate;
           }
         }
@@ -120,13 +141,16 @@ public class GuideActivity extends BaseActivity {
       public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         mPageColorAnimator.setCurrentPlayTime((long) (1000 * (position + positionOffset)));
         mVpGuide.setBackgroundColor((Integer) mPageColorAnimator.getAnimatedValue());
+        mInGuide.setPosition(position + positionOffset);
 
         if (position == 1 && positionOffset > 0f) {
           ViewHelper.setTranslationY(mIvWave, 40 * positionOffset);
           ViewHelper.setAlpha(mPage3ViewHolder.mPostPostView, positionOffset);
+          ViewHelper.setAlpha(mInGuide, 1 - positionOffset);
         } else if (position == 2 && positionOffset < 0f) {
           ViewHelper.setTranslationY(mIvWave, 40 + (40 * positionOffset));
           ViewHelper.setAlpha(mPage3ViewHolder.mPostPostView, 1 + positionOffset);
+          ViewHelper.setAlpha(mInGuide, -positionOffset);
         }
       }
 
@@ -176,7 +200,10 @@ public class GuideActivity extends BaseActivity {
         if (RESTRequester.responseOk(response)) {
           Log.d(C.TAG.RR, response.toString());
           mPost = response.object;
-          mPage3ViewHolder.mPostPostView.setData(mPost);
+          mPost.bgUrl = null;
+          if (mPage3ViewHolder != null) {
+            mPage3ViewHolder.mPostPostView.setData(mPost);
+          }
         }
       }
     }, PostResponse.class);
@@ -208,4 +235,8 @@ public class GuideActivity extends BaseActivity {
     }
   }
 
+  @Subscribe
+  public void onLoginEvent(Account.LoginEvent event) {
+    finish();
+  }
 }

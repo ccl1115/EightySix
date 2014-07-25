@@ -559,7 +559,7 @@ public class FeedActivity extends BaseActivity {
 
     @OnClick (R.id.ll_feedback)
     void onLlFeedbackClicked() {
-      startActivity(new Intent(FeedActivity.this, FeedbackActivity.class));
+      FeedbackActivity.start(FeedActivity.this);
       mPopupMenu.dismiss();
     }
 

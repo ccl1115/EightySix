@@ -113,7 +113,7 @@ public class PublishActivity extends BaseActivity {
 
   private int mBgColor = Color.WHITE;
 
-  private int mFactoryId;
+  protected int mFactoryId;
 
   public static void start(Context context, int factoryId) {
     Intent intent = new Intent(context, PublishActivity.class);

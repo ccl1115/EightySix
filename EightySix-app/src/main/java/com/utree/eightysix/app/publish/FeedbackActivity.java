@@ -1,5 +1,7 @@
 package com.utree.eightysix.app.publish;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -21,7 +23,11 @@ public class FeedbackActivity extends PublishActivity {
   @InjectView (R.id.fl_portrait)
   public FrameLayout mFlPortrait;
 
-  private int mFeedbackCircleId;
+  public static void start(Context context) {
+    Intent intent = new Intent(context, FeedbackActivity.class);
+    intent.putExtra("factoryId", U.getConfigInt("feedback.circle.id"));
+    context.startActivity(intent);
+  }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -31,8 +37,6 @@ public class FeedbackActivity extends PublishActivity {
 
     mTvBottom.setVisibility(View.INVISIBLE);
     mFlPortrait.setVisibility(View.INVISIBLE);
-
-    mFeedbackCircleId = U.getConfigInt("feedback.circle.id");
 
     showSoftKeyboard(mPostEditText);
   }
