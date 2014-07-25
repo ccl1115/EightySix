@@ -111,6 +111,7 @@ public class GuideActivity extends BaseActivity {
             View inflate = inflater.inflate(R.layout.page_guide_3, container, false);
             mPage3ViewHolder = new Page3ViewHolder(inflate);
             container.addView(inflate);
+            mPage3ViewHolder.mPostPostView.mTvPraise.setOnClickListener(null);
             mPage3ViewHolder.mPostPostView.setData(mPost);
             mPage3ViewHolder.mPostPostView.mAivBg.setImageResource(mRandomBg);
             return inflate;
