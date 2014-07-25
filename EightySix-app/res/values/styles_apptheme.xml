@@ -13,7 +13,9 @@
     </style>
 
     <style name="Widget.CheckBox.AppTheme" parent="android:Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/apptheme_btn_check_holo_light</item>
     </style>
+
 
     <style name="Widget.RadioButton.AppTheme" parent="android:Widget.CompoundButton.RadioButton">
     </style>
