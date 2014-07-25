@@ -44,41 +44,41 @@
 
     <page row="3" column="4" itemWidth="60" itemHeight="40" spaceHorizontal="10" spaceVertical="15">
         <item>
-            <local-image>bg_10</local-image>
+            <local-image>bg_71</local-image>
         </item>
 
         <item>
-            <local-image>bg_16</local-image>
+            <local-image>bg_72</local-image>
         </item>
         <item>
-            <local-image>bg_21</local-image>
+            <local-image>bg_73</local-image>
         </item>
         <item>
-            <local-image>bg_27</local-image>
+            <local-image>bg_74</local-image>
         </item>
         <item>
-            <local-image>bg_29</local-image>
+            <local-image>bg_75</local-image>
         </item>
         <item>
-            <local-image>bg_33</local-image>
+            <local-image>bg_76</local-image>
         </item>
         <item>
-            <local-image>bg_37</local-image>
+            <local-image>bg_77</local-image>
         </item>
         <item>
-            <local-image>bg_40</local-image>
+            <local-image>bg_78</local-image>
         </item>
         <item>
-            <local-image>bg_42</local-image>
+            <local-image>bg_79</local-image>
         </item>
         <item>
-            <local-image>bg_43</local-image>
+            <local-image>bg_80</local-image>
         </item>
         <item>
-            <local-image>bg_64</local-image>
+            <local-image>bg_81</local-image>
         </item>
         <item>
-            <local-image>bg_65</local-image>
+            <local-image>bg_82</local-image>
         </item>
     </page>
 

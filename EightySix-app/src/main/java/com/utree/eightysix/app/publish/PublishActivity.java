@@ -28,6 +28,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ArgbEvaluator;
+import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
@@ -439,6 +440,11 @@ public class PublishActivity extends BaseActivity {
       mUseColor = false;
       mBgColor = Color.WHITE;
     }
+  }
+
+  private void fadeInAnimation(View view) {
+    ObjectAnimator animator = ObjectAnimator.ofFloat(view, "alpha", 0f, 1f);
+    animator.setDuration(500);
   }
 
   @Subscribe

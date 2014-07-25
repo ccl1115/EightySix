@@ -29,6 +29,7 @@ import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.ImportContactActivity;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
+import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
 import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
 import com.utree.eightysix.app.msg.MsgActivity;
@@ -279,6 +280,14 @@ public class FeedActivity extends BaseActivity {
       mMenuViewHolder.mRbNewPraiseDot.setVisibility(View.VISIBLE);
     } else {
       mMenuViewHolder.mRbNewPraiseDot.setVisibility(View.INVISIBLE);
+    }
+  }
+
+  @Subscribe
+  public void onSetPraiseCountEvent(UpdatePraiseCountEvent event) {
+    if (mMenuViewHolder != null) {
+      mMenuViewHolder.mTvPraiseCount.setText(String.valueOf(event.getCount()));
+      mMenuViewHolder.mTvPraisePercent.setText(event.getPercent());
     }
   }
 

@@ -16,18 +16,16 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
+import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.PraisesRequest;
 import com.utree.eightysix.response.MsgsResponse;
-import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.IRefreshable;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RandomSceneTextView;
-import com.utree.eightysix.widget.RefresherView;
 import java.util.List;
 
 /**
@@ -175,6 +173,8 @@ public class PraiseActivity extends BaseActivity {
               setTopTitle(getString(R.string.praise_count_obtained, response.object.myPraiseCount));
               setTopSubTitle(getString(R.string.praise_status,
                   response.object.postCount, response.object.commentCount, response.object.percent));
+
+              U.getBus().post(new UpdatePraiseCountEvent(response.object.myPraiseCount, response.object.percent));
             }
           } else {
             mMsgAdapter.add(response.object.posts.lists);

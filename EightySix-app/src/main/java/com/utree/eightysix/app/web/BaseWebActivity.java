@@ -89,6 +89,7 @@ public class BaseWebActivity extends BaseActivity {
       @Override
       public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
         super.onReceivedError(view, errorCode, description, failingUrl);
+        mWbBase.setVisibility(View.INVISIBLE);
         mLlError.setVisibility(View.VISIBLE);
       }
 
