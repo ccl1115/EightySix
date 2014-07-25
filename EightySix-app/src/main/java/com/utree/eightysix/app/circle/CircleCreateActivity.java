@@ -203,6 +203,7 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
           finish();
         }
         mEtCaptcha.setText("");
+        requestCaptcha();
         mRbCreate.setEnabled(true);
       }
     }, Response.class);
