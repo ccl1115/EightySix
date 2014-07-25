@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnFocusChange;
 import butterknife.OnTextChanged;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.squareup.otto.Subscribe;
@@ -27,6 +28,7 @@ import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.widget.RoundedButton;
 import java.io.File;
+import java.util.regex.Pattern;
 
 /**
  * @author simon
@@ -34,6 +36,8 @@ import java.io.File;
 @Layout (R.layout.activity_circle_create)
 @TopTitle (R.string.create_circle)
 public class CircleCreateActivity extends BaseActivity implements Location.OnResult, LogoutListener {
+
+  private static final Pattern sAbbreviationPattern = Pattern.compile("(股份)*(责任)*(有限)*(股份)*(责任)*第*(一|二|三|四|五|六|七|八|九|十|零)*分*(公司|厂)|集团|\\(.+\\)|（.+）");
 
   @InjectView (R.id.et_circle_name)
   public EditText mEtCircleName;
@@ -87,6 +91,17 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
   public void onTvLocationClicked() {
     M.getLocation().requestLocation();
     mTvLocation.setText(R.string.locating);
+  }
+
+  @OnFocusChange(R.id.et_circle_abbreviation)
+  public void onEtCircleAbbreviationFocusChange(boolean focused) {
+    if (focused) {
+      if (mEtCircleAbbreviation.getText().length() == 0) {
+        String text = mEtCircleName.getText().toString();
+        text = sAbbreviationPattern.matcher(text).replaceAll("");
+        mEtCircleAbbreviation.setText(text);
+      }
+    }
   }
 
   @OnClick (R.id.rb_reget_captcha)
