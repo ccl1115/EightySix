@@ -17,6 +17,7 @@
                 android:id="@+id/rstv_empty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 app:text="@string/not_found_circle"
                 app:subText="@string/not_found_circle_tip"
                 app:drawable="@drawable/scene_1"
