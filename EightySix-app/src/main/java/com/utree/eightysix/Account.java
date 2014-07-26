@@ -106,7 +106,7 @@ public class Account {
   }
 
   public void decNewCommentCount(int count) {
-    int value = getNewCommentCount() - count;
+    int value = Math.min(getNewCommentCount() - count, 0);
     U.getBus().post(new NewCommentCountEvent(count));
     getAccountSharedPreferences().edit().putInt("new_comment_count", value).apply();
   }

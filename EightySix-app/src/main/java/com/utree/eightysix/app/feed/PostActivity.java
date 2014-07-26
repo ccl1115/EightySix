@@ -242,6 +242,7 @@ public class PostActivity extends BaseActivity {
       cacheOutComments(mPostId, 1);
     }
 
+    Account.inst().decNewCommentCount(1);
   }
 
   @Override
