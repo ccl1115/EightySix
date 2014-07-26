@@ -167,15 +167,11 @@ public class PraiseActivity extends BaseActivity {
               }
             };
             mAlvMsg.setAdapter(mMsgAdapter);
-            if (response.object.myPraiseCount == 0) {
-              setTopTitle("赞列表");
-            } else {
-              setTopTitle(getString(R.string.praise_count_obtained, response.object.myPraiseCount));
-              setTopSubTitle(getString(R.string.praise_status,
-                  response.object.postCount, response.object.commentCount, response.object.percent));
+            setTopTitle(getString(R.string.praise_count_obtained, response.object.myPraiseCount));
+            setTopSubTitle(getString(R.string.praise_status,
+                response.object.postCount, response.object.commentCount, response.object.percent));
 
-              U.getBus().post(new UpdatePraiseCountEvent(response.object.myPraiseCount, response.object.percent));
-            }
+            U.getBus().post(new UpdatePraiseCountEvent(response.object.myPraiseCount, response.object.percent));
           } else {
             mMsgAdapter.add(response.object.posts.lists);
           }
