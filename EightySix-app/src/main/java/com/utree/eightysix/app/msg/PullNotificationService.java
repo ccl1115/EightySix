@@ -241,7 +241,7 @@ public class PullNotificationService extends Service {
         if (count == 1) {
           getNM().notify(type == TYPE_FOLLOW_COMMENT ? ID_FOLLOW_COMMENT : ID_OWN_COMMENT,
               buildComment(count, response.object.lists.get(0).value, type));
-        } else {
+        } else if (count > 1) {
           getNM().notify(type == TYPE_FOLLOW_COMMENT ? ID_FOLLOW_COMMENT : ID_OWN_COMMENT,
               buildComment(count, null, type));
         }
