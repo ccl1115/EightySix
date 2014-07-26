@@ -24,6 +24,8 @@ import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.RequestData;
 import de.akquinet.android.androlog.Log;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 /**
  * 拉通知
@@ -243,7 +245,7 @@ public class PullNotificationService extends Service {
           getNM().notify(type == TYPE_FOLLOW_COMMENT ? ID_FOLLOW_COMMENT : ID_OWN_COMMENT,
               buildComment(count, null, type));
         }
-        Account.inst().setNewCommentCount(response.object.lists.size());
+        Account.inst().incNewCommentCount(count);
         break;
       case TYPE_PRAISE:
         Account.inst().setHasNewPraise(true);
@@ -256,4 +258,5 @@ public class PullNotificationService extends Service {
         break;
     }
   }
+
 }

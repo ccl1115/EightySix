@@ -96,6 +96,18 @@ public class Account {
     getAccountSharedPreferences().edit().putInt("new_comment_count", count).apply();
   }
 
+  public void incNewCommentCount(int count) {
+    int value = getNewCommentCount() + count;
+    U.getBus().post(new NewCommentCountEvent(count));
+    getAccountSharedPreferences().edit().putInt("new_comment_count", value).apply();
+  }
+
+  public void decNewCommentCount(int count) {
+    int value = getNewCommentCount() - count;
+    U.getBus().post(new NewCommentCountEvent(count));
+    getAccountSharedPreferences().edit().putInt("new_comment_count", value).apply();
+  }
+
   public int getNewCommentCount() {
     return getAccountSharedPreferences().getInt("new_comment_count", 0);
   }
