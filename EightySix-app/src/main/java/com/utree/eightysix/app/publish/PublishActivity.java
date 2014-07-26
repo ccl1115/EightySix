@@ -421,12 +421,14 @@ public class PublishActivity extends BaseActivity {
     } else if (tv.type == TypedValue.TYPE_STRING) {
       mAivPostBg.setBackgroundColor(Color.TRANSPARENT);
       mAivPostBg.setUrl(tv.string.toString());
+      fadeInAnimation(mAivPostBg);
       mImageUploadFinished = true;
       mImageUploadUrl = tv.string.toString();
       mUseColor = false;
       mBgColor = Color.WHITE;
     } else if (tv.type == TypedValue.TYPE_REFERENCE) {
       mAivPostBg.setBackgroundColor(Color.TRANSPARENT);
+      fadeInAnimation(mAivPostBg);
 
       mImageUploadUrl = U.getCloudStorage().getUrl(U.getConfig("storage.bg.bucket.name"),
           "",
@@ -445,6 +447,7 @@ public class PublishActivity extends BaseActivity {
   private void fadeInAnimation(View view) {
     ObjectAnimator animator = ObjectAnimator.ofFloat(view, "alpha", 0f, 1f);
     animator.setDuration(500);
+    animator.start();
   }
 
   @Subscribe
