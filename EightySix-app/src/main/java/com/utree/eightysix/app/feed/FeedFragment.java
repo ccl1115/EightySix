@@ -305,6 +305,7 @@ class FeedFragment extends BaseFragment {
     if (mFeedAdapter != null) {
       mFeedAdapter.add(event.getPost());
       mRstvEmpty.setVisibility(View.INVISIBLE);
+      mLvFeed.setSelection(0);
     }
   }
 

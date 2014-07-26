@@ -39,6 +39,7 @@ import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.Circle;
+import com.utree.eightysix.data.Post;
 import com.utree.eightysix.event.HasNewPraiseEvent;
 import com.utree.eightysix.event.NewCommentCountEvent;
 import com.utree.eightysix.request.CircleSideRequest;
