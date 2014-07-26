@@ -277,7 +277,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     public String getTitle(int position) {
       if (position == 0) {
-        return getString(R.string.register);
+        return getString(R.string.forget_pwd);
       }
       return null;
     }
@@ -297,7 +297,8 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void onClick(View view, int position) {
       if (position == 0) {
-        RegisterActivity.start(LoginActivity.this, mEtPhoneNumber.getText().toString());
+        Intent intent = new Intent(LoginActivity.this, ForgetPwdActivity.class);
+        startActivity(intent);
       }
     }
 
@@ -308,7 +309,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public TopBar.LayoutParams getLayoutParams(int position) {
-      return new TopBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+      return new TopBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
     }
   }
 }

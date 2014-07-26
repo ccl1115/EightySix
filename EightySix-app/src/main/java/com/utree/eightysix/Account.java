@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import com.google.gson.reflect.TypeToken;
 import com.utree.eightysix.app.account.LoginActivity;
+import com.utree.eightysix.app.intro.IntroActivity;
 import com.utree.eightysix.data.User;
 import com.utree.eightysix.event.HasNewPraiseEvent;
 import com.utree.eightysix.event.NewCommentCountEvent;
@@ -164,7 +165,7 @@ public class Account {
         }
       }, Response.class));
 
-      Intent intent = new Intent(U.getContext(), LoginActivity.class);
+      Intent intent = new Intent(U.getContext(), IntroActivity.class);
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       U.getContext().startActivity(intent);
     }

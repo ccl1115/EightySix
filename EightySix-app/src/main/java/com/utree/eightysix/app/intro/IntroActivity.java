@@ -55,7 +55,7 @@ public class IntroActivity extends BaseActivity {
   @Override
   @Subscribe
   public void onLogout(Account.LogoutEvent event) {
-    finish();
+    // I don't finish when user logout
   }
 
   @Override

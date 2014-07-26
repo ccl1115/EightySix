@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -363,8 +364,6 @@ public class PublishActivity extends BaseActivity {
 
       }
     });
-
-    getTopBar().getActionView(0).setEnabled(false);
   }
 
   @Override
