@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnFocusChange;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ArgbEvaluator;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -145,6 +146,15 @@ public class PublishActivity extends BaseActivity {
   @OnClick (R.id.iv_camera)
   public void onIvCameraClicked() {
     mCameraDialog.show();
+  }
+
+  @OnFocusChange(R.id.et_post_content)
+  public void onPostEditTextFocusChanged(boolean focused) {
+    if (focused) {
+      mPostEditText.setHintTextColor(0x88ffffff);
+    } else {
+      mPostEditText.setHintTextColor(0xffffffff);
+    }
   }
 
   @Override
@@ -353,6 +363,8 @@ public class PublishActivity extends BaseActivity {
 
       }
     });
+
+    getTopBar().getActionView(0).setEnabled(false);
   }
 
   @Override

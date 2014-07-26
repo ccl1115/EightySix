@@ -30,7 +30,7 @@ import java.util.List;
 
 /**
  */
-public class TopBar extends ViewGroup implements View.OnClickListener {
+public class TopBar extends FrameLayout implements View.OnClickListener {
 
   private final List<ActionButton> mActionViews = new ArrayList<ActionButton>();
 
@@ -98,6 +98,8 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     mActionOverFlow.setBackgroundDrawable(getResources().getDrawable(R.drawable.apptheme_primary_btn_dark));
 
     setOnClickListener(this);
+
+    mRbSearch.setEnabled(false);
   }
 
   public String getTitle() {
@@ -149,6 +151,16 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     }
     requestLayout();
     invalidate();
+  }
+
+  @Override
+  public boolean addStatesFromChildren() {
+    return true;
+  }
+
+  @Override
+  public boolean shouldDelayChildPressedState() {
+    return false;
   }
 
   public void setCallback(Callback callback) {
@@ -380,7 +392,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     return p instanceof LayoutParams;
   }
 
-  public static class LayoutParams extends MarginLayoutParams {
+  public static class LayoutParams extends FrameLayout.LayoutParams {
 
     public LayoutParams(Context c, AttributeSet attrs) {
       super(c, attrs);

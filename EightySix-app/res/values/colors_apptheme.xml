@@ -2,7 +2,7 @@
 <resources>
     <color name="apptheme_primary_light_color">#ff5e468c</color>
     <color name="apptheme_primary_light_color_pressed">#ff3f2e5d</color>
-    <color name="apptheme_primary_light_color_disabled">#fff0f0f0</color>
+    <color name="apptheme_primary_light_color_disabled">#ffb8b8b8</color>
 
     <color name="apptheme_secondary_light_color">#ffe64545</color>
     <color name="apptheme_secondary_light_color_pressed">#ffa23131</color>

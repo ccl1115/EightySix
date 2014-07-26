@@ -16,7 +16,7 @@ import com.utree.eightysix.drawable.RoundRectDrawable;
 /**
  * @author simon
  */
-public abstract class ActionButton extends FrameLayout {
+public class ActionButton extends FrameLayout {
 
   private boolean mHasNew;
 
@@ -56,11 +56,13 @@ public abstract class ActionButton extends FrameLayout {
     mCountIndicator.setLayoutParams(params);
     addView(mCountIndicator);
     mCountIndicator.setVisibility(GONE);
+
+    mNewIndicator.setCallback(this);
   }
 
-  public abstract void setActionLayoutParams(LayoutParams params);
+  public void setActionLayoutParams(LayoutParams params) {}
 
-  public abstract void setActionBackgroundDrawable(Drawable drawable);
+  public void setActionBackgroundDrawable(Drawable drawable) {}
 
   public void setHasNew(boolean n) {
     mHasNew = n;
