@@ -196,7 +196,7 @@
     <!-- PraiseStaticActivity -->
     <string name="praise_count_static">被赞次数统计</string>
     <string name="praise_count_obtained">已获%1$d赞</string>
-    <string name="praise_status">%1$d个帖子 %2$d个评论被赞 超过全国%3$s的工友</string>
+    <string name="praise_status">帖子获%1$d赞，评论获%2$d赞，超过全国%3$s的工友</string>
     <string name="no_new_praise">没有新赞</string>
     <string name="praise_no_praise">你还没有收到赞</string>
 
