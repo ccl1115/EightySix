@@ -1,8 +1,10 @@
 package com.utree.eightysix;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v4.app.NotificationManagerCompat;
 import android.text.TextUtils;
 import com.google.gson.reflect.TypeToken;
 import com.utree.eightysix.app.account.LoginActivity;
@@ -168,6 +170,8 @@ public class Account {
       Intent intent = new Intent(U.getContext(), IntroActivity.class);
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       U.getContext().startActivity(intent);
+
+      ((NotificationManager) U.getContext().getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
     }
   }
 
