@@ -30,10 +30,7 @@ public class ColorUtil {
   }
 
   public static int lighten(int color) {
-    return Color.argb(0xff,
-        Math.min(0xff, Color.red(color) + 0xAA),
-        Math.min(0xff, Color.green(color) + 0xAA),
-        Math.min(0xff, Color.blue(color) + 0xAA));
+    return (0x4b << 24) + (color & 0xffffff);
   }
 
   public static void asyncThemedColor(final Bitmap bitmap) {

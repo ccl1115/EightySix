@@ -82,7 +82,6 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
       }
       if (BuildConfig.DEBUG) {
         e.printStackTrace();
-      } else {
       }
       U.getReporter().reportRequestError(mRequestData, e);
     }

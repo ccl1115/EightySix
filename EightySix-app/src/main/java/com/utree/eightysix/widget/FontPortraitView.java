@@ -1,9 +1,11 @@
 package com.utree.eightysix.widget;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
+import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.utils.ColorUtil;
@@ -32,7 +34,11 @@ public class FontPortraitView extends TextView {
   @Override
   public void setTextColor(int color) {
     super.setTextColor(color);
-    setBackgroundDrawable(new RoundRectDrawable(U.dp2px(15), ColorUtil.lighten(color)));
+    if (color == Color.WHITE) {
+      setBackgroundDrawable(new RoundRectDrawable(U.dp2px(55), 0xff8422e5));
+    } else {
+      setBackgroundDrawable(new RoundRectDrawable(U.dp2px(55), ColorUtil.lighten(color)));
+    }
   }
 
   public void setEmotion(char c) {

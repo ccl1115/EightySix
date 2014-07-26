@@ -52,7 +52,7 @@ public class ReporterImpl implements Reporter {
   @Override
   public void reportRequestError(RequestData requestData, Throwable t) {
     Properties properties = fromRequestData(requestData);
-    properties.setProperty("throwable", t.getMessage());
+    properties.setProperty("throwable", t.getMessage() == null ? t.toString() : t.getMessage());
     U.getAnalyser().trackKVEvent(U.getContext(), "server_response_error", properties);
   }
 

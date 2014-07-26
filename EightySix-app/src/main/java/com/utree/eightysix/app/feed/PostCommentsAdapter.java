@@ -1,6 +1,7 @@
 package com.utree.eightysix.app.feed;
 
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -171,7 +172,7 @@ class PostCommentsAdapter extends BaseAdapter {
       int color = resources.getColor(R.color.apptheme_primary_light_color);
       holder.mTvComment.setTextColor(color);
       holder.mFpvPortrait.setEmotion('\ue800');
-      holder.mFpvPortrait.setEmotionColor(color);
+      holder.mFpvPortrait.setEmotionColor(Color.WHITE);
     } else {
       floor = position + "楼";
       holder.mTvComment.setTextColor(resources.getColor(android.R.color.black));
