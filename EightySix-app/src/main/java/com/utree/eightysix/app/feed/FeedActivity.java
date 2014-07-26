@@ -307,6 +307,12 @@ public class FeedActivity extends BaseActivity {
 
     if (circle != null) {
       mFeedFragment.setCircle(circle);
+    } else {
+      final int circleId = intent.getIntExtra("id", -1);
+      if (circleId != -1) {
+        mFeedFragment.setCircle(circleId);
+      }
+
     }
 
     if (mFeedFragment.getCircle() != null) {
@@ -319,7 +325,8 @@ public class FeedActivity extends BaseActivity {
     requestSideCircle();
     //if (mSideCircles != null) {
     //  for (Iterator<Circle> iterator = mSideCircles.iterator(); iterator.hasNext(); ) {
-    //    Circle c = iterator.next();
+    //    Circle c = iterator.next()
+    // ;
     //    if (c == null) iterator.remove();
     //  }
     //  selectSideCircle(mSideCircles);
