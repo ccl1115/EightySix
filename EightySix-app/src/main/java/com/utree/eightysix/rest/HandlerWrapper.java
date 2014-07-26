@@ -83,8 +83,8 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
       if (BuildConfig.DEBUG) {
         e.printStackTrace();
       } else {
-        U.getReporter().reportRequestError(mRequestData, e);
       }
+      U.getReporter().reportRequestError(mRequestData, e);
     }
 
     if (statusCode > HttpStatus.SC_MULTIPLE_CHOICES) {
@@ -92,8 +92,8 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
         Toast.makeText(U.getContext(), "HttpStatus: " + statusCode, Toast.LENGTH_SHORT).show();
       } else {
         U.showToast(U.gs(R.string.server_500));
-        U.getReporter().reportRequestStatusCode(mRequestData, statusCode);
       }
+      U.getReporter().reportRequestStatusCode(mRequestData, statusCode);
     }
     try {
       mOnResponse.onResponse(null);
