@@ -23,7 +23,6 @@ import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.drawable.SmallGearsDrawable;
-import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.widget.AsyncImageView;
@@ -64,7 +63,7 @@ public class FeedPostView extends BasePostView {
   @InjectView (R.id.ll_comment)
   public LinearLayout mLlComment;
 
-  @InjectView (R.id.ll_panel)
+  @InjectView (R.id.fl_grid_panel)
   public LinearLayout mLlPanel;
 
   @InjectView (R.id.ll_item)

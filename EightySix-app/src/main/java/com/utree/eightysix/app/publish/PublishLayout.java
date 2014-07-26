@@ -27,8 +27,8 @@ public class PublishLayout extends ViewGroup {
   @InjectView (R.id.ll_bottom)
   public LinearLayout mLlBottom;
 
-  @InjectView (R.id.ll_panel)
-  public LinearLayout mLlPanel;
+  @InjectView (R.id.fl_grid_panel)
+  public FrameLayout mFlGridPanel;
 
   private boolean mPanelHidden = false;
 
@@ -52,10 +52,10 @@ public class PublishLayout extends ViewGroup {
     if (mLastPanel == PANEL_COLOR) {
       mLastPanel = PANEL_INFO;
       mLlBottom.setVisibility(VISIBLE);
-      mLlPanel.setVisibility(GONE);
+      mFlGridPanel.setVisibility(GONE);
     } else {
       mLastPanel = PANEL_COLOR;
-      mLlPanel.setVisibility(VISIBLE);
+      mFlGridPanel.setVisibility(VISIBLE);
       mLlBottom.setVisibility(GONE);
     }
     mPanelHidden = false;
@@ -71,11 +71,11 @@ public class PublishLayout extends ViewGroup {
   public void switchToPanel(int panel) {
     mLastPanel = panel;
     if (mLastPanel == PANEL_COLOR) {
-      mLlPanel.setVisibility(VISIBLE);
+      mFlGridPanel.setVisibility(VISIBLE);
       mLlBottom.setVisibility(GONE);
     } else {
       mLlBottom.setVisibility(VISIBLE);
-      mLlPanel.setVisibility(GONE);
+      mFlGridPanel.setVisibility(GONE);
     }
     mPanelHidden = false;
     requestLayout();
@@ -83,18 +83,18 @@ public class PublishLayout extends ViewGroup {
   }
 
   public void hidePanel() {
-    mLlPanel.setVisibility(GONE);
+    mFlGridPanel.setVisibility(GONE);
     mLlBottom.setVisibility(GONE);
     mPanelHidden = true;
   }
 
   public void showPanel() {
     if (mLastPanel == PANEL_COLOR) {
-      mLlPanel.setVisibility(VISIBLE);
+      mFlGridPanel.setVisibility(VISIBLE);
       mLlBottom.setVisibility(GONE);
     } else if (mLastPanel == PANEL_INFO) {
       mLlBottom.setVisibility(VISIBLE);
-      mLlPanel.setVisibility(GONE);
+      mFlGridPanel.setVisibility(GONE);
     }
 
     mPanelHidden = false;
@@ -113,8 +113,8 @@ public class PublishLayout extends ViewGroup {
     }
 
     if (mLastPanel == PANEL_COLOR && !mPanelHidden) {
-      measureChild(mLlPanel, widthMeasureSpec, heightSize + MeasureSpec.AT_MOST);
-      heightLeft -= mLlPanel.getMeasuredHeight();
+      measureChild(mFlGridPanel, widthMeasureSpec, heightSize + MeasureSpec.AT_MOST);
+      heightLeft -= mFlGridPanel.getMeasuredHeight();
     }
 
     measureChild(mFlPanel, widthMeasureSpec, heightLeft + MeasureSpec.AT_MOST);
@@ -129,12 +129,12 @@ public class PublishLayout extends ViewGroup {
     mFlTop.layout(l, 0, r, mFlTop.getMeasuredHeight());
     mFlPanel.layout(l, mFlTop.getBottom(), r, mFlTop.getBottom() + mFlPanel.getMeasuredHeight());
     if (mPanelHidden) {
-      mLlPanel.layout(0, 0, 0, 0);
+      mFlGridPanel.layout(0, 0, 0, 0);
     } else if (mLastPanel == PANEL_INFO) {
       mLlBottom.layout(l, mFlPanel.getBottom(), r, mFlPanel.getBottom() + mLlBottom.getMeasuredHeight());
-      mLlPanel.layout(0, 0, 0, 0);
+      mFlGridPanel.layout(0, 0, 0, 0);
     } else if (mLastPanel == PANEL_COLOR) {
-      mLlPanel.layout(l, mFlPanel.getBottom(), r, mFlPanel.getBottom() + mLlPanel.getMeasuredHeight());
+      mFlGridPanel.layout(l, mFlPanel.getBottom(), r, mFlPanel.getBottom() + mFlGridPanel.getMeasuredHeight());
       mLlBottom.layout(0, 0, 0, 0);
     }
   }

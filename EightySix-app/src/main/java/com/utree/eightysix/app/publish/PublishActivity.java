@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -22,6 +21,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -85,14 +85,8 @@ public class PublishActivity extends BaseActivity {
   @InjectView (R.id.tv_post_tip)
   public TextView mTvPostTip;
 
-  @InjectView (R.id.ll_bottom)
-  public LinearLayout mLlBottom;
-
   @InjectView (R.id.gp_panel)
   public GridPanel mGpPanel;
-
-  @InjectView (R.id.ll_panel)
-  public LinearLayout mLlPanel;
 
   @InjectView(R.id.in_panel)
   public IndicatorView mInPanel;

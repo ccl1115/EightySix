@@ -122,29 +122,31 @@
                 android:text="@string/who_will_see_this_secret"/>
     </LinearLayout>
 
-    <LinearLayout
-            android:id="@+id/ll_panel"
+    <FrameLayout
+            android:id="@+id/fl_grid_panel"
             android:layout_width="match_parent"
-            android:layout_height="190dp"
-            android:orientation="vertical"
+            android:layout_height="229dp"
             android:visibility="gone">
 
         <com.utree.eightysix.widget.panel.GridPanel
                 android:id="@+id/gp_panel"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"/>
 
         <com.utree.eightysix.widget.IndicatorView
                 android:id="@+id/in_panel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_margin="4dp"
+                android:layout_gravity="bottom|center_horizontal"
                 app:count="2"
                 app:drawable="@drawable/apptheme_indicator_dot"
                 app:selector="@drawable/apptheme_indicator_dot_selected"
                 app:spacing="4dp"/>
-    </LinearLayout>
+    </FrameLayout>
 
 </merge>

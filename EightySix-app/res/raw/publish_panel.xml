@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<panel row="4" column="5" itemWidth="50" itemHeight="30" spaceHorizontal="10" spaceVertical="10">
-    <page row="3" column="4" itemWidth="60" itemHeight="40" spaceHorizontal="10" spaceVertical="15">
+<panel row="4" column="5" itemWidth="58" itemHeight="58" spaceHorizontal="10" spaceVertical="10">
+    <page>
         <item>
             <color>#ffd6393d</color>
         </item>
@@ -14,10 +14,10 @@
         <item>
             <color>#ff33332e</color>
         </item>
-
         <item>
             <color>#ff2faa67</color>
         </item>
+
         <item>
             <color>#ff029081</color>
         </item>
@@ -27,9 +27,18 @@
         <item>
             <color>#ff834a2c</color>
         </item>
-
         <item>
             <color>#ff7469be</color>
+        </item>
+        <item>
+            <color>#ff4d79bd</color>
+        </item>
+
+        <item>
+            <color>#ffe3a74a</color>
+        </item>
+        <item>
+            <color>#ffbe844f</color>
         </item>
         <item>
             <color>#ff4d79bd</color>
@@ -42,7 +51,7 @@
         </item>
     </page>
 
-    <page row="3" column="4" itemWidth="60" itemHeight="40" spaceHorizontal="10" spaceVertical="15">
+    <page>
         <item>
             <local-image>bg_93</local-image>
         </item>
@@ -59,6 +68,7 @@
         <item>
             <local-image>bg_97</local-image>
         </item>
+
         <item>
             <local-image>bg_98</local-image>
         </item>
@@ -74,11 +84,21 @@
         <item>
             <local-image>bg_102</local-image>
         </item>
+
         <item>
             <local-image>bg_103</local-image>
         </item>
         <item>
             <local-image>bg_104</local-image>
+        </item>
+        <item>
+            <local-image>bg_105</local-image>
+        </item>
+        <item>
+            <local-image>bg_106</local-image>
+        </item>
+        <item>
+            <local-image>bg_107</local-image>
         </item>
     </page>
 
