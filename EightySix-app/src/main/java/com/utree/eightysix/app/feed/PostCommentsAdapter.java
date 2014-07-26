@@ -205,7 +205,9 @@ class PostCommentsAdapter extends BaseAdapter {
     }
 
     RandomSceneTextView view = (RandomSceneTextView) convertView;
-    view.setDrawable(R.drawable.scene_6);
+    view.setDrawable(null);
+    int padding = U.dp2px(8);
+    view.setPadding(padding, padding, padding, padding);
     view.setText(R.string.not_found_comment);
 
     return convertView;
