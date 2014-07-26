@@ -79,7 +79,7 @@
             android:visibility="gone"
             android:text="已有帐号登录"
             android:textSize="14sp"
-            android:textColor="@android:color/white"/>
+            android:textColor="@color/apptheme_primary_text_light"/>
 
     <TextView
             android:id="@+id/tv_forget_pwd"
@@ -92,5 +92,5 @@
             android:visibility="gone"
             android:text="@string/forget_pwd"
             android:textSize="14sp"
-            android:textColor="@android:color/white"/>
+            android:textColor="@color/apptheme_primary_text_light"/>
 </RelativeLayout>
