@@ -323,7 +323,12 @@ public class FeedActivity extends BaseActivity {
 
 
     //region 侧边栏数据处理
-    requestSideCircle();
+    getHandler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        requestSideCircle();
+      }
+    }, 500);
     //if (mSideCircles != null) {
     //  for (Iterator<Circle> iterator = mSideCircles.iterator(); iterator.hasNext(); ) {
     //    Circle c = iterator.next()
