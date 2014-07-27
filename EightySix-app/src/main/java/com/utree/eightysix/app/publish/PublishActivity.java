@@ -365,7 +365,6 @@ public class PublishActivity extends BaseActivity {
       }
     });
 
-    getTopBar().getActionView(0).setEnabled(false);
     getTopBar().getActionView(0).setActionBackgroundDrawable(
         new RoundRectDrawable(U.dp2px(2),
             getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
