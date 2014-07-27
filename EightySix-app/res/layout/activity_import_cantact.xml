@@ -78,14 +78,11 @@
                     android:layout_height="500dp"
                     android:background="@android:color/white">
 
-                <TextView
+                <com.utree.eightysix.widget.GearsView
                         android:id="@+id/tv_loading"
                         android:layout_width="match_parent"
                         android:layout_height="180dp"
-                        android:gravity="center"
-                        android:textSize="40sp"
-                        android:textColor="@android:color/white"
-                        android:background="@color/apptheme_primary_light_color"/>
+                        android:gravity="center"/>
 
                 <TextView
                         android:id="@+id/tv_result"
@@ -94,8 +91,7 @@
                         android:gravity="center"
                         android:text="通讯录查找中..."
                         android:textSize="18sp"
-                        android:textColor="@android:color/white"
-                        android:background="@color/apptheme_primary_light_color"/>
+                        android:textColor="@android:color/darker_gray"/>
 
                 <TextView
                         android:layout_width="wrap_content"

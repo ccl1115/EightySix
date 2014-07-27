@@ -71,7 +71,8 @@ public class ContactsSyncService extends IntentService {
 
   @Override
   protected void onHandleIntent(Intent intent) {
-    if (checkTimestamp() || intent.getBooleanExtra("force", false)) {
+    boolean force = intent.getBooleanExtra("force", false);
+    if (checkTimestamp() || force) {
 
       final List<Contact> cache = getContactsFromCache();
       final List<Contact> phone = getContactsFromPhone();
@@ -93,7 +94,7 @@ public class ContactsSyncService extends IntentService {
         }
       });
 
-      if (cache == null || !compareCacheAndPhone(cache, phone)) {
+      if (cache == null || force || !compareCacheAndPhone(cache, phone)) {
         cacheContacts(phone);
         uploadContact(phone);
       }

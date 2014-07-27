@@ -10,6 +10,7 @@ import butterknife.OnClick;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
@@ -93,6 +94,7 @@ public class IntroActivity extends BaseActivity {
       }
     }, U.getConfigInt("activity.intro.delay"));
 
+    M.getLocation().requestLocation();
   }
 
   @Override

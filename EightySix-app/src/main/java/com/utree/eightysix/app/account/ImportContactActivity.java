@@ -1,6 +1,7 @@
 package com.utree.eightysix.app.account;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Message;
@@ -23,6 +24,9 @@ import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
+import com.utree.eightysix.drawable.GearsDrawable;
+import com.utree.eightysix.drawable.RoundRectDrawable;
+import com.utree.eightysix.widget.GearsView;
 import com.utree.eightysix.widget.RoundedButton;
 import java.util.Random;
 
@@ -41,7 +45,7 @@ public class ImportContactActivity extends BaseActivity {
   public LinearLayout mLlScroll;
 
   @InjectView (R.id.tv_loading)
-  public TextView mTvLoading;
+  public GearsView mTvLoading;
 
   @InjectView (R.id.rb_done)
   public RoundedButton mRbDone;
@@ -70,6 +74,8 @@ public class ImportContactActivity extends BaseActivity {
 
     mVMask.setVisibility(View.VISIBLE);
     mFlImport.setVisibility(View.VISIBLE);
+    mFlImport.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(4), Color.WHITE));
+    mLlScroll.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(4), Color.WHITE));
 
     AnimatorSet set = new AnimatorSet();
 
@@ -87,27 +93,8 @@ public class ImportContactActivity extends BaseActivity {
 
       @Override
       public void onAnimationEnd(Animator animation) {
-        getHandler().sendEmptyMessageDelayed(MSG_ANIMATE, 500);
 
-        if (U.useFixture()) {
-
-          getHandler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-              getHandler().removeMessages(MSG_ANIMATE);
-
-              mTvResult.setText(String.format("为你找到%d个朋友", mRandom.nextInt(100)));
-
-              ObjectAnimator animator = ObjectAnimator.ofFloat(mLlScroll, "translationY", 0, -U.dp2px(180));
-              animator.setDuration(500);
-              animator.start();
-            }
-          }, 5000);
-        } else {
-          //startService(new Intent(ImportContactActivity.this, ContactsSyncService.class));
-          ContactsSyncService.start(ImportContactActivity.this, true);
-        }
-
+        ContactsSyncService.start(ImportContactActivity.this, true);
       }
 
       @Override
@@ -132,20 +119,7 @@ public class ImportContactActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    mTvLoading.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/refresh_icon.ttf"));
-
     setActionLeftDrawable(null);
-  }
-
-  @Override
-  protected void onHandleMessage(Message message) {
-    switch (message.what) {
-      case MSG_ANIMATE:
-        mTvLoading.setText(String.valueOf((char) (0xe801 + mRandom.nextInt(14))));
-        mTvLoading.invalidate();
-        getHandler().sendEmptyMessageDelayed(MSG_ANIMATE, 500);
-        break;
-    }
   }
 
   @Override
