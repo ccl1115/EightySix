@@ -47,18 +47,18 @@ public class GuideActivity extends BaseActivity {
   private ValueAnimator mPageColorAnimator =
       ValueAnimator.ofObject(new ArgbEvaluator(), PAGE_1_BACKGROUND_COLOR, PAGE_2_BACKGROUND_COLOR, PAGE_3_BACKGROUND_COLOR);
   private static final int[] RANDOM_BACKGROUND = {
-      R.drawable.bg_93,
+      R.drawable.bg_13,
       R.drawable.bg_94,
-      R.drawable.bg_95,
+      R.drawable.bg_20,
       R.drawable.bg_96,
       R.drawable.bg_97,
-      R.drawable.bg_98,
-      R.drawable.bg_99,
-      R.drawable.bg_100,
+      R.drawable.bg_24,
+      R.drawable.bg_28,
+      R.drawable.bg_31,
       R.drawable.bg_101,
-      R.drawable.bg_102,
-      R.drawable.bg_103,
-      R.drawable.bg_104,
+      R.drawable.bg_40,
+      R.drawable.bg_46,
+      R.drawable.bg_49,
   };
   @InjectView (R.id.vp_guide)
   public ViewPager mVpGuide;

@@ -3,14 +3,40 @@
 <panel row="4" column="5" itemWidth="58" itemHeight="58" spaceHorizontal="10" spaceVertical="10">
     <page>
         <item>
-            <local-image>bg_93</local-image>
+            <local-image>bg_13</local-image>
+        </item>
+
+        <item>
+            <local-image>bg_20</local-image>
+        </item>
+        <item>
+            <local-image>bg_24</local-image>
+        </item>
+        <item>
+            <local-image>bg_28</local-image>
+        </item>
+        <item>
+            <local-image>bg_31</local-image>
+        </item>
+
+        <item>
+            <local-image>bg_40</local-image>
+        </item>
+        <item>
+            <local-image>bg_46</local-image>
+        </item>
+        <item>
+            <local-image>bg_49</local-image>
+        </item>
+        <item>
+            <local-image>bg_52</local-image>
+        </item>
+        <item>
+            <local-image>bg_63</local-image>
         </item>
 
         <item>
             <local-image>bg_94</local-image>
-        </item>
-        <item>
-            <local-image>bg_95</local-image>
         </item>
         <item>
             <local-image>bg_96</local-image>
@@ -18,37 +44,11 @@
         <item>
             <local-image>bg_97</local-image>
         </item>
-
-        <item>
-            <local-image>bg_98</local-image>
-        </item>
-        <item>
-            <local-image>bg_99</local-image>
-        </item>
-        <item>
-            <local-image>bg_100</local-image>
-        </item>
         <item>
             <local-image>bg_101</local-image>
         </item>
         <item>
-            <local-image>bg_102</local-image>
-        </item>
-
-        <item>
-            <local-image>bg_103</local-image>
-        </item>
-        <item>
-            <local-image>bg_104</local-image>
-        </item>
-        <item>
             <local-image>bg_105</local-image>
-        </item>
-        <item>
-            <local-image>bg_64</local-image>
-        </item>
-        <item>
-            <local-image>bg_65</local-image>
         </item>
     </page>
 
