@@ -67,7 +67,7 @@ public class CircleSearchActivity extends BaseActivity {
   @InjectView (R.id.tv_empty_text)
   public TextView mTvEmptyText;
 
-  @InjectView(R.id.rstv_empty)
+  @InjectView (R.id.rstv_empty)
   public RandomSceneTextView mRstvHistoryEmpty;
 
   private List<String> mSearchHistory;
@@ -129,7 +129,7 @@ public class CircleSearchActivity extends BaseActivity {
     }
   }
 
-  @OnItemLongClick(R.id.lv_result)
+  @OnItemLongClick (R.id.lv_result)
   public boolean onLvResultItemLongClicked(int position) {
     final Circle circle = mResultAdapter.getItem(position);
     if (circle != null) {
@@ -209,15 +209,6 @@ public class CircleSearchActivity extends BaseActivity {
       }
     });
 
-    M.getLocation().requestLocation(new Location.OnResult() {
-      @Override
-      public void onResult(Location.Result result) {
-        mLocatingFinished = true;
-        if (mRequestSearchStarted) {
-          requestSearch(1, mLastKeyword);
-        }
-      }
-    });
   }
 
   /**
@@ -292,30 +283,28 @@ public class CircleSearchActivity extends BaseActivity {
 
   private void requestSearch(final int page, final String keyword) {
     mRequestSearchStarted = true;
-    if (mLocatingFinished) {
-      request(new SearchCircleRequest(page, keyword), new OnResponse<CirclesResponse>() {
-        @Override
-        public void onResponse(CirclesResponse response) {
-          if (RESTRequester.responseOk(response)) {
-            if (page == 1) {
-              mLvResult.setVisibility(View.VISIBLE);
-              mLvHistory.setVisibility(View.GONE);
+    request(new SearchCircleRequest(page, keyword), new OnResponse<CirclesResponse>() {
+      @Override
+      public void onResponse(CirclesResponse response) {
+        if (RESTRequester.responseOk(response)) {
+          if (page == 1) {
+            mLvResult.setVisibility(View.VISIBLE);
+            mLvHistory.setVisibility(View.GONE);
 
-              mResultAdapter = new CircleBaseListAdapter(response.object.lists);
-              mLvResult.setAdapter(mResultAdapter);
-              mPageInfo = response.object.page;
-            } else {
-              mResultAdapter.add(response.object.lists);
-              mPageInfo = response.object.page;
-            }
+            mResultAdapter = new CircleBaseListAdapter(response.object.lists);
+            mLvResult.setAdapter(mResultAdapter);
+            mPageInfo = response.object.page;
           } else {
-            mTvEmptyText.setText(String.format(getString(R.string.no_search_result), keyword));
+            mResultAdapter.add(response.object.lists);
+            mPageInfo = response.object.page;
           }
-          hideProgressBar();
-          updateHistoryData();
+        } else {
+          mTvEmptyText.setText(String.format(getString(R.string.no_search_result), keyword));
         }
-      }, CirclesResponse.class);
-    }
+        hideProgressBar();
+        updateHistoryData();
+      }
+    }, CirclesResponse.class);
     showProgressBar();
   }
 

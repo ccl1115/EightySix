@@ -119,24 +119,11 @@ public class BaseCirclesActivity extends BaseActivity {
     return false;
   }
 
-  protected void showCircleSetDialog(final Circle circle) {
-    AlertDialog dialog = new AlertDialog.Builder(this)
-        .setTitle(String.format("确认在%s上班么？", circle.name))
-        .setMessage((U.getSyncClient().getSync() != null ? U.getSyncClient().getSync().selectFactoryDays : 15) + "天之内不能修改在职工厂")
-        .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
-            requestCircleSet(circle);
-          }
-        })
-        .setNegativeButton("重新选择", new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
-            dialog.dismiss();
-          }
-        }).create();
-
-    dialog.show();
+  @Override
+  public void onActionLeftClicked() {
+    if (mMode == MODE_MY) {
+      finish();
+    }
   }
 
   @Override
@@ -263,23 +250,16 @@ public class BaseCirclesActivity extends BaseActivity {
   }
 
   @Override
-  protected void onResume() {
-    super.onResume();
-    M.getLocation().onResume(mOnResult);
-    M.getLocation().requestLocation();
-  }
-
-  @Override
   protected void onPause() {
     super.onPause();
     M.getLocation().onPause(mOnResult);
   }
 
   @Override
-  public void onActionLeftClicked() {
-    if (mMode == MODE_MY) {
-      finish();
-    }
+  protected void onResume() {
+    super.onResume();
+    M.getLocation().onResume(mOnResult);
+    M.getLocation().requestLocation();
   }
 
   @Override
@@ -293,6 +273,26 @@ public class BaseCirclesActivity extends BaseActivity {
   @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();
+  }
+
+  protected void showCircleSetDialog(final Circle circle) {
+    AlertDialog dialog = new AlertDialog.Builder(this)
+        .setTitle(String.format("确认在%s上班么？", circle.name))
+        .setMessage((U.getSyncClient().getSync() != null ? U.getSyncClient().getSync().selectFactoryDays : 15) + "天之内不能修改在职工厂")
+        .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            requestCircleSet(circle);
+          }
+        })
+        .setNegativeButton("重新选择", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            dialog.dismiss();
+          }
+        }).create();
+
+    dialog.show();
   }
 
   private AlertDialog getQuitConfirmDialog() {
@@ -340,43 +340,43 @@ public class BaseCirclesActivity extends BaseActivity {
 
   private void requestCircles(final int page) {
     mRequestStarted = true;
-    if (mLocatingFinished) {
-      request(mMode == MODE_MY ? new MyCirclesRequest("", page) : new SelectCirclesRequest("", page), new OnResponse2<CirclesResponse>() {
-        @Override
-        public void onResponse(CirclesResponse response) {
-          if (RESTRequester.responseOk(response)) {
-            if (page == 1) {
-              mCircleListAdapter = new CircleListAdapter(response.object.lists);
-              mLvCircles.setAdapter(mCircleListAdapter);
+    request(mMode == MODE_MY ? new MyCirclesRequest("", page) : new SelectCirclesRequest("", page), new OnResponse2<CirclesResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        mLvCircles.stopLoadMore();
+        hideProgressBar();
+        mRefresherView.setRefreshing(false);
+        mRstvEmpty.setVisibility(View.VISIBLE);
+      }
 
-              if (response.object.lists.size() == 0) {
-                mRstvEmpty.setVisibility(View.VISIBLE);
-              } else {
-                mRstvEmpty.setVisibility(View.GONE);
-              }
-            } else if (mCircleListAdapter != null) {
-              mCircleListAdapter.add(response.object.lists);
-            }
-            mPageInfo = response.object.page;
-          } else {
-            if (mCircleListAdapter == null || mCircleListAdapter.getCount() == 0) {
+      @Override
+      public void onResponse(CirclesResponse response) {
+        if (RESTRequester.responseOk(response)) {
+          if (page == 1) {
+            mCircleListAdapter = new CircleListAdapter(response.object.lists);
+            mLvCircles.setAdapter(mCircleListAdapter);
+
+            if (response.object.lists.size() == 0) {
               mRstvEmpty.setVisibility(View.VISIBLE);
+            } else {
+              mRstvEmpty.setVisibility(View.GONE);
             }
+          } else if (mCircleListAdapter != null) {
+            mCircleListAdapter.add(response.object.lists);
           }
-          mLvCircles.stopLoadMore();
-          hideProgressBar();
-          mRefresherView.setRefreshing(false);
+          mPageInfo = response.object.page;
+        } else {
+          if (mCircleListAdapter == null || mCircleListAdapter.getCount() == 0) {
+            mRstvEmpty.setVisibility(View.VISIBLE);
+          }
         }
+        mLvCircles.stopLoadMore();
+        hideProgressBar();
+        mRefresherView.setRefreshing(false);
+      }
 
-        @Override
-        public void onResponseError(Throwable e) {
-          mLvCircles.stopLoadMore();
-          hideProgressBar();
-          mRefresherView.setRefreshing(false);
-          mRstvEmpty.setVisibility(View.VISIBLE);
-        }
-      }, CirclesResponse.class);
-    }
+
+    }, CirclesResponse.class);
   }
 
   private void requestCircleSet(final Circle circle) {

@@ -20,7 +20,10 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.intro.IntroActivity;
+import com.utree.eightysix.contact.ContactsSyncEvent;
+import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.User;
 import com.utree.eightysix.request.RegisterRequest;
 import com.utree.eightysix.response.UserResponse;
@@ -196,8 +199,9 @@ public class RegisterActivity extends BaseActivity {
                 if (user != null) {
                   Account.inst().login(user.userId, user.token);
                   showToast(R.string.register_success, false);
-                  startActivity(new Intent(RegisterActivity.this, ImportContactActivity.class));
-                  finish();
+                  //startActivity(new Intent(RegisterActivity.this, ImportContactActivity.class));
+                  //finish();
+                  ContactsSyncService.start(RegisterActivity.this, true);
                   return;
                 } else {
                   showToast(R.string.server_object_error);
@@ -211,5 +215,11 @@ public class RegisterActivity extends BaseActivity {
 
     showProgressBar();
     mBtnRegister.setEnabled(false);
+  }
+
+  @Subscribe
+  public void onContactsSyncEvent(ContactsSyncEvent event) {
+    BaseCirclesActivity.startSelect(this);
+    finish();
   }
 }
