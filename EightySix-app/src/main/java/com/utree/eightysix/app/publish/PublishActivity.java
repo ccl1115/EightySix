@@ -21,9 +21,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -52,7 +50,6 @@ import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.widget.AsyncImageView;
-import com.utree.eightysix.widget.ImageActionButton;
 import com.utree.eightysix.widget.IndicatorView;
 import com.utree.eightysix.widget.PostEditText;
 import com.utree.eightysix.widget.TextActionButton;
@@ -269,19 +266,10 @@ public class PublishActivity extends BaseActivity {
       public void onTextChanged(CharSequence s, int start, int before, int count) {
         if (s.length() == 0) {
           mTvPostTip.setVisibility(View.VISIBLE);
-          getTopBar().getActionView(0).setEnabled(false);
-          getTopBar().getActionView(0).setActionBackgroundDrawable(
-              new RoundRectDrawable(U.dp2px(2),
-                  getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
-          ((TextActionButton) getTopBar().getActionView(0)).setTextColor(
-              getResources().getColor(R.color.apptheme_primary_grey_color_disabled));
+          disablePublishButton();
         } else {
           mTvPostTip.setVisibility(View.INVISIBLE);
-          getTopBar().getActionView(0).setEnabled(true);
-          getTopBar().getActionView(0).setActionBackgroundDrawable(
-              new RoundRectDrawable(U.dp2px(2),
-                  getResources().getColorStateList(R.color.apptheme_primary_btn_light)));
-          ((TextActionButton) getTopBar().getActionView(0)).setTextColor(Color.WHITE);
+          enablePublishButton();
         }
 
         if (s.length() > U.getConfigInt("post.length")) {
@@ -375,6 +363,14 @@ public class PublishActivity extends BaseActivity {
             getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
     ((TextActionButton) getTopBar().getActionView(0)).setTextColor(
         getResources().getColor(R.color.apptheme_primary_grey_color_disabled));
+  }
+
+  protected void enablePublishButton() {
+    getTopBar().getActionView(0).setEnabled(true);
+    getTopBar().getActionView(0).setActionBackgroundDrawable(
+        new RoundRectDrawable(U.dp2px(2),
+            getResources().getColorStateList(R.color.apptheme_primary_btn_light)));
+    ((TextActionButton) getTopBar().getActionView(0)).setTextColor(Color.WHITE);
   }
 
   @Override
@@ -613,6 +609,8 @@ public class PublishActivity extends BaseActivity {
       final PublishRequest request = new PublishRequest(mFactoryId, mPostEditText.getText().toString(),
           mUseColor ? String.format("%h", mBgColor) : "", mImageUploadUrl);
 
+      disablePublishButton();
+
       request(request, new OnResponse<PublishPostResponse>() {
         @Override
         public void onResponse(PublishPostResponse response) {
@@ -629,6 +627,8 @@ public class PublishActivity extends BaseActivity {
             U.getBus().post(new PostPublishedEvent(post));
 
             finish();
+          } else {
+            enablePublishButton();
           }
           hideProgressBar();
         }
@@ -637,5 +637,14 @@ public class PublishActivity extends BaseActivity {
 
     hideSoftKeyboard(mPostEditText);
     showProgressBar(true);
+  }
+
+  private void disablePublishButton() {
+    getTopBar().getActionView(0).setEnabled(false);
+    getTopBar().getActionView(0).setActionBackgroundDrawable(
+        new RoundRectDrawable(U.dp2px(2),
+            getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
+    ((TextActionButton) getTopBar().getActionView(0)).setTextColor(
+        getResources().getColor(R.color.apptheme_primary_grey_color_disabled));
   }
 }

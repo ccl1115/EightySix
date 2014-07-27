@@ -169,17 +169,10 @@ public class RegisterActivity extends BaseActivity {
 
     String phoneNumber = getIntent().getStringExtra("phoneNumber");
 
-    if (TextUtils.isEmpty(phoneNumber)) {
-      TelephonyManager manager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-      String line1Number = manager.getLine1Number();
-      if (line1Number != null) {
-        line1Number = line1Number.replace("+86", "");
-        mEtPhoneNumber.setText(line1Number);
-      }
-    } else {
+    if (phoneNumber != null) {
       mEtPhoneNumber.setText(phoneNumber);
+      mEtPhoneNumber.setSelection(mEtPhoneNumber.getText().length());
     }
-    mEtPhoneNumber.setSelection(mEtPhoneNumber.getText().length());
   }
 
   @Override
