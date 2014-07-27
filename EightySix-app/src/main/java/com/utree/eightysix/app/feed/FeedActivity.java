@@ -377,7 +377,7 @@ public class FeedActivity extends BaseActivity {
       mNoPermDialog = new ThemedDialog(this);
       View view = LayoutInflater.from(this).inflate(R.layout.dialog_content_locked, null);
       NoPermViewHolder noPermViewHolder = new NoPermViewHolder(view);
-      noPermViewHolder.mTvFriendCount.setText(getString(R.string.current_friend_count, mFeedFragment.getCircle().friendCount));
+      noPermViewHolder.mTvFriendCount.setText(getString(R.string.current_friend_count, mFeedFragment.getFriendCount()));
       mNoPermDialog.setContent(view);
       mNoPermDialog.setPositive(R.string.invite_people, new View.OnClickListener() {
         @Override

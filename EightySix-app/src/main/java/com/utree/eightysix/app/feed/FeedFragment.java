@@ -214,6 +214,14 @@ class FeedFragment extends BaseFragment {
     return mCircle;
   }
 
+  public int getFriendCount() {
+    if (mCircle != null) {
+      return mCircle.friendCount;
+    } else {
+      return 0;
+    }
+  }
+
   public void setCircle(Circle circle) {
     if (circle == null || !circle.equals(mCircle)) {
       if (mLvFeed != null) mLvFeed.setAdapter(null);
