@@ -3,5 +3,5 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:color="@android:color/white" android:state_enabled="true" android:state_pressed="false"/>
     <item android:color="@color/apptheme_primary_grey_color" android:state_enabled="true" android:state_pressed="true"/>
-    <item android:color="@android:color/black" android:state_enabled="false"/>
+    <item android:color="@color/apptheme_primary_grey_color_disabled" android:state_enabled="false"/>
 </selector>

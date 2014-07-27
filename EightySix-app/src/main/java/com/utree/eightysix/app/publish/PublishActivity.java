@@ -52,8 +52,10 @@ import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.widget.AsyncImageView;
+import com.utree.eightysix.widget.ImageActionButton;
 import com.utree.eightysix.widget.IndicatorView;
 import com.utree.eightysix.widget.PostEditText;
+import com.utree.eightysix.widget.TextActionButton;
 import com.utree.eightysix.widget.TopBar;
 import com.utree.eightysix.widget.panel.GridPanel;
 import com.utree.eightysix.widget.panel.Item;
@@ -271,12 +273,15 @@ public class PublishActivity extends BaseActivity {
           getTopBar().getActionView(0).setActionBackgroundDrawable(
               new RoundRectDrawable(U.dp2px(2),
                   getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
+          ((TextActionButton) getTopBar().getActionView(0)).setTextColor(
+              getResources().getColor(R.color.apptheme_primary_grey_color_disabled));
         } else {
           mTvPostTip.setVisibility(View.INVISIBLE);
           getTopBar().getActionView(0).setEnabled(true);
           getTopBar().getActionView(0).setActionBackgroundDrawable(
               new RoundRectDrawable(U.dp2px(2),
                   getResources().getColorStateList(R.color.apptheme_primary_btn_light)));
+          ((TextActionButton) getTopBar().getActionView(0)).setTextColor(Color.WHITE);
         }
 
         if (s.length() > U.getConfigInt("post.length")) {
@@ -368,6 +373,8 @@ public class PublishActivity extends BaseActivity {
     getTopBar().getActionView(0).setActionBackgroundDrawable(
         new RoundRectDrawable(U.dp2px(2),
             getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
+    ((TextActionButton) getTopBar().getActionView(0)).setTextColor(
+        getResources().getColor(R.color.apptheme_primary_grey_color_disabled));
   }
 
   @Override

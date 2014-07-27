@@ -51,9 +51,6 @@ public class LoginActivity extends BaseActivity {
   @InjectView (R.id.et_phone_number)
   public EditText mEtPhoneNumber;
 
-  @InjectView (R.id.tv_forget_pwd)
-  public TextView mTvForgetPwd;
-
   @InjectView (R.id.btn_fixture)
   public RoundedButton mBtnFixture;
 
@@ -83,11 +80,6 @@ public class LoginActivity extends BaseActivity {
   @OnClick (R.id.btn_login)
   public void onBtnLoginClicked() {
     requestLogin();
-  }
-
-  @OnClick (R.id.tv_forget_pwd)
-  public void onTvForgetPwd() {
-    startActivity(new Intent(this, ForgetPwdActivity.class));
   }
 
   @OnClick (R.id.btn_fixture)
