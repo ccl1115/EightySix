@@ -60,6 +60,7 @@ public class BaseMsgItemView extends LinearLayout {
   @OnClick (R.id.fl_left)
   public void onFlLeftClicked(View view) {
     mPosts[0].read = 1;
+    mPosts[0].comments = 0;
     ((BaseAdapter) ((ListView) getParent()).getAdapter()).notifyDataSetChanged();
     PostActivity.start(view.getContext(), mPosts[0], null);
   }
@@ -67,6 +68,7 @@ public class BaseMsgItemView extends LinearLayout {
   @OnClick(R.id.fl_right)
   public void onFlRightClicked(View view) {
     mPosts[1].read = 1;
+    mPosts[1].comments = 0;
     ((BaseAdapter) ((ListView) getParent()).getAdapter()).notifyDataSetChanged();
     PostActivity.start(view.getContext(), mPosts[1], null);
   }

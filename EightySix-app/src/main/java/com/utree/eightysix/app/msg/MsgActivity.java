@@ -53,7 +53,6 @@ public class MsgActivity extends BaseActivity {
   @InjectView (R.id.alv_refresh)
   public AdvancedListView mAlvMsg;
 
-  private Random mRandom = new Random();
   private MsgAdapter mMsgAdapter;
   private Paginate.Page mPageInfo;
 
