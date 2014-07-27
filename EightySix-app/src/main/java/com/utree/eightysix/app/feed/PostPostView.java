@@ -84,7 +84,11 @@ public class PostPostView extends BasePostView {
   public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
     if (mPost != null && mPost.bgUrl != null) {
       if (ImageUtils.getUrlHash(mPost.bgUrl).equals(event.getHash())) {
-        ColorUtil.asyncThemedColor(event.getBitmap());
+        if (event.getBitmap() == null) {
+          setPostTheme(Color.WHITE);
+        } else {
+          ColorUtil.asyncThemedColor(event.getBitmap());
+        }
       }
     }
   }
@@ -107,16 +111,6 @@ public class PostPostView extends BasePostView {
 
     if (TextUtils.isEmpty(mPost.bgUrl)) {
       setPostTheme(ColorUtil.strToColor(mPost.bgColor));
-    //} else {
-    //  Bitmap fromMemByUrl = ImageUtils.getFromMemByUrl(mPost.bgUrl);
-    //  if (fromMemByUrl != null) {
-    //    ColorUtil.asyncThemedColor(fromMemByUrl);
-    //  } else {
-    //    mTvComment.setTextColor(Color.TRANSPARENT);
-    //    mTvPraise.setTextColor(Color.TRANSPARENT);
-    //    mTvContent.setTextColor(Color.TRANSPARENT);
-    //    mTvSource.setTextColor(Color.TRANSPARENT);
-    //  }
     }
 
 
