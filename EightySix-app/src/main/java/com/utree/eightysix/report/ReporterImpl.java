@@ -22,25 +22,28 @@ public class ReporterImpl implements Reporter {
       @Override
       public void uncaughtException(Thread thread, Throwable ex) {
         reportAppCrash(ex);
-        StringWriter wr = null;
-        PrintWriter writer = null;
-        try {
-          wr = new StringWriter();
-          writer = new PrintWriter(wr);
-          ex.printStackTrace(writer);
-          ReporterActivity.start(U.getContext(), wr.toString());
-        } finally {
-          if (writer != null) {
-            writer.close();
-          }
 
-          if (wr != null) {
-            try {
-              wr.close();
-            } catch (IOException ignored) {
+        if (BuildConfig.DEBUG) {
+          StringWriter wr = null;
+          PrintWriter writer = null;
+          try {
+            wr = new StringWriter();
+            writer = new PrintWriter(wr);
+            ex.printStackTrace(writer);
+            ReporterActivity.start(U.getContext(), wr.toString());
+          } finally {
+            if (writer != null) {
+              writer.close();
             }
-          }
 
+            if (wr != null) {
+              try {
+                wr.close();
+              } catch (IOException ignored) {
+              }
+            }
+
+          }
         }
 
         android.os.Process.killProcess(android.os.Process.myPid());
