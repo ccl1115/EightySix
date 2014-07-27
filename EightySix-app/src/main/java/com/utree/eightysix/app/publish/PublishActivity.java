@@ -334,12 +334,7 @@ public class PublishActivity extends BaseActivity {
 
     List<Item> itemsByPage = mGpPanel.getItemsByPage(0);
     Item item = itemsByPage.get(new Random().nextInt(itemsByPage.size()));
-    int color = item.getValue().data;
-    mPostEditText.setTextColor(ColorUtil.monochromizing(color));
-    mTvPostTip.setTextColor(ColorUtil.monochromizing(color));
-    mAivPostBg.setImageDrawable(null);
-    mAivPostBg.setBackgroundColor(color);
-    mBgColor = color;
+    onGridPanelItemClicked(item);
 
     mGpPanel.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
       @Override
