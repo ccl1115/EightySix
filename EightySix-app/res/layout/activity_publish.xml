@@ -87,21 +87,21 @@
                 android:layout_gravity="center_horizontal"
                 android:clickable="false">
 
-            <com.utree.eightysix.widget.RoundedButton
-                    app:radius="61dp"
-                    app:background="#fff3f3f3"
-                    android:layout_width="61dp"
-                    android:layout_height="61dp"
-                    android:layout_gravity="center"
-                    android:clickable="false"/>
+            <!--<com.utree.eightysix.widget.RoundedButton-->
+                    <!--app:radius="61dp"-->
+                    <!--app:background="#fff3f3f3"-->
+                    <!--android:layout_width="61dp"-->
+                    <!--android:layout_height="61dp"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:clickable="false"/>-->
 
-            <com.utree.eightysix.widget.RoundedButton
-                    app:radius="60dp"
-                    app:background="#ffffffff"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center"
-                    android:clickable="false"/>
+            <!--<com.utree.eightysix.widget.RoundedButton-->
+                    <!--app:radius="60dp"-->
+                    <!--app:background="#ffffffff"-->
+                    <!--android:layout_width="60dp"-->
+                    <!--android:layout_height="60dp"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:clickable="false"/>-->
 
             <ImageView
                     android:layout_width="48dp"
@@ -144,8 +144,8 @@
                 android:layout_margin="4dp"
                 android:layout_gravity="bottom|center_horizontal"
                 app:count="2"
-                app:drawable="@drawable/apptheme_indicator_dot"
-                app:selector="@drawable/apptheme_indicator_dot_selected"
+                app:drawable="@drawable/indicator_dot"
+                app:selector="@drawable/indicator_dot_selected"
                 app:spacing="4dp"/>
     </FrameLayout>
 
