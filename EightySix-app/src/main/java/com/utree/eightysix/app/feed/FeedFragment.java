@@ -40,7 +40,7 @@ import java.util.Iterator;
 /**
  * @author simon
  */
-class FeedFragment extends BaseFragment {
+public class FeedFragment extends BaseFragment {
 
   @InjectView (R.id.lv_feed)
   public AdvancedListView mLvFeed;

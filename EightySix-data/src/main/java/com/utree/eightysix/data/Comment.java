@@ -7,6 +7,9 @@ import java.io.Serializable;
  */
 public class Comment implements Serializable {
 
+  @SerializedName ("floor")
+  public int floor;
+
   @SerializedName ("content")
   public String content;
 

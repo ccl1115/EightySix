@@ -54,18 +54,20 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_comment"
                     android:drawableLeft="@drawable/ic_reply"
-                    android:gravity="center_vertical"
+                    android:gravity="center_vertical|right"
                     android:textSize="14sp"
                     android:textColor="@android:color/white"
+                    android:minWidth="50dp"
                     android:padding="5dp"/>
 
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_praise"
-                    android:gravity="center_vertical"
+                    android:gravity="center_vertical|right"
                     android:textSize="14sp"
                     android:textColor="@android:color/white"
+                    android:minWidth="50dp"
                     android:padding="5dp"/>
 
         </LinearLayout>
