@@ -254,6 +254,7 @@ public class ImageUtils {
     }
   }
 
+
   public static Bitmap syncLoadResourceBitmap(int resId, final String hash, int width, int height) {
     String format = String.format("%s_%d_%d", hash, width, height);
     Bitmap bitmap = sLruCache.get(format);
@@ -315,9 +316,19 @@ public class ImageUtils {
   }
 
   public static void asyncLoad(final String url, final String hash) {
-    Log.d(TAG, "loading: " + url);
     Bitmap bitmap = sLruCache.get(hash);
     if (bitmap == null) {
+
+      final int id = localResource(url);
+
+      if (id != 0) {
+        bitmap = syncLoadResourceBitmap(id, hash);
+        if (bitmap != null) {
+          U.getBus().post(new ImageLoadedEvent(hash, bitmap));
+          return;
+        }
+      }
+
       try {
         final DiskLruCache.Snapshot snapshot = U.getImageCache().get(hash);
         if (snapshot != null) {
@@ -452,6 +463,22 @@ public class ImageUtils {
         U.getBus().post(new ImageUploadedEvent(mFileHash, mUrl));
       }
     }
+  }
+
+  /**
+   * Detect whether this url image is in resource package,
+   * <p/>
+   * if true return the correspond id
+   *
+   * @param url the url
+   * @return the id of this resource
+   */
+  private static int localResource(String url) {
+    if (url.contains(U.getConfig("storage.bg.bucket.name"))) {
+      String res = url.substring(url.lastIndexOf('/') + 1).split("\\.")[0];
+      return U.getContext().getResources().getIdentifier(res, "drawable", U.getContext().getPackageName());
+    }
+    return 0;
   }
 
   /**
