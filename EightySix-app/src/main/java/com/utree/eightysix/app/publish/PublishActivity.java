@@ -268,9 +268,15 @@ public class PublishActivity extends BaseActivity {
         if (s.length() == 0) {
           mTvPostTip.setVisibility(View.VISIBLE);
           getTopBar().getActionView(0).setEnabled(false);
+          getTopBar().getActionView(0).setActionBackgroundDrawable(
+              new RoundRectDrawable(U.dp2px(2),
+                  getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
         } else {
           mTvPostTip.setVisibility(View.INVISIBLE);
           getTopBar().getActionView(0).setEnabled(true);
+          getTopBar().getActionView(0).setActionBackgroundDrawable(
+              new RoundRectDrawable(U.dp2px(2),
+                  getResources().getColorStateList(R.color.apptheme_primary_btn_light)));
         }
 
         if (s.length() > U.getConfigInt("post.length")) {
@@ -358,6 +364,11 @@ public class PublishActivity extends BaseActivity {
 
       }
     });
+
+    getTopBar().getActionView(0).setEnabled(false);
+    getTopBar().getActionView(0).setActionBackgroundDrawable(
+        new RoundRectDrawable(U.dp2px(2),
+            getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
   }
 
   @Override

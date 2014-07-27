@@ -94,11 +94,11 @@ public class RESTRequester implements IRESTRequester {
     List<Header> headers = new ArrayList<Header>();
 
     try {
-      data.api = clz.getAnnotation(Api.class).value();
-      data.params = new RequestParams();
+      data.setApi(clz.getAnnotation(Api.class).value());
+      data.setParams(new RequestParams());
 
       Cache cache = clz.getAnnotation(Cache.class);
-      data.cache = cache != null;
+      data.setCache(cache != null);
 
       Token token = clz.getAnnotation(Token.class);
       if (token != null && Account.inst().isLogin()) {
@@ -107,9 +107,9 @@ public class RESTRequester implements IRESTRequester {
 
       Method method = clz.getAnnotation(Method.class);
       if (method != null) {
-        data.method = method.value();
+        data.setMethod(method.value());
       } else {
-        data.method = Method.POST;
+        data.setMethod(Method.POST);
       }
 
       for (Field f : clz.getFields()) {
@@ -143,7 +143,7 @@ public class RESTRequester implements IRESTRequester {
       }
 
       if (headers.size() > 0) {
-        data.headers = new Header[headers.size()];
+        data.setHeaders(new Header[headers.size()]);
         headers.toArray(data.getHeaders());
       }
     } catch (Throwable t) {

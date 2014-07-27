@@ -45,7 +45,7 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
   @Override
   public void onStart() {
     super.onStart();
-    Log.d(C.TAG.RR, "request starting:" + mRequestData.api);
+    Log.d(C.TAG.RR, "request starting:" + mRequestData.getApi());
   }
 
   @Override
