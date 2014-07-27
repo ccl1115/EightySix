@@ -26,6 +26,8 @@ import com.utree.eightysix.drawable.SmallGearsDrawable;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.widget.AsyncImageView;
+import com.utree.eightysix.widget.GearsView;
+import de.akquinet.android.androlog.Log;
 
 /**
  */
@@ -72,6 +74,9 @@ public class FeedPostView extends BasePostView {
   @InjectView (R.id.fl_content)
   public FrameLayout mFlContent;
 
+  @InjectView (R.id.gv_loading)
+  public GearsView mGvLoading;
+
   private int mFactoryId;
 
   private SmallGearsDrawable mGearsDrawable;
@@ -99,19 +104,17 @@ public class FeedPostView extends BasePostView {
 
   @Subscribe
   public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
+    Log.d("PostView", "image loaded");
     if (!TextUtils.isEmpty(mPost.bgUrl)) {
       if (ImageUtils.getUrlHash(mPost.bgUrl).equals(event.getHash())) {
-        mFlContent.setVisibility(VISIBLE);
-
-        if (TextUtils.isEmpty(mPost.comment)) {
-          mLlComment.setVisibility(GONE);
+        if (event.getBitmap() == null) {
+          Log.d("PostView", "bitmap is null, load theme with white");
+          setPostTheme(Color.WHITE);
         } else {
-          mLlComment.setVisibility(VISIBLE);
+          Log.d("PostView", "load color theme by bitmap");
+          ColorUtil.asyncThemedColor(event.getBitmap());
         }
-
-        mLlItem.setBackgroundDrawable(null);
-
-        ColorUtil.asyncThemedColor(event.getBitmap());
+        mGvLoading.setVisibility(INVISIBLE);
       }
     }
   }
@@ -123,29 +126,6 @@ public class FeedPostView extends BasePostView {
         setPostTheme(event.getColor());
       }
     }
-  }
-
-  @Override
-  protected void setPostTheme(int color) {
-    super.setPostTheme(color);
-
-    mTvComment.setTextColor(mMonoColor);
-    mTvContent.setTextColor(mMonoColor);
-    mTvPraise.setTextColor(mMonoColor);
-    mTvSource.setTextColor(mMonoColor);
-
-    if (mPost.praised == 1) {
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_red_pressed, 0, 0, 0);
-    } else if (mPost.praise > 0) {
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartRes, 0, 0, 0);
-    } else {
-      mTvPraise.setText("");
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartOutlineRes, 0, 0, 0);
-    }
-
-    mTvComment.setCompoundDrawablesWithIntrinsicBounds(mCommentRes, 0, 0, 0);
-
-    invalidate();
   }
 
   public ImageView getIvShare() {
@@ -183,16 +163,6 @@ public class FeedPostView extends BasePostView {
 
     if (TextUtils.isEmpty(mPost.bgUrl)) {
       setPostTheme(ColorUtil.strToColor(mPost.bgColor));
-    //} else {
-    //  Bitmap fromMemByUrl = ImageUtils.getFromMemByUrl(mPost.bgUrl);
-    //  if (fromMemByUrl != null) {
-    //    ColorUtil.asyncThemedColor(fromMemByUrl);
-    //  } else {
-    //    mTvComment.setTextColor(Color.TRANSPARENT);
-    //    mTvPraise.setTextColor(Color.TRANSPARENT);
-    //    mTvContent.setTextColor(Color.TRANSPARENT);
-    //    mTvSource.setTextColor(Color.TRANSPARENT);
-    //  }
     }
 
     String content = post.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content;
@@ -211,18 +181,16 @@ public class FeedPostView extends BasePostView {
 
 
     if (!TextUtils.isEmpty(post.bgUrl)) {
-      if (ImageUtils.getFromMem(MD5Util.getMD5String(post.bgUrl.getBytes()).toLowerCase()) == null) {
-        mFlContent.setVisibility(INVISIBLE);
-        mLlComment.setVisibility(INVISIBLE);
-        mLlItem.setBackgroundDrawable(mGearsDrawable);
+      if (ImageUtils.getFromMemByUrl(post.bgUrl) == null) {
+        mGvLoading.setVisibility(VISIBLE);
+        mFlContent.setBackgroundColor(Color.WHITE);
+      } else {
+        mGvLoading.setVisibility(INVISIBLE);
       }
-      mTvContent.setBackgroundColor(Color.TRANSPARENT);
       mAivBg.setUrl(post.bgUrl);
     } else {
-      mFlContent.setVisibility(VISIBLE);
-      mLlComment.setVisibility(VISIBLE);
-      mTvContent.setBackgroundColor(ColorUtil.strToColor(post.bgColor));
-      mLlItem.setBackgroundDrawable(null);
+      mGvLoading.setVisibility(INVISIBLE);
+      mFlContent.setBackgroundColor(ColorUtil.strToColor(post.bgColor));
       mAivBg.setUrl(null);
     }
 
@@ -275,6 +243,29 @@ public class FeedPostView extends BasePostView {
       U.getBus().post(new FeedPostPraiseEvent(mPost, false));
     }
     ((BaseAdapter) ((AdapterView) getParent()).getAdapter()).notifyDataSetChanged();
+  }
+
+  @Override
+  protected void setPostTheme(int color) {
+    super.setPostTheme(color);
+
+    mTvComment.setTextColor(mMonoColor);
+    mTvContent.setTextColor(mMonoColor);
+    mTvPraise.setTextColor(mMonoColor);
+    mTvSource.setTextColor(mMonoColor);
+
+    if (mPost.praised == 1) {
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_red_pressed, 0, 0, 0);
+    } else if (mPost.praise > 0) {
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartRes, 0, 0, 0);
+    } else {
+      mTvPraise.setText("");
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartOutlineRes, 0, 0, 0);
+    }
+
+    mTvComment.setCompoundDrawablesWithIntrinsicBounds(mCommentRes, 0, 0, 0);
+
+    invalidate();
   }
 
   @Override

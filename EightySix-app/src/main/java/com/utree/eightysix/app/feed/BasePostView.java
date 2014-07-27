@@ -14,9 +14,9 @@ import com.utree.eightysix.utils.ColorUtil;
 public class BasePostView extends FrameLayout {
   protected Post mPost;
 
-  protected int mHeartRes;
-  protected int mHeartOutlineRes;
-  protected int mCommentRes;
+  protected int mHeartRes = R.drawable.ic_black_heart_white_normal;
+  protected int mHeartOutlineRes = R.drawable.ic_black_heart_outline_normal;
+  protected int mCommentRes = R.drawable.ic_black_reply;
   protected int mMonoColor;
 
   public BasePostView(Context context, AttributeSet attrs, int defStyle) {

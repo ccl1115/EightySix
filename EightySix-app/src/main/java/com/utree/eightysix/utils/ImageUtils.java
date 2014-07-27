@@ -298,13 +298,16 @@ public class ImageUtils {
                   error.printStackTrace();
                 }
               }
+              U.getBus().post(new ImageLoadedEvent(hash, null));
             }
           });
         }
       } catch (IOException ignored) {
         Log.e(TAG, "Get snapshot IOException: " + ignored.getMessage());
+        U.getBus().post(new ImageLoadedEvent(hash, null));
       } catch (OutOfMemoryError e) {
         U.getAnalyser().reportException(U.getContext(), e);
+        U.getBus().post(new ImageLoadedEvent(hash, null));
       }
     } else {
       U.getBus().post(new ImageLoadedEvent(hash, bitmap));
@@ -336,13 +339,16 @@ public class ImageUtils {
                   error.printStackTrace();
                 }
               }
+              U.getBus().post(new ImageLoadedEvent(hash, null));
             }
           });
         }
       } catch (IOException ignored) {
         Log.e(TAG, "Get snapshot IOException: " + ignored.getMessage());
+        U.getBus().post(new ImageLoadedEvent(hash, null));
       } catch (OutOfMemoryError e) {
         U.getAnalyser().reportException(U.getContext(), e);
+        U.getBus().post(new ImageLoadedEvent(hash, null));
       }
     } else {
       U.getBus().post(new ImageLoadedEvent(hash, bitmap));
