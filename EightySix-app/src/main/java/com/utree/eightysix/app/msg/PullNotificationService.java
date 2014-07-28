@@ -76,7 +76,11 @@ public class PullNotificationService extends Service {
   private static final int ID_PRAISE = 0x5000;
   private static final int ID_APPROVE = 0x6000;
   private static final int ID_OWN_COMMENT = 0x7000;
-  private Bitmap mLargeIcon;
+  private static Bitmap sLargeIcon;
+
+  static {
+    sLargeIcon = BitmapFactory.decodeResource(U.getContext().getResources(), R.drawable.ic_app_icon);
+  }
 
   public static void start(Context context, int type, String seq) {
     Intent intent = new Intent(context, PullNotificationService.class);
@@ -140,7 +144,7 @@ public class PullNotificationService extends Service {
         .setTicker(getString(R.string.notification_friend_new_post))
         .setAutoCancel(true)
         .setSmallIcon(R.drawable.notif_icon)
-        .setLargeIcon(mLargeIcon)
+        .setLargeIcon(sLargeIcon)
         .setContentTitle(shortName)
         .setContentText(getString(R.string.notification_friend_new_post))
         .setContentIntent(PendingIntent.getActivity(this, 0,
@@ -152,7 +156,7 @@ public class PullNotificationService extends Service {
     Log.d(C.TAG.NT, "build unlock circle: " + circleId);
     return new NotificationCompat.Builder(this).setTicker(getString(R.string.notification_circle_unlocked))
         .setSmallIcon(R.drawable.notif_icon)
-        .setLargeIcon(mLargeIcon)
+        .setLargeIcon(sLargeIcon)
         .setAutoCancel(true)
         .setContentTitle(getString(R.string.notification_circle_unlocked))
         .setContentText(getString(R.string.notification_circle_unlocked_tip, circleName))
@@ -167,7 +171,7 @@ public class PullNotificationService extends Service {
     builder.setContentTitle(getString(R.string.notification_new))
         .setAutoCancel(true)
         .setTicker(getString(R.string.notification_new))
-        .setLargeIcon(mLargeIcon)
+        .setLargeIcon(sLargeIcon)
         .setSmallIcon(R.drawable.notif_icon);
     if (count == 1) {
       builder.setContentText(getString(type == TYPE_FOLLOW_COMMENT ?
@@ -187,7 +191,7 @@ public class PullNotificationService extends Service {
     Log.d(C.TAG.NT, "build approve: " + circleId);
     return new NotificationCompat.Builder(this).setDefaults(Notification.DEFAULT_ALL)
         .setSmallIcon(R.drawable.notif_icon)
-        .setLargeIcon(mLargeIcon)
+        .setLargeIcon(sLargeIcon)
         .setAutoCancel(true)
         .setTicker(getString(R.string.notification_circle_create_approve))
         .setContentTitle(getString(R.string.notification_circle_create_approve))
@@ -199,10 +203,9 @@ public class PullNotificationService extends Service {
 
   private Notification buildFriendJoin(String circleId, String circleName, int count) {
     Log.d(C.TAG.NT, "build friend join: " + circleId);
-    mLargeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_app_icon);
     return new NotificationCompat.Builder(this)
         .setSmallIcon(R.drawable.notif_icon)
-        .setLargeIcon(mLargeIcon)
+        .setLargeIcon(sLargeIcon)
         .setAutoCancel(true)
         .setTicker(getString(R.string.notification_new_friend))
         .setContentTitle(getString(R.string.notification_new_friend))

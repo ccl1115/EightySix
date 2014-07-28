@@ -334,7 +334,7 @@ public class PublishActivity extends BaseActivity {
 
     List<Item> itemsByPage = mGpPanel.getItemsByPage(0);
     Item item = itemsByPage.get(new Random().nextInt(itemsByPage.size()));
-    onGridPanelItemClicked(item);
+    switchItem(item, false);
 
     mGpPanel.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
       @Override
@@ -395,11 +395,15 @@ public class PublishActivity extends BaseActivity {
 
   @Subscribe
   public void onGridPanelItemClicked(Item item) {
+    switchItem(item, true);
+  }
+
+  private void switchItem(Item item, boolean animation) {
     final TypedValue tv = item.getValue();
     if (tv.type == TypedValue.TYPE_INT_COLOR_ARGB8) {
       ValueAnimator.clearAllAnimations();
       ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), mBgColor, tv.data);
-      animator.setDuration(500);
+      animator.setDuration(animation ? 500 : 0);
       animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
         @Override
         public void onAnimationUpdate(ValueAnimator animation) {
@@ -434,15 +438,18 @@ public class PublishActivity extends BaseActivity {
     } else if (tv.type == TypedValue.TYPE_STRING) {
       mAivPostBg.setBackgroundColor(Color.TRANSPARENT);
       mAivPostBg.setUrl(tv.string.toString());
-      fadeInAnimation(mAivPostBg);
+      if (animation) {
+        fadeInAnimation(mAivPostBg);
+      }
       mImageUploadFinished = true;
       mImageUploadUrl = tv.string.toString();
       mUseColor = false;
       mBgColor = Color.WHITE;
     } else if (tv.type == TypedValue.TYPE_REFERENCE) {
       mAivPostBg.setBackgroundColor(Color.TRANSPARENT);
-      fadeInAnimation(mAivPostBg);
-
+      if (animation) {
+        fadeInAnimation(mAivPostBg);
+      }
       mImageUploadUrl = U.getCloudStorage().getUrl(U.getConfig("storage.bg.bucket.name"),
           "",
           getResources().getResourceEntryName(tv.resourceId) + ".png");

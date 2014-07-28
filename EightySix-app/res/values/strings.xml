@@ -252,5 +252,6 @@
     <string name="exit">退出</string>
     <string name="exit_app">关闭应用</string>
     <string name="later">稍后再说</string>
+    <string name="guide">欢迎页</string>
 
 </resources>
