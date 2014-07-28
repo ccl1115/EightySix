@@ -171,8 +171,8 @@ class PostCommentsAdapter extends BaseAdapter {
       floor = "楼主";
       int color = resources.getColor(R.color.apptheme_primary_light_color);
       holder.mTvComment.setTextColor(color);
-      holder.mFpvPortrait.setEmotion('\ue800');
-      holder.mFpvPortrait.setEmotionColor(Color.WHITE);
+      holder.mFpvPortrait.setEmotion(' ');
+      holder.mFpvPortrait.setBackgroundResource(R.drawable.host_portrait);
     } else {
       floor = comment.floor + "楼";
       holder.mTvComment.setTextColor(resources.getColor(android.R.color.black));

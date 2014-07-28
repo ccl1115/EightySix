@@ -5,13 +5,14 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
 
-    <com.utree.eightysix.widget.AsyncImageView
+    <ImageView
             android:id="@+id/aiv_qr_code"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/qrcode"/>
 
     <TextView
             android:layout_width="wrap_content"
