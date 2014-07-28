@@ -46,6 +46,7 @@ public class UpgradeService extends Service {
 
     mBuilder = new NotificationCompat.Builder(this);
     mBuilder.setTicker("开始下载新版本")
+        .setContentTitle("下载蓝莓客户端")
         .setProgress(100, 0, false)
         .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_app_icon))
         .setSmallIcon(R.drawable.notif_icon);
@@ -55,7 +56,6 @@ public class UpgradeService extends Service {
     if (tmpFile.exists() && upgrade.md5 != null && upgrade.md5.toLowerCase().equals(MD5Util.getMD5(tmpFile).toLowerCase())) {
       Intent i = new Intent(Intent.ACTION_VIEW);
       i.setDataAndType(Uri.fromFile(tmpFile), "application/vnd.android.package-archive");
-      i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       startActivity(i);
     } else {
       if (tmpFile.exists()) tmpFile.delete();
@@ -64,7 +64,7 @@ public class UpgradeService extends Service {
 
             @Override
             public void onStart() {
-              mBuilder.setContentTitle("开始下载");
+              mBuilder.setContentText("开始下载");
               mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
             }
 
@@ -85,7 +85,7 @@ public class UpgradeService extends Service {
 
             @Override
             public void onFailure(Throwable e, File response) {
-              mBuilder.setContentText("下载完成");
+              mBuilder.setContentText("下载失败");
               mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
             }
           });
