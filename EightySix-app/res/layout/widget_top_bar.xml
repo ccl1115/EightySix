@@ -121,7 +121,10 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="8dp"
                 android:minHeight="0dp"
-                android:padding="5dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
                 android:text="@string/search"
                 android:textSize="14sp"/>
     </LinearLayout>

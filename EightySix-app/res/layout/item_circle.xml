@@ -9,9 +9,9 @@
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp">
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
 
         <com.utree.eightysix.widget.RoundedButton
                 android:id="@+id/rb_icon"
@@ -45,7 +45,7 @@
                     android:id="@+id/tv_circle_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="6dp"
                     android:lines="1"
                     android:singleLine="true"
                     android:ellipsize="end"

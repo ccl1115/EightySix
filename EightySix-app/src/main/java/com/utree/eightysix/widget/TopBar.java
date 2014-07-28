@@ -363,8 +363,8 @@ public class TopBar extends FrameLayout implements View.OnClickListener {
     button.setSingleLine(true);
     button.setLines(1);
     button.setOnClickListener(this);
-    final int hPadding = U.dp2px(6);
-    final int vPadding = U.dp2px(4);
+    final int hPadding = U.dp2px(8);
+    final int vPadding = U.dp2px(6);
     button.setActionPadding(hPadding, vPadding, hPadding, vPadding);
     return button;
   }
