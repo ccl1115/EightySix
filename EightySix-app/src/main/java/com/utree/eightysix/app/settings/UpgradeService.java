@@ -2,6 +2,7 @@ package com.utree.eightysix.app.settings;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -49,6 +50,7 @@ public class UpgradeService extends Service {
         .setContentTitle("下载蓝莓客户端")
         .setProgress(100, 0, false)
         .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_app_icon))
+        .setContentIntent(PendingIntent.getActivity(this, 0, null, 0))
         .setSmallIcon(R.drawable.notif_icon);
 
 

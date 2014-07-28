@@ -2,6 +2,7 @@ package com.utree.eightysix.push;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -79,7 +80,7 @@ public final class PushMessageReceiver extends FrontiaPushMessageReceiver {
       builder.setContentText(message);
       builder.setTicker("PushService Debug");
       builder.setSmallIcon(R.drawable.ic_app_icon);
-      builder.setDefaults(Notification.DEFAULT_ALL);
+      builder.setContentIntent(PendingIntent.getActivity(context, 0, null, 0));
       ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(0x100, builder.build());
 
       Date date = new Date();
