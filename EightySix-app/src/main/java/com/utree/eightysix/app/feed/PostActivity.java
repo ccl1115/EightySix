@@ -443,6 +443,7 @@ public class PostActivity extends BaseActivity {
 
             hideProgressBar();
             mEtPostContent.setEnabled(true);
+            mRbPost.setEnabled(true);
             mLvComments.setSelection(Integer.MAX_VALUE);
           }
         }, PublishCommentResponse.class);
