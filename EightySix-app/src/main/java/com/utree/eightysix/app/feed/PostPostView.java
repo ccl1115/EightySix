@@ -243,10 +243,9 @@ public class PostPostView extends BasePostView {
     super.onMeasure(widthMeasureSpec, widthSize + MeasureSpec.EXACTLY);
   }
 
-
   @Override
-  protected void finalize() throws Throwable {
-    super.finalize();
+  protected void onDetachedFromWindow() {
     U.getBus().unregister(this);
+    super.onDetachedFromWindow();
   }
 }

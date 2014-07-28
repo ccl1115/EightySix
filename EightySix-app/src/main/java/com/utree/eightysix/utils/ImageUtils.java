@@ -29,8 +29,9 @@ import org.apache.http.Header;
 public class ImageUtils {
   private static final String TAG = "ImageUtils";
 
+  public static final int MAX_SIZE = (((ActivityManager) U.getContext().getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass() >> 4) * 1024 * 1024;
   private static LruCache<String, Bitmap> sLruCache = new LruCache<String, Bitmap>(
-      (((ActivityManager) U.getContext().getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass() >> 2) * 1024 * 1024) {
+      MAX_SIZE) {
     @Override
     protected void entryRemoved(boolean evicted, String key, Bitmap oldValue, Bitmap newValue) {
       Log.d(TAG, "evicted: " + key);

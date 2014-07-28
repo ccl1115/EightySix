@@ -7,6 +7,7 @@ import com.aliyun.android.util.MD5Util;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.U;
 import com.utree.eightysix.utils.ImageUtils;
+import de.akquinet.android.androlog.Log;
 
 /**
  */
@@ -63,8 +64,10 @@ public class AsyncImageView extends ImageView {
   }
 
   @Override
-  protected void finalize() throws Throwable {
-    super.finalize();
+  protected void onDetachedFromWindow() {
+    Log.d("AsyncImageView", "unregister from bus");
     U.getBus().unregister(this);
+    super.onDetachedFromWindow();
   }
+
 }

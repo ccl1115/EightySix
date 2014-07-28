@@ -28,10 +28,4 @@ public class SyncClient {
     }
     return mSync;
   }
-
-  @Override
-  protected void finalize() throws Throwable {
-    super.finalize();
-    U.getBus().unregister(this);
-  }
 }

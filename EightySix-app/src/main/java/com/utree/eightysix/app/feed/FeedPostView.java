@@ -269,12 +269,6 @@ public class FeedPostView extends BasePostView {
   }
 
   @Override
-  protected void finalize() throws Throwable {
-    super.finalize();
-    U.getBus().unregister(this);
-  }
-
-  @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
     int widthSize = MeasureSpec.getSize(widthMeasureSpec);
     if (mLlComment.getVisibility() == VISIBLE) {
@@ -291,8 +285,8 @@ public class FeedPostView extends BasePostView {
 
   @Override
   protected void onDetachedFromWindow() {
-    super.onDetachedFromWindow();
     U.getBus().unregister(this);
+    super.onDetachedFromWindow();
   }
 
 }
