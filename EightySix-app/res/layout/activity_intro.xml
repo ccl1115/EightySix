@@ -59,7 +59,7 @@
             android:layout_marginRight="16dp"
             android:layout_centerHorizontal="true"
             android:layout_above="@+id/tv_login"
-            android:textColor="@color/apptheme_primary_light_color"
+            android:textColor="@color/apptheme_secondary_dark_color"
             android:gravity="center"
             android:visibility="gone"
             android:text="立即加入"
