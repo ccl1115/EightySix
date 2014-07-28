@@ -28,6 +28,7 @@ import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.TextActionButton;
 import com.utree.eightysix.widget.TopBar;
+import de.akquinet.android.androlog.Log;
 
 /**
  * @author simon
@@ -36,6 +37,8 @@ import com.utree.eightysix.widget.TopBar;
 @TopTitle (R.string.who_to_invite)
 public class ContactsActivity extends BaseActivity {
 
+
+  private static final String TAG = "ContactsActivity";
 
   @InjectView (R.id.alv_contacts)
   public AdvancedListView mAlvContacts;
@@ -107,6 +110,7 @@ public class ContactsActivity extends BaseActivity {
       @Override
       public void onClick(View view, int position) {
         for (Contact contact : mContactsAdapter.getChecked()) {
+          Log.d(TAG, "send Share msg to " + contact.toString());
           sendSMS(contact.phone, getIntent().getStringExtra("textToShare"));
         }
 

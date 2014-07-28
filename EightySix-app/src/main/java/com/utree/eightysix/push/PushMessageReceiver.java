@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import com.baidu.frontia.api.FrontiaPushMessageReceiver;
 import com.google.gson.annotations.SerializedName;
@@ -80,7 +81,9 @@ public final class PushMessageReceiver extends FrontiaPushMessageReceiver {
       builder.setContentText(message);
       builder.setTicker("PushService Debug");
       builder.setSmallIcon(R.drawable.ic_app_icon);
-      builder.setContentIntent(PendingIntent.getActivity(context, 0, null, 0));
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+        builder.setContentIntent(PendingIntent.getActivity(context, 0, null, 0));
+      }
       ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(0x100, builder.build());
 
       Date date = new Date();

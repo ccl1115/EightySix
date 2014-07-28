@@ -222,4 +222,9 @@ public class RegisterActivity extends BaseActivity {
     BaseCirclesActivity.startSelect(this);
     finish();
   }
+
+  @Subscribe
+  public void onLoginEvent(Account.LoginEvent event) {
+    finish();
+  }
 }

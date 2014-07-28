@@ -87,8 +87,8 @@ public class ContactsAdapter extends BaseAdapter {
 
         Contact contact = getItem(position);
 
-        holder.mPosition = position;
-        holder.mCbCheck.setChecked(mChecked.get(position));
+        holder.mPosition = position - 1;
+        holder.mCbCheck.setChecked(mChecked.get(position - 1));
         holder.mTvName.setText(contact.name);
         holder.mTvPhone.setText(contact.phone);
         break;

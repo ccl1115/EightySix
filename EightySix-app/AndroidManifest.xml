@@ -58,13 +58,6 @@
 
         <meta-data android:name="com.baidu.lbsapi.API_KEY" android:value="Z6S9LBSSdPUi96GkdLS6zO0L"/>
 
-        <activity android:exported="@bool/exported" android:name=".app.intro.IntroActivity" android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
 
         <!-- Tencent open sdk -->
         <activity android:launchMode="singleInstance" android:name="com.tencent.tauth.AuthActivity" android:noHistory="true" android:screenOrientation="portrait">
@@ -80,6 +73,13 @@
 
         <activity android:configChanges="orientation|keyboardHidden" android:name="com.tencent.connect.common.AssistActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
+        <activity android:exported="@bool/exported" android:name=".app.intro.IntroActivity" android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
 
         <activity android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.account.RegisterActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateVisible"/>
 
@@ -89,7 +89,7 @@
 
         <activity android:configChanges="keyboardHidden|orientation|keyboard|screenSize" android:exported="@bool/exported" android:name=".app.account.ImportContactActivity" android:screenOrientation="portrait"/>
 
-        <activity android:configChanges="keyboardHidden|orientation|keyboard|screenSize" android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.feed.FeedActivity" android:screenOrientation="portrait"/>
+        <activity android:configChanges="keyboardHidden|orientation|keyboard|screenSize" android:exported="@bool/exported" android:clearTaskOnLaunch="true" android:launchMode="singleTask" android:name=".app.feed.FeedActivity" android:screenOrientation="portrait"/>
 
         <activity android:configChanges="keyboardHidden|orientation|keyboard|screenSize" android:exported="@bool/exported" android:name=".app.intro.GuideActivity" android:screenOrientation="portrait"/>
 
