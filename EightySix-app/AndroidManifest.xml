@@ -163,6 +163,7 @@
         </service>
         <service android:name=".app.SyncService"/>
         <service android:name=".app.msg.PullNotificationService"/>
+        <service android:name=".app.settings.UpgradeService"/>
         <!-- push结束 -->
 
     </application>

@@ -49,47 +49,8 @@ public class UpgradeDialog extends ThemedDialog {
     setPositive(R.string.download_upgrade, new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        mRbPositive.setBackgroundColor(getContext().getResources().getColorStateList(R.color.apptheme_primary_btn_light));
-        File tmpFile = IOUtils.createTmpFile(String.format("upgrade_%s.apk", mUpgrade.version));
-        if (tmpFile.exists() && mUpgrade.md5 != null && mUpgrade.md5.toLowerCase().equals(MD5Util.getMD5(tmpFile).toLowerCase())) {
-          Intent intent = new Intent(Intent.ACTION_VIEW);
-          intent.setDataAndType(Uri.fromFile(tmpFile), "application/vnd.android.package-archive");
-          getContext().startActivity(intent);
-        } else {
-          if (tmpFile.exists()) tmpFile.delete();
-          mRequestHandle = U.getRESTRequester().getClient()
-              .get(getContext(), mUpgrade.url, null, new FileAsyncHttpResponseHandler(tmpFile) {
-
-                @Override
-                public void onStart() {
-                  super.onStart();
-                  mRbPositive.setText("0 %");
-                  mRbPositive.setEnabled(false);
-                }
-
-                @Override
-                public void onProgress(int bytesWritten, int totalSize) {
-                  mRbPositive.setText(String.format("%d %%", 100 * bytesWritten / totalSize));
-                }
-
-                @Override
-                public void onSuccess(File file) {
-                  Intent intent = new Intent(Intent.ACTION_VIEW);
-                  intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
-                  getContext().startActivity(intent);
-                  mRbPositive.setText("下载完成");
-                  mRbPositive.setEnabled(true);
-                }
-
-                @Override
-                public void onFailure(Throwable e, File response) {
-                  if (BuildConfig.DEBUG) e.printStackTrace();
-                  mRbPositive.setText("下载失败");
-                  mRbPositive.setBackgroundColor(getContext().getResources().getColorStateList(R.color.apptheme_secondary_btn_light));
-                  mRbPositive.setEnabled(true);
-                }
-              });
-        }
+        dismiss();
+        UpgradeService.start(getContext(), mUpgrade);
       }
     });
 
