@@ -59,6 +59,11 @@ public class IntroActivity extends BaseActivity {
     // I don't finish when user logout
   }
 
+  @Subscribe
+  public void onLogin(Account.LoginEvent event) {
+    finish();
+  }
+
   @Override
   public void onActionLeftClicked() {
   }

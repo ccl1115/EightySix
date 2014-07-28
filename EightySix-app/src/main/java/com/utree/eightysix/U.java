@@ -179,6 +179,11 @@ public class U {
   private static void loadConfig() {
     M.checkThread();
     sConfiguration = new Properties();
+    if (!BuildConfig.DEBUG) {
+      // in release version we only load internal configuration file.
+      loadInternalConfig();
+      return;
+    }
     File file = new File(Environment.getExternalStorageDirectory().getAbsoluteFile() + "/configuration.properties");
     if (!file.exists()) {
       file = new File("/sdcard/configuration.properties");

@@ -90,7 +90,7 @@ public class FeedPromotionView extends FrameLayout {
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
     int widthSize = MeasureSpec.getSize(widthMeasureSpec);
     if (mLlBottom.getVisibility() == VISIBLE) {
-      widthSize += mLlBottom.getMeasuredHeight();
+      widthSize += U.dp2px(44);
     }
     super.onMeasure(widthMeasureSpec, widthSize - U.dp2px(16) + MeasureSpec.EXACTLY);
   }
