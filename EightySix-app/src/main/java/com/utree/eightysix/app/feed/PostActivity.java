@@ -25,6 +25,7 @@ import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
@@ -209,14 +210,14 @@ public class PostActivity extends BaseActivity {
   @Override
   protected void onResume() {
     super.onResume();
-    U.getBus().register(mLvComments);
+    M.getRegisterHelper().register(mLvComments);
 
   }
 
   @Override
   protected void onPause() {
     super.onPause();
-    U.getBus().unregister(mLvComments);
+    M.getRegisterHelper().unregister(mLvComments);
   }
 
   @Override

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import butterknife.InjectView;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
@@ -124,7 +125,7 @@ public class PraiseActivity extends BaseActivity {
       }
     });
 
-    U.getBus().register(mAlvMsg);
+    M.getRegisterHelper().register(mAlvMsg);
 
     mRstvEmpty.setText(R.string.not_found_praise);
     mRstvEmpty.setSubText(R.string.not_found_praise_tip);
@@ -140,7 +141,7 @@ public class PraiseActivity extends BaseActivity {
   protected void onDestroy() {
     super.onDestroy();
 
-    U.getBus().unregister(mAlvMsg);
+    M.getRegisterHelper().unregister(mAlvMsg);
   }
 
   @Override

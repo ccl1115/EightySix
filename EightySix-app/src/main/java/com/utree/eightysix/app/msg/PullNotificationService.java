@@ -13,6 +13,7 @@ import android.support.v4.app.NotificationCompat;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.C;
+import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.FeedActivity;
@@ -92,7 +93,7 @@ public class PullNotificationService extends Service {
   @Override
   public void onCreate() {
     super.onCreate();
-    U.getBus().register(this);
+    M.getRegisterHelper().register(this);
   }
 
   @Override
@@ -108,7 +109,7 @@ public class PullNotificationService extends Service {
   @Override
   public void onDestroy() {
     super.onDestroy();
-    U.getBus().unregister(this);
+    M.getRegisterHelper().unregister(this);
   }
 
   @Override

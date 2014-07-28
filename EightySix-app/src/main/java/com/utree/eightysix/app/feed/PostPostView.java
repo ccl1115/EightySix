@@ -18,6 +18,7 @@ import butterknife.OnClick;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
+import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
@@ -77,7 +78,7 @@ public class PostPostView extends BasePostView {
     LayoutInflater.from(context).inflate(R.layout.item_post_post, this);
     ButterKnife.inject(this, this);
 
-    U.getBus().register(this);
+    M.getRegisterHelper().register(this);
   }
 
   @Subscribe
@@ -245,7 +246,7 @@ public class PostPostView extends BasePostView {
 
   @Override
   protected void onDetachedFromWindow() {
-    U.getBus().unregister(this);
+    M.getRegisterHelper().unregister(this);
     super.onDetachedFromWindow();
   }
 }

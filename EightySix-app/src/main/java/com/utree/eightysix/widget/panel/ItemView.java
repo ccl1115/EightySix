@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.util.TypedValue;
 import android.view.View;
+import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.drawable.AsyncImageDrawable;
@@ -87,7 +88,7 @@ public class ItemView extends View implements View.OnClickListener {
           ImageUtils.syncLoadResourceBitmapThumbnail(value.resourceId, ImageUtils.getUrlHash(imageUrl)));
     }
     if (mDrawable != null) {
-      U.getBus().register(mDrawable);
+      M.getRegisterHelper().register(mDrawable);
       mDrawable.setCallback(this);
     }
   }
@@ -95,7 +96,7 @@ public class ItemView extends View implements View.OnClickListener {
   @Override
   protected void onDetachedFromWindow() {
     if (mDrawable != null) {
-      U.getBus().unregister(mDrawable);
+      M.getRegisterHelper().unregister(mDrawable);
     }
     super.onDetachedFromWindow();
   }

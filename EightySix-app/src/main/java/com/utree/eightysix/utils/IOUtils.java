@@ -5,11 +5,9 @@ import com.aliyun.android.util.MD5Util;
 import com.utree.eightysix.U;
 import de.akquinet.android.androlog.Log;
 import java.io.File;
-import java.io.FilePermission;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Reader;
 
 /**
  */

@@ -21,6 +21,7 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
@@ -266,14 +267,14 @@ public class FeedActivity extends BaseActivity {
   @Override
   protected void onPause() {
     super.onPause();
-    U.getBus().unregister(mLvSideCircles);
+    M.getRegisterHelper().unregister(mLvSideCircles);
     Env.setLastCircle(mFeedFragment.getCircle());
   }
 
   @Override
   protected void onResume() {
     super.onResume();
-    U.getBus().register(mLvSideCircles);
+    M.getRegisterHelper().register(mLvSideCircles);
   }
 
   @Override

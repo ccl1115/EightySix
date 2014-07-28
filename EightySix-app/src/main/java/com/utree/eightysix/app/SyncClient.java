@@ -1,6 +1,7 @@
 package com.utree.eightysix.app;
 
 import com.squareup.otto.Subscribe;
+import com.utree.eightysix.M;
 import com.utree.eightysix.U;
 import com.utree.eightysix.data.Sync;
 import de.akquinet.android.androlog.Log;
@@ -13,7 +14,7 @@ public class SyncClient {
   private Sync mSync;
 
   public SyncClient() {
-    U.getBus().register(this);
+    M.getRegisterHelper().register(this);
   }
 
   @Subscribe

@@ -7,7 +7,6 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.C;
 import com.utree.eightysix.U;
 import com.utree.eightysix.data.Circle;
-import java.util.Date;
 
 /**
  * Persistent key/value storage back-end by Android SharedPreference

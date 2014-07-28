@@ -11,6 +11,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
 import com.squareup.otto.Subscribe;
+import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.OverlayTipUtil;
@@ -104,7 +105,7 @@ public class FeedFragment extends BaseFragment {
       }
     });
 
-    U.getBus().register(mLvFeed);
+    M.getRegisterHelper().register(mLvFeed);
 
     mRefresherView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override
@@ -198,11 +199,11 @@ public class FeedFragment extends BaseFragment {
     super.onDestroy();
 
     if (mLvFeed != null) {
-      U.getBus().unregister(mLvFeed);
+      M.getRegisterHelper().unregister(mLvFeed);
     }
 
     if (mFeedAdapter != null) {
-      U.getBus().unregister(mFeedAdapter);
+      M.getRegisterHelper().unregister(mFeedAdapter);
     }
   }
 
@@ -402,7 +403,7 @@ public class FeedFragment extends BaseFragment {
             }
 
             mFeedAdapter = new FeedAdapter(response.object);
-            U.getBus().register(mFeedAdapter);
+            M.getRegisterHelper().register(mFeedAdapter);
             mLvFeed.setAdapter(mFeedAdapter);
 
             ((FeedActivity) getBaseActivity()).setTitle(mCircle);
@@ -440,7 +441,7 @@ public class FeedFragment extends BaseFragment {
             }
 
             mFeedAdapter = new FeedAdapter(response.object);
-            U.getBus().register(mFeedAdapter);
+            M.getRegisterHelper().register(mFeedAdapter);
             mLvFeed.setAdapter(mFeedAdapter);
 
             ((FeedActivity) getBaseActivity()).setTitle(mCircle);

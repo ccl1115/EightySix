@@ -4,6 +4,7 @@ import com.baidu.android.pushservice.PushConstants;
 import com.baidu.android.pushservice.PushManager;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.M;
 import com.utree.eightysix.U;
 
 /**
@@ -24,6 +25,6 @@ public class PushHelperImpl implements PushHelper {
   @Subscribe
   public void onLogoutEvent(Account.LogoutEvent event) {
     stopWork();
-    U.getBus().unregister(this);
+    M.getRegisterHelper().unregister(this);
   }
 }

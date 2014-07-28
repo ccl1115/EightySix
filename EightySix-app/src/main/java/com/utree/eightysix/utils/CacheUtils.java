@@ -1,9 +1,7 @@
 package com.utree.eightysix.utils;
 
-import android.os.Environment;
 import com.jakewharton.disklrucache.DiskLruCache;
 import com.utree.eightysix.U;
-import de.akquinet.android.androlog.Log;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;

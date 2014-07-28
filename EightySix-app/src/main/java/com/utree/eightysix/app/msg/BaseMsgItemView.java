@@ -14,6 +14,7 @@ import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
+import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.PostActivity;
@@ -84,7 +85,7 @@ public class BaseMsgItemView extends LinearLayout {
     inflate(context, R.layout.item_msg, this);
     U.viewBinding(this, this);
 
-    U.getBus().register(this);
+    M.getRegisterHelper().register(this);
   }
 
   public void setData(Post[] posts) {
@@ -172,7 +173,7 @@ public class BaseMsgItemView extends LinearLayout {
 
   @Override
   protected void onDetachedFromWindow() {
-    U.getBus().unregister(this);
+    M.getRegisterHelper().unregister(this);
     super.onDetachedFromWindow();
   }
 }

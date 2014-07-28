@@ -17,6 +17,7 @@ import com.aliyun.android.util.MD5Util;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
+import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
@@ -97,7 +98,7 @@ public class FeedPostView extends BasePostView {
     mIvShare.setBackgroundDrawable(
         new RoundRectDrawable(U.dp2px(2), getResources().getColorStateList(R.color.apptheme_transparent_bg)));
 
-    U.getBus().register(this);
+    M.getRegisterHelper().register(this);
 
     mGearsDrawable = new SmallGearsDrawable();
   }
@@ -280,12 +281,12 @@ public class FeedPostView extends BasePostView {
   @Override
   protected void onAttachedToWindow() {
     super.onAttachedToWindow();
-    U.getBus().register(this);
+    M.getRegisterHelper().register(this);
   }
 
   @Override
   protected void onDetachedFromWindow() {
-    U.getBus().unregister(this);
+    M.getRegisterHelper().unregister(this);
     super.onDetachedFromWindow();
   }
 

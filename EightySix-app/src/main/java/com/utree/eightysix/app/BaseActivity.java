@@ -23,6 +23,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import static com.nineoldandroids.view.ViewHelper.getTranslationY;
 import com.utree.eightysix.C;
+import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.settings.UpgradeDialog;
@@ -393,7 +394,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
 
     initAnimator();
 
-    U.getBus().register(this);
+    M.getRegisterHelper().register(this);
 
     if (shouldCheckUpgrade()) {
       checkUpgrade();
@@ -405,7 +406,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     cancelAll();
 
 
-    U.getBus().unregister(this);
+    M.getRegisterHelper().unregister(this);
 
     hideProgressBar();
 
