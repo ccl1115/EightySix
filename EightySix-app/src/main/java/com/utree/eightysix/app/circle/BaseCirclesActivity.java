@@ -277,8 +277,8 @@ public class BaseCirclesActivity extends BaseActivity {
 
   protected void showCircleSetDialog(final Circle circle) {
     AlertDialog dialog = new AlertDialog.Builder(this)
-        .setTitle(String.format("确认在%s上班么？", circle.name))
-        .setMessage((U.getSyncClient().getSync() != null ? U.getSyncClient().getSync().selectFactoryDays : 15) + "天之内不能修改在职工厂")
+        .setTitle("设置在职企业")
+        .setMessage(String.format("确认在[%s]上班么？\n\n请注意：", circle.name) + (U.getSyncClient().getSync() != null ? U.getSyncClient().getSync().selectFactoryDays : 15) + "天之内不能修改哦\n")
         .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
