@@ -319,8 +319,6 @@ class FeedAdapter extends BaseAdapter {
 
     @OnClick (R.id.rb_select)
     public void onRbSelectClicked(View view) {
-      RequestData data = U.getRESTRequester().convert(new FeedsRequest(mId, 1));
-      new CacheInWorker(RESTRequester.genCacheKey(data.getApi(), data.getParams()), "").execute();
       BaseCirclesActivity.startSelect(view.getContext());
     }
   }

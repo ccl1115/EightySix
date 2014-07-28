@@ -29,9 +29,9 @@ import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.ImportContactActivity;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
-import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
 import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
+import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
 import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.msg.PraiseActivity;
 import com.utree.eightysix.app.publish.FeedbackActivity;
@@ -39,7 +39,6 @@ import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.Circle;
-import com.utree.eightysix.data.Post;
 import com.utree.eightysix.event.HasNewPraiseEvent;
 import com.utree.eightysix.event.NewCommentCountEvent;
 import com.utree.eightysix.request.CircleSideRequest;
@@ -106,9 +105,23 @@ public class FeedActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
+  public static void start(Context context, Circle circle, boolean skipCache) {
+    Intent intent = new Intent(context, FeedActivity.class);
+    intent.putExtra("circle", circle);
+    intent.putExtra("skipCache", skipCache);
+    context.startActivity(intent);
+  }
+
   public static void start(Context context, int id) {
     Intent intent = new Intent(context, FeedActivity.class);
     intent.putExtra("id", id);
+    context.startActivity(intent);
+  }
+
+  public static void start(Context context, int id, boolean skipCache) {
+    Intent intent = new Intent(context, FeedActivity.class);
+    intent.putExtra("id", id);
+    intent.putExtra("skipCache", skipCache);
     context.startActivity(intent);
   }
 
@@ -306,12 +319,14 @@ public class FeedActivity extends BaseActivity {
     //region 标题栏数据处理
     Circle circle = intent.getParcelableExtra("circle");
 
+    boolean skipCache = intent.getBooleanExtra("skipCache", false);
+
     if (circle != null) {
-      mFeedFragment.setCircle(circle);
+      mFeedFragment.setCircle(circle, skipCache);
     } else {
       final int circleId = intent.getIntExtra("id", -1);
       if (circleId != -1) {
-        mFeedFragment.setCircle(circleId);
+        mFeedFragment.setCircle(circleId, skipCache);
       }
 
     }

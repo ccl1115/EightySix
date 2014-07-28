@@ -247,11 +247,51 @@ public class FeedFragment extends BaseFragment {
   }
 
   public void setCircle(int id) {
+    if (mCircle != null && mCircle.id != id) {
+      if (mLvFeed != null) mLvFeed.setAdapter(null);
+    }
+
+    if (isAdded()) {
+      cacheOutFeeds(id, 1);
+    }
+  }
+
+  public void setCircle(int id, boolean skipCache) {
     if (mCircle.id != id) {
       if (mLvFeed != null) mLvFeed.setAdapter(null);
     }
 
-    cacheOutFeeds(id, 1);
+    if (isAdded()) {
+      if (skipCache) {
+        requestFeeds(id, 1);
+      } else {
+        cacheOutFeeds(id, 1);
+      }
+    }
+  }
+
+  public void setCircle(Circle circle, boolean skipCache) {
+    if (circle == null || !circle.equals(mCircle)) {
+      if (mLvFeed != null) mLvFeed.setAdapter(null);
+    }
+
+    mCircle = circle;
+
+    if (mCircle == null) {
+      mCircle = Env.getLastCircle();
+    }
+
+    if (mCircle != null) {
+      if (mLvFeed != null) mLvFeed.setAdapter(null);
+
+      if (isAdded()) {
+        if (skipCache) {
+          requestFeeds(mCircle.id, 1);
+        } else {
+          cacheOutFeeds(mCircle.id, 1);
+        }
+      }
+    }
   }
 
   @Override
@@ -273,6 +313,10 @@ public class FeedFragment extends BaseFragment {
     } else {
       return 0;
     }
+  }
+
+  public int getCircleId() {
+    return mCircle == null ? 0 : mCircle.id;
   }
 
   public void refresh() {

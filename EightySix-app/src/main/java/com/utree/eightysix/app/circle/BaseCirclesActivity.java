@@ -100,7 +100,7 @@ public class BaseCirclesActivity extends BaseActivity {
     if (circle != null) {
       if (mMode == MODE_MY) {
         circle.selected = true;
-        FeedActivity.start(this, circle);
+        FeedActivity.start(this, circle, true);
       } else if (mMode == MODE_SELECT) {
         showCircleSetDialog(circle);
       }
@@ -384,7 +384,7 @@ public class BaseCirclesActivity extends BaseActivity {
       @Override
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
-          FeedActivity.start(BaseCirclesActivity.this, circle);
+          FeedActivity.start(BaseCirclesActivity.this, circle, true);
           finish();
         }
       }
