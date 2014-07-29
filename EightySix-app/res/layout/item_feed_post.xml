@@ -28,6 +28,21 @@
                 android:textColor="@android:color/white"
                 android:background="@android:color/transparent"/>
 
+        <ImageView
+                android:id="@+id/iv_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/ic_share"/>
+
+        <com.utree.eightysix.widget.GearsView
+                android:id="@+id/gv_loading"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"/>
+
         <LinearLayout
                 android:id="@+id/fl_grid_panel"
                 android:orientation="horizontal"
@@ -72,21 +87,6 @@
                     android:padding="5dp"/>
 
         </LinearLayout>
-
-        <ImageView
-                android:id="@+id/iv_share"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/ic_share"/>
-
-        <com.utree.eightysix.widget.GearsView
-                android:id="@+id/gv_loading"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/white"/>
     </FrameLayout>
 
     <View android:layout_width="match_parent"

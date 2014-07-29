@@ -1,6 +1,5 @@
 package com.utree.eightysix.utils;
 
-import com.utree.eightysix.M;
 import com.utree.eightysix.U;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -22,6 +21,7 @@ public final class RegisterHelper {
       }
     }
     U.getBus().register(object);
+    mWeakReferences.add(new WeakReference<Object>(object));
   }
 
   public void unregister(Object object) {
@@ -31,6 +31,7 @@ public final class RegisterHelper {
       if (target != null && target == object) {
         try {
           U.getBus().unregister(object);
+          obj.clear();
         } catch (IllegalArgumentException ignored) {
         }
       }

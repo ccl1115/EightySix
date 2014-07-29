@@ -301,7 +301,7 @@ public class FeedActivity extends BaseActivity {
   @Subscribe
   public void onSetPraiseCountEvent(UpdatePraiseCountEvent event) {
     if (mMenuViewHolder != null) {
-      mMenuViewHolder.mTvPraiseCount.setText(String.valueOf(event.getCount()));
+      mMenuViewHolder.mTvPraiseCount.setText(String.format("%d个赞", event.getCount()));
       mMenuViewHolder.mTvPraisePercent.setText(event.getPercent());
     }
   }
@@ -329,7 +329,6 @@ public class FeedActivity extends BaseActivity {
       if (circleId != -1) {
         mFeedFragment.setCircle(circleId, skipCache);
       }
-
     }
 
     if (mFeedFragment.getCircle() != null) {
@@ -440,10 +439,7 @@ public class FeedActivity extends BaseActivity {
           mSideCircles = response.object.lists.size() > 10 ?
               response.object.lists.subList(0, 10) : response.object.lists;
 
-          if (mFeedFragment.getCircle() == null && mSideCircles.size() > 0) {
-            mFeedFragment.setCircle(mSideCircles.get(0));
-            setSideHighlight(mFeedFragment.getCircle());
-          }
+          setSideHighlight(mFeedFragment.getCircle());
           selectSideCircle(mSideCircles);
 
           mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
@@ -499,10 +495,7 @@ public class FeedActivity extends BaseActivity {
           mSideCircles = response.object.lists.size() > 10 ?
               response.object.lists.subList(0, 10) : response.object.lists;
 
-          if (mFeedFragment.getCircle() == null && mSideCircles.size() > 0) {
-            mFeedFragment.setCircle(mSideCircles.get(0));
-            setSideHighlight(mFeedFragment.getCircle());
-          }
+          setSideHighlight(mFeedFragment.getCircle());
           selectSideCircle(mSideCircles);
 
           mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);

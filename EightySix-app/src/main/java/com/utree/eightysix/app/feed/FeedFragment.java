@@ -114,12 +114,12 @@ public class FeedFragment extends BaseFragment {
         if (mCircle != null) {
           requestFeeds(mCircle.id, 1);
         } else {
-          ((FeedActivity) getBaseActivity()).requestSideCircle();
+          requestFeeds(0, 1);
         }
       }
     });
 
-    mRefresherView.setColorScheme(R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed,
+    mRefresherView.setColorSchemeResources(R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed,
         R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed);
 
     mLvFeed.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -305,6 +305,8 @@ public class FeedFragment extends BaseFragment {
       if (isAdded()) {
         cacheOutFeeds(mCircle.id, 1);
       }
+    } else {
+      requestFeeds(0, 1);
     }
   }
 
@@ -323,7 +325,11 @@ public class FeedFragment extends BaseFragment {
   public void refresh() {
     mRefreshed = true;
     getBaseActivity().showProgressBar();
-    requestFeeds(mCircle.id, 1);
+    if (mCircle != null) {
+      requestFeeds(mCircle.id, 1);
+    } else {
+      requestFeeds(0, 1);
+    }
   }
 
   @Subscribe
@@ -387,7 +393,6 @@ public class FeedFragment extends BaseFragment {
   }
 
   private void requestFeeds(int id, final int page) {
-    mRefresherView.setRefreshing(true);
     getBaseActivity().request(new FeedsRequest(id, page), new OnResponse<FeedsResponse>() {
       @Override
       public void onResponse(FeedsResponse response) {
