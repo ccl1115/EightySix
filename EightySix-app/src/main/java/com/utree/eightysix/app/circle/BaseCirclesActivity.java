@@ -88,8 +88,10 @@ public class BaseCirclesActivity extends BaseActivity {
   @OnClick ({R.id.fl_search, R.id.tv_search_hint})
   public void onFlSearchClicked() {
     if (mMode == MODE_MY) {
+      U.getAnalyser().trackEvent(this, "circle_search", "my");
       CircleSearchActivity.start(this, false);
     } else if (mMode == MODE_SELECT) {
+      U.getAnalyser().trackEvent(this, "circle_search", "select");
       CircleSearchActivity.start(this, true);
     }
   }
@@ -101,8 +103,10 @@ public class BaseCirclesActivity extends BaseActivity {
       if (mMode == MODE_MY) {
         circle.selected = true;
         FeedActivity.start(this, circle, true);
+        U.getAnalyser().trackEvent(this, "circle_select", "my");
       } else if (mMode == MODE_SELECT) {
         showCircleSetDialog(circle);
+        U.getAnalyser().trackEvent(this, "circle_select", "select");
       }
     }
   }
@@ -122,7 +126,10 @@ public class BaseCirclesActivity extends BaseActivity {
   @Override
   public void onActionLeftClicked() {
     if (mMode == MODE_MY) {
+      U.getAnalyser().trackEvent(this, "circle_title", "my");
       finish();
+    } else {
+      U.getAnalyser().trackEvent(this, "circle_title", "select");
     }
   }
 
@@ -141,7 +148,7 @@ public class BaseCirclesActivity extends BaseActivity {
     mMode = getIntent().getIntExtra("mode", MODE_MY);
     setTopTitle(mMode == MODE_MY ? getString(R.string.my_circles) : getString(R.string.select_circle));
 
-    if (mMode == MODE_SELECT) {
+    if (mMode == MODE_MY) {
       getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
         @Override
         public String getTitle(int position) {
@@ -218,6 +225,10 @@ public class BaseCirclesActivity extends BaseActivity {
 
         @Override
         public boolean onLoadMoreStart() {
+          if (mPageInfo != null) {
+            U.getAnalyser().trackEvent(BaseCirclesActivity.this,
+                "circle_load_more", String.valueOf(mPageInfo.currPage + 1));
+          }
           if (mRefreshed) {
             requestCircles(mPageInfo == null ? 1 : mPageInfo.currPage + 1);
           } else {
@@ -230,6 +241,7 @@ public class BaseCirclesActivity extends BaseActivity {
       mRefresherView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
         @Override
         public void onRefresh() {
+          U.getAnalyser().trackEvent(BaseCirclesActivity.this, "circle_pull_refresh");
           mRefreshed = true;
           requestCircles(1);
         }
