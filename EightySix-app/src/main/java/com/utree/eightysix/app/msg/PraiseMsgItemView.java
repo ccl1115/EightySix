@@ -27,12 +27,19 @@ public class PraiseMsgItemView extends BaseMsgItemView {
   protected void setLeftData(Post left) {
     super.setLeftData(left);
 
-    if (left != null) {
-      if (left.praise == 0) {
-        mTvCountLeft.setText("");
-      } else {
-        mTvCountLeft.setText(String.valueOf(left.praise));
-      }
+    if (left == null) return;
+
+    if (left.read == 1 || ReadMsgStore.inst().isRead(left.id)) {
+      left.comments = 0;
+      mVMaskLeft.setVisibility(VISIBLE);
+    } else {
+      mVMaskLeft.setVisibility(INVISIBLE);
+    }
+
+    if (left.praise == 0) {
+      mTvCountLeft.setText("");
+    } else {
+      mTvCountLeft.setText(String.valueOf(left.praise));
     }
   }
 
@@ -40,12 +47,19 @@ public class PraiseMsgItemView extends BaseMsgItemView {
   protected void setRightData(Post right) {
     super.setRightData(right);
 
-    if (right != null) {
-      if (right.praise == 0) {
-        mTvCountRight.setText("");
-      } else {
-        mTvCountRight.setText(String.valueOf(right.praise));
-      }
+    if (right == null) return;
+
+    if (right.read == 1) {
+      right.comments = 0;
+      mVMaskRight.setVisibility(VISIBLE);
+    } else {
+      mVMaskRight.setVisibility(INVISIBLE);
+    }
+
+    if (right.praise == 0) {
+      mTvCountRight.setText("");
+    } else {
+      mTvCountRight.setText(String.valueOf(right.praise));
     }
   }
 

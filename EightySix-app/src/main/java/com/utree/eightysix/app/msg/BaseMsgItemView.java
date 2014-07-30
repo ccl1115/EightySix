@@ -1,7 +1,6 @@
 package com.utree.eightysix.app.msg;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -13,14 +12,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import com.squareup.otto.Subscribe;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.PostActivity;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.utils.ColorUtil;
-import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.widget.AsyncImageView;
 
 /**
@@ -64,6 +61,7 @@ public class BaseMsgItemView extends LinearLayout {
     mPosts[0].comments = 0;
     ((BaseAdapter) ((ListView) getParent()).getAdapter()).notifyDataSetChanged();
     PostActivity.start(view.getContext(), mPosts[0], null);
+    ReadMsgStore.inst().addRead(mPosts[0].id);
   }
 
   @OnClick(R.id.fl_right)
@@ -72,6 +70,7 @@ public class BaseMsgItemView extends LinearLayout {
     mPosts[1].comments = 0;
     ((BaseAdapter) ((ListView) getParent()).getAdapter()).notifyDataSetChanged();
     PostActivity.start(view.getContext(), mPosts[1], null);
+    ReadMsgStore.inst().addRead(mPosts[1].id);
   }
 
   protected Post[] mPosts;
@@ -128,11 +127,6 @@ public class BaseMsgItemView extends LinearLayout {
         mAivBgRight.setUrl(null);
         mTvContentRight.setBackgroundColor(ColorUtil.strToColor(right.bgColor));
       }
-      if (right.read == 1) {
-        mVMaskRight.setVisibility(VISIBLE);
-      } else {
-        mVMaskRight.setVisibility(INVISIBLE);
-      }
     } else {
       mFlRight.setVisibility(INVISIBLE);
     }
@@ -153,11 +147,6 @@ public class BaseMsgItemView extends LinearLayout {
       } else {
         mAivBgLeft.setUrl(null);
         mTvContentLeft.setBackgroundColor(ColorUtil.strToColor(left.bgColor));
-      }
-      if (left.read == 1) {
-        mVMaskLeft.setVisibility(VISIBLE);
-      } else {
-        mVMaskLeft.setVisibility(INVISIBLE);
       }
     } else {
       mFlLeft.setVisibility(INVISIBLE);

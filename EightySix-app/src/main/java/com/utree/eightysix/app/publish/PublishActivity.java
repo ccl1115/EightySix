@@ -568,7 +568,7 @@ public class PublishActivity extends BaseActivity {
     if (TextUtils.isEmpty(mPostEditText.getText())) {
       super.onBackPressed();
     } else {
-      showDescriptionDialog();
+      mConfirmQuitDialog.show();
     }
   }
 

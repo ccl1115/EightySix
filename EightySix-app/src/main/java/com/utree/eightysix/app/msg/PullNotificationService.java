@@ -190,7 +190,8 @@ public class PullNotificationService extends Service {
 
   private Notification buildApprove(String circleId, String circleName) {
     Log.d(C.TAG.NT, "build approve: " + circleId);
-    return new NotificationCompat.Builder(this).setDefaults(Notification.DEFAULT_ALL)
+    return new NotificationCompat.Builder(this)
+        .setDefaults(Notification.DEFAULT_ALL)
         .setLargeIcon(sLargeIcon)
         .setAutoCancel(true)
         .setTicker(getString(R.string.notification_circle_create_approve))

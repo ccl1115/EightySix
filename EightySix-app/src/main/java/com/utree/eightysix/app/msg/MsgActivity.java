@@ -22,16 +22,12 @@ import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.MsgsRequest;
 import com.utree.eightysix.response.MsgsResponse;
-import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.IRefreshable;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RandomSceneTextView;
-import com.utree.eightysix.widget.RefresherView;
 import java.util.List;
-import java.util.Random;
 
 /**
  * @author simon
@@ -75,8 +71,10 @@ public class MsgActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    mRvMsg.setColorScheme(R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed,
-        R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed);
+    mRvMsg.setColorSchemeResources(R.color.apptheme_primary_light_color,
+        R.color.apptheme_primary_light_color_pressed,
+        R.color.apptheme_primary_light_color,
+        R.color.apptheme_primary_light_color_pressed);
 
     if (U.useFixture()) {
       showProgressBar();
@@ -134,6 +132,7 @@ public class MsgActivity extends BaseActivity {
       public void onRefresh() {
         mRefreshed = true;
         requestMsgs(1);
+        ReadMsgStore.inst().clearRead();
       }
     });
 

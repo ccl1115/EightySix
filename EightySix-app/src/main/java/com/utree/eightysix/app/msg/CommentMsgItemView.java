@@ -27,12 +27,19 @@ public class CommentMsgItemView extends BaseMsgItemView {
   protected void setLeftData(Post left) {
     super.setLeftData(left);
 
-    if (left != null) {
-      if (left.comments == 0) {
-        mTvCountLeft.setText("");
-      } else {
-        mTvCountLeft.setText("+ " + String.valueOf(left.comments));
-      }
+    if (left == null) return;
+
+    if (left.read == 1 || ReadMsgStore.inst().isRead(left.id)) {
+      left.comments = 0;
+      mVMaskLeft.setVisibility(VISIBLE);
+    } else {
+      mVMaskLeft.setVisibility(INVISIBLE);
+    }
+
+    if (left.comments == 0) {
+      mTvCountLeft.setText("");
+    } else {
+      mTvCountLeft.setText("+ " + String.valueOf(left.comments));
     }
   }
 
@@ -40,12 +47,19 @@ public class CommentMsgItemView extends BaseMsgItemView {
   protected void setRightData(Post right) {
     super.setRightData(right);
 
-    if (right != null) {
-      if (right.comments == 0) {
-        mTvCountRight.setText("");
-      } else {
-        mTvCountRight.setText("+ " + String.valueOf(right.comments));
-      }
+    if (right == null) return;
+
+    if (right.read == 1 || ReadMsgStore.inst().isRead(right.id)) {
+      right.comments = 0;
+      mVMaskRight.setVisibility(VISIBLE);
+    } else {
+      mVMaskRight.setVisibility(INVISIBLE);
+    }
+
+    if (right.comments == 0) {
+      mTvCountRight.setText("");
+    } else {
+      mTvCountRight.setText("+ " + String.valueOf(right.comments));
     }
   }
 
