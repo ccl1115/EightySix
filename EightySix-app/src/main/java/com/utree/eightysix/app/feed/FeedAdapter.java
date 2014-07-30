@@ -275,6 +275,7 @@ class FeedAdapter extends BaseAdapter {
     holder.mRbUnlock.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
+        U.getAnalyser().trackEvent(U.getContext(), "feed_unlock");
         U.getBus().post(new UnlockClickedEvent());
       }
     });
@@ -319,6 +320,7 @@ class FeedAdapter extends BaseAdapter {
 
     @OnClick (R.id.rb_select)
     public void onRbSelectClicked(View view) {
+      U.getAnalyser().trackEvent(U.getContext(), "feed_select");
       BaseCirclesActivity.startSelect(view.getContext());
     }
   }
@@ -332,6 +334,7 @@ class FeedAdapter extends BaseAdapter {
 
     @OnClick (R.id.rb_invite)
     public void onRbInviteClicked() {
+      U.getAnalyser().trackEvent(U.getContext(), "feed_upload");
       U.getBus().post(new InviteClickedEvent());
     }
   }

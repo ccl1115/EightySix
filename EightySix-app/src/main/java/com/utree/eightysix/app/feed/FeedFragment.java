@@ -96,6 +96,7 @@ public class FeedFragment extends BaseFragment {
 
       @Override
       public boolean onLoadMoreStart() {
+        U.getAnalyser().trackEvent(getActivity(), "feed_load_more", String.valueOf(mPageInfo.currPage + 1));
         if (mRefreshed) {
           requestFeeds(mCircle.id, mPageInfo == null ? 1 : mPageInfo.currPage + 1);
         } else {
@@ -110,6 +111,7 @@ public class FeedFragment extends BaseFragment {
     mRefresherView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override
       public void onRefresh() {
+        U.getAnalyser().trackEvent(getActivity(), "feed_pull_refresh");
         mRefreshed = true;
         if (mCircle != null) {
           requestFeeds(mCircle.id, 1);

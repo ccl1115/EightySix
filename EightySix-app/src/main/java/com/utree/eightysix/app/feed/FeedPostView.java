@@ -235,6 +235,7 @@ public class FeedPostView extends BasePostView {
   @OnClick (R.id.tv_praise)
   public void onTvPraiseClicked() {
     if (mPost.praised == 1) {
+      U.getAnalyser().trackEvent(U.getContext(), "feed_post_praise", "cancel");
       AnimatorSet unlikeAnimator = new AnimatorSet();
       unlikeAnimator.setDuration(500);
       unlikeAnimator.playTogether(
@@ -246,6 +247,7 @@ public class FeedPostView extends BasePostView {
       mPost.praise--;
       U.getBus().post(new FeedPostPraiseEvent(mPost, true));
     } else {
+      U.getAnalyser().trackEvent(U.getContext(), "feed_post_praise", "praise");
       AnimatorSet praiseAnimator = new AnimatorSet();
       praiseAnimator.setDuration(800);
       praiseAnimator.playTogether(
