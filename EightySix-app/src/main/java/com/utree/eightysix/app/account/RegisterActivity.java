@@ -225,6 +225,5 @@ public class RegisterActivity extends BaseActivity {
 
   @Subscribe
   public void onLoginEvent(Account.LoginEvent event) {
-    finish();
   }
 }

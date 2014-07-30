@@ -559,27 +559,9 @@ public class PublishActivity extends BaseActivity {
           });
 
       mDescriptionDialog = builder.create();
-
-      builder = new AlertDialog.Builder(this);
-
-      builder.setTitle(getString(R.string.quit_confirm))
-          .setPositiveButton(getString(R.string.resume_editing), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-              dialog.dismiss();
-            }
-          })
-          .setNegativeButton(getString(R.string.quit), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-              finish();
-            }
-          });
-
-      mConfirmQuitDialog = builder.create();
     }
 
-    showDescriptionDialog();
+    mDescriptionDialog.show();
   }
 
   private void confirmFinish() {
