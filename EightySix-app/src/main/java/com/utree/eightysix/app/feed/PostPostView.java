@@ -146,12 +146,15 @@ public class PostPostView extends BasePostView {
 
   @OnClick (R.id.iv_close)
   public void onIvCloseClicked() {
+    U.getAnalyser().trackEvent(U.getContext(), "post_close");
     ((PostActivity) getContext()).finishOrShowQuitConfirmDialog();
   }
 
   @OnClick (R.id.iv_more)
   public void onIvMoreClicked() {
     if (mPost == null) return;
+
+    U.getAnalyser().trackEvent(U.getContext(), "post_more");
     new AlertDialog.Builder(getContext()).setTitle(U.gs(R.string.post_action))
         .setItems(new String[]{U.gs(R.string.share), U.gs(R.string.report),
                 mPost.praised == 1 ? U.gs(R.string.unlike) : U.gs(R.string.like),
@@ -161,15 +164,26 @@ public class PostPostView extends BasePostView {
               public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                   case 0:
+                    U.getAnalyser().trackEvent(U.getContext(), "post_more_share");
                     U.getShareManager().sharePostDialog(((Activity) getContext()), mPost).show();
                     break;
                   case 1:
+                    U.getAnalyser().trackEvent(U.getContext(), "post_more_report");
                     new ReportDialog(getContext(), mPost.id).show();
                     break;
                   case 2:
-                    onTvPraiseClicked();
+                    if (mPost == null) return;
+                    if (mPost.praised == 1) {
+                      U.getAnalyser().trackEvent(U.getContext(), "post_more_praise", "cancel");
+                      doCancelPraise();
+                    } else {
+                      U.getAnalyser().trackEvent(U.getContext(), "post_more_praise", "praise");
+                      doPraise();
+                    }
+                    ((BaseAdapter) ((AdapterView) getParent()).getAdapter()).notifyDataSetChanged();
                     break;
                   case 3:
+                    U.getAnalyser().trackEvent(U.getContext(), "post_more_delete");
                     U.getBus().post(new PostDeleteRequest(mPost.id));
                     break;
                 }
@@ -181,29 +195,39 @@ public class PostPostView extends BasePostView {
   public void onTvPraiseClicked() {
     if (mPost == null) return;
     if (mPost.praised == 1) {
-      AnimatorSet unlikeAnimator = new AnimatorSet();
-      unlikeAnimator.setDuration(500);
-      unlikeAnimator.playTogether(
-          ObjectAnimator.ofFloat(mTvPraise, "scaleX", 1, 0.8f, 1),
-          ObjectAnimator.ofFloat(mTvPraise, "scaleY", 1, 0.8f, 1)
-      );
-      unlikeAnimator.start();
-      mPost.praised = 0;
-      mPost.praise--;
-      U.getBus().post(new PostPostPraiseEvent(mPost, true));
+      U.getAnalyser().trackEvent(U.getContext(), "post_praise", "cancel");
+      doCancelPraise();
     } else {
-      AnimatorSet praiseAnimator = new AnimatorSet();
-      praiseAnimator.setDuration(800);
-      praiseAnimator.playTogether(
-          ObjectAnimator.ofFloat(mTvPraise, "scaleX", 1, 1.2f, 0.8f, 1),
-          ObjectAnimator.ofFloat(mTvPraise, "scaleY", 1, 1.2f, 0.8f, 1)
-      );
-      praiseAnimator.start();
-      mPost.praised = 1;
-      mPost.praise++;
-      U.getBus().post(new PostPostPraiseEvent(mPost, false));
+      U.getAnalyser().trackEvent(U.getContext(), "post_praise", "praise");
+      doPraise();
     }
     ((BaseAdapter) ((AdapterView) getParent()).getAdapter()).notifyDataSetChanged();
+  }
+
+  protected void doPraise() {
+    AnimatorSet praiseAnimator = new AnimatorSet();
+    praiseAnimator.setDuration(800);
+    praiseAnimator.playTogether(
+        ObjectAnimator.ofFloat(mTvPraise, "scaleX", 1, 1.2f, 0.8f, 1),
+        ObjectAnimator.ofFloat(mTvPraise, "scaleY", 1, 1.2f, 0.8f, 1)
+    );
+    praiseAnimator.start();
+    mPost.praised = 1;
+    mPost.praise++;
+    U.getBus().post(new PostPostPraiseEvent(mPost, false));
+  }
+
+  private void doCancelPraise() {
+    AnimatorSet unlikeAnimator = new AnimatorSet();
+    unlikeAnimator.setDuration(500);
+    unlikeAnimator.playTogether(
+        ObjectAnimator.ofFloat(mTvPraise, "scaleX", 1, 0.8f, 1),
+        ObjectAnimator.ofFloat(mTvPraise, "scaleY", 1, 0.8f, 1)
+    );
+    unlikeAnimator.start();
+    mPost.praised = 0;
+    mPost.praise--;
+    U.getBus().post(new PostPostPraiseEvent(mPost, true));
   }
 
   @Override

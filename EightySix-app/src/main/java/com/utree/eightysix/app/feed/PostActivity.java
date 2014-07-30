@@ -122,6 +122,8 @@ public class PostActivity extends BaseActivity {
     final Comment comment = (Comment) mLvComments.getAdapter().getItem(position);
     if (comment == null) return;
 
+    U.getAnalyser().trackEvent(this, "comment_more");
+
     String[] items;
     String like = comment.praised == 1 ? getString(R.string.unlike) : getString(R.string.like);
     if (comment.self == 1) {
@@ -140,16 +142,20 @@ public class PostActivity extends BaseActivity {
                     if (comment.praised == 1) {
                       comment.praise++;
                       U.getBus().post(new PostCommentPraiseEvent(comment, false));
+                      U.getAnalyser().trackEvent(U.getContext(), "comment_more_praise", "praise");
                     } else {
                       comment.praise = Math.max(0, comment.praise - 1);
                       U.getBus().post(new PostCommentPraiseEvent(comment, true));
+                      U.getAnalyser().trackEvent(U.getContext(), "comment_more_praise", "cancel");
                     }
                     mPostCommentsAdapter.notifyDataSetChanged();
                     break;
                   case 1:
+                    U.getAnalyser().trackEvent(PostActivity.this, "comment_more_share");
                     U.getShareManager().shareCommentDialog(PostActivity.this, mPost, comment.content).show();
                     break;
                   case 2:
+                    U.getAnalyser().trackEvent(PostActivity.this, "comment_more_report");
                     new ReportDialog(PostActivity.this, mPostId, comment.id).show();
                     break;
                   case 3:
@@ -162,6 +168,7 @@ public class PostActivity extends BaseActivity {
 
   @OnClick (R.id.rb_post)
   public void onRbPostClicked() {
+    U.getAnalyser().trackEvent(this, "post_comment");
     showProgressBar();
     mEtPostContent.setEnabled(false);
     mRbPost.setEnabled(false);

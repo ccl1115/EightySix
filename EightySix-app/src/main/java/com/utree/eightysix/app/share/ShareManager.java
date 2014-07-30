@@ -5,6 +5,7 @@ import android.view.View;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.widget.ThemedDialog;
@@ -62,12 +63,14 @@ public class ShareManager {
 
     @OnClick (R.id.tv_sms)
     void onTvSmsClicked() {
+      U.getAnalyser().trackEvent(mActivity, "share_by_msg");
       mShareViaSMS.shareComment(mActivity, mPost, mComment);
       mDialog.dismiss();
     }
 
     @OnClick (R.id.tv_qq_friends)
     void onQQFriendsClicked() {
+      U.getAnalyser().trackEvent(mActivity, "share_by_qq");
       mShareToQQ.shareComment(mActivity, mPost, mComment);
       mDialog.dismiss();
     }
@@ -88,12 +91,14 @@ public class ShareManager {
 
     @OnClick (R.id.tv_sms)
     void onTvSmsClicked() {
+      U.getAnalyser().trackEvent(mActivity, "share_by_msg");
       mShareViaSMS.sharePost(mActivity, mPost);
       mDialog.dismiss();
     }
 
     @OnClick (R.id.tv_qq_friends)
     void onQQFriendsClicked() {
+      U.getAnalyser().trackEvent(mActivity, "share_by_qq");
       mShareToQQ.sharePost(mActivity, mPost);
       mDialog.dismiss();
     }
@@ -114,12 +119,14 @@ public class ShareManager {
 
     @OnClick (R.id.tv_sms)
     void onTvSmsClicked() {
+      U.getAnalyser().trackEvent(mActivity, "share_by_msg");
       mShareViaSMS.shareApp(mActivity, mFactoryId);
       mDialog.dismiss();
     }
 
     @OnClick (R.id.tv_qq_friends)
     void onQQFriendsClicked() {
+      U.getAnalyser().trackEvent(mActivity, "share_by_qq");
       mShareToQQ.shareApp(mActivity, mFactoryId);
       mDialog.dismiss();
     }
