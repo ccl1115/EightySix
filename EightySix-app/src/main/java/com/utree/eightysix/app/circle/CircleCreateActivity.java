@@ -61,6 +61,7 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
   public RoundedButton mRbCreate;
 
   private boolean mRequesting;
+  private Location.Result mResult;
 
   @OnTextChanged (R.id.et_circle_name)
   public void onEtCircleNameTextChanged(CharSequence t) {
@@ -150,10 +151,13 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
 
   @Override
   public void onResult(Location.Result result) {
-    if (result != null && !TextUtils.isEmpty(result.address)) {
-      mTvLocation.setText(result.address);
-    } else {
-      mTvLocation.setText(getString(R.string.locating_failed));
+    if (mResult == null) {
+      if (result != null && !TextUtils.isEmpty(result.address)) {
+        mResult = result;
+        mTvLocation.setText(mResult.address);
+      } else {
+        mTvLocation.setText(getString(R.string.locating_failed));
+      }
     }
   }
 
