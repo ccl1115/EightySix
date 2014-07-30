@@ -81,6 +81,7 @@ public class FeedPostView extends BasePostView {
   private int mFactoryId;
 
   private SmallGearsDrawable mGearsDrawable;
+  private Runnable mShareAnimation;
 
   public FeedPostView(Context context) {
     this(context, null, 0);
@@ -101,6 +102,15 @@ public class FeedPostView extends BasePostView {
     M.getRegisterHelper().register(this);
 
     mGearsDrawable = new SmallGearsDrawable();
+    mShareAnimation = new Runnable() {
+      @Override
+      public void run() {
+        mIvShare.setVisibility(VISIBLE);
+        ObjectAnimator alpha = ObjectAnimator.ofFloat(mIvShare, "alpha", 0, 1f);
+        alpha.setDuration(500);
+        alpha.start();
+      }
+    };
   }
 
   @Subscribe
@@ -211,6 +221,10 @@ public class FeedPostView extends BasePostView {
     } else {
       mLlComment.setVisibility(VISIBLE);
     }
+
+    mIvShare.setVisibility(INVISIBLE);
+    mIvShare.removeCallbacks(mShareAnimation);
+    mIvShare.postDelayed(mShareAnimation, 500);
   }
 
   @OnClick (R.id.iv_share)
