@@ -18,9 +18,11 @@ public abstract class ShareDialog extends ThemedDialog {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setTitle("分享给厂里的朋友");
-    setCanceledOnTouchOutside(true);
     setContent(R.layout.dialog_content_share);
     getViewHolder(this);
+
+    setCancelable(true);
+    setCanceledOnTouchOutside(false);
   }
 
   protected abstract Object getViewHolder(ShareDialog dialog);

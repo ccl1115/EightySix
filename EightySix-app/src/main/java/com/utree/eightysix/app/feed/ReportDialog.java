@@ -14,7 +14,7 @@ import com.utree.eightysix.widget.ThemedDialog;
 /**
  * @author simon
  */
-class ReportDialog extends ThemedDialog {
+public class ReportDialog extends ThemedDialog {
 
   private String mPostId;
   private String mCommentId;
@@ -52,6 +52,8 @@ class ReportDialog extends ThemedDialog {
     setContent(R.layout.dialog_report);
 
     ButterKnife.inject(new ReportViewHolder(), this);
+
+    setCanceledOnTouchOutside(false);
   }
 
   @Keep

@@ -40,7 +40,7 @@ public class UpgradeDialog extends ThemedDialog {
 
     setTitle(R.string.new_version_to_upgrade);
 
-    LayoutInflater.from(getContext()).inflate(R.layout.activity_upgrade, mFlContent, true);
+    setContent(R.layout.activity_upgrade);
     ViewHolder viewHolder = new ViewHolder(mFlContent);
 
     viewHolder.mTvInfo.setText(mUpgrade.info);

@@ -12,6 +12,8 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.utils.ColorUtil;
+import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.widget.panel.Item;
 
 /**
@@ -39,6 +41,28 @@ public class FeedbackActivity extends PublishActivity {
     mFlPortrait.setVisibility(View.INVISIBLE);
 
     showSoftKeyboard(mPostEditText);
+  }
+
+  @Override
+  protected void showDescriptionDialogWhenFirstRun() {
+  }
+
+  @Subscribe
+  @Override
+  public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
+    super.onImageLoadedEvent(event);
+  }
+
+  @Subscribe
+  @Override
+  public void onImageUploaded(ImageUtils.ImageUploadedEvent event) {
+    super.onImageUploaded(event);
+  }
+
+  @Subscribe
+  @Override
+  public void onThemedColorEvent(ColorUtil.ThemedColorEvent event) {
+    super.onThemedColorEvent(event);
   }
 
   @Subscribe

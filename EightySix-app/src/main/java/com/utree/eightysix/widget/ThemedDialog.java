@@ -59,7 +59,6 @@ public class ThemedDialog extends Dialog {
     mVBotDivider.setVisibility(View.INVISIBLE);
   }
 
-  @SuppressLint ("InflateParams")
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

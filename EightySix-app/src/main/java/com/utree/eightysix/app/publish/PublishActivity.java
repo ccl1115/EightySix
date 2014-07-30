@@ -124,7 +124,7 @@ public class PublishActivity extends BaseActivity {
 
   @OnClick (R.id.ll_bottom)
   public void onLlBottomClicked() {
-    mDescriptionDialog.show();
+    showDescriptionDialog();
   }
 
   @OnClick (R.id.iv_shuffle)
@@ -182,10 +182,12 @@ public class PublishActivity extends BaseActivity {
 
           if (!mIsOpened) {
             mPublishLayout.hidePanel();
+            mPostEditText.setHint("");
           }
           mIsOpened = true;
         } else if (mIsOpened) {
           mPublishLayout.showPanel();
+          mPostEditText.setHint(R.string.post_anonymously);
           mIsOpened = false;
         }
       }
@@ -251,10 +253,6 @@ public class PublishActivity extends BaseActivity {
         });
 
     mConfirmQuitDialog = builder.create();
-
-    if (Env.firstRun(FIRST_RUN_KEY)) {
-      mDescriptionDialog.show();
-    }
 
     mPostEditText.addTextChangedListener(new TextWatcher() {
       @Override
@@ -358,6 +356,15 @@ public class PublishActivity extends BaseActivity {
             getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
     ((TextActionButton) getTopBar().getActionView(0)).setTextColor(
         getResources().getColor(R.color.apptheme_primary_grey_color_disabled));
+
+    showDescriptionDialogWhenFirstRun();
+  }
+
+  protected void showDescriptionDialogWhenFirstRun() {
+    if (Env.firstRun(FIRST_RUN_KEY)) {
+      showDescriptionDialog();
+    }
+
   }
 
   protected void enablePublishButton() {
@@ -537,11 +544,49 @@ public class PublishActivity extends BaseActivity {
     confirmFinish();
   }
 
+  protected void showDescriptionDialog() {
+    if (mDescriptionDialog == null) {
+      AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+      builder.setTitle(R.string.who_will_see_this_secret).setMessage(R.string.post_description)
+          .setPositiveButton(getString(R.string.got_it), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              if (which == Dialog.BUTTON_POSITIVE) {
+                dialog.dismiss();
+              }
+            }
+          });
+
+      mDescriptionDialog = builder.create();
+
+      builder = new AlertDialog.Builder(this);
+
+      builder.setTitle(getString(R.string.quit_confirm))
+          .setPositiveButton(getString(R.string.resume_editing), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              dialog.dismiss();
+            }
+          })
+          .setNegativeButton(getString(R.string.quit), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              finish();
+            }
+          });
+
+      mConfirmQuitDialog = builder.create();
+    }
+
+    showDescriptionDialog();
+  }
+
   private void confirmFinish() {
     if (TextUtils.isEmpty(mPostEditText.getText())) {
       super.onBackPressed();
     } else {
-      mConfirmQuitDialog.show();
+      showDescriptionDialog();
     }
   }
 
