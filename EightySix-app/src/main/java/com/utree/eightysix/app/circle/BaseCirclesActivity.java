@@ -141,37 +141,39 @@ public class BaseCirclesActivity extends BaseActivity {
     mMode = getIntent().getIntExtra("mode", MODE_MY);
     setTopTitle(mMode == MODE_MY ? getString(R.string.my_circles) : getString(R.string.select_circle));
 
-    getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
-      @Override
-      public String getTitle(int position) {
-        return getString(R.string.create);
-      }
+    if (mMode == MODE_SELECT) {
+      getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
+        @Override
+        public String getTitle(int position) {
+          return getString(R.string.create);
+        }
 
-      @Override
-      public Drawable getIcon(int position) {
-        return null;
-      }
+        @Override
+        public Drawable getIcon(int position) {
+          return null;
+        }
 
-      @Override
-      public Drawable getBackgroundDrawable(int position) {
-        return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
-      }
+        @Override
+        public Drawable getBackgroundDrawable(int position) {
+          return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
+        }
 
-      @Override
-      public void onClick(View view, int position) {
-        startActivity(new Intent(BaseCirclesActivity.this, CircleCreateActivity.class));
-      }
+        @Override
+        public void onClick(View view, int position) {
+          startActivity(new Intent(BaseCirclesActivity.this, CircleCreateActivity.class));
+        }
 
-      @Override
-      public int getCount() {
-        return 1;
-      }
+        @Override
+        public int getCount() {
+          return 1;
+        }
 
-      @Override
-      public TopBar.LayoutParams getLayoutParams(int position) {
-        return new TopBar.LayoutParams(MATCH_PARENT, MATCH_PARENT);
-      }
-    });
+        @Override
+        public TopBar.LayoutParams getLayoutParams(int position) {
+          return new TopBar.LayoutParams(MATCH_PARENT, MATCH_PARENT);
+        }
+      });
+    }
 
     if (U.useFixture()) {
       mCircleListAdapter = new CircleListAdapter(U.getFixture(Circle.class, 20, "valid"));
@@ -330,10 +332,8 @@ public class BaseCirclesActivity extends BaseActivity {
           }
           mPageInfo = response.object.page;
           mLvCircles.stopLoadMore();
-          hideProgressBar();
-        } else {
-          requestCircles(page);
         }
+        requestCircles(page);
       }
     }, CirclesResponse.class);
   }
