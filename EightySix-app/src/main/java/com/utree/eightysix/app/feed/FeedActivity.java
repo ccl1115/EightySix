@@ -142,7 +142,7 @@ public class FeedActivity extends BaseActivity {
     if (!mFeedFragment.canPublish()) {
       showNoPermDialog();
     } else {
-      PublishActivity.start(this, mFeedFragment.getCircle().id);
+      PublishActivity.start(this, mFeedFragment.getCircleId());
     }
   }
 
@@ -395,7 +395,7 @@ public class FeedActivity extends BaseActivity {
     if (!mFeedFragment.canPublish()) {
       showNoPermDialog();
     } else {
-      PublishActivity.start(this, mFeedFragment.getCircle().id);
+      PublishActivity.start(this, mFeedFragment.getCircleId());
     }
   }
 
@@ -463,7 +463,7 @@ public class FeedActivity extends BaseActivity {
 
   private void showInviteDialog() {
     if (mInviteDialog == null) {
-      mInviteDialog = U.getShareManager().shareAppDialog(this, mFeedFragment.getCircle().id);
+      mInviteDialog = U.getShareManager().shareAppDialog(this, mFeedFragment.getCircleId());
     }
     if (!mInviteDialog.isShowing()) {
       mInviteDialog.show();
