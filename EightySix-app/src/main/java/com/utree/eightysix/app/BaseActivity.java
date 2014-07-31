@@ -191,10 +191,12 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   }
 
   public void setLoadingText(int res) {
+    mTvLoadingText.setVisibility(View.VISIBLE);
     mTvLoadingText.setText(res);
   }
 
   public void setLoadingText(String text) {
+    mTvLoadingText.setVisibility(View.VISIBLE);
     mTvLoadingText.setText(text);
   }
 
