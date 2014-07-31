@@ -26,16 +26,27 @@
                 android:visibility="invisible"
                 android:background="@color/apptheme_mandatory_mask_color"/>
 
-        <FrameLayout
+        <LinearLayout
                 android:id="@+id/fl_loading_wrapper"
                 android:padding="15dp"
+                android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center">
 
             <ProgressBar
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-        </FrameLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="8dp"/>
+
+            <TextView
+                    android:id="@+id/tv_loading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"/>
+        </LinearLayout>
     </FrameLayout>
 </RelativeLayout>

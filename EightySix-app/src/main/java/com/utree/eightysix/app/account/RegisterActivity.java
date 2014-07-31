@@ -201,6 +201,7 @@ public class RegisterActivity extends BaseActivity {
                   showToast(R.string.register_success, false);
                   //startActivity(new Intent(RegisterActivity.this, ImportContactActivity.class));
                   //finish();
+                  setLoadingText("寻找工友圈中");
                   ContactsSyncService.start(RegisterActivity.this, true);
                   return;
                 } else {

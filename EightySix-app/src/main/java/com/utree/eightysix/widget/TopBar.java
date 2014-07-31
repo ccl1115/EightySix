@@ -1,6 +1,5 @@
 package com.utree.eightysix.widget;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -23,7 +22,6 @@ import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.app.Layout;
 import de.akquinet.android.androlog.Log;
 import java.util.ArrayList;
 import java.util.List;
@@ -123,7 +121,6 @@ public class TopBar extends FrameLayout implements View.OnClickListener {
     mSubTitle.setText(subTitle);
   }
 
-
   public void setActionAdapter(ActionAdapter actionAdapter) {
     mActionAdapter = actionAdapter;
     mCurCount = mActionAdapter == null ? 0 : mActionAdapter.getCount();
@@ -151,16 +148,6 @@ public class TopBar extends FrameLayout implements View.OnClickListener {
     }
     requestLayout();
     invalidate();
-  }
-
-  @Override
-  public boolean addStatesFromChildren() {
-    return true;
-  }
-
-  @Override
-  public boolean shouldDelayChildPressedState() {
-    return false;
   }
 
   public void setCallback(Callback callback) {
@@ -234,6 +221,26 @@ public class TopBar extends FrameLayout implements View.OnClickListener {
 
   public ActionButton getActionOverflow() {
     return mActionOverFlow;
+  }
+
+  @Override
+  protected void dispatchDraw(Canvas canvas) {
+    // draw top line
+    canvas.drawLine(0, 0, getMeasuredWidth(), 0, mTopLinePaint);
+    canvas.drawLine(0, getMeasuredHeight() - 1, getMeasuredWidth(), getMeasuredHeight() - 1, mBotLinePaint);
+
+    super.dispatchDraw(canvas);
+  }
+
+  @Override
+  public boolean addStatesFromChildren() {
+    return true;
+  }
+
+  @Override
+  protected LayoutParams generateDefaultLayoutParams() {
+    Log.d("TopBar", "generateDefaultLayoutParams");
+    return new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
   }
 
   @SuppressWarnings ("SuspiciousNameCombination")
@@ -329,12 +336,25 @@ public class TopBar extends FrameLayout implements View.OnClickListener {
   }
 
   @Override
-  protected void dispatchDraw(Canvas canvas) {
-    // draw top line
-    canvas.drawLine(0, 0, getMeasuredWidth(), 0, mTopLinePaint);
-    canvas.drawLine(0, getMeasuredHeight() - 1, getMeasuredWidth(), getMeasuredHeight() - 1, mBotLinePaint);
+  public LayoutParams generateLayoutParams(AttributeSet attrs) {
+    Log.d("TopBar", "generateLayoutParams from attrs");
+    return new LayoutParams(getContext(), attrs);
+  }
 
-    super.dispatchDraw(canvas);
+  @Override
+  public boolean shouldDelayChildPressedState() {
+    return false;
+  }
+
+  @Override
+  protected boolean checkLayoutParams(ViewGroup.LayoutParams p) {
+    return p instanceof LayoutParams;
+  }
+
+  @Override
+  protected LayoutParams generateLayoutParams(ViewGroup.LayoutParams p) {
+    Log.d("TopBar", "generateLayoutParams from source");
+    return new LayoutParams(p);
   }
 
   private ActionButton buildActionItemView(Drawable drawable, Drawable backgroundDrawable, LayoutParams layoutParams) {
@@ -369,44 +389,6 @@ public class TopBar extends FrameLayout implements View.OnClickListener {
     return button;
   }
 
-  @Override
-  protected LayoutParams generateDefaultLayoutParams() {
-    Log.d("TopBar", "generateDefaultLayoutParams");
-    return new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-  }
-
-  @Override
-  public LayoutParams generateLayoutParams(AttributeSet attrs) {
-    Log.d("TopBar", "generateLayoutParams from attrs");
-    return new LayoutParams(getContext(), attrs);
-  }
-
-  @Override
-  protected LayoutParams generateLayoutParams(ViewGroup.LayoutParams p) {
-    Log.d("TopBar", "generateLayoutParams from source");
-    return new LayoutParams(p);
-  }
-
-  @Override
-  protected boolean checkLayoutParams(ViewGroup.LayoutParams p) {
-    return p instanceof LayoutParams;
-  }
-
-  public static class LayoutParams extends FrameLayout.LayoutParams {
-
-    public LayoutParams(Context c, AttributeSet attrs) {
-      super(c, attrs);
-    }
-
-    public LayoutParams(int width, int height) {
-      super(width, height);
-    }
-
-    public LayoutParams(ViewGroup.LayoutParams source) {
-      super(source);
-    }
-  }
-
   public interface ActionAdapter {
     String getTitle(int position);
 
@@ -435,5 +417,20 @@ public class TopBar extends FrameLayout implements View.OnClickListener {
     void onSearchTextChanged(CharSequence cs);
 
     void onActionSearchClicked(CharSequence cs);
+  }
+
+  public static class LayoutParams extends FrameLayout.LayoutParams {
+
+    public LayoutParams(Context c, AttributeSet attrs) {
+      super(c, attrs);
+    }
+
+    public LayoutParams(int width, int height) {
+      super(width, height);
+    }
+
+    public LayoutParams(ViewGroup.LayoutParams source) {
+      super(source);
+    }
   }
 }

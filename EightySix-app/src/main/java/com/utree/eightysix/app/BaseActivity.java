@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,7 +67,8 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   };
   public View mVProgressMask;
   private FrameLayout mProgressBar;
-  private FrameLayout mFlLoadingWrapper;
+  private LinearLayout mLlLoadingWrapper;
+  private TextView mTvLoadingText;
   private ViewGroup mBaseView;
   private TopBar mTopBar;
   private ObjectAnimator mHideTopBarAnimator;
@@ -135,12 +137,12 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     if (mShowProgressBarAnimator == null) {
       mShowProgressBarAnimator = new AnimatorSet();
       mShowProgressBarAnimator.playTogether(
-          ObjectAnimator.ofFloat(mFlLoadingWrapper,
+          ObjectAnimator.ofFloat(mLlLoadingWrapper,
               "translationY",
-              (getTranslationY(mFlLoadingWrapper) == 0) ?
-                  mFlLoadingWrapper.getMeasuredHeight() : getTranslationY(mFlLoadingWrapper),
+              (getTranslationY(mLlLoadingWrapper) == 0) ?
+                  mLlLoadingWrapper.getMeasuredHeight() : getTranslationY(mLlLoadingWrapper),
               0),
-          ObjectAnimator.ofFloat(mFlLoadingWrapper, "alpha", 0f, 1f)
+          ObjectAnimator.ofFloat(mLlLoadingWrapper, "alpha", 0f, 1f)
       );
       mShowProgressBarAnimator.setDuration(500);
     }
@@ -152,11 +154,11 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     if (mHideProgressBarAnimator == null) {
       mHideProgressBarAnimator = new AnimatorSet();
       mHideProgressBarAnimator.playTogether(
-          ObjectAnimator.ofFloat(mFlLoadingWrapper,
+          ObjectAnimator.ofFloat(mLlLoadingWrapper,
               "translationY",
-              getTranslationY(mFlLoadingWrapper),
-              mFlLoadingWrapper.getMeasuredHeight()),
-          ObjectAnimator.ofFloat(mFlLoadingWrapper, "alpha", 1f, 0f)
+              getTranslationY(mLlLoadingWrapper),
+              mLlLoadingWrapper.getMeasuredHeight()),
+          ObjectAnimator.ofFloat(mLlLoadingWrapper, "alpha", 1f, 0f)
       );
       mHideProgressBarAnimator.setDuration(500);
       mHideProgressBarAnimator.addListener(new Animator.AnimatorListener() {
@@ -168,7 +170,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
         @Override
         public void onAnimationEnd(Animator animation) {
           mProgressBar.setVisibility(View.INVISIBLE);
-          ViewHelper.setTranslationY(mFlLoadingWrapper, 0);
+          ViewHelper.setTranslationY(mLlLoadingWrapper, 0);
         }
 
         @Override
@@ -186,6 +188,14 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     mHideProgressBarAnimator.start();
 
     hideProgressMask();
+  }
+
+  public void setLoadingText(int res) {
+    mTvLoadingText.setText(res);
+  }
+
+  public void setLoadingText(String text) {
+    mTvLoadingText.setText(text);
   }
 
   public final <T extends Response> void request(Object request, OnResponse<T> onResponse, Class<T> clz) {
@@ -368,11 +378,12 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
 
     mProgressBar = (FrameLayout) mBaseView.findViewById(R.id.progress_bar);
     mVProgressMask = mBaseView.findViewById(R.id.v_progress_mask);
-    mFlLoadingWrapper = (FrameLayout) mBaseView.findViewById(R.id.fl_loading_wrapper);
+    mLlLoadingWrapper = (LinearLayout) mBaseView.findViewById(R.id.fl_loading_wrapper);
+    mTvLoadingText = (TextView) mBaseView.findViewById(R.id.tv_loading);
 
     mTopBar.setCallback(this);
 
-    mFlLoadingWrapper.setBackgroundDrawable(
+    mLlLoadingWrapper.setBackgroundDrawable(
         new RoundRectDrawable(dp2px(15), getResources().getColor(R.color.apptheme_progress_bar_bg)));
 
     Layout layout = getClass().getAnnotation(Layout.class);
