@@ -397,9 +397,6 @@ public class FeedFragment extends BaseFragment {
   }
 
   private void requestFeeds(int id, final int page) {
-    if (mRefresherView != null) {
-      mRefresherView.setRefreshing(true);
-    }
     getBaseActivity().request(new FeedsRequest(id, page), new OnResponse<FeedsResponse>() {
       @Override
       public void onResponse(FeedsResponse response) {
