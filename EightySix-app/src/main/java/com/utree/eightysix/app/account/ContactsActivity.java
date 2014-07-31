@@ -59,13 +59,10 @@ public class ContactsActivity extends BaseActivity {
 
   @Subscribe
   public void onContactCheckedChanged(ContactCheckedCountChanged changed) {
-    TextActionButton actionView = (TextActionButton) getTopBar().getActionView(0);
     if (changed.getCount() == 0) {
-      actionView.setEnabled(false);
-      actionView.setText("完成");
+      disableSendButton();
     } else {
-      actionView.setEnabled(true);
-      actionView.setText(String.format("完成(%d)", changed.getCount()));
+      enableSendButton();
     }
   }
 
@@ -133,6 +130,12 @@ public class ContactsActivity extends BaseActivity {
     });
 
     ContactsSyncService.start(this, true);
+
+    getTopBar().getActionView(0).setActionBackgroundDrawable(
+        new RoundRectDrawable(U.dp2px(2),
+            getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
+    ((TextActionButton) getTopBar().getActionView(0)).setTextColor(
+        getResources().getColor(R.color.apptheme_primary_grey_color_disabled));
   }
 
   @Override
@@ -173,4 +176,20 @@ public class ContactsActivity extends BaseActivity {
     }
   }
 
+  protected void enableSendButton() {
+    getTopBar().getActionView(0).setEnabled(true);
+    getTopBar().getActionView(0).setActionBackgroundDrawable(
+        new RoundRectDrawable(U.dp2px(2),
+            getResources().getColorStateList(R.color.apptheme_primary_btn_light)));
+    ((TextActionButton) getTopBar().getActionView(0)).setTextColor(Color.WHITE);
+  }
+
+  private void disableSendButton() {
+    getTopBar().getActionView(0).setEnabled(false);
+    getTopBar().getActionView(0).setActionBackgroundDrawable(
+        new RoundRectDrawable(U.dp2px(2),
+            getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
+    ((TextActionButton) getTopBar().getActionView(0)).setTextColor(
+        getResources().getColor(R.color.apptheme_primary_grey_color_disabled));
+  }
 }
