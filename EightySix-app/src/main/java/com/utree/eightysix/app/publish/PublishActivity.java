@@ -175,7 +175,7 @@ public class PublishActivity extends BaseActivity {
     mPublishLayout = new PublishLayout(this);
     setContentView(mPublishLayout);
 
-    onIvShuffleClicked();
+    mTvPostTip.setText(getHintText());
 
     //region To detect soft keyboard visibility change
     final View activityRootView = findViewById(android.R.id.content);
