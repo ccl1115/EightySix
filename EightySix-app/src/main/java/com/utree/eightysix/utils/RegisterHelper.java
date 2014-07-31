@@ -1,6 +1,7 @@
 package com.utree.eightysix.utils;
 
 import com.utree.eightysix.U;
+import de.akquinet.android.androlog.Log;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -22,6 +23,7 @@ public final class RegisterHelper {
     }
     U.getBus().register(object);
     mWeakReferences.add(new WeakReference<Object>(object));
+    Log.d("RegisterHelper", "register: " + object.toString());
   }
 
   public void unregister(Object object) {
@@ -32,10 +34,11 @@ public final class RegisterHelper {
         try {
           U.getBus().unregister(object);
           obj.clear();
+          iterator.remove();
+          Log.d("RegisterHelper", "unregister: " + object.toString());
         } catch (IllegalArgumentException ignored) {
         }
       }
-      iterator.remove();
     }
   }
 }
