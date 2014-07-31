@@ -54,6 +54,7 @@ public class RandomSceneTextView extends LinearLayout {
 
     LayoutParams params = new LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
     params.gravity = Gravity.CENTER_HORIZONTAL;
+    params.topMargin = U.dp2px(8);
     addView(mIv, params);
 
     params = new LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
