@@ -463,7 +463,7 @@ public class PublishActivity extends BaseActivity {
       if (animation) {
         fadeInAnimation(mAivPostBg);
       }
-      mImageUploadUrl = U.getCloudStorage().getUrl(U.getConfig("storage.bg.bucket.name"),
+      mImageUploadUrl = U.getCloudStorage().getUrl(U.getBgBucket(),
           "",
           getResources().getResourceEntryName(tv.resourceId) + ".png");
       mImageUploadFinished = true;

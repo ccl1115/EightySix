@@ -451,9 +451,9 @@ public class ImageUtils {
       final String hash = IOUtils.fileHash(mFile);
       final String path = hash.substring(0, 1) + File.separator + hash.substring(2, 4) + File.separator;
       final String key = hash.substring(5);
-      Storage.Result result = U.getCloudStorage().put(U.getConfig("storage.image.bucket.name"), path, key, file);
+      Storage.Result result = U.getCloudStorage().put(U.getImageBucket(), path, key, file);
       if (result.error == 0 && TextUtils.isEmpty(result.msg)) {
-        String url = U.getCloudStorage().getUrl(U.getConfig("storage.image.bucket.name"), path, key);
+        String url = U.getCloudStorage().getUrl(U.getImageBucket(), path, key);
         cacheImage(getUrlHash(url), file);
         mFileHash = hash;
         mUrl = url;
@@ -481,7 +481,7 @@ public class ImageUtils {
    * @return the id of this resource
    */
   private static int localResource(String url) {
-    if (url.contains(U.getConfig("storage.bg.bucket.name"))) {
+    if (url.contains(U.getBgBucket())) {
       String res = url.substring(url.lastIndexOf('/') + 1).split("\\.")[0];
       return U.getContext().getResources().getIdentifier(res, "drawable", U.getContext().getPackageName());
     }

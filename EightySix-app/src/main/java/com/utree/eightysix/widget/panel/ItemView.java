@@ -13,7 +13,6 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.drawable.AsyncImageDrawable;
 import com.utree.eightysix.utils.ImageUtils;
-import de.akquinet.android.androlog.Log;
 
 /**
  * @author simon
@@ -81,7 +80,7 @@ public class ItemView extends View implements View.OnClickListener {
     } else if(value.type == TypedValue.TYPE_STRING) {
       mDrawable = new AsyncImageDrawable(getResources(), value.string.toString());
     } else if (value.type == TypedValue.TYPE_REFERENCE) {
-      String imageUrl = U.getCloudStorage().getUrl(U.getConfig("storage.bg.bucket.name"),
+      String imageUrl = U.getCloudStorage().getUrl(U.getBgBucket(),
           "",
           getResources().getResourceEntryName(value.resourceId) + ".png");
       mDrawable = new BitmapDrawable(getResources(),

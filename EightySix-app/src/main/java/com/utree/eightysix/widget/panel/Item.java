@@ -64,7 +64,7 @@ public class Item {
 
   private TypedValue parseBgImage(XmlPullParser parser) throws XmlPullParserException, IOException {
     parser.next();
-    final String url = String.format("http://%s.%s/%s", U.getConfig("storage.bg.bucket.name"), U.getConfig("storage.host"), parser.getText());
+    final String url = String.format("http://%s.%s/%s", U.getBgBucket(), U.getConfig("storage.host"), parser.getText());
     TypedValue tv = new TypedValue();
     tv.string = url;
     tv.type = TypedValue.TYPE_STRING;
