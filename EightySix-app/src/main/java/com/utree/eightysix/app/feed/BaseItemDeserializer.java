@@ -52,6 +52,7 @@ public class BaseItemDeserializer implements JsonDeserializer<BaseItem> {
       question.bgColor = safeGetAsString(obj.get("bgColor"));
       question.bgUrl = safeGetAsString(obj.get("bgUrl"));
       question.content = safeGetAsString(obj.get("content"));
+      question.buttonText = safeGetAsString(obj.get("buttonText"));
       questionSet.lists.add(question);
     }
 

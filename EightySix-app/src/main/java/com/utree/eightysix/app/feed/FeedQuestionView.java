@@ -74,6 +74,7 @@ public class FeedQuestionView extends FrameLayout {
     QuestionSet.Question question = mQuestionSet.lists.get(mLastIndex);
 
     mContent.setText(question.content);
+    mRbAskQuestion.setText(question.buttonText);
     if (TextUtils.isEmpty(question.bgUrl)) {
       mAivBg.setUrl(null);
       mContent.setBackgroundColor(ColorUtil.strToColor(question.bgColor));
