@@ -471,7 +471,7 @@ public class FeedActivity extends BaseActivity {
   }
 
   private void setSideHighlight(Circle circle) {
-    if (mSideCircles == null) return;
+    if (mSideCircles == null || circle == null) return;
     for (Circle c : mSideCircles) {
       c.selected = circle.equals(c);
     }
@@ -493,7 +493,6 @@ public class FeedActivity extends BaseActivity {
 
       @Override
       public void onResponseError(Throwable e) {
-        e.printStackTrace();
       }
 
       @Override
