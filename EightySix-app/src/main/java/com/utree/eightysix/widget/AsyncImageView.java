@@ -56,7 +56,7 @@ public class AsyncImageView extends ImageView {
 
     setImageBitmap(null);
 
-    ImageUtils.asyncLoad(url, mUrlHash);
+    ImageUtils.asyncLoadWithRes(url, mUrlHash);
   }
 
   @Override

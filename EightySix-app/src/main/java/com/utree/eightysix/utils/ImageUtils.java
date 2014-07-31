@@ -272,6 +272,23 @@ public class ImageUtils {
     return syncLoadResourceBitmap(resId, hash, U.dp2px(48), U.dp2px(48));
   }
 
+  public static void asyncLoadWithRes(final String url, final String hash) {
+
+    Bitmap bitmap = sLruCache.get(hash);
+
+    if (bitmap == null) {
+      final int id = localResource(url);
+
+      if (id != 0) {
+        new ImageResDecodeWorker(id, hash).execute();
+      } else {
+        asyncLoad(url, hash);
+      }
+    } else {
+      U.getBus().post(new ImageLoadedEvent(hash, bitmap));
+    }
+  }
+
   public static void asyncLoadThumbnail(final String url, final String hash) {
     asyncLoad(url, hash, U.dp2px(48), U.dp2px(48));
   }
@@ -319,17 +336,6 @@ public class ImageUtils {
   public static void asyncLoad(final String url, final String hash) {
     Bitmap bitmap = sLruCache.get(hash);
     if (bitmap == null) {
-
-      final int id = localResource(url);
-
-      if (id != 0) {
-        bitmap = syncLoadResourceBitmap(id, hash);
-        if (bitmap != null) {
-          U.getBus().post(new ImageLoadedEvent(hash, bitmap));
-          return;
-        }
-      }
-
       try {
         final DiskLruCache.Snapshot snapshot = U.getImageCache().get(hash);
         if (snapshot != null) {
@@ -521,6 +527,30 @@ public class ImageUtils {
 
     public String getUrl() {
       return mUrl;
+    }
+  }
+
+  private static class ImageResDecodeWorker extends AsyncTask<Void, Void, Bitmap> {
+    private String mHash;
+    private int mRes;
+
+    private ImageResDecodeWorker(int res, String hash) {
+      mRes = res;
+      mHash = hash;
+    }
+
+    @Override
+    protected Bitmap doInBackground(Void... params) {
+      return safeDecodeBitmap(mRes);
+    }
+
+    @Override
+    protected void onPostExecute(Bitmap bitmap) {
+      if (bitmap != null) {
+        sLruCache.put(mHash, bitmap);
+      }
+
+      U.getBus().post(new ImageLoadedEvent(mHash, bitmap));
     }
   }
 
