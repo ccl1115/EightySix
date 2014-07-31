@@ -32,10 +32,13 @@ public class FeedbackActivity extends PublishActivity {
   }
 
   @Override
+  protected String getHintText() {
+    return getString(R.string.give_us_feedback);
+  }
+
+  @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
-    mTvPostTip.setText(getString(R.string.give_us_feedback));
 
     mTvBottom.setVisibility(View.INVISIBLE);
     mFlPortrait.setVisibility(View.INVISIBLE);

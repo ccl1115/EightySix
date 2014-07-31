@@ -156,6 +156,11 @@ public class PublishActivity extends BaseActivity {
     confirmFinish();
   }
 
+  protected String getHintText() {
+    return getString(R.string.post_anonymously);
+
+  }
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -182,12 +187,12 @@ public class PublishActivity extends BaseActivity {
 
           if (!mIsOpened) {
             mPublishLayout.hidePanel();
-            mPostEditText.setHint("");
+            mTvPostTip.setText("");
           }
           mIsOpened = true;
         } else if (mIsOpened) {
           mPublishLayout.showPanel();
-          mPostEditText.setHint(R.string.post_anonymously);
+          mTvPostTip.setText(getHintText());
           mIsOpened = false;
         }
       }
