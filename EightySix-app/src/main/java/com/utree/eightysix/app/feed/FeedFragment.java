@@ -364,9 +364,11 @@ public class FeedFragment extends BaseFragment {
   @Subscribe
   public void onPostPublishedEvent(PostPublishedEvent event) {
     if (mFeedAdapter != null) {
-      mFeedAdapter.add(event.getPost());
-      mRstvEmpty.setVisibility(View.INVISIBLE);
-      mLvFeed.setSelection(0);
+      if (mCircle != null && mCircle.id == event.getCircleId()) {
+        mFeedAdapter.add(event.getPost());
+        mRstvEmpty.setVisibility(View.INVISIBLE);
+        mLvFeed.setSelection(0);
+      }
     }
   }
 

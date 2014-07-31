@@ -368,8 +368,9 @@ public class PublishActivity extends BaseActivity {
   protected void showDescriptionDialogWhenFirstRun() {
     if (Env.firstRun(FIRST_RUN_KEY)) {
       showDescriptionDialog();
+    } else {
+      onIvShuffleClicked();
     }
-
   }
 
   protected void enablePublishButton() {
@@ -658,7 +659,7 @@ public class PublishActivity extends BaseActivity {
             post.content = mPostEditText.getText().toString();
             post.source = "认识的人";
             post.type = BaseItem.TYPE_POST;
-            U.getBus().post(new PostPublishedEvent(post));
+            U.getBus().post(new PostPublishedEvent(post, mFactoryId));
 
             finish();
           } else {

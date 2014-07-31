@@ -44,6 +44,8 @@ public class FeedbackActivity extends PublishActivity {
     mFlPortrait.setVisibility(View.INVISIBLE);
 
     showSoftKeyboard(mPostEditText);
+
+    onIvShuffleClicked();
   }
 
   @Override
