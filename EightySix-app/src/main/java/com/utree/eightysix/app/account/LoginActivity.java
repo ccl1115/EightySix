@@ -212,7 +212,7 @@ public class LoginActivity extends BaseActivity {
             } else {
               showToast(R.string.server_object_error);
             }
-          } else if (response.code == 2450) {
+          } else if (response.code == 2450 || response.code == 140371) {
             mLlCaptcha.setVisibility(View.VISIBLE);
             requestCaptcha();
           }
