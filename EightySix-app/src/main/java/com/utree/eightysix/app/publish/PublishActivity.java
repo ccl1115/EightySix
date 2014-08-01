@@ -368,8 +368,6 @@ public class PublishActivity extends BaseActivity {
   protected void showDescriptionDialogWhenFirstRun() {
     if (Env.firstRun(FIRST_RUN_KEY)) {
       showDescriptionDialog();
-    } else {
-      onIvShuffleClicked();
     }
   }
 

@@ -25,6 +25,8 @@
                 android:id="@+id/tv_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:gravity="bottom|right"
+                android:padding="16dp"
                 android:background="@android:color/transparent"/>
 
         <TextView

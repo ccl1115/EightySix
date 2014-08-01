@@ -92,7 +92,7 @@ public class FeedPromotionView extends FrameLayout {
     if (mLlBottom.getVisibility() == VISIBLE) {
       widthSize += U.dp2px(44);
     }
-    super.onMeasure(widthMeasureSpec, widthSize - U.dp2px(16) + MeasureSpec.EXACTLY);
+    super.onMeasure(widthMeasureSpec, widthSize - U.dp2px(40) + MeasureSpec.EXACTLY);
   }
 
   @OnClick (R.id.tv_content)
