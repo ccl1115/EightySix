@@ -71,6 +71,9 @@ public class ActionButton extends FrameLayout {
   }
 
   public void setCount(int c) {
+    if (c > 99) {
+      c = 99;
+    }
     mCountIndicator.setText(String.valueOf(c));
     if (c > 0) {
       mCountIndicator.setVisibility(VISIBLE);
