@@ -32,6 +32,7 @@ import com.utree.eightysix.request.RegHotRequest;
 import com.utree.eightysix.response.PostResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.IndicatorView;
 import de.akquinet.android.androlog.Log;
@@ -48,18 +49,11 @@ public class GuideActivity extends BaseActivity {
   private ValueAnimator mPageColorAnimator =
       ValueAnimator.ofObject(new ArgbEvaluator(), PAGE_1_BACKGROUND_COLOR, PAGE_2_BACKGROUND_COLOR, PAGE_3_BACKGROUND_COLOR);
   private static final int[] RANDOM_BACKGROUND = {
-      R.drawable.bg_13,
-      R.drawable.bg_94,
       R.drawable.bg_20,
-      R.drawable.bg_96,
-      R.drawable.bg_97,
-      R.drawable.bg_24,
-      R.drawable.bg_28,
-      R.drawable.bg_31,
-      R.drawable.bg_101,
-      R.drawable.bg_40,
-      R.drawable.bg_46,
+      R.drawable.bg_94,
       R.drawable.bg_49,
+      R.drawable.bg_31,
+      R.drawable.bg_97,
   };
   @InjectView (R.id.vp_guide)
   public ViewPager mVpGuide;
