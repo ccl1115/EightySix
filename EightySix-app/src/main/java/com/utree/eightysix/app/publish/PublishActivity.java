@@ -53,6 +53,7 @@ import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.IndicatorView;
 import com.utree.eightysix.widget.PostEditText;
 import com.utree.eightysix.widget.TextActionButton;
+import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TopBar;
 import com.utree.eightysix.widget.panel.GridPanel;
 import com.utree.eightysix.widget.panel.Item;
@@ -110,6 +111,7 @@ public class PublishActivity extends BaseActivity {
   private int mBgColor = Color.WHITE;
 
   protected int mFactoryId;
+  private ThemedDialog mQuitConfirmDialog;
 
   public static void start(Context context, int factoryId) {
     Intent intent = new Intent(context, PublishActivity.class);
@@ -572,7 +574,25 @@ public class PublishActivity extends BaseActivity {
     if (TextUtils.isEmpty(mPostEditText.getText())) {
       super.onBackPressed();
     } else {
-      mConfirmQuitDialog.show();
+      if (mQuitConfirmDialog == null) {
+        mQuitConfirmDialog = new ThemedDialog(this);
+        mQuitConfirmDialog.setTitle("你有内容未发表，确认离开？");
+        mQuitConfirmDialog.setPositive(R.string.okay, new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            finish();
+          }
+        });
+        mQuitConfirmDialog.setRbNegative(R.string.cancel, new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            mQuitConfirmDialog.dismiss();
+          }
+        });
+      }
+      if (!mQuitConfirmDialog.isShowing()) {
+        mQuitConfirmDialog.show();
+      }
     }
   }
 
