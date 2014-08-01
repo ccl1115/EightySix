@@ -465,6 +465,9 @@ public class FeedFragment extends BaseFragment {
         } else {
           requestFeeds(id, page);
         }
+        mRefresherView.setRefreshing(false);
+        mLvFeed.stopLoadMore();
+        getBaseActivity().hideProgressBar();
       }
     }, FeedsResponse.class);
   }
