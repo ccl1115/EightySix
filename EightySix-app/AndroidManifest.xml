@@ -73,7 +73,7 @@
 
         <activity android:configChanges="orientation|keyboardHidden" android:name="com.tencent.connect.common.AssistActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
-        <activity android:exported="@bool/exported" android:name=".app.intro.IntroActivity" android:screenOrientation="portrait">
+        <activity android:name=".app.intro.IntroActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -81,45 +81,45 @@
             </intent-filter>
         </activity>
 
-        <activity android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.account.RegisterActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateVisible"/>
+        <activity android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.account.RegisterActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden"/>
 
-        <activity android:exported="@bool/exported" android:name=".app.account.ForgetPwdActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateVisible"/>
+        <activity android:exported="@bool/exported" android:name=".app.account.ForgetPwdActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden"/>
 
-        <activity android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.account.LoginActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateVisible"/>
+        <activity android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.account.LoginActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden"/>
 
-        <activity android:configChanges="keyboardHidden|orientation|keyboard|screenSize" android:exported="@bool/exported" android:name=".app.account.ImportContactActivity" android:screenOrientation="portrait"/>
+        <activity android:exported="@bool/exported" android:name=".app.account.ImportContactActivity" android:screenOrientation="portrait"/>
 
-        <activity android:configChanges="keyboardHidden|orientation|keyboard|screenSize" android:exported="@bool/exported" android:clearTaskOnLaunch="true" android:launchMode="singleTask" android:name=".app.feed.FeedActivity" android:screenOrientation="portrait"/>
+        <activity android:exported="@bool/exported" android:clearTaskOnLaunch="true" android:launchMode="singleTask" android:name=".app.feed.FeedActivity" android:screenOrientation="portrait"/>
 
-        <activity android:configChanges="keyboardHidden|orientation|keyboard|screenSize" android:exported="@bool/exported" android:name=".app.intro.GuideActivity" android:screenOrientation="portrait"/>
+        <activity android:exported="@bool/exported" android:name=".app.intro.GuideActivity" android:screenOrientation="portrait"/>
 
-        <activity android:configChanges="keyboardHidden|orientation|keyboard|screenSize" android:exported="@bool/exported" android:name=".app.publish.PublishActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <activity android:exported="@bool/exported" android:name=".app.publish.PublishActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden|adjustResize"/>
 
-        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:exported="@bool/exported" android:name=".app.circle.CircleSearchActivity" android:screenOrientation="portrait" android:windowSoftInputMode="adjustNothing"/>
+        <activity android:exported="@bool/exported" android:name=".app.circle.CircleSearchActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden"/>
 
-        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:exported="@bool/exported" android:name=".app.circle.CircleCreateActivity" android:screenOrientation="portrait"/>
+        <activity android:exported="@bool/exported" android:name=".app.circle.CircleCreateActivity" android:screenOrientation="portrait"/>
 
-        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:exported="@bool/exported" android:name=".app.feed.PostActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden" android:launchMode="singleTask"/>
+        <activity android:exported="@bool/exported" android:name=".app.feed.PostActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden" android:launchMode="singleTask"/>
 
-        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:exported="@bool/exported" android:name=".app.publish.FeedbackActivity" android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize"/>
+        <activity android:exported="@bool/exported" android:name=".app.publish.FeedbackActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden|adjustResize"/>
 
-        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:exported="@bool/exported" android:name=".app.account.PraiseStaticActivity" android:screenOrientation="portrait"/>
+        <activity android:exported="@bool/exported" android:name=".app.account.PraiseStaticActivity" android:screenOrientation="portrait"/>
 
-        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:exported="@bool/exported" android:name=".app.msg.MsgActivity" android:screenOrientation="portrait"/>
+        <activity android:exported="@bool/exported" android:name=".app.msg.MsgActivity" android:screenOrientation="portrait"/>
 
-        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:exported="@bool/exported" android:name=".app.circle.BaseCirclesActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateAlwaysHidden"/>
+        <activity android:exported="@bool/exported" android:name=".app.circle.BaseCirclesActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateAlwaysHidden"/>
 
-        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:exported="@bool/exported" android:name=".app.settings.MainSettingsActivity" android:screenOrientation="portrait"/>
+        <activity android:exported="@bool/exported" android:name=".app.settings.MainSettingsActivity" android:screenOrientation="portrait"/>
 
-        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:exported="@bool/exported" android:name=".app.account.InviteActivity" android:screenOrientation="portrait"/>
+        <activity android:exported="@bool/exported" android:name=".app.account.InviteActivity" android:screenOrientation="portrait"/>
 
-        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:exported="@bool/exported" android:name=".app.account.ContactsActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden"/>
+        <activity android:exported="@bool/exported" android:name=".app.account.ContactsActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden"/>
 
-        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:exported="@bool/exported" android:name=".app.web.BaseWebActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateAlwaysHidden"/>
+        <activity android:exported="@bool/exported" android:name=".app.web.BaseWebActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden"/>
 
-        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:exported="@bool/exported" android:name=".app.msg.PraiseActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateAlwaysHidden"/>
+        <activity android:exported="@bool/exported" android:name=".app.msg.PraiseActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden"/>
 
-        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:exported="@bool/exported" android:name=".report.ReporterActivity" android:process=":report" android:screenOrientation="portrait"/>
+        <activity android:exported="@bool/exported" android:name=".report.ReporterActivity" android:process=":report" android:screenOrientation="portrait"/>
 
         <service android:enabled="true" android:name="com.baidu.location.f" android:process=":remote"/>
 
