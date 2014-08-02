@@ -244,6 +244,7 @@ public class BaseCirclesActivity extends BaseActivity {
           U.getAnalyser().trackEvent(BaseCirclesActivity.this, "circle_pull_refresh");
           mRefreshed = true;
           requestCircles(1);
+          showRefreshIndicator();
         }
       });
     }
@@ -357,6 +358,7 @@ public class BaseCirclesActivity extends BaseActivity {
       public void onResponseError(Throwable e) {
         mLvCircles.stopLoadMore();
         hideProgressBar();
+        hideRefreshIndicator();
         mRefresherView.setRefreshing(false);
         mRstvEmpty.setVisibility(View.VISIBLE);
       }
@@ -384,6 +386,7 @@ public class BaseCirclesActivity extends BaseActivity {
         }
         mLvCircles.stopLoadMore();
         hideProgressBar();
+        hideRefreshIndicator();
         mRefresherView.setRefreshing(false);
       }
 

@@ -39,6 +39,7 @@ import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.RequestData;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
+import com.utree.eightysix.widget.RefreshIndicator;
 import com.utree.eightysix.widget.TopBar;
 import java.io.InputStream;
 import java.util.Calendar;
@@ -71,6 +72,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   private TextView mTvLoadingText;
   private ViewGroup mBaseView;
   private TopBar mTopBar;
+  private RefreshIndicator mRefreshIndicator;
   private ObjectAnimator mHideTopBarAnimator;
   private ObjectAnimator mShowTopBarAnimator;
   private AnimatorSet mShowProgressBarAnimator;
@@ -382,6 +384,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     mVProgressMask = mBaseView.findViewById(R.id.v_progress_mask);
     mLlLoadingWrapper = (LinearLayout) mBaseView.findViewById(R.id.fl_loading_wrapper);
     mTvLoadingText = (TextView) mBaseView.findViewById(R.id.tv_loading);
+    mRefreshIndicator = (RefreshIndicator) mBaseView.findViewById(R.id.refresh_indicator);
 
     mTopBar.setCallback(this);
 
@@ -473,6 +476,14 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     } else {
       mTopBar.setVisibility(View.VISIBLE);
     }
+  }
+
+  public final void showRefreshIndicator() {
+    mRefreshIndicator.show();
+  }
+
+  public final void hideRefreshIndicator() {
+    mRefreshIndicator.hide();
   }
 
   protected final String getTopTitle() {
