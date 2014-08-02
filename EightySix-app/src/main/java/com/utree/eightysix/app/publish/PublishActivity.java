@@ -330,10 +330,8 @@ public class PublishActivity extends BaseActivity {
 
       @Override
       public TopBar.LayoutParams getLayoutParams(int position) {
-        TopBar.LayoutParams layoutParams = new TopBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.rightMargin = U.dp2px(8);
-        return layoutParams;
+        return new TopBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.MATCH_PARENT);
       }
     });
 

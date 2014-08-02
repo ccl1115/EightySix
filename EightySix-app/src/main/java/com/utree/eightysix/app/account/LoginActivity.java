@@ -31,6 +31,7 @@ import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.request.LoginRequest;
 import com.utree.eightysix.response.UserResponse;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.widget.RoundedButton;
@@ -181,6 +182,12 @@ public class LoginActivity extends BaseActivity {
       mEtPhoneNumber.setText(phone);
       mEtPhoneNumber.setSelection(phone.length());
     }
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    Env.setFirstRun(false);
   }
 
   @Override

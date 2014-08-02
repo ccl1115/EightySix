@@ -169,7 +169,6 @@ public class GuideActivity extends BaseActivity {
   @Override
   protected void onDestroy() {
     super.onDestroy();
-    Env.setFirstRun(false);
   }
 
   @Override

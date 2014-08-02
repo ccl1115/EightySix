@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
+import com.utree.eightysix.U;
 import de.akquinet.android.androlog.Log;
 
 /**
@@ -37,7 +39,11 @@ public class TextActionButton extends ActionButton {
 
   @Override
   public void setLayoutParams(ViewGroup.LayoutParams params) {
-    mTextAction.setLayoutParams(new LayoutParams(params));
+    LayoutParams p = new LayoutParams(params);
+    int h = U.dp2px(8);
+    int v = U.dp2px(12);
+    p.setMargins(h, v, h, v);
+    mTextAction.setLayoutParams(p);
     super.setLayoutParams(params);
   }
 

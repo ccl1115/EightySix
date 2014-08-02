@@ -28,6 +28,7 @@ import com.utree.eightysix.data.User;
 import com.utree.eightysix.request.RegisterRequest;
 import com.utree.eightysix.response.UserResponse;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.TopBar;
@@ -176,6 +177,12 @@ public class RegisterActivity extends BaseActivity {
       mEtPhoneNumber.setText(phoneNumber);
       mEtPhoneNumber.setSelection(mEtPhoneNumber.getText().length());
     }
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    Env.setFirstRun(false);
   }
 
   @Override

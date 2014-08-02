@@ -305,9 +305,12 @@ public class CircleSearchActivity extends BaseActivity {
             mPageInfo = response.object.page;
           }
         } else {
+          mLvResult.setVisibility(View.VISIBLE);
+          mLvHistory.setVisibility(View.GONE);
           mTvEmptyText.setText(String.format(getString(R.string.no_search_result), keyword));
         }
         hideProgressBar();
+        hideSoftKeyboard(getTopBar().getSearchEditText());
         updateHistoryData();
       }
     }, CirclesResponse.class);
