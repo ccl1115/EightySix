@@ -94,6 +94,7 @@
                     android:drawableLeft="@drawable/ic_search"
                     android:drawablePadding="4dp"
                     android:hint="@string/enter_search_keyword"
+                    android:maxLength="50"
                     android:textColor="@android:color/white"
                     android:paddingRight="56dp"
                     android:singleLine="true"
