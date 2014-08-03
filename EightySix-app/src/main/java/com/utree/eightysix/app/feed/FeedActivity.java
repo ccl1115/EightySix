@@ -21,12 +21,14 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.C;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.SyncClient;
 import com.utree.eightysix.app.account.ImportContactActivity;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
@@ -40,6 +42,7 @@ import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.Circle;
+import com.utree.eightysix.data.Sync;
 import com.utree.eightysix.event.HasNewPraiseEvent;
 import com.utree.eightysix.event.NewCommentCountEvent;
 import com.utree.eightysix.request.CircleSideRequest;
@@ -287,6 +290,23 @@ public class FeedActivity extends BaseActivity {
   protected void onResume() {
     super.onResume();
     M.getRegisterHelper().register(mLvSideCircles);
+
+    Sync sync = U.getSyncClient().getSync();
+    if (sync != null && sync.upgrade != null) {
+      int v = 0;
+      try {
+        v = Integer.parseInt(sync.upgrade.version);
+      } catch (NumberFormatException ignored) {
+      }
+      if (v > C.VERSION) {
+        getTopBar().getActionOverflow().setHasNew(true);
+        mMenuViewHolder.mRbSettingsDot.setVisibility(View.VISIBLE);
+      } else {
+        getTopBar().getActionOverflow().setHasNew(false);
+        mMenuViewHolder.mRbSettingsDot.setVisibility(View.INVISIBLE);
+      }
+    }
+
   }
 
   @Override
@@ -583,6 +603,9 @@ public class FeedActivity extends BaseActivity {
 
     @InjectView (R.id.rb_new_praise_dot)
     RoundedButton mRbNewPraiseDot;
+
+    @InjectView(R.id.rb_settings_dot)
+    RoundedButton mRbSettingsDot;
 
     MenuViewHolder(View view) {
       ButterKnife.inject(this, view);

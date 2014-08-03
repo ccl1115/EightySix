@@ -3,16 +3,19 @@ package com.utree.eightysix.app.settings;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
+import butterknife.InjectView;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.C;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
-import com.utree.eightysix.app.intro.GuideActivity;
 import com.utree.eightysix.data.Sync;
+import com.utree.eightysix.widget.RoundedButton;
 
 /**
  * @author simon
@@ -20,6 +23,9 @@ import com.utree.eightysix.data.Sync;
 @Layout (R.layout.activity_main_settings)
 @TopTitle (R.string.settings)
 public class MainSettingsActivity extends BaseActivity {
+
+  @InjectView (R.id.rb_upgrade_dot)
+  public RoundedButton mRbUpgradeDot;
 
   @OnClick (R.id.rb_logout)
   public void onRbLogoutClicked() {
@@ -42,8 +48,8 @@ public class MainSettingsActivity extends BaseActivity {
     dialog.show();
   }
 
-  @OnClick (R.id.tv_check_update)
-  public void onTvCheckUpdateClicked() {
+  @OnClick (R.id.ll_check_update)
+  public void onLlCheckUpdateClicked() {
     Sync sync = U.getSyncClient().getSync();
     if (sync != null && sync.upgrade != null) {
       new UpgradeDialog(this, sync.upgrade).show();
@@ -56,13 +62,27 @@ public class MainSettingsActivity extends BaseActivity {
   }
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+  public void onActionLeftClicked() {
+    finish();
   }
 
   @Override
-  public void onActionLeftClicked() {
-    finish();
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+
+    Sync sync = U.getSyncClient().getSync();
+    if (sync != null && sync.upgrade != null) {
+      int v = 0;
+      try {
+        v = Integer.parseInt(sync.upgrade.version);
+      } catch (NumberFormatException ignored) {
+      }
+      if (v > C.VERSION) {
+        mRbUpgradeDot.setVisibility(View.VISIBLE);
+      } else {
+        mRbUpgradeDot.setVisibility(View.INVISIBLE);
+      }
+    }
   }
 
   @Override

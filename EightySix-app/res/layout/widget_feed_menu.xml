@@ -140,6 +140,16 @@
                 android:textSize="14sp"
                 android:textColor="#ffef5724"/>
 
+        <com.utree.eightysix.widget.RoundedButton
+                android:id="@+id/rb_settings_dot"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_gravity="center_vertical"
+                android:visibility="invisible"
+                app:radius="5dp"
+                app:background="@color/apptheme_secondary_light_color"/>
+
     </LinearLayout>
 
     <View
