@@ -431,7 +431,6 @@ public class PublishActivity extends BaseActivity {
         public void onAnimationEnd(Animator animation) {
           mPostEditText.setTextColor(ColorUtil.monochromizing(tv.data));
           mTvPostTip.setTextColor(ColorUtil.monochromizing(tv.data));
-          mBgColor = tv.data;
         }
 
         @Override
@@ -446,6 +445,9 @@ public class PublishActivity extends BaseActivity {
       });
       animator.start();
       mAivPostBg.setImageDrawable(null);
+      mUseColor = true;
+      mBgColor = tv.data;
+      mImageUploadUrl = "";
     } else if (tv.type == TypedValue.TYPE_STRING) {
       mAivPostBg.setBackgroundColor(Color.TRANSPARENT);
       mAivPostBg.setUrl(tv.string.toString());
