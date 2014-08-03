@@ -15,6 +15,6 @@
             layout="@layout/widget_post_comment"
             android:id="@+id/fl_post_comment"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"/>
 </RelativeLayout>

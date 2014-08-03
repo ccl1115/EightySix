@@ -398,6 +398,7 @@ public class PostActivity extends BaseActivity {
 
   private void requestComment(final int page) {
     final String id = mPost == null ? mPostId : mPost.id;
+    showProgressBar();
     request(new PostCommentsRequest(id, page), new OnResponse<PostCommentsResponse>() {
       @Override
       public void onResponse(PostCommentsResponse response) {
