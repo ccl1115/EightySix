@@ -176,6 +176,10 @@ public class FeedActivity extends BaseActivity {
     } else {
       mDlContent.openDrawer(mLlSide);
     }
+    if (mSideCirclesAdapter == null || mSideCirclesAdapter.getCount() == 0) {
+      requestSideCircle();
+      showProgressBar();
+    }
   }
 
   @Override
@@ -509,6 +513,7 @@ public class FeedActivity extends BaseActivity {
           mLvSideCircles.setAdapter(mSideCirclesAdapter);
 
         }
+        hideProgressBar();
       }
 
 
