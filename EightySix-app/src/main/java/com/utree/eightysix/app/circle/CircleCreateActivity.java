@@ -202,16 +202,19 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
     request(request, new OnResponse<Response>() {
       @Override
       public void onResponse(Response response) {
+        hideProgressBar();
+        mEtCaptcha.setText("");
+        mRbCreate.setEnabled(true);
         if (response != null && response.code == 0) {
           showToast(getString(R.string.success_created), false);
           finish();
+        } else {
+          requestCaptcha();
         }
-        mEtCaptcha.setText("");
-        requestCaptcha();
-        mRbCreate.setEnabled(true);
       }
     }, Response.class);
 
     mRbCreate.setEnabled(false);
+    showProgressBar(true);
   }
 }
