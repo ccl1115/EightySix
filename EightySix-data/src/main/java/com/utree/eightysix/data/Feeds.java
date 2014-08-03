@@ -9,22 +9,22 @@ public class Feeds {
   @SerializedName ("myPraiseCount")
   public int myPraiseCount;
 
-  @SerializedName("factoryView")
+  @SerializedName ("factoryView")
   public Circle circle;
 
   /**
    * 是否被锁定
-   *
+   * <p/>
    * 1 锁定
    * 0 不锁定
    */
-  @SerializedName("lock")
+  @SerializedName ("lock")
   public int lock;
 
   /**
    * 赞百分比
    */
-  @SerializedName("praisePercent")
+  @SerializedName ("praisePercent")
   public String praisePercent;
 
   /**
@@ -32,46 +32,46 @@ public class Feeds {
    * 0 不变
    * -1 下降
    */
-  @SerializedName("upDown")
+  @SerializedName ("upDown")
   public int upDown;
 
   /**
    * 是否是用户当前工厂
-   *
+   * <p/>
    * 1 是
    * 0 不是
    */
-  @SerializedName("current")
+  @SerializedName ("current")
   public int current;
 
   /**
    * 圈子朋友数
    */
-  @SerializedName("currFactoryGoodFriends")
+  @SerializedName ("currFactoryGoodFriends")
   public int currFactoryFriends;
 
   /**
    * 被隐藏的帖子数
    */
-  @SerializedName("friendAnonymousPostCount")
+  @SerializedName ("friendAnonymousPostCount")
   public int hiddenCount;
 
   /**
    * 是否上传通讯录
-   *
+   * <p/>
    * 1 已上传
    * 0 未选择
    */
-  @SerializedName("upContact")
+  @SerializedName ("upContact")
   public int upContact;
 
   /**
    * 是否选择工厂
-   *
+   * <p/>
    * 1 已选择
    * 0 未选择
    */
-  @SerializedName("selectFactory")
+  @SerializedName ("selectFactory")
   public int selectFactory;
 
   @SerializedName ("posts")
@@ -79,4 +79,7 @@ public class Feeds {
 
   @SerializedName ("workerCount")
   public int workerCount;
+
+  @SerializedName ("fetchNoticeView")
+  public FetchNotification mFetchNotification;
 }
