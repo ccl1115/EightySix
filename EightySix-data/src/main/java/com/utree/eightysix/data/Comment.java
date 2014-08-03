@@ -43,6 +43,13 @@ public class Comment implements Serializable {
   @SerializedName("commentViewTime")
   public String time;
 
+  /**
+   * 1 deleted
+   * 0 not deleted
+   */
+  @SerializedName("delete")
+  public int delete;
+
   @Override
   public int hashCode() {
     return id.hashCode();

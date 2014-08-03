@@ -338,8 +338,6 @@ public class PostActivity extends BaseActivity {
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
           mPostCommentsAdapter.remove(request.commentId);
-          mPost.comments = Math.max(0, mPost.comments - 1);
-          U.getBus().post(mPost);
         }
       }
     }, Response.class);

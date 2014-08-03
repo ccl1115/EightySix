@@ -123,11 +123,10 @@ class PostCommentsAdapter extends BaseAdapter {
   }
 
   public void remove(String commentId) {
-    for (Iterator<Comment> iterator = mComments.iterator(); iterator.hasNext(); ) {
-      Comment c = iterator.next();
+    for (Comment c : mComments) {
       if (c == null) continue;
       if (c.id.equals(commentId)) {
-        iterator.remove();
+        c.delete = 1;
         notifyDataSetChanged();
         break;
       }
@@ -165,17 +164,13 @@ class PostCommentsAdapter extends BaseAdapter {
         notifyDataSetChanged();
       }
     });
-    holder.mTvComment.setText(comment.content);
     final String floor;
     if (comment.owner == 1) {
       floor = "楼主";
-      int color = resources.getColor(R.color.apptheme_primary_light_color);
-      holder.mTvComment.setTextColor(color);
       holder.mFpvPortrait.setEmotion(' ');
       holder.mFpvPortrait.setBackgroundResource(R.drawable.host_portrait);
     } else {
       floor = comment.floor + "楼";
-      holder.mTvComment.setTextColor(resources.getColor(android.R.color.black));
       if (comment.avatar != null && comment.avatar.length() == 1) {
         holder.mFpvPortrait.setEmotion(comment.avatar.charAt(0));
       }
@@ -184,6 +179,18 @@ class PostCommentsAdapter extends BaseAdapter {
       }
     }
     holder.mTvInfo.setText(String.format("%s | %s | 赞(%d)", floor, comment.time, comment.praise));
+
+    if (comment.delete == 1) {
+      holder.mTvComment.setText("该评论已被删除");
+      holder.mTvComment.setTextColor(resources.getColor(R.color.apptheme_primary_grey_color));
+    } else {
+      holder.mTvComment.setText(comment.content);
+      if (comment.owner == 1) {
+        holder.mTvComment.setTextColor(resources.getColor(R.color.apptheme_primary_light_color));
+      } else {
+        holder.mTvComment.setTextColor(resources.getColor(android.R.color.black));
+      }
+    }
     return convertView;
   }
 
