@@ -29,6 +29,7 @@ import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.TextActionButton;
 import com.utree.eightysix.widget.TopBar;
 import de.akquinet.android.androlog.Log;
+import java.util.ArrayList;
 
 /**
  * @author simon
@@ -159,9 +160,10 @@ public class ContactsActivity extends BaseActivity {
   }
 
   private void sendSMS(String phoneNumber, String message) {
-    PendingIntent intent = PendingIntent.getActivity(this, 0, new Intent(this, ContactsActivity.class), 0);
+    if (message == null) return;
     SmsManager sms = SmsManager.getDefault();
-    sms.sendTextMessage(phoneNumber, null, message, null, null);
+    ArrayList<String> strings = SmsManager.getDefault().divideMessage(message);
+    sms.sendMultipartTextMessage(phoneNumber, null, strings, null, null);
   }
 
   public static class ContactCheckedCountChanged {
