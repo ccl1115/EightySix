@@ -12,7 +12,9 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.feed.event.InviteClickedEvent;
 import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
+import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
 import com.utree.eightysix.data.QuestionSet;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.widget.AsyncImageView;
@@ -68,6 +70,11 @@ public class FeedQuestionView extends FrameLayout {
   @OnClick (R.id.rb_ask_question)
   public void onRbAskQuestionClicked() {
     U.getBus().post(new StartPublishActivityEvent());
+  }
+
+  @OnClick (R.id.rb_share)
+  public void onRbShareClicked() {
+    U.getBus().post(new UnlockClickedEvent());
   }
 
   protected void setQuestion() {
