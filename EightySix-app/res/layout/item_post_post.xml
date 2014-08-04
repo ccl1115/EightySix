@@ -48,6 +48,7 @@
                 android:gravity="center_vertical"
                 android:textSize="14sp"
                 android:textColor="@android:color/white"
+                android:minWidth="50dp"
                 android:padding="5dp"/>
 
         <TextView
@@ -57,6 +58,7 @@
                 android:gravity="center_vertical"
                 android:textSize="14sp"
                 android:textColor="@android:color/white"
+                android:minWidth="50dp"
                 android:padding="5dp"/>
 
     </LinearLayout>
