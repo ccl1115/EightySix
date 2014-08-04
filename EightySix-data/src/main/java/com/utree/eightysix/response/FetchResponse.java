@@ -9,6 +9,6 @@ import com.utree.eightysix.rest.Response;
  */
 public class FetchResponse extends Response {
 
-  @SerializedName("fetchNoticeView")
-  public FetchNotification fetchNotification;
+  @SerializedName("object")
+  public FetchNotification object;
 }

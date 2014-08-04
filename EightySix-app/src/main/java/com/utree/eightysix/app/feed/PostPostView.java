@@ -88,7 +88,7 @@ public class PostPostView extends BasePostView {
         if (event.getBitmap() == null) {
           setPostTheme(Color.WHITE);
         } else {
-          ColorUtil.asyncThemedColor(event.getBitmap());
+          ColorUtil.asyncThemedColor(event.getHash(), event.getBitmap());
         }
       }
     }

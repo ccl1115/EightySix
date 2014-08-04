@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import com.utree.eightysix.U;
 import de.akquinet.android.androlog.Log;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import org.michaelevans.colorart.library.ColorArt;
 
 /**
@@ -14,7 +15,7 @@ import org.michaelevans.colorart.library.ColorArt;
 public class ColorUtil {
   private static final String TAG = "ColorUtil";
 
-  private static HashMap<String, Integer> mCachedColor = new HashMap<String, Integer>();
+  private static ConcurrentHashMap<String, Integer> mCachedColor = new ConcurrentHashMap<String, Integer>();
 
   public static int strToColor(String color) {
     try {
@@ -33,33 +34,35 @@ public class ColorUtil {
     return (0x4b << 24) + (color & 0xffffff);
   }
 
-  public static void asyncThemedColor(final Bitmap bitmap) {
+  public static void asyncThemedColor(final String hash, final Bitmap bitmap) {
     if (bitmap == null) return;
-    if (mCachedColor.containsKey(String.valueOf(bitmap.hashCode()))) {
+    if (mCachedColor.containsKey(hash)) {
       Log.d(TAG, "Get color from cache");
-      U.getBus().post(new ThemedColorEvent(bitmap, mCachedColor.get(String.valueOf(bitmap.hashCode()))));
+      U.getBus().post(new ThemedColorEvent(bitmap, mCachedColor.get(hash)));
     } else {
       Log.d(TAG, "Get color from ColorArt");
-      new ThemedColorWorker(bitmap).execute();
+      new ThemedColorWorker(hash, bitmap).execute();
     }
   }
 
-  private static int themedColor(final Bitmap bitmap) {
+  private static int themedColor(final String hash, final Bitmap bitmap) {
     final int color = new ColorArt(bitmap).getBackgroundColor();
-    mCachedColor.put(String.valueOf(bitmap.hashCode()), color);
+    mCachedColor.put(hash, color);
     return color;
   }
 
   private static class ThemedColorWorker extends AsyncTask<Void, Void, Integer> {
     private Bitmap mBitmap;
+    private String mHash;
 
-    public ThemedColorWorker(Bitmap bitmap) {
+    public ThemedColorWorker(String hash, Bitmap bitmap) {
       mBitmap = bitmap;
+      mHash = hash;
     }
 
     @Override
     protected Integer doInBackground(Void... params) {
-      return themedColor(mBitmap);
+      return themedColor(mHash, mBitmap);
     }
 
     @Override

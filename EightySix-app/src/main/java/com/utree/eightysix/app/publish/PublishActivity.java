@@ -470,7 +470,7 @@ public class PublishActivity extends BaseActivity {
 
       Bitmap bitmap = ImageUtils.syncLoadResourceBitmap(tv.resourceId, ImageUtils.getUrlHash(mImageUploadUrl));
       mAivPostBg.setImageBitmap(bitmap);
-      ColorUtil.asyncThemedColor(bitmap);
+      ColorUtil.asyncThemedColor(ImageUtils.getUrlHash(mImageUploadUrl), bitmap);
       //Log.d("PublishActivity", "URL: " + mImageUploadUrl);
       mUseColor = false;
       mBgColor = Color.WHITE;
@@ -487,7 +487,7 @@ public class PublishActivity extends BaseActivity {
   public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
     if (!TextUtils.isEmpty(mImageUploadUrl)) {
       if (event.getHash().equals(ImageUtils.getUrlHash(mImageUploadUrl))) {
-        ColorUtil.asyncThemedColor(event.getBitmap());
+        ColorUtil.asyncThemedColor(event.getHash(), event.getBitmap());
       }
     }
   }

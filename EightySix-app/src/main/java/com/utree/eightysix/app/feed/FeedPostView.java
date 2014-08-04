@@ -123,7 +123,7 @@ public class FeedPostView extends BasePostView {
           setPostTheme(Color.WHITE);
         } else {
           Log.d("PostView", "load color theme by bitmap");
-          ColorUtil.asyncThemedColor(event.getBitmap());
+          ColorUtil.asyncThemedColor(event.getHash(), event.getBitmap());
         }
         mGvLoading.setVisibility(INVISIBLE);
       }

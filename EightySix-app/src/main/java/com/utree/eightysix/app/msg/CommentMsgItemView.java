@@ -99,7 +99,7 @@ public class CommentMsgItemView extends BaseMsgItemView {
       if (mPosts[0] != null) {
         if (!TextUtils.isEmpty(mPosts[0].bgUrl)) {
           if (event.getHash().equals(ImageUtils.getUrlHash(mPosts[0].bgUrl))) {
-            ColorUtil.asyncThemedColor(event.getBitmap());
+            ColorUtil.asyncThemedColor(event.getHash(), event.getBitmap());
           }
         }
       }
@@ -107,7 +107,7 @@ public class CommentMsgItemView extends BaseMsgItemView {
       if (mPosts[1] != null) {
         if (!TextUtils.isEmpty(mPosts[1].bgUrl)) {
           if (event.getHash().equals(ImageUtils.getUrlHash(mPosts[1].bgUrl))) {
-            ColorUtil.asyncThemedColor(event.getBitmap());
+            ColorUtil.asyncThemedColor(event.getHash(), event.getBitmap());
           }
         }
       }

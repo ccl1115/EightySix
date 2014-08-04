@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.intro;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.utree.eightysix.app.account.RegisterActivity;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.RoundedButton;
+import de.akquinet.android.androlog.Log;
 
 /**
  */
@@ -37,6 +39,7 @@ public class IntroActivity extends BaseActivity {
   public TextView mTvForgetPwd;
 
   public boolean mCanGoBack;
+  private boolean mResumed;
 
   @OnClick (R.id.tv_login)
   public void onTvLoginClicked() {
@@ -72,12 +75,6 @@ public class IntroActivity extends BaseActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    // start push service in main entry activity
-    // note:
-    // put this in Application#onCreate() entry, if push service crashed,
-    // it will cause app restart infinitely.
-    U.getPushHelper().startWork();
-
     hideTopBar(false);
 
     WindowManager.LayoutParams attributes = getWindow().getAttributes();
@@ -100,6 +97,26 @@ public class IntroActivity extends BaseActivity {
     }, U.getConfigInt("activity.intro.delay"));
 
     M.getLocation().requestLocation();
+
+    if (Env.firstRun("install_shortcut")) {
+      Log.d("IntroActivity", "install shortcut");
+      addShortcut();
+      Env.setFirstRun("install_shortcut", false);
+    }
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+
+    if (!mResumed) {
+      // start push service in main entry activity
+      // note:
+      // put this in Application#onCreate() entry, if push service crashed,
+      // it will cause app restart infinitely.
+      U.getPushHelper().startWork();
+      mResumed = true;
+    }
   }
 
   @Override
@@ -133,5 +150,28 @@ public class IntroActivity extends BaseActivity {
     animator.start();
 
     mCanGoBack = true;
+  }
+
+
+  private void addShortcut() {
+    Intent target = new Intent();
+    target.addCategory(Intent.CATEGORY_LAUNCHER);
+    target.setAction(Intent.ACTION_MAIN);
+    target.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+        | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+    ComponentName comp = new ComponentName(this.getPackageName(),
+        this.getPackageName() + ".app.intro.IntroActivity");
+    target.setComponent(comp);
+
+    Intent shortcut = new Intent(
+        "com.android.launcher.action.INSTALL_SHORTCUT");
+    shortcut.putExtra("duplicate", false);
+    shortcut.putExtra(Intent.EXTRA_SHORTCUT_NAME,
+        getString(R.string.app_name));
+    shortcut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, target);
+
+    shortcut.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(
+        this, R.drawable.ic_launcher));
+    sendBroadcast(shortcut);
   }
 }
