@@ -12,6 +12,7 @@ import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.C;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
@@ -23,6 +24,7 @@ import com.utree.eightysix.request.PullNotificationRequest;
 import com.utree.eightysix.response.PullNotificationResponse;
 import com.utree.eightysix.rest.HandlerWrapper;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.RequestData;
 import de.akquinet.android.androlog.Log;
@@ -70,13 +72,13 @@ public class PullNotificationService extends Service {
    */
   private static final int TYPE_OWN_COMMENT = 7;
 
-  private static final int ID_POST = 0x10;
-  private static final int ID_UNLOCK_FACTORY = 0x20;
-  private static final int ID_FRIEND_L1_JOIN = 0x30;
-  private static final int ID_FOLLOW_COMMENT = 0x40;
-  private static final int ID_PRAISE = 0x50;
-  private static final int ID_APPROVE = 0x60;
-  private static final int ID_OWN_COMMENT = 0x70;
+  private static final int ID_POST = 0x1000;
+  private static final int ID_UNLOCK_FACTORY = 0x2000;
+  private static final int ID_FRIEND_L1_JOIN = 0x3000;
+  private static final int ID_FOLLOW_COMMENT = 0x4000;
+  private static final int ID_PRAISE = 0x5000;
+  private static final int ID_APPROVE = 0x6000;
+  private static final int ID_OWN_COMMENT = 0x7000;
   private static Bitmap sLargeIcon;
 
   static {
@@ -125,12 +127,17 @@ public class PullNotificationService extends Service {
   private void requestPullNotification(final int type, final String seq) {
     RequestData data = U.getRESTRequester().convert(new PullNotificationRequest(type, seq));
     U.getRESTRequester().request(data, new HandlerWrapper<PullNotificationResponse>(data,
-        new OnResponse<PullNotificationResponse>() {
+        new OnResponse2<PullNotificationResponse>() {
           @Override
           public void onResponse(PullNotificationResponse response) {
             if (RESTRequester.responseOk(response)) {
               handleResponse(response);
             }
+          }
+
+          @Override
+          public void onResponseError(Throwable e) {
+            if (BuildConfig.DEBUG) e.printStackTrace();
           }
         }, PullNotificationResponse.class));
   }
@@ -146,6 +153,7 @@ public class PullNotificationService extends Service {
         .setAutoCancel(true)
         .setDefaults(Notification.DEFAULT_ALL)
         .setLargeIcon(sLargeIcon)
+        .setSmallIcon(R.drawable.ic_app_icon)
         .setContentTitle(shortName)
         .setContentText(getString(R.string.notification_friend_new_post))
         .setContentIntent(PendingIntent.getActivity(this, 0,
@@ -159,6 +167,7 @@ public class PullNotificationService extends Service {
         .setLargeIcon(sLargeIcon)
         .setAutoCancel(true)
         .setDefaults(Notification.DEFAULT_ALL)
+        .setSmallIcon(R.drawable.ic_app_icon)
         .setContentTitle(getString(R.string.notification_circle_unlocked))
         .setContentText(getString(R.string.notification_circle_unlocked_tip, circleName))
         .setContentIntent(PendingIntent.getActivity(this, 0,
@@ -173,6 +182,7 @@ public class PullNotificationService extends Service {
         .setAutoCancel(true)
         .setTicker(getString(R.string.notification_new))
         .setDefaults(Notification.DEFAULT_ALL)
+        .setSmallIcon(R.drawable.ic_app_icon)
         .setLargeIcon(sLargeIcon);
     if (count == 1) {
       builder.setContentText(getString(type == TYPE_FOLLOW_COMMENT ?
@@ -196,6 +206,7 @@ public class PullNotificationService extends Service {
         .setAutoCancel(true)
         .setTicker(getString(R.string.notification_circle_create_approve))
         .setDefaults(Notification.DEFAULT_ALL)
+        .setSmallIcon(R.drawable.ic_app_icon)
         .setContentTitle(getString(R.string.notification_circle_create_approve))
         .setContentText(getString(R.string.notification_circle_create_approve_tip, circleName))
         .setContentIntent(PendingIntent.getActivity(this, 0,
@@ -209,6 +220,7 @@ public class PullNotificationService extends Service {
         .setLargeIcon(sLargeIcon)
         .setAutoCancel(true)
         .setDefaults(Notification.DEFAULT_ALL)
+        .setSmallIcon(R.drawable.ic_app_icon)
         .setTicker(getString(R.string.notification_new_friend))
         .setContentTitle(getString(R.string.notification_new_friend))
         .setContentText(count > 1 ? getString(R.string.notification_new_friend_tip_plural, circleName, count) :

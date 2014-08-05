@@ -35,6 +35,7 @@ import com.utree.eightysix.app.feed.event.InviteClickedEvent;
 import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
 import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
+import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.msg.PraiseActivity;
 import com.utree.eightysix.app.publish.FeedbackActivity;
@@ -280,6 +281,21 @@ public class FeedActivity extends BaseActivity {
   }
 
   @Override
+  protected void onStart() {
+    super.onStart();
+
+    startService(new Intent(this, FetchNotificationService.class));
+  }
+
+  @Override
+  protected void onStop() {
+    super.onStop();
+    mDlContent.closeDrawer(mLlSide);
+
+    stopService(new Intent(this, FetchNotificationService.class));
+  }
+
+  @Override
   protected void onPause() {
     super.onPause();
     M.getRegisterHelper().unregister(mLvSideCircles);
@@ -397,12 +413,6 @@ public class FeedActivity extends BaseActivity {
 
     setHasNewPraise();
     setNewCommentCount();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mDlContent.closeDrawer(mLlSide);
   }
 
   @Subscribe

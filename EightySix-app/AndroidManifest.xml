@@ -126,6 +126,8 @@
 
         <service android:enabled="true" android:name=".contact.ContactsSyncService"/>
 
+        <service android:enabled="true" android:name=".app.msg.FetchNotificationService"/>
+
         <!-- push应用定义消息receiver声明 -->
         <receiver android:name="com.utree.eightysix.push.PushMessageReceiver">
             <intent-filter>

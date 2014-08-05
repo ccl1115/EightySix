@@ -38,7 +38,7 @@ public class IntroActivity extends BaseActivity {
   @InjectView (R.id.tv_forget_pwd)
   public TextView mTvForgetPwd;
 
-  public boolean mCanGoBack;
+  private boolean mCanGoBack;
   private boolean mResumed;
 
   @OnClick (R.id.tv_login)

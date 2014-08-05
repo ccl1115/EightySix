@@ -4,31 +4,37 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
-* @author simon
-*/
+ * @author simon
+ */
 public class PullNotification {
 
   @SerializedName ("type")
   public int type;
 
-  @SerializedName("msg")
+  @SerializedName ("msg")
   public String msg;
 
-  @SerializedName("praise")
+  @SerializedName ("praise")
   public int praise;
 
-  @SerializedName("lists")
+  @SerializedName ("praiseCount")
+  public int praiseCount;
+
+  @SerializedName ("percent")
+  public String percent;
+
+  @SerializedName ("lists")
   public List<Item> lists;
 
   public static class Item {
 
-    @SerializedName("value")
+    @SerializedName ("value")
     public String value;
 
-    @SerializedName("shortName")
+    @SerializedName ("shortName")
     public String shortName;
 
-    @SerializedName("friendCount")
+    @SerializedName ("friendCount")
     public int friendCount;
   }
 }

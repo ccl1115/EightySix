@@ -10,18 +10,19 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.request.FetchNotificationRequest;
 import com.utree.eightysix.response.FetchResponse;
 import com.utree.eightysix.rest.HandlerWrapper;
-import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.RequestData;
+import de.akquinet.android.androlog.Log;
 
 /**
  * @author simon
  */
 public class FetchNotificationService extends Service {
 
+  public static final String TAG = "FetchNotificationService";
   private static final int FETCH_INTERVAL = 60000;
   private static final int MSG_FETCH = 0x1;
-
   private long mLastFetchTime;
 
 
@@ -31,14 +32,14 @@ public class FetchNotificationService extends Service {
       final long now = System.currentTimeMillis();
       mLastFetchTime = now + FETCH_INTERVAL;
       sendEmptyMessageAtTime(MSG_FETCH, mLastFetchTime);
+      requestFetch();
     }
   };
 
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
-
-    mLastFetchTime = System.currentTimeMillis() + FETCH_INTERVAL;
-    mHandler.sendEmptyMessageAtTime(MSG_FETCH, mLastFetchTime);
+    Log.d(TAG, "start FetchService");
+    mHandler.sendEmptyMessage(MSG_FETCH);
     return START_STICKY;
   }
 
@@ -48,23 +49,43 @@ public class FetchNotificationService extends Service {
   }
 
   private void requestFetch() {
+    Log.d(TAG, "requestFetch");
     RequestData data = U.getRESTRequester().convert(new FetchNotificationRequest());
-    U.getRESTRequester().request(data, new HandlerWrapper<FetchResponse>(data, new OnResponse<FetchResponse>() {
+    U.getRESTRequester().request(data, new HandlerWrapper<FetchResponse>(data, new OnResponse2<FetchResponse>() {
 
       @Override
       public void onResponse(FetchResponse response) {
         if (RESTRequester.responseOk(response)) {
-          if (response.object.newPraise.praise == 1) {
+          if (response.object.newPraise != null &&
+              response.object.newPraise.praise == 1) {
             Account.inst().setHasNewPraise(true);
           }
 
           int count = 0;
 
-          count += response.object.myPostComment.lists.size();
-          count += response.object.newComment.lists.size();
+          if (response.object.myPostComment != null) {
+            try {
+              count += Integer.parseInt(response.object.myPostComment.msg);
+            } catch (NumberFormatException ignored) {
+
+            }
+          }
+
+          if (response.object.newComment != null) {
+            try {
+              count += Integer.parseInt(response.object.newComment.msg);
+            } catch (NumberFormatException ignored) {
+
+            }
+          }
 
           Account.inst().incNewCommentCount(count);
         }
+      }
+
+      @Override
+      public void onResponseError(Throwable e) {
+        e.printStackTrace();
       }
     }, FetchResponse.class));
   }
