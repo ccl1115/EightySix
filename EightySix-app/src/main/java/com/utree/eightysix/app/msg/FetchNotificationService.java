@@ -23,15 +23,12 @@ public class FetchNotificationService extends Service {
   public static final String TAG = "FetchNotificationService";
   private static final int FETCH_INTERVAL = 60000;
   private static final int MSG_FETCH = 0x1;
-  private long mLastFetchTime;
 
 
   private Handler mHandler = new Handler() {
     @Override
     public void handleMessage(Message msg) {
-      final long now = System.currentTimeMillis();
-      mLastFetchTime = now + FETCH_INTERVAL;
-      sendEmptyMessageAtTime(MSG_FETCH, mLastFetchTime);
+      sendEmptyMessageDelayed(MSG_FETCH, FETCH_INTERVAL);
       requestFetch();
     }
   };
@@ -40,7 +37,7 @@ public class FetchNotificationService extends Service {
   public int onStartCommand(Intent intent, int flags, int startId) {
     Log.d(TAG, "start FetchService");
     mHandler.sendEmptyMessage(MSG_FETCH);
-    return START_STICKY;
+    return START_NOT_STICKY;
   }
 
   @Override
@@ -64,19 +61,11 @@ public class FetchNotificationService extends Service {
           int count = 0;
 
           if (response.object.myPostComment != null) {
-            try {
-              count += Integer.parseInt(response.object.myPostComment.msg);
-            } catch (NumberFormatException ignored) {
-
-            }
+            count += response.object.myPostComment.lists.size();
           }
 
           if (response.object.newComment != null) {
-            try {
-              count += Integer.parseInt(response.object.newComment.msg);
-            } catch (NumberFormatException ignored) {
-
-            }
+            count += response.object.newComment.lists.size();
           }
 
           Account.inst().incNewCommentCount(count);

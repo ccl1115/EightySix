@@ -257,10 +257,8 @@ public class PullNotificationService extends Service {
       case TYPE_OWN_COMMENT:
       case TYPE_FOLLOW_COMMENT:
         int count = 0;
-        try {
-          count = Integer.parseInt(response.object.msg);
-        } catch (NumberFormatException ignored) {
-
+        if (response.object.lists != null) {
+          count = response.object.lists.size();
         }
         if (count == 1) {
           getNM().notify(type == TYPE_FOLLOW_COMMENT ? ID_FOLLOW_COMMENT : ID_OWN_COMMENT,

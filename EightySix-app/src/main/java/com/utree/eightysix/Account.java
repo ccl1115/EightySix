@@ -96,8 +96,9 @@ public class Account {
   }
 
   public void setNewCommentCount(int count) {
-    U.getBus().post(new NewCommentCountEvent(count));
-    getAccountSharedPreferences().edit().putInt("new_comment_count", count).apply();
+    int value = Math.max(count, 0);
+    U.getBus().post(new NewCommentCountEvent(value));
+    getAccountSharedPreferences().edit().putInt("new_comment_count", value).apply();
   }
 
   public void incNewCommentCount(int count) {
@@ -108,7 +109,7 @@ public class Account {
   }
 
   public void decNewCommentCount(int count) {
-    int value = Math.min(getNewCommentCount() - count, 0);
+    int value = Math.max(getNewCommentCount() - count, 0);
     U.getBus().post(new NewCommentCountEvent(value));
     getAccountSharedPreferences().edit().putInt("new_comment_count", value).apply();
     Log.d(C.TAG.ACCOUNT, "incNewCommentCount: " + value);
