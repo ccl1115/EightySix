@@ -25,6 +25,7 @@ import com.utree.eightysix.app.intro.IntroActivity;
 import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.User;
+import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.request.RegisterRequest;
 import com.utree.eightysix.response.UserResponse;
 import com.utree.eightysix.rest.OnResponse;
@@ -150,7 +151,7 @@ public class RegisterActivity extends BaseActivity {
 
       @Override
       public Drawable getBackgroundDrawable(int position) {
-        return U.gd(R.drawable.apptheme_primary_btn_dark);
+        return new RoundRectDrawable(dp2px(2), getResources().getColorStateList(R.color.apptheme_primary_btn_light));
       }
 
       @Override
@@ -167,7 +168,7 @@ public class RegisterActivity extends BaseActivity {
 
       @Override
       public TopBar.LayoutParams getLayoutParams(int position) {
-        return new TopBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        return new TopBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
       }
     });
 

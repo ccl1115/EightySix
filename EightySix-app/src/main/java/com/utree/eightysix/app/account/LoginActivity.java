@@ -28,6 +28,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.feed.FeedActivity;
+import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.request.LoginRequest;
 import com.utree.eightysix.response.UserResponse;
 import com.utree.eightysix.rest.OnResponse;
@@ -288,9 +289,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public Drawable getBackgroundDrawable(int position) {
-      if (position == 0) return U.gd(R.drawable.apptheme_primary_btn_dark);
-
-      return null;
+      return new RoundRectDrawable(dp2px(2), getResources().getColorStateList(R.color.apptheme_primary_btn_light));
     }
 
     @Override
