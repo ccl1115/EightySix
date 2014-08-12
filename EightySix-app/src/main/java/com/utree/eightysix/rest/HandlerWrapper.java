@@ -10,6 +10,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import de.akquinet.android.androlog.Log;
 import java.net.ConnectException;
+import java.net.UnknownHostException;
 import java.util.Properties;
 import org.apache.http.HttpStatus;
 
@@ -78,7 +79,9 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
   public void onFailure(int statusCode, org.apache.http.Header[] headers, Throwable e, String rawData, T errorResponse) {
     if (e != null) {
       if (e instanceof ConnectException) {
-        Toast.makeText(U.getContext(), U.gs(R.string.server_connection_exception), Toast.LENGTH_SHORT).show();
+        U.showToast(U.getContext().getString(R.string.server_connection_exception));
+      } else {
+        U.showToast(U.getContext().getString(R.string.server_connection_exception));
       }
       if (BuildConfig.DEBUG) {
         e.printStackTrace();
