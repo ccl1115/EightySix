@@ -139,7 +139,7 @@ class CircleListAdapter extends BaseAdapter {
       }
     }
     Circle pre = null;
-    for (int i = 0, size = mCircles.size(); i < size; i++) {
+    for (int i = 0; i < mCircles.size(); i++) {
       Circle circle = mCircles.get(i);
       if (circle == null) continue;
 
