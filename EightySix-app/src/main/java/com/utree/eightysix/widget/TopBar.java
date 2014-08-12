@@ -28,7 +28,7 @@ import java.util.List;
 
 /**
  */
-public class TopBar extends FrameLayout implements View.OnClickListener {
+public class TopBar extends ViewGroup implements View.OnClickListener {
 
   private final List<ActionButton> mActionViews = new ArrayList<ActionButton>();
 
@@ -419,7 +419,7 @@ public class TopBar extends FrameLayout implements View.OnClickListener {
     void onActionSearchClicked(CharSequence cs);
   }
 
-  public static class LayoutParams extends FrameLayout.LayoutParams {
+  public static class LayoutParams extends MarginLayoutParams {
 
     public LayoutParams(Context c, AttributeSet attrs) {
       super(c, attrs);

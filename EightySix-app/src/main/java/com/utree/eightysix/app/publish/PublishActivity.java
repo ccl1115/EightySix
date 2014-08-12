@@ -680,10 +680,9 @@ public class PublishActivity extends BaseActivity {
             U.getBus().post(new PostPublishedEvent(post, mFactoryId));
 
             finish();
-          } else {
-            enablePublishButton();
           }
           hideProgressBar();
+          enablePublishButton();
         }
       }, PublishPostResponse.class);
     }

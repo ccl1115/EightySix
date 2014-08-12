@@ -151,7 +151,7 @@ public class RegisterActivity extends BaseActivity {
 
       @Override
       public Drawable getBackgroundDrawable(int position) {
-        return new RoundRectDrawable(dp2px(2), getResources().getColorStateList(R.color.apptheme_primary_btn_light));
+        return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
       }
 
       @Override

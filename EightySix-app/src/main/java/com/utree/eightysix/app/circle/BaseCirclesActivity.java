@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
 import android.widget.EditText;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -177,7 +179,7 @@ public class BaseCirclesActivity extends BaseActivity {
 
         @Override
         public TopBar.LayoutParams getLayoutParams(int position) {
-          return new TopBar.LayoutParams(MATCH_PARENT, MATCH_PARENT);
+          return new TopBar.LayoutParams(WRAP_CONTENT, MATCH_PARENT);
         }
       });
     }

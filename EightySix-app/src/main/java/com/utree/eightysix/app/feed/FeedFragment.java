@@ -260,7 +260,7 @@ public class FeedFragment extends BaseFragment {
   }
 
   public void setCircle(int id, boolean skipCache) {
-    if (mCircle.id != id) {
+    if (mCircle != null && mCircle.id != id) {
       if (mLvFeed != null) mLvFeed.setAdapter(null);
     }
 
