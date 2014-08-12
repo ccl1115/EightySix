@@ -126,7 +126,6 @@ public class RegisterActivity extends BaseActivity {
           }
         } else {
           mBtnRegister.setEnabled(false);
-          showToast("密码格式错误，仅限字母和数字哦");
         }
       }
 
@@ -198,6 +197,12 @@ public class RegisterActivity extends BaseActivity {
   }
 
   private void requestRegister() {
+
+    if (!InputValidator.pwdRegex(mEtPwd.getText().toString())) {
+      showToast("密码格式错误，仅限字母和数字哦");
+      return;
+    }
+
     request(new RegisterRequest(mEtPhoneNumber.getText().toString(), mEtPwd.getText().toString()),
         new OnResponse<UserResponse>() {
           @Override

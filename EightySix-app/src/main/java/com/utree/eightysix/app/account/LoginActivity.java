@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -155,7 +154,6 @@ public class LoginActivity extends BaseActivity {
         } else {
           mCorrectPwd = false;
           mBtnLogin.setEnabled(false);
-          showToast("密码格式错误，仅限字母和数字哦");
         }
       }
 
@@ -208,6 +206,12 @@ public class LoginActivity extends BaseActivity {
   }
 
   private void requestLogin() {
+
+    if (!InputValidator.pwdRegex(mEtPwd.getText().toString())) {
+      showToast("密码格式错误，仅限字母和数字哦");
+      return;
+    }
+
     OnResponse<UserResponse> onResponse = new OnResponse<UserResponse>() {
       @Override
       public void onResponse(UserResponse response) {
