@@ -145,6 +145,7 @@ public class ForgetPwdActivity extends BaseActivity {
           mBtnDone.setEnabled(true);
         } else {
           mBtnDone.setEnabled(false);
+          showToast("密码格式错误，仅限字母和数字哦");
         }
       }
 

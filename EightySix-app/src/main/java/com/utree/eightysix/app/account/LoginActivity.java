@@ -155,6 +155,7 @@ public class LoginActivity extends BaseActivity {
         } else {
           mCorrectPwd = false;
           mBtnLogin.setEnabled(false);
+          showToast("密码格式错误，仅限字母和数字哦");
         }
       }
 

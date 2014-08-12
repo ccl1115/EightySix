@@ -126,6 +126,7 @@ public class RegisterActivity extends BaseActivity {
           }
         } else {
           mBtnRegister.setEnabled(false);
+          showToast("密码格式错误，仅限字母和数字哦");
         }
       }
 

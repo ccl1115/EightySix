@@ -21,7 +21,7 @@
     <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
+            android:inputType="textWebPassword"
             android:maxLength="16"
             android:id="@+id/et_pwd"
             android:layout_gravity="center_horizontal"
