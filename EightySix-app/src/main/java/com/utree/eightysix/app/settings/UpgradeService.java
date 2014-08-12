@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
@@ -50,8 +51,11 @@ public class UpgradeService extends Service {
         .setContentTitle("下载蓝莓客户端")
         .setProgress(100, 0, false)
         .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_app_icon))
-        .setContentIntent(PendingIntent.getActivity(this, 0, null, 0))
         .setSmallIcon(R.drawable.notif_icon);
+
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+      mBuilder.setContentIntent(PendingIntent.getActivity(this, 0, null, 0));
+    }
 
 
     File tmpFile = IOUtils.createTmpFile(String.format("upgrade_%s.apk", upgrade.version));
