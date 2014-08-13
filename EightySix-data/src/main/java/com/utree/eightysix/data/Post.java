@@ -9,6 +9,9 @@ import java.io.Serializable;
  */
 public class Post extends BaseItem implements Parcelable {
 
+  @SerializedName("circle")
+  public Circle circle;
+
   @SerializedName ("countComment")
   public int comments;
 
@@ -66,6 +69,7 @@ public class Post extends BaseItem implements Parcelable {
 
   @Override
   public void writeToParcel(Parcel dest, int flags) {
+    dest.writeParcelable(this.circle, flags);
     dest.writeInt(this.comments);
     dest.writeInt(this.praise);
     dest.writeString(this.id);
@@ -87,6 +91,7 @@ public class Post extends BaseItem implements Parcelable {
   }
 
   private Post(Parcel in) {
+    this.circle = in.readParcelable(null);
     this.comments = in.readInt();
     this.praise = in.readInt();
     this.id = in.readString();
@@ -117,7 +122,8 @@ public class Post extends BaseItem implements Parcelable {
   @Override
   public String toString() {
     return "Post{" +
-        "comments=" + comments +
+        "circle=" + circle +
+        ", comments=" + comments +
         ", praise=" + praise +
         ", id='" + id + '\'' +
         ", myPraiseCount=" + myPraiseCount +

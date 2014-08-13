@@ -7,6 +7,7 @@ import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
+import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.widget.ThemedDialog;
 
@@ -19,29 +20,29 @@ public class ShareManager {
   private IShare mShareToQQ = new ShareToQQ();
   private IShare mShareViaSMS = new ShareViaSMS();
 
-  public ThemedDialog shareAppDialog(final Activity activity, final int factoryId) {
+  public ThemedDialog shareAppDialog(final Activity activity, final Circle circle) {
     return new ShareDialog(activity) {
       @Override
       protected Object getViewHolder(ShareDialog dialog) {
-        return new ShareAppViewHolder(activity, dialog, factoryId);
+        return new ShareAppViewHolder(activity, dialog, circle);
       }
     };
   }
 
-  public ThemedDialog sharePostDialog(final Activity activity, final Post post) {
+  public ThemedDialog sharePostDialog(final Activity activity, final Circle circle, final Post post) {
     return new ShareDialog(activity) {
       @Override
       protected Object getViewHolder(ShareDialog dialog) {
-        return new SharePostViewHolder(activity, dialog, post);
+        return new SharePostViewHolder(activity, dialog, circle, post);
       }
     };
   }
 
-  public ThemedDialog shareCommentDialog(final Activity activity, final Post post, final String comment) {
+  public ThemedDialog shareCommentDialog(final Activity activity, final Circle circle, final Post post, final String comment) {
     return new ShareDialog(activity) {
       @Override
       protected Object getViewHolder(ShareDialog dialog) {
-        return new ShareCommentViewHolder(activity, dialog, post, comment);
+        return new ShareCommentViewHolder(activity, dialog, circle, post, comment);
       }
     };
   }
@@ -51,27 +52,29 @@ public class ShareManager {
     private Activity mActivity;
     private ShareDialog mDialog;
     private Post mPost;
+    private Circle mCircle;
     private String mComment;
 
-    ShareCommentViewHolder(Activity activity, ShareDialog dialog, Post post, String comment) {
+    ShareCommentViewHolder(Activity activity, ShareDialog dialog, Circle circle, Post post, String comment) {
       mActivity = activity;
       mDialog = dialog;
       mPost = post;
       mComment = comment;
+      mCircle = circle;
       ButterKnife.inject(this, dialog);
     }
 
     @OnClick (R.id.tv_sms)
     void onTvSmsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_msg");
-      mShareViaSMS.shareComment(mActivity, mPost, mComment);
+      mShareViaSMS.shareComment(mActivity, mCircle, mPost, mComment);
       mDialog.dismiss();
     }
 
     @OnClick (R.id.tv_qq_friends)
     void onQQFriendsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_qq");
-      mShareToQQ.shareComment(mActivity, mPost, mComment);
+      mShareToQQ.shareComment(mActivity, mCircle, mPost, mComment);
       mDialog.dismiss();
     }
   }
@@ -81,25 +84,27 @@ public class ShareManager {
     private Activity mActivity;
     private ShareDialog mDialog;
     private Post mPost;
+    private Circle mCircle;
 
-    SharePostViewHolder(Activity activity, ShareDialog dialog, Post post) {
+    SharePostViewHolder(Activity activity, ShareDialog dialog, Circle circle, Post post) {
       mActivity = activity;
       mDialog = dialog;
       mPost = post;
+      mCircle = circle;
       ButterKnife.inject(this, dialog);
     }
 
     @OnClick (R.id.tv_sms)
     void onTvSmsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_msg");
-      mShareViaSMS.sharePost(mActivity, mPost);
+      mShareViaSMS.sharePost(mActivity, mCircle, mPost);
       mDialog.dismiss();
     }
 
     @OnClick (R.id.tv_qq_friends)
     void onQQFriendsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_qq");
-      mShareToQQ.sharePost(mActivity, mPost);
+      mShareToQQ.sharePost(mActivity, mCircle, mPost);
       mDialog.dismiss();
     }
   }
@@ -108,26 +113,26 @@ public class ShareManager {
   public class ShareAppViewHolder {
     private Activity mActivity;
     private ShareDialog mDialog;
-    private int mFactoryId;
+    private Circle mCircle;
 
-    ShareAppViewHolder(Activity activity, ShareDialog dialog, int factoryId) {
+    ShareAppViewHolder(Activity activity, ShareDialog dialog, Circle circle) {
       mActivity = activity;
       mDialog = dialog;
-      mFactoryId = factoryId;
+      mCircle = circle;
       ButterKnife.inject(this, dialog);
     }
 
     @OnClick (R.id.tv_sms)
     void onTvSmsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_msg");
-      mShareViaSMS.shareApp(mActivity, mFactoryId);
+      mShareViaSMS.shareApp(mActivity, mCircle);
       mDialog.dismiss();
     }
 
     @OnClick (R.id.tv_qq_friends)
     void onQQFriendsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_qq");
-      mShareToQQ.shareApp(mActivity, mFactoryId);
+      mShareToQQ.shareApp(mActivity, mCircle);
       mDialog.dismiss();
     }
   }

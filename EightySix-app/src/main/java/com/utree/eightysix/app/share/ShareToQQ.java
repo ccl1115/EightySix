@@ -10,6 +10,7 @@ import com.tencent.tauth.UiError;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Post;
 
 /**
@@ -26,17 +27,17 @@ class ShareToQQ extends IShare {
   }
 
   @Override
-  public void shareApp(Activity activity, int circleId) {
+  public void shareApp(Activity activity, Circle circle) {
     Bundle data = new Bundle();
     data.putString(QQShare.SHARE_TO_QQ_TITLE, shareTitleForApp());
     data.putString(QQShare.SHARE_TO_QQ_SUMMARY, shareContentForApp());
-    data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, shareLinkForApp(circleId));
+    data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, shareLinkForApp(circle.id));
     data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
     shareToQQ(activity, data, defaultListener());
   }
 
   @Override
-  public void sharePost(Activity activity, Post post) {
+  public void sharePost(Activity activity, Circle circle, Post post) {
     Bundle data = new Bundle();
     data.putString(QQShare.SHARE_TO_QQ_TITLE, shareTitleForPost());
     data.putString(QQShare.SHARE_TO_QQ_SUMMARY, post.content);
@@ -46,7 +47,7 @@ class ShareToQQ extends IShare {
   }
 
   @Override
-  public void shareComment(Activity activity, Post post, String comment) {
+  public void shareComment(Activity activity, Circle circle, Post post, String comment) {
     Bundle data = new Bundle();
     data.putString(QQShare.SHARE_TO_QQ_TITLE, shareTitleForComment());
     data.putString(QQShare.SHARE_TO_QQ_SUMMARY, comment);

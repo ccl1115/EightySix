@@ -26,10 +26,6 @@ import com.utree.eightysix.data.Feeds;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.data.Promotion;
 import com.utree.eightysix.data.QuestionSet;
-import com.utree.eightysix.request.FeedsRequest;
-import com.utree.eightysix.rest.CacheInWorker;
-import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.rest.RequestData;
 import com.utree.eightysix.widget.RoundedButton;
 import java.util.List;
 
@@ -190,7 +186,7 @@ class FeedAdapter extends BaseAdapter {
       convertView = new FeedPostView(parent.getContext());
     }
 
-    ((FeedPostView) convertView).setData(mFeeds.circle.id, (Post) getItem(position));
+    ((FeedPostView) convertView).setData((Post) getItem(position));
     return convertView;
   }
 

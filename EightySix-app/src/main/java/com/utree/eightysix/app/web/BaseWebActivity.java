@@ -19,6 +19,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.share.ShareDialog;
+import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.drawable.GearsDrawable;
 import com.utree.eightysix.widget.GearsView;
 import de.akquinet.android.androlog.Log;
@@ -106,7 +107,9 @@ public class BaseWebActivity extends BaseActivity {
             String[] kv = s.split("=");
             if (kv.length == 2) {
               if (kv[0].equals("factoryId")) {
-                U.getShareManager().shareAppDialog(BaseWebActivity.this, Integer.parseInt(kv[1])).show();
+                Circle circle = new Circle();
+                circle.id = Integer.parseInt(kv[1]);
+                U.getShareManager().shareAppDialog(BaseWebActivity.this, circle).show();
                 return true;
               }
             }

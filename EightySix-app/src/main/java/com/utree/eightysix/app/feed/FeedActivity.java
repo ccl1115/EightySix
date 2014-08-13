@@ -496,7 +496,7 @@ public class FeedActivity extends BaseActivity {
 
   private void showInviteDialog() {
     if (mInviteDialog == null) {
-      mInviteDialog = U.getShareManager().shareAppDialog(this, mFeedFragment.getCircleId());
+      mInviteDialog = U.getShareManager().shareAppDialog(this, mFeedFragment.getCircle());
     }
     if (!mInviteDialog.isShowing()) {
       mInviteDialog.show();
