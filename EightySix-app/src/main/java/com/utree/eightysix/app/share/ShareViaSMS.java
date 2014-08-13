@@ -12,13 +12,13 @@ class ShareViaSMS extends IShare {
   @Override
   public void shareApp(Activity activity, Circle circle) {
     ContactsActivity.start(activity,
-        String.format(shareContentForApp(), circle.name, circle.name) + shareLinkForApp(circle.id));
+        String.format(shareContentForApp(), circle.shortName, circle.shortName) + shareLinkForApp(circle.id));
   }
 
   @Override
   public void sharePost(Activity activity, Circle circle, Post post) {
     ContactsActivity.start(activity,
-        String.format(shareContentForPost(), circle.name, circle.name) + shareLinkForPost(post.id));
+        String.format(shareContentForPost(), circle.shortName, circle.shortName) + shareLinkForPost(post.id));
   }
 
   @Override
