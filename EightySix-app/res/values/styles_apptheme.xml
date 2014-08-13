@@ -32,7 +32,7 @@
     <style name="Widget.RefreshIndicator"/>
 
     <style name="Widget.RefreshIndicator.AppTheme">
-        <item name="android:background">#ff41454d</item>
+        <item name="android:background">#ff363940</item>
     </style>
 
     <style name="Widget.RoundedButton.Apptheme.Small">

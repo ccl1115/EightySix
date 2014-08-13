@@ -131,6 +131,7 @@ public class MsgActivity extends BaseActivity {
       @Override
       public void onRefresh() {
         mRefreshed = true;
+        showRefreshIndicator();
         requestMsgs(1);
         ReadMsgStore.inst().clearRead();
       }
@@ -211,6 +212,7 @@ public class MsgActivity extends BaseActivity {
           }
         }
         hideProgressBar();
+        hideRefreshIndicator();
         mAlvMsg.stopLoadMore();
         mRvMsg.setRefreshing(false);
       }
