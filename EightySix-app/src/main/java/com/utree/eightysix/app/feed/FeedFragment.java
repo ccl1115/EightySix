@@ -340,22 +340,30 @@ public class FeedFragment extends BaseFragment {
       getBaseActivity().request(new PostPraiseCancelRequest(event.getPost().id), new OnResponse<Response>() {
         @Override
         public void onResponse(Response response) {
-          if (response == null || response.code != 0) {
-            event.getPost().praised = 1;
+          if (RESTRequester.responseOk(response)) {
+            U.getBus().post(event.getPost());
+          } else if ((response.code & 0xffff) == 0x2286) {
+            event.getPost().praised = 0;
+          } else {
+            event.getPost().praised = 0;
             event.getPost().praise++;
-            mFeedAdapter.notifyDataSetChanged();
           }
+          mFeedAdapter.notifyDataSetChanged();
         }
       }, Response.class);
     } else {
       getBaseActivity().request(new PostPraiseRequest(event.getPost().id), new OnResponse<Response>() {
         @Override
         public void onResponse(Response response) {
-          if (response == null || response.code != 0) {
-            event.getPost().praised = 0;
+          if (RESTRequester.responseOk(response)) {
+            U.getBus().post(event.getPost());
+          } else if ((response.code & 0xffff) == 0x2286) {
+            event.getPost().praised = 1;
+          } else {
+            event.getPost().praised = 1;
             event.getPost().praise = Math.max(0, event.getPost().praise - 1);
-            mFeedAdapter.notifyDataSetChanged();
           }
+          mFeedAdapter.notifyDataSetChanged();
         }
       }, Response.class);
     }
