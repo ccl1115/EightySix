@@ -373,10 +373,8 @@ public class FeedActivity extends BaseActivity {
     if (circle != null) {
       mFeedFragment.setCircle(circle, skipCache);
     } else {
-      final int circleId = intent.getIntExtra("id", -1);
-      if (circleId != -1) {
-        mFeedFragment.setCircle(circleId, skipCache);
-      }
+      final int circleId = intent.getIntExtra("id", 0);
+      mFeedFragment.setCircle(circleId, skipCache);
     }
 
     if (mFeedFragment.getCircle() != null) {
