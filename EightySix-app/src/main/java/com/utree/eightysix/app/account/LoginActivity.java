@@ -198,6 +198,7 @@ public class LoginActivity extends BaseActivity {
   @Override
   @Subscribe
   public void onLogout(Account.LogoutEvent event) {
+    finish();
   }
 
   @Subscribe

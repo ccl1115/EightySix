@@ -213,8 +213,6 @@ public class RegisterActivity extends BaseActivity {
                 if (user != null) {
                   Account.inst().login(user.userId, user.token);
                   showToast(R.string.register_success, false);
-                  //startActivity(new Intent(RegisterActivity.this, ImportContactActivity.class));
-                  //finish();
                   setLoadingText("寻找工友圈中");
                   ContactsSyncService.start(RegisterActivity.this, true);
                   return;
@@ -225,6 +223,7 @@ public class RegisterActivity extends BaseActivity {
             }
             mBtnRegister.setEnabled(true);
             hideProgressBar();
+            hideSoftKeyboard(mBtnRegister);
           }
         }, UserResponse.class);
 
