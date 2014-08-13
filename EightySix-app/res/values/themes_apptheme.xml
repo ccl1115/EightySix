@@ -21,9 +21,12 @@
         <item name="android:windowBackground">@null</item>
 
         <item name="android:windowNoTitle">true</item>
+
         <item name="topBarStyle">@style/Widget.TopBar.AppTheme</item>
         <item name="roundedButtonStyle">@style/Widget.RoundedButton.Apptheme</item>
         <item name="postEditTextStyle">@style/Widget.PostEditText.Apptheme</item>
+        <item name="refreshIndicatorStyle">@style/Widget.RefreshIndicator.AppTheme</item>
+
         <item name="android:editTextStyle">@style/Widget.EditText.AppTheme</item>
         <item name="android:checkboxStyle">@style/Widget.CheckBox.AppTheme</item>
         <item name="android:radioButtonStyle">@style/Widget.RadioButton.AppTheme</item>

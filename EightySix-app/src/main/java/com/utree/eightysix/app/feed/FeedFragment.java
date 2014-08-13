@@ -111,6 +111,7 @@ public class FeedFragment extends BaseFragment {
     mRefresherView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override
       public void onRefresh() {
+        getBaseActivity().showRefreshIndicator();
         U.getAnalyser().trackEvent(getActivity(), "feed_pull_refresh");
         mRefreshed = true;
         if (mCircle != null) {
@@ -405,7 +406,7 @@ public class FeedFragment extends BaseFragment {
   }
 
   private void requestFeeds(int id, final int page) {
-    if (mRefresherView != null) {
+    if (mRefresherView != null && page == 1) {
       mRefresherView.setRefreshing(true);
     }
     getBaseActivity().request(new FeedsRequest(id, page), new OnResponse<FeedsResponse>() {
@@ -441,6 +442,7 @@ public class FeedFragment extends BaseFragment {
         mRefresherView.setRefreshing(false);
         mLvFeed.stopLoadMore();
         getBaseActivity().hideProgressBar();
+        getBaseActivity().hideRefreshIndicator();
       }
     }, FeedsResponse.class);
   }

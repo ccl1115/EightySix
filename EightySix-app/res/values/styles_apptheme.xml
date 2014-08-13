@@ -29,6 +29,12 @@
         <item name="botLineColor">#ff2b2333</item>
     </style>
 
+    <style name="Widget.RefreshIndicator"/>
+
+    <style name="Widget.RefreshIndicator.AppTheme">
+        <item name="android:background">#ff41454d</item>
+    </style>
+
     <style name="Widget.RoundedButton.Apptheme.Small">
         <item name="background">#FFF7F7F7</item>
         <item name="android:textSize">14sp</item>
