@@ -58,13 +58,14 @@ import com.utree.eightysix.widget.TopBar;
 import com.utree.eightysix.widget.panel.GridPanel;
 import com.utree.eightysix.widget.panel.Item;
 import de.akquinet.android.androlog.Log;
+
 import java.io.File;
 import java.util.List;
 import java.util.Random;
 
 /**
  */
-@TopTitle (R.string.publish_content)
+@TopTitle(R.string.publish_content)
 public class PublishActivity extends BaseActivity {
 
   private static final String FIRST_RUN_KEY = "post_activity";
@@ -73,19 +74,19 @@ public class PublishActivity extends BaseActivity {
   private static final int REQUEST_CODE_ALBUM = 0x2;
   private static final int REQUEST_CODE_CROP = 0x4;
 
-  @InjectView (R.id.et_post_content)
+  @InjectView(R.id.et_post_content)
   public PostEditText mPostEditText;
 
-  @InjectView (R.id.tv_bottom)
+  @InjectView(R.id.tv_bottom)
   public TextView mTvBottom;
 
-  @InjectView (R.id.aiv_post_bg)
+  @InjectView(R.id.aiv_post_bg)
   public AsyncImageView mAivPostBg;
 
-  @InjectView (R.id.tv_post_tip)
+  @InjectView(R.id.tv_post_tip)
   public TextView mTvPostTip;
 
-  @InjectView (R.id.gp_panel)
+  @InjectView(R.id.gp_panel)
   public GridPanel mGpPanel;
 
   @InjectView(R.id.in_panel)
@@ -124,12 +125,12 @@ public class PublishActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
-  @OnClick (R.id.ll_bottom)
+  @OnClick(R.id.ll_bottom)
   public void onLlBottomClicked() {
     showDescriptionDialog();
   }
 
-  @OnClick (R.id.iv_shuffle)
+  @OnClick(R.id.iv_shuffle)
   public void onIvShuffleClicked() {
     if (mIsOpened) {
       hideSoftKeyboard(mPostEditText);
@@ -139,7 +140,7 @@ public class PublishActivity extends BaseActivity {
     }
   }
 
-  @OnClick (R.id.iv_camera)
+  @OnClick(R.id.iv_camera)
   public void onIvCameraClicked() {
     mCameraDialog.show();
   }
@@ -369,14 +370,6 @@ public class PublishActivity extends BaseActivity {
     if (Env.firstRun(FIRST_RUN_KEY)) {
       showDescriptionDialog();
     }
-  }
-
-  protected void enablePublishButton() {
-    getTopBar().getActionView(0).setEnabled(true);
-    getTopBar().getActionView(0).setActionBackgroundDrawable(
-        new RoundRectDrawable(U.dp2px(2),
-            getResources().getColorStateList(R.color.apptheme_primary_btn_light)));
-    ((TextActionButton) getTopBar().getActionView(0)).setTextColor(Color.WHITE);
   }
 
   @Override
@@ -691,12 +684,31 @@ public class PublishActivity extends BaseActivity {
     showProgressBar(true);
   }
 
-  private void disablePublishButton() {
-    getTopBar().getActionView(0).setEnabled(false);
-    getTopBar().getActionView(0).setActionBackgroundDrawable(
-        new RoundRectDrawable(U.dp2px(2),
-            getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
-    ((TextActionButton) getTopBar().getActionView(0)).setTextColor(
-        getResources().getColor(R.color.apptheme_primary_grey_color_disabled));
+  protected void disablePublishButton() {
+    getHandler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        getTopBar().getActionView(0).setEnabled(false);
+        getTopBar().getActionView(0).setActionBackgroundDrawable(
+            new RoundRectDrawable(U.dp2px(2),
+                getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
+        ((TextActionButton) getTopBar().getActionView(0)).setTextColor(
+            getResources().getColor(R.color.apptheme_primary_grey_color_disabled));
+      }
+    }, 200);
   }
+
+  protected void enablePublishButton() {
+    getHandler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        getTopBar().getActionView(0).setEnabled(true);
+        getTopBar().getActionView(0).setActionBackgroundDrawable(
+            new RoundRectDrawable(U.dp2px(2),
+                getResources().getColorStateList(R.color.apptheme_primary_btn_light)));
+        ((TextActionButton) getTopBar().getActionView(0)).setTextColor(Color.WHITE);
+      }
+    }, 200);
+  }
+
 }
