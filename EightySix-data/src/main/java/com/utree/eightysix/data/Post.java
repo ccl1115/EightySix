@@ -91,7 +91,7 @@ public class Post extends BaseItem implements Parcelable {
   }
 
   private Post(Parcel in) {
-    this.circle = in.readParcelable(null);
+    this.circle = in.readParcelable(Post.class.getClassLoader());
     this.comments = in.readInt();
     this.praise = in.readInt();
     this.id = in.readString();
