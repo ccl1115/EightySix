@@ -121,6 +121,7 @@ public class PraiseActivity extends BaseActivity {
       @Override
       public void onRefresh() {
         mRefreshed = true;
+        showRefreshIndicator();
         requestPraises(1);
       }
     });
@@ -201,6 +202,7 @@ public class PraiseActivity extends BaseActivity {
           }
         }
         hideProgressBar();
+        hideRefreshIndicator();
         mAlvMsg.stopLoadMore();
         mRvMsg.setRefreshing(false);
       }
@@ -215,8 +217,6 @@ public class PraiseActivity extends BaseActivity {
       }
 
     }, MsgsResponse.class);
-
-    showProgressBar();
   }
 
   private void cacheOutPraises(final int page) {

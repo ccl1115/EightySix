@@ -21,6 +21,7 @@ import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
+import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.drawable.SmallGearsDrawable;
@@ -78,9 +79,6 @@ public class FeedPostView extends BasePostView {
   @InjectView (R.id.gv_loading)
   public GearsView mGvLoading;
 
-  private int mFactoryId;
-
-  private SmallGearsDrawable mGearsDrawable;
   private Runnable mShareAnimation;
 
   public FeedPostView(Context context) {
@@ -101,7 +99,6 @@ public class FeedPostView extends BasePostView {
 
     M.getRegisterHelper().register(this);
 
-    mGearsDrawable = new SmallGearsDrawable();
     mShareAnimation = new Runnable() {
       @Override
       public void run() {
@@ -163,9 +160,7 @@ public class FeedPostView extends BasePostView {
     return mTvLastComment;
   }
 
-  public void setData(int factoryId, Post post) {
-    mFactoryId = factoryId;
-
+  public void setData(Post post) {
     mPost = post;
 
     if (mPost == null) {
@@ -229,7 +224,7 @@ public class FeedPostView extends BasePostView {
 
   @OnClick (R.id.iv_share)
   public void onIvShareClicked() {
-    U.getShareManager().sharePostDialog((Activity) getContext(), mPost).show();
+    U.getShareManager().sharePostDialog((Activity) getContext(), mPost.circle, mPost).show();
   }
 
   @OnClick (R.id.tv_praise)

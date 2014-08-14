@@ -14,6 +14,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.feed.event.PostCommentPraiseEvent;
+import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.utils.ColorUtil;

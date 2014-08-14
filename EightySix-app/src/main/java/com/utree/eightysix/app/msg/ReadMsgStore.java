@@ -40,7 +40,9 @@ class ReadMsgStore {
   }
 
   void clearRead() {
-    sStore.clear();
+    if (sStore != null) {
+      sStore.clear();
+    }
     U.getContext().getSharedPreferences("read_msg_store", Context.MODE_PRIVATE)
         .edit().remove(Account.inst().getUserId()).apply();
   }

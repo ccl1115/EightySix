@@ -22,6 +22,7 @@ import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
+import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.PostDeleteRequest;
 import com.utree.eightysix.utils.ColorUtil;
@@ -165,7 +166,7 @@ public class PostPostView extends BasePostView {
                 switch (which) {
                   case 0:
                     U.getAnalyser().trackEvent(U.getContext(), "post_more_share");
-                    U.getShareManager().sharePostDialog(((Activity) getContext()), mPost).show();
+                    U.getShareManager().sharePostDialog(((Activity) getContext()), mPost.circle, mPost).show();
                     break;
                   case 1:
                     U.getAnalyser().trackEvent(U.getContext(), "post_more_report");

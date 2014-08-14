@@ -309,7 +309,7 @@ public class FeedFragment extends BaseFragment {
         cacheOutFeeds(mCircle.id, 1);
       }
     } else {
-      requestFeeds(0, 1);
+      cacheOutFeeds(0, 1);
     }
   }
 

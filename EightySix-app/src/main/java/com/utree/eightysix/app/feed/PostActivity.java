@@ -143,7 +143,7 @@ public class PostActivity extends BaseActivity {
                     break;
                   case 1:
                     U.getAnalyser().trackEvent(PostActivity.this, "comment_more_share");
-                    U.getShareManager().shareCommentDialog(PostActivity.this, mPost, comment.content).show();
+                    U.getShareManager().shareCommentDialog(PostActivity.this, mPost.circle, mPost, comment.content).show();
                     break;
                   case 2:
                     U.getAnalyser().trackEvent(PostActivity.this, "comment_more_report");
