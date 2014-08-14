@@ -40,7 +40,7 @@ class ShareToQQ extends IShare {
   public void sharePost(Activity activity, Circle circle, Post post) {
     Bundle data = new Bundle();
     data.putString(QQShare.SHARE_TO_QQ_TITLE, shareTitleForPost());
-    data.putString(QQShare.SHARE_TO_QQ_SUMMARY, post.content);
+    data.putString(QQShare.SHARE_TO_QQ_SUMMARY, shareContentForPost());
     data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, shareLinkForPost(post.id));
     data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
     shareToQQ(activity, data, defaultListener());

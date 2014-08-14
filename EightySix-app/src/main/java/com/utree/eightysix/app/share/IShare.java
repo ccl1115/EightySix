@@ -30,11 +30,11 @@ abstract class IShare {
   }
 
   protected String shareTitleForApp() {
-    return "来自［蓝莓圈］";
+    return "和我一起玩【蓝莓】吧！";
   }
 
   protected String shareTitleForPost() {
-    return "分享自［蓝莓圈］的精华帖";
+    return "分享1个仁宝电脑的秘密";
   }
 
   protected String shareTitleForComment() {
@@ -42,10 +42,10 @@ abstract class IShare {
   }
 
   protected String shareContentForApp() {
-    return "快来和我一起玩［蓝莓圈］吧，里面有你喜欢的朋友圈子，身边的好友都在圈子里匿名爆料，八卦，说秘密，不要错过精彩内容哦";
+    return "【蓝莓】-工厂里的秘密社区，仁宝电脑的朋友最近都在上面，旁边几个厂都火爆了，进来看看吧";
   }
 
   protected String shareContentForPost() {
-    return "";
+    return "转自【蓝莓】-工厂里的秘密社区";
   }
 }
