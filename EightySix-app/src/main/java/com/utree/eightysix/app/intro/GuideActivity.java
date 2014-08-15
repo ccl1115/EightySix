@@ -20,7 +20,6 @@ import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.C;
 import com.utree.eightysix.R;
-import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.ForgetPwdActivity;
@@ -32,8 +31,6 @@ import com.utree.eightysix.request.RegHotRequest;
 import com.utree.eightysix.response.PostResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.utils.ColorUtil;
-import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.IndicatorView;
 import de.akquinet.android.androlog.Log;
 import java.util.Random;
@@ -227,7 +224,7 @@ public class GuideActivity extends BaseActivity {
       startActivity(new Intent(GuideActivity.this, LoginActivity.class));
     }
 
-    @OnClick (R.id.rb_join)
+    @OnClick (R.id.tv_join)
     public void onTvJoinClicked() {
       startActivity(new Intent(GuideActivity.this, RegisterActivity.class));
     }
