@@ -18,7 +18,7 @@
             android:layout_marginBottom="12dp"
             android:layout_centerHorizontal="true"
             android:layout_above="@+id/tv_sub_tip"
-            android:text="匿名发帖与评论"
+            android:text="带上面具，畅所欲言"
             android:textSize="26sp"
             android:textColor="@android:color/black"/>
 
@@ -34,6 +34,6 @@
             android:gravity="center"
             android:textSize="16sp"
             android:textColor="@android:color/black"
-            android:text="你发表的内容，厂里认识你的人都能收到， 但无法知道作者是你"/>
+            android:text="没名字，没头像，没资料，严格隐藏真实身份。无所谓你是谁，只关注你想说什么"/>
 
 </RelativeLayout>

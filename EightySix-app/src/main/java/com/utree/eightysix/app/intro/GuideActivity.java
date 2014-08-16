@@ -20,7 +20,6 @@ import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.C;
 import com.utree.eightysix.R;
-import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.ForgetPwdActivity;
@@ -32,8 +31,6 @@ import com.utree.eightysix.request.RegHotRequest;
 import com.utree.eightysix.response.PostResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.utils.ColorUtil;
-import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.IndicatorView;
 import de.akquinet.android.androlog.Log;
 import java.util.Random;
@@ -45,9 +42,13 @@ public class GuideActivity extends BaseActivity {
 
   private static final int PAGE_1_BACKGROUND_COLOR = 0xff43cf76;
   private static final int PAGE_2_BACKGROUND_COLOR = 0xff3f61a9;
+  private static final int PAGE_2_1_BACKGROUND_COLOR = 0xffcf6b39;
   private static final int PAGE_3_BACKGROUND_COLOR = 0xff55b5c3;
   private ValueAnimator mPageColorAnimator =
-      ValueAnimator.ofObject(new ArgbEvaluator(), PAGE_1_BACKGROUND_COLOR, PAGE_2_BACKGROUND_COLOR, PAGE_3_BACKGROUND_COLOR);
+      ValueAnimator.ofObject(new ArgbEvaluator(), PAGE_1_BACKGROUND_COLOR,
+          PAGE_2_BACKGROUND_COLOR,
+          PAGE_2_1_BACKGROUND_COLOR,
+          PAGE_3_BACKGROUND_COLOR);
   private static final int[] RANDOM_BACKGROUND = {
       R.drawable.bg_20,
       R.drawable.bg_94,
@@ -64,7 +65,7 @@ public class GuideActivity extends BaseActivity {
   private int mRandomBg;
 
   {
-    mPageColorAnimator.setDuration(2000);
+    mPageColorAnimator.setDuration(3000);
     mPageColorAnimator.setInterpolator(new LinearInterpolator());
     mRandomBg = RANDOM_BACKGROUND[new Random().nextInt(RANDOM_BACKGROUND.length)];
   }
@@ -89,7 +90,7 @@ public class GuideActivity extends BaseActivity {
     mVpGuide.setAdapter(new PagerAdapter() {
       @Override
       public int getCount() {
-        return 3;
+        return 4;
       }
 
       @Override
@@ -107,6 +108,11 @@ public class GuideActivity extends BaseActivity {
             return inflate;
           }
           case 2: {
+            View inflate = inflater.inflate(R.layout.page_guide_2_1, container, false);
+            container.addView(inflate);
+            return inflate;
+          }
+          case 3: {
             View inflate = inflater.inflate(R.layout.page_guide_3, container, false);
             mPage3ViewHolder = new Page3ViewHolder(inflate);
             container.addView(inflate);
@@ -137,11 +143,11 @@ public class GuideActivity extends BaseActivity {
         mVpGuide.setBackgroundColor((Integer) mPageColorAnimator.getAnimatedValue());
         mInGuide.setPosition(position + positionOffset);
 
-        if (position == 1 && positionOffset > 0f) {
+        if (position == 2 && positionOffset > 0f) {
           ViewHelper.setTranslationY(mIvWave, 40 * positionOffset);
           ViewHelper.setAlpha(mPage3ViewHolder.mPostPostView, positionOffset);
           ViewHelper.setAlpha(mInGuide, 1 - positionOffset);
-        } else if (position == 2 && positionOffset < 0f) {
+        } else if (position == 3 && positionOffset < 0f) {
           ViewHelper.setTranslationY(mIvWave, 40 + (40 * positionOffset));
           ViewHelper.setAlpha(mPage3ViewHolder.mPostPostView, 1 + positionOffset);
           ViewHelper.setAlpha(mInGuide, -positionOffset);
@@ -227,7 +233,7 @@ public class GuideActivity extends BaseActivity {
       startActivity(new Intent(GuideActivity.this, LoginActivity.class));
     }
 
-    @OnClick (R.id.rb_join)
+    @OnClick (R.id.tv_join)
     public void onTvJoinClicked() {
       startActivity(new Intent(GuideActivity.this, RegisterActivity.class));
     }

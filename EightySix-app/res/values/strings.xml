@@ -35,6 +35,7 @@
     <string name="search">搜索</string>
     <string name="pull_to_refresh">下拉刷新</string>
     <string name="loading_more">正在加载更多</string>
+    <string name="copy_to_clipborad">复制至剪贴板</string>
 
     <string name="server_error">服务器错误</string>
     <string name="server_object_error">服务器返回对象解析错误</string>
@@ -46,7 +47,7 @@
     <string name="not_found_circle_tip">你可以搜索或者创建一个</string>
     <string name="not_found_history">你还没有搜索历史</string>
     <string name="not_found_history_tip">搜索跟你相关的工友圈吧</string>
-    <string name="not_found_post">还没有帖子浏览</string>
+    <string name="not_found_post">哎哟！这里空空如也</string>
     <string name="not_found_post_tip">点击右下角按钮，抢先发帖吧</string>
     <string name="not_found_comment">还没有人评论，抢个沙发吧</string>
     <string name="not_found_msg">还没有新消息哦</string>
@@ -145,6 +146,7 @@
     <string name="send_succeed">发送成功</string>
     <string name="cannot_post_empty_content">不能发表空内容。</string>
     <string name="post_not_found">没有找到帖子</string>
+    <string name="comment_load_failed">加载失败，请点击重试</string>
 
     <!-- BaseCirclesActivity -->
     <string name="search_circles">找工厂，找商圈，找企业</string>
@@ -240,10 +242,10 @@
 
 
     <!-- Overlay Tips -->
-    <string name="overlay_tip_source">你肯定认识他们，但不会告诉你作者是谁。认识的人，包括你通讯录里的朋友以及他们在这个厂的朋友。</string>
+    <string name="overlay_tip_source">发这条秘密的人，你肯定认识。为了保护作者，系统将把你的朋友和他们在这个厂的朋友都显示为认识的人。</string>
     <string name="overlay_tip_praise">赞，可以鼓励作者，并且当该秘密有更新时，你将收到提醒</string>
     <string name="overlay_tip_portrait">每次评论新的秘密，你的头像都会不同。</string>
-    <string name="overlay_tip_share">分享，可以让身边的朋友快速加入，你和他们的秘密都会被更多地倾听和回应</string>
+    <string name="overlay_tip_share">遇到屌炸天的秘密时，记得分享给朋友哦！</string>
 
     <string name="ask_question">我要提问</string>
 

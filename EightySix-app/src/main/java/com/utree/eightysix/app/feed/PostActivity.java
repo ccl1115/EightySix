@@ -26,6 +26,7 @@ import com.utree.eightysix.app.OverlayTipUtil;
 import com.utree.eightysix.app.feed.event.PostCommentPraiseEvent;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
+import com.utree.eightysix.app.feed.event.ReloadCommentEvent;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.CommentPraiseCancelRequest;
@@ -368,6 +369,12 @@ public class PostActivity extends BaseActivity {
     }, Response.class);
   }
 
+  @Subscribe
+  public void onReloadCommentEvent(ReloadCommentEvent event) {
+    requestComment(1);
+    mPostCommentsAdapter.setNeedReload(false);
+  }
+
   void finishOrShowQuitConfirmDialog() {
     if (mEtPostContent.getText().length() == 0) {
       finish();
@@ -405,7 +412,10 @@ public class PostActivity extends BaseActivity {
           mLvComments.setAdapter(mPostCommentsAdapter);
           mPost = response.object.post;
           U.getBus().post(mPost);
+        } else {
+          mPostCommentsAdapter.setNeedReload(true);
         }
+
         hideProgressBar();
       }
     }, PostCommentsResponse.class);

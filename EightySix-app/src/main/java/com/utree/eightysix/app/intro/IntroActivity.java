@@ -21,7 +21,6 @@ import com.utree.eightysix.app.account.LoginActivity;
 import com.utree.eightysix.app.account.RegisterActivity;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.utils.Env;
-import com.utree.eightysix.widget.RoundedButton;
 import de.akquinet.android.androlog.Log;
 
 /**
@@ -29,14 +28,11 @@ import de.akquinet.android.androlog.Log;
 @Layout (R.layout.activity_intro)
 public class IntroActivity extends BaseActivity {
 
-  @InjectView (R.id.rb_join)
-  public RoundedButton mRbJoin;
+  @InjectView (R.id.tv_join)
+  public TextView mTvJoin;
 
   @InjectView (R.id.tv_login)
   public TextView mTvLogin;
-
-  @InjectView (R.id.tv_forget_pwd)
-  public TextView mTvForgetPwd;
 
   private boolean mCanGoBack;
   private boolean mResumed;
@@ -46,14 +42,9 @@ public class IntroActivity extends BaseActivity {
     startActivity(new Intent(this, LoginActivity.class));
   }
 
-  @OnClick (R.id.rb_join)
+  @OnClick (R.id.tv_join)
   public void onRbJoinClicked() {
     startActivity(new Intent(this, RegisterActivity.class));
-  }
-
-  @OnClick (R.id.tv_forget_pwd)
-  public void onTvForgetPwdClicked() {
-    startActivity(new Intent(this, ForgetPwdActivity.class));
   }
 
   @Override
@@ -133,19 +124,14 @@ public class IntroActivity extends BaseActivity {
   }
 
   private void showLogin() {
-    mTvForgetPwd.setVisibility(View.VISIBLE);
     mTvLogin.setVisibility(View.VISIBLE);
-    mRbJoin.setVisibility(View.VISIBLE);
+    mTvJoin.setVisibility(View.VISIBLE);
 
-    ObjectAnimator animator = ObjectAnimator.ofFloat(mTvForgetPwd, "translationY", U.dp2px(200), 0);
-    animator.setDuration(1000);
+    ObjectAnimator animator = ObjectAnimator.ofFloat(mTvLogin, "translationY", U.dp2px(400), 0);
+    animator.setDuration(900);
     animator.start();
 
-    animator = ObjectAnimator.ofFloat(mTvLogin, "translationY", U.dp2px(200), 0);
-    animator.setDuration(1000);
-    animator.start();
-
-    animator = ObjectAnimator.ofFloat(mRbJoin, "translationY", U.dp2px(400), 0);
+    animator = ObjectAnimator.ofFloat(mTvJoin, "translationY", U.dp2px(400), 0);
     animator.setDuration(900);
     animator.start();
 

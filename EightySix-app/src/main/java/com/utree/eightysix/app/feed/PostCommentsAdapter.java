@@ -1,7 +1,6 @@
 package com.utree.eightysix.app.feed;
 
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +13,13 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.feed.event.PostCommentPraiseEvent;
-import com.utree.eightysix.data.Circle;
+import com.utree.eightysix.app.feed.event.ReloadCommentEvent;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.widget.FontPortraitView;
 import com.utree.eightysix.widget.RandomSceneTextView;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -32,9 +30,12 @@ class PostCommentsAdapter extends BaseAdapter {
   private static final int TYPE_POST = 0;
   private static final int TYPE_COMMENT = 1;
   private static final int TYPE_NOT_FOUND = 2;
+  private static final int TYPE_RELOAD = 3;
 
   private Post mPost;
   private List<Comment> mComments;
+
+  private boolean mNeedReload;
 
   public PostCommentsAdapter(Post post, List<Comment> comments) {
     mPost = post;
@@ -63,17 +64,18 @@ class PostCommentsAdapter extends BaseAdapter {
     notifyDataSetChanged();
   }
 
+  public void setNeedReload(boolean need) {
+    mNeedReload = need;
+  }
+
   @Override
   public int getCount() {
-    int count = 0;
+    if (mNeedReload) return 2;
+    int count = 1;
     if (mComments != null) {
-      if (mComments.size() == 0) {
-        count = 1;
-      } else {
-        count = mComments.size();
-      }
+      count += mComments.size();
     }
-    return count + 1;
+    return count;
   }
 
   @Override
@@ -107,6 +109,9 @@ class PostCommentsAdapter extends BaseAdapter {
       case TYPE_NOT_FOUND:
         convertView = getNotFoundView(convertView, parent);
         break;
+      case TYPE_RELOAD:
+        convertView = getReloadView(convertView, parent);
+        break;
     }
     return convertView;
   }
@@ -114,13 +119,14 @@ class PostCommentsAdapter extends BaseAdapter {
   @Override
   public int getItemViewType(int position) {
     if (position == 0) return TYPE_POST;
+    else if (mNeedReload) return TYPE_RELOAD;
     else if (mComments != null && mComments.size() == 0) return TYPE_NOT_FOUND;
     else return TYPE_COMMENT;
   }
 
   @Override
   public int getViewTypeCount() {
-    return 3;
+    return 4;
   }
 
   public void remove(String commentId) {
@@ -217,6 +223,22 @@ class PostCommentsAdapter extends BaseAdapter {
     int padding = U.dp2px(8);
     view.setPadding(padding, padding, padding, padding);
     view.setText(R.string.not_found_comment);
+
+    return convertView;
+  }
+
+  private View getReloadView(View convertView, ViewGroup parent) {
+    if (convertView == null) {
+      convertView = LayoutInflater.from(parent.getContext())
+          .inflate(R.layout.item_comment_reload, parent, false);
+    }
+
+    convertView.findViewById(R.id.tv_reload).setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        U.getBus().post(new ReloadCommentEvent());
+      }
+    });
 
     return convertView;
   }

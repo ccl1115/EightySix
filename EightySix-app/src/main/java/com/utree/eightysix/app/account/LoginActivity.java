@@ -94,6 +94,11 @@ public class LoginActivity extends BaseActivity {
     requestCaptcha();
   }
 
+  @OnClick(R.id.tv_forget_pwd)
+  public void onTvForgetPwd() {
+    startActivity(new Intent(this, ForgetPwdActivity.class));
+  }
+
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
@@ -174,8 +179,6 @@ public class LoginActivity extends BaseActivity {
         return false;
       }
     });
-
-    getTopBar().setActionAdapter(new ActionAdapter());
 
     String phone = getIntent().getStringExtra("phone");
     if (phone != null) {
@@ -277,43 +280,5 @@ public class LoginActivity extends BaseActivity {
           }
         }
     );
-  }
-
-  private class ActionAdapter implements TopBar.ActionAdapter {
-    @Override
-    public String getTitle(int position) {
-      if (position == 0) {
-        return getString(R.string.forget_pwd);
-      }
-      return null;
-    }
-
-    @Override
-    public Drawable getIcon(int position) {
-      return null;
-    }
-
-    @Override
-    public Drawable getBackgroundDrawable(int position) {
-      return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
-    }
-
-    @Override
-    public void onClick(View view, int position) {
-      if (position == 0) {
-        Intent intent = new Intent(LoginActivity.this, ForgetPwdActivity.class);
-        startActivity(intent);
-      }
-    }
-
-    @Override
-    public int getCount() {
-      return 1;
-    }
-
-    @Override
-    public TopBar.LayoutParams getLayoutParams(int position) {
-      return new TopBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-    }
   }
 }
