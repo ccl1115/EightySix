@@ -134,57 +134,18 @@ public class FeedFragment extends BaseFragment {
 
           if (Env.firstRun("overlay_tip_source")) {
             if (view.getChildCount() <= 2) return;
-
-            View last = view.getChildAt(view.getChildCount() - 2);
-            if (last == null) return;
-            View sourceView = last.findViewById(R.id.tv_source);
-            if (sourceView == null || sourceView.getVisibility() != View.VISIBLE) return;
-
-            mSourceTip = OverlayTipUtil.getSourceTip(sourceView, new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                if (mSourceTip != null) mSourceTip.dismiss();
-                mLvFeed.setEnabled(true);
-              }
-            });
-            mSourceTip.show(getActivity());
-            mLvFeed.setEnabled(false);
+            FeedPostView last = (FeedPostView) view.getChildAt(view.getChildCount() - 2);
+            last.showSourceTipOverlay();
             Env.setFirstRun("overlay_tip_source", false);
           } else if (Env.firstRun("overlay_tip_praise")) {
             if (view.getChildCount() <= 2) return;
-
-            View last = view.getChildAt(view.getChildCount() - 2);
-            if (last == null) return;
-            View praiseView = last.findViewById(R.id.tv_praise);
-            if (praiseView == null || praiseView.getVisibility() != View.VISIBLE) return;
-
-            mPraiseTip = OverlayTipUtil.getPraiseTip(praiseView, new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                if (mPraiseTip != null) mPraiseTip.dismiss();
-                mLvFeed.setEnabled(true);
-              }
-            });
-            mPraiseTip.show(getActivity());
-            mLvFeed.setEnabled(false);
+            FeedPostView last = (FeedPostView) view.getChildAt(view.getChildCount() - 2);
+            last.showPraiseTipOverlay();
             Env.setFirstRun("overlay_tip_praise", false);
           } else if (Env.firstRun("overlay_tip_share")) {
             if (view.getChildCount() <= 2) return;
-
-            View last = view.getChildAt(view.getChildCount() - 2);
-            if (last == null) return;
-            View shareView = last.findViewById(R.id.iv_share);
-            if (shareView == null || shareView.getVisibility() != View.VISIBLE) return;
-
-            mShareTip = OverlayTipUtil.getShareTip(shareView, new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                if (mShareTip != null) mShareTip.dismiss();
-                mLvFeed.setEnabled(true);
-              }
-            });
-            mShareTip.show(getActivity());
-            mLvFeed.setEnabled(false);
+            FeedPostView last = (FeedPostView) view.getChildAt(view.getChildCount() - 2);
+            last.showShareTipOverlay();
             Env.setFirstRun("overlay_tip_share", false);
           }
         }

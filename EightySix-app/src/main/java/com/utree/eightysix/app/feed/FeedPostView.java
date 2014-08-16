@@ -5,6 +5,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
@@ -13,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import com.aliyun.android.util.MD5Util;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
@@ -21,10 +22,8 @@ import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
-import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.drawable.RoundRectDrawable;
-import com.utree.eightysix.drawable.SmallGearsDrawable;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.widget.AsyncImageView;
@@ -80,6 +79,8 @@ public class FeedPostView extends BasePostView {
   public GearsView mGvLoading;
 
   private Runnable mShareAnimation;
+
+  private boolean mHasTipShown;
 
   public FeedPostView(Context context) {
     this(context, null, 0);
@@ -301,4 +302,65 @@ public class FeedPostView extends BasePostView {
     super.onDetachedFromWindow();
   }
 
+  public void showShareTipOverlay() {
+    if (mHasTipShown) return;
+
+    View view = LayoutInflater.from(getContext())
+        .inflate(R.layout.overlay_tip_share, this, false);
+
+    view.findViewById(R.id.ll_tip).setBackgroundDrawable(
+        new RoundRectDrawable(U.dp2px(8), Color.WHITE));
+    mFlContent.addView(view);
+
+    view.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        mFlContent.removeView(v);
+        mHasTipShown = false;
+      }
+    });
+
+    mHasTipShown = true;
+  }
+
+  public void showSourceTipOverlay() {
+    if (mHasTipShown) return;
+
+    View view = LayoutInflater.from(getContext())
+        .inflate(R.layout.overlay_tip_source, this, false);
+
+    view.findViewById(R.id.ll_tip).setBackgroundDrawable(
+        new RoundRectDrawable(U.dp2px(8), Color.WHITE));
+    mFlContent.addView(view);
+
+    view.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        mFlContent.removeView(v);
+        mHasTipShown = false;
+      }
+    });
+    mHasTipShown = true;
+  }
+
+  public void showPraiseTipOverlay() {
+    if (mHasTipShown) return;
+
+    View view = LayoutInflater.from(getContext())
+        .inflate(R.layout.overlay_tip_praise, this, false);
+
+    view.findViewById(R.id.ll_tip).setBackgroundDrawable(
+        new RoundRectDrawable(U.dp2px(8), Color.WHITE));
+    mFlContent.addView(view);
+
+    view.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        mFlContent.removeView(v);
+        mHasTipShown = false;
+      }
+    });
+
+    mHasTipShown = true;
+  }
 }
