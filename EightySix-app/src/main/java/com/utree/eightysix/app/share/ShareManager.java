@@ -1,14 +1,20 @@
 package com.utree.eightysix.app.share;
 
 import android.app.Activity;
+import android.content.Context;
+import android.text.ClipboardManager;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Post;
+import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.ThemedDialog;
 
 /**
@@ -18,6 +24,7 @@ public class ShareManager {
 
 
   private IShare mShareToQQ = new ShareToQQ();
+  private IShare mShareToQzone = new ShareToQzone();
   private IShare mShareViaSMS = new ShareViaSMS();
 
   public ThemedDialog shareAppDialog(final Activity activity, final Circle circle) {
@@ -55,6 +62,15 @@ public class ShareManager {
     private Circle mCircle;
     private String mComment;
 
+    @InjectView(R.id.aiv_qr_code)
+    ImageView mIvQrCode;
+
+    @InjectView(R.id.tv_qr_code)
+    TextView mTvQrCode;
+
+    @InjectView(R.id.rb_clipboard)
+    RoundedButton mRbClipboard;
+
     ShareCommentViewHolder(Activity activity, ShareDialog dialog, Circle circle, Post post, String comment) {
       mActivity = activity;
       mDialog = dialog;
@@ -62,6 +78,10 @@ public class ShareManager {
       mComment = comment;
       mCircle = circle;
       ButterKnife.inject(this, dialog);
+
+      mIvQrCode.setVisibility(View.GONE);
+      mTvQrCode.setVisibility(View.GONE);
+      mRbClipboard.setVisibility(View.VISIBLE);
     }
 
     @OnClick (R.id.tv_sms)
@@ -77,6 +97,21 @@ public class ShareManager {
       mShareToQQ.shareComment(mActivity, mCircle, mPost, mComment);
       mDialog.dismiss();
     }
+
+    @OnClick (R.id.tv_qzone)
+    void onQzoneClicked() {
+      U.getAnalyser().trackEvent(mActivity, "share_by_qzone");
+      mShareToQzone.shareComment(mActivity, mCircle, mPost, mComment);
+      mDialog.dismiss();
+    }
+
+    @OnClick (R.id.rb_clipboard)
+    void onRbClipboardClicked() {
+      ClipboardManager cm = (ClipboardManager) mActivity.getSystemService(Context.CLIPBOARD_SERVICE);
+      cm.setText(mShareToQzone.shareLinkForPost(mPost.id));
+      U.showToast("已经复制至剪贴板");
+      mDialog.dismiss();
+    }
   }
 
   @Keep
@@ -86,12 +121,25 @@ public class ShareManager {
     private Post mPost;
     private Circle mCircle;
 
+    @InjectView(R.id.aiv_qr_code)
+    ImageView mIvQrCode;
+
+    @InjectView(R.id.tv_qr_code)
+    TextView mTvQrCode;
+
+    @InjectView(R.id.rb_clipboard)
+    RoundedButton mRbClipboard;
+
     SharePostViewHolder(Activity activity, ShareDialog dialog, Circle circle, Post post) {
       mActivity = activity;
       mDialog = dialog;
       mPost = post;
       mCircle = circle;
       ButterKnife.inject(this, dialog);
+
+      mIvQrCode.setVisibility(View.GONE);
+      mTvQrCode.setVisibility(View.GONE);
+      mRbClipboard.setVisibility(View.VISIBLE);
     }
 
     @OnClick (R.id.tv_sms)
@@ -105,6 +153,21 @@ public class ShareManager {
     void onQQFriendsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_qq");
       mShareToQQ.sharePost(mActivity, mCircle, mPost);
+      mDialog.dismiss();
+    }
+
+    @OnClick (R.id.tv_qzone)
+    void onQzoneClicked() {
+      U.getAnalyser().trackEvent(mActivity, "share_by_qzone");
+      mShareToQzone.sharePost(mActivity, mCircle, mPost);
+      mDialog.dismiss();
+    }
+
+    @OnClick (R.id.rb_clipboard)
+    void onRbClipboardClicked() {
+      ClipboardManager cm = (ClipboardManager) mActivity.getSystemService(Context.CLIPBOARD_SERVICE);
+      cm.setText(mShareToQzone.shareLinkForPost(mPost.id));
+      U.showToast("已经复制至剪贴板");
       mDialog.dismiss();
     }
   }
@@ -133,6 +196,13 @@ public class ShareManager {
     void onQQFriendsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_qq");
       mShareToQQ.shareApp(mActivity, mCircle);
+      mDialog.dismiss();
+    }
+
+    @OnClick (R.id.tv_qzone)
+    void onQzoneClicked() {
+      U.getAnalyser().trackEvent(mActivity, "share_by_qzone");
+      mShareToQzone.shareApp(mActivity, mCircle);
       mDialog.dismiss();
     }
   }
