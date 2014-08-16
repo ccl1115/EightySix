@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="55dp"
-            app:count="3"
+            app:count="4"
             app:selector="@drawable/apptheme_indicator_white_dot_selected"
             app:drawable="@drawable/apptheme_indicator_white_dot"
             app:spacing="8dp"/>
