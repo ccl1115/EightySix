@@ -242,10 +242,10 @@
 
 
     <!-- Overlay Tips -->
-    <string name="overlay_tip_source">你肯定认识他们，但不会告诉你作者是谁。认识的人，包括你通讯录里的朋友以及他们在这个厂的朋友。</string>
+    <string name="overlay_tip_source">发这条秘密的人，你肯定认识。为了保护作者，系统将把你的朋友和他们在这个厂的朋友都显示为认识的人。</string>
     <string name="overlay_tip_praise">赞，可以鼓励作者，并且当该秘密有更新时，你将收到提醒</string>
     <string name="overlay_tip_portrait">每次评论新的秘密，你的头像都会不同。</string>
-    <string name="overlay_tip_share">分享，可以让身边的朋友快速加入，你和他们的秘密都会被更多地倾听和回应</string>
+    <string name="overlay_tip_share">遇到屌炸天的秘密时，记得分享给朋友哦！</string>
 
     <string name="ask_question">我要提问</string>
 
