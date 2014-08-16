@@ -276,7 +276,7 @@ public class FeedFragment extends BaseFragment {
 
   public int getCurrFriends() {
     if (mFeedAdapter != null && mFeedAdapter.getFeeds() != null) {
-      return mFeedAdapter.getFeeds().currFactoryFriends;
+      return mFeedAdapter.getFeeds().circle.friendCount;
     } else {
       return 0;
     }
