@@ -20,6 +20,12 @@
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"/>
 
+        <View
+                android:id="@+id/v_mask"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#44000000"/>
+
         <TextView
                 style="@style/TextView.PostStyle"
                 android:id="@+id/tv_content"

@@ -109,31 +109,14 @@ public class FeedPostView extends BasePostView {
         alpha.start();
       }
     };
+
+    setPostTheme(Color.BLACK);
   }
 
   @Subscribe
   public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
-    Log.d("PostView", "image loaded");
     if (!TextUtils.isEmpty(mPost.bgUrl)) {
-      if (ImageUtils.getUrlHash(mPost.bgUrl).equals(event.getHash())) {
-        if (event.getBitmap() == null) {
-          Log.d("PostView", "bitmap is null, load theme with white");
-          setPostTheme(Color.WHITE);
-        } else {
-          Log.d("PostView", "load color theme by bitmap");
-          ColorUtil.asyncThemedColor(event.getHash(), event.getBitmap());
-        }
-        mGvLoading.setVisibility(INVISIBLE);
-      }
-    }
-  }
-
-  @Subscribe
-  public void onThemedColorEvent(ColorUtil.ThemedColorEvent event) {
-    if (!TextUtils.isEmpty(mPost.bgUrl)) {
-      if (event.getBitmap().equals(ImageUtils.getFromMemByUrl(mPost.bgUrl))) {
-        setPostTheme(event.getColor());
-      }
+      mGvLoading.setVisibility(INVISIBLE);
     }
   }
 
@@ -166,10 +149,6 @@ public class FeedPostView extends BasePostView {
 
     if (mPost == null) {
       return;
-    }
-
-    if (TextUtils.isEmpty(mPost.bgUrl)) {
-      setPostTheme(ColorUtil.strToColor(mPost.bgColor));
     }
 
     String content = post.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content;
@@ -266,6 +245,8 @@ public class FeedPostView extends BasePostView {
     mTvContent.setTextColor(mMonoColor);
     mTvPraise.setTextColor(mMonoColor);
     mTvSource.setTextColor(mMonoColor);
+
+    if (mPost == null) return;
 
     if (mPost.praised == 1) {
       mTvPraise.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_red_pressed, 0, 0, 0);

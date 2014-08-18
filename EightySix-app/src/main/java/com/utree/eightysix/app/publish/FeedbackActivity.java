@@ -54,20 +54,8 @@ public class FeedbackActivity extends PublishActivity {
 
   @Subscribe
   @Override
-  public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
-    super.onImageLoadedEvent(event);
-  }
-
-  @Subscribe
-  @Override
   public void onImageUploaded(ImageUtils.ImageUploadedEvent event) {
     super.onImageUploaded(event);
-  }
-
-  @Subscribe
-  @Override
-  public void onThemedColorEvent(ColorUtil.ThemedColorEvent event) {
-    super.onThemedColorEvent(event);
   }
 
   @Subscribe

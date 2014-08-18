@@ -463,8 +463,6 @@ public class PublishActivity extends BaseActivity {
 
       Bitmap bitmap = ImageUtils.syncLoadResourceBitmap(tv.resourceId, ImageUtils.getUrlHash(mImageUploadUrl));
       mAivPostBg.setImageBitmap(bitmap);
-      ColorUtil.asyncThemedColor(ImageUtils.getUrlHash(mImageUploadUrl), bitmap);
-      //Log.d("PublishActivity", "URL: " + mImageUploadUrl);
       mUseColor = false;
       mBgColor = Color.WHITE;
     }
@@ -474,22 +472,6 @@ public class PublishActivity extends BaseActivity {
     ObjectAnimator animator = ObjectAnimator.ofFloat(view, "alpha", 0f, 1f);
     animator.setDuration(500);
     animator.start();
-  }
-
-  @Subscribe
-  public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
-    if (!TextUtils.isEmpty(mImageUploadUrl)) {
-      if (event.getHash().equals(ImageUtils.getUrlHash(mImageUploadUrl))) {
-        ColorUtil.asyncThemedColor(event.getHash(), event.getBitmap());
-      }
-    }
-  }
-
-  @Subscribe
-  public void onThemedColorEvent(ColorUtil.ThemedColorEvent event) {
-    int monochromizing = ColorUtil.monochromizing(event.getColor());
-    mPostEditText.setTextColor(monochromizing);
-    mTvPostTip.setTextColor(monochromizing);
   }
 
   @Override

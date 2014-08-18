@@ -80,28 +80,8 @@ public class PostPostView extends BasePostView {
     ButterKnife.inject(this, this);
 
     M.getRegisterHelper().register(this);
-  }
 
-  @Subscribe
-  public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
-    if (mPost != null && mPost.bgUrl != null) {
-      if (ImageUtils.getUrlHash(mPost.bgUrl).equals(event.getHash())) {
-        if (event.getBitmap() == null) {
-          setPostTheme(Color.WHITE);
-        } else {
-          ColorUtil.asyncThemedColor(event.getHash(), event.getBitmap());
-        }
-      }
-    }
-  }
-
-  @Subscribe
-  public void onThemedColorEvent(ColorUtil.ThemedColorEvent event) {
-    if (mPost != null && !TextUtils.isEmpty(mPost.bgUrl)) {
-      if (event.getBitmap().equals(ImageUtils.getFromMemByUrl(mPost.bgUrl))) {
-        setPostTheme(event.getColor());
-      }
-    }
+    setPostTheme(Color.BLACK);
   }
 
   public void setData(Post post) {
@@ -110,11 +90,6 @@ public class PostPostView extends BasePostView {
     if (mPost == null) {
       return;
     }
-
-    if (TextUtils.isEmpty(mPost.bgUrl)) {
-      setPostTheme(ColorUtil.strToColor(mPost.bgColor));
-    }
-
 
     mTvContent.setText(mPost.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content);
     if (mPost.comments > 0) {
@@ -127,10 +102,10 @@ public class PostPostView extends BasePostView {
 
     if (!TextUtils.isEmpty(mPost.bgUrl)) {
       mAivBg.setUrl(mPost.bgUrl);
-      mTvContent.setBackgroundColor(Color.TRANSPARENT);
+      mAivBg.setBackgroundColor(Color.TRANSPARENT);
     } else {
       mAivBg.setUrl(null);
-      mTvContent.setBackgroundColor(ColorUtil.strToColor(mPost.bgColor));
+      mAivBg.setBackgroundColor(ColorUtil.strToColor(mPost.bgColor));
     }
 
     mTvComment.setCompoundDrawablesWithIntrinsicBounds(mCommentRes, 0, 0, 0);
@@ -247,6 +222,8 @@ public class PostPostView extends BasePostView {
     mTvContent.setTextColor(mMonoColor);
     mTvPraise.setTextColor(mMonoColor);
     mTvSource.setTextColor(mMonoColor);
+
+    if (mPost == null) return;
 
     if (mPost.praised == 1) {
       mTvPraise.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_red_pressed, 0, 0, 0);

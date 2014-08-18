@@ -270,7 +270,9 @@ public class FeedFragment extends BaseFragment {
         cacheOutFeeds(mCircle.id, 1);
       }
     } else {
-      cacheOutFeeds(0, 1);
+      if (isAdded()) {
+        requestFeeds(0, 1);
+      }
     }
   }
 
@@ -366,7 +368,7 @@ public class FeedFragment extends BaseFragment {
     }
   }
 
-  private void requestFeeds(int id, final int page) {
+  private void requestFeeds(final int id, final int page) {
     if (mRefresherView != null && page == 1) {
       mRefresherView.setRefreshing(true);
     }
@@ -396,7 +398,9 @@ public class FeedFragment extends BaseFragment {
               response.object.praisePercent, response.object.upDown);
           mPageInfo = response.object.posts.page;
         } else {
-          if (mFeedAdapter != null && mFeedAdapter.getCount() == 0) {
+          if (id == 0) {
+            cacheOutFeeds(0, 1);
+          } else if (mFeedAdapter != null && mFeedAdapter.getCount() == 0) {
             mRstvEmpty.setVisibility(View.VISIBLE);
           }
         }
