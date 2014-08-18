@@ -52,7 +52,7 @@
     <string name="not_found_comment">还没有人评论，抢个沙发吧</string>
     <string name="not_found_msg">还没有新消息哦</string>
     <string name="not_found_msg_tip">多多发帖、互动，和大家畅快的交流吧</string>
-    <string name="not_found_praise">还没有赞信息哦</string>
+    <string name="not_found_praise">还没有收到赞哦</string>
     <string name="not_found_praise_tip">多多发帖、回帖，积累赞数吧</string>
 
     <!-- Report abuse -->
@@ -197,7 +197,7 @@
     <string name="give_us_feedback">向我们提出建议</string>
 
     <!-- PraiseStaticActivity -->
-    <string name="praise_count_static">被赞次数统计</string>
+    <string name="praise_count">我收到的赞</string>
     <string name="praise_count_obtained">已获%1$d赞</string>
     <string name="praise_status">帖子获%1$d赞，评论获%2$d赞，超过全国%3$s的工友</string>
     <string name="no_new_praise">没有新赞</string>

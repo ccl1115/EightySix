@@ -369,6 +369,7 @@ public class FeedActivity extends BaseActivity {
 
   @Override
   protected void onNewIntent(Intent intent) {
+
     //region 标题栏数据处理
     Circle circle = intent.getParcelableExtra("circle");
 
