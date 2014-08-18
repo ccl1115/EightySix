@@ -135,43 +135,6 @@ public class RegisterActivity extends BaseActivity {
       }
     });
 
-    getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
-      @Override
-      public String getTitle(int position) {
-        if (position == 0) {
-          return getString(R.string.login);
-        }
-        return null;
-      }
-
-      @Override
-      public Drawable getIcon(int position) {
-        return null;
-      }
-
-      @Override
-      public Drawable getBackgroundDrawable(int position) {
-        return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
-      }
-
-      @Override
-      public void onClick(View view, int position) {
-        if (position == 0) {
-          LoginActivity.start(RegisterActivity.this, mEtPhoneNumber.getText().toString());
-        }
-      }
-
-      @Override
-      public int getCount() {
-        return 1;
-      }
-
-      @Override
-      public TopBar.LayoutParams getLayoutParams(int position) {
-        return new TopBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-      }
-    });
-
     String phoneNumber = getIntent().getStringExtra("phoneNumber");
 
     if (phoneNumber != null) {
@@ -223,7 +186,7 @@ public class RegisterActivity extends BaseActivity {
             }
             mBtnRegister.setEnabled(true);
             hideProgressBar();
-            hideSoftKeyboard(mBtnRegister);
+            hideSoftKeyboard(mEtPhoneNumber);
           }
         }, UserResponse.class);
 
