@@ -185,6 +185,7 @@
     <string name="introduce_to_friends">介绍给朋友</string>
     <string name="about">蓝莓的故事</string>
     <string name="no_publish_perm_tip">如果这里有%1$d个朋友在职，就能证明你也在这里工作过，就可以发帖啦。</string>
+    <string name="no_perm_tip">为杜绝捣乱，只有证明你曾经在这里工作过，才可以发帖！\n\n解锁条件：当你有三个朋友把这里设为在职时，就能解锁发帖啦！</string>
 
     <!-- PostActivity -->
     <string name="comment">评论</string>
@@ -219,7 +220,7 @@
     <string name="search_contact">搜人名</string>
     <string name="check_update">检查更新</string>
     <string name="help">使用帮助</string>
-    <string name="no_perm_to_publish">你还没有发帖的权限</string>
+    <string name="no_perm_to_publish">你没有发帖的权限</string>
     <string name="find_friends">找出圈子里的朋友，看他们都在说什么？</string>
     <string name="not_select_circle">你还没有选择在职工厂</string>
     <string name="circle_unlocked_tip">你还没有解锁这个圈子</string>

@@ -394,9 +394,13 @@ public class FeedFragment extends BaseFragment {
           } else if (mFeedAdapter != null) {
             mFeedAdapter.add(response.object.posts.lists);
           }
+          mPageInfo = response.object.posts.page;
+
           ((FeedActivity) getBaseActivity()).setMyPraiseCount(response.object.myPraiseCount,
               response.object.praisePercent, response.object.upDown);
-          mPageInfo = response.object.posts.page;
+
+          ((FeedActivity) getBaseActivity()).mSend.setImageResource(response.object.lock == 1 ?
+              R.drawable.ic_post_pen_disabled : R.drawable.ic_post_pen);
         } else {
           if (id == 0) {
             cacheOutFeeds(0, 1);
@@ -436,10 +440,12 @@ public class FeedFragment extends BaseFragment {
             mFeedAdapter.add(response.object.posts.lists);
           }
           mPageInfo = response.object.posts.page;
-          mLvFeed.stopLoadMore();
+
           ((FeedActivity) getBaseActivity())
               .setMyPraiseCount(response.object.myPraiseCount, response.object.praisePercent, response.object.upDown);
-          getBaseActivity().hideProgressBar();
+
+          ((FeedActivity) getBaseActivity()).mSend.setImageResource(response.object.lock == 1 ?
+              R.drawable.ic_post_pen_disabled : R.drawable.ic_post_pen);
         } else {
           if (id != 0) {
             requestFeeds(id, page);

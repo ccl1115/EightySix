@@ -7,6 +7,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -437,7 +441,13 @@ public class FeedActivity extends BaseActivity {
       mNoPermDialog = new ThemedDialog(this);
       View view = LayoutInflater.from(this).inflate(R.layout.dialog_content_locked, null);
       NoPermViewHolder noPermViewHolder = new NoPermViewHolder(view);
-      noPermViewHolder.mTvFriendCount.setText(getString(R.string.current_friend_count, mFeedFragment.getFriendCount()));
+      String tip = getString(R.string.no_perm_tip);
+      int index = tip.indexOf("解锁条件");
+      ForegroundColorSpan span = new ForegroundColorSpan(
+          getResources().getColor(R.color.apptheme_primary_light_color));
+      SpannableString spannableString = new SpannableString(tip);
+      spannableString.setSpan(span, index, index + 4, 0);
+      noPermViewHolder.mTvNoPermTip.setText(spannableString);
       mNoPermDialog.setContent(view);
       mNoPermDialog.setPositive(R.string.invite_people, new View.OnClickListener() {
         @Override
@@ -552,7 +562,8 @@ public class FeedActivity extends BaseActivity {
     if (circle == null) return;
 
     setTopTitle(circle.shortName);
-    setTopSubTitle(String.format(getString(R.string.friends_info), mFeedFragment.getCurrFriends(), mFeedFragment.getWorkerCount()));
+    setTopSubTitle(String.format(getString(R.string.friends_info),
+        mFeedFragment.getCurrFriends(), mFeedFragment.getWorkerCount()));
     if (circle.lock == 1) {
       getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(
           getResources().getDrawable(R.drawable.ic_lock_small), null, null, null);
@@ -589,8 +600,8 @@ public class FeedActivity extends BaseActivity {
   @Keep
   class NoPermViewHolder {
 
-    @InjectView (R.id.tv_friend_count)
-    TextView mTvFriendCount;
+    @InjectView (R.id.tv_no_perm_tip)
+    TextView mTvNoPermTip;
 
     NoPermViewHolder(View view) {
       ButterKnife.inject(this, view);
