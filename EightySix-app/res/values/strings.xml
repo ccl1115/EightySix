@@ -149,7 +149,7 @@
     <string name="comment_load_failed">加载失败，请点击重试</string>
 
     <!-- BaseCirclesActivity -->
-    <string name="search_circles">找工厂，找商圈，找企业</string>
+    <string name="search_circles">请输入你的企业名称查找</string>
     <string name="my_circles">我的工友圈</string>
     <string name="no_circles">没有找到工友圈</string>
     <string name="factory">工</string>
@@ -178,7 +178,7 @@
     <string name="success_created">提交成功，若审核通过，我们会及时通知，请耐心等候</string>
 
     <!-- FeedActivity -->
-    <string name="select_circle">选择工友圈</string>
+    <string name="select_circle">设置你正在上班的企业</string>
     <string name="friends_info">朋友(%1$d) | 工友(%2$d)</string>
     <string name="hidden_friends_feed">朋友发的%1$d条匿名帖被隐藏</string>
     <string name="unlock_to_view">解锁查看</string>
