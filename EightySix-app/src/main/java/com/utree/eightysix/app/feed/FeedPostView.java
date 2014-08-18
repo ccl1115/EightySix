@@ -69,7 +69,7 @@ public class FeedPostView extends BasePostView {
   @InjectView (R.id.fl_grid_panel)
   public LinearLayout mLlPanel;
 
-  @InjectView (R.id.ll_item)
+  @InjectView (R.id.rl_item)
   public LinearLayout mLlItem;
 
   @InjectView (R.id.fl_content)

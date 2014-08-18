@@ -28,6 +28,9 @@ public class Circle extends BaseCircle implements Comparator<Circle>, Comparable
   @SerializedName ("factoryType")
   public int circleType;
 
+  @SerializedName("current")
+  public int current;
+
   /**
    * 1 is lock
    * 0 is unlock

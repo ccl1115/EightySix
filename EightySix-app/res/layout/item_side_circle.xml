@@ -13,19 +13,35 @@
             android:orientation="vertical"
             android:background="@drawable/apptheme_primary_list_selector">
 
-        <TextView
-                android:layout_width="wrap_content"
+        <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="4dp"
-                android:duplicateParentState="true"
-                android:lines="1"
-                android:singleLine="true"
-                android:ellipsize="end"
-                android:id="@+id/name"
-                android:textSize="16sp"
-                android:textColor="@color/apptheme_primary_text_dark"/>
+                android:orientation="horizontal">
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="4dp"
+                    android:duplicateParentState="true"
+                    android:lines="1"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:id="@+id/name"
+                    android:textSize="16sp"
+                    android:textColor="@color/apptheme_primary_text_dark"/>
+
+            <ImageView
+                    android:id="@+id/iv_house"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/house"/>
+
+        </LinearLayout>
 
         <TextView
                 android:layout_width="wrap_content"
