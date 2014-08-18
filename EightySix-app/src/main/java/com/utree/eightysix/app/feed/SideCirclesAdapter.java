@@ -67,7 +67,7 @@ class SideCirclesAdapter extends BaseAdapter {
     viewHolder.mTvFriends.setText(circle.info);
 
     Resources res = parent.getResources();
-    if (circle.current == 1) {
+    if (circle.currFactory == 1) {
       viewHolder.mIvHouse.setVisibility(View.VISIBLE);
     } else {
       viewHolder.mIvHouse.setVisibility(View.INVISIBLE);

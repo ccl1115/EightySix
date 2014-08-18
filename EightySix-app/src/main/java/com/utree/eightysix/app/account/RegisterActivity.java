@@ -176,7 +176,7 @@ public class RegisterActivity extends BaseActivity {
                 if (user != null) {
                   Account.inst().login(user.userId, user.token);
                   showToast(R.string.register_success, false);
-                  setLoadingText("寻找工友圈中");
+                  setLoadingText("身份验证中");
                   ContactsSyncService.start(RegisterActivity.this, true);
                   return;
                 } else {

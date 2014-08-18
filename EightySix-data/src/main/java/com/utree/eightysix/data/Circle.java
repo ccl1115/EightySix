@@ -28,8 +28,8 @@ public class Circle extends BaseCircle implements Comparator<Circle>, Comparable
   @SerializedName ("factoryType")
   public int circleType;
 
-  @SerializedName("current")
-  public int current;
+  @SerializedName("currFactory")
+  public int currFactory;
 
   /**
    * 1 is lock

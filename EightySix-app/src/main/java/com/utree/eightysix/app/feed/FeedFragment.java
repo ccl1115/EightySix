@@ -441,7 +441,9 @@ public class FeedFragment extends BaseFragment {
               .setMyPraiseCount(response.object.myPraiseCount, response.object.praisePercent, response.object.upDown);
           getBaseActivity().hideProgressBar();
         } else {
-          requestFeeds(id, page);
+          if (id != 0) {
+            requestFeeds(id, page);
+          }
         }
         mRefresherView.setRefreshing(false);
         mLvFeed.stopLoadMore();
