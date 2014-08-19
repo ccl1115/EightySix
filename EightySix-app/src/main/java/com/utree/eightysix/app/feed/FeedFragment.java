@@ -2,7 +2,6 @@ package com.utree.eightysix.app.feed;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +31,7 @@ import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
+import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RandomSceneTextView;
@@ -119,6 +119,16 @@ public class FeedFragment extends BaseFragment {
         } else {
           requestFeeds(0, 1);
         }
+      }
+
+      @Override
+      public void onDrag() {
+        getBaseActivity().showRefreshIndicator();
+      }
+
+      @Override
+      public void onCancel() {
+        getBaseActivity().hideRefreshIndicator();
       }
     });
 

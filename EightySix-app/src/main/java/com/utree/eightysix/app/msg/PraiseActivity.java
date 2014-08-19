@@ -3,7 +3,6 @@ package com.utree.eightysix.app.msg;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +24,7 @@ import com.utree.eightysix.request.PraisesRequest;
 import com.utree.eightysix.response.MsgsResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RandomSceneTextView;
@@ -124,6 +124,16 @@ public class PraiseActivity extends BaseActivity {
       public void onRefresh() {
         mRefreshed = true;
         requestPraises(1);
+      }
+
+      @Override
+      public void onDrag() {
+        showRefreshIndicator();
+      }
+
+      @Override
+      public void onCancel() {
+        hideRefreshIndicator();
       }
     });
 

@@ -47,6 +47,8 @@ public class RefreshIndicator extends FrameLayout {
   }
 
   public void show() {
+    if (getVisibility() == VISIBLE) return;
+
     ObjectAnimator tag = (ObjectAnimator) getTag();
     if (tag != null) tag.cancel();
 
@@ -58,6 +60,8 @@ public class RefreshIndicator extends FrameLayout {
   }
 
   public void hide() {
+    if (getVisibility() == INVISIBLE) return;
+
     ObjectAnimator tag = (ObjectAnimator) getTag();
     if (tag != null) tag.cancel();
     ObjectAnimator animator = ObjectAnimator.ofFloat(this, "translationY", 0, -getMeasuredHeight());

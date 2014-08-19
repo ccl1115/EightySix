@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +38,7 @@ import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RandomSceneTextView;
@@ -247,6 +247,16 @@ public class BaseCirclesActivity extends BaseActivity {
           mRefreshed = true;
           requestCircles(1);
           showRefreshIndicator();
+        }
+
+        @Override
+        public void onDrag() {
+          showRefreshIndicator();
+        }
+
+        @Override
+        public void onCancel() {
+          hideRefreshIndicator();
         }
       });
     }
