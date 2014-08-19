@@ -78,7 +78,6 @@ public class ShareManager {
     private ShareDialog mDialog;
     private Post mPost;
     private String mComment;
-    private String mShorten;
 
     @InjectView(R.id.aiv_qr_code)
     ImageView mIvQrCode;
