@@ -17,16 +17,13 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
-import com.squareup.otto.Subscribe;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
-import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.PostDeleteRequest;
 import com.utree.eightysix.utils.ColorUtil;
-import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.widget.AsyncImageView;
 
 /**
@@ -141,7 +138,7 @@ public class PostPostView extends BasePostView {
                 switch (which) {
                   case 0:
                     U.getAnalyser().trackEvent(U.getContext(), "post_more_share");
-                    U.getShareManager().sharePostDialog(((Activity) getContext()), mPost.circle, mPost).show();
+                    U.getShareManager().sharePostDialog(((Activity) getContext()), mPost).show();
                     break;
                   case 1:
                     U.getAnalyser().trackEvent(U.getContext(), "post_more_report");

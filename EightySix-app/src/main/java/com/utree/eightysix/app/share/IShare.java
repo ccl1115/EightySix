@@ -5,29 +5,23 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.U;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Post;
+import com.utree.eightysix.utils.BdShortener;
+import com.utree.eightysix.utils.Shortener;
 
 /**
  * @author simon
  */
 abstract class IShare {
-  public abstract void shareApp(Activity activity, Circle circle);
 
-  public abstract void sharePost(Activity activity, Circle circle, Post post);
+  String mShortenAppLink;
+  String mShortenPostLink;
 
-  public abstract void shareComment(Activity activity, Circle circle, Post post, String comment);
+  public abstract void shareApp(Activity activity, Circle circle, String url);
 
-  protected String shareLinkForApp(int circleId) {
-    return String.format("%s/shareapp.do?userId=%s&factoryId=%d", U.getConfig("api.host"), Account.inst().getUserId(), circleId);
-  }
+  public abstract void sharePost(Activity activity, Post post, String url);
 
-  protected String shareLinkForPost(String postId) {
-    return String.format("%s/sharecontent.do?userId=%s&postVirtualId=%s",
-        U.getConfig("api.host"), Account.inst().getUserId(), postId);
-  }
+  public abstract void shareComment(Activity activity, Post post, String comment, String url);
 
-  protected String shareLinkForComment(String postId) {
-    return shareLinkForPost(postId);
-  }
 
   protected String shareTitleForApp() {
     return "和我一起玩【蓝莓】吧！";
@@ -38,7 +32,7 @@ abstract class IShare {
   }
 
   protected String shareTitleForComment() {
-    return "分享自［蓝莓圈］的精彩评论";
+    return "分享自【蓝莓圈】的精彩评论";
   }
 
   protected String shareContentForApp() {

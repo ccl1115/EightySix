@@ -9,11 +9,14 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Post;
+import com.utree.eightysix.utils.BdShortener;
+import com.utree.eightysix.utils.Shortener;
 import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.ThemedDialog;
 
@@ -27,6 +30,8 @@ public class ShareManager {
   private IShare mShareToQzone = new ShareToQzone();
   private IShare mShareViaSMS = new ShareViaSMS();
 
+  private Shortener mShortener = new BdShortener();
+
   public ThemedDialog shareAppDialog(final Activity activity, final Circle circle) {
     return new ShareDialog(activity) {
       @Override
@@ -36,31 +41,44 @@ public class ShareManager {
     };
   }
 
-  public ThemedDialog sharePostDialog(final Activity activity, final Circle circle, final Post post) {
+  public ThemedDialog sharePostDialog(final Activity activity, final Post post) {
     return new ShareDialog(activity) {
       @Override
       protected Object getViewHolder(ShareDialog dialog) {
-        return new SharePostViewHolder(activity, dialog, circle, post);
+        return new SharePostViewHolder(activity, dialog, post);
       }
     };
   }
 
-  public ThemedDialog shareCommentDialog(final Activity activity, final Circle circle, final Post post, final String comment) {
+  public ThemedDialog shareCommentDialog(final Activity activity, final Post post, final String comment) {
     return new ShareDialog(activity) {
       @Override
       protected Object getViewHolder(ShareDialog dialog) {
-        return new ShareCommentViewHolder(activity, dialog, circle, post, comment);
+        return new ShareCommentViewHolder(activity, dialog, post, comment);
       }
     };
   }
 
+  static String shareLinkForApp(int circleId) {
+    return String.format("%s/shareapp.do?userId=%s&factoryId=%d",
+        U.getConfig("api.host"), Account.inst().getUserId(), circleId);
+  }
+
+  static String shareLinkForPost(String postId) {
+    return String.format("%s/sharecontent.do?userId=%s&postVirtualId=%s",
+        U.getConfig("api.host"), Account.inst().getUserId(), postId);
+  }
+
+  static String shareLinkForComment(String postId) {
+    return shareLinkForPost(postId);
+  }
   @Keep
   public class ShareCommentViewHolder {
     private Activity mActivity;
     private ShareDialog mDialog;
     private Post mPost;
-    private Circle mCircle;
     private String mComment;
+    private String mShorten;
 
     @InjectView(R.id.aiv_qr_code)
     ImageView mIvQrCode;
@@ -71,12 +89,11 @@ public class ShareManager {
     @InjectView(R.id.rb_clipboard)
     RoundedButton mRbClipboard;
 
-    ShareCommentViewHolder(Activity activity, ShareDialog dialog, Circle circle, Post post, String comment) {
+    ShareCommentViewHolder(Activity activity, ShareDialog dialog, Post post, String comment) {
       mActivity = activity;
       mDialog = dialog;
       mPost = post;
       mComment = comment;
-      mCircle = circle;
       ButterKnife.inject(this, dialog);
 
       mIvQrCode.setVisibility(View.GONE);
@@ -87,29 +104,65 @@ public class ShareManager {
     @OnClick (R.id.tv_sms)
     void onTvSmsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_msg");
-      mShareViaSMS.shareComment(mActivity, mCircle, mPost, mComment);
+      mShortener.shorten(shareLinkForComment(mPost.id), new Shortener.Callback() {
+        @Override
+        public void onShorten(String shorten) {
+          if (shorten == null) {
+            mShareViaSMS.shareComment(mActivity, mPost, mComment, shareLinkForComment(mPost.id));
+          } else {
+            mShareViaSMS.shareComment(mActivity, mPost, mComment, shorten);
+          }
+        }
+      });
       mDialog.dismiss();
     }
 
     @OnClick (R.id.tv_qq_friends)
     void onQQFriendsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_qq");
-      mShareToQQ.shareComment(mActivity, mCircle, mPost, mComment);
+      mShortener.shorten(shareLinkForComment(mPost.id), new Shortener.Callback() {
+        @Override
+        public void onShorten(String shorten) {
+          if (shorten == null) {
+            mShareToQQ.shareComment(mActivity, mPost, mComment, shareLinkForComment(mPost.id));
+          } else {
+            mShareToQQ.shareComment(mActivity, mPost, mComment, shorten);
+          }
+        }
+      });
       mDialog.dismiss();
     }
 
     @OnClick (R.id.tv_qzone)
     void onQzoneClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_qzone");
-      mShareToQzone.shareComment(mActivity, mCircle, mPost, mComment);
+      mShortener.shorten(shareLinkForComment(mPost.id), new Shortener.Callback() {
+        @Override
+        public void onShorten(String shorten) {
+          if (shorten == null) {
+            mShareToQzone.shareComment(mActivity, mPost, mComment, shareLinkForComment(mPost.id));
+          } else {
+            mShareToQzone.shareComment(mActivity, mPost, mComment, shorten);
+          }
+        }
+      });
       mDialog.dismiss();
     }
 
     @OnClick (R.id.rb_clipboard)
     void onRbClipboardClicked() {
-      ClipboardManager cm = (ClipboardManager) mActivity.getSystemService(Context.CLIPBOARD_SERVICE);
-      cm.setText(mShareToQzone.shareLinkForPost(mPost.id));
-      U.showToast("已经复制至剪贴板");
+      mShortener.shorten(shareLinkForComment(mPost.id), new Shortener.Callback() {
+        @Override
+        public void onShorten(String shorten) {
+          final ClipboardManager cm = (ClipboardManager) mActivity.getSystemService(Context.CLIPBOARD_SERVICE);
+          if (shorten == null) {
+            cm.setText(shareLinkForPost(mPost.id));
+          } else {
+            cm.setText(shorten);
+          }
+          U.showToast("已经复制至剪贴板");
+        }
+      });
       mDialog.dismiss();
     }
   }
@@ -119,7 +172,6 @@ public class ShareManager {
     private Activity mActivity;
     private ShareDialog mDialog;
     private Post mPost;
-    private Circle mCircle;
 
     @InjectView(R.id.aiv_qr_code)
     ImageView mIvQrCode;
@@ -130,11 +182,10 @@ public class ShareManager {
     @InjectView(R.id.rb_clipboard)
     RoundedButton mRbClipboard;
 
-    SharePostViewHolder(Activity activity, ShareDialog dialog, Circle circle, Post post) {
+    SharePostViewHolder(Activity activity, ShareDialog dialog, Post post) {
       mActivity = activity;
       mDialog = dialog;
       mPost = post;
-      mCircle = circle;
       ButterKnife.inject(this, dialog);
 
       mIvQrCode.setVisibility(View.GONE);
@@ -145,29 +196,65 @@ public class ShareManager {
     @OnClick (R.id.tv_sms)
     void onTvSmsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_msg");
-      mShareViaSMS.sharePost(mActivity, mCircle, mPost);
+      mShortener.shorten(shareLinkForPost(mPost.id), new Shortener.Callback() {
+        @Override
+        public void onShorten(String shorten) {
+          if (shorten == null) {
+            mShareViaSMS.sharePost(mActivity, mPost, shareLinkForPost(mPost.id));
+          } else {
+            mShareViaSMS.sharePost(mActivity, mPost, shorten);
+          }
+        }
+      });
       mDialog.dismiss();
     }
 
     @OnClick (R.id.tv_qq_friends)
     void onQQFriendsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_qq");
-      mShareToQQ.sharePost(mActivity, mCircle, mPost);
+      mShortener.shorten(shareLinkForPost(mPost.id), new Shortener.Callback() {
+        @Override
+        public void onShorten(String shorten) {
+          if (shorten == null) {
+            mShareViaSMS.sharePost(mActivity, mPost, shareLinkForPost(mPost.id));
+          } else {
+            mShareViaSMS.sharePost(mActivity, mPost, shorten);
+          }
+        }
+      });
       mDialog.dismiss();
     }
 
     @OnClick (R.id.tv_qzone)
     void onQzoneClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_qzone");
-      mShareToQzone.sharePost(mActivity, mCircle, mPost);
+      mShortener.shorten(shareLinkForPost(mPost.id), new Shortener.Callback() {
+        @Override
+        public void onShorten(String shorten) {
+          if (shorten == null) {
+            mShareViaSMS.sharePost(mActivity, mPost, shareLinkForPost(mPost.id));
+          } else {
+            mShareViaSMS.sharePost(mActivity, mPost, shorten);
+          }
+        }
+      });
       mDialog.dismiss();
     }
 
     @OnClick (R.id.rb_clipboard)
     void onRbClipboardClicked() {
-      ClipboardManager cm = (ClipboardManager) mActivity.getSystemService(Context.CLIPBOARD_SERVICE);
-      cm.setText(mShareToQzone.shareLinkForPost(mPost.id));
-      U.showToast("已经复制至剪贴板");
+      mShortener.shorten(shareLinkForPost(mPost.id), new Shortener.Callback() {
+        @Override
+        public void onShorten(String shorten) {
+          final ClipboardManager cm = (ClipboardManager) mActivity.getSystemService(Context.CLIPBOARD_SERVICE);
+          if (shorten == null) {
+            cm.setText(shareLinkForPost(mPost.id));
+          } else {
+            cm.setText(shorten);
+          }
+          U.showToast("已经复制至剪贴板");
+        }
+      });
       mDialog.dismiss();
     }
   }
@@ -188,21 +275,48 @@ public class ShareManager {
     @OnClick (R.id.tv_sms)
     void onTvSmsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_msg");
-      mShareViaSMS.shareApp(mActivity, mCircle);
+      mShortener.shorten(shareLinkForApp(mCircle.id), new Shortener.Callback() {
+        @Override
+        public void onShorten(String shorten) {
+          if (shorten == null) {
+            mShareViaSMS.shareApp(mActivity, mCircle, shareLinkForApp(mCircle.id));
+          } else {
+            mShareViaSMS.shareApp(mActivity, mCircle, shorten);
+          }
+        }
+      });
       mDialog.dismiss();
     }
 
     @OnClick (R.id.tv_qq_friends)
     void onQQFriendsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_qq");
-      mShareToQQ.shareApp(mActivity, mCircle);
+      mShortener.shorten(shareLinkForApp(mCircle.id), new Shortener.Callback() {
+        @Override
+        public void onShorten(String shorten) {
+          if (shorten == null) {
+            mShareToQQ.shareApp(mActivity, mCircle, shareLinkForApp(mCircle.id));
+          } else {
+            mShareToQQ.shareApp(mActivity, mCircle, shorten);
+          }
+        }
+      });
       mDialog.dismiss();
     }
 
     @OnClick (R.id.tv_qzone)
     void onQzoneClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_qzone");
-      mShareToQzone.shareApp(mActivity, mCircle);
+      mShortener.shorten(shareLinkForApp(mCircle.id), new Shortener.Callback() {
+        @Override
+        public void onShorten(String shorten) {
+          if (shorten == null) {
+            mShareToQzone.shareApp(mActivity, mCircle, shareLinkForApp(mCircle.id));
+          } else {
+            mShareToQzone.shareApp(mActivity, mCircle, shorten);
+          }
+        }
+      });
       mDialog.dismiss();
     }
   }

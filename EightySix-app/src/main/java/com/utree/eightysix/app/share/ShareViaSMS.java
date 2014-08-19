@@ -10,21 +10,20 @@ import com.utree.eightysix.data.Post;
  */
 class ShareViaSMS extends IShare {
   @Override
-  public void shareApp(Activity activity, Circle circle) {
+  public void shareApp(Activity activity, Circle circle, String url) {
     ContactsActivity.start(activity,
-        String.format(shareContentForApp(), circle.shortName, circle.shortName) + shareLinkForApp(circle.id));
+        String.format(shareContentForApp(), circle.shortName, circle.shortName) + url);
   }
 
   @Override
-  public void sharePost(Activity activity, Circle circle, Post post) {
+  public void sharePost(Activity activity, Post post, String url) {
     ContactsActivity.start(activity,
-        String.format(shareContentForPost(), circle.shortName, circle.shortName) + shareLinkForPost(post.id));
+        String.format(shareContentForPost(), post.circle, post.circle) + url);
   }
 
   @Override
-  public void shareComment(Activity activity, Circle circle, Post post, String comment) {
-    ContactsActivity.start(activity,
-        String.format("“%s”，%s", comment, shareLinkForComment(post.id)));
+  public void shareComment(Activity activity, Post post, String comment, String url) {
+    ContactsActivity.start(activity, String.format("“%s”，%s", comment, url));
   }
 
   protected String shareContentForApp() {

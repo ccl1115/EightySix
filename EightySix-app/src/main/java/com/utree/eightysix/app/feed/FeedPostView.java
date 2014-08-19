@@ -28,7 +28,6 @@ import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.GearsView;
-import de.akquinet.android.androlog.Log;
 
 /**
  */
@@ -204,7 +203,7 @@ public class FeedPostView extends BasePostView {
 
   @OnClick (R.id.iv_share)
   public void onIvShareClicked() {
-    U.getShareManager().sharePostDialog((Activity) getContext(), mPost.circle, mPost).show();
+    U.getShareManager().sharePostDialog((Activity) getContext(), mPost).show();
   }
 
   @OnClick (R.id.tv_praise)

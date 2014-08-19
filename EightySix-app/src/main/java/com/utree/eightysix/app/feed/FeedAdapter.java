@@ -46,11 +46,6 @@ class FeedAdapter extends BaseAdapter {
   FeedAdapter(Feeds feeds) {
     mFeeds = feeds;
 
-    for (BaseItem item : mFeeds.posts.lists) {
-      if (item instanceof Post) {
-        ((Post) item).circle = mFeeds.circle;
-      }
-    }
     boolean showUnlock = mFeeds.lock == 1;
     boolean showInvite = mFeeds.upContact != 1;
     boolean showSelect = mFeeds.selectFactory != 1;
@@ -65,11 +60,6 @@ class FeedAdapter extends BaseAdapter {
   }
 
   public void add(List<BaseItem> posts) {
-    for (BaseItem item : posts) {
-      if (item instanceof Post) {
-        ((Post) item).circle = mFeeds.circle;
-      }
-    }
     if (mFeeds.posts.lists == null) {
       mFeeds.posts.lists = posts;
     } else {

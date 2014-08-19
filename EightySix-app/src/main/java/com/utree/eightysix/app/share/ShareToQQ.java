@@ -27,31 +27,31 @@ class ShareToQQ extends IShare {
   }
 
   @Override
-  public void shareApp(Activity activity, Circle circle) {
+  public void shareApp(Activity activity, Circle circle, String url) {
     Bundle data = new Bundle();
     data.putString(QQShare.SHARE_TO_QQ_TITLE, shareTitleForApp());
     data.putString(QQShare.SHARE_TO_QQ_SUMMARY, shareContentForApp());
-    data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, shareLinkForApp(circle.id));
+    data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, url);
     data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
     shareToQQ(activity, data, defaultListener());
   }
 
   @Override
-  public void sharePost(Activity activity, Circle circle, Post post) {
+  public void sharePost(Activity activity, Post post, String url) {
     Bundle data = new Bundle();
     data.putString(QQShare.SHARE_TO_QQ_TITLE, shareTitleForPost());
     data.putString(QQShare.SHARE_TO_QQ_SUMMARY, shareContentForPost());
-    data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, shareLinkForPost(post.id));
+    data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, url);
     data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
     shareToQQ(activity, data, defaultListener());
   }
 
   @Override
-  public void shareComment(Activity activity, Circle circle, Post post, String comment) {
+  public void shareComment(Activity activity, Post post, String comment, String url) {
     Bundle data = new Bundle();
     data.putString(QQShare.SHARE_TO_QQ_TITLE, shareTitleForComment());
     data.putString(QQShare.SHARE_TO_QQ_SUMMARY, comment);
-    data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, shareLinkForComment(post.id));
+    data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, url);
     data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
     shareToQQ(activity, data, defaultListener());
   }
