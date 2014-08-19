@@ -144,7 +144,7 @@ public class PostActivity extends BaseActivity {
                     break;
                   case 1:
                     U.getAnalyser().trackEvent(PostActivity.this, "comment_more_share");
-                    U.getShareManager().shareCommentDialog(PostActivity.this, mPost.circle, mPost, comment.content).show();
+                    U.getShareManager().shareCommentDialog(PostActivity.this, mPost, comment.content).show();
                     break;
                   case 2:
                     U.getAnalyser().trackEvent(PostActivity.this, "comment_more_report");
@@ -372,7 +372,6 @@ public class PostActivity extends BaseActivity {
   @Subscribe
   public void onReloadCommentEvent(ReloadCommentEvent event) {
     requestComment(1);
-    mPostCommentsAdapter.setNeedReload(false);
   }
 
   void finishOrShowQuitConfirmDialog() {
@@ -411,9 +410,12 @@ public class PostActivity extends BaseActivity {
           mPostCommentsAdapter = new PostCommentsAdapter(response.object.post, response.object.comments.lists);
           mLvComments.setAdapter(mPostCommentsAdapter);
           mPost = response.object.post;
+          mPostCommentsAdapter.setNeedReload(false);
           U.getBus().post(mPost);
         } else {
-          mPostCommentsAdapter.setNeedReload(true);
+          if (mPostCommentsAdapter != null && mPostCommentsAdapter.getCount() == 1) {
+            mPostCommentsAdapter.setNeedReload(true);
+          }
         }
 
         hideProgressBar();

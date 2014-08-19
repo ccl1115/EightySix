@@ -66,6 +66,7 @@ class PostCommentsAdapter extends BaseAdapter {
 
   public void setNeedReload(boolean need) {
     mNeedReload = need;
+    notifyDataSetChanged();
   }
 
   @Override
