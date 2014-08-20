@@ -23,7 +23,7 @@
                 app:drawable="@drawable/scene_1"
                 android:visibility="gone"/>
 
-        <android.support.v4.widget.SwipeRefreshLayout
+        <com.utree.eightysix.view.SwipeRefreshLayout
                 android:id="@+id/refresh_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -33,7 +33,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
 
-        </android.support.v4.widget.SwipeRefreshLayout>
+        </com.utree.eightysix.view.SwipeRefreshLayout>
 
     </FrameLayout>
 </LinearLayout>

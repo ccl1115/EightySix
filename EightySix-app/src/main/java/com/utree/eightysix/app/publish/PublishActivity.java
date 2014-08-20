@@ -506,13 +506,7 @@ public class PublishActivity extends BaseActivity {
         if (data != null) {
           Uri uri = data.getData();
 
-          Cursor cursor = getContentResolver()
-              .query(uri, new String[]{MediaStore.MediaColumns.DATA}, null, null, null);
-
-          if (cursor.moveToFirst()) {
-            String p = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
-            setBgImage(p);
-          }
+          setBgImage(uri.getPath());
         }
         break;
       default:
@@ -612,7 +606,7 @@ public class PublishActivity extends BaseActivity {
 
   private boolean startCrop() {
     try {
-      Intent cropIntent = new Intent("com.android.camera.action.CROP");
+      Intent cropIntent = new Intent(this, ImageCropActivity.class);
       // indicate image type and Uri
       cropIntent.setDataAndType(Uri.fromFile(mOutputFile), "image/*");
       // set crop properties

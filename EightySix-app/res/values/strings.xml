@@ -226,6 +226,9 @@
     <string name="circle_unlocked_tip">你还没有解锁这个圈子</string>
     <string name="unlock">解锁</string>
 
+    <!-- CropImageActivity -->
+    <string name="crop_image">裁剪图片</string>
+
     <!-- Notifications -->
     <string name="notification_friend_new_post">你的朋友发了一条新帖子</string>
     <string name="notification_circle_unlocked">新的工友圈解锁了！</string>
