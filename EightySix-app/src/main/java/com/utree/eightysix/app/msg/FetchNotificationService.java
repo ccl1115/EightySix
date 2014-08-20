@@ -78,4 +78,10 @@ public class FetchNotificationService extends Service {
       }
     }, FetchResponse.class));
   }
+
+  @Override
+  public void onDestroy() {
+    mHandler.removeMessages(MSG_FETCH);
+    super.onDestroy();
+  }
 }

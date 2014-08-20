@@ -59,6 +59,7 @@ import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TopBar;
+import de.akquinet.android.androlog.Log;
 import java.util.List;
 
 /**
@@ -293,6 +294,7 @@ public class FeedActivity extends BaseActivity {
 
   @Override
   protected void onStop() {
+    Log.d("FeedActivity", "onStop");
     super.onStop();
     mDlContent.closeDrawer(mLlSide);
 
