@@ -65,9 +65,21 @@ public class ImageCropActivity extends BaseActivity {
 
     Uri uri = getIntent().getData();
 
+    if (uri == null) {
+      setResult(RESULT_CANCELED);
+      finish();
+      return;
+    }
+
     File f = new File(uri.getPath());
 
     Bitmap bitmap = ImageUtils.safeDecodeBitmap(f);
+
+    if (bitmap == null) {
+      setResult(RESULT_CANCELED);
+      finish();
+      return;
+    }
 
     mCivCrop.setImageBitmap(bitmap);
 
@@ -75,6 +87,11 @@ public class ImageCropActivity extends BaseActivity {
 
   @Override
   public void onBackPressed() {
+    finish();
+  }
+
+  @Override
+  public void onActionLeftClicked() {
     finish();
   }
 

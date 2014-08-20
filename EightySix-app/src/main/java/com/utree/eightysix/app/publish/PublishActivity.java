@@ -476,10 +476,10 @@ public class PublishActivity extends BaseActivity {
 
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    if (resultCode == Activity.RESULT_CANCELED) return;
 
     switch (requestCode) {
       case REQUEST_CODE_ALBUM:
+        if (resultCode == RESULT_CANCELED) return;
         if (data != null) {
           Uri uri = data.getData();
 
@@ -496,6 +496,7 @@ public class PublishActivity extends BaseActivity {
         }
         break;
       case REQUEST_CODE_CAMERA:
+        if (resultCode == RESULT_CANCELED) return;
         if (mOutputFile != null) {
           if (!startCrop()) {
             setBgImage(mOutputFile.getAbsolutePath());
@@ -503,10 +504,14 @@ public class PublishActivity extends BaseActivity {
         }
         break;
       case REQUEST_CODE_CROP:
-        if (data != null) {
-          Uri uri = data.getData();
+        if (resultCode == RESULT_CANCELED) {
+          setBgImage(mOutputFile.getAbsolutePath());
+        } else {
+          if (data != null) {
+            Uri uri = data.getData();
 
-          setBgImage(uri.getPath());
+            setBgImage(uri.getPath());
+          }
         }
         break;
       default:
