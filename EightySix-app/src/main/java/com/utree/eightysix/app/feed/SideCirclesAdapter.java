@@ -73,6 +73,32 @@ class SideCirclesAdapter extends BaseAdapter {
       viewHolder.mIvHouse.setVisibility(View.INVISIBLE);
     }
 
+    switch (circle.hotLevel) {
+      case 0:
+        viewHolder.mIvFire.setVisibility(View.GONE);
+        break;
+      case 1:
+        viewHolder.mIvFire.setImageResource(R.drawable.fire_1);
+        viewHolder.mIvFire.setVisibility(View.VISIBLE);
+        break;
+      case 2:
+        viewHolder.mIvFire.setImageResource(R.drawable.fire_2);
+        viewHolder.mIvFire.setVisibility(View.VISIBLE);
+        break;
+      case 3:
+        viewHolder.mIvFire.setImageResource(R.drawable.fire_3);
+        viewHolder.mIvFire.setVisibility(View.VISIBLE);
+        break;
+      case 4:
+        viewHolder.mIvFire.setImageResource(R.drawable.fire_4);
+        viewHolder.mIvFire.setVisibility(View.VISIBLE);
+        break;
+      case 5:
+        viewHolder.mIvFire.setImageResource(R.drawable.fire_5);
+        viewHolder.mIvFire.setVisibility(View.VISIBLE);
+        break;
+    }
+
     if (circle.selected) {
       viewHolder.mLlItem.setBackgroundColor(res.getColor(R.color.apptheme_primary_light_color));
       viewHolder.mTvName.setTextColor(Color.WHITE);
@@ -110,6 +136,9 @@ class SideCirclesAdapter extends BaseAdapter {
 
     @InjectView(R.id.iv_house)
     public ImageView mIvHouse;
+
+    @InjectView(R.id.iv_fire)
+    public ImageView mIvFire;
 
     ViewHolder(View view) {
       ButterKnife.inject(this, view);

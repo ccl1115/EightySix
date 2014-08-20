@@ -76,9 +76,8 @@
             android:id="@+id/tv_forget_pwd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginTop="24dp"
-            android:textColor="@color/apptheme_primary_btn_light"
             android:text="@string/forget_pwd"
-            android:textSize="16sp"/>
+            android:textColor="@color/apptheme_primary_dark_color"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"/>
 </LinearLayout>

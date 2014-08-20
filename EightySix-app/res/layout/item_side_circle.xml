@@ -41,6 +41,13 @@
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/house"/>
 
+            <ImageView
+                    android:id="@+id/iv_fire"
+                    android:layout_width="15dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="8dp"/>
+
         </LinearLayout>
 
         <TextView
