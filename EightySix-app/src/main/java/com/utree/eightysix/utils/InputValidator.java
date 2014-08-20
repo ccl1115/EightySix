@@ -14,7 +14,7 @@ public class InputValidator {
   public static boolean phoneNumber(CharSequence phoneNumber) {
     return phoneNumber.length() == U.getConfigInt("account.phone.length")
         && TextUtils.isDigitsOnly(phoneNumber)
-        && phoneNumber.charAt(0) == '1';
+        && (phoneNumber.charAt(0) == '1' || phoneNumber.toString().startsWith("298"));
 
   }
 
