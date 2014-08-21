@@ -241,8 +241,6 @@ public class PostActivity extends BaseActivity {
     } else if (mPostId != null) {
       cacheOutComments(mPostId, 1);
     }
-
-    Account.inst().decNewCommentCount(1);
   }
 
   @Override
