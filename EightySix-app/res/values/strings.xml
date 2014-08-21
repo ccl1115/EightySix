@@ -178,9 +178,10 @@
     <string name="success_created">提交成功，若审核通过，我们会及时通知，请耐心等候</string>
 
     <!-- FeedActivity -->
-    <string name="select_circle">设置你正在上班的企业</string>
+    <string name="select_circle">设置在职企业</string>
+    <string name="not_select_circle">不设置在哪里上班，没法玩啊</string>
     <string name="friends_info">朋友(%1$d) | 工友(%2$d)</string>
-    <string name="hidden_friends_feed">朋友发的%1$d条匿名帖被隐藏</string>
+    <string name="hidden_friends_feed">朋友发了%1$d条秘密，但是被隐藏了</string>
     <string name="unlock_to_view">解锁查看</string>
     <string name="introduce_to_friends">介绍给朋友</string>
     <string name="about">蓝莓的故事</string>
@@ -222,7 +223,6 @@
     <string name="help">使用帮助</string>
     <string name="no_perm_to_publish">你没有发帖的权限</string>
     <string name="find_friends">找出圈子里的朋友，看他们都在说什么？</string>
-    <string name="not_select_circle">你还没有选择在职工厂</string>
     <string name="circle_unlocked_tip">你还没有解锁这个圈子</string>
     <string name="unlock">解锁</string>
 

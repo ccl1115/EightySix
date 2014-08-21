@@ -20,8 +20,13 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
+import com.utree.eightysix.app.feed.event.UploadClickedEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
-import com.utree.eightysix.data.*;
+import com.utree.eightysix.data.BaseItem;
+import com.utree.eightysix.data.Feeds;
+import com.utree.eightysix.data.Post;
+import com.utree.eightysix.data.Promotion;
+import com.utree.eightysix.data.QuestionSet;
 import com.utree.eightysix.widget.RoundedButton;
 import java.util.List;
 
@@ -29,15 +34,17 @@ import java.util.List;
  */
 class FeedAdapter extends BaseAdapter {
 
-  public static final int TYPE_COUNT = 8;
+  public static final int TYPE_COUNT = 10;
   private static final int TYPE_PLACEHOLDER = 0;
   private static final int TYPE_UNLOCK = 1;
-  private static final int TYPE_INVITE = 2;
+  private static final int TYPE_UPLOAD = 2;
   private static final int TYPE_SELECT = 3;
   private static final int TYPE_UNKNOWN = 4;
   private static final int TYPE_POST = 5;
   private static final int TYPE_PROMO = 6;
   private static final int TYPE_QUESTION = 7;
+  private static final int TYPE_INVITE_FRIEND = 8;
+  private static final int TYPE_INVITE_FACTORY = 9;
 
   private SparseBooleanArray mAnimated = new SparseBooleanArray();
 
@@ -46,16 +53,18 @@ class FeedAdapter extends BaseAdapter {
   FeedAdapter(Feeds feeds) {
     mFeeds = feeds;
 
-    boolean showUnlock = mFeeds.lock == 1;
-    boolean showInvite = mFeeds.upContact != 1;
-    boolean showSelect = mFeeds.selectFactory != 1;
-    if (showUnlock) {
-      mFeeds.posts.lists.add(0, new BaseItem(TYPE_UNLOCK));
-    }
-    if (showInvite && showSelect) {
-      mFeeds.posts.lists.add(0, new BaseItem(TYPE_INVITE));
-    } else if (!showInvite && showSelect) {
+    if (mFeeds.selectFactory != 1) {
       mFeeds.posts.lists.add(0, new BaseItem(TYPE_SELECT));
+    } else if (mFeeds.upContact != 1) {
+      mFeeds.posts.lists.add(0, new BaseItem(TYPE_UPLOAD));
+    } else if (mFeeds.current != 1) {
+      if (mFeeds.currFactoryFriends < U.getSyncClient().getSync().unlockFriends) {
+        mFeeds.posts.lists.add(0, new BaseItem(TYPE_UNLOCK));
+      }
+    } else if (mFeeds.posts.lists.size() == 0) {
+      mFeeds.posts.lists.add(0, new BaseItem(TYPE_INVITE_FACTORY));
+    } else if (mFeeds.currFactoryFriends == 0) {
+      mFeeds.posts.lists.add(0, new BaseItem(TYPE_INVITE_FRIEND));
     }
   }
 
@@ -113,8 +122,8 @@ class FeedAdapter extends BaseAdapter {
       case TYPE_UNLOCK:
         convertView = getUnlockView(convertView, parent);
         break;
-      case TYPE_INVITE:
-        convertView = getInviteView(convertView, parent);
+      case TYPE_UPLOAD:
+        convertView = getUploadView(convertView, parent);
         break;
       case TYPE_SELECT:
         convertView = getSelectView(convertView, parent);
@@ -127,6 +136,12 @@ class FeedAdapter extends BaseAdapter {
         break;
       case TYPE_UNKNOWN:
         convertView = getUnknownView(convertView, parent);
+        break;
+      case TYPE_INVITE_FACTORY:
+        convertView = getInviteFactoryView(convertView, parent);
+        break;
+      case TYPE_INVITE_FRIEND:
+        convertView = getInviteFriendView(convertView, parent);
         break;
     }
 
@@ -148,9 +163,11 @@ class FeedAdapter extends BaseAdapter {
           return TYPE_PROMO;
         case BaseItem.TYPE_QUESTION_SET:
           return TYPE_QUESTION;
-        case TYPE_INVITE:
+        case TYPE_UPLOAD:
         case TYPE_UNLOCK:
         case TYPE_SELECT:
+        case TYPE_INVITE_FACTORY:
+        case TYPE_INVITE_FRIEND:
           return type;
         default:
           return TYPE_UNKNOWN;
@@ -242,14 +259,14 @@ class FeedAdapter extends BaseAdapter {
     return convertView;
   }
 
-  private View getInviteView(View convertView, ViewGroup parent) {
-    InviteViewHolder holder;
+  private View getUploadView(View convertView, ViewGroup parent) {
+    UploadViewHolder holder;
     if (convertView == null) {
-      convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_invite, parent, false);
-      holder = new InviteViewHolder(convertView);
+      convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_upload, parent, false);
+      holder = new UploadViewHolder(convertView);
       convertView.setTag(holder);
     } else {
-      holder = (InviteViewHolder) convertView.getTag();
+      holder = (UploadViewHolder) convertView.getTag();
     }
 
     return convertView;
@@ -301,6 +318,32 @@ class FeedAdapter extends BaseAdapter {
     return convertView;
   }
 
+  private View getInviteFriendView(View convertView, final ViewGroup parent) {
+    InviteFriendViewHolder holder;
+    if (convertView == null) {
+      convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_invite_friend, parent, false);
+      holder = new InviteFriendViewHolder(convertView);
+      convertView.setTag(holder);
+    } else {
+      holder = (InviteFriendViewHolder) convertView.getTag();
+    }
+
+    return convertView;
+  }
+
+  private View getInviteFactoryView(View convertView, final ViewGroup parent) {
+    InviteFactoryViewHolder holder;
+    if (convertView == null) {
+      convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_invite_factory, parent, false);
+      holder = new InviteFactoryViewHolder(convertView);
+      convertView.setTag(holder);
+    } else {
+      holder = (InviteFactoryViewHolder) convertView.getTag();
+    }
+
+    return convertView;
+  }
+
   @Keep
   static class SelectViewHolder {
 
@@ -319,21 +362,21 @@ class FeedAdapter extends BaseAdapter {
   }
 
   @Keep
-  static class InviteViewHolder {
+  static class UploadViewHolder {
 
-    public InviteViewHolder(View view) {
+    public UploadViewHolder(View view) {
       ButterKnife.inject(this, view);
     }
 
     @OnClick (R.id.rb_invite)
     public void onRbInviteClicked() {
       U.getAnalyser().trackEvent(U.getContext(), "feed_upload");
-      U.getBus().post(new InviteClickedEvent());
+      U.getBus().post(new UploadClickedEvent());
     }
   }
 
   @Keep
-  public static class UnlockViewHolder {
+  static class UnlockViewHolder {
     @InjectView (R.id.rb_unlock)
     public RoundedButton mRbUnlock;
 
@@ -347,6 +390,30 @@ class FeedAdapter extends BaseAdapter {
     public ImageView mIvHiddenCount;
 
     public UnlockViewHolder(View view) {
+      ButterKnife.inject(this, view);
+    }
+  }
+
+  static class InviteFriendViewHolder {
+    @OnClick (R.id.rb_invite)
+    public void onRbInviteClicked() {
+      U.getAnalyser().trackEvent(U.getContext(), "feed_invite_friend");
+      U.getBus().post(new InviteClickedEvent());
+    }
+
+    public InviteFriendViewHolder(View view) {
+      ButterKnife.inject(this, view);
+    }
+  }
+
+  static class InviteFactoryViewHolder {
+    @OnClick (R.id.rb_invite)
+    public void onRbInviteClicked() {
+      U.getAnalyser().trackEvent(U.getContext(), "feed_invite_factory");
+      U.getBus().post(new InviteClickedEvent());
+    }
+
+    public InviteFactoryViewHolder(View view) {
       ButterKnife.inject(this, view);
     }
   }
