@@ -132,7 +132,7 @@ public class Env {
   }
 
   public static long getTimestamp(String key){
-    return getSharedPreferences().getLong(key, System.currentTimeMillis());
+    return getSharedPreferences().getLong(key, 0);
   }
 
   private static SharedPreferences getSharedPreferences() {

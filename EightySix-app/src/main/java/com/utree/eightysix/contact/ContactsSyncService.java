@@ -6,34 +6,23 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Handler;
 import android.provider.ContactsContract;
-import static android.provider.ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME;
-import static android.provider.ContactsContract.CommonDataKinds.Phone.HAS_PHONE_NUMBER;
-import static android.provider.ContactsContract.CommonDataKinds.Phone.NUMBER;
-import static android.provider.ContactsContract.CommonDataKinds.Phone.RAW_CONTACT_ID;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonWriter;
 import com.jakewharton.disklrucache.DiskLruCache;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.U;
 import com.utree.eightysix.request.ImportContactsRequest;
-import com.utree.eightysix.rest.ContactsSyncResponse;
-import com.utree.eightysix.rest.HandlerWrapper;
-import com.utree.eightysix.rest.OnResponse;
-import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.rest.RequestData;
-import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.rest.*;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.InputValidator;
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
+
+import static android.provider.ContactsContract.CommonDataKinds.Phone.*;
 
 /**
  * The workflow of syncing contacts:
@@ -106,8 +95,7 @@ public class ContactsSyncService extends IntentService {
     target.setTimeInMillis(Env.getTimestamp(TIMESTAMP_KEY));
     Calendar now = Calendar.getInstance();
 
-    return now.get(Calendar.YEAR) == target.get(Calendar.YEAR) &&
-        now.get(Calendar.DAY_OF_YEAR) - target.get(Calendar.DAY_OF_YEAR) >= 1;
+    return now.get(Calendar.DAY_OF_YEAR) != target.get(Calendar.DAY_OF_YEAR);
   }
 
   private void uploadContact(final List<Contact> contacts) {
