@@ -5,9 +5,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import com.utree.eightysix.U;
 import de.akquinet.android.androlog.Log;
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
-import org.michaelevans.colorart.library.ColorArt;
 
 /**
  * @author simon
@@ -46,9 +44,7 @@ public class ColorUtil {
   }
 
   private static int themedColor(final String hash, final Bitmap bitmap) {
-    final int color = new ColorArt(bitmap).getBackgroundColor();
-    mCachedColor.put(hash, color);
-    return color;
+    return 0;
   }
 
   private static class ThemedColorWorker extends AsyncTask<Void, Void, Integer> {
