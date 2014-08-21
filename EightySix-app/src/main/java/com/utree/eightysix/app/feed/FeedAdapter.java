@@ -290,17 +290,11 @@ class FeedAdapter extends BaseAdapter {
       }
     });
 
-    if (mFeeds.hiddenCount == 0) {
-      holder.mRbHidden.setText("");
-      holder.mIvHiddenCount.setVisibility(View.VISIBLE);
-      holder.mTvHidden.setText(U.gs(R.string.circle_unlocked_tip));
-      holder.mRbUnlock.setText(U.gs(R.string.unlock));
-    } else {
-      holder.mIvHiddenCount.setVisibility(View.GONE);
-      holder.mRbHidden.setText(String.valueOf(mFeeds.hiddenCount));
-      holder.mTvHidden.setText(U.gfs(R.string.hidden_friends_feed, mFeeds.hiddenCount));
-      holder.mRbUnlock.setText(U.gs(R.string.unlock_to_view));
-    }
+    mFeeds.hiddenCount += 1;
+    holder.mIvHiddenCount.setVisibility(View.GONE);
+    holder.mRbHidden.setText(String.valueOf(mFeeds.hiddenCount));
+    holder.mTvHidden.setText(U.gfs(R.string.hidden_friends_feed, mFeeds.hiddenCount));
+    holder.mRbUnlock.setText(U.gs(R.string.unlock_to_view));
 
     return convertView;
   }
