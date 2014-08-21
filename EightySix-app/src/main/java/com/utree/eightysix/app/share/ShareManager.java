@@ -215,9 +215,9 @@ public class ShareManager {
         @Override
         public void onShorten(String shorten) {
           if (shorten == null) {
-            mShareViaSMS.sharePost(mActivity, mPost, shareLinkForPost(mPost.id));
+            mShareToQQ.sharePost(mActivity, mPost, shareLinkForPost(mPost.id));
           } else {
-            mShareViaSMS.sharePost(mActivity, mPost, shorten);
+            mShareToQQ.sharePost(mActivity, mPost, shorten);
           }
         }
       });
@@ -231,9 +231,9 @@ public class ShareManager {
         @Override
         public void onShorten(String shorten) {
           if (shorten == null) {
-            mShareViaSMS.sharePost(mActivity, mPost, shareLinkForPost(mPost.id));
+            mShareToQzone.sharePost(mActivity, mPost, shareLinkForPost(mPost.id));
           } else {
-            mShareViaSMS.sharePost(mActivity, mPost, shorten);
+            mShareToQzone.sharePost(mActivity, mPost, shorten);
           }
         }
       });
