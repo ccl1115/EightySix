@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.account;
 
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -29,6 +28,7 @@ import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.TextActionButton;
 import com.utree.eightysix.widget.TopBar;
 import de.akquinet.android.androlog.Log;
+
 import java.util.ArrayList;
 
 /**

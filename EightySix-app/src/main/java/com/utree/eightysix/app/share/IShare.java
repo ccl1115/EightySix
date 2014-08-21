@@ -1,12 +1,8 @@
 package com.utree.eightysix.app.share;
 
 import android.app.Activity;
-import com.utree.eightysix.Account;
-import com.utree.eightysix.U;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Post;
-import com.utree.eightysix.utils.BdShortener;
-import com.utree.eightysix.utils.Shortener;
 
 /**
  * @author simon
@@ -28,7 +24,7 @@ abstract class IShare {
   }
 
   protected String shareTitleForPost() {
-    return "分享1个仁宝电脑的秘密";
+    return "分享1个%s的秘密";
   }
 
   protected String shareTitleForComment() {
@@ -36,7 +32,7 @@ abstract class IShare {
   }
 
   protected String shareContentForApp() {
-    return "【蓝莓】-工厂里的秘密社区，仁宝电脑的朋友最近都在上面，旁边几个厂都火爆了，进来看看吧";
+    return "【蓝莓】-工厂里的秘密社区，%s的朋友最近都在上面，旁边几个厂都火爆了，进来看看吧";
   }
 
   protected String shareContentForPost() {
