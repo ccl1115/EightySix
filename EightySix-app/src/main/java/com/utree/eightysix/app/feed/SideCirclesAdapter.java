@@ -78,23 +78,43 @@ class SideCirclesAdapter extends BaseAdapter {
         viewHolder.mIvFire.setVisibility(View.GONE);
         break;
       case 1:
-        viewHolder.mIvFire.setImageResource(R.drawable.fire_1);
+        if (circle.selected) {
+          viewHolder.mIvFire.setImageResource(R.drawable.fire_white_1);
+        } else {
+          viewHolder.mIvFire.setImageResource(R.drawable.fire_1);
+        }
         viewHolder.mIvFire.setVisibility(View.VISIBLE);
         break;
       case 2:
-        viewHolder.mIvFire.setImageResource(R.drawable.fire_2);
+        if (circle.selected) {
+          viewHolder.mIvFire.setImageResource(R.drawable.fire_white_2);
+        } else {
+          viewHolder.mIvFire.setImageResource(R.drawable.fire_2);
+        }
         viewHolder.mIvFire.setVisibility(View.VISIBLE);
         break;
       case 3:
-        viewHolder.mIvFire.setImageResource(R.drawable.fire_3);
+        if (circle.selected) {
+          viewHolder.mIvFire.setImageResource(R.drawable.fire_white_3);
+        } else {
+          viewHolder.mIvFire.setImageResource(R.drawable.fire_3);
+        }
         viewHolder.mIvFire.setVisibility(View.VISIBLE);
         break;
       case 4:
-        viewHolder.mIvFire.setImageResource(R.drawable.fire_4);
+        if (circle.selected) {
+          viewHolder.mIvFire.setImageResource(R.drawable.fire_white_4);
+        } else {
+          viewHolder.mIvFire.setImageResource(R.drawable.fire_4);
+        }
         viewHolder.mIvFire.setVisibility(View.VISIBLE);
         break;
       case 5:
-        viewHolder.mIvFire.setImageResource(R.drawable.fire_5);
+        if (circle.selected) {
+          viewHolder.mIvFire.setImageResource(R.drawable.fire_white_5);
+        } else {
+          viewHolder.mIvFire.setImageResource(R.drawable.fire_5);
+        }
         viewHolder.mIvFire.setVisibility(View.VISIBLE);
         break;
     }
@@ -104,6 +124,7 @@ class SideCirclesAdapter extends BaseAdapter {
       viewHolder.mTvName.setTextColor(Color.WHITE);
       viewHolder.mTvFriends.setTextColor(Color.WHITE);
       viewHolder.mIvHouse.setImageResource(R.drawable.house_white);
+
     } else {
       viewHolder.mLlItem.setBackgroundDrawable(res.getDrawable(R.drawable.apptheme_primary_list_selector));
       viewHolder.mTvName.setTextColor(res.getColor(R.color.apptheme_primary_text_dark));

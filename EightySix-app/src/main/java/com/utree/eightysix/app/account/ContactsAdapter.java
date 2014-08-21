@@ -42,7 +42,7 @@ public class ContactsAdapter extends BaseAdapter {
     List<Contact> ret = new ArrayList<Contact>();
     for (int i = 0, size = mContacts.size(); i < size; i++) {
       if (mChecked.get(i)) {
-        ret.add(mContacts.get(i));
+        ret.add(mFiltered.get(i));
       }
     }
     return ret;
