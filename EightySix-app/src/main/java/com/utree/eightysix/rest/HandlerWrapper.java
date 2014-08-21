@@ -3,16 +3,11 @@ package com.utree.eightysix.rest;
 import android.widget.Toast;
 import com.google.gson.Gson;
 import com.loopj.android.http.BaseJsonHttpResponseHandler;
-import com.utree.eightysix.Account;
-import com.utree.eightysix.BuildConfig;
-import com.utree.eightysix.C;
-import com.utree.eightysix.R;
-import com.utree.eightysix.U;
+import com.utree.eightysix.*;
 import de.akquinet.android.androlog.Log;
-import java.net.ConnectException;
-import java.net.UnknownHostException;
-import java.util.Properties;
 import org.apache.http.HttpStatus;
+
+import java.net.ConnectException;
 
 /**
  * Wrapper of handler use to parse response data using Gson and cache automatically
@@ -119,7 +114,8 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
 
   private void handleObjectError(T response) {
     if (response.code != 0) {
-      if ((response.code & 0xffff) == 0x1014 || (response.code & 0xffff) == 0x1025) {
+      if ((response.code & 0xffff) == 0x1014 || (response.code & 0xffff) == 0x1025
+          || (response.code & 0xffff) == 0x7930) {
         // 用户token失效，退出客户端
         Account.inst().logout();
       }
