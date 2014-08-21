@@ -61,8 +61,7 @@ class FeedAdapter extends BaseAdapter {
       mFeeds.posts.lists.add(0, new BaseItem(TYPE_UPLOAD));
     } else if (mFeeds.current != 1) {
       // 不在职
-      if (0 < mFeeds.currFactoryFriends &&
-          mFeeds.currFactoryFriends < U.getSyncClient().getSync().unlockFriends) {
+      if (mFeeds.lock == 1) {
         // 有朋友但没达到解锁条件
         mFeeds.posts.lists.add(0, new BaseItem(TYPE_UNLOCK));
       }
