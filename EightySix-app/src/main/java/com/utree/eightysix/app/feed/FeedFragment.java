@@ -13,15 +13,10 @@ import com.squareup.otto.Subscribe;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.app.OverlayTipUtil;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
-import com.utree.eightysix.data.BaseItem;
-import com.utree.eightysix.data.Circle;
-import com.utree.eightysix.data.Feeds;
-import com.utree.eightysix.data.Paginate;
-import com.utree.eightysix.data.Post;
+import com.utree.eightysix.data.*;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
 import com.utree.eightysix.request.FeedsRequest;
 import com.utree.eightysix.request.PostPraiseCancelRequest;
@@ -36,6 +31,7 @@ import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RandomSceneTextView;
 import com.utree.eightysix.widget.guide.Guide;
+
 import java.util.Iterator;
 
 /**
@@ -43,13 +39,13 @@ import java.util.Iterator;
  */
 public class FeedFragment extends BaseFragment {
 
-  @InjectView (R.id.lv_feed)
+  @InjectView(R.id.lv_feed)
   public AdvancedListView mLvFeed;
 
-  @InjectView (R.id.refresh_view)
+  @InjectView(R.id.refresh_view)
   public SwipeRefreshLayout mRefresherView;
 
-  @InjectView (R.id.tv_empty_text)
+  @InjectView(R.id.tv_empty_text)
   public RandomSceneTextView mRstvEmpty;
 
   private FeedAdapter mFeedAdapter;
@@ -66,7 +62,7 @@ public class FeedFragment extends BaseFragment {
   public FeedFragment() {
   }
 
-  @OnItemClick (R.id.lv_feed)
+  @OnItemClick(R.id.lv_feed)
   public void onLvFeedItemClicked(int position, View view) {
     Object item = mLvFeed.getAdapter().getItem(position);
     if (item == null || !(item instanceof Post)) return;
@@ -412,8 +408,8 @@ public class FeedFragment extends BaseFragment {
           ((FeedActivity) getBaseActivity()).setMyPraiseCount(response.object.myPraiseCount,
               response.object.praisePercent, response.object.upDown);
 
-          ((FeedActivity) getBaseActivity()).mSend.setImageResource(response.object.lock == 1 ?
-              R.drawable.ic_post_pen_disabled : R.drawable.ic_post_pen);
+          ((FeedActivity) getBaseActivity()).mSend.setImageResource(response.object.lock != 1 || response.object.current == 1 ?
+              R.drawable.ic_post_pen : R.drawable.ic_post_pen_disabled);
         } else {
           if (id == 0) {
             cacheOutFeeds(0, 1);
@@ -457,8 +453,8 @@ public class FeedFragment extends BaseFragment {
           ((FeedActivity) getBaseActivity())
               .setMyPraiseCount(response.object.myPraiseCount, response.object.praisePercent, response.object.upDown);
 
-          ((FeedActivity) getBaseActivity()).mSend.setImageResource(response.object.lock == 1 ?
-              R.drawable.ic_post_pen_disabled : R.drawable.ic_post_pen);
+          ((FeedActivity) getBaseActivity()).mSend.setImageResource(response.object.lock != 1 || response.object.current == 1 ?
+              R.drawable.ic_post_pen : R.drawable.ic_post_pen_disabled);
         } else {
           if (id != 0) {
             requestFeeds(id, page);
