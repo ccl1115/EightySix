@@ -27,7 +27,6 @@ import com.utree.eightysix.storage.oss.OSSImpl;
 import com.utree.eightysix.utils.CacheUtils;
 import com.utree.eightysix.report.Reporter;
 import com.utree.eightysix.report.ReporterImpl;
-import com.utree.eightysix.utils.MEnv;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -60,7 +59,6 @@ public class U {
   private static Fixture sFixture;
   private static Toast sToast;
   private static SyncClient sSyncClient;
-  private static MEnv sMEnv;
 
   private static final Object lock = new Object();
 
@@ -266,15 +264,6 @@ public class U {
     return (int) (U.getContext().getResources().getDisplayMetrics().density * dp + 0.5f);
   }
 
-
-  public static MEnv getMEnv() {
-    if (sMEnv == null) {
-      synchronized (lock) {
-        sMEnv = new MEnv();
-      }
-    }
-    return sMEnv;
-  }
 
   public static String timestamp(long timestamp) {
     final long now = new Date().getTime();

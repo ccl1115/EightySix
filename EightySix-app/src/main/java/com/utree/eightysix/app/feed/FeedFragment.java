@@ -146,17 +146,14 @@ public class FeedFragment extends BaseFragment {
             if (view.getChildCount() <= 2) return;
             FeedPostView last = (FeedPostView) view.getChildAt(view.getChildCount() - 2);
             last.showSourceTipOverlay();
-            Env.setFirstRun("overlay_tip_source", false);
           } else if (Env.firstRun("overlay_tip_praise")) {
             if (view.getChildCount() <= 2) return;
             FeedPostView last = (FeedPostView) view.getChildAt(view.getChildCount() - 2);
             last.showPraiseTipOverlay();
-            Env.setFirstRun("overlay_tip_praise", false);
           } else if (Env.firstRun("overlay_tip_share")) {
             if (view.getChildCount() <= 2) return;
             FeedPostView last = (FeedPostView) view.getChildAt(view.getChildCount() - 2);
             last.showShareTipOverlay();
-            Env.setFirstRun("overlay_tip_share", false);
           }
         }
       }

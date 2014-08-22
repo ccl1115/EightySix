@@ -25,6 +25,7 @@ import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.utils.ColorUtil;
+import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.GearsView;
@@ -79,7 +80,7 @@ public class FeedPostView extends BasePostView {
 
   private Runnable mShareAnimation;
 
-  private boolean mHasTipShown;
+  private static boolean sHasTipShown;
 
   public FeedPostView(Context context) {
     this(context, null, 0);
@@ -283,7 +284,7 @@ public class FeedPostView extends BasePostView {
   }
 
   public void showShareTipOverlay() {
-    if (mHasTipShown) return;
+    if (sHasTipShown) return;
 
     View view = LayoutInflater.from(getContext())
         .inflate(R.layout.overlay_tip_share, this, false);
@@ -296,15 +297,16 @@ public class FeedPostView extends BasePostView {
       @Override
       public void onClick(View v) {
         mFlContent.removeView(v);
-        mHasTipShown = false;
+        sHasTipShown = false;
+        Env.setFirstRun("overlay_tip_share", false);
       }
     });
 
-    mHasTipShown = true;
+    sHasTipShown = true;
   }
 
   public void showSourceTipOverlay() {
-    if (mHasTipShown) return;
+    if (sHasTipShown) return;
 
     View view = LayoutInflater.from(getContext())
         .inflate(R.layout.overlay_tip_source, this, false);
@@ -317,14 +319,15 @@ public class FeedPostView extends BasePostView {
       @Override
       public void onClick(View v) {
         mFlContent.removeView(v);
-        mHasTipShown = false;
+        sHasTipShown = false;
+        Env.setFirstRun("overlay_tip_source", false);
       }
     });
-    mHasTipShown = true;
+    sHasTipShown = true;
   }
 
   public void showPraiseTipOverlay() {
-    if (mHasTipShown) return;
+    if (sHasTipShown) return;
 
     View view = LayoutInflater.from(getContext())
         .inflate(R.layout.overlay_tip_praise, this, false);
@@ -337,10 +340,11 @@ public class FeedPostView extends BasePostView {
       @Override
       public void onClick(View v) {
         mFlContent.removeView(v);
-        mHasTipShown = false;
+        sHasTipShown = false;
+        Env.setFirstRun("overlay_tip_praise", false);
       }
     });
 
-    mHasTipShown = true;
+    sHasTipShown = true;
   }
 }
