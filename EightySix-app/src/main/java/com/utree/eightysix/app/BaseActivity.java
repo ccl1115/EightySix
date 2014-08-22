@@ -12,17 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import butterknife.ButterKnife;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
-import static com.nineoldandroids.view.ViewHelper.getTranslationY;
 import com.utree.eightysix.C;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
@@ -31,18 +26,15 @@ import com.utree.eightysix.app.settings.UpgradeDialog;
 import com.utree.eightysix.data.Sync;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.event.LogoutListener;
-import com.utree.eightysix.rest.CacheInWorker;
-import com.utree.eightysix.rest.CacheOutWorker;
-import com.utree.eightysix.rest.HandlerWrapper;
-import com.utree.eightysix.rest.OnResponse;
-import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.rest.RequestData;
-import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.rest.*;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.RefreshIndicator;
 import com.utree.eightysix.widget.TopBar;
+
 import java.io.InputStream;
 import java.util.Calendar;
+
+import static com.nineoldandroids.view.ViewHelper.getTranslationY;
 
 /**
  * Provides many base functionality to derived class
