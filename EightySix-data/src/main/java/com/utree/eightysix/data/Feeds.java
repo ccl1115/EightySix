@@ -65,6 +65,9 @@ public class Feeds {
   @SerializedName ("upContact")
   public int upContact;
 
+  @SerializedName("fetchNoticeView")
+  public FetchNotification fetch;
+
   /**
    * 是否选择工厂
    * <p/>
@@ -80,6 +83,4 @@ public class Feeds {
   @SerializedName ("workerCount")
   public int workerCount;
 
-  @SerializedName ("fetchNoticeView")
-  public FetchNotification mFetchNotification;
 }

@@ -258,7 +258,7 @@ public class PullNotificationService extends Service {
       case TYPE_FOLLOW_COMMENT:
         int count = 0;
         if (response.object.lists != null) {
-          count = response.object.lists.size();
+          count = response.object.unread;
         }
         if (count == 1) {
           getNM().notify(type == TYPE_FOLLOW_COMMENT ? ID_FOLLOW_COMMENT : ID_OWN_COMMENT,
@@ -267,7 +267,7 @@ public class PullNotificationService extends Service {
           getNM().notify(type == TYPE_FOLLOW_COMMENT ? ID_FOLLOW_COMMENT : ID_OWN_COMMENT,
               buildComment(count, null, type));
         }
-        Account.inst().incNewCommentCount(count);
+        Account.inst().setNewCommentCount(count);
         break;
       case TYPE_PRAISE:
         Account.inst().setHasNewPraise(true);

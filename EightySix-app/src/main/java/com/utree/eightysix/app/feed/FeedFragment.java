@@ -10,11 +10,13 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
 import com.squareup.otto.Subscribe;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
+import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
 import com.utree.eightysix.data.*;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
@@ -405,11 +407,19 @@ public class FeedFragment extends BaseFragment {
           }
           mPageInfo = response.object.posts.page;
 
-          ((FeedActivity) getBaseActivity()).setMyPraiseCount(response.object.myPraiseCount,
-              response.object.praisePercent, response.object.upDown);
-
           ((FeedActivity) getBaseActivity()).mSend.setImageResource(response.object.lock != 1 || response.object.current == 1 ?
               R.drawable.ic_post_pen : R.drawable.ic_post_pen_disabled);
+
+
+          if (response.object.fetch.newComment != null) {
+            Account.inst().setNewCommentCount(response.object.fetch.newComment.unread);
+          }
+
+          if (response.object.fetch.newPraise != null) {
+            Account.inst().setHasNewPraise(response.object.fetch.newPraise.praise == 1);
+            U.getBus().post(new UpdatePraiseCountEvent(response.object.fetch.newPraise.praiseCount,
+                response.object.fetch.newPraise.percent));
+          }
         } else {
           if (id == 0) {
             cacheOutFeeds(0, 1);
