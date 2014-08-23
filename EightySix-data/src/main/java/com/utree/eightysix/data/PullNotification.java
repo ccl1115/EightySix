@@ -23,6 +23,9 @@ public class PullNotification {
   @SerializedName ("percent")
   public String percent;
 
+  @SerializedName("unread")
+  public int unread;
+
   @SerializedName ("lists")
   public List<Item> lists;
 

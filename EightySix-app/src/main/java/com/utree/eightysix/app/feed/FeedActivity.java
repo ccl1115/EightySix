@@ -32,10 +32,7 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.ImportContactActivity;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
-import com.utree.eightysix.app.feed.event.UploadClickedEvent;
-import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
-import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
-import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
+import com.utree.eightysix.app.feed.event.*;
 import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.msg.PraiseActivity;
@@ -57,6 +54,7 @@ import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TopBar;
 import de.akquinet.android.androlog.Log;
+
 import java.util.List;
 
 /**
@@ -100,6 +98,7 @@ public class FeedActivity extends BaseActivity {
 
   private boolean mRefreshed;
   private MenuViewHolder mMenuViewHolder;
+  private ThemedDialog mUnlockDialog;
 
   public static void start(Context context) {
     Intent intent = new Intent(context, FeedActivity.class);
@@ -418,15 +417,19 @@ public class FeedActivity extends BaseActivity {
   }
 
   @Subscribe
-  public void onInviteClicked(UploadClickedEvent event) {
+  public void onUploadClicked(UploadClickedEvent event) {
     startActivity(new Intent(this, ImportContactActivity.class));
   }
 
   @Subscribe
   public void onUnlockClicked(UnlockClickedEvent event) {
-    showInviteDialog();
+    showUnlockDialog();
   }
 
+  @Subscribe
+  public void onInviteClicked(InviteClickedEvent event) {
+    showInviteDialog();
+  }
   @Subscribe
   public void onStartPublishActivity(StartPublishActivityEvent event) {
     if (!mFeedFragment.canPublish()) {
@@ -439,7 +442,7 @@ public class FeedActivity extends BaseActivity {
   private void showNoPermDialog() {
     if (mNoPermDialog == null) {
       mNoPermDialog = new ThemedDialog(this);
-      View view = LayoutInflater.from(this).inflate(R.layout.dialog_content_locked, null);
+      View view = LayoutInflater.from(this).inflate(R.layout.dialog_publish_locked, null);
       NoPermViewHolder noPermViewHolder = new NoPermViewHolder(view);
       String tip = getString(R.string.no_perm_tip);
       int index = tip.indexOf("解锁条件");
@@ -461,6 +464,34 @@ public class FeedActivity extends BaseActivity {
 
     if (!mNoPermDialog.isShowing()) {
       mNoPermDialog.show();
+    }
+  }
+
+  private void showUnlockDialog() {
+    if (mUnlockDialog == null) {
+      mUnlockDialog = new ThemedDialog(this);
+      View view = LayoutInflater.from(this).inflate(R.layout.dialog_unlock, null);
+      TextView tipView = (TextView) view.findViewById(R.id.tv_unlock_tip);
+      String tip = getString(R.string.unlock_tip, U.getSyncClient().getSync().unlockFriends, U.getSyncClient().getSync().unlockFriends);
+      int index = tip.indexOf("解锁条件");
+      ForegroundColorSpan span = new ForegroundColorSpan(
+          getResources().getColor(R.color.apptheme_primary_light_color));
+      SpannableString spannableString = new SpannableString(tip);
+      spannableString.setSpan(span, index, index +4, 0);
+      tipView.setText(spannableString);
+      mUnlockDialog.setContent(view);
+      mUnlockDialog.setPositive(R.string.invite_people, new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          mUnlockDialog.dismiss();
+          showInviteDialog();
+        }
+      });
+      mUnlockDialog.setTitle("秘密为什么会隐藏");
+    }
+
+    if (!mUnlockDialog.isShowing()) {
+      mUnlockDialog.show();
     }
   }
 

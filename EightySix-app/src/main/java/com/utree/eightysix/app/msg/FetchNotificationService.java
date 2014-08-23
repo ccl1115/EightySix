@@ -58,17 +58,9 @@ public class FetchNotificationService extends Service {
             Account.inst().setHasNewPraise(true);
           }
 
-          int count = 0;
+          int count = response.object.newComment.unread;
 
-          if (response.object.myPostComment != null) {
-            count += response.object.myPostComment.lists.size();
-          }
-
-          if (response.object.newComment != null) {
-            count += response.object.newComment.lists.size();
-          }
-
-          Account.inst().incNewCommentCount(count);
+          Account.inst().setNewCommentCount(count);
         }
       }
 
