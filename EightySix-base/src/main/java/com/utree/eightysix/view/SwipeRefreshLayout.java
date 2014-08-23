@@ -439,6 +439,7 @@ public class SwipeRefreshLayout extends ViewGroup {
         mIsBeingDragged = false;
         mCurrPercentage = 0;
         mActivePointerId = INVALID_POINTER;
+        mListener.onCancel();
         break;
     }
 
@@ -526,6 +527,7 @@ public class SwipeRefreshLayout extends ViewGroup {
         mIsBeingDragged = false;
         mCurrPercentage = 0;
         mActivePointerId = INVALID_POINTER;
+        mListener.onCancel();
         return false;
     }
 
