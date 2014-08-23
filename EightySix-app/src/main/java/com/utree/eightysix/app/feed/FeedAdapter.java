@@ -34,6 +34,8 @@ import java.util.List;
  */
 class FeedAdapter extends BaseAdapter {
 
+  private static final int TIP_NOT_SHOWN = -1;
+
   public static final int TYPE_COUNT = 10;
   private static final int TYPE_PLACEHOLDER = 0;
   private static final int TYPE_UNLOCK = 1;
@@ -49,6 +51,10 @@ class FeedAdapter extends BaseAdapter {
   private SparseBooleanArray mAnimated = new SparseBooleanArray();
 
   private Feeds mFeeds;
+
+  private int mTipOverlaySourcePosition = TIP_NOT_SHOWN;
+  private int mTipOverlayPraisePosition = TIP_NOT_SHOWN;
+  private int mTipOverlaySharePosition = TIP_NOT_SHOWN;
 
   FeedAdapter(Feeds feeds) {
     mFeeds = feeds;
@@ -201,12 +207,60 @@ class FeedAdapter extends BaseAdapter {
     }
   }
 
+  void showTipOverlaySource(int position) {
+    mTipOverlaySourcePosition = position;
+    notifyDataSetChanged();
+  }
+
+  void showTipOverlayPraise(int position) {
+    mTipOverlayPraisePosition = position;
+    notifyDataSetChanged();
+  }
+
+  void showTipOverlayShare(int position) {
+    mTipOverlaySharePosition = position;
+    notifyDataSetChanged();
+  }
+
+  @Subscribe
+  public void onDismissTipOverlay(DismissTipOverlayEvent event) {
+    switch (event.getType()) {
+      case DismissTipOverlayEvent.TYPE_PRAISE:
+        mTipOverlayPraisePosition = -1;
+        break;
+      case DismissTipOverlayEvent.TYPE_SHARE:
+        mTipOverlaySharePosition = -1;
+        break;
+      case DismissTipOverlayEvent.TYPE_SOURCE:
+        mTipOverlaySourcePosition = -1;
+        break;
+    }
+  }
+
+  boolean tipsShowing() {
+    return mTipOverlayPraisePosition != -1 || mTipOverlaySharePosition != -1 || mTipOverlaySourcePosition != -1;
+  }
+
   private View getPostView(int position, View convertView, ViewGroup parent) {
     if (convertView == null) {
       convertView = new FeedPostView(parent.getContext());
     }
 
-    ((FeedPostView) convertView).setData((Post) getItem(position));
+    FeedPostView feedPostView = (FeedPostView) convertView;
+    feedPostView.setData((Post) getItem(position));
+
+    if (mTipOverlaySourcePosition == position) {
+      feedPostView.showSourceTipOverlay();
+    } else if (mTipOverlaySourcePosition == -1 && mTipOverlayPraisePosition == position) {
+      feedPostView.showPraiseTipOverlay();
+    } else if (mTipOverlayPraisePosition == -1 && mTipOverlaySharePosition == position) {
+      feedPostView.showShareTipOverlay();
+    } else {
+      feedPostView.hidePraiseTipOverlay();
+      feedPostView.hideSourceTipOverlay();
+      feedPostView.hideShareTipOverlay();
+    }
+
     return convertView;
   }
 
@@ -280,10 +334,9 @@ class FeedAdapter extends BaseAdapter {
       }
     });
 
-    mFeeds.hiddenCount += 1;
     holder.mIvHiddenCount.setVisibility(View.GONE);
-    holder.mRbHidden.setText(String.valueOf(mFeeds.hiddenCount));
-    holder.mTvHidden.setText(U.gfs(R.string.hidden_friends_feed, mFeeds.hiddenCount));
+    holder.mRbHidden.setText(String.valueOf(mFeeds.hiddenCount + 1));
+    holder.mTvHidden.setText(U.gfs(R.string.hidden_friends_feed, mFeeds.hiddenCount + 1));
     holder.mRbUnlock.setText(U.gs(R.string.unlock_to_view));
 
     return convertView;
@@ -415,6 +468,22 @@ class FeedAdapter extends BaseAdapter {
 
     public InviteFactoryViewHolder(View view) {
       ButterKnife.inject(this, view);
+    }
+  }
+
+  static class DismissTipOverlayEvent {
+    private int mType;
+
+    static final int TYPE_SOURCE = 1;
+    static final int TYPE_PRAISE = 2;
+    static final int TYPE_SHARE = 3;
+
+    DismissTipOverlayEvent(int type) {
+      mType = type;
+    }
+
+    public int getType() {
+      return mType;
     }
   }
 }

@@ -60,6 +60,7 @@ public class FeedFragment extends BaseFragment {
   private Guide mPraiseTip;
   private Guide mShareTip;
   private int mWorkerCount;
+  private boolean mPostPraiseRequesting;
 
   public FeedFragment() {
   }
@@ -139,19 +140,21 @@ public class FeedFragment extends BaseFragment {
         if (scrollState == SCROLL_STATE_IDLE) {
           U.getBus().post(new ListViewScrollStateIdledEvent());
 
+          if (view.getChildCount() <= 2) return;
+
+          int firstItem = mLvFeed.getFirstVisiblePosition() + 1;
+
+          if (mFeedAdapter.tipsShowing()) return;
 
           if (Env.firstRun("overlay_tip_source")) {
-            if (view.getChildCount() <= 2) return;
-            FeedPostView last = (FeedPostView) view.getChildAt(view.getChildCount() - 2);
-            last.showSourceTipOverlay();
+            mFeedAdapter.showTipOverlaySource(firstItem);
+            Env.setFirstRun("overlay_tip_source", false);
           } else if (Env.firstRun("overlay_tip_praise")) {
-            if (view.getChildCount() <= 2) return;
-            FeedPostView last = (FeedPostView) view.getChildAt(view.getChildCount() - 2);
-            last.showPraiseTipOverlay();
+            mFeedAdapter.showTipOverlayPraise(firstItem);
+            Env.setFirstRun("overlay_tip_praise", false);
           } else if (Env.firstRun("overlay_tip_share")) {
-            if (view.getChildCount() <= 2) return;
-            FeedPostView last = (FeedPostView) view.getChildAt(view.getChildCount() - 2);
-            last.showShareTipOverlay();
+            mFeedAdapter.showTipOverlayShare(firstItem);
+            Env.setFirstRun("overlay_tip_share", false);
           }
         }
       }
@@ -308,6 +311,10 @@ public class FeedFragment extends BaseFragment {
 
   @Subscribe
   public void onFeedPostPraiseEvent(final FeedPostPraiseEvent event) {
+    if (mPostPraiseRequesting) {
+      return;
+    }
+    mPostPraiseRequesting = true;
     if (event.isCancel()) {
       getBaseActivity().request(new PostPraiseCancelRequest(event.getPost().id), new OnResponse<Response>() {
         @Override
@@ -321,6 +328,8 @@ public class FeedFragment extends BaseFragment {
             event.getPost().praise++;
           }
           mFeedAdapter.notifyDataSetChanged();
+
+          mPostPraiseRequesting = false;
         }
       }, Response.class);
     } else {
@@ -336,6 +345,8 @@ public class FeedFragment extends BaseFragment {
             event.getPost().praise = Math.max(0, event.getPost().praise - 1);
           }
           mFeedAdapter.notifyDataSetChanged();
+
+          mPostPraiseRequesting = false;
         }
       }, Response.class);
     }

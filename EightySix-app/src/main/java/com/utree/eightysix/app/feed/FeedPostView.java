@@ -25,7 +25,6 @@ import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.utils.ColorUtil;
-import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.GearsView;
@@ -81,6 +80,9 @@ public class FeedPostView extends BasePostView {
   private Runnable mShareAnimation;
 
   private static boolean sHasTipShown;
+  private View mTipOverlayShare;
+  private View mTipOverlaySource;
+  private View mTipOverlayPraise;
 
   public FeedPostView(Context context) {
     this(context, null, 0);
@@ -291,68 +293,92 @@ public class FeedPostView extends BasePostView {
     super.onDetachedFromWindow();
   }
 
-  public void showShareTipOverlay() {
-    if (sHasTipShown) return;
+  void showShareTipOverlay() {
 
-    View view = LayoutInflater.from(getContext())
-        .inflate(R.layout.overlay_tip_share, this, false);
+    if (mTipOverlayShare == null) {
+      mTipOverlayShare = LayoutInflater.from(getContext())
+          .inflate(R.layout.overlay_tip_share, this, false);
 
-    view.findViewById(R.id.ll_tip).setBackgroundDrawable(
-        new RoundRectDrawable(U.dp2px(8), Color.WHITE));
-    mFlContent.addView(view);
+      mTipOverlayShare.findViewById(R.id.ll_tip).setBackgroundDrawable(
+          new RoundRectDrawable(U.dp2px(8), Color.WHITE));
+      mFlContent.addView(mTipOverlayShare);
 
-    view.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        mFlContent.removeView(v);
-        sHasTipShown = false;
-        Env.setFirstRun("overlay_tip_share", false);
-      }
-    });
+      mTipOverlayShare.setOnClickListener(new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          mTipOverlayShare.setVisibility(GONE);
+          U.getBus().post(new FeedAdapter.DismissTipOverlayEvent(
+              FeedAdapter.DismissTipOverlayEvent.TYPE_SHARE));
+        }
+      });
+    } else {
+      mTipOverlayShare.setVisibility(VISIBLE);
+    }
 
-    sHasTipShown = true;
   }
 
-  public void showSourceTipOverlay() {
-    if (sHasTipShown) return;
-
-    View view = LayoutInflater.from(getContext())
-        .inflate(R.layout.overlay_tip_source, this, false);
-
-    view.findViewById(R.id.ll_tip).setBackgroundDrawable(
-        new RoundRectDrawable(U.dp2px(8), Color.WHITE));
-    mFlContent.addView(view);
-
-    view.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        mFlContent.removeView(v);
-        sHasTipShown = false;
-        Env.setFirstRun("overlay_tip_source", false);
-      }
-    });
-    sHasTipShown = true;
+  void hideShareTipOverlay() {
+    if (mTipOverlayShare != null) {
+      mTipOverlayShare.setVisibility(GONE);
+    }
   }
 
-  public void showPraiseTipOverlay() {
-    if (sHasTipShown) return;
+  void showSourceTipOverlay() {
 
-    View view = LayoutInflater.from(getContext())
-        .inflate(R.layout.overlay_tip_praise, this, false);
+    if (mTipOverlaySource == null) {
+      mTipOverlaySource = LayoutInflater.from(getContext())
+          .inflate(R.layout.overlay_tip_source, this, false);
 
-    view.findViewById(R.id.ll_tip).setBackgroundDrawable(
-        new RoundRectDrawable(U.dp2px(8), Color.WHITE));
-    mFlContent.addView(view);
+      mTipOverlaySource.findViewById(R.id.ll_tip).setBackgroundDrawable(
+          new RoundRectDrawable(U.dp2px(8), Color.WHITE));
+      mFlContent.addView(mTipOverlaySource);
+    } else {
+      mTipOverlaySource.setVisibility(VISIBLE);
+    }
 
-    view.setOnClickListener(new OnClickListener() {
+    mTipOverlaySource.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-        mFlContent.removeView(v);
-        sHasTipShown = false;
-        Env.setFirstRun("overlay_tip_praise", false);
+        v.setVisibility(GONE);
+        U.getBus().post(new FeedAdapter.DismissTipOverlayEvent(
+            FeedAdapter.DismissTipOverlayEvent.TYPE_SOURCE));
       }
     });
+  }
 
-    sHasTipShown = true;
+  void hideSourceTipOverlay() {
+    if (mTipOverlaySource != null) {
+      mTipOverlaySource.setVisibility(GONE);
+    }
+  }
+
+  void showPraiseTipOverlay() {
+
+    if (mTipOverlayPraise == null) {
+      mTipOverlayPraise = LayoutInflater.from(getContext())
+          .inflate(R.layout.overlay_tip_praise, this, false);
+
+      mTipOverlayPraise.findViewById(R.id.ll_tip).setBackgroundDrawable(
+          new RoundRectDrawable(U.dp2px(8), Color.WHITE));
+      mFlContent.addView(mTipOverlayPraise);
+
+      mTipOverlayPraise.setOnClickListener(new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          mTipOverlayPraise.setVisibility(GONE);
+          U.getBus().post(new FeedAdapter.DismissTipOverlayEvent(
+              FeedAdapter.DismissTipOverlayEvent.TYPE_PRAISE));
+        }
+      });
+    } else {
+      mTipOverlayPraise.setVisibility(VISIBLE);
+    }
+
+  }
+
+  void hidePraiseTipOverlay() {
+    if (mTipOverlayPraise != null) {
+      mTipOverlayPraise.setVisibility(GONE);
+    }
   }
 }
