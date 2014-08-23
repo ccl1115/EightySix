@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -29,15 +28,7 @@ import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
 import com.utree.eightysix.app.feed.event.ReloadCommentEvent;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
-import com.utree.eightysix.request.CommentPraiseCancelRequest;
-import com.utree.eightysix.request.CommentPraiseRequest;
-import com.utree.eightysix.request.PostCommentDeleteRequest;
-import com.utree.eightysix.request.PostCommentsRequest;
-import com.utree.eightysix.request.PostDeleteRequest;
-import com.utree.eightysix.request.PostPraiseCancelRequest;
-import com.utree.eightysix.request.PostPraiseRequest;
-import com.utree.eightysix.request.PublishCommentRequest;
-import com.utree.eightysix.request.ReportRequest;
+import com.utree.eightysix.request.*;
 import com.utree.eightysix.response.PostCommentsResponse;
 import com.utree.eightysix.response.PublishCommentResponse;
 import com.utree.eightysix.rest.OnResponse;
@@ -49,6 +40,7 @@ import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.guide.Guide;
 import de.akquinet.android.androlog.Log;
+
 import java.util.regex.Pattern;
 
 /**
@@ -78,10 +70,9 @@ public class PostActivity extends BaseActivity {
   private boolean mPostPraiseRequesting;
   private boolean mPostCommentPraiseRequesting;
 
-  public static void start(Context context, Post post, Rect rect) {
+  public static void start(Context context, Post post) {
     Intent intent = new Intent(context, PostActivity.class);
     intent.putExtra("post", post);
-    intent.putExtra("rect", rect);
     context.startActivity(intent);
   }
 
@@ -240,9 +231,9 @@ public class PostActivity extends BaseActivity {
     }
 
     if (mPost != null) {
-      cacheOutComments(mPost.id, 1);
+      cacheOutComments(1);
     } else if (mPostId != null) {
-      cacheOutComments(mPostId, 1);
+      cacheOutComments(1);
     }
   }
 
@@ -438,8 +429,10 @@ public class PostActivity extends BaseActivity {
     }, PostCommentsResponse.class);
   }
 
-  private void cacheOutComments(final String id, final int page) {
-    cacheOut(new PostCommentsRequest(id, 0, page), new OnResponse<PostCommentsResponse>() {
+  private void cacheOutComments(final int page) {
+    final String id = mPost == null ? mPostId : mPost.id;
+    final int viewType = mPost == null ? 0 : mPost.viewType;
+    cacheOut(new PostCommentsRequest(id, viewType, page), new OnResponse<PostCommentsResponse>() {
       @Override
       public void onResponse(PostCommentsResponse response) {
         if (response != null && response.code == 0 && response.object != null) {

@@ -92,6 +92,9 @@ public class BaseItemDeserializer implements JsonDeserializer<BaseItem> {
     post.read = safeGetAsInt(jObj.get("readed"));
     post.source = safeGetAsString(jObj.get("postSource"));
     post.whoAtMe = safeGetAsString(jObj.get("whoAtMe"));
+    post.isRepost = safeGetAsInt(jObj.get("isRepost"));
+    post.isHot = safeGetAsInt(jObj.get("isHot"));
+    post.viewType = safeGetAsInt(jObj.get("viewType"));
     return post;
   }
 

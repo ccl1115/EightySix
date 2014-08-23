@@ -60,7 +60,7 @@ public class BaseMsgItemView extends LinearLayout {
     mPosts[0].read = 1;
     mPosts[0].comments = 0;
     ((BaseAdapter) ((ListView) getParent()).getAdapter()).notifyDataSetChanged();
-    PostActivity.start(view.getContext(), mPosts[0], null);
+    PostActivity.start(view.getContext(), mPosts[0]);
     ReadMsgStore.inst().addRead(mPosts[0].id);
   }
 
@@ -69,7 +69,7 @@ public class BaseMsgItemView extends LinearLayout {
     mPosts[1].read = 1;
     mPosts[1].comments = 0;
     ((BaseAdapter) ((ListView) getParent()).getAdapter()).notifyDataSetChanged();
-    PostActivity.start(view.getContext(), mPosts[1], null);
+    PostActivity.start(view.getContext(), mPosts[1]);
     ReadMsgStore.inst().addRead(mPosts[1].id);
   }
 
