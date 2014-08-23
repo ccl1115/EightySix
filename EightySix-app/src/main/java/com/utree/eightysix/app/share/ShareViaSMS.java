@@ -18,7 +18,7 @@ class ShareViaSMS extends IShare {
   @Override
   public void sharePost(Activity activity, Post post, String url) {
     ContactsActivity.start(activity,
-        String.format(shareContentForPost(), post.circle, post.circle) + url);
+        String.format(shareContentForPost(), post.shortName, post.shortName) + url);
   }
 
   @Override

@@ -41,8 +41,8 @@ class ShareToQzone extends IShare {
   @Override
   public void sharePost(Activity activity, Post post, String url) {
     Bundle data = new Bundle();
-    data.putString(QzoneShare.SHARE_TO_QQ_TITLE, String.format(shareTitleForPost(), post.circle));
-    data.putString(QzoneShare.SHARE_TO_QQ_SUMMARY, String.format(shareContentForPost(), post.circle));
+    data.putString(QzoneShare.SHARE_TO_QQ_TITLE, String.format(shareTitleForPost(), post.shortName));
+    data.putString(QzoneShare.SHARE_TO_QQ_SUMMARY, String.format(shareContentForPost(), post.shortName));
     data.putString(QzoneShare.SHARE_TO_QQ_TARGET_URL, url);
     ArrayList<String> urls = new ArrayList<String>();
     urls.add(post.bgUrl);
