@@ -42,8 +42,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:scaleType="centerInside"
-                android:src="@drawable/symbol_alert"
-                android:visibility="gone"/>
+                android:src="@drawable/symbol_alert"/>
 
         </FrameLayout>
 

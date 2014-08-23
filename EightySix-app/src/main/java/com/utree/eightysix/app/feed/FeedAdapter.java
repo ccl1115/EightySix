@@ -54,16 +54,23 @@ class FeedAdapter extends BaseAdapter {
     mFeeds = feeds;
 
     if (mFeeds.selectFactory != 1) {
+      // 设置在职企业
       mFeeds.posts.lists.add(0, new BaseItem(TYPE_SELECT));
     } else if (mFeeds.upContact != 1) {
+      // 上传通讯录
       mFeeds.posts.lists.add(0, new BaseItem(TYPE_UPLOAD));
     } else if (mFeeds.current != 1) {
-      if (mFeeds.currFactoryFriends < U.getSyncClient().getSync().unlockFriends) {
+      // 不在职
+      if (0 < mFeeds.currFactoryFriends &&
+          mFeeds.currFactoryFriends < U.getSyncClient().getSync().unlockFriends) {
+        // 有朋友但没达到解锁条件
         mFeeds.posts.lists.add(0, new BaseItem(TYPE_UNLOCK));
       }
     } else if (mFeeds.posts.lists.size() == 0) {
+      // 邀请厂里的人加入
       mFeeds.posts.lists.add(0, new BaseItem(TYPE_INVITE_FACTORY));
     } else if (mFeeds.currFactoryFriends == 0) {
+      // 邀请朋友加入
       mFeeds.posts.lists.add(0, new BaseItem(TYPE_INVITE_FRIEND));
     }
   }
