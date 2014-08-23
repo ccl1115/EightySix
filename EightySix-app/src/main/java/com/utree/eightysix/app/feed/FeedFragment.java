@@ -139,19 +139,21 @@ public class FeedFragment extends BaseFragment {
         if (scrollState == SCROLL_STATE_IDLE) {
           U.getBus().post(new ListViewScrollStateIdledEvent());
 
+          if (view.getChildCount() <= 2) return;
+
+          int firstItem = mLvFeed.getFirstVisiblePosition() + 1;
+
+          if (mFeedAdapter.tipsShowing()) return;
 
           if (Env.firstRun("overlay_tip_source")) {
-            if (view.getChildCount() <= 2) return;
-            FeedPostView last = (FeedPostView) view.getChildAt(view.getChildCount() - 2);
-            last.showSourceTipOverlay();
+            mFeedAdapter.showTipOverlaySource(firstItem);
+            Env.setFirstRun("overlay_tip_source", false);
           } else if (Env.firstRun("overlay_tip_praise")) {
-            if (view.getChildCount() <= 2) return;
-            FeedPostView last = (FeedPostView) view.getChildAt(view.getChildCount() - 2);
-            last.showPraiseTipOverlay();
+            mFeedAdapter.showTipOverlayPraise(firstItem);
+            Env.setFirstRun("overlay_tip_praise", false);
           } else if (Env.firstRun("overlay_tip_share")) {
-            if (view.getChildCount() <= 2) return;
-            FeedPostView last = (FeedPostView) view.getChildAt(view.getChildCount() - 2);
-            last.showShareTipOverlay();
+            mFeedAdapter.showTipOverlayShare(firstItem);
+            Env.setFirstRun("overlay_tip_share", false);
           }
         }
       }

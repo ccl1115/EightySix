@@ -54,7 +54,6 @@ import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TopBar;
 import de.akquinet.android.androlog.Log;
-import sun.java2d.pipe.SpanShapeRenderer;
 
 import java.util.List;
 
