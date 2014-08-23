@@ -75,6 +75,9 @@ public class PostActivity extends BaseActivity {
   private Guide mPortraitTip;
   private ThemedDialog mQuitConfirmDialog;
 
+  private boolean mPostPraiseRequesting;
+  private boolean mPostCommentPraiseRequesting;
+
   public static void start(Context context, Post post, Rect rect) {
     Intent intent = new Intent(context, PostActivity.class);
     intent.putExtra("post", post);
@@ -266,6 +269,11 @@ public class PostActivity extends BaseActivity {
 
   @Subscribe
   public void onPostCommentPraiseEvent(final PostCommentPraiseEvent event) {
+    if (mPostCommentPraiseRequesting) {
+      return;
+    }
+
+    mPostCommentPraiseRequesting = true;
     if (event.isCancel()) {
       request(new CommentPraiseCancelRequest(mPost.id, event.getComment().id), new OnResponse<Response>() {
         @Override
@@ -277,6 +285,7 @@ public class PostActivity extends BaseActivity {
             event.getComment().praised = 0;
           }
           mPostCommentsAdapter.notifyDataSetChanged();
+          mPostCommentPraiseRequesting = false;
         }
       }, Response.class);
     } else {
@@ -290,6 +299,7 @@ public class PostActivity extends BaseActivity {
             event.getComment().praised = 1;
           }
           mPostCommentsAdapter.notifyDataSetChanged();
+          mPostCommentPraiseRequesting = false;
         }
       }, Response.class);
     }
@@ -297,6 +307,10 @@ public class PostActivity extends BaseActivity {
 
   @Subscribe
   public void onPostPostPraiseEvent(final PostPostPraiseEvent event) {
+
+    if (mPostPraiseRequesting) return;
+
+    mPostPraiseRequesting = true;
     if (event.isCancel()) {
       request(new PostPraiseCancelRequest(event.getPost().id), new OnResponse<Response>() {
         @Override
@@ -310,6 +324,7 @@ public class PostActivity extends BaseActivity {
             event.getPost().praise++;
           }
           mPostCommentsAdapter.notifyDataSetChanged();
+          mPostPraiseRequesting = false;
         }
       }, Response.class);
     } else {
@@ -325,6 +340,7 @@ public class PostActivity extends BaseActivity {
             event.getPost().praise = Math.max(0, event.getPost().praise - 1);
           }
           mPostCommentsAdapter.notifyDataSetChanged();
+          mPostPraiseRequesting = false;
         }
       }, Response.class);
     }
@@ -400,8 +416,9 @@ public class PostActivity extends BaseActivity {
 
   private void requestComment(final int page) {
     final String id = mPost == null ? mPostId : mPost.id;
+    final int viewType = mPost == null ? 0 : mPost.viewType;
     showProgressBar();
-    request(new PostCommentsRequest(id, page), new OnResponse<PostCommentsResponse>() {
+    request(new PostCommentsRequest(id, viewType, page), new OnResponse<PostCommentsResponse>() {
       @Override
       public void onResponse(PostCommentsResponse response) {
         if (RESTRequester.responseOk(response)) {
@@ -422,7 +439,7 @@ public class PostActivity extends BaseActivity {
   }
 
   private void cacheOutComments(final String id, final int page) {
-    cacheOut(new PostCommentsRequest(id, page), new OnResponse<PostCommentsResponse>() {
+    cacheOut(new PostCommentsRequest(id, 0, page), new OnResponse<PostCommentsResponse>() {
       @Override
       public void onResponse(PostCommentsResponse response) {
         if (response != null && response.code == 0 && response.object != null) {

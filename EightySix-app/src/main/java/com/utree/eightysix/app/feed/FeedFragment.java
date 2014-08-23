@@ -60,6 +60,7 @@ public class FeedFragment extends BaseFragment {
   private Guide mPraiseTip;
   private Guide mShareTip;
   private int mWorkerCount;
+  private boolean mPostPraiseRequesting;
 
   public FeedFragment() {
   }
@@ -310,6 +311,10 @@ public class FeedFragment extends BaseFragment {
 
   @Subscribe
   public void onFeedPostPraiseEvent(final FeedPostPraiseEvent event) {
+    if (mPostPraiseRequesting) {
+      return;
+    }
+    mPostPraiseRequesting = true;
     if (event.isCancel()) {
       getBaseActivity().request(new PostPraiseCancelRequest(event.getPost().id), new OnResponse<Response>() {
         @Override
@@ -323,6 +328,8 @@ public class FeedFragment extends BaseFragment {
             event.getPost().praise++;
           }
           mFeedAdapter.notifyDataSetChanged();
+
+          mPostPraiseRequesting = false;
         }
       }, Response.class);
     } else {
@@ -338,6 +345,8 @@ public class FeedFragment extends BaseFragment {
             event.getPost().praise = Math.max(0, event.getPost().praise - 1);
           }
           mFeedAdapter.notifyDataSetChanged();
+
+          mPostPraiseRequesting = false;
         }
       }, Response.class);
     }

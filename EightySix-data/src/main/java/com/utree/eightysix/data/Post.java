@@ -3,7 +3,6 @@ package com.utree.eightysix.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
-import java.io.Serializable;
 
 /**
  */
@@ -44,6 +43,9 @@ public class Post extends BaseItem implements Parcelable {
 
   @SerializedName("praised")
   public int praised;
+
+  @SerializedName("viewType")
+  public int viewType;
 
   @Override
   public boolean equals(Object o) {

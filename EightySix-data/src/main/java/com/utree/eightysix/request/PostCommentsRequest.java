@@ -17,8 +17,13 @@ public class PostCommentsRequest extends Paginate {
   @Param ("postId")
   public String postId;
 
-  public PostCommentsRequest(String postId, int page) {
+
+  @Param ("viewType")
+  public int viewType;
+
+  public PostCommentsRequest(String postId, int viewType, int page) {
     super(page);
+    this.viewType = viewType;
     this.postId = postId;
   }
 }

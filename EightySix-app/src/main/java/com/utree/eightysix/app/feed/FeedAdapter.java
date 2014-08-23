@@ -334,10 +334,9 @@ class FeedAdapter extends BaseAdapter {
       }
     });
 
-    mFeeds.hiddenCount += 1;
     holder.mIvHiddenCount.setVisibility(View.GONE);
-    holder.mRbHidden.setText(String.valueOf(mFeeds.hiddenCount));
-    holder.mTvHidden.setText(U.gfs(R.string.hidden_friends_feed, mFeeds.hiddenCount));
+    holder.mRbHidden.setText(String.valueOf(mFeeds.hiddenCount + 1));
+    holder.mTvHidden.setText(U.gfs(R.string.hidden_friends_feed, mFeeds.hiddenCount + 1));
     holder.mRbUnlock.setText(U.gs(R.string.unlock_to_view));
 
     return convertView;
