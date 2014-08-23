@@ -47,6 +47,12 @@ public class Post extends BaseItem implements Parcelable {
   @SerializedName("viewType")
   public int viewType;
 
+  @SerializedName("isRepost")
+  public int isRepost;
+
+  @SerializedName("isHot")
+  public int isHot;
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -87,6 +93,9 @@ public class Post extends BaseItem implements Parcelable {
     dest.writeString(this.bgColor);
     dest.writeString(this.content);
     dest.writeInt(this.type);
+    dest.writeInt(this.viewType);
+    dest.writeInt(this.isRepost);
+    dest.writeInt(this.isHot);
   }
 
   public Post() {
@@ -109,6 +118,9 @@ public class Post extends BaseItem implements Parcelable {
     this.bgColor = in.readString();
     this.content = in.readString();
     this.type = in.readInt();
+    this.viewType = in.readInt();
+    this.isRepost = in.readInt();
+    this.isHot = in.readInt();
   }
 
   public static final Parcelable.Creator<Post> CREATOR = new Parcelable.Creator<Post>() {

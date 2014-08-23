@@ -105,6 +105,14 @@ public class PostPostView extends BasePostView {
       mAivBg.setBackgroundColor(ColorUtil.strToColor(mPost.bgColor));
     }
 
+    if (mPost.isHot == 1) {
+      mTvSource.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_hot, 0, 0, 0);
+    } else if (mPost.isRepost == 1) {
+      mTvSource.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_repost, 0, 0, 0);
+    } else {
+      mTvSource.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+    }
+
     mTvComment.setCompoundDrawablesWithIntrinsicBounds(mCommentRes, 0, 0, 0);
 
     if (mPost.praised == 1) {
