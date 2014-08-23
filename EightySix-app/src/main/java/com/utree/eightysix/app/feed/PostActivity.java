@@ -408,8 +408,10 @@ public class PostActivity extends BaseActivity {
   private void requestComment(final int page) {
     final String id = mPost == null ? mPostId : mPost.id;
     final int viewType = mPost == null ? 0 : mPost.viewType;
+    final int isHot = mPost == null ? 0 : mPost.isHot;
+    final int isRepost = mPost == null ? 0 : mPost.isRepost;
     showProgressBar();
-    request(new PostCommentsRequest(id, viewType, page), new OnResponse<PostCommentsResponse>() {
+    request(new PostCommentsRequest(id, viewType, isHot, isRepost, page), new OnResponse<PostCommentsResponse>() {
       @Override
       public void onResponse(PostCommentsResponse response) {
         if (RESTRequester.responseOk(response)) {
@@ -432,7 +434,9 @@ public class PostActivity extends BaseActivity {
   private void cacheOutComments(final int page) {
     final String id = mPost == null ? mPostId : mPost.id;
     final int viewType = mPost == null ? 0 : mPost.viewType;
-    cacheOut(new PostCommentsRequest(id, viewType, page), new OnResponse<PostCommentsResponse>() {
+    final int isHot = mPost == null ? 0 : mPost.isHot;
+    final int isRepost = mPost == null ? 0 : mPost.isRepost;
+    cacheOut(new PostCommentsRequest(id, viewType, isHot, isRepost, page), new OnResponse<PostCommentsResponse>() {
       @Override
       public void onResponse(PostCommentsResponse response) {
         if (response != null && response.code == 0 && response.object != null) {

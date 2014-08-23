@@ -11,6 +11,9 @@ public class Post extends BaseItem implements Parcelable {
   @SerializedName("factoryName")
   public String circle;
 
+  @SerializedName("factoryShortName")
+  public String shortName;
+
   @SerializedName ("countComment")
   public int comments;
 
@@ -78,6 +81,7 @@ public class Post extends BaseItem implements Parcelable {
   @Override
   public void writeToParcel(Parcel dest, int flags) {
     dest.writeString(this.circle);
+    dest.writeString(this.shortName);
     dest.writeInt(this.comments);
     dest.writeInt(this.praise);
     dest.writeString(this.id);
@@ -103,6 +107,7 @@ public class Post extends BaseItem implements Parcelable {
 
   private Post(Parcel in) {
     this.circle = in.readString();
+    this.shortName = in.readString();
     this.comments = in.readInt();
     this.praise = in.readInt();
     this.id = in.readString();

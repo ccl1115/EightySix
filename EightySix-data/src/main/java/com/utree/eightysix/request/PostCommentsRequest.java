@@ -17,13 +17,20 @@ public class PostCommentsRequest extends Paginate {
   @Param ("postId")
   public String postId;
 
-
   @Param ("viewType")
   public int viewType;
 
-  public PostCommentsRequest(String postId, int viewType, int page) {
+  @Param ("isHot")
+  public int isHot;
+
+  @Param("isRepost")
+  public int isRepost;
+
+  public PostCommentsRequest(String postId, int viewType, int isHot, int isRepost, int page) {
     super(page);
     this.viewType = viewType;
     this.postId = postId;
+    this.isHot = isHot;
+    this.isRepost = isRepost;
   }
 }
