@@ -237,22 +237,6 @@ class FeedAdapter extends BaseAdapter {
     return convertView;
   }
 
-  private void animateConvertView(int position, View convertView) {
-    if (position > 3 && !mAnimated.get(position, false)) {
-      AnimatorSet set = new AnimatorSet();
-      set.playTogether(
-          ObjectAnimator.ofFloat(convertView, "translationY", U.dp2px(350), 0),
-          ObjectAnimator.ofFloat(convertView, "rotationX", 5, 0)
-      );
-      set.setDuration(300);
-      set.start();
-      mAnimated.put(position, true);
-    } else {
-      ViewHelper.setTranslationY(convertView, 0);
-      ViewHelper.setRotationX(convertView, 0);
-    }
-  }
-
   private View getPlaceHolderView(int position, View convertView, ViewGroup parent) {
     if (convertView == null) {
       convertView = new View(parent.getContext());
@@ -342,6 +326,22 @@ class FeedAdapter extends BaseAdapter {
     }
 
     return convertView;
+  }
+
+  private void animateConvertView(int position, View convertView) {
+    if (position > 3 && !mAnimated.get(position, false)) {
+      AnimatorSet set = new AnimatorSet();
+      set.playTogether(
+          ObjectAnimator.ofFloat(convertView, "translationY", U.dp2px(350), 0),
+          ObjectAnimator.ofFloat(convertView, "rotationX", 5, 0)
+      );
+      set.setDuration(300);
+      set.start();
+      mAnimated.put(position, true);
+    } else {
+      ViewHelper.setTranslationY(convertView, 0);
+      ViewHelper.setRotationX(convertView, 0);
+    }
   }
 
   @Keep
