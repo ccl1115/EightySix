@@ -10,9 +10,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-
 import android.widget.EditText;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -43,6 +40,9 @@ import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RandomSceneTextView;
 import com.utree.eightysix.widget.TopBar;
+
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  */
@@ -264,28 +264,16 @@ public class BaseCirclesActivity extends BaseActivity {
     if (mMode == MODE_SELECT) {
       setActionLeftDrawable(null);
     }
-
-    mOnResult = new Location.OnResult() {
-      @Override
-      public void onResult(Location.Result result) {
-        mLocatingFinished = true;
-        if (mRequestStarted) {
-          requestCircles(1);
-        }
-      }
-    };
   }
 
   @Override
   protected void onPause() {
     super.onPause();
-    M.getLocation().onPause(mOnResult);
   }
 
   @Override
   protected void onResume() {
     super.onResume();
-    M.getLocation().onResume(mOnResult);
     M.getLocation().requestLocation();
   }
 
