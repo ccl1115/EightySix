@@ -1,24 +1,14 @@
 package com.utree.eightysix.widget;
 
 import android.content.Context;
-import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.drawable.ColorDrawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.utree.eightysix.R;
-import org.omg.PortableServer.POAPackage.ObjectAlreadyActive;
 
 /**
  * @author simon
@@ -40,6 +30,7 @@ public class RefreshIndicator extends FrameLayout {
   private void init(Context context, AttributeSet attrs) {
     LayoutInflater.from(context).inflate(R.layout.widget_refresh_indicator, this, true);
     ButterKnife.inject(this, this);
+    setClickable(true);
   }
 
   public void setText(String text) {
