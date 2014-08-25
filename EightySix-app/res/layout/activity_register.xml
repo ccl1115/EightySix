@@ -38,9 +38,12 @@
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
             android:text="@string/register_phone_intro"
             android:textColor="@color/apptheme_primary_dark_color"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="15dp"/>
+            android:gravity="center_horizontal"
+            android:paddingLeft="44dp"
+            android:paddingRight="44dp"/>
 
 </LinearLayout>

@@ -70,10 +70,10 @@
     </style>
 
     <style name="TextView.PostStyle">
-        <item name="android:textSize" tools:ignore="SpUsage">20dp</item>
-        <item name="android:maxLines">10</item>
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingRight">16dp</item>
+        <item name="android:textSize" tools:ignore="SpUsage">23dp</item>
+        <item name="android:maxLines">7</item>
+        <item name="android:paddingLeft">44dp</item>
+        <item name="android:paddingRight">44dp</item>
         <item name="android:gravity">center</item>
     </style>
 

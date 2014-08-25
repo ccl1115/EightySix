@@ -70,13 +70,12 @@
                     android:textSize="14sp"
                     android:textColor="@android:color/white"
                     android:gravity="center_vertical"
-                    android:padding="5dp"
-                    android:drawablePadding="8dp"/>
+                    android:padding="5dp"/>
 
             <TextView
+                    android:id="@+id/tv_comment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tv_comment"
                     android:drawableLeft="@drawable/ic_reply"
                     android:gravity="center_vertical|right"
                     android:textSize="14sp"
@@ -106,7 +105,7 @@
             android:id="@+id/ll_comment"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
+            android:layout_height="50dp"
             android:background="@android:color/white"
             android:paddingLeft="10dp"
             android:paddingRight="10dp">
