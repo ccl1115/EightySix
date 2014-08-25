@@ -32,7 +32,7 @@ abstract class IShare {
   }
 
   protected String shareContentForApp() {
-    return "【蓝莓】-工厂里的秘密社区，%s的朋友最近都在上面，旁边几个厂都火爆了，进来看看吧";
+    return "%s的朋友最近都在上面，旁边几个厂都火爆了，进来看看吧";
   }
 
   protected String shareContentForPost() {
