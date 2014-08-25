@@ -1,5 +1,6 @@
 package com.utree.eightysix;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
@@ -190,6 +191,7 @@ public class U {
     }
   }
 
+  @SuppressLint("SdCardPath")
   private static void loadConfig() {
     M.checkThread();
     sConfiguration = new Properties();

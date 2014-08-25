@@ -170,6 +170,7 @@ public class FeedActivity extends BaseActivity {
       setSideHighlight(circle);
       mDlContent.closeDrawer(mLlSide);
       mFeedFragment.mRefresherView.setRefreshing(true);
+      requestSideCircle();
     }
   }
 
