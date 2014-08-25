@@ -264,16 +264,7 @@ public class BaseCirclesActivity extends BaseActivity {
     if (mMode == MODE_SELECT) {
       setActionLeftDrawable(null);
     }
-  }
 
-  @Override
-  protected void onPause() {
-    super.onPause();
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
     M.getLocation().requestLocation();
   }
 
