@@ -281,6 +281,7 @@ public class PraiseActivity extends BaseActivity {
       @Override
       public void onResponseError(Throwable e) {
         hideProgressBar();
+        hideRefreshIndicator();
         mAlvMsg.stopLoadMore();
         mRvMsg.setRefreshing(false);
         mRstvEmpty.setVisibility(View.VISIBLE);

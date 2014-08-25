@@ -231,8 +231,6 @@ public class FeedActivity extends BaseActivity {
       public Drawable getIcon(int position) {
         if (position == 0) {
           return getResources().getDrawable(R.drawable.ic_action_msg);
-        } else if (position == 1) {
-          return getResources().getDrawable(R.drawable.ic_action_refresh);
         }
         return null;
       }
@@ -247,15 +245,12 @@ public class FeedActivity extends BaseActivity {
         if (position == 0) {
           U.getAnalyser().trackEvent(FeedActivity.this, "feed_msg");
           MsgActivity.start(FeedActivity.this, Account.inst().getNewCommentCount() > 0);
-        } else if (position == 1) {
-          U.getAnalyser().trackEvent(FeedActivity.this, "feed_refresh");
-          mFeedFragment.refresh();
         }
       }
 
       @Override
       public int getCount() {
-        return 2;
+        return 1;
       }
 
       @Override

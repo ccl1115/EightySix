@@ -235,6 +235,7 @@ public class MsgActivity extends BaseActivity {
       public void onResponseError(Throwable e) {
         mRstvEmpty.setVisibility(View.VISIBLE);
         hideProgressBar();
+        hideRefreshIndicator();
         mAlvMsg.stopLoadMore();
         mRvMsg.setRefreshing(false);
       }
