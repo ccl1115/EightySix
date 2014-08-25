@@ -69,6 +69,7 @@ public class PostActivity extends BaseActivity {
 
   private boolean mPostPraiseRequesting;
   private boolean mPostCommentPraiseRequesting;
+  private AlertDialog mCommentContextDialog;
 
   public static void start(Context context, Post post) {
     Intent intent = new Intent(context, PostActivity.class);
@@ -105,6 +106,10 @@ public class PostActivity extends BaseActivity {
   public void onLvCommentsItemClicked(final int position) {
     if (position == 0) return;
 
+    if (mCommentContextDialog != null && mCommentContextDialog.isShowing()) {
+      return;
+    }
+
     final Comment comment = (Comment) mLvComments.getAdapter().getItem(position);
     if (comment == null) return;
 
@@ -117,7 +122,8 @@ public class PostActivity extends BaseActivity {
     } else {
       items = new String[]{like, getString(R.string.share), getString(R.string.report)};
     }
-    new AlertDialog.Builder(this).setTitle(getString(R.string.comment_action))
+
+    mCommentContextDialog = new AlertDialog.Builder(this).setTitle(getString(R.string.comment_action))
         .setItems(items,
             new DialogInterface.OnClickListener() {
               @Override
@@ -149,7 +155,9 @@ public class PostActivity extends BaseActivity {
                     break;
                 }
               }
-            }).create().show();
+            }).create();
+
+    mCommentContextDialog.show();
   }
 
   @OnClick (R.id.rb_post)
