@@ -2,16 +2,11 @@ package com.utree.eightysix.app.account;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
@@ -21,18 +16,15 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
-import com.utree.eightysix.app.intro.IntroActivity;
 import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.User;
-import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.request.RegisterRequest;
 import com.utree.eightysix.response.UserResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.widget.RoundedButton;
-import com.utree.eightysix.widget.TopBar;
 
 /**
  */
@@ -186,11 +178,11 @@ public class RegisterActivity extends BaseActivity {
             }
             mBtnRegister.setEnabled(true);
             hideProgressBar();
-            hideSoftKeyboard(mEtPhoneNumber);
           }
         }, UserResponse.class);
 
     showProgressBar();
+    hideSoftKeyboard(mEtPwd);
     mBtnRegister.setEnabled(false);
   }
 
