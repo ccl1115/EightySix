@@ -3,23 +3,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="15dp"
-                android:paddingTop="4dp"
-                android:paddingRight="15dp">
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
 
     <com.utree.eightysix.widget.FontPortraitView
             android:id="@+id/fpv_portrait"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_marginTop="4dp"
             android:layout_marginRight="10dp"
+            android:layout_centerVertical="true"
             android:gravity="center"/>
 
     <TextView
             android:id="@+id/tv_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="8dp"
             android:layout_toRightOf="@+id/fpv_portrait"
             android:layout_toLeftOf="@+id/iv_heart"
             android:textSize="14sp"/>
@@ -29,11 +28,11 @@
             android:id="@+id/tv_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp"
             android:layout_alignLeft="@+id/tv_comment"
             android:layout_toLeftOf="@+id/iv_heart"
             android:layout_below="@+id/tv_comment"
-            android:paddingBottom="6dp"
             android:textSize="12sp"
             android:textColor="@color/apptheme_primary_dark_color"/>
 

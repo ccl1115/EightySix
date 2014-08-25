@@ -188,6 +188,7 @@ public class RegisterActivity extends BaseActivity {
 
   @Subscribe
   public void onContactsSyncEvent(ContactsSyncEvent event) {
+    showToast("朋友数目：" + event.getFriendCount());
     BaseCirclesActivity.startSelect(this);
     finish();
   }
