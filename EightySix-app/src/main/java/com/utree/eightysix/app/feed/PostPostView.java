@@ -95,7 +95,12 @@ public class PostPostView extends BasePostView {
       mTvComment.setText("");
     }
     mTvPraise.setText(String.valueOf(post.praise));
-    mTvSource.setText(mPost.source);
+    
+    if (mPost.isRepost == 1) {
+      mTvSource.setText("转自" + mPost.source);
+    } else {
+      mTvSource.setText(mPost.source);
+    }
 
     if (!TextUtils.isEmpty(mPost.bgUrl)) {
       mAivBg.setUrl(mPost.bgUrl);

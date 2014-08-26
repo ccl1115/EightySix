@@ -77,6 +77,9 @@ public class FeedPostView extends BasePostView {
   @InjectView (R.id.gv_loading)
   public GearsView mGvLoading;
 
+  @InjectView (R.id.tv_hot)
+  public TextView mTvHot;
+
   private Runnable mShareAnimation;
 
   private static boolean sHasTipShown;
@@ -162,11 +165,21 @@ public class FeedPostView extends BasePostView {
       mTvComment.setText("");
     }
     mTvPraise.setText(String.valueOf(post.praise));
-    mTvSource.setText(post.source);
     mTvLastComment.setText(post.comment);
     mTvLastCommentHead.setText(post.commentHead);
     mTvLastCommentTail.setText(post.commentTail);
 
+    if (mPost.isRepost == 1) {
+      mTvSource.setText("转自" + mPost.source);
+    } else {
+      mTvSource.setText(mPost.source);
+    }
+
+    if (mPost.isHot == 1) {
+      mTvHot.setVisibility(VISIBLE);
+    } else {
+      mTvHot.setVisibility(INVISIBLE);
+    }
 
     if (!TextUtils.isEmpty(post.bgUrl)) {
       if (ImageUtils.getFromMemByUrl(post.bgUrl) == null) {

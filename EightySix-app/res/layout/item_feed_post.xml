@@ -26,6 +26,19 @@
                 android:layout_height="match_parent"
                 android:background="#44000000"/>
 
+
+        <TextView
+                android:id="@+id/tv_hot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/round_border"
+                android:text="热帖"
+                android:textSize="12sp"
+                android:textColor="@android:color/white"
+                android:padding="6dp"
+                android:visibility="invisible"/>
+
         <TextView
                 style="@style/TextView.PostStyle"
                 android:id="@+id/tv_content"
@@ -47,7 +60,8 @@
                 android:id="@+id/gv_loading"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/white"/>
+                android:background="@android:color/white"
+                android:visibility="invisible"/>
 
         <LinearLayout
                 android:id="@+id/fl_grid_panel"
