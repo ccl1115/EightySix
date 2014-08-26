@@ -19,7 +19,6 @@ import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
-import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
@@ -28,7 +27,6 @@ import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
-import com.utree.eightysix.location.Location;
 import com.utree.eightysix.request.CircleSetRequest;
 import com.utree.eightysix.request.SearchCircleRequest;
 import com.utree.eightysix.response.CirclesResponse;
@@ -39,11 +37,8 @@ import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RandomSceneTextView;
 import com.utree.eightysix.widget.RoundedButton;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 
 /**
  */
@@ -229,7 +224,7 @@ public class CircleSearchActivity extends BaseActivity {
 
   protected void showCircleSetDialog(final Circle circle) {
     AlertDialog dialog = new AlertDialog.Builder(this)
-        .setTitle("设置在职企业")
+        .setTitle("完成设置")
         .setMessage(String.format("确认在[%s]上班么？\n\n请注意：", circle.name) + (U.getSyncClient().getSync() != null ? U.getSyncClient().getSync().selectFactoryDays : 15) + "天之内不能修改哦\n")
         .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
           @Override
