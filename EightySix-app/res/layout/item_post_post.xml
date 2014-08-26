@@ -25,13 +25,11 @@
             android:background="@android:color/transparent"/>
 
     <LinearLayout
-            android:orientation="horizontal"
+            android:id="@+id/fl_panel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_gravity="bottom"
-            android:id="@+id/fl_panel"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
             android:layout_marginBottom="5dp">
 
         <TextView
@@ -40,34 +38,33 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
                 android:singleLine="true"
                 android:maxLines="1"
                 android:textSize="14sp"
                 android:textColor="@android:color/white"
-                android:padding="5dp"
-                android:drawablePadding="8dp"/>
+                android:paddingLeft="15dp"/>
 
         <TextView
+                android:id="@+id/tv_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tv_comment"
                 android:drawableLeft="@drawable/ic_reply"
                 android:gravity="center_vertical"
                 android:textSize="14sp"
                 android:textColor="@android:color/white"
                 android:minWidth="50dp"
-                android:padding="5dp"/>
+                android:paddingLeft="5dp"/>
 
         <TextView
+                android:id="@+id/tv_praise"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tv_praise"
                 android:gravity="center_vertical"
                 android:textSize="14sp"
                 android:textColor="@android:color/white"
                 android:minWidth="50dp"
-                android:padding="5dp"/>
+                android:paddingLeft="5dp"
+                android:paddingRight="15dp"/>
 
     </LinearLayout>
 
