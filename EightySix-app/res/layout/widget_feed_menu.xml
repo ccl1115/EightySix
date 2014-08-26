@@ -59,21 +59,6 @@
                 app:radius="5dp"
                 app:background="@color/apptheme_secondary_light_color"/>
 
-        <TextView
-                android:id="@+id/tv_praise_percent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="8dp"
-                android:textSize="16sp"/>
-
-        <ImageView
-            android:id="@+id/iv_arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="8dp"/>
-
     </LinearLayout>
 
     <View

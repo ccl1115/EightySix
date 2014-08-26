@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -22,11 +21,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import com.squareup.otto.Subscribe;
-import com.utree.eightysix.Account;
-import com.utree.eightysix.C;
-import com.utree.eightysix.M;
-import com.utree.eightysix.R;
-import com.utree.eightysix.U;
+import com.utree.eightysix.*;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
@@ -348,7 +343,6 @@ public class FeedActivity extends BaseActivity {
   public void onSetPraiseCountEvent(UpdatePraiseCountEvent event) {
     if (mMenuViewHolder != null) {
       mMenuViewHolder.mTvPraiseCount.setText(String.format("%d个赞", event.getCount()));
-      mMenuViewHolder.mTvPraisePercent.setText(event.getPercent());
     }
   }
 
@@ -606,22 +600,6 @@ public class FeedActivity extends BaseActivity {
     } else {
       mMenuViewHolder.mTvPraiseCount.setText(String.format("%d个赞", count));
     }
-
-    mMenuViewHolder.mTvPraisePercent.setText(praisePercent);
-
-    switch (variant) {
-      case 1:
-        mMenuViewHolder.mIvPraiseArrow.setVisibility(View.VISIBLE);
-        mMenuViewHolder.mIvPraiseArrow.setImageResource(R.drawable.praise_up_arrow);
-        break;
-      case -1:
-        mMenuViewHolder.mIvPraiseArrow.setVisibility(View.VISIBLE);
-        mMenuViewHolder.mIvPraiseArrow.setImageResource(R.drawable.praise_down_arrow);
-        break;
-      default:
-        mMenuViewHolder.mIvPraiseArrow.setVisibility(View.GONE);
-        break;
-    }
   }
 
   @Keep
@@ -640,12 +618,6 @@ public class FeedActivity extends BaseActivity {
 
     @InjectView (R.id.tv_praise_count)
     TextView mTvPraiseCount;
-
-    @InjectView (R.id.tv_praise_percent)
-    TextView mTvPraisePercent;
-
-    @InjectView (R.id.iv_arrow)
-    ImageView mIvPraiseArrow;
 
     @InjectView (R.id.rb_new_praise_dot)
     RoundedButton mRbNewPraiseDot;
