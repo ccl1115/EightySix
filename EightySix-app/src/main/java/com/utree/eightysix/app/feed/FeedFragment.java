@@ -144,6 +144,10 @@ public class FeedFragment extends BaseFragment {
 
           int firstItem = mLvFeed.getFirstVisiblePosition() + 1;
 
+          if (mFeedAdapter.getItemViewType(firstItem) != FeedAdapter.TYPE_POST) {
+            return;
+          }
+
           if (mFeedAdapter.tipsShowing()) return;
 
           if (Env.firstRun("overlay_tip_source")) {
