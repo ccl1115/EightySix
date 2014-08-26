@@ -74,7 +74,7 @@ class PostCommentsAdapter extends BaseAdapter {
     if (mNeedReload) return 2;
     int count = 1;
     if (mComments != null) {
-      count += mComments.size();
+      count += Math.max(mComments.size(), 1);
     }
     return count;
   }
@@ -119,10 +119,15 @@ class PostCommentsAdapter extends BaseAdapter {
 
   @Override
   public int getItemViewType(int position) {
-    if (position == 0) return TYPE_POST;
-    else if (mNeedReload) return TYPE_RELOAD;
-    else if (mComments != null && mComments.size() == 0) return TYPE_NOT_FOUND;
-    else return TYPE_COMMENT;
+    if (position == 0) {
+      return TYPE_POST;
+    } else if (mNeedReload) {
+      return TYPE_RELOAD;
+    } else if (mComments != null && mComments.size() == 0) {
+      return TYPE_NOT_FOUND;
+    } else {
+      return TYPE_COMMENT;
+    }
   }
 
   @Override
