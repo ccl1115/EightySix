@@ -12,14 +12,15 @@
             android:orientation="horizontal">
 
         <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:id="@+id/ri_progress_bar"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginRight="16dp"/>
 
         <TextView
                 android:id="@+id/tv_loading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
                 android:layout_gravity="center_vertical"
                 android:text="加载中..."
                 android:textColor="@android:color/white"/>

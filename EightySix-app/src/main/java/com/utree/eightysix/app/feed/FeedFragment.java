@@ -110,7 +110,7 @@ public class FeedFragment extends BaseFragment {
     mRefresherView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override
       public void onRefresh() {
-        getBaseActivity().showRefreshIndicator();
+        getBaseActivity().showRefreshIndicator(true);
         U.getAnalyser().trackEvent(getActivity(), "feed_pull_refresh");
         mRefreshed = true;
         if (mCircle != null) {
@@ -122,7 +122,7 @@ public class FeedFragment extends BaseFragment {
 
       @Override
       public void onDrag() {
-        getBaseActivity().showRefreshIndicator();
+        getBaseActivity().showRefreshIndicator(false);
       }
 
       @Override

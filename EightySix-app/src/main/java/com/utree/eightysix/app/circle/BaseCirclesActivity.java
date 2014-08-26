@@ -243,15 +243,15 @@ public class BaseCirclesActivity extends BaseActivity {
       mRefresherView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
         @Override
         public void onRefresh() {
+          showRefreshIndicator(true);
           U.getAnalyser().trackEvent(BaseCirclesActivity.this, "circle_pull_refresh");
           mRefreshed = true;
           requestCircles(1);
-          showRefreshIndicator();
         }
 
         @Override
         public void onDrag() {
-          showRefreshIndicator();
+          showRefreshIndicator(false);
         }
 
         @Override

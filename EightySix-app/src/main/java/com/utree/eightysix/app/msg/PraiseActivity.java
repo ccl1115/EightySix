@@ -122,13 +122,14 @@ public class PraiseActivity extends BaseActivity {
     mRvMsg.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override
       public void onRefresh() {
+        showRefreshIndicator(true);
         mRefreshed = true;
         requestPraises(1);
       }
 
       @Override
       public void onDrag() {
-        showRefreshIndicator();
+        showRefreshIndicator(false);
       }
 
       @Override

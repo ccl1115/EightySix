@@ -130,15 +130,15 @@ public class MsgActivity extends BaseActivity {
     mRvMsg.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override
       public void onRefresh() {
+        showRefreshIndicator(true);
         mRefreshed = true;
-        showRefreshIndicator();
         requestMsgs(1);
         ReadMsgStore.inst().clearRead();
       }
 
       @Override
       public void onDrag() {
-        showRefreshIndicator();
+        showRefreshIndicator(false);
       }
 
       @Override

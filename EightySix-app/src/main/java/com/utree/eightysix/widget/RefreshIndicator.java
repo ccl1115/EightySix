@@ -4,8 +4,10 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.utree.eightysix.R;
@@ -15,7 +17,11 @@ import com.utree.eightysix.R;
  */
 public class RefreshIndicator extends FrameLayout {
 
-  private TextView mTvText;
+  @InjectView(R.id.tv_loading)
+  TextView mTvText;
+
+  @InjectView(R.id.ri_progress_bar)
+  ProgressBar mProgress;
 
   public RefreshIndicator(Context context) {
     this(context, null);
@@ -48,6 +54,18 @@ public class RefreshIndicator extends FrameLayout {
     animator.setDuration(200);
     animator.start();
     setTag(animator);
+  }
+
+  public void show(boolean progressing) {
+    if (progressing) {
+      mProgress.setVisibility(VISIBLE);
+      mTvText.setText("刷新中...");
+    } else {
+      mProgress.setVisibility(GONE);
+      mTvText.setText("下拉刷新");
+    }
+
+    show();
   }
 
   public void hide() {
