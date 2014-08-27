@@ -142,23 +142,21 @@ public class FeedFragment extends BaseFragment {
 
           if (view.getChildCount() <= 2) return;
 
-          int firstItem = mLvFeed.getFirstVisiblePosition() + 1;
+          final int firstItem = mLvFeed.getFirstVisiblePosition() + 1;
 
-          if (mFeedAdapter.getItemViewType(firstItem) != FeedAdapter.TYPE_POST) {
-            return;
-          }
+          if (mFeedAdapter.tipsShowing() || mFeedAdapter.getItemViewType(firstItem) != FeedAdapter.TYPE_POST) return;
 
-          if (mFeedAdapter.tipsShowing()) return;
+          Post post = (Post) mFeedAdapter.getItem(firstItem);
 
-          if (Env.firstRun("overlay_tip_source")) {
+
+          if (post.isRepost == 0 && Env.firstRun("overlay_tip_source")) {
             mFeedAdapter.showTipOverlaySource(firstItem);
-            Env.setFirstRun("overlay_tip_source", false);
           } else if (Env.firstRun("overlay_tip_praise")) {
             mFeedAdapter.showTipOverlayPraise(firstItem);
-            Env.setFirstRun("overlay_tip_praise", false);
           } else if (Env.firstRun("overlay_tip_share")) {
             mFeedAdapter.showTipOverlayShare(firstItem);
-            Env.setFirstRun("overlay_tip_share", false);
+          } else if (post.isRepost == 1 && Env.firstRun("overlay_tip_repost")) {
+            mFeedAdapter.showTipOverlayRepost(firstItem);
           }
         }
       }

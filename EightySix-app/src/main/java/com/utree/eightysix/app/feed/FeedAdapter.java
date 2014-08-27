@@ -55,6 +55,7 @@ class FeedAdapter extends BaseAdapter {
   private int mTipOverlaySourcePosition = TIP_NOT_SHOWN;
   private int mTipOverlayPraisePosition = TIP_NOT_SHOWN;
   private int mTipOverlaySharePosition = TIP_NOT_SHOWN;
+  private int mTipOverlayRepostPosition = TIP_NOT_SHOWN;
 
   FeedAdapter(Feeds feeds) {
     mFeeds = feeds;
@@ -225,23 +226,32 @@ class FeedAdapter extends BaseAdapter {
     notifyDataSetChanged();
   }
 
+  void showTipOverlayRepost(int position) {
+    mTipOverlayRepostPosition = position;
+    notifyDataSetChanged();
+  }
+
   @Subscribe
   public void onDismissTipOverlay(DismissTipOverlayEvent event) {
     switch (event.getType()) {
       case DismissTipOverlayEvent.TYPE_PRAISE:
-        mTipOverlayPraisePosition = -1;
+        mTipOverlayPraisePosition = TIP_NOT_SHOWN;
         break;
       case DismissTipOverlayEvent.TYPE_SHARE:
-        mTipOverlaySharePosition = -1;
+        mTipOverlaySharePosition = TIP_NOT_SHOWN;
         break;
       case DismissTipOverlayEvent.TYPE_SOURCE:
-        mTipOverlaySourcePosition = -1;
+        mTipOverlaySourcePosition = TIP_NOT_SHOWN;
+        break;
+      case DismissTipOverlayEvent.TYPE_REPOST:
+        mTipOverlayRepostPosition = TIP_NOT_SHOWN;
         break;
     }
   }
 
   boolean tipsShowing() {
-    return mTipOverlayPraisePosition != -1 || mTipOverlaySharePosition != -1 || mTipOverlaySourcePosition != -1;
+    return mTipOverlayPraisePosition != -1 || mTipOverlaySharePosition != -1 || mTipOverlaySourcePosition != -1 ||
+        mTipOverlayRepostPosition != -1;
   }
 
   private View getPostView(int position, View convertView, ViewGroup parent) {
@@ -258,10 +268,13 @@ class FeedAdapter extends BaseAdapter {
       feedPostView.showPraiseTipOverlay();
     } else if (mTipOverlayPraisePosition == -1 && mTipOverlaySharePosition == position) {
       feedPostView.showShareTipOverlay();
+    } else if (mTipOverlaySharePosition == -1 && mTipOverlayRepostPosition == position) {
+      feedPostView.showRepostTipOverlay();
     } else {
       feedPostView.hidePraiseTipOverlay();
       feedPostView.hideSourceTipOverlay();
       feedPostView.hideShareTipOverlay();
+      feedPostView.hideRepostTipOverlay();
     }
 
     return convertView;
@@ -480,6 +493,7 @@ class FeedAdapter extends BaseAdapter {
     static final int TYPE_SOURCE = 1;
     static final int TYPE_PRAISE = 2;
     static final int TYPE_SHARE = 3;
+    static final int TYPE_REPOST = 4;
 
     DismissTipOverlayEvent(int type) {
       mType = type;

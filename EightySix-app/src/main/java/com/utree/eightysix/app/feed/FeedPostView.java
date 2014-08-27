@@ -7,12 +7,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.nineoldandroids.animation.AnimatorSet;
@@ -25,6 +20,7 @@ import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.utils.ColorUtil;
+import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.GearsView;
@@ -82,10 +78,10 @@ public class FeedPostView extends BasePostView {
 
   private Runnable mShareAnimation;
 
-  private static boolean sHasTipShown;
   private View mTipOverlayShare;
   private View mTipOverlaySource;
   private View mTipOverlayPraise;
+  private View mTipOverlayRepost;
 
   public FeedPostView(Context context) {
     this(context, null, 0);
@@ -315,6 +311,7 @@ public class FeedPostView extends BasePostView {
           mTipOverlayShare.setVisibility(GONE);
           U.getBus().post(new FeedAdapter.DismissTipOverlayEvent(
               FeedAdapter.DismissTipOverlayEvent.TYPE_SHARE));
+          Env.setFirstRun("overlay_tip_share", false);
         }
       });
     } else {
@@ -348,6 +345,7 @@ public class FeedPostView extends BasePostView {
         v.setVisibility(GONE);
         U.getBus().post(new FeedAdapter.DismissTipOverlayEvent(
             FeedAdapter.DismissTipOverlayEvent.TYPE_SOURCE));
+        Env.setFirstRun("overlay_tip_source", false);
       }
     });
   }
@@ -374,6 +372,7 @@ public class FeedPostView extends BasePostView {
           mTipOverlayPraise.setVisibility(GONE);
           U.getBus().post(new FeedAdapter.DismissTipOverlayEvent(
               FeedAdapter.DismissTipOverlayEvent.TYPE_PRAISE));
+          Env.setFirstRun("overlay_tip_praise", false);
         }
       });
     } else {
@@ -385,6 +384,36 @@ public class FeedPostView extends BasePostView {
   void hidePraiseTipOverlay() {
     if (mTipOverlayPraise != null) {
       mTipOverlayPraise.setVisibility(GONE);
+    }
+  }
+
+  void showRepostTipOverlay() {
+
+    if (mTipOverlayRepost == null) {
+      mTipOverlayRepost = LayoutInflater.from(getContext())
+          .inflate(R.layout.overlay_tip_repost, this, false);
+
+      mTipOverlayRepost.findViewById(R.id.ll_tip).setBackgroundDrawable(
+          new RoundRectDrawable(U.dp2px(8), Color.WHITE));
+      mFlContent.addView(mTipOverlayRepost);
+
+      mTipOverlayRepost.setOnClickListener(new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          mTipOverlayRepost.setVisibility(GONE);
+          U.getBus().post(new FeedAdapter.DismissTipOverlayEvent(
+              FeedAdapter.DismissTipOverlayEvent.TYPE_REPOST));
+          Env.setFirstRun("overlay_tip_repost", false);
+        }
+      });
+    } else {
+      mTipOverlayRepost.setVisibility(VISIBLE);
+    }
+  }
+
+  void hideRepostTipOverlay() {
+    if (mTipOverlayRepost != null) {
+      mTipOverlayRepost.setVisibility(GONE);
     }
   }
 }
