@@ -18,7 +18,6 @@ import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
-import com.utree.eightysix.C;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
@@ -27,18 +26,24 @@ import com.utree.eightysix.app.account.LoginActivity;
 import com.utree.eightysix.app.account.RegisterActivity;
 import com.utree.eightysix.app.feed.PostPostView;
 import com.utree.eightysix.data.Post;
-import com.utree.eightysix.request.RegHotRequest;
-import com.utree.eightysix.response.PostResponse;
-import com.utree.eightysix.rest.OnResponse2;
-import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.widget.IndicatorView;
-import de.akquinet.android.androlog.Log;
+
 import java.util.Random;
 
 /**
  */
 @Layout (R.layout.activity_guide)
 public class GuideActivity extends BaseActivity {
+
+  private static final Post LOCAL_POST = new Post();
+
+  static {
+    LOCAL_POST.source = "仁宝电脑";
+    LOCAL_POST.comments = 165;
+    LOCAL_POST.praise = 391;
+    LOCAL_POST.content = "本地测试";
+  }
+
 
   private static final int PAGE_1_BACKGROUND_COLOR = 0xff43cf76;
   private static final int PAGE_2_BACKGROUND_COLOR = 0xff3f61a9;
@@ -49,6 +54,7 @@ public class GuideActivity extends BaseActivity {
           PAGE_2_BACKGROUND_COLOR,
           PAGE_2_1_BACKGROUND_COLOR,
           PAGE_3_BACKGROUND_COLOR);
+
   private static final int[] RANDOM_BACKGROUND = {
       R.drawable.bg_20,
       R.drawable.bg_94,
@@ -56,6 +62,7 @@ public class GuideActivity extends BaseActivity {
       R.drawable.bg_31,
       R.drawable.bg_97,
   };
+
   @InjectView (R.id.vp_guide)
   public ViewPager mVpGuide;
   @InjectView (R.id.iv_bottom_wave)
@@ -117,7 +124,7 @@ public class GuideActivity extends BaseActivity {
             mPage3ViewHolder = new Page3ViewHolder(inflate);
             container.addView(inflate);
             mPage3ViewHolder.mPostPostView.mTvPraise.setOnClickListener(null);
-            mPage3ViewHolder.mPostPostView.setData(mPost);
+            mPage3ViewHolder.mPostPostView.setData(LOCAL_POST);
             mPage3ViewHolder.mPostPostView.mAivBg.setImageResource(mRandomBg);
             return inflate;
           }
@@ -164,12 +171,6 @@ public class GuideActivity extends BaseActivity {
 
       }
     });
-    getHandler().postDelayed(new Runnable() {
-      @Override
-      public void run() {
-        requestRegPost();
-      }
-    }, 500);
   }
 
   @Override
@@ -196,26 +197,6 @@ public class GuideActivity extends BaseActivity {
   @Subscribe
   public void onLoginEvent(Account.LoginEvent event) {
     finish();
-  }
-
-  private void requestRegPost() {
-    request(new RegHotRequest(), new OnResponse2<PostResponse>() {
-      @Override
-      public void onResponseError(Throwable e) {
-      }
-
-      @Override
-      public void onResponse(PostResponse response) {
-        if (RESTRequester.responseOk(response)) {
-          Log.d(C.TAG.RR, response.toString());
-          mPost = response.object;
-          mPost.bgUrl = null;
-          if (mPage3ViewHolder != null) {
-            mPage3ViewHolder.mPostPostView.setData(mPost);
-          }
-        }
-      }
-    }, PostResponse.class);
   }
 
   public class Page3ViewHolder {
