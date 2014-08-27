@@ -20,8 +20,8 @@
             style="@style/TextView.PostStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="24dp"
-            android:paddingRight="24dp"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
             android:background="@android:color/transparent"/>
 
     <LinearLayout
@@ -42,7 +42,7 @@
                 android:maxLines="1"
                 android:textSize="14sp"
                 android:textColor="@android:color/white"
-                android:paddingLeft="15dp"/>
+                android:layout_marginLeft="15dp"/>
 
         <TextView
                 android:id="@+id/tv_comment"
@@ -53,7 +53,7 @@
                 android:textSize="14sp"
                 android:textColor="@android:color/white"
                 android:minWidth="50dp"
-                android:paddingLeft="5dp"/>
+                android:layout_marginLeft="5dp"/>
 
         <TextView
                 android:id="@+id/tv_praise"
@@ -63,8 +63,8 @@
                 android:textSize="14sp"
                 android:textColor="@android:color/white"
                 android:minWidth="50dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="15dp"/>
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="15dp"/>
 
     </LinearLayout>
 

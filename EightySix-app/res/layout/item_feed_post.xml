@@ -34,9 +34,9 @@
                 android:layout_margin="10dp"
                 android:background="@drawable/round_border"
                 android:text="热帖"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:textColor="@android:color/white"
-                android:padding="6dp"
+                android:padding="8dp"
                 android:visibility="invisible"/>
 
         <TextView
@@ -82,7 +82,7 @@
                     android:textSize="14sp"
                     android:textColor="@android:color/white"
                     android:gravity="center_vertical"
-                    android:paddingLeft="15dp"/>
+                    android:layout_marginLeft="15dp"/>
 
             <TextView
                     android:id="@+id/tv_comment"
@@ -93,7 +93,7 @@
                     android:textSize="14sp"
                     android:textColor="@android:color/white"
                     android:minWidth="50dp"
-                    android:paddingRight="5dp"/>
+                    android:layout_marginRight="5dp"/>
 
             <TextView
                     android:layout_width="wrap_content"
@@ -103,8 +103,8 @@
                     android:textSize="14sp"
                     android:textColor="@android:color/white"
                     android:minWidth="50dp"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="15dp"/>
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="15dp"/>
 
         </LinearLayout>
     </FrameLayout>
