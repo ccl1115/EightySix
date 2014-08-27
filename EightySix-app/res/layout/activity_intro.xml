@@ -18,25 +18,17 @@
             android:layout_centerHorizontal="true"
             android:src="@drawable/big_logo"/>
 
-    <ImageView
-            android:id="@+id/app_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/big_logo"
-            android:layout_marginTop="56dp"
-            android:src="@drawable/logo_app_name"/>
-
-    <ImageView
+    <TextView
             android:id="@+id/intro_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_below="@+id/app_title"
+            android:layout_below="@+id/big_logo"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="15dp"
-            android:src="@drawable/logo_slogan"/>
+            android:layout_marginTop="240dp"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:text="让漂泊的心 有个家"/>
 
     <TextView
             android:id="@+id/intro_url"
