@@ -75,7 +75,7 @@ class FeedAdapter extends BaseAdapter {
     } else if (mFeeds.posts.lists.size() == 0) {
       // 邀请厂里的人加入
       mFeeds.posts.lists.add(0, new BaseItem(TYPE_INVITE_FACTORY));
-    } else if (mFeeds.currFactoryFriends == 0) {
+    } else if (mFeeds.circle.friendCount == 0) {
       // 邀请朋友加入
       mFeeds.posts.lists.add(0, new BaseItem(TYPE_INVITE_FRIEND));
     } else if (mFeeds.lock == 1) {

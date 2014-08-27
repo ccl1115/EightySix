@@ -7,9 +7,9 @@
     <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/guide_2"/>
+            android:src="@drawable/guide_3"/>
 
     <TextView
             android:id="@+id/tv_tip"

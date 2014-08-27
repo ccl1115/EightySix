@@ -45,9 +45,9 @@ public class GuideActivity extends BaseActivity {
   }
 
 
-  private static final int PAGE_1_BACKGROUND_COLOR = 0xff43cf76;
-  private static final int PAGE_2_BACKGROUND_COLOR = 0xff3f61a9;
-  private static final int PAGE_2_1_BACKGROUND_COLOR = 0xffcf6b39;
+  private static final int PAGE_1_BACKGROUND_COLOR = 0xff699de6;
+  private static final int PAGE_2_BACKGROUND_COLOR = 0xff864bfd;
+  private static final int PAGE_2_1_BACKGROUND_COLOR = 0xffff8474;
   private static final int PAGE_3_BACKGROUND_COLOR = 0xff55b5c3;
   private ValueAnimator mPageColorAnimator =
       ValueAnimator.ofObject(new ArgbEvaluator(), PAGE_1_BACKGROUND_COLOR,
