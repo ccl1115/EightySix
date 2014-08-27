@@ -35,6 +35,7 @@ import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
@@ -247,6 +248,7 @@ public class BaseCirclesActivity extends BaseActivity {
           U.getAnalyser().trackEvent(BaseCirclesActivity.this, "circle_pull_refresh");
           mRefreshed = true;
           requestCircles(1);
+          requestLocation();
         }
 
         @Override
@@ -264,14 +266,21 @@ public class BaseCirclesActivity extends BaseActivity {
     if (mMode == MODE_SELECT) {
       setActionLeftDrawable(null);
     }
-
-    M.getLocation().requestLocation();
   }
 
   @Override
   public void onBackPressed() {
     if (mMode != MODE_SELECT) {
       super.onBackPressed();
+    }
+  }
+
+  private void requestLocation() {
+    long last = Env.getTimestamp("last_location");
+    long now = System.currentTimeMillis();
+    if (now - last > 7200000) { // 两个小时之后请求新的定位
+      M.getLocation().requestLocation();
+      Env.setTimestamp("last_location");
     }
   }
 
@@ -284,7 +293,8 @@ public class BaseCirclesActivity extends BaseActivity {
   protected void showCircleSetDialog(final Circle circle) {
     AlertDialog dialog = new AlertDialog.Builder(this)
         .setTitle("完成设置")
-        .setMessage(String.format("确认在[%s]上班么？\n\n请注意：", circle.name) + (U.getSyncClient().getSync() != null ? U.getSyncClient().getSync().selectFactoryDays : 15) + "天之内不能修改哦\n")
+        .setMessage(String.format("确认在[%s]上班么？\n\n请注意：%d天之内不能修改哦\n", circle.name,
+            U.getSyncClient().getSync() != null ? U.getSyncClient().getSync().selectFactoryDays : 15))
         .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
