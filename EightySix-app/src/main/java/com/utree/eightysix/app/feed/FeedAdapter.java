@@ -37,16 +37,16 @@ class FeedAdapter extends BaseAdapter {
   private static final int TIP_NOT_SHOWN = -1;
 
   public static final int TYPE_COUNT = 10;
-  private static final int TYPE_PLACEHOLDER = 0;
-  private static final int TYPE_UNLOCK = 1;
-  private static final int TYPE_UPLOAD = 2;
-  private static final int TYPE_SELECT = 3;
-  private static final int TYPE_UNKNOWN = 4;
-  private static final int TYPE_POST = 5;
-  private static final int TYPE_PROMO = 6;
-  private static final int TYPE_QUESTION = 7;
-  private static final int TYPE_INVITE_FRIEND = 8;
-  private static final int TYPE_INVITE_FACTORY = 9;
+  static final int TYPE_PLACEHOLDER = 0;
+  static final int TYPE_UNLOCK = 1;
+  static final int TYPE_UPLOAD = 2;
+  static final int TYPE_SELECT = 3;
+  static final int TYPE_UNKNOWN = 4;
+  static final int TYPE_POST = 5;
+  static final int TYPE_PROMO = 6;
+  static final int TYPE_QUESTION = 7;
+  static final int TYPE_INVITE_FRIEND = 8;
+  static final int TYPE_INVITE_FACTORY = 9;
 
   private SparseBooleanArray mAnimated = new SparseBooleanArray();
 
