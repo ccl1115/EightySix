@@ -60,7 +60,7 @@ public class GuideActivity extends BaseActivity {
       R.drawable.bg_94,
       R.drawable.bg_49,
       R.drawable.bg_31,
-      R.drawable.bg_97,
+      R.drawable.bg_200,
   };
 
   @InjectView (R.id.vp_guide)
