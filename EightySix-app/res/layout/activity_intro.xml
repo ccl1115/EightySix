@@ -5,7 +5,7 @@
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@color/apptheme_secondary_dark_color">
+                android:background="@drawable/intro">
 
     <ImageView
             android:id="@+id/big_logo"
@@ -16,7 +16,7 @@
             android:layout_alignParentLeft="false"
             android:layout_alignParentTop="false"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/large_logo"/>
+            android:src="@drawable/big_logo"/>
 
     <ImageView
             android:id="@+id/app_title"

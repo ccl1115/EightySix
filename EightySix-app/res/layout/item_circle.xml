@@ -10,16 +10,16 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp">
+            android:paddingTop="12dp"
+            android:paddingBottom="15dp">
 
         <com.utree.eightysix.widget.RoundedButton
                 android:id="@+id/rb_icon"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
                 android:gravity="center"
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="2dp"
                 android:textSize="10sp"
                 app:radius="1dp"/>
 
@@ -45,7 +45,7 @@
                     android:id="@+id/tv_circle_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="2dp"
                     android:lines="1"
                     android:singleLine="true"
                     android:ellipsize="end"
