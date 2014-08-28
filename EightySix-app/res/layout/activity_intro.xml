@@ -22,9 +22,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_below="@+id/big_logo"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="240dp"
+            android:layout_above="@+id/ll_actions"
+            android:layout_marginBottom="48dp"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:text="让漂泊的心 有个家"/>
@@ -43,6 +43,7 @@
             android:layout_alignParentBottom="true"/>
 
     <LinearLayout
+            android:id="@+id/ll_actions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="60dp"
@@ -58,7 +59,6 @@
                 android:layout_marginRight="8dp"
                 android:textColor="@color/apptheme_primary_text_light"
                 android:gravity="center"
-                android:visibility="gone"
                 android:text="立即加入"
                 android:textSize="16sp"
                 android:background="@drawable/round_border"/>
@@ -72,7 +72,6 @@
                 android:layout_marginRight="16dp"
                 android:textColor="@color/apptheme_primary_text_light"
                 android:gravity="center"
-                android:visibility="gone"
                 android:text="登  录"
                 android:textSize="16sp"
                 android:background="@drawable/round_border"/>
