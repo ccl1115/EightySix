@@ -41,7 +41,7 @@ public class GuideActivity extends BaseActivity {
     LOCAL_POST.source = "仁宝电脑";
     LOCAL_POST.comments = 165;
     LOCAL_POST.praise = 391;
-    LOCAL_POST.content = "故意找我50块假钱的傻逼，每天都去宿舍门口！想揍他，可我从来都没有去...";
+    LOCAL_POST.content = "找我50块假钱的傻逼，每天都在宿舍门口碰到！好想上去揍他。。。";
   }
 
 
