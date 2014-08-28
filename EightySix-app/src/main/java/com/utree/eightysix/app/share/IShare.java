@@ -28,7 +28,7 @@ abstract class IShare {
   }
 
   protected String shareTitleForComment() {
-    return "分享自【蓝莓圈】的精彩评论";
+    return "分享自【蓝莓】的精彩评论";
   }
 
   protected String shareContentForApp() {
