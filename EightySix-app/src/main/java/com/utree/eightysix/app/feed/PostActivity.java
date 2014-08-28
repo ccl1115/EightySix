@@ -32,6 +32,7 @@ import com.utree.eightysix.request.*;
 import com.utree.eightysix.response.PostCommentsResponse;
 import com.utree.eightysix.response.PublishCommentResponse;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
@@ -311,7 +312,7 @@ public class PostActivity extends BaseActivity {
 
     mPostPraiseRequesting = true;
     if (event.isCancel()) {
-      request(new PostPraiseCancelRequest(event.getPost().id), new OnResponse<Response>() {
+      request(new PostPraiseCancelRequest(event.getPost().id), new OnResponse2<Response>() {
         @Override
         public void onResponse(Response response) {
           if (RESTRequester.responseOk(response)) {
@@ -325,9 +326,14 @@ public class PostActivity extends BaseActivity {
           mPostCommentsAdapter.notifyDataSetChanged();
           mPostPraiseRequesting = false;
         }
+
+        @Override
+        public void onResponseError(Throwable e) {
+          mPostPraiseRequesting = false;
+        }
       }, Response.class);
     } else {
-      request(new PostPraiseRequest(event.getPost().id), new OnResponse<Response>() {
+      request(new PostPraiseRequest(event.getPost().id), new OnResponse2<Response>() {
         @Override
         public void onResponse(Response response) {
           if (RESTRequester.responseOk(response)) {
@@ -339,6 +345,11 @@ public class PostActivity extends BaseActivity {
             event.getPost().praise = Math.max(0, event.getPost().praise - 1);
           }
           mPostCommentsAdapter.notifyDataSetChanged();
+          mPostPraiseRequesting = false;
+        }
+
+        @Override
+        public void onResponseError(Throwable e) {
           mPostPraiseRequesting = false;
         }
       }, Response.class);

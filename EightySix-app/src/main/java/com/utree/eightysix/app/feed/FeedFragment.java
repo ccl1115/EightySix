@@ -25,6 +25,7 @@ import com.utree.eightysix.request.PostPraiseCancelRequest;
 import com.utree.eightysix.request.PostPraiseRequest;
 import com.utree.eightysix.response.FeedsResponse;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
@@ -318,7 +319,7 @@ public class FeedFragment extends BaseFragment {
     }
     mPostPraiseRequesting = true;
     if (event.isCancel()) {
-      getBaseActivity().request(new PostPraiseCancelRequest(event.getPost().id), new OnResponse<Response>() {
+      getBaseActivity().request(new PostPraiseCancelRequest(event.getPost().id), new OnResponse2<Response>() {
         @Override
         public void onResponse(Response response) {
           if (RESTRequester.responseOk(response)) {
@@ -333,9 +334,14 @@ public class FeedFragment extends BaseFragment {
 
           mPostPraiseRequesting = false;
         }
+
+        @Override
+        public void onResponseError(Throwable e) {
+          mPostPraiseRequesting = false;
+        }
       }, Response.class);
     } else {
-      getBaseActivity().request(new PostPraiseRequest(event.getPost().id), new OnResponse<Response>() {
+      getBaseActivity().request(new PostPraiseRequest(event.getPost().id), new OnResponse2<Response>() {
         @Override
         public void onResponse(Response response) {
           if (RESTRequester.responseOk(response)) {
@@ -348,6 +354,11 @@ public class FeedFragment extends BaseFragment {
           }
           mFeedAdapter.notifyDataSetChanged();
 
+          mPostPraiseRequesting = false;
+        }
+
+        @Override
+        public void onResponseError(Throwable e) {
           mPostPraiseRequesting = false;
         }
       }, Response.class);
