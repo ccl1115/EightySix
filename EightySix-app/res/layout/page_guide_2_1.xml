@@ -18,7 +18,7 @@
             android:layout_marginBottom="12dp"
             android:layout_centerHorizontal="true"
             android:layout_above="@+id/tv_sub_tip"
-            android:text="分享秘密，获得共鸣"
+            android:text="分享心事，获得共鸣"
             android:textSize="26sp"
             android:textColor="@android:color/black"/>
 

@@ -42,6 +42,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="48dp"
                 android:paddingRight="48dp"
+                android:maxLength="77"
                 android:textColor="@android:color/white"/>
 
     </FrameLayout>

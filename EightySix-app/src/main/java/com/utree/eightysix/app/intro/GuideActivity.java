@@ -41,7 +41,7 @@ public class GuideActivity extends BaseActivity {
     LOCAL_POST.source = "仁宝电脑";
     LOCAL_POST.comments = 165;
     LOCAL_POST.praise = 391;
-    LOCAL_POST.content = "本地测试";
+    LOCAL_POST.content = "故意找我50块假钱的傻逼，每天都去宿舍门口！想揍他，可我从来都没有去...";
   }
 
 
@@ -56,11 +56,7 @@ public class GuideActivity extends BaseActivity {
           PAGE_3_BACKGROUND_COLOR);
 
   private static final int[] RANDOM_BACKGROUND = {
-      R.drawable.bg_20,
-      R.drawable.bg_94,
-      R.drawable.bg_49,
-      R.drawable.bg_31,
-      R.drawable.bg_200,
+      R.drawable.guide_post_bg,
   };
 
   @InjectView (R.id.vp_guide)
