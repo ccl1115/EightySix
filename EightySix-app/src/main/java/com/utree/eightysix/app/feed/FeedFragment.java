@@ -150,7 +150,7 @@ public class FeedFragment extends BaseFragment {
           Post post = (Post) mFeedAdapter.getItem(firstItem);
 
 
-          if (post.isRepost == 0 && Env.firstRun("overlay_tip_source")) {
+          if (post.isHot == 0 && post.isRepost == 0 && Env.firstRun("overlay_tip_source")) {
             mFeedAdapter.showTipOverlaySource(firstItem);
           } else if (Env.firstRun("overlay_tip_praise")) {
             mFeedAdapter.showTipOverlayPraise(firstItem);
