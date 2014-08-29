@@ -66,10 +66,14 @@ public class RefreshIndicator extends FrameLayout {
     }
 
     show();
+
+    setClickable(true);
   }
 
   public void hide() {
     if (getVisibility() == INVISIBLE) return;
+
+    setClickable(false);
 
     ObjectAnimator tag = (ObjectAnimator) getTag();
     if (tag != null) tag.cancel();
