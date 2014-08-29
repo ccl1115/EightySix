@@ -49,7 +49,7 @@ public class HelpActivity extends BaseActivity {
   }
 
   @Override
-  public void onBackPressed() {
+  public void onActionLeftClicked() {
     finish();
   }
 }
