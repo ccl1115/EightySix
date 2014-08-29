@@ -33,6 +33,7 @@ import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.msg.PraiseActivity;
 import com.utree.eightysix.app.publish.FeedbackActivity;
 import com.utree.eightysix.app.publish.PublishActivity;
+import com.utree.eightysix.app.settings.HelpActivity;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.Circle;
@@ -212,7 +213,7 @@ public class FeedActivity extends BaseActivity {
 
     if (mPopupMenu == null) {
       LinearLayout menu = (LinearLayout) View.inflate(FeedActivity.this, R.layout.widget_feed_menu, null);
-      mPopupMenu = new PopupWindow(menu, dp2px(190), dp2px(180) + 3);
+      mPopupMenu = new PopupWindow(menu, dp2px(190), dp2px(225) + 4);
       mMenuViewHolder = new MenuViewHolder(menu);
       mPopupMenu.setFocusable(true);
       mPopupMenu.setOutsideTouchable(true);
@@ -660,6 +661,7 @@ public class FeedActivity extends BaseActivity {
 
     @OnClick(R.id.ll_help)
     void onLlHelpClicked() {
+      startActivity(new Intent(FeedActivity.this, HelpActivity.class));
       mPopupMenu.dismiss();
     }
   }

@@ -9,7 +9,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
         <ProgressBar
                 android:id="@+id/ri_progress_bar"

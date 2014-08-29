@@ -43,9 +43,10 @@
             android:gravity="center_vertical"
             android:textSize="16sp"
             android:text="@string/help"
+            android:visibility="invisible"
             android:background="@drawable/apptheme_primary_list_selector"/>
 
-    <include layout="@layout/widget_primary_divider"/>
+    <!--<include layout="@layout/widget_primary_divider"/>-->
 
     <com.utree.eightysix.widget.RoundedButton
             android:id="@+id/rb_logout"
