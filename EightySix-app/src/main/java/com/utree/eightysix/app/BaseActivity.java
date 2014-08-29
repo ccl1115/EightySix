@@ -264,7 +264,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
 
       @Override
       public void onAnimationEnd(Animator animation) {
-        mVProgressMask.setVisibility(View.INVISIBLE);
+        mVProgressMask.setVisibility(View.GONE);
         onHideMaskEnd();
       }
 

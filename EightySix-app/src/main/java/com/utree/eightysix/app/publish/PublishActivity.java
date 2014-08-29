@@ -336,9 +336,7 @@ public class PublishActivity extends BaseActivity {
       }
     });
 
-    List<Item> itemsByPage = mGpPanel.getItemsByPage(0);
-    Item item = itemsByPage.get(new Random().nextInt(itemsByPage.size()));
-    switchItem(item, false);
+    randomItem();
 
     mGpPanel.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
       @Override
@@ -366,6 +364,12 @@ public class PublishActivity extends BaseActivity {
     showDescriptionDialogWhenFirstRun();
   }
 
+  private void randomItem() {
+    List<Item> itemsByPage = mGpPanel.getItemsByPage(0);
+    Item item = itemsByPage.get(new Random().nextInt(itemsByPage.size()));
+    switchItem(item, false);
+  }
+
   protected void showDescriptionDialogWhenFirstRun() {
     if (Env.firstRun(FIRST_RUN_KEY)) {
       showDescriptionDialog();
@@ -387,6 +391,12 @@ public class PublishActivity extends BaseActivity {
 
   @Subscribe
   public void onImageUploaded(ImageUtils.ImageUploadedEvent event) {
+    if (event.getHash() == null || event.getUrl() == null) {
+      mImageUploadFinished = false;
+      showToast("上传图片失败");
+      randomItem();
+      return;
+    }
     if (event.getHash().equals(mFileHash)) {
       mImageUploadFinished = true;
       mImageUploadUrl = event.getUrl();

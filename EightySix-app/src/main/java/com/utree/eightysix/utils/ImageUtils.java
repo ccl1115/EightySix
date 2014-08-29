@@ -466,9 +466,7 @@ public class ImageUtils {
 
     @Override
     protected void onPostExecute(Void aVoid) {
-      if (mFileHash != null && mUrl != null) {
-        U.getBus().post(new ImageUploadedEvent(mFileHash, mUrl));
-      }
+      U.getBus().post(new ImageUploadedEvent(mFileHash, mUrl));
     }
   }
 

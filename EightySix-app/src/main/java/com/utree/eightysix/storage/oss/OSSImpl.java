@@ -60,6 +60,7 @@ public class OSSImpl implements Storage {
             if (BuildConfig.DEBUG) {
                 e.printStackTrace();
             }
+            result.error = 1;
             result.msg = e.getErrorCode();
         }
         return result;

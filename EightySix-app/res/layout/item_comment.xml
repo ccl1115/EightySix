@@ -33,7 +33,7 @@
             android:layout_below="@+id/tv_comment"
             android:paddingBottom="12dp"
             android:textSize="12sp"
-            android:textColor="#ffe3e3e3"/>
+            android:textColor="#ffcccccc"/>
 
     <ImageView
             android:id="@+id/iv_heart"
