@@ -28,7 +28,7 @@ public class FontPortraitView extends TextView {
   public FontPortraitView(Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
     setTypeface(sTypeface);
-    setTextSize(20);
+    setTextSize(16);
   }
 
   @Override

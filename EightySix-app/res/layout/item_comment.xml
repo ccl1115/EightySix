@@ -6,8 +6,8 @@
 
     <com.utree.eightysix.widget.FontPortraitView
             android:id="@+id/fpv_portrait"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="6dp"
@@ -31,9 +31,9 @@
             android:layout_alignLeft="@+id/tv_comment"
             android:layout_toLeftOf="@+id/iv_heart"
             android:layout_below="@+id/tv_comment"
-            android:layout_marginBottom="12dp"
+            android:paddingBottom="12dp"
             android:textSize="12sp"
-            android:textColor="@color/apptheme_primary_dark_color"/>
+            android:textColor="#ffe3e3e3"/>
 
     <ImageView
             android:id="@+id/iv_heart"
@@ -49,5 +49,5 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_alignParentBottom="true"
-            android:background="#ffcccccc"/>
+            android:background="#ffe3e3e3"/>
 </RelativeLayout>

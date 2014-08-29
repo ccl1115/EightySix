@@ -27,17 +27,23 @@
                 android:background="#44000000"/>
 
 
-        <TextView
-                android:id="@+id/tv_hot"
+        <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@drawable/round_border_normal"
-                android:text="热帖"
-                android:textSize="14sp"
-                android:textColor="@android:color/white"
-                android:padding="@dimen/feed_hot_padding"
-                android:visibility="invisible"/>
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp" >
+
+            <TextView
+                    android:id="@+id/tv_hot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/round_border_normal"
+                    android:text="热帖"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/white"
+                    android:padding="@dimen/feed_hot_padding"
+                    android:visibility="invisible"/>
+        </FrameLayout>
 
         <TextView
                 style="@style/TextView.PostStyle"
