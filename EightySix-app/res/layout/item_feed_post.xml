@@ -98,7 +98,7 @@
                     android:gravity="center_vertical|right"
                     android:textSize="14sp"
                     android:textColor="@android:color/white"
-                    android:minWidth="50dp"
+                    android:minWidth="45dp"
                     android:layout_marginRight="5dp"/>
 
             <TextView
@@ -108,7 +108,7 @@
                     android:gravity="center_vertical|right"
                     android:textSize="14sp"
                     android:textColor="@android:color/white"
-                    android:minWidth="50dp"
+                    android:minWidth="45dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="15dp"/>
 
