@@ -9,7 +9,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
         <ProgressBar
                 android:id="@+id/ri_progress_bar"
@@ -22,7 +22,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="加载中..."
                 android:textColor="@android:color/white"/>
     </LinearLayout>
 </merge>

@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -118,7 +120,7 @@ public class BaseCirclesActivity extends BaseActivity {
   public boolean onLvCirclesItemLongClicked(int position) {
     final Circle circle = mCircleListAdapter.getItem(position);
     if (circle != null) {
-      if (mMode == MODE_MY && !circle.viewGroupType.equals("在职企业")) {
+      if (mMode == MODE_MY && !circle.viewGroupType.equals("我所在的圈子")) {
         showCircleSetDialog(circle);
         return true;
       }
@@ -291,11 +293,14 @@ public class BaseCirclesActivity extends BaseActivity {
   }
 
   protected void showCircleSetDialog(final Circle circle) {
+    SpannableString str = new SpannableString("设为在职");
+    ForegroundColorSpan span = new ForegroundColorSpan(getResources().getColor(R.color.apptheme_primary_light_color));
+    str.setSpan(span, 0, 4, 0);
     AlertDialog dialog = new AlertDialog.Builder(this)
-        .setTitle("完成设置")
-        .setMessage(String.format("确认在[%s]上班么？\n\n请注意：%d天之内不能修改哦\n", circle.name,
+        .setTitle(String.format("确认在[%s]上班么？", circle.shortName))
+        .setMessage(String.format("请注意：%d天之内不能修改哦",
             U.getSyncClient().getSync() != null ? U.getSyncClient().getSync().selectFactoryDays : 15))
-        .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
+        .setPositiveButton(str, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
             requestCircleSet(circle);

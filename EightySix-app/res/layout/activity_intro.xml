@@ -23,8 +23,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_centerHorizontal="true"
-            android:layout_above="@+id/ll_actions"
-            android:layout_marginBottom="48dp"
+            android:layout_marginTop="48dp"
+            android:layout_below="@+id/big_logo"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:text="让漂泊的心 有个家"/>
