@@ -68,7 +68,7 @@ class FeedAdapter extends BaseAdapter {
       mFeeds.posts.lists.add(0, new BaseItem(TYPE_UPLOAD));
     } else if (mFeeds.current != 1) {
       // 不在职
-      if (mFeeds.currFactoryFriends != 0 && mFeeds.lock == 1) {
+      if (mFeeds.circle.friendCount != 0 && mFeeds.lock == 1) {
         // 有朋友但没达到解锁条件
         mFeeds.posts.lists.add(0, new BaseItem(TYPE_UNLOCK));
       }
@@ -118,6 +118,9 @@ class FeedAdapter extends BaseAdapter {
 
   @Override
   public BaseItem getItem(int position) {
+    if (position < 0 || position >= mFeeds.posts.lists.size()) {
+      return null;
+    }
     return mFeeds.posts.lists.get(position - 1);
   }
 
