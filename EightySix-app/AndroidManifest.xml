@@ -121,6 +121,7 @@
 
         <activity android:exported="@bool/exported" android:name=".report.ReporterActivity" android:process=":report" android:screenOrientation="portrait"/>
         <activity android:name=".app.publish.ImageCropActivity"/>
+        <activity android:name=".app.settings.HelpActivity"/>
 
         <service android:enabled="true" android:name="com.baidu.location.f" android:process=":remote"/>
 

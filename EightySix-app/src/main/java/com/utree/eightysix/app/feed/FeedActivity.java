@@ -657,6 +657,11 @@ public class FeedActivity extends BaseActivity {
       startActivity(new Intent(FeedActivity.this, MainSettingsActivity.class));
       mPopupMenu.dismiss();
     }
+
+    @OnClick(R.id.ll_help)
+    void onLlHelpClicked() {
+      mPopupMenu.dismiss();
+    }
   }
 
 }
