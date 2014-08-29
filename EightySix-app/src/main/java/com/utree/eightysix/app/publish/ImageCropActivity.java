@@ -2,6 +2,7 @@ package com.utree.eightysix.app.publish;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import butterknife.InjectView;
@@ -73,6 +74,7 @@ public class ImageCropActivity extends BaseActivity {
 
     File f = new File(uri.getPath());
 
+
     Bitmap bitmap = ImageUtils.safeDecodeBitmap(f);
 
     if (bitmap == null) {
@@ -83,6 +85,20 @@ public class ImageCropActivity extends BaseActivity {
 
     mCivCrop.setImageBitmap(bitmap);
 
+    try {
+      ExifInterface exifInterface = new ExifInterface(f.getPath());
+      int orientation = exifInterface
+          .getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+
+      if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
+        mCivCrop.rotateImage(90);
+      } else if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
+        mCivCrop.rotateImage(180);
+      } else if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
+        mCivCrop.rotateImage(270);
+      }
+    } catch (IOException ignored) {
+    }
   }
 
   @Override
