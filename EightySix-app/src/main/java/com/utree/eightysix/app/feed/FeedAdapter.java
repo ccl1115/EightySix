@@ -118,7 +118,7 @@ class FeedAdapter extends BaseAdapter {
 
   @Override
   public BaseItem getItem(int position) {
-    if (position < 0 || position >= mFeeds.posts.lists.size()) {
+    if (position < 1 || position > mFeeds.posts.lists.size()) {
       return null;
     }
     return mFeeds.posts.lists.get(position - 1);
