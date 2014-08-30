@@ -499,7 +499,7 @@ public class PublishActivity extends BaseActivity {
           Cursor cursor = getContentResolver()
               .query(uri, new String[]{MediaStore.MediaColumns.DATA}, null, null, null);
 
-          if (cursor.moveToFirst()) {
+          if (cursor != null && cursor.moveToFirst()) {
             String p = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
             mOutputFile = new File(p);
             if (!startCrop()) {

@@ -2,6 +2,7 @@ package com.utree.eightysix.app.share;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import com.utree.eightysix.R;
 import com.utree.eightysix.widget.ThemedDialog;
@@ -21,8 +22,6 @@ public abstract class ShareDialog extends ThemedDialog {
     setContent(R.layout.dialog_content_share);
     getViewHolder(this);
 
-    setCancelable(true);
-    setCanceledOnTouchOutside(false);
   }
 
   protected abstract Object getViewHolder(ShareDialog dialog);
