@@ -105,6 +105,9 @@ public class PublishActivity extends BaseActivity {
   private boolean mImageUploadFinished;
   private boolean mUseColor = true;
 
+  private boolean mStartCamera = false;
+  private boolean mStartAlbum = false;
+
   private String mFileHash;
 
   private String mImageUploadUrl;
@@ -212,12 +215,12 @@ public class PublishActivity extends BaseActivity {
       public void onClick(DialogInterface dialog, int which) {
         switch (which) {
           case 0:
-            if (!startCamera()) {
+            if (!(mStartCamera =startCamera())) {
               showToast(R.string.error_start_camera);
             }
             break;
           case 1:
-            if (!startAlbum()) {
+            if (!(mStartAlbum = startAlbum())) {
               showToast(R.string.error_start_album);
             }
             break;
@@ -514,14 +517,20 @@ public class PublishActivity extends BaseActivity {
         }
         break;
       case REQUEST_CODE_CROP:
-        if (resultCode == RESULT_CANCELED) {
-          setBgImage(mOutputFile.getAbsolutePath());
-        } else {
+        if (resultCode != RESULT_CANCELED) {
           if (data != null) {
             Uri uri = data.getData();
 
             setBgImage(uri.getPath());
           }
+        } else {
+          if (mStartAlbum) {
+            startAlbum();
+          } else if (mStartCamera) {
+            startCamera();
+          }
+          mStartAlbum = false;
+          mStartCamera = false;
         }
         break;
       default:
