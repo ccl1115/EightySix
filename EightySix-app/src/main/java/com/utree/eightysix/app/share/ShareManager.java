@@ -60,13 +60,13 @@ public class ShareManager {
   }
 
   static String shareLinkForApp(int circleId) {
-    return String.format("%s/shareapp.do?userId=%s&factoryId=%d",
-        U.getConfig("api.host"), Account.inst().getUserId(), circleId);
+    return String.format("%s/shareapp.do?userId=%s&factoryId=%d&parentId=%s&channel=%s",
+        U.getConfig("api.host"), Account.inst().getUserId(), circleId, U.getConfig("app.parentId"), U.getConfig("app.channel"));
   }
 
   static String shareLinkForPost(String postId) {
-    return String.format("%s/sharecontent.do?userId=%s&postVirtualId=%s",
-        U.getConfig("api.host"), Account.inst().getUserId(), postId);
+    return String.format("%s/sharecontent.do?userId=%s&postVirtualId=%s&parentId=%s&channel=%s",
+        U.getConfig("api.host"), Account.inst().getUserId(), postId, U.getConfig("app.parentId"), U.getConfig("app.channel"));
   }
 
   static String shareLinkForComment(String postId) {
