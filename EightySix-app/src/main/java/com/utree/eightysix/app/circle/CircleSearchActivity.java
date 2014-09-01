@@ -226,13 +226,12 @@ public class CircleSearchActivity extends BaseActivity {
     mCircleSetDialog = new ThemedDialog(this);
     mCircleSetDialog.setTitle("完成设置");
     TextView textView = new TextView(this);
-    textView.setText(String.format("确认在[%s]上班么？\n\n请注意：", circle.name) + (U.getSyncClient().getSync() != null ? U.getSyncClient().getSync().selectFactoryDays : 15) + "天之内不能修改哦\n");
+    textView.setText(String.format("确认在[%s]上班么？\n\n请注意：", circle.name) + (U.getSyncClient().getSync() != null ? U.getSyncClient().getSync().selectFactoryDays : 15) + "天之内不能修改哦");
+    textView.setPadding(16, 16, 16, 16);
+    textView.setText(String.format("\n确认在[%s]上班么？\n\n请注意：", circle.name) + (U.getSyncClient().getSync() != null ? U.getSyncClient().getSync().selectFactoryDays : 15) + "天之内不能修改哦\n");
     mCircleSetDialog.setContent(textView);
 
-    SpannableString str = new SpannableString("设置在职");
-    ForegroundColorSpan span = new ForegroundColorSpan(getResources().getColor(R.color.apptheme_primary_light_color));
-    str.setSpan(span, 0, 4, 0);
-    mCircleSetDialog.setPositive(str, new View.OnClickListener() {
+    mCircleSetDialog.setPositive("设置在职", new View.OnClickListener() {
       @Override
       public void onClick(View view) {
         requestCircleSet(circle);
