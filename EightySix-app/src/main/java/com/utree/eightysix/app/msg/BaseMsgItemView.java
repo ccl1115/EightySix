@@ -95,29 +95,8 @@ public class BaseMsgItemView extends LinearLayout {
     }
   }
 
-  protected void setLeftThemedColor(int color) {
-    int monoColor = ColorUtil.monochromizing(color);
-    mTvContentLeft.setTextColor(monoColor);
-    mTvCountLeft.setTextColor(monoColor);
-  }
-
-  protected void setRightThemedColor(int color) {
-    int monoColor = ColorUtil.monochromizing(color);
-    mTvContentRight.setTextColor(monoColor);
-    mTvCountRight.setTextColor(monoColor);
-  }
-
   protected void setRightData(Post right) {
     if (right != null) {
-
-      if (TextUtils.isEmpty(right.bgUrl)) {
-        setRightThemedColor(ColorUtil.strToColor(right.bgColor));
-      //} else {
-      //  Bitmap fromMemByUrl = ImageUtils.getFromMemByUrl(right.bgUrl);
-      //  if (fromMemByUrl != null) {
-      //    ColorUtil.asyncThemedColor(fromMemByUrl);
-      //  }
-      }
       mFlRight.setVisibility(VISIBLE);
       mTvContentRight.setText(right.content);
       if (!TextUtils.isEmpty(right.bgUrl)) {
@@ -134,11 +113,6 @@ public class BaseMsgItemView extends LinearLayout {
 
   protected void setLeftData(Post left) {
     if (left != null) {
-
-      if (TextUtils.isEmpty(left.bgUrl)) {
-        setLeftThemedColor(ColorUtil.strToColor(left.bgColor));
-      }
-
       mFlLeft.setVisibility(VISIBLE);
       mTvContentLeft.setText(left.content);
       if (!TextUtils.isEmpty(left.bgUrl)) {

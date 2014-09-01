@@ -12,7 +12,6 @@ import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
-import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
@@ -27,7 +26,6 @@ import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RandomSceneTextView;
-import java.util.List;
 
 /**
  * @author simon
@@ -76,33 +74,11 @@ public class MsgActivity extends BaseActivity {
         R.color.apptheme_primary_light_color,
         R.color.apptheme_primary_light_color_pressed);
 
-    if (U.useFixture()) {
-      showProgressBar();
-      getHandler().postDelayed(new Runnable() {
-        @Override
-        public void run() {
-          List<Post> valid = U.getFixture(Post.class, 23, "valid");
-          for (Post p : valid) {
-            if (p.read == 1) {
-              mTvNoNewMsg.setVisibility(View.GONE);
-            }
-          }
-          mAlvMsg.setAdapter(new MsgAdapter<CommentMsgItemView>(valid) {
-            @Override
-            protected CommentMsgItemView newView(Context context) {
-              return new CommentMsgItemView(context);
-            }
-          });
-          hideProgressBar();
-        }
-      }, 1000);
+    mRefreshed = getIntent().getBooleanExtra("refresh", false);
+    if (mRefreshed) {
+      requestMsgs(1);
     } else {
-      mRefreshed = getIntent().getBooleanExtra("refresh", false);
-      if (mRefreshed) {
-        requestMsgs(1);
-      } else {
-        cacheOutMsg(1);
-      }
+      cacheOutMsg(1);
     }
 
     mAlvMsg.setLoadMoreCallback(new LoadMoreCallback() {
@@ -210,7 +186,7 @@ public class MsgActivity extends BaseActivity {
             }
 
             for (Post post : response.object.posts.lists) {
-              if (post.read == 1) {
+              if (post.read == 0) {
                 mTvNoNewMsg.setVisibility(View.GONE);
                 break;
               }
@@ -266,7 +242,7 @@ public class MsgActivity extends BaseActivity {
             }
 
             for (Post post : response.object.posts.lists) {
-              if (post.read == 1) {
+              if (post.read == 0) {
                 mTvNoNewMsg.setVisibility(View.GONE);
                 break;
               }
