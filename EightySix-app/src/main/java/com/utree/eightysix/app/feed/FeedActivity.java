@@ -162,7 +162,7 @@ public class FeedActivity extends BaseActivity {
         c.selected = false;
       }
 
-      mFeedFragment.setCircle(circle);
+      mFeedFragment.setCircle(circle, true);
       setSideHighlight(circle);
       mDlContent.closeDrawer(mLlSide);
       mFeedFragment.mRefresherView.setRefreshing(true);
@@ -348,7 +348,7 @@ public class FeedActivity extends BaseActivity {
   @Subscribe
   public void onSetPraiseCountEvent(UpdatePraiseCountEvent event) {
     if (mMenuViewHolder != null) {
-      mMenuViewHolder.mTvPraiseCount.setText(String.format("%d个赞", event.getCount()));
+      mMenuViewHolder.mTvPraiseCount.setText(String.format("收到%d个赞", event.getCount()));
     }
   }
 
@@ -602,9 +602,9 @@ public class FeedActivity extends BaseActivity {
 
   void setMyPraiseCount(int count, String praisePercent, int variant) {
     if (count == 0) {
-      mMenuViewHolder.mTvPraiseCount.setText("赞");
+      mMenuViewHolder.mTvPraiseCount.setText("我收到的赞");
     } else {
-      mMenuViewHolder.mTvPraiseCount.setText(String.format("%d个赞", count));
+      mMenuViewHolder.mTvPraiseCount.setText(String.format("收到%d个赞", count));
     }
   }
 

@@ -82,7 +82,7 @@ public class PullNotificationService extends Service {
   private static Bitmap sLargeIcon;
 
   static {
-    sLargeIcon = BitmapFactory.decodeResource(U.getContext().getResources(), R.drawable.ic_app_icon);
+    sLargeIcon = BitmapFactory.decodeResource(U.getContext().getResources(), R.drawable.ic_launcher);
   }
 
   public static void start(Context context, int type, String seq) {
@@ -153,7 +153,7 @@ public class PullNotificationService extends Service {
         .setAutoCancel(true)
         .setDefaults(Notification.DEFAULT_ALL)
         .setLargeIcon(sLargeIcon)
-        .setSmallIcon(R.drawable.ic_app_icon)
+        .setSmallIcon(R.drawable.ic_launcher)
         .setContentTitle(shortName)
         .setContentText(getString(R.string.notification_friend_new_post))
         .setContentIntent(PendingIntent.getActivity(this, 0,
@@ -167,7 +167,7 @@ public class PullNotificationService extends Service {
         .setLargeIcon(sLargeIcon)
         .setAutoCancel(true)
         .setDefaults(Notification.DEFAULT_ALL)
-        .setSmallIcon(R.drawable.ic_app_icon)
+        .setSmallIcon(R.drawable.ic_launcher)
         .setContentTitle(getString(R.string.notification_circle_unlocked))
         .setContentText(getString(R.string.notification_circle_unlocked_tip, circleName))
         .setContentIntent(PendingIntent.getActivity(this, 0,
@@ -182,7 +182,7 @@ public class PullNotificationService extends Service {
         .setAutoCancel(true)
         .setTicker(getString(R.string.notification_new))
         .setDefaults(Notification.DEFAULT_ALL)
-        .setSmallIcon(R.drawable.ic_app_icon)
+        .setSmallIcon(R.drawable.ic_launcher)
         .setLargeIcon(sLargeIcon);
     if (count == 1) {
       builder.setContentText(getString(type == TYPE_FOLLOW_COMMENT ?
@@ -206,7 +206,7 @@ public class PullNotificationService extends Service {
         .setAutoCancel(true)
         .setTicker(getString(R.string.notification_circle_create_approve))
         .setDefaults(Notification.DEFAULT_ALL)
-        .setSmallIcon(R.drawable.ic_app_icon)
+        .setSmallIcon(R.drawable.ic_launcher)
         .setContentTitle(getString(R.string.notification_circle_create_approve))
         .setContentText(getString(R.string.notification_circle_create_approve_tip, circleName))
         .setContentIntent(PendingIntent.getActivity(this, 0,
@@ -220,7 +220,7 @@ public class PullNotificationService extends Service {
         .setLargeIcon(sLargeIcon)
         .setAutoCancel(true)
         .setDefaults(Notification.DEFAULT_ALL)
-        .setSmallIcon(R.drawable.ic_app_icon)
+        .setSmallIcon(R.drawable.ic_launcher)
         .setTicker(getString(R.string.notification_new_friend))
         .setContentTitle(getString(R.string.notification_new_friend))
         .setContentText(count > 1 ? getString(R.string.notification_new_friend_tip_plural, circleName, count) :

@@ -42,8 +42,6 @@
             android:layout_marginTop="15dp"
             android:text="@string/register_phone_intro"
             android:textColor="@color/apptheme_primary_dark_color"
-            android:gravity="center_horizontal"
-            android:paddingLeft="44dp"
-            android:paddingRight="44dp"/>
+            android:gravity="center_horizontal"/>
 
 </LinearLayout>

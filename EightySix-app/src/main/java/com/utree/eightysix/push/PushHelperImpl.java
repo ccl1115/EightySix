@@ -4,6 +4,7 @@ import com.baidu.android.pushservice.PushConstants;
 import com.baidu.android.pushservice.PushManager;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.M;
 import com.utree.eightysix.U;
 

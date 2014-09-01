@@ -45,6 +45,7 @@ public class ReporterImpl implements Reporter {
 
           }
         }
+        // TODO add crash log on release version
 
         android.os.Process.killProcess(android.os.Process.myPid());
       }
