@@ -190,7 +190,7 @@ public class ImageUtils {
    */
   @SuppressWarnings ("SuspiciousNameCombination")
   public static Bitmap safeDecodeBitmap(String hash) {
-    int widthPixels = (int) (U.getContext().getResources().getDisplayMetrics().widthPixels * 0.75);
+    int widthPixels = 600;
     try {
       return decodeBitmap(hash, widthPixels, widthPixels);
     } catch (OutOfMemoryError e) {
@@ -218,7 +218,7 @@ public class ImageUtils {
 
   @SuppressWarnings ("SuspiciousNameCombination")
   public static Bitmap safeDecodeBitmap(int resId) {
-    int widthPixels = (int) (U.getContext().getResources().getDisplayMetrics().widthPixels * 0.75);
+    int widthPixels = 600;
     try {
       return decodeBitmap(resId, widthPixels, widthPixels);
     } catch (OutOfMemoryError e) {
@@ -437,7 +437,7 @@ public class ImageUtils {
 
       try {
         fos = new FileOutputStream(file);
-        mBitmap.compress(Bitmap.CompressFormat.JPEG, 75, fos);
+        mBitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);
       } catch (FileNotFoundException ignored) {
       } finally {
         if (fos != null) {

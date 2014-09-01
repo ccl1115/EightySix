@@ -223,8 +223,7 @@ public class PullNotificationService extends Service {
         .setSmallIcon(R.drawable.ic_app_icon)
         .setTicker(getString(R.string.notification_new_friend))
         .setContentTitle(getString(R.string.notification_new_friend))
-        .setContentText(count > 1 ? getString(R.string.notification_new_friend_tip_plural, circleName, count) :
-            getString(R.string.notification_new_friend_tip, circleName))
+        .setContentText(getString(R.string.notification_new_friend_tip, circleName))
         .setContentIntent(PendingIntent.getActivity(this, 0,
             FeedActivity.getIntent(this, Integer.parseInt(circleId)), PendingIntent.FLAG_UPDATE_CURRENT))
         .build();

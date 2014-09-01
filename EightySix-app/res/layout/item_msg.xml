@@ -14,7 +14,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginRight="4dp">
 
-
         <com.utree.eightysix.widget.AsyncImageView
                 android:id="@+id/aiv_bg_left"
                 android:scaleType="centerCrop"
@@ -47,6 +46,12 @@
                     android:textColor="@android:color/white"/>
 
         </FrameLayout>
+
+        <View
+                android:id="@+id/v_darken_left"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#44000000"/>
 
         <View
                 android:id="@+id/v_mask_left"
@@ -96,6 +101,12 @@
                     android:textColor="@android:color/white"/>
 
         </FrameLayout>
+
+        <View
+                android:id="@+id/v_darken_right"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#44000000"/>
 
         <View
                 android:id="@+id/v_mask_right"

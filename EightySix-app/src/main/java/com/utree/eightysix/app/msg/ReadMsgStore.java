@@ -6,6 +6,7 @@ import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.M;
 import com.utree.eightysix.U;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,6 +28,19 @@ class ReadMsgStore {
 
   ReadMsgStore() {
     M.getRegisterHelper().register(this);
+
+    String stores = U.getContext().getSharedPreferences("read_msg_store", Context.MODE_PRIVATE)
+        .getString(Account.inst().getUserId(), "");
+
+    String[] msgs = stores.split(",");
+
+    sStore = new HashSet<String>();
+
+    for (String m : msgs) {
+      if (!TextUtils.isEmpty(m)) {
+        sStore.add(m);
+      }
+    }
   }
 
   void addRead(String postId) {
@@ -48,21 +62,23 @@ class ReadMsgStore {
   }
 
   boolean isRead(String postId) {
-    if (sStore == null) {
-      String stores = U.getContext().getSharedPreferences("read_msg_store", Context.MODE_PRIVATE)
-          .getString(Account.inst().getUserId(), "");
+    return sStore.contains(postId);
+  }
 
-      String[] msgs = stores.split(",");
+  @Subscribe
+  public void onLogin(Account.LoginEvent event) {
+    String stores = U.getContext().getSharedPreferences("read_msg_store", Context.MODE_PRIVATE)
+        .getString(Account.inst().getUserId(), "");
 
-      sStore = new HashSet<String>();
+    String[] msgs = stores.split(",");
 
-      for (String m : msgs) {
-        if (!TextUtils.isEmpty(m)) {
-          sStore.add(m);
-        }
+    sStore = new HashSet<String>();
+
+    for (String m : msgs) {
+      if (!TextUtils.isEmpty(m)) {
+        sStore.add(m);
       }
     }
-    return sStore.contains(postId);
   }
 
   @Subscribe

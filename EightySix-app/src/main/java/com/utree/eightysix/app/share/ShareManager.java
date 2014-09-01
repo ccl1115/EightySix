@@ -15,8 +15,8 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Post;
-import com.utree.eightysix.utils.BdShortener;
 import com.utree.eightysix.utils.Shortener;
+import com.utree.eightysix.utils.WeiboShortener;
 import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.ThemedDialog;
 
@@ -30,7 +30,7 @@ public class ShareManager {
   private IShare mShareToQzone = new ShareToQzone();
   private IShare mShareViaSMS = new ShareViaSMS();
 
-  private Shortener mShortener = new BdShortener();
+  private Shortener mShortener = new WeiboShortener();
 
   public ThemedDialog shareAppDialog(final Activity activity, final Circle circle) {
     return new ShareDialog(activity) {
@@ -60,13 +60,13 @@ public class ShareManager {
   }
 
   static String shareLinkForApp(int circleId) {
-    return String.format("%s/shareapp.do?userId=%s&factoryId=%d&parentId=%s&channel=%s",
-        U.getConfig("api.host"), Account.inst().getUserId(), circleId, U.getConfig("app.parentId"), U.getConfig("app.channel"));
+    return String.format("%s/shareapp.do?factoryId=%d&parentId=%s&channel=%s",
+        U.getConfig("api.host"), circleId, U.getConfig("app.parentId"), U.getConfig("app.channel"));
   }
 
   static String shareLinkForPost(String postId) {
-    return String.format("%s/sharecontent.do?userId=%s&postVirtualId=%s&parentId=%s&channel=%s",
-        U.getConfig("api.host"), Account.inst().getUserId(), postId, U.getConfig("app.parentId"), U.getConfig("app.channel"));
+    return String.format("%s/sharecontent.do?postVirtualId=%s&parentId=%s&channel=%s",
+        U.getConfig("api.host"), postId, U.getConfig("app.parentId"), U.getConfig("app.channel"));
   }
 
   static String shareLinkForComment(String postId) {

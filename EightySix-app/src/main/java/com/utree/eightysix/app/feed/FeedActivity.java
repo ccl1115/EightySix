@@ -35,6 +35,7 @@ import com.utree.eightysix.app.publish.FeedbackActivity;
 import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.app.settings.HelpActivity;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
+import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Sync;
@@ -414,7 +415,20 @@ public class FeedActivity extends BaseActivity {
 
   @Subscribe
   public void onUploadClicked(UploadClickedEvent event) {
-    startActivity(new Intent(this, ImportContactActivity.class));
+    ContactsSyncService.start(this, true);
+    showProgressBar(true);
+  }
+
+  @Subscribe
+  public void onContactsSyncEvent(ContactsSyncEvent event) {
+    if (event.isSucceed()) {
+      showToast("上传通讯录成功");
+    } else {
+      showToast("上传通讯录失败");
+    }
+
+    mFeedFragment.refresh();
+    showProgressBar(false);
   }
 
   @Subscribe
