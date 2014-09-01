@@ -73,9 +73,8 @@ public class PraiseActivity extends BaseActivity {
         @Override
         public void run() {
           List<Post> valid = U.getFixture(Post.class, 23, "valid");
-          for (Post p : valid)
-          {
-            if (p.read == 0) {
+          for (Post p : valid) {
+            if (p.read == 1) {
               mTvNoNewMsg.setVisibility(View.INVISIBLE);
             }
           }

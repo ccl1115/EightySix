@@ -149,6 +149,7 @@
     <string name="comment_load_failed">加载失败，请点击重试</string>
 
     <!-- BaseCirclesActivity -->
+    <string name="select_circle">你在哪里工作？</string>
     <string name="search_circles">请输入你的企业名称查找</string>
     <string name="my_circles">我的工友圈</string>
     <string name="no_circles">没有找到工友圈</string>
@@ -178,7 +179,6 @@
     <string name="success_created">提交成功，若审核通过，我们会及时通知，请耐心等候</string>
 
     <!-- FeedActivity -->
-    <string name="select_circle">你哪里工作？</string>
     <string name="not_select_circle">不设置在哪里上班，没法玩啊</string>
     <string name="friends_info">朋友(%1$d) | 工友(%2$d)</string>
     <string name="hidden_friends_feed">你朋友发了%1$d条秘密，但是被隐藏了</string>

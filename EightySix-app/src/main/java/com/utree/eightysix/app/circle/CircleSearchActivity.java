@@ -41,27 +41,27 @@ import java.util.*;
 
 /**
  */
-@Layout(R.layout.activity_circle_search)
+@Layout (R.layout.activity_circle_search)
 public class CircleSearchActivity extends BaseActivity {
 
   private final HistoryFooterViewHolder mHistoryFooterViewHolder = new HistoryFooterViewHolder();
 
-  @InjectView(R.id.lv_history)
+  @InjectView (R.id.lv_history)
   public ListView mLvHistory;
 
-  @InjectView(R.id.lv_result)
+  @InjectView (R.id.lv_result)
   public AdvancedListView mLvResult;
 
-  @InjectView(R.id.ll_empty_result)
+  @InjectView (R.id.ll_empty_result)
   public LinearLayout mLlEmptyResult;
 
-  @InjectView(R.id.rb_create_circle)
+  @InjectView (R.id.rb_create_circle)
   public RoundedButton mRbCreateCircle;
 
-  @InjectView(R.id.tv_empty_text)
+  @InjectView (R.id.tv_empty_text)
   public TextView mTvEmptyText;
 
-  @InjectView(R.id.rstv_empty)
+  @InjectView (R.id.rstv_empty)
   public RandomSceneTextView mRstvHistoryEmpty;
 
   private List<String> mSearchHistory;
@@ -85,13 +85,13 @@ public class CircleSearchActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
-  @OnClick(R.id.rb_create_circle)
+  @OnClick (R.id.rb_create_circle)
   public void onRbCreateCircleClicked() {
-    CircleCreateActivity.start(this, getTopBar().getSearchEditText().getText().toString());
+    startActivity(new Intent(this, CircleCreateActivity.class));
     finish();
   }
 
-  @OnItemClick(R.id.lv_history)
+  @OnItemClick (R.id.lv_history)
   public void onHistoryItemClicked(int position) {
     U.getAnalyser().trackEvent(this, "search_history");
     String keyword = mSearchHistory.get(position);
@@ -112,7 +112,7 @@ public class CircleSearchActivity extends BaseActivity {
     //endregion
   }
 
-  @OnItemClick(R.id.lv_result)
+  @OnItemClick (R.id.lv_result)
   public void onResultItemClicked(int position) {
     U.getAnalyser().trackEvent(this, "search_result");
     final Circle circle = mResultAdapter.getItem(position);
@@ -126,7 +126,7 @@ public class CircleSearchActivity extends BaseActivity {
     }
   }
 
-  @OnItemLongClick(R.id.lv_result)
+  @OnItemLongClick (R.id.lv_result)
   public boolean onLvResultItemLongClicked(int position) {
     final Circle circle = mResultAdapter.getItem(position);
     if (circle != null) {
@@ -331,10 +331,10 @@ public class CircleSearchActivity extends BaseActivity {
 
   @Keep
   public class HistoryFooterViewHolder {
-    @InjectView(R.id.rb_clear_history)
+    @InjectView (R.id.rb_clear_history)
     public RoundedButton mRbClearHistory;
 
-    @OnClick(R.id.rb_clear_history)
+    @OnClick (R.id.rb_clear_history)
     public void onRbClearHistory() {
       clearHistory();
     }

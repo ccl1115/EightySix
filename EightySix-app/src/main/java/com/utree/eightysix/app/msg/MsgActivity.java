@@ -83,8 +83,8 @@ public class MsgActivity extends BaseActivity {
         public void run() {
           List<Post> valid = U.getFixture(Post.class, 23, "valid");
           for (Post p : valid) {
-            if (p.read == 0) {
-              mTvNoNewMsg.setVisibility(View.INVISIBLE);
+            if (p.read == 1) {
+              mTvNoNewMsg.setVisibility(View.GONE);
             }
           }
           mAlvMsg.setAdapter(new MsgAdapter<CommentMsgItemView>(valid) {

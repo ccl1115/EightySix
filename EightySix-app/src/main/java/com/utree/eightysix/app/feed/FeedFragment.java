@@ -436,6 +436,10 @@ public class FeedFragment extends BaseFragment {
             Account.inst().setNewCommentCount(response.object.fetch.newComment.unread);
           }
 
+          if (response.object.fetch.myPostComment != null) {
+            Account.inst().setNewCommentCount(response.object.fetch.myPostComment.unread);
+          }
+
           if (response.object.fetch.newPraise != null) {
             Account.inst().setHasNewPraise(response.object.fetch.newPraise.praise == 1);
             U.getBus().post(new UpdatePraiseCountEvent(response.object.fetch.newPraise.praiseCount,
