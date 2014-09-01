@@ -87,7 +87,7 @@ public class CircleSearchActivity extends BaseActivity {
 
   @OnClick (R.id.rb_create_circle)
   public void onRbCreateCircleClicked() {
-    startActivity(new Intent(this, CircleCreateActivity.class));
+    CircleCreateActivity.start(this, getTopBar().getSearchEditText().getText().toString());
     finish();
   }
 

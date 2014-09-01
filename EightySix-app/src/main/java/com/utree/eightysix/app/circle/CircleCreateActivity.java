@@ -1,5 +1,8 @@
 package com.utree.eightysix.app.circle;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -63,6 +66,17 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
   private boolean mRequesting;
   private Location.Result mResult;
 
+  public static void start(Context context, String circle) {
+    Intent intent = new Intent(context, CircleCreateActivity.class);
+    intent.putExtra("circle", circle);
+
+    if (!(context instanceof Activity)) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    context.startActivity(intent);
+  }
+
   @OnTextChanged (R.id.et_circle_name)
   public void onEtCircleNameTextChanged(CharSequence t) {
     final int length = U.getConfigInt("circle.length");
@@ -118,6 +132,9 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    String circle = getIntent().getStringExtra("circle");
+    mEtCircleName.setText(circle);
 
     requestCaptcha();
   }
