@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,36 +35,33 @@ import com.utree.eightysix.response.CirclesResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
-import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.LoadMoreCallback;
-import com.utree.eightysix.widget.RandomSceneTextView;
-import com.utree.eightysix.widget.RoundedButton;
+import com.utree.eightysix.widget.*;
 
 import java.util.*;
 
 /**
  */
-@Layout (R.layout.activity_circle_search)
+@Layout(R.layout.activity_circle_search)
 public class CircleSearchActivity extends BaseActivity {
 
   private final HistoryFooterViewHolder mHistoryFooterViewHolder = new HistoryFooterViewHolder();
 
-  @InjectView (R.id.lv_history)
+  @InjectView(R.id.lv_history)
   public ListView mLvHistory;
 
-  @InjectView (R.id.lv_result)
+  @InjectView(R.id.lv_result)
   public AdvancedListView mLvResult;
 
-  @InjectView (R.id.ll_empty_result)
+  @InjectView(R.id.ll_empty_result)
   public LinearLayout mLlEmptyResult;
 
-  @InjectView (R.id.rb_create_circle)
+  @InjectView(R.id.rb_create_circle)
   public RoundedButton mRbCreateCircle;
 
-  @InjectView (R.id.tv_empty_text)
+  @InjectView(R.id.tv_empty_text)
   public TextView mTvEmptyText;
 
-  @InjectView (R.id.rstv_empty)
+  @InjectView(R.id.rstv_empty)
   public RandomSceneTextView mRstvHistoryEmpty;
 
   private List<String> mSearchHistory;
@@ -78,6 +77,7 @@ public class CircleSearchActivity extends BaseActivity {
 
   private boolean mLocatingFinished;
   private boolean mRequestSearchStarted;
+  private ThemedDialog mCircleSetDialog;
 
   public static void start(Context context, boolean select) {
     Intent intent = new Intent(context, CircleSearchActivity.class);
@@ -85,13 +85,13 @@ public class CircleSearchActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
-  @OnClick (R.id.rb_create_circle)
+  @OnClick(R.id.rb_create_circle)
   public void onRbCreateCircleClicked() {
     CircleCreateActivity.start(this, getTopBar().getSearchEditText().getText().toString());
     finish();
   }
 
-  @OnItemClick (R.id.lv_history)
+  @OnItemClick(R.id.lv_history)
   public void onHistoryItemClicked(int position) {
     U.getAnalyser().trackEvent(this, "search_history");
     String keyword = mSearchHistory.get(position);
@@ -112,7 +112,7 @@ public class CircleSearchActivity extends BaseActivity {
     //endregion
   }
 
-  @OnItemClick (R.id.lv_result)
+  @OnItemClick(R.id.lv_result)
   public void onResultItemClicked(int position) {
     U.getAnalyser().trackEvent(this, "search_result");
     final Circle circle = mResultAdapter.getItem(position);
@@ -126,7 +126,7 @@ public class CircleSearchActivity extends BaseActivity {
     }
   }
 
-  @OnItemLongClick (R.id.lv_result)
+  @OnItemLongClick(R.id.lv_result)
   public boolean onLvResultItemLongClicked(int position) {
     final Circle circle = mResultAdapter.getItem(position);
     if (circle != null) {
@@ -202,7 +202,7 @@ public class CircleSearchActivity extends BaseActivity {
       @Override
       public boolean onLoadMoreStart() {
         if (mPageInfo != null) {
-          U.getAnalyser().trackEvent(CircleSearchActivity.this, "search_load_more", String.valueOf(mPageInfo.currPage  + 1));
+          U.getAnalyser().trackEvent(CircleSearchActivity.this, "search_load_more", String.valueOf(mPageInfo.currPage + 1));
           requestSearch(mPageInfo.currPage + 1, mLastKeyword);
           return true;
         }
@@ -223,23 +223,29 @@ public class CircleSearchActivity extends BaseActivity {
   }
 
   protected void showCircleSetDialog(final Circle circle) {
-    AlertDialog dialog = new AlertDialog.Builder(this)
-        .setTitle("完成设置")
-        .setMessage(String.format("确认在[%s]上班么？\n\n请注意：", circle.name) + (U.getSyncClient().getSync() != null ? U.getSyncClient().getSync().selectFactoryDays : 15) + "天之内不能修改哦\n")
-        .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
-            requestCircleSet(circle);
-          }
-        })
-        .setNegativeButton("重新选择", new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
-            dialog.dismiss();
-          }
-        }).create();
+    mCircleSetDialog = new ThemedDialog(this);
+    mCircleSetDialog.setTitle("完成设置");
+    TextView textView = new TextView(this);
+    textView.setText(String.format("确认在[%s]上班么？\n\n请注意：", circle.name) + (U.getSyncClient().getSync() != null ? U.getSyncClient().getSync().selectFactoryDays : 15) + "天之内不能修改哦\n");
+    mCircleSetDialog.setContent(textView);
 
-    dialog.show();
+    SpannableString str = new SpannableString("设置在职");
+    ForegroundColorSpan span = new ForegroundColorSpan(getResources().getColor(R.color.apptheme_primary_light_color));
+    str.setSpan(span, 0, 4, 0);
+    mCircleSetDialog.setPositive(str, new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        requestCircleSet(circle);
+      }
+    });
+    mCircleSetDialog.setRbNegative("重新选择", new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        mCircleSetDialog.dismiss();
+      }
+    });
+
+    mCircleSetDialog.show();
   }
 
   private void updateHistoryData() {
@@ -327,10 +333,10 @@ public class CircleSearchActivity extends BaseActivity {
 
   @Keep
   public class HistoryFooterViewHolder {
-    @InjectView (R.id.rb_clear_history)
+    @InjectView(R.id.rb_clear_history)
     public RoundedButton mRbClearHistory;
 
-    @OnClick (R.id.rb_clear_history)
+    @OnClick(R.id.rb_clear_history)
     public void onRbClearHistory() {
       clearHistory();
     }

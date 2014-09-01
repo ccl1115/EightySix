@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
@@ -39,10 +40,7 @@ import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.view.SwipeRefreshLayout;
-import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.LoadMoreCallback;
-import com.utree.eightysix.widget.RandomSceneTextView;
-import com.utree.eightysix.widget.TopBar;
+import com.utree.eightysix.widget.*;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -77,6 +75,8 @@ public class BaseCirclesActivity extends BaseActivity {
   private boolean mLocatingFinished;
   private boolean mRequestStarted;
   private Location.OnResult mOnResult;
+
+  private ThemedDialog mCircleSetDialog;
 
   public static void startSelect(Context context) {
     Intent intent = new Intent(context, BaseCirclesActivity.class);
@@ -293,27 +293,29 @@ public class BaseCirclesActivity extends BaseActivity {
   }
 
   protected void showCircleSetDialog(final Circle circle) {
-    SpannableString str = new SpannableString("设为在职");
+    mCircleSetDialog = new ThemedDialog(this);
+    mCircleSetDialog.setTitle("完成设置");
+    TextView textView = new TextView(this);
+    textView.setText(String.format("确认在[%s]上班么？\n\n请注意：", circle.name) + (U.getSyncClient().getSync() != null ? U.getSyncClient().getSync().selectFactoryDays : 15) + "天之内不能修改哦\n");
+    mCircleSetDialog.setContent(textView);
+
+    SpannableString str = new SpannableString("设置在职");
     ForegroundColorSpan span = new ForegroundColorSpan(getResources().getColor(R.color.apptheme_primary_light_color));
     str.setSpan(span, 0, 4, 0);
-    AlertDialog dialog = new AlertDialog.Builder(this)
-        .setTitle(String.format("确认在[%s]上班么？", circle.shortName))
-        .setMessage(String.format("请注意：%d天之内不能修改哦",
-            U.getSyncClient().getSync() != null ? U.getSyncClient().getSync().selectFactoryDays : 15))
-        .setPositiveButton(str, new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
-            requestCircleSet(circle);
-          }
-        })
-        .setNegativeButton("重新选择", new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
-            dialog.dismiss();
-          }
-        }).create();
+    mCircleSetDialog.setPositive(str, new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        requestCircleSet(circle);
+      }
+    });
+    mCircleSetDialog.setRbNegative("重新选择", new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        mCircleSetDialog.dismiss();
+      }
+    });
 
-    dialog.show();
+    mCircleSetDialog.show();
   }
 
   private AlertDialog getQuitConfirmDialog() {
