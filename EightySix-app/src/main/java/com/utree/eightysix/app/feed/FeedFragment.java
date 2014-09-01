@@ -168,7 +168,7 @@ public class FeedFragment extends BaseFragment {
       }
     });
 
-    getBaseActivity().showRefreshIndicator();
+    getBaseActivity().showRefreshIndicator(true);
     mRefresherView.setRefreshing(true);
   }
 

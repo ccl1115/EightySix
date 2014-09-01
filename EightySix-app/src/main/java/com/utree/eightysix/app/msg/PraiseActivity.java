@@ -170,7 +170,7 @@ public class PraiseActivity extends BaseActivity {
 
   private void requestPraises(final int page) {
     if (page == 1) {
-      showRefreshIndicator();
+      showRefreshIndicator(true);
       mRvMsg.setRefreshing(true);
     }
     request(new PraisesRequest(page), new OnResponse2<MsgsResponse>() {

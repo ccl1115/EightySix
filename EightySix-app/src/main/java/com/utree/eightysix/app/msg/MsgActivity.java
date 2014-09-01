@@ -185,7 +185,7 @@ public class MsgActivity extends BaseActivity {
   private void requestMsgs(final int page) {
     if (page == 1) {
       mRvMsg.setRefreshing(true);
-      showRefreshIndicator();
+      showRefreshIndicator(true);
     }
     request(new MsgsRequest(page), new OnResponse2<MsgsResponse>() {
       @Override
