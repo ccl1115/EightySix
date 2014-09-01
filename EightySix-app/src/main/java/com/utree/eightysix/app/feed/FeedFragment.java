@@ -291,8 +291,14 @@ public class FeedFragment extends BaseFragment {
   }
 
   public int getCurrFriends() {
-    if (mFeedAdapter != null && mFeedAdapter.getFeeds() != null) {
-      return mFeedAdapter.getFeeds().circle.friendCount;
+//    if (mLvFeed != null && mFeedAdapter.getFeeds() != null) {
+//      return mFeedAdapter.getFeeds().circle.friendCount;
+//    } else {
+//      return 0;
+//    }
+//
+    if (mCircle != null) {
+      return mCircle.friendCount;
     } else {
       return 0;
     }
@@ -446,10 +452,10 @@ public class FeedFragment extends BaseFragment {
                 response.object.fetch.newPraise.percent));
           }
         } else {
-          if (id == 0) {
-            cacheOutFeeds(0, 1);
-          } else if (mFeedAdapter != null && mFeedAdapter.getCount() == 0) {
+          if (mFeedAdapter != null && mFeedAdapter.getCount() == 0) {
             mRstvEmpty.setVisibility(View.VISIBLE);
+          } else {
+            cacheOutFeeds(id, 1);
           }
         }
         mRefresherView.setRefreshing(false);
@@ -491,13 +497,12 @@ public class FeedFragment extends BaseFragment {
           ((FeedActivity) getBaseActivity()).mSend.setImageResource(response.object.lock != 1 || response.object.current == 1 ?
               R.drawable.ic_post_pen : R.drawable.ic_post_pen_disabled);
         } else {
-          if (id != 0) {
-            requestFeeds(id, page);
-          }
+          requestFeeds(id, page);
         }
         mRefresherView.setRefreshing(false);
         mLvFeed.stopLoadMore();
         getBaseActivity().hideProgressBar();
+        getBaseActivity().hideRefreshIndicator();
       }
     }, FeedsResponse.class);
   }

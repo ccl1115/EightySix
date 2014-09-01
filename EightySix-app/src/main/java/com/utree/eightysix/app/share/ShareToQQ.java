@@ -32,6 +32,7 @@ class ShareToQQ extends IShare {
     data.putString(QQShare.SHARE_TO_QQ_TITLE, shareTitleForApp());
     data.putString(QQShare.SHARE_TO_QQ_SUMMARY, String.format(shareContentForApp(), circle.shortName));
     data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, url);
+    data.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://utree-resource.oss-cn-beijing.aliyuncs.com/faceless.png");
     data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
     shareToQQ(activity, data, defaultListener());
   }
@@ -42,6 +43,7 @@ class ShareToQQ extends IShare {
     data.putString(QQShare.SHARE_TO_QQ_TITLE, String.format(shareTitleForPost(), post.shortName));
     data.putString(QQShare.SHARE_TO_QQ_SUMMARY, String.format(shareContentForPost(), post.shortName));
     data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, url);
+    data.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://utree-resource.oss-cn-beijing.aliyuncs.com/faceless.png");
     data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
     shareToQQ(activity, data, defaultListener());
   }
@@ -52,6 +54,7 @@ class ShareToQQ extends IShare {
     data.putString(QQShare.SHARE_TO_QQ_TITLE, shareTitleForComment());
     data.putString(QQShare.SHARE_TO_QQ_SUMMARY, comment);
     data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, url);
+    data.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://utree-resource.oss-cn-beijing.aliyuncs.com/faceless.png");
     data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
     shareToQQ(activity, data, defaultListener());
   }
