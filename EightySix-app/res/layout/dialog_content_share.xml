@@ -66,7 +66,7 @@
                 android:textSize="12sp"
                 android:gravity="center"
                 android:drawablePadding="4dp"
-                android:drawableTop="@drawable/ic_share_qq"
+                android:drawableTop="@drawable/icon_144"
                 android:background="@drawable/apptheme_primary_list_selector"/>
 
         <TextView
