@@ -159,7 +159,7 @@ public class FeedActivity extends BaseActivity {
   public void onLvSideItemClicked(int position) {
     U.getAnalyser().trackEvent(this, "side_switch", "side_switch");
     Circle circle = mSideCircles.get(position);
-    if (circle != null && !circle.selected) {
+    if (circle != null) {
       for (Circle c : mSideCircles) {
         c.selected = false;
       }
