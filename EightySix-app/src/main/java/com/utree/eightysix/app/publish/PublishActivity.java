@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
@@ -32,6 +33,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
@@ -184,25 +186,28 @@ public class PublishActivity extends BaseActivity {
     mTvPostTip.setText(getHintText());
 
     //region To detect soft keyboard visibility change
-    final View activityRootView = findViewById(android.R.id.content);
-    activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-      @Override
-      public void onGlobalLayout() {
-        int heightDiff = activityRootView.getRootView().getHeight() - activityRootView.getHeight();
-        if (heightDiff > 100) { // 99% of the time the height diff will be due to a keyboard.
+    // works after ICM
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+      final View activityRootView = findViewById(android.R.id.content);
+      activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+          int heightDiff = activityRootView.getRootView().getHeight() - activityRootView.getHeight();
+          if (heightDiff > 100) { // 99% of the time the height diff will be due to a keyboard.
 
-          if (!mIsOpened) {
-            mPublishLayout.hidePanel();
-            mTvPostTip.setText("");
+            if (!mIsOpened) {
+              mPublishLayout.hidePanel();
+              mTvPostTip.setText("");
+            }
+            mIsOpened = true;
+          } else if (mIsOpened) {
+            mPublishLayout.showPanel();
+            mTvPostTip.setText(getHintText());
+            mIsOpened = false;
           }
-          mIsOpened = true;
-        } else if (mIsOpened) {
-          mPublishLayout.showPanel();
-          mTvPostTip.setText(getHintText());
-          mIsOpened = false;
         }
-      }
-    });
+      });
+    }
     //endregion
 
     AlertDialog.Builder builder = new AlertDialog.Builder(this);

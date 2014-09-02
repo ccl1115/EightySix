@@ -1,6 +1,7 @@
 package com.utree.eightysix.app.publish;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -136,6 +137,27 @@ public class PublishLayout extends ViewGroup {
     } else if (mLastPanel == PANEL_COLOR) {
       mFlGridPanel.layout(l, mFlPanel.getBottom(), r, mFlPanel.getBottom() + mFlGridPanel.getMeasuredHeight());
       mLlBottom.layout(0, 0, 0, 0);
+    }
+  }
+
+  @Override
+  protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+      if (h > oldh) {
+        post(new Runnable() {
+          @Override
+          public void run() {
+            showPanel();
+          }
+        });
+      } else {
+        post(new Runnable() {
+          @Override
+          public void run() {
+            hidePanel();
+          }
+        });
+      }
     }
   }
 }

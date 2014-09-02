@@ -43,7 +43,8 @@
                 android:paddingLeft="48dp"
                 android:paddingRight="48dp"
                 android:maxLength="77"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/white"
+                android:background="@color/alp_pattern_path_dark"/>
 
     </FrameLayout>
 
