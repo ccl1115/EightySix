@@ -26,13 +26,13 @@ public class CommentMsgItemView extends BaseMsgItemView {
       mVMaskLeft.setVisibility(VISIBLE);
     } else {
       mVMaskLeft.setVisibility(INVISIBLE);
+      if (left.comments == 0) {
+        mTvCountLeft.setText("");
+      } else {
+        mTvCountLeft.setText("+ " + String.valueOf(left.comments));
+      }
     }
 
-    if (left.comments == 0) {
-      mTvCountLeft.setText("");
-    } else {
-      mTvCountLeft.setText("+ " + String.valueOf(left.comments));
-    }
   }
 
   @Override
@@ -45,12 +45,12 @@ public class CommentMsgItemView extends BaseMsgItemView {
       mVMaskRight.setVisibility(VISIBLE);
     } else {
       mVMaskRight.setVisibility(INVISIBLE);
+      if (right.comments == 0) {
+        mTvCountRight.setText("");
+      } else {
+        mTvCountRight.setText("+ " + String.valueOf(right.comments));
+      }
     }
 
-    if (right.comments == 0) {
-      mTvCountRight.setText("");
-    } else {
-      mTvCountRight.setText("+ " + String.valueOf(right.comments));
-    }
   }
 }

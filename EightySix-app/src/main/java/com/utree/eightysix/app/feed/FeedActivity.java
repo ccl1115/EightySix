@@ -25,7 +25,6 @@ import com.utree.eightysix.*;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.account.ImportContactActivity;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.event.*;
 import com.utree.eightysix.app.msg.FetchNotificationService;
@@ -35,7 +34,6 @@ import com.utree.eightysix.app.publish.FeedbackActivity;
 import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.app.settings.HelpActivity;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
-import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Sync;
@@ -221,9 +219,6 @@ public class FeedActivity extends BaseActivity {
       mPopupMenu.setOutsideTouchable(true);
       mPopupMenu.setBackgroundDrawable(new BitmapDrawable(getResources()));
     }
-
-    //getTopBar().mTitle.setCompoundDrawablesWithIntrinsicBounds(null, null,
-    //    getResources().getDrawable(R.drawable.top_bar_arrow_down), null);
 
     getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
       @Override

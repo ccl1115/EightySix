@@ -44,7 +44,7 @@ public class SyncService extends Service {
 
   private void requestSync() {
     sSyncing = true;
-    RequestData data = U.getRESTRequester().convert(new SyncRequest());
+    RequestData data = U.getRESTRequester().convert(new SyncRequest(U.getConfig("app.parentId")));
     U.getRESTRequester().request(data, new HandlerWrapper<SyncResponse>(data, new OnResponse2<SyncResponse>() {
       @Override
       public void onResponseError(Throwable e) {

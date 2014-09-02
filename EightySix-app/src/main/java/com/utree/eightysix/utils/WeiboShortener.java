@@ -14,11 +14,11 @@ import java.net.URL;
  */
 public class WeiboShortener implements Shortener {
 
-  private static final String API = "https://api.weibo.com/2/short_url_expand.json";
+  private static final String API = "https://api.weibo.com/2/short_url/shorten.json";
 
   @Override
   public void shorten(final String url, final Callback callback) {
-    U.getRESTRequester().getClient().get(U.getContext(), API + String.format("?source=%s&url_long=%s", "2940228905", url),
+    U.getRESTRequester().getClient().get(U.getContext(), API, new RequestParams("source", "1681459862", "url_long", url),
         new JsonHttpResponseHandler() {
           @Override
           public void onSuccess(JSONObject response) {
