@@ -85,9 +85,14 @@ class FeedAdapter extends BaseAdapter {
     if (mFeeds.posts.lists == null) {
       mFeeds.posts.lists = posts;
     } else {
+      int size = mFeeds.posts.lists.size();
       mFeeds.posts.lists.addAll(posts);
+      if (size == 1) {
+        notifyDataSetInvalidated();
+      } else {
+        notifyDataSetChanged();
+      }
     }
-    notifyDataSetChanged();
   }
 
   public void add(BaseItem post) {
