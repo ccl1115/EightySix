@@ -348,7 +348,7 @@ class FeedAdapter extends BaseAdapter {
     holder.mRbUnlock.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        U.getAnalyser().trackEvent(U.getContext(), "feed_unlock");
+        U.getAnalyser().trackEvent(U.getContext(), "feed_unlock", "feed_unlock");
         U.getBus().post(new UnlockClickedEvent());
       }
     });
@@ -428,7 +428,7 @@ class FeedAdapter extends BaseAdapter {
 
     @OnClick (R.id.rb_select)
     public void onRbSelectClicked(View view) {
-      U.getAnalyser().trackEvent(U.getContext(), "feed_select");
+      U.getAnalyser().trackEvent(U.getContext(), "feed_select", "feed_select");
       BaseCirclesActivity.startSelect(view.getContext());
     }
   }
@@ -442,7 +442,7 @@ class FeedAdapter extends BaseAdapter {
 
     @OnClick (R.id.rb_invite)
     public void onRbInviteClicked() {
-      U.getAnalyser().trackEvent(U.getContext(), "feed_upload");
+      U.getAnalyser().trackEvent(U.getContext(), "feed_upload", "feed_upload");
       U.getBus().post(new UploadClickedEvent());
     }
   }
@@ -469,7 +469,7 @@ class FeedAdapter extends BaseAdapter {
   static class InviteFriendViewHolder {
     @OnClick (R.id.rb_invite)
     public void onRbInviteClicked() {
-      U.getAnalyser().trackEvent(U.getContext(), "feed_invite_friend");
+      U.getAnalyser().trackEvent(U.getContext(), "feed_invite_friend", "feed_invite_friend");
       U.getBus().post(new InviteClickedEvent());
     }
 
@@ -481,7 +481,7 @@ class FeedAdapter extends BaseAdapter {
   static class InviteFactoryViewHolder {
     @OnClick (R.id.rb_invite)
     public void onRbInviteClicked() {
-      U.getAnalyser().trackEvent(U.getContext(), "feed_invite_factory");
+      U.getAnalyser().trackEvent(U.getContext(), "feed_invite_factory", "feed_invite_factory");
       U.getBus().post(new InviteClickedEvent());
     }
 

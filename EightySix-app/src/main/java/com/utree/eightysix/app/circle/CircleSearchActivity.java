@@ -93,7 +93,7 @@ public class CircleSearchActivity extends BaseActivity {
 
   @OnItemClick (R.id.lv_history)
   public void onHistoryItemClicked(int position) {
-    U.getAnalyser().trackEvent(this, "search_history");
+    U.getAnalyser().trackEvent(this, "search_history", "search_history");
     String keyword = mSearchHistory.get(position);
     getTopBar().getSearchEditText().setText(keyword);
     mLastKeyword = keyword;
@@ -114,7 +114,7 @@ public class CircleSearchActivity extends BaseActivity {
 
   @OnItemClick (R.id.lv_result)
   public void onResultItemClicked(int position) {
-    U.getAnalyser().trackEvent(this, "search_result");
+    U.getAnalyser().trackEvent(this, "search_result", "search_result");
     final Circle circle = mResultAdapter.getItem(position);
     if (circle != null) {
       if (mSelectMode) {

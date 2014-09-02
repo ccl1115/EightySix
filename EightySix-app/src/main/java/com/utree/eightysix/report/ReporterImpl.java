@@ -1,11 +1,13 @@
 package com.utree.eightysix.report;
 
+import com.tencent.open.TaskGuide;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.U;
 import com.utree.eightysix.rest.RequestData;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import com.utree.eightysix.utils.IOUtils;
+
+import java.io.*;
+import java.util.Calendar;
 import java.util.Properties;
 
 /**
@@ -44,8 +46,30 @@ public class ReporterImpl implements Reporter {
             }
 
           }
+        } else {
+          Calendar instance = Calendar.getInstance();
+          File file = IOUtils.createTmpFile(instance.getTime().toString() + "-" + ex.toString());
+
+          PrintWriter writer = null;
+          FileWriter wr = null;
+          try {
+            wr = new FileWriter(file);
+            writer = new PrintWriter(wr);
+            ex.printStackTrace(writer);
+          } catch (IOException ignored) {
+          } finally {
+            if (writer != null) {
+              writer.close();
+            }
+
+            if (wr != null) {
+              try {
+                wr.close();
+              } catch (IOException ignored) {
+              }
+            }
+          }
         }
-        // TODO add crash log on release version
 
         android.os.Process.killProcess(android.os.Process.myPid());
       }

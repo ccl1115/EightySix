@@ -102,7 +102,7 @@ public class ShareManager {
 
     @OnClick (R.id.tv_sms)
     void onTvSmsClicked() {
-      U.getAnalyser().trackEvent(mActivity, "share_by_msg");
+      U.getAnalyser().trackEvent(mActivity, "share_by_msg", "comment");
       mShortener.shorten(shareLinkForComment(mPost.id), new Shortener.Callback() {
         @Override
         public void onShorten(String shorten) {
@@ -118,7 +118,7 @@ public class ShareManager {
 
     @OnClick (R.id.tv_qq_friends)
     void onQQFriendsClicked() {
-      U.getAnalyser().trackEvent(mActivity, "share_by_qq");
+      U.getAnalyser().trackEvent(mActivity, "share_by_qq", "comment");
       mShortener.shorten(shareLinkForComment(mPost.id), new Shortener.Callback() {
         @Override
         public void onShorten(String shorten) {
@@ -134,7 +134,7 @@ public class ShareManager {
 
     @OnClick (R.id.tv_qzone)
     void onQzoneClicked() {
-      U.getAnalyser().trackEvent(mActivity, "share_by_qzone");
+      U.getAnalyser().trackEvent(mActivity, "share_by_qzone", "comment");
       mShortener.shorten(shareLinkForComment(mPost.id), new Shortener.Callback() {
         @Override
         public void onShorten(String shorten) {
@@ -194,7 +194,7 @@ public class ShareManager {
 
     @OnClick (R.id.tv_sms)
     void onTvSmsClicked() {
-      U.getAnalyser().trackEvent(mActivity, "share_by_msg");
+      U.getAnalyser().trackEvent(mActivity, "share_by_msg", "post");
       mShortener.shorten(shareLinkForPost(mPost.id), new Shortener.Callback() {
         @Override
         public void onShorten(String shorten) {
@@ -210,7 +210,7 @@ public class ShareManager {
 
     @OnClick (R.id.tv_qq_friends)
     void onQQFriendsClicked() {
-      U.getAnalyser().trackEvent(mActivity, "share_by_qq");
+      U.getAnalyser().trackEvent(mActivity, "share_by_qq", "post");
       mShortener.shorten(shareLinkForPost(mPost.id), new Shortener.Callback() {
         @Override
         public void onShorten(String shorten) {
@@ -226,7 +226,7 @@ public class ShareManager {
 
     @OnClick (R.id.tv_qzone)
     void onQzoneClicked() {
-      U.getAnalyser().trackEvent(mActivity, "share_by_qzone");
+      U.getAnalyser().trackEvent(mActivity, "share_by_qzone", "post");
       mShortener.shorten(shareLinkForPost(mPost.id), new Shortener.Callback() {
         @Override
         public void onShorten(String shorten) {
@@ -273,7 +273,7 @@ public class ShareManager {
 
     @OnClick (R.id.tv_sms)
     void onTvSmsClicked() {
-      U.getAnalyser().trackEvent(mActivity, "share_by_msg");
+      U.getAnalyser().trackEvent(mActivity, "share_by_msg", "app");
       mShortener.shorten(shareLinkForApp(mCircle.id), new Shortener.Callback() {
         @Override
         public void onShorten(String shorten) {
@@ -289,7 +289,7 @@ public class ShareManager {
 
     @OnClick (R.id.tv_qq_friends)
     void onQQFriendsClicked() {
-      U.getAnalyser().trackEvent(mActivity, "share_by_qq");
+      U.getAnalyser().trackEvent(mActivity, "share_by_qq", "app");
       mShortener.shorten(shareLinkForApp(mCircle.id), new Shortener.Callback() {
         @Override
         public void onShorten(String shorten) {
@@ -305,7 +305,7 @@ public class ShareManager {
 
     @OnClick (R.id.tv_qzone)
     void onQzoneClicked() {
-      U.getAnalyser().trackEvent(mActivity, "share_by_qzone");
+      U.getAnalyser().trackEvent(mActivity, "share_by_qzone", "app");
       mShortener.shorten(shareLinkForApp(mCircle.id), new Shortener.Callback() {
         @Override
         public void onShorten(String shorten) {

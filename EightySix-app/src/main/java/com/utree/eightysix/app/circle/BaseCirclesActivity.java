@@ -247,7 +247,7 @@ public class BaseCirclesActivity extends BaseActivity {
         @Override
         public void onRefresh() {
           showRefreshIndicator(true);
-          U.getAnalyser().trackEvent(BaseCirclesActivity.this, "circle_pull_refresh");
+          U.getAnalyser().trackEvent(BaseCirclesActivity.this, "circle_pull_refresh", "refresh");
           mRefreshed = true;
           requestCircles(1);
           requestLocation();

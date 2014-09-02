@@ -66,11 +66,12 @@ public class ContactsSyncService extends IntentService {
       final List<Contact> cache = getContactsFromCache();
       final List<Contact> phone = getContactsFromPhone();
 
-      if (phone == null) {
+      if (phone == null || phone.size() == 0) {
         mHandler.post(new Runnable() {
           @Override
           public void run() {
             U.getBus().post(new ContactsSyncEvent(false, 0));
+            Env.setTimestamp(TIMESTAMP_KEY);
           }
         });
         return;

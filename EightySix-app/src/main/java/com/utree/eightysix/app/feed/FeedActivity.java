@@ -140,7 +140,7 @@ public class FeedActivity extends BaseActivity {
 
   @OnClick (R.id.ib_send)
   public void onIbSendClicked() {
-    U.getAnalyser().trackEvent(this, "feed_publish");
+    U.getAnalyser().trackEvent(this, "feed_publish", "feed_publish");
     if (!mFeedFragment.canPublish()) {
       showNoPermDialog();
     } else {
@@ -150,13 +150,13 @@ public class FeedActivity extends BaseActivity {
 
   @OnClick (R.id.tv_more)
   public void onSideMoreClicked() {
-    U.getAnalyser().trackEvent(this, "side_more");
+    U.getAnalyser().trackEvent(this, "side_more", "side_more");
     startActivity(new Intent(this, BaseCirclesActivity.class));
   }
 
   @OnItemClick (R.id.lv_side_circles)
   public void onLvSideItemClicked(int position) {
-    U.getAnalyser().trackEvent(this, "side_switch");
+    U.getAnalyser().trackEvent(this, "side_switch", "side_switch");
     Circle circle = mSideCircles.get(position);
     if (circle != null && !circle.selected) {
       for (Circle c : mSideCircles) {
@@ -178,7 +178,7 @@ public class FeedActivity extends BaseActivity {
 
   @Override
   public void onActionLeftClicked() {
-    U.getAnalyser().trackEvent(this, "feed_title");
+    U.getAnalyser().trackEvent(this, "feed_title", "feed_title");
     if (mDlContent.isDrawerOpen(mLlSide)) {
       mDlContent.closeDrawer(mLlSide);
     } else {
@@ -192,7 +192,7 @@ public class FeedActivity extends BaseActivity {
 
   @Override
   public void onActionOverflowClicked() {
-    U.getAnalyser().trackEvent(this, "feed_more");
+    U.getAnalyser().trackEvent(this, "feed_more", "feed_more");
     if (!mPopupMenu.isShowing()) {
       mPopupMenu.showAsDropDown(getTopBar().mActionOverFlow);
       mDlContent.closeDrawer(mLlSide);
@@ -246,7 +246,7 @@ public class FeedActivity extends BaseActivity {
       @Override
       public void onClick(View view, int position) {
         if (position == 0) {
-          U.getAnalyser().trackEvent(FeedActivity.this, "feed_msg");
+          U.getAnalyser().trackEvent(FeedActivity.this, "feed_msg", "feed_msg");
           MsgActivity.start(FeedActivity.this, Account.inst().getNewCommentCount() > 0);
         }
       }

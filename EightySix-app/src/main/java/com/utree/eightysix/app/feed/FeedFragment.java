@@ -114,7 +114,7 @@ public class FeedFragment extends BaseFragment {
       @Override
       public void onRefresh() {
         getBaseActivity().showRefreshIndicator(true);
-        U.getAnalyser().trackEvent(getActivity(), "feed_pull_refresh");
+        U.getAnalyser().trackEvent(getActivity(), "feed_pull_refresh", "feed_pull_refresh");
         mRefreshed = true;
         if (mCircle != null) {
           requestFeeds(mCircle.id, 1);
