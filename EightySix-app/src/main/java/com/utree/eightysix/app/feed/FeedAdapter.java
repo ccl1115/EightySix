@@ -20,14 +20,11 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
-import com.utree.eightysix.app.feed.event.UploadClickedEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
-import com.utree.eightysix.data.BaseItem;
-import com.utree.eightysix.data.Feeds;
-import com.utree.eightysix.data.Post;
-import com.utree.eightysix.data.Promotion;
-import com.utree.eightysix.data.QuestionSet;
+import com.utree.eightysix.app.feed.event.UploadClickedEvent;
+import com.utree.eightysix.data.*;
 import com.utree.eightysix.widget.RoundedButton;
+
 import java.util.List;
 
 /**
@@ -401,7 +398,7 @@ class FeedAdapter extends BaseAdapter {
   }
 
   private void animateConvertView(int position, View convertView) {
-    if (position > 3 && !mAnimated.get(position, false)) {
+    if (position > 5 && !mAnimated.get(position, false)) {
       AnimatorSet set = new AnimatorSet();
       set.playTogether(
           ObjectAnimator.ofFloat(convertView, "translationY", U.dp2px(350), 0),

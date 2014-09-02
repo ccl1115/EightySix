@@ -2,6 +2,7 @@ package com.utree.eightysix.request;
 
 import com.utree.eightysix.C;
 import com.utree.eightysix.rest.Api;
+import com.utree.eightysix.rest.Optional;
 import com.utree.eightysix.rest.Param;
 
 /**
@@ -11,6 +12,7 @@ import com.utree.eightysix.rest.Param;
 public class SyncRequest {
 
   @Param("parentId")
+  @Optional
   public String parentId;
 
   public SyncRequest(String parentId) {

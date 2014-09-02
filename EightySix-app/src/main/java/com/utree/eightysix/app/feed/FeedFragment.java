@@ -401,7 +401,7 @@ public class FeedFragment extends BaseFragment {
 
   @Subscribe
   public void onContactsSyncEvent(ContactsSyncEvent event) {
-    if (mFeedAdapter.getFeeds().upContact == 0) {
+    if (mFeedAdapter != null && mFeedAdapter.getFeeds().upContact == 0) {
       if (event.isSucceed()) {
         U.showToast("上传通讯录成功");
       } else {
