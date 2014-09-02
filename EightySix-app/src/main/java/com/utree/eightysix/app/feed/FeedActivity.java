@@ -342,16 +342,16 @@ public class FeedActivity extends BaseActivity {
     }
   }
 
-  @Subscribe
-  public void onSetPraiseCountEvent(UpdatePraiseCountEvent event) {
-    if (mMenuViewHolder != null) {
-      if (event.getCount() == 0) {
-        mMenuViewHolder.mTvPraiseCount.setText("我收到的赞");
-      } else {
-        mMenuViewHolder.mTvPraiseCount.setText(String.format("收到%d个赞", event.getCount()));
-      }
-    }
-  }
+//  @Subscribe
+//  public void onSetPraiseCountEvent(UpdatePraiseCountEvent event) {
+//    if (mMenuViewHolder != null) {
+//      if (event.getCount() == 0) {
+//        mMenuViewHolder.mTvPraiseCount.setText("我收到的赞");
+//      } else {
+//        mMenuViewHolder.mTvPraiseCount.setText(String.format("收到%d个赞", event.getCount()));
+//      }
+//    }
+//  }
 
   @Override
   public void onBackPressed() {
@@ -603,13 +603,13 @@ public class FeedActivity extends BaseActivity {
     }
   }
 
-  void setMyPraiseCount(int count, String praisePercent, int variant) {
-    if (count == 0) {
-      mMenuViewHolder.mTvPraiseCount.setText("我收到的赞");
-    } else {
-      mMenuViewHolder.mTvPraiseCount.setText(String.format("收到%d个赞", count));
-    }
-  }
+//  void setMyPraiseCount(int count, String praisePercent, int variant) {
+//    if (count == 0) {
+//      mMenuViewHolder.mTvPraiseCount.setText("我收到的赞");
+//    } else {
+//      mMenuViewHolder.mTvPraiseCount.setText(String.format("收到%d个赞", count));
+//    }
+//  }
 
   @Keep
   class NoPermViewHolder {
