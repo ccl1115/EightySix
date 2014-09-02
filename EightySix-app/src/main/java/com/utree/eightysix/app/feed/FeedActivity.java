@@ -349,7 +349,11 @@ public class FeedActivity extends BaseActivity {
   @Subscribe
   public void onSetPraiseCountEvent(UpdatePraiseCountEvent event) {
     if (mMenuViewHolder != null) {
-      mMenuViewHolder.mTvPraiseCount.setText(String.format("收到%d个赞", event.getCount()));
+      if (event.getCount() == 0) {
+        mMenuViewHolder.mTvPraiseCount.setText("我收到的赞");
+      } else {
+        mMenuViewHolder.mTvPraiseCount.setText(String.format("收到%d个赞", event.getCount()));
+      }
     }
   }
 
@@ -417,18 +421,6 @@ public class FeedActivity extends BaseActivity {
   public void onUploadClicked(UploadClickedEvent event) {
     ContactsSyncService.start(this, true);
     showProgressBar(true);
-  }
-
-  @Subscribe
-  public void onContactsSyncEvent(ContactsSyncEvent event) {
-    if (event.isSucceed()) {
-      showToast("上传通讯录成功");
-    } else {
-      showToast("上传通讯录失败");
-    }
-
-    mFeedFragment.refresh();
-    showProgressBar(false);
   }
 
   @Subscribe

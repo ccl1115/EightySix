@@ -215,7 +215,7 @@ public class PublishActivity extends BaseActivity {
       public void onClick(DialogInterface dialog, int which) {
         switch (which) {
           case 0:
-            if (!(mStartCamera =startCamera())) {
+            if (!(mStartCamera = startCamera())) {
               showToast(R.string.error_start_camera);
             }
             break;
@@ -525,12 +525,15 @@ public class PublishActivity extends BaseActivity {
           }
         } else {
           if (mStartAlbum) {
-            startAlbum();
+            mStartAlbum = startAlbum();
+            mStartCamera = false;
           } else if (mStartCamera) {
-            startCamera();
+            mStartCamera = startCamera();
+            mStartAlbum = false;
+          } else {
+            mStartAlbum = false;
+            mStartCamera = false;
           }
-          mStartAlbum = false;
-          mStartCamera = false;
         }
         break;
       default:

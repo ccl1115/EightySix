@@ -294,9 +294,9 @@ public class BaseCirclesActivity extends BaseActivity {
 
   protected void showCircleSetDialog(final Circle circle) {
     mCircleSetDialog = new ThemedDialog(this);
-    mCircleSetDialog.setTitle("完成设置");
+    mCircleSetDialog.setTitle(String.format("确认在[%s]上班么？", circle.shortName));
     TextView textView = new TextView(this);
-    textView.setText(String.format("确认在[%s]上班么？\n\n请注意：", circle.name) + (U.getSyncClient().getSync() != null ? U.getSyncClient().getSync().selectFactoryDays : 15) + "天之内不能修改哦");
+    textView.setText("\n请注意：" + (U.getSyncClient().getSync() != null ? U.getSyncClient().getSync().selectFactoryDays : 15) + "天之内不能修改哦\n");
     textView.setPadding(16, 16, 16, 16);
     mCircleSetDialog.setContent(textView);
 

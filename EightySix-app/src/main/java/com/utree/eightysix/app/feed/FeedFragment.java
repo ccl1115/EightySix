@@ -19,6 +19,7 @@ import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
+import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.data.*;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
 import com.utree.eightysix.request.FeedsRequest;
@@ -398,6 +399,21 @@ public class FeedFragment extends BaseFragment {
       }
     }
   }
+
+  @Subscribe
+  public void onContactsSyncEvent(ContactsSyncEvent event) {
+    if (mFeedAdapter.getFeeds().upContact == 0) {
+      if (event.isSucceed()) {
+        U.showToast("上传通讯录成功");
+      } else {
+        U.showToast("上传通讯录失败");
+      }
+    }
+
+    refresh();
+    getBaseActivity().hideProgressBar();
+  }
+
 
   public int getWorkerCount() {
     if (mFeedAdapter != null && mFeedAdapter.getFeeds() != null) {

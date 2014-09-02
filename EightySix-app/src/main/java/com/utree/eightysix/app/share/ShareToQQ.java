@@ -19,7 +19,7 @@ import com.utree.eightysix.data.Post;
 class ShareToQQ extends IShare {
 
   private Tencent sTencent =
-      Tencent.createInstance(U.getConfig("qq.app_id"), U.getContext().getApplicationContext());
+      Tencent.createInstance(BuildConfig.DEBUG ? U.getConfig("qq.app_id") : U.getConfig("qq.app_id.release"), U.getContext().getApplicationContext());
 
   private void shareToQQ(Activity from, Bundle data, IUiListener listener) {
     data.putString(QQShare.SHARE_TO_QQ_APP_NAME, U.getContext().getString(R.string.app_name));

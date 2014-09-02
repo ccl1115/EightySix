@@ -281,7 +281,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     animator.start();
   }
 
-  protected final void showProgressBar(boolean mandatory) {
+  public final void showProgressBar(boolean mandatory) {
     showProgressBar();
     if (mandatory) {
       showProgressMask();
