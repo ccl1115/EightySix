@@ -185,12 +185,14 @@ public class PostActivity extends BaseActivity {
           if (portraitView == null) return;
 
           if (Env.firstRun("overlay_tip_portrait")) {
-            mPortraitTip = OverlayTipUtil.getPortraitTip(portraitView, new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                if (mPortraitTip != null) mPortraitTip.dismiss();
-              }
-            });
+            if (mPortraitTip == null) {
+              mPortraitTip = OverlayTipUtil.getPortraitTip(portraitView, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                  if (mPortraitTip != null) mPortraitTip.dismiss();
+                }
+              });
+            }
             mPortraitTip.show(PostActivity.this);
             Env.setFirstRun("overlay_tip_portrait", false);
           }
