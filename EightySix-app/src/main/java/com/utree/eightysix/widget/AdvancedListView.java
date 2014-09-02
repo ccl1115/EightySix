@@ -8,7 +8,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
-import com.utree.eightysix.U;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 
 /**

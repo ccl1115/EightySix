@@ -71,7 +71,7 @@ class MaskView extends ViewGroup {
 			if (child != null) {
 				LayoutParams lp = (LayoutParams) child.getLayoutParams();
 				if (lp == null) {
-					child.setLayoutParams(lp);
+					child.setLayoutParams(null);
 				}
 				measureChild(child, w + MeasureSpec.AT_MOST, h + MeasureSpec.AT_MOST);
 			}

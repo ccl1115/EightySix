@@ -422,6 +422,7 @@ public class FeedActivity extends BaseActivity {
   @Subscribe
   public void onUnlockClicked(UnlockClickedEvent event) {
     showUnlockDialog();
+    ContactsSyncService.start(this, true);
   }
 
   @Subscribe

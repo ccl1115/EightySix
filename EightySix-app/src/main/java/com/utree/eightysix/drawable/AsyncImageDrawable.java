@@ -9,7 +9,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import com.aliyun.android.util.MD5Util;
 import com.squareup.otto.Subscribe;
-import com.utree.eightysix.U;
 import com.utree.eightysix.utils.ImageUtils;
 
 /**
