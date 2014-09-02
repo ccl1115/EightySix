@@ -22,10 +22,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.OverlayTipUtil;
-import com.utree.eightysix.app.feed.event.PostCommentPraiseEvent;
-import com.utree.eightysix.app.feed.event.PostDeleteEvent;
-import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
-import com.utree.eightysix.app.feed.event.ReloadCommentEvent;
+import com.utree.eightysix.app.feed.event.*;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.*;
@@ -220,6 +217,15 @@ public class PostActivity extends BaseActivity {
   protected void onPause() {
     super.onPause();
     M.getRegisterHelper().unregister(mLvComments);
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+
+    if (mPostId != null) {
+      U.getBus().post(new RefreshFeedEvent());
+    }
   }
 
   @Override

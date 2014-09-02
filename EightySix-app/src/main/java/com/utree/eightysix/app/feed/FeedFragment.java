@@ -16,6 +16,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
+import com.utree.eightysix.app.feed.event.RefreshFeedEvent;
 import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
 import com.utree.eightysix.contact.ContactsSyncEvent;
@@ -411,6 +412,11 @@ public class FeedFragment extends BaseFragment {
 
     refresh();
     getBaseActivity().hideProgressBar();
+  }
+
+  @Subscribe
+  public void onRefreshFeedEvent(RefreshFeedEvent event) {
+    refresh();
   }
 
 
