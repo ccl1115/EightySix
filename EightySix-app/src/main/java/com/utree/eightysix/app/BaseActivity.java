@@ -486,7 +486,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     return mTopBar.getTitle();
   }
 
-  protected final void setTopTitle(String title) {
+  public final void setTopTitle(String title) {
     mTopBar.setTitle(title);
   }
 
@@ -494,7 +494,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     return mTopBar.getSubTitle();
   }
 
-  protected final void setTopSubTitle(String title) {
+  public final void setTopSubTitle(String title) {
     mTopBar.setSubTitle(title);
   }
 

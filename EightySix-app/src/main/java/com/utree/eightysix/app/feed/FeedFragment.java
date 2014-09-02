@@ -14,6 +14,7 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
@@ -452,11 +453,11 @@ public class FeedFragment extends BaseFragment {
                 response.object.fetch.newPraise.percent));
           }
         } else {
-          if (mFeedAdapter != null && mFeedAdapter.getCount() == 0) {
-            mRstvEmpty.setVisibility(View.VISIBLE);
-          } else {
-            cacheOutFeeds(id, 1);
+          mRstvEmpty.setVisibility(View.VISIBLE);
+          if (mCircle != null) {
+            getBaseActivity().setTopTitle(mCircle.shortName);
           }
+          getBaseActivity().setTopSubTitle("");
         }
         mRefresherView.setRefreshing(false);
         mLvFeed.stopLoadMore();

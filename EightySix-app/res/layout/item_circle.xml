@@ -11,7 +11,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="12dp"
-            android:paddingBottom="15dp">
+            android:paddingBottom="15dp"
+            android:background="@drawable/apptheme_primary_list_selector">
 
         <com.utree.eightysix.widget.RoundedButton
                 android:id="@+id/rb_icon"

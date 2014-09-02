@@ -2,6 +2,7 @@ package com.utree.eightysix.utils;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.U;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,7 +18,7 @@ public class WeiboShortener implements Shortener {
 
   @Override
   public void shorten(final String url, final Callback callback) {
-    U.getRESTRequester().getClient().get(U.getContext(), API + String.format("?source=%s&url_long=%s", "462605141", "http://baidu.com"),
+    U.getRESTRequester().getClient().get(U.getContext(), API + String.format("?source=%s&url_long=%s", "2940228905", url),
         new JsonHttpResponseHandler() {
           @Override
           public void onSuccess(JSONObject response) {
@@ -34,6 +35,9 @@ public class WeiboShortener implements Shortener {
 
           @Override
           public void onFailure(Throwable e, JSONObject errorResponse) {
+            if (BuildConfig.DEBUG) {
+              e.printStackTrace();
+            }
             callback.onShorten(null);
           }
         });
