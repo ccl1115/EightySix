@@ -395,7 +395,7 @@ public class PostActivity extends BaseActivity {
 
   @Subscribe
   public void onReloadCommentEvent(ReloadCommentEvent event) {
-    requestComment(1);
+    requestComment(1, false);
   }
 
   void finishOrShowQuitConfirmDialog() {
@@ -424,7 +424,7 @@ public class PostActivity extends BaseActivity {
     }
   }
 
-  private void requestComment(final int page) {
+  private void requestComment(final int page, final boolean bottom) {
     final String id = mPost == null ? mPostId : mPost.id;
     final int viewType = mPost == null ? 0 : mPost.viewType;
     final int isHot = mPost == null ? 0 : mPost.isHot;
@@ -443,6 +443,10 @@ public class PostActivity extends BaseActivity {
           if (mPostCommentsAdapter != null && mPostCommentsAdapter.getCount() == 1) {
             mPostCommentsAdapter.setNeedReload(true);
           }
+        }
+
+        if (bottom) {
+          mLvComments.setSelection(Integer.MAX_VALUE);
         }
 
         hideProgressBar();
@@ -465,7 +469,7 @@ public class PostActivity extends BaseActivity {
         } else {
           showProgressBar();
         }
-        requestComment(page);
+        requestComment(page, false);
       }
     }, PostCommentsResponse.class);
   }
@@ -486,6 +490,8 @@ public class PostActivity extends BaseActivity {
             mEtPostContent.setEnabled(true);
             mRbPost.setEnabled(true);
             mLvComments.setSelection(Integer.MAX_VALUE);
+
+            requestComment(1, true);
           }
         }, PublishCommentResponse.class);
   }

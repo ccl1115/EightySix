@@ -128,9 +128,10 @@ public class FeedActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
-  public static Intent getIntent(Context context, int id) {
+  public static Intent getIntent(Context context, int id, boolean skipCache) {
     Intent intent = new Intent(context, FeedActivity.class);
     intent.putExtra("id", id);
+    intent.putExtra("skipCache", skipCache);
     if (!(context instanceof Activity)) {
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     }

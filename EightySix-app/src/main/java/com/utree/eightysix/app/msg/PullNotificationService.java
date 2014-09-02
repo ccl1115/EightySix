@@ -171,7 +171,7 @@ public class PullNotificationService extends Service {
         .setContentTitle(getString(R.string.notification_circle_unlocked))
         .setContentText(getString(R.string.notification_circle_unlocked_tip, circleName))
         .setContentIntent(PendingIntent.getActivity(this, 0,
-            FeedActivity.getIntent(this, Integer.parseInt(circleId)), PendingIntent.FLAG_UPDATE_CURRENT))
+            FeedActivity.getIntent(this, Integer.parseInt(circleId), true), PendingIntent.FLAG_UPDATE_CURRENT))
         .build();
   }
 
@@ -210,7 +210,7 @@ public class PullNotificationService extends Service {
         .setContentTitle(getString(R.string.notification_circle_create_approve))
         .setContentText(getString(R.string.notification_circle_create_approve_tip, circleName))
         .setContentIntent(PendingIntent.getActivity(this, 0,
-            FeedActivity.getIntent(this, Integer.parseInt(circleId)), PendingIntent.FLAG_UPDATE_CURRENT))
+            FeedActivity.getIntent(this, Integer.parseInt(circleId), true), PendingIntent.FLAG_UPDATE_CURRENT))
         .build();
   }
 
@@ -225,7 +225,7 @@ public class PullNotificationService extends Service {
         .setContentTitle(getString(R.string.notification_new_friend))
         .setContentText(getString(R.string.notification_new_friend_tip, circleName))
         .setContentIntent(PendingIntent.getActivity(this, 0,
-            FeedActivity.getIntent(this, Integer.parseInt(circleId)), PendingIntent.FLAG_UPDATE_CURRENT))
+            FeedActivity.getIntent(this, Integer.parseInt(circleId), true), PendingIntent.FLAG_UPDATE_CURRENT))
         .build();
   }
 
