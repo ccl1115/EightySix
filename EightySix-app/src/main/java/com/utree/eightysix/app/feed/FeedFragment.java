@@ -410,6 +410,7 @@ public class FeedFragment extends BaseFragment {
   private void requestFeeds(final int id, final int page) {
     if (mRefresherView != null && page == 1) {
       mRefresherView.setRefreshing(true);
+      getBaseActivity().setTopSubTitle("");
     }
     getBaseActivity().request(new FeedsRequest(id, page), new OnResponse<FeedsResponse>() {
       @Override
@@ -430,6 +431,8 @@ public class FeedFragment extends BaseFragment {
             mLvFeed.setAdapter(mFeedAdapter);
 
             ((FeedActivity) getBaseActivity()).setTitle(mCircle);
+            getBaseActivity().setTopSubTitle(String.format(getString(R.string.friends_info),
+                mCircle.friendCount, response.object.workerCount));
           } else if (mFeedAdapter != null) {
             mFeedAdapter.add(response.object.posts.lists);
           }

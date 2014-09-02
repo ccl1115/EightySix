@@ -471,7 +471,7 @@ public class PublishActivity extends BaseActivity {
       }
       mImageUploadUrl = U.getCloudStorage().getUrl(U.getBgBucket(),
           "",
-          getResources().getResourceEntryName(tv.resourceId) + ".png");
+          getResources().getResourceEntryName(tv.resourceId) + ".jpg");
       mImageUploadFinished = true;
 
       Bitmap bitmap = ImageUtils.syncLoadResourceBitmap(tv.resourceId, ImageUtils.getUrlHash(mImageUploadUrl));

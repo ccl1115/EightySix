@@ -372,18 +372,9 @@ public class FeedActivity extends BaseActivity {
 
     if (circle != null) {
       mFeedFragment.setCircle(circle, skipCache);
-      setTopSubTitle(String.format(getString(R.string.friends_info), 0, 0));
-      if (circle.lock == 1) {
-        getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(
-            getResources().getDrawable(R.drawable.ic_lock_small), null, null, null);
-        getTopBar().mSubTitle.setCompoundDrawablePadding(U.dp2px(5));
-      } else {
-        getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-      }
     } else {
       final int circleId = intent.getIntExtra("id", 0);
       mFeedFragment.setCircle(circleId, skipCache);
-      setTopSubTitle(String.format(getString(R.string.friends_info), 0, 0));
     }
 
     if (mFeedFragment.getCircle() != null) {
@@ -612,8 +603,8 @@ public class FeedActivity extends BaseActivity {
     if (circle == null) return;
 
     setTopTitle(circle.shortName);
-    setTopSubTitle(String.format(getString(R.string.friends_info),
-        mFeedFragment.getCurrFriends(), mFeedFragment.getWorkerCount()));
+//    setTopSubTitle(String.format(getString(R.string.friends_info),
+//        mFeedFragment.getCurrFriends(), mFeedFragment.getWorkerCount()));
     if (circle.lock == 1) {
       getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(
           getResources().getDrawable(R.drawable.ic_lock_small), null, null, null);

@@ -82,7 +82,7 @@ public class ItemView extends View implements View.OnClickListener {
     } else if (value.type == TypedValue.TYPE_REFERENCE) {
       String imageUrl = U.getCloudStorage().getUrl(U.getBgBucket(),
           "",
-          getResources().getResourceEntryName(value.resourceId) + ".png");
+          getResources().getResourceEntryName(value.resourceId) + ".jpg");
       mDrawable = new BitmapDrawable(getResources(),
           ImageUtils.syncLoadResourceBitmapThumbnail(value.resourceId, ImageUtils.getUrlHash(imageUrl)));
     }
