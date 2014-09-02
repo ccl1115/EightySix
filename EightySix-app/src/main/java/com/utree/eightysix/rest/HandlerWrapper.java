@@ -8,6 +8,7 @@ import de.akquinet.android.androlog.Log;
 import org.apache.http.HttpStatus;
 
 import java.net.ConnectException;
+import org.apache.http.NoHttpResponseException;
 
 /**
  * Wrapper of handler use to parse response data using Gson and cache automatically
@@ -75,6 +76,8 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
     if (e != null) {
       if (e instanceof ConnectException) {
         U.showToast(U.getContext().getString(R.string.server_connection_exception));
+      } else if (e instanceof NoHttpResponseException) {
+
       } else {
         U.showToast(U.getContext().getString(R.string.server_connection_exception));
       }

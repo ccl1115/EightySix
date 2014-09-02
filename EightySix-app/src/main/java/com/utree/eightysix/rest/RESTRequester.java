@@ -14,6 +14,7 @@ import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.MD5Util;
 import de.akquinet.android.androlog.Log;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -21,7 +22,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.apache.http.Header;
+import org.apache.http.NoHttpResponseException;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpRequestRetryHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
+import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.protocol.HttpContext;
 
 /**
  */
@@ -36,20 +43,7 @@ public class RESTRequester implements IRESTRequester {
     mAsyncHttpClient = new AsyncHttpClient();
     mAsyncHttpClient.setMaxConnections(U.getConfigInt("api.connections"));
     mAsyncHttpClient.setMaxRetriesAndTimeout(U.getConfigInt("api.retry"), U.getConfigInt("api.timeout"));
-  }
-
-  public RESTRequester(String host, int maxConnections) {
-    mHost = host;
-    mAsyncHttpClient = new AsyncHttpClient();
-    mAsyncHttpClient.setMaxConnections(maxConnections);
-    mAsyncHttpClient.setMaxRetriesAndTimeout(U.getConfigInt("api.retry"), U.getConfigInt("api.timeout"));
-  }
-
-  public RESTRequester(String host, int maxConnections, int retry, int timeout) {
-    mHost = host;
-    mAsyncHttpClient = new AsyncHttpClient();
-    mAsyncHttpClient.setMaxConnections(maxConnections);
-    mAsyncHttpClient.setMaxRetriesAndTimeout(retry, timeout);
+    compact();
   }
 
   public static String genCacheKey(String api, RequestParams params) {
@@ -172,6 +166,14 @@ public class RESTRequester implements IRESTRequester {
     return mAsyncHttpClient.post(U.getContext(), mHost + api, headers, params, contentType, handler);
   }
 
+  @Override
+  public RequestParams addAuthParams(RequestParams params) {
+    if (params == null) params = new RequestParams();
+    params.add("userId", Account.inst().getUserId());
+    params.add("token", Account.inst().getToken());
+    return params;
+  }
+
   public void putBaseParams(RequestParams params) {
     if (params == null) {
       params = new RequestParams();
@@ -202,11 +204,25 @@ public class RESTRequester implements IRESTRequester {
     }
   }
 
-  @Override
-  public RequestParams addAuthParams(RequestParams params) {
-    if (params == null) params = new RequestParams();
-    params.add("userId", Account.inst().getUserId());
-    params.add("token", Account.inst().getToken());
-    return params;
+  private void compact() {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+      HttpProtocolParams.setUseExpectContinue(mAsyncHttpClient.getHttpClient().getParams(), false);
+      HttpRequestRetryHandler retryHandler = new HttpRequestRetryHandler() {
+
+        public boolean retryRequest(IOException exception, int executionCount,
+                                    HttpContext context) {
+          if (executionCount >= 5) {
+            return false;
+          }
+          if (exception instanceof NoHttpResponseException) {
+            return true;
+          } else if (exception instanceof ClientProtocolException) {
+            return true;
+          }
+          return false;
+        }
+      };
+      ((DefaultHttpClient) mAsyncHttpClient.getHttpClient()).setHttpRequestRetryHandler(retryHandler);
+    }
   }
 }
