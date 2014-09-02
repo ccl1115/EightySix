@@ -52,6 +52,11 @@ EightySix的应用层
 
 数据定义，用于将json解析为pojo对象
 
+
+#### EightySix-config-tool
+
+Configuration app for quickly change values used by the main app
+
 ## Dependencies
 
 我们依赖的开源项目
@@ -145,11 +150,6 @@ public class SampleActivity extends BaseActivity {
 
 以上我们就做了一个请求，host是预先配置好的，path＝/hello/wolrd，http method是GET，
 而params是pwd=test。
-
-**另外还有一些需要注意的地方：**
-
-1. 重复的请求会被抛弃。我们根据path和params.toString()加起来的md5值来判断一个请求是不是重复的。
-2. Activity在onDestroy的时候会自动取消所有的请求，也可以通过cancelAll()方法来暂停。
 
 ## Otto 消息和事件系统
 
