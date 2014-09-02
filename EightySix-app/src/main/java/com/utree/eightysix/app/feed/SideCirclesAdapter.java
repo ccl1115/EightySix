@@ -5,15 +5,14 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.data.Circle;
+
 import java.util.List;
 
 /**
@@ -65,19 +64,72 @@ class SideCirclesAdapter extends BaseAdapter {
     Circle circle = getItem(position);
 
     viewHolder.mTvName.setText(circle.shortName);
-    viewHolder.mTvFriends.setText(
-        String.format(parent.getContext().getString(R.string.friends_info),
-            circle.friendCount, circle.workmateCount));
+    viewHolder.mTvFriends.setText(circle.info);
 
     Resources res = parent.getResources();
+    if (circle.currFactory == 1) {
+      viewHolder.mIvHouse.setVisibility(View.VISIBLE);
+    } else {
+      viewHolder.mIvHouse.setVisibility(View.INVISIBLE);
+    }
+
+    switch (circle.hotLevel) {
+      case 0:
+        viewHolder.mIvFire.setVisibility(View.GONE);
+        break;
+      case 1:
+        if (circle.selected) {
+          viewHolder.mIvFire.setImageResource(R.drawable.fire_white_1);
+        } else {
+          viewHolder.mIvFire.setImageResource(R.drawable.fire_1);
+        }
+        viewHolder.mIvFire.setVisibility(View.VISIBLE);
+        break;
+      case 2:
+        if (circle.selected) {
+          viewHolder.mIvFire.setImageResource(R.drawable.fire_white_2);
+        } else {
+          viewHolder.mIvFire.setImageResource(R.drawable.fire_2);
+        }
+        viewHolder.mIvFire.setVisibility(View.VISIBLE);
+        break;
+      case 3:
+        if (circle.selected) {
+          viewHolder.mIvFire.setImageResource(R.drawable.fire_white_3);
+        } else {
+          viewHolder.mIvFire.setImageResource(R.drawable.fire_3);
+        }
+        viewHolder.mIvFire.setVisibility(View.VISIBLE);
+        break;
+      case 4:
+        if (circle.selected) {
+          viewHolder.mIvFire.setImageResource(R.drawable.fire_white_4);
+        } else {
+          viewHolder.mIvFire.setImageResource(R.drawable.fire_4);
+        }
+        viewHolder.mIvFire.setVisibility(View.VISIBLE);
+        break;
+      case 5:
+        if (circle.selected) {
+          viewHolder.mIvFire.setImageResource(R.drawable.fire_white_5);
+        } else {
+          viewHolder.mIvFire.setImageResource(R.drawable.fire_5);
+        }
+        viewHolder.mIvFire.setVisibility(View.VISIBLE);
+        break;
+    }
+
     if (circle.selected) {
       viewHolder.mLlItem.setBackgroundColor(res.getColor(R.color.apptheme_primary_light_color));
       viewHolder.mTvName.setTextColor(Color.WHITE);
       viewHolder.mTvFriends.setTextColor(Color.WHITE);
+      viewHolder.mIvHouse.setImageResource(R.drawable.house_white);
+
     } else {
       viewHolder.mLlItem.setBackgroundDrawable(res.getDrawable(R.drawable.apptheme_primary_list_selector));
       viewHolder.mTvName.setTextColor(res.getColor(R.color.apptheme_primary_text_dark));
       viewHolder.mTvFriends.setTextColor(0xffb3b3b3);
+      viewHolder.mIvHouse.setImageResource(R.drawable.house);
     }
 
     if (circle.lock == 1) {
@@ -94,14 +146,20 @@ class SideCirclesAdapter extends BaseAdapter {
   @Keep
   static class ViewHolder {
 
-    @InjectView (R.id.name)
+    @InjectView(R.id.name)
     public TextView mTvName;
 
-    @InjectView (R.id.friends)
+    @InjectView(R.id.friends)
     public TextView mTvFriends;
 
-    @InjectView (R.id.ll_item)
+    @InjectView(R.id.ll_item)
     public LinearLayout mLlItem;
+
+    @InjectView(R.id.iv_house)
+    public ImageView mIvHouse;
+
+    @InjectView(R.id.iv_fire)
+    public ImageView mIvFire;
 
     ViewHolder(View view) {
       ButterKnife.inject(this, view);

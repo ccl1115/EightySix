@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:paddingTop="8dp"
+              android:paddingBottom="8dp">
+
+    <com.utree.eightysix.widget.RoundedButton
+            android:id="@+id/rb_type_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp"
+            android:text="@string/report_type_1"
+            android:textColor="@color/apptheme_primary_grey_btn_text"
+            app:background="@color/apptheme_primary_grey_btn"
+            app:radius="4dp"/>
+
+    <com.utree.eightysix.widget.RoundedButton
+            android:id="@+id/rb_type_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp"
+            android:text="@string/report_type_2"
+            android:textColor="@color/apptheme_primary_grey_btn_text"
+            app:background="@color/apptheme_primary_grey_btn"
+            app:radius="4dp"/>
+
+    <com.utree.eightysix.widget.RoundedButton
+            android:id="@+id/rb_type_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp"
+            android:text="@string/report_type_3"
+            android:textColor="@color/apptheme_primary_grey_btn_text"
+            app:background="@color/apptheme_primary_grey_btn"
+            app:radius="4dp"/>
+
+    <com.utree.eightysix.widget.RoundedButton
+            android:id="@+id/rb_type_4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp"
+            android:text="@string/report_type_4"
+            android:textColor="@color/apptheme_primary_grey_btn_text"
+            app:background="@color/apptheme_primary_grey_btn"
+            app:radius="4dp"/>
+
+    <com.utree.eightysix.widget.RoundedButton
+            android:id="@+id/rb_type_5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp"
+            android:text="@string/report_type_5"
+            android:textColor="@color/apptheme_primary_grey_btn_text"
+            app:background="@color/apptheme_primary_grey_btn"
+            app:radius="4dp"/>
+
+    <com.utree.eightysix.widget.RoundedButton
+            android:id="@+id/rb_type_6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp"
+            android:text="@string/report_type_6"
+            android:textColor="@color/apptheme_primary_grey_btn_text"
+            app:background="@color/apptheme_primary_grey_btn"
+            app:radius="4dp"/>
+</LinearLayout>

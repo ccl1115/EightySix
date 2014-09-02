@@ -15,6 +15,6 @@ public class BaseCircle {
   @SerializedName("id")
   public int id;
 
-  @SerializedName("workmateCount")
+  @SerializedName("workerCount")
   public int workmateCount;
 }

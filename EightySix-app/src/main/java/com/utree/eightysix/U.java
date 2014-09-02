@@ -1,9 +1,9 @@
 package com.utree.eightysix;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
-import android.os.Looper;
 import android.view.View;
 import android.widget.Toast;
 import butterknife.ButterKnife;
@@ -13,19 +13,22 @@ import com.jakewharton.disklrucache.DiskLruCache;
 import com.squareup.otto.Bus;
 import com.squareup.otto.ThreadEnforcer;
 import com.utree.eightysix.app.BaseApplication;
-import com.utree.eightysix.app.EventRequester;
-import com.utree.eightysix.location.BdLocationImpl;
-import com.utree.eightysix.location.Location;
+import com.utree.eightysix.app.SyncClient;
+import com.utree.eightysix.app.feed.BaseItemDeserializer;
+import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.push.PushHelper;
 import com.utree.eightysix.push.PushHelperImpl;
+import com.utree.eightysix.rest.IRESTRequester;
 import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.app.share.ShareManager;
 import com.utree.eightysix.statistics.Analyser;
 import com.utree.eightysix.statistics.MtaAnalyserImpl;
 import com.utree.eightysix.storage.Storage;
 import com.utree.eightysix.storage.oss.OSSImpl;
 import com.utree.eightysix.utils.CacheUtils;
+import com.utree.eightysix.report.Reporter;
+import com.utree.eightysix.report.ReporterImpl;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Date;
@@ -45,44 +48,65 @@ public class U {
   public static final int MINUTE_IN_MS = 60 * 1000;
 
   private static Analyser sStatistics;
-  private static Location sLocation;
   private static Storage sCloudStorage;
-  private static RESTRequester sRESTRequester;
+  private static IRESTRequester sRESTRequester;
   private static CacheUtils sCacheUtils;
   private static Bus sBus;
-
+  private static Reporter sReporter;
+  private static ShareManager sShareManager;
   private static PushHelper sPushHelper;
-
-  private static Gson sGson = new GsonBuilder().create();
-
+  private static Gson sGson ;
   private static Properties sConfiguration;
   private static Fixture sFixture;
+  private static Toast sToast;
+  private static SyncClient sSyncClient;
 
-  private static EventRequester sEventRequester;
+  private static final Object lock = new Object();
 
-  static {
-    sEventRequester = new EventRequester();
-    getBus().register(sEventRequester);
+  public static ShareManager getShareManager() {
+    if (sShareManager == null) {
+      synchronized (lock) {
+        sShareManager = new ShareManager();
+      }
+    }
+    return sShareManager;
+  }
+
+  public static SyncClient getSyncClient() {
+    if (sSyncClient == null) {
+      sSyncClient = new SyncClient();
+    }
+    return sSyncClient;
+  }
+
+  public static Reporter getReporter() {
+    if (sReporter == null) {
+      synchronized (lock) {
+        sReporter = new ReporterImpl();
+      }
+    }
+    return sReporter;
   }
 
   public static Gson getGson() {
+    if (sGson == null) {
+      synchronized (lock) {
+        GsonBuilder builder = new GsonBuilder();
+        builder.setPrettyPrinting();
+        builder.registerTypeAdapter(BaseItem.class, new BaseItemDeserializer());
+        sGson = builder.create();
+      }
+    }
     return sGson;
   }
 
   public static Analyser getAnalyser() {
-    checkThread();
     if (sStatistics == null) {
-      sStatistics = new MtaAnalyserImpl();
+      synchronized (lock) {
+        sStatistics = new MtaAnalyserImpl();
+      }
     }
     return sStatistics;
-  }
-
-  public static Location getLocation() {
-    checkThread();
-    if (sLocation == null) {
-      sLocation = new BdLocationImpl();
-    }
-    return sLocation;
   }
 
   public static Context getContext() {
@@ -90,31 +114,18 @@ public class U {
   }
 
   public static Storage getCloudStorage() {
-    checkThread();
     if (sCloudStorage == null) {
       sCloudStorage = new OSSImpl();
     }
     return sCloudStorage;
   }
 
-  public static <T> T viewBinding(View view, Class<T> holderClass) {
-    try {
-      T t = holderClass.newInstance();
-      ButterKnife.inject(holderClass, view);
-      return t;
-    } catch (InstantiationException e) {
-      return null;
-    } catch (IllegalAccessException e) {
-      return null;
-    }
-  }
-
   public static void viewBinding(View view, Object target) {
     ButterKnife.inject(target, view);
   }
 
-  public static RESTRequester getRESTRequester() {
-    checkThread();
+  public static IRESTRequester getRESTRequester() {
+    M.checkThread();
     if (sRESTRequester == null) {
       sRESTRequester = new RESTRequester(getConfig("api.host"));
     }
@@ -129,7 +140,7 @@ public class U {
   }
 
   public static PushHelper getPushHelper() {
-    checkThread();
+    M.checkThread();
     if (sPushHelper == null) {
       sPushHelper = new PushHelperImpl();
     }
@@ -164,15 +175,49 @@ public class U {
     return sConfiguration.getProperty(key);
   }
 
+  public static String getImageBucket() {
+    if (BuildConfig.DEBUG) {
+      return U.getConfig("storage.image.bucket.name");
+    } else {
+      return U.getConfig("storage.image.bucket.name.release");
+    }
+  }
+
+  public static String getBgBucket() {
+    if (BuildConfig.DEBUG) {
+      return U.getConfig("storage.bg.bucket.name");
+    } else {
+      return U.getConfig("storage.bg.bucket.name.release");
+    }
+  }
+
+  @SuppressLint("SdCardPath")
   private static void loadConfig() {
-    checkThread();
+    M.checkThread();
     sConfiguration = new Properties();
+    if (!BuildConfig.DEBUG) {
+      // in release version we only load internal configuration file.
+      loadInternalConfig();
+      return;
+    }
     File file = new File(Environment.getExternalStorageDirectory().getAbsoluteFile() + "/configuration.properties");
+    if (!file.exists()) {
+      file = new File("/sdcard/configuration.properties");
+    }
     if (file.exists() && file.isFile()) {
+      FileReader in = null;
       try {
-        sConfiguration.load(new FileReader(file));
+        in = new FileReader(file);
+        sConfiguration.load(in);
       } catch (Exception e) {
         loadInternalConfig();
+      } finally {
+        if (in != null) {
+          try {
+            in.close();
+          } catch (IOException ignored) {
+          }
+        }
       }
     } else {
       loadInternalConfig();
@@ -210,28 +255,23 @@ public class U {
   }
 
   public static Bus getBus() {
-    checkThread();
+    M.checkThread();
     if (sBus == null) {
       sBus = new Bus(ThreadEnforcer.MAIN);
     }
     return sBus;
   }
 
-  private static void checkThread() {
-    if (Looper.myLooper() != Looper.getMainLooper()) {
-      throw new IllegalThreadStateException("This static method in U class must be invoked in main thread");
-    }
-  }
-
   public static int dp2px(int dp) {
     return (int) (U.getContext().getResources().getDisplayMetrics().density * dp + 0.5f);
   }
+
 
   public static String timestamp(long timestamp) {
     final long now = new Date().getTime();
     final long t = now - timestamp;
     if (t < 0) {
-      return "未来";
+      return "刚刚";
     } else if (t < MINUTE_IN_MS) {
       return (t / SECOND_IN_MS) + "秒前";
     } else if (t < HOUR_IN_MS) {
@@ -274,7 +314,11 @@ public class U {
    * @param string the string to show
    */
   public static void showToast(String string) {
-    Toast.makeText(getContext(), string, Toast.LENGTH_SHORT).show();
+    if (sToast != null) {
+      sToast.cancel();
+    }
+    sToast = Toast.makeText(getContext(), string, Toast.LENGTH_SHORT);
+    sToast.show();
   }
 
   public static boolean useFixture() {

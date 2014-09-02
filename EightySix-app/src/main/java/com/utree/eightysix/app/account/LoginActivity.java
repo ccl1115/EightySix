@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.account;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -11,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,9 +27,11 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.feed.FeedActivity;
+import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.request.LoginRequest;
 import com.utree.eightysix.response.UserResponse;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.widget.RoundedButton;
@@ -50,9 +52,6 @@ public class LoginActivity extends BaseActivity {
   @InjectView (R.id.et_phone_number)
   public EditText mEtPhoneNumber;
 
-  @InjectView (R.id.tv_forget_pwd)
-  public TextView mTvForgetPwd;
-
   @InjectView (R.id.btn_fixture)
   public RoundedButton mBtnFixture;
 
@@ -71,14 +70,17 @@ public class LoginActivity extends BaseActivity {
 
   private int mPhoneNumberLength = U.getConfigInt("account.phone.length");
 
+  private boolean mRequesting = false;
+
+  public static void start(Context context, String phoneNumber) {
+    Intent intent = new Intent(context, LoginActivity.class);
+    intent.putExtra("phone", phoneNumber);
+    context.startActivity(intent);
+  }
+
   @OnClick (R.id.btn_login)
   public void onBtnLoginClicked() {
     requestLogin();
-  }
-
-  @OnClick (R.id.tv_forget_pwd)
-  public void onTvForgetPwd() {
-    startActivity(new Intent(this, ForgetPwdActivity.class));
   }
 
   @OnClick (R.id.btn_fixture)
@@ -87,10 +89,21 @@ public class LoginActivity extends BaseActivity {
     finish();
   }
 
+  @OnClick (R.id.iv_captcha)
+  public void onIvCaptchaClicked() {
+    requestCaptcha();
+  }
+
+  @OnClick(R.id.tv_forget_pwd)
+  public void onTvForgetPwd() {
+    startActivity(new Intent(this, ForgetPwdActivity.class));
+  }
+
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     setTopTitle(getString(R.string.login) + getString(R.string.app_name));
+
 
     if (U.useFixture()) {
       mBtnFixture.setVisibility(View.VISIBLE);
@@ -167,18 +180,28 @@ public class LoginActivity extends BaseActivity {
       }
     });
 
-    getTopBar().setActionAdapter(new ActionAdapter());
-
+    String phone = getIntent().getStringExtra("phone");
+    if (phone != null) {
+      mEtPhoneNumber.setText(phone);
+      mEtPhoneNumber.setSelection(phone.length());
+    }
   }
 
   @Override
-  protected void onActionLeftOnClicked() {
+  protected void onDestroy() {
+    super.onDestroy();
+    Env.setFirstRun(false);
+  }
+
+  @Override
+  public void onActionLeftClicked() {
     finish();
   }
 
   @Override
   @Subscribe
   public void onLogout(Account.LogoutEvent event) {
+    finish();
   }
 
   @Subscribe
@@ -187,6 +210,12 @@ public class LoginActivity extends BaseActivity {
   }
 
   private void requestLogin() {
+
+    if (!InputValidator.pwdRegex(mEtPwd.getText().toString())) {
+      showToast("密码格式错误，仅限字母和数字哦");
+      return;
+    }
+
     OnResponse<UserResponse> onResponse = new OnResponse<UserResponse>() {
       @Override
       public void onResponse(UserResponse response) {
@@ -200,12 +229,13 @@ public class LoginActivity extends BaseActivity {
             } else {
               showToast(R.string.server_object_error);
             }
-          } else if (response.code == 2450) {
+          } else if (response.code == 2450 || response.code == 140371) {
             mLlCaptcha.setVisibility(View.VISIBLE);
             requestCaptcha();
           }
         }
         mBtnLogin.setEnabled(true);
+        mEtCaptcha.setText("");
         hideProgressBar();
       }
     };
@@ -226,15 +256,18 @@ public class LoginActivity extends BaseActivity {
   }
 
   private void requestCaptcha() {
+    if (mRequesting) return;
+    mRequesting = true;
     U.getRESTRequester().post(C.API_VALICODE_FIND_PWD, null,
         new RequestParams("phone", mEtPhoneNumber.getText().toString()), null,
-        new FileAsyncHttpResponseHandler(IOUtils.createTmpFile("valicode.png")) {
+        new FileAsyncHttpResponseHandler(IOUtils.createTmpFile("valicode_" + System.currentTimeMillis())) {
           @Override
           public void onSuccess(File file) {
             mIvCaptcha.setImageURI(Uri.fromFile(file));
             if (file != null) {
               file.delete();
             }
+            mRequesting = false;
           }
 
           @Override
@@ -243,47 +276,9 @@ public class LoginActivity extends BaseActivity {
             if (response != null) {
               response.delete();
             }
+            mRequesting = false;
           }
         }
     );
-  }
-
-  private class ActionAdapter implements TopBar.ActionAdapter {
-    @Override
-    public String getTitle(int position) {
-      if (position == 0) {
-        return getString(R.string.register);
-      }
-      return null;
-    }
-
-    @Override
-    public Drawable getIcon(int position) {
-      return null;
-    }
-
-    @Override
-    public Drawable getBackgroundDrawable(int position) {
-      if (position == 0) return U.gd(R.drawable.apptheme_primary_btn_dark);
-
-      return null;
-    }
-
-    @Override
-    public void onClick(View view, int position) {
-      if (position == 0) {
-        startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-      }
-    }
-
-    @Override
-    public int getCount() {
-      return 1;
-    }
-
-    @Override
-    public FrameLayout.LayoutParams getLayoutParams(int position) {
-      return new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-    }
   }
 }

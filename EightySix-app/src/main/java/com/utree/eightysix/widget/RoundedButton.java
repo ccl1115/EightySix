@@ -66,6 +66,11 @@ public final class RoundedButton extends TextView {
     invalidate();
   }
 
+  public void setBackgroundColor(ColorStateList colorStateList) {
+    mColorStateList = colorStateList;
+    invalidate();
+  }
+
     public void setRadius(int radius) {
         mRadius = radius;
     }

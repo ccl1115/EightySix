@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <com.utree.eightysix.app.feed.PostPostView
+            android:id="@+id/post_post_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#1C000000"/>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_above="@+id/tv_join"
+            android:gravity="center"
+            android:text="隔壁厂在说这些， 你们厂呢？"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"/>
+
+    <com.utree.eightysix.widget.RoundedButton
+            android:id="@+id/tv_join"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/tv_login"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:text="注册加入"
+            android:textSize="16sp"
+            app:radius="4dp"
+            app:background="@color/apptheme_primary_transparent_btn"/>
+
+    <TextView
+            android:id="@+id/tv_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_join"
+            android:layout_marginTop="16dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="50dp"
+            android:text="已有帐号登录"
+            android:textSize="14sp"
+            android:textColor="@color/apptheme_primary_text_light"/>
+
+    <TextView
+            android:id="@+id/tv_forget_pwd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/tv_join"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="50dp"
+            android:layout_alignParentBottom="true"
+            android:text="@string/forget_pwd"
+            android:textSize="14sp"
+            android:textColor="@color/apptheme_primary_text_light"/>
+
+</RelativeLayout>

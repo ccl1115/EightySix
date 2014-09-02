@@ -12,6 +12,12 @@
     <artifactId>EightySix-app</artifactId>
     <packaging>apk</packaging>
     <name>EightySix-app - Application</name>
+    <version>1.0.1</version>
+
+    <properties>
+        <android.manifest.versionCode>2</android.manifest.versionCode>
+        <android.manifest.versionName>${project.version}</android.manifest.versionName>
+    </properties>
 
     <dependencies>
 
@@ -26,12 +32,6 @@
             <groupId>android.support</groupId>
             <artifactId>compatibility-v4</artifactId>
             <type>jar</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -95,6 +95,13 @@
         </dependency>
 
         <dependency>
+            <groupId>com.edmodo</groupId>
+            <artifactId>cropper</artifactId>
+            <version>1.0.1</version>
+            <type>aar</type>
+        </dependency>
+
+        <dependency>
             <groupId>com.utree.eightysix</groupId>
             <artifactId>EightySix-data</artifactId>
             <version>1.0-SNAPSHOT</version>
@@ -108,14 +115,21 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}-${project.version}</finalName>
+        <finalName>${project.artifactId}-${project.version}-${android.manifest.versionCode}</finalName>
         <plugins>
             <plugin>
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                 <artifactId>android-maven-plugin</artifactId>
                 <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>manifest-update</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
-
 
         </plugins>
     </build>
@@ -164,24 +178,6 @@
                     </plugin>
                 </plugins>
             </build>
-        </profile>
-
-        <profile>
-            <id>debug</id>
-
-            <dependencies>
-                <dependency>
-                    <groupId>com.utree.eightysix</groupId>
-                    <artifactId>EightySix-fixture</artifactId>
-                    <version>1.0-SNAPSHOT</version>
-                    <exclusions>
-                        <exclusion>
-                            <groupId>com.utree.eightysix</groupId>
-                            <artifactId>EightySix-data</artifactId>
-                        </exclusion>
-                    </exclusions>
-                </dependency>
-            </dependencies>
         </profile>
 
         <profile>
@@ -249,6 +245,39 @@
                             </options>
                         </configuration>
                     </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jarsigner-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>signing</id>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <inherited>true</inherited>
+                                <configuration>
+                                    <removeExistingSignatures>true</removeExistingSignatures>
+                                    <archiveDirectory/>
+                                    <includes>
+                                        <include>target/*.apk</include>
+                                    </includes>
+                                    <keystore>../release.ks</keystore>
+                                    <storepass>qgLMR2HS</storepass>
+                                    <alias>release</alias>
+                                    <keypass>Rjz649S9</keypass>
+                                    <arguments>
+                                        <argument>-sigalg</argument>
+                                        <argument>MD5withRSA</argument>
+                                        <argument>-digestalg</argument>
+                                        <argument>SHA1</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
                 </plugins>
             </build>
         </profile>

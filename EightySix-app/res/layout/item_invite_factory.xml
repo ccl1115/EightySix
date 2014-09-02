@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:paddingLeft="8dp"
+             android:paddingRight="8dp">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="16dp"
+            android:background="#ff2b7db9">
+
+        <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:padding="8dp">
+
+            <com.utree.eightysix.widget.RoundedButton
+                    android:layout_gravity="center"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    app:radius="72dp"
+                    app:background="#44000000"/>
+
+            <com.utree.eightysix.widget.RoundedButton
+                    android:id="@+id/rb_hidden_count"
+                    android:layout_gravity="center"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    app:radius="64dp"
+                    app:background="#ff00b7ec"/>
+
+            <ImageView
+                android:id="@+id/iv_hidden_count"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_people_white"/>
+
+        </FrameLayout>
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+
+            <TextView
+                    android:id="@+id/tv_invite_friend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:text="想知道更多厂里的秘密吗？"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/white"/>
+
+            <com.utree.eightysix.widget.RoundedButton
+                    android:id="@+id/rb_invite"
+                    android:layout_width="160dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="5dp"
+                    android:text="去邀请朋友"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    app:radius="4dp"
+                    app:background="@android:color/white"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</FrameLayout>

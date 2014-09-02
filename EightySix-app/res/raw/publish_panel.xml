@@ -1,70 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<panel row="4" column="5" itemWidth="50" itemHeight="40" spaceHorizontal="10" spaceVertical="10">
+<panel row="4" column="5" itemWidth="58" itemHeight="58" spaceHorizontal="10" spaceVertical="10">
     <page>
         <item>
-            <color>#ffffaeaa</color>
-        </item>
-        <item>
-            <color>#ffd4706a</color>
-        </item>
-        <item>
-            <color>#ffaa3e39</color>
-        </item>
-        <item>
-            <color>#ff801b15</color>
-        </item>
-        <item>
-            <color>#ff550400</color>
+            <local-image>bg_13</local-image>
         </item>
 
         <item>
-            <color>#ffffd7aa</color>
+            <local-image>bg_20</local-image>
         </item>
         <item>
-            <color>#ffd4a26a</color>
+            <local-image>bg_24</local-image>
         </item>
         <item>
-            <color>#ffaa7539</color>
+            <local-image>bg_28</local-image>
         </item>
         <item>
-            <color>#ff804d15</color>
-        </item>
-        <item>
-            <color>#ff552d00</color>
+            <local-image>bg_31</local-image>
         </item>
 
         <item>
-            <color>#ff6e91a1</color>
+            <local-image>bg_40</local-image>
         </item>
         <item>
-            <color>#ff467386</color>
+            <local-image>bg_200</local-image>
         </item>
         <item>
-            <color>#ff27576b</color>
+            <local-image>bg_49</local-image>
         </item>
         <item>
-            <color>#ff103d50</color>
+            <local-image>bg_201</local-image>
         </item>
         <item>
-            <color>#ff022636</color>
+            <local-image>bg_63</local-image>
         </item>
 
         <item>
-            <color>#ff84c68c</color>
+            <local-image>bg_94</local-image>
         </item>
         <item>
-            <color>#ff52a55d</color>
+            <local-image>bg_96</local-image>
         </item>
         <item>
-            <color>#ff2c8437</color>
+            <local-image>bg_202</local-image>
         </item>
         <item>
-            <color>#ff10631b</color>
+            <local-image>bg_101</local-image>
         </item>
         <item>
-            <color>#ff004208</color>
+            <local-image>bg_105</local-image>
         </item>
     </page>
+
+    <page>
+        <item>
+            <color>#ffd6393d</color>
+        </item>
+        <item>
+            <color>#ffde6b7d</color>
+        </item>
+        <item>
+            <color>#ffa1c155</color>
+        </item>
+        <item>
+            <color>#ff33332e</color>
+        </item>
+        <item>
+            <color>#ff2faa67</color>
+        </item>
+
+        <item>
+            <color>#ff029081</color>
+        </item>
+        <item>
+            <color>#ff24a6b9</color>
+        </item>
+        <item>
+            <color>#ff834a2c</color>
+        </item>
+        <item>
+            <color>#ff7469be</color>
+        </item>
+        <item>
+            <color>#ff4d79bd</color>
+        </item>
+
+        <item>
+            <color>#ffe3a74a</color>
+        </item>
+        <item>
+            <color>#ffbe844f</color>
+        </item>
+        <item>
+            <color>#ff483fd9</color>
+        </item>
+        <item>
+            <color>#ff3829fd</color>
+        </item>
+        <item>
+            <color>#ff3f8a9f</color>
+        </item>
+    </page>
+
 
 </panel>

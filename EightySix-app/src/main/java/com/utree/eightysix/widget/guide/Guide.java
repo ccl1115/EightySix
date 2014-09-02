@@ -12,7 +12,10 @@ import android.view.animation.AnimationUtils;
  * @author Simon
  */
 public class Guide implements View.OnKeyListener, View.OnClickListener {
-	/**
+
+  private boolean mShowing;
+
+  /**
 	 * Cannot initialize out of package
 	 */
 	Guide() {
@@ -77,8 +80,13 @@ public class Guide implements View.OnKeyListener, View.OnClickListener {
 					mOnVisibilityChangedListener.onShown();
 				}
 			}
+      mShowing = true;
 		}
 	}
+
+  public boolean isShowing() {
+    return mShowing;
+  }
 
 	public void dismiss() {
 		if (mMaskView == null) {
@@ -124,6 +132,7 @@ public class Guide implements View.OnKeyListener, View.OnClickListener {
 			}
 			onDestroy();
 		}
+    mShowing = false;
 	}
 
 	private MaskView onCreateView(Activity activity) {

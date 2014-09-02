@@ -14,6 +14,7 @@
         android:background="#ffe2e3e5">
 
     <EditText
+            style="@style/TextView.SingleLine"
             android:id="@+id/tv_search_hint"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -26,6 +27,7 @@
             android:paddingRight="8dp"
             android:drawableLeft="@drawable/ic_search"
             android:drawablePadding="6dp"
-            android:editable="false"/>
+            android:editable="false"
+            android:inputType="none"/>
 
 </FrameLayout>

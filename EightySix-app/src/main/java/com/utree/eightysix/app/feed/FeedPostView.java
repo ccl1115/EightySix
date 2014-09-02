@@ -5,29 +5,29 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.*;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
+import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.app.feed.event.FeedPostCancelPraiseEvent;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
-import com.utree.eightysix.drawable.RoundRectDrawable;
-import com.utree.eightysix.event.AdapterDataSetChangedEvent;
-import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
 import com.utree.eightysix.data.Post;
-import com.utree.eightysix.utils.ShareUtils;
-import com.utree.eightysix.utils.Utils;
+import com.utree.eightysix.drawable.RoundRectDrawable;
+import com.utree.eightysix.utils.ColorUtil;
+import com.utree.eightysix.utils.Env;
+import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.widget.AsyncImageView;
+import com.utree.eightysix.widget.GearsView;
 
 /**
  */
-public class FeedPostView extends RelativeLayout {
+public class FeedPostView extends BasePostView {
 
   private static int sPostLength = U.getConfigInt("post.length");
 
@@ -46,13 +46,42 @@ public class FeedPostView extends RelativeLayout {
   @InjectView (R.id.tv_last_comment)
   public TextView mTvLastComment;
 
+  @InjectView (R.id.tv_last_comment_head)
+  public TextView mTvLastCommentHead;
+
+  @InjectView (R.id.tv_last_comment_tail)
+  public TextView mTvLastCommentTail;
+
   @InjectView (R.id.iv_share)
   public ImageView mIvShare;
 
   @InjectView (R.id.aiv_bg)
   public AsyncImageView mAivBg;
 
-  private Post mPost;
+  @InjectView (R.id.ll_comment)
+  public LinearLayout mLlComment;
+
+  @InjectView (R.id.fl_grid_panel)
+  public LinearLayout mLlPanel;
+
+  @InjectView (R.id.rl_item)
+  public LinearLayout mLlItem;
+
+  @InjectView (R.id.fl_content)
+  public FrameLayout mFlContent;
+
+  @InjectView (R.id.gv_loading)
+  public GearsView mGvLoading;
+
+  @InjectView (R.id.tv_hot)
+  public TextView mTvHot;
+
+  private Runnable mShareAnimation;
+
+  private View mTipOverlayShare;
+  private View mTipOverlaySource;
+  private View mTipOverlayPraise;
+  private View mTipOverlayRepost;
 
   public FeedPostView(Context context) {
     this(context, null, 0);
@@ -69,6 +98,27 @@ public class FeedPostView extends RelativeLayout {
 
     mIvShare.setBackgroundDrawable(
         new RoundRectDrawable(U.dp2px(2), getResources().getColorStateList(R.color.apptheme_transparent_bg)));
+
+    M.getRegisterHelper().register(this);
+
+    mShareAnimation = new Runnable() {
+      @Override
+      public void run() {
+        mIvShare.setVisibility(VISIBLE);
+        ObjectAnimator alpha = ObjectAnimator.ofFloat(mIvShare, "alpha", 0, 1f);
+        alpha.setDuration(500);
+        alpha.start();
+      }
+    };
+
+    setPostTheme(Color.BLACK);
+  }
+
+  @Subscribe
+  public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
+    if (!TextUtils.isEmpty(mPost.bgUrl)) {
+      mGvLoading.setVisibility(INVISIBLE);
+    }
   }
 
   public ImageView getIvShare() {
@@ -79,90 +129,99 @@ public class FeedPostView extends RelativeLayout {
     return mTvContent.getText();
   }
 
-  public void setContent(String content) {
-    mTvContent.setText(content);
-  }
-
   public CharSequence getSource() {
     return mTvSource.getText();
-  }
-
-  public void setSource(String source) {
-    mTvSource.setText(source);
   }
 
   public CharSequence getPraise() {
     return mTvPraise.getText();
   }
 
-  public void setPraise(String praise) {
-    mTvPraise.setText(praise);
-  }
-
   public CharSequence getComment() {
     return mTvComment.getText();
-  }
-
-  public void setComment(String comment) {
-    mTvComment.setText(comment);
   }
 
   public TextView getLastComment() {
     return mTvLastComment;
   }
 
-  public void setLastComment(String lastComment) {
-    mTvLastComment.setText(lastComment);
-  }
-
   public void setData(Post post) {
     mPost = post;
 
-    setContent(post.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content);
-    setComment(String.valueOf(post.comments));
-    setPraise(String.valueOf(post.praise));
-    setSource(post.source);
-    //setLastComment(post.comment.toString());
+    if (mPost == null) {
+      return;
+    }
+
+    String content = post.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content;
+
+    mTvContent.setText(content);
+    if (post.comments > 0) {
+      mTvComment.setText(String.valueOf(post.comments));
+    } else {
+      mTvComment.setText("");
+    }
+    mTvPraise.setText(String.valueOf(post.praise));
+    mTvLastComment.setText(post.comment);
+    mTvLastCommentHead.setText(post.commentHead);
+    mTvLastCommentTail.setText(post.commentTail);
+
+    if (mPost.isRepost == 1) {
+      mTvSource.setText("转自" + mPost.source);
+    } else {
+      mTvSource.setText(mPost.source);
+    }
+
+    if (mPost.isHot == 1) {
+      mTvHot.setVisibility(VISIBLE);
+    } else {
+      mTvHot.setVisibility(INVISIBLE);
+    }
 
     if (!TextUtils.isEmpty(post.bgUrl)) {
+      if (ImageUtils.getFromMemByUrl(post.bgUrl) == null) {
+        mGvLoading.setVisibility(VISIBLE);
+        mFlContent.setBackgroundColor(Color.WHITE);
+      } else {
+        mGvLoading.setVisibility(INVISIBLE);
+      }
       mAivBg.setUrl(post.bgUrl);
-      mTvContent.setBackgroundColor(Color.TRANSPARENT);
     } else {
+      mGvLoading.setVisibility(INVISIBLE);
+      mFlContent.setBackgroundColor(ColorUtil.strToColor(post.bgColor));
       mAivBg.setUrl(null);
-      mTvContent.setBackgroundColor(Utils.strToColor(post.bgColor));
     }
 
-    if (post.praised == 1) {
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(
-          getResources().getDrawable(R.drawable.ic_heart_red_pressed), null, null, null);
-    } else if (post.praise > 0) {
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(
-          getResources().getDrawable(R.drawable.ic_heart_white_normal), null, null, null);
+    if (mPost.praised == 1) {
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_red_pressed, 0, 0, 0);
+    } else if (mPost.praise > 0) {
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartRes, 0, 0, 0);
     } else {
       mTvPraise.setText("");
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(
-          getResources().getDrawable(R.drawable.ic_heart_outline_normal), null, null, null);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartOutlineRes, 0, 0, 0);
     }
 
-    if (getTop() <= 0) {
-      mIvShare.setVisibility(INVISIBLE);
-    }
+    mTvComment.setCompoundDrawablesWithIntrinsicBounds(mCommentRes, 0, 0, 0);
 
     if (TextUtils.isEmpty(post.comment)) {
-      mTvLastComment.setVisibility(GONE);
+      mLlComment.setVisibility(GONE);
     } else {
-      mTvLastComment.setVisibility(VISIBLE);
+      mLlComment.setVisibility(VISIBLE);
     }
+
+    mIvShare.setVisibility(INVISIBLE);
+    mIvShare.removeCallbacks(mShareAnimation);
+    mIvShare.postDelayed(mShareAnimation, 500);
   }
 
   @OnClick (R.id.iv_share)
   public void onIvShareClicked() {
-    ShareUtils.sharePostToQQ((Activity) getContext(), mPost);
+    U.getShareManager().sharePostDialog((Activity) getContext(), mPost).show();
   }
 
   @OnClick (R.id.tv_praise)
   public void onTvPraiseClicked() {
     if (mPost.praised == 1) {
+      U.getAnalyser().trackEvent(U.getContext(), "feed_post_praise", "cancel");
       AnimatorSet unlikeAnimator = new AnimatorSet();
       unlikeAnimator.setDuration(500);
       unlikeAnimator.playTogether(
@@ -172,8 +231,9 @@ public class FeedPostView extends RelativeLayout {
       unlikeAnimator.start();
       mPost.praised = 0;
       mPost.praise--;
-      U.getBus().post(new FeedPostCancelPraiseEvent(mPost));
+      U.getBus().post(new FeedPostPraiseEvent(mPost, true));
     } else {
+      U.getAnalyser().trackEvent(U.getContext(), "feed_post_praise", "praise");
       AnimatorSet praiseAnimator = new AnimatorSet();
       praiseAnimator.setDuration(800);
       praiseAnimator.playTogether(
@@ -183,37 +243,177 @@ public class FeedPostView extends RelativeLayout {
       praiseAnimator.start();
       mPost.praised = 1;
       mPost.praise++;
-      U.getBus().post(new FeedPostPraiseEvent(mPost));
+      U.getBus().post(new FeedPostPraiseEvent(mPost, false));
     }
-    U.getBus().post(new AdapterDataSetChangedEvent());
+    ((BaseAdapter) ((AdapterView) getParent()).getAdapter()).notifyDataSetChanged();
   }
 
-  @Subscribe
-  public void onListViewScrollStateIdled(ListViewScrollStateIdledEvent event) {
-    if (mIvShare.getVisibility() == INVISIBLE && getTop() >= 0) {
-      mIvShare.setVisibility(VISIBLE);
-      ObjectAnimator animator = ObjectAnimator.ofFloat(mIvShare, "alpha", 0f, 1f);
-      animator.setDuration(500);
-      animator.start();
+  @Override
+  protected void setPostTheme(int color) {
+    super.setPostTheme(color);
+
+    mTvComment.setTextColor(mMonoColor);
+    mTvContent.setTextColor(mMonoColor);
+    mTvPraise.setTextColor(mMonoColor);
+    mTvSource.setTextColor(mMonoColor);
+
+    if (mPost == null) return;
+
+    if (mPost.praised == 1) {
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_red_pressed, 0, 0, 0);
+    } else if (mPost.praise > 0) {
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartRes, 0, 0, 0);
+    } else {
+      mTvPraise.setText("");
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartOutlineRes, 0, 0, 0);
     }
+
+    mTvComment.setCompoundDrawablesWithIntrinsicBounds(mCommentRes, 0, 0, 0);
+
+    invalidate();
   }
 
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    final int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+    int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+//    if (mLlComment.getVisibility() == VISIBLE) {
+//      widthSize += U.dp2px(44);
+//    }
     super.onMeasure(widthMeasureSpec, widthSize + MeasureSpec.EXACTLY);
+//    super.onMeasure(widthMeasureSpec, widthSize - U.dp2px(16) + MeasureSpec.EXACTLY);
   }
 
   @Override
   protected void onAttachedToWindow() {
     super.onAttachedToWindow();
-    U.getBus().register(this);
+    M.getRegisterHelper().register(this);
   }
 
   @Override
   protected void onDetachedFromWindow() {
+    M.getRegisterHelper().unregister(this);
     super.onDetachedFromWindow();
-    U.getBus().unregister(this);
   }
 
+  void showShareTipOverlay() {
+
+    if (mTipOverlayShare == null) {
+      mTipOverlayShare = LayoutInflater.from(getContext())
+          .inflate(R.layout.overlay_tip_share, this, false);
+
+      mTipOverlayShare.findViewById(R.id.ll_tip).setBackgroundDrawable(
+          new RoundRectDrawable(U.dp2px(8), Color.WHITE));
+      mFlContent.addView(mTipOverlayShare);
+
+      mTipOverlayShare.setOnClickListener(new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          mTipOverlayShare.setVisibility(GONE);
+          U.getBus().post(new FeedAdapter.DismissTipOverlayEvent(
+              FeedAdapter.DismissTipOverlayEvent.TYPE_SHARE));
+          Env.setFirstRun("overlay_tip_share", false);
+        }
+      });
+    } else {
+      mTipOverlayShare.setVisibility(VISIBLE);
+    }
+
+  }
+
+  void hideShareTipOverlay() {
+    if (mTipOverlayShare != null) {
+      mTipOverlayShare.setVisibility(GONE);
+    }
+  }
+
+  void showSourceTipOverlay() {
+
+    if (mTipOverlaySource == null) {
+      mTipOverlaySource = LayoutInflater.from(getContext())
+          .inflate(R.layout.overlay_tip_source, this, false);
+
+      mTipOverlaySource.findViewById(R.id.ll_tip).setBackgroundDrawable(
+          new RoundRectDrawable(U.dp2px(8), Color.WHITE));
+      mFlContent.addView(mTipOverlaySource);
+    } else {
+      mTipOverlaySource.setVisibility(VISIBLE);
+    }
+
+    mTipOverlaySource.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        v.setVisibility(GONE);
+        U.getBus().post(new FeedAdapter.DismissTipOverlayEvent(
+            FeedAdapter.DismissTipOverlayEvent.TYPE_SOURCE));
+        Env.setFirstRun("overlay_tip_source", false);
+      }
+    });
+  }
+
+  void hideSourceTipOverlay() {
+    if (mTipOverlaySource != null) {
+      mTipOverlaySource.setVisibility(GONE);
+    }
+  }
+
+  void showPraiseTipOverlay() {
+
+    if (mTipOverlayPraise == null) {
+      mTipOverlayPraise = LayoutInflater.from(getContext())
+          .inflate(R.layout.overlay_tip_praise, this, false);
+
+      mTipOverlayPraise.findViewById(R.id.ll_tip).setBackgroundDrawable(
+          new RoundRectDrawable(U.dp2px(8), Color.WHITE));
+      mFlContent.addView(mTipOverlayPraise);
+
+      mTipOverlayPraise.setOnClickListener(new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          mTipOverlayPraise.setVisibility(GONE);
+          U.getBus().post(new FeedAdapter.DismissTipOverlayEvent(
+              FeedAdapter.DismissTipOverlayEvent.TYPE_PRAISE));
+          Env.setFirstRun("overlay_tip_praise", false);
+        }
+      });
+    } else {
+      mTipOverlayPraise.setVisibility(VISIBLE);
+    }
+
+  }
+
+  void hidePraiseTipOverlay() {
+    if (mTipOverlayPraise != null) {
+      mTipOverlayPraise.setVisibility(GONE);
+    }
+  }
+
+  void showRepostTipOverlay() {
+
+    if (mTipOverlayRepost == null) {
+      mTipOverlayRepost = LayoutInflater.from(getContext())
+          .inflate(R.layout.overlay_tip_repost, this, false);
+
+      mTipOverlayRepost.findViewById(R.id.ll_tip).setBackgroundDrawable(
+          new RoundRectDrawable(U.dp2px(8), Color.WHITE));
+      mFlContent.addView(mTipOverlayRepost);
+
+      mTipOverlayRepost.setOnClickListener(new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          mTipOverlayRepost.setVisibility(GONE);
+          U.getBus().post(new FeedAdapter.DismissTipOverlayEvent(
+              FeedAdapter.DismissTipOverlayEvent.TYPE_REPOST));
+          Env.setFirstRun("overlay_tip_repost", false);
+        }
+      });
+    } else {
+      mTipOverlayRepost.setVisibility(VISIBLE);
+    }
+  }
+
+  void hideRepostTipOverlay() {
+    if (mTipOverlayRepost != null) {
+      mTipOverlayRepost.setVisibility(GONE);
+    }
+  }
 }

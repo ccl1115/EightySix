@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
              android:layout_width="match_parent"
-             android:layout_height="wrap_content">
+             android:layout_height="wrap_content"
+             android:paddingLeft="8dp"
+             android:paddingRight="8dp"
+             android:orientation="vertical">
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:paddingLeft="10dp"
             android:paddingRight="16dp"
             android:background="#ff2b7db9">
@@ -19,7 +20,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:padding="10dp">
+                android:padding="8dp">
 
             <com.utree.eightysix.widget.RoundedButton
                     android:layout_gravity="center"
@@ -37,6 +38,15 @@
                     android:textSize="23sp"
                     app:radius="64dp"
                     app:background="#ff00b7ec"/>
+
+            <ImageView
+                android:id="@+id/iv_hidden_count"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="centerInside"
+                android:src="@drawable/symbol_alert"
+                android:visibility="gone"/>
 
         </FrameLayout>
 
@@ -71,4 +81,11 @@
         </LinearLayout>
 
     </LinearLayout>
-</FrameLayout>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:background="@android:color/white"
+            android:text="朋友是你通讯录里的联系人"/>
+</LinearLayout>

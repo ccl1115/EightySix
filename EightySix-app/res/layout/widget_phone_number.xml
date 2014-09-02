@@ -10,7 +10,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/account"
-            android:id="@+id/textView"
             android:textSize="16sp"
             android:layout_marginRight="14dp"
             android:paddingBottom="6dp"

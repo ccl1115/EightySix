@@ -14,25 +14,17 @@ public class InputValidator {
   public static boolean phoneNumber(CharSequence phoneNumber) {
     return phoneNumber.length() == U.getConfigInt("account.phone.length")
         && TextUtils.isDigitsOnly(phoneNumber)
-        && phoneNumber.charAt(0) == '1';
+        && (phoneNumber.charAt(0) == '1' || phoneNumber.toString().startsWith("298"));
 
   }
 
   public static boolean pwd(CharSequence pwd) {
-    return PWD_REGEX.matcher(pwd).matches()
-        && pwd.length() >= U.getConfigInt("account.pwd.length.min")
+    return pwd.length() >= U.getConfigInt("account.pwd.length.min")
         && pwd.length() <= U.getConfigInt("account.pwd.length.max");
   }
 
-  public static CharSequence trimPwd(CharSequence pwd) {
-    String s = pwd.toString();
-    if (s.contains(" ")) {
-      pwd = s.replace(" ", "");
-    }
-    if (pwd.length() > U.getConfigInt("account.pwd.length.max")) {
-      pwd = s.substring(0, U.getConfigInt("account.pwd.length.max"));
-    }
-    return pwd;
+  public static boolean pwdRegex(CharSequence pwd) {
+    return PWD_REGEX.matcher(pwd).matches();
   }
 
   public static boolean post(CharSequence post) {

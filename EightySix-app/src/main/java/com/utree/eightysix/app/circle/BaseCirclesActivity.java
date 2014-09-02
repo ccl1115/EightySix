@@ -7,18 +7,20 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import butterknife.OnItemLongClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
@@ -27,16 +29,21 @@ import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.drawable.RoundRectDrawable;
+import com.utree.eightysix.location.Location;
+import com.utree.eightysix.request.CircleSetRequest;
 import com.utree.eightysix.request.MyCirclesRequest;
 import com.utree.eightysix.request.SelectCirclesRequest;
 import com.utree.eightysix.response.CirclesResponse;
 import com.utree.eightysix.rest.OnResponse;
-import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.EmotionOnRefreshListener;
-import com.utree.eightysix.widget.LoadMoreCallback;
-import com.utree.eightysix.widget.RefresherView;
-import com.utree.eightysix.widget.TopBar;
-import java.util.ArrayList;
+import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.utils.Env;
+import com.utree.eightysix.view.SwipeRefreshLayout;
+import com.utree.eightysix.widget.*;
+
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  */
@@ -46,20 +53,14 @@ public class BaseCirclesActivity extends BaseActivity {
   private static final int MODE_SELECT = 1;
   private static final int MODE_MY = 2;
 
-  @InjectView (R.id.fl_search)
-  public FrameLayout mFlSearch;
-
   @InjectView (R.id.alv_refresh)
   public AdvancedListView mLvCircles;
 
   @InjectView (R.id.refresh_view)
-  public RefresherView mRefresherView;
+  public SwipeRefreshLayout mRefresherView;
 
-  @InjectView (R.id.tv_empty_text)
-  public TextView mTvEmptyText;
-
-  @InjectView (R.id.tv_head)
-  public TextView mTvHead;
+  @InjectView (R.id.rstv_empty)
+  public RandomSceneTextView mRstvEmpty;
 
   @InjectView (R.id.tv_search_hint)
   public EditText mRbSearchHint;
@@ -71,6 +72,11 @@ public class BaseCirclesActivity extends BaseActivity {
   private boolean mRefreshed;
 
   private Paginate.Page mPageInfo;
+  private boolean mLocatingFinished;
+  private boolean mRequestStarted;
+  private Location.OnResult mOnResult;
+
+  private ThemedDialog mCircleSetDialog;
 
   public static void startSelect(Context context) {
     Intent intent = new Intent(context, BaseCirclesActivity.class);
@@ -86,7 +92,13 @@ public class BaseCirclesActivity extends BaseActivity {
 
   @OnClick ({R.id.fl_search, R.id.tv_search_hint})
   public void onFlSearchClicked() {
-    startActivity(new Intent(this, CircleSearchActivity.class));
+    if (mMode == MODE_MY) {
+      U.getAnalyser().trackEvent(this, "circle_search", "my");
+      CircleSearchActivity.start(this, false);
+    } else if (mMode == MODE_SELECT) {
+      U.getAnalyser().trackEvent(this, "circle_search", "select");
+      CircleSearchActivity.start(this, true);
+    }
   }
 
   @OnItemClick (R.id.alv_refresh)
@@ -95,32 +107,34 @@ public class BaseCirclesActivity extends BaseActivity {
     if (circle != null) {
       if (mMode == MODE_MY) {
         circle.selected = true;
-        if (mRefreshed && mCircleListAdapter != null) {
-          FeedActivity.start(this, circle, new ArrayList<Circle>(mCircleListAdapter.getCircles().subList(0, 10)));
-        } else {
-          FeedActivity.start(this, circle);
-        }
+        FeedActivity.start(this, circle, true);
+        U.getAnalyser().trackEvent(this, "circle_select", "my");
       } else if (mMode == MODE_SELECT) {
-        AlertDialog dialog = new AlertDialog.Builder(this)
-            .setTitle(String.format("确认在%s上班么？", circle.name))
-            .setMessage("15天之内不能修改在职工厂")
-            .setPositiveButton("确认", new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                circle.selected = true;
-                FeedActivity.start(BaseCirclesActivity.this, circle,
-                    (ArrayList<Circle>) mCircleListAdapter.getCircles());
-              }
-            })
-            .setNegativeButton("重新选择", new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-              }
-            }).create();
-
-        dialog.show();
+        showCircleSetDialog(circle);
+        U.getAnalyser().trackEvent(this, "circle_select", "select");
       }
+    }
+  }
+
+  @OnItemLongClick (R.id.alv_refresh)
+  public boolean onLvCirclesItemLongClicked(int position) {
+    final Circle circle = mCircleListAdapter.getItem(position);
+    if (circle != null) {
+      if (mMode == MODE_MY && !circle.viewGroupType.equals("我所在的圈子")) {
+        showCircleSetDialog(circle);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @Override
+  public void onActionLeftClicked() {
+    if (mMode == MODE_MY) {
+      U.getAnalyser().trackEvent(this, "circle_title", "my");
+      finish();
+    } else {
+      U.getAnalyser().trackEvent(this, "circle_title", "select");
     }
   }
 
@@ -130,47 +144,48 @@ public class BaseCirclesActivity extends BaseActivity {
 
     setContentView(R.layout.activity_base_circles);
 
-    mTvEmptyText.setText("");
-
     mRbSearchHint.setHint(R.string.search_circles);
     mRbSearchHint.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(2), Color.WHITE));
+
+    mRefresherView.setColorScheme(R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed,
+        R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed);
 
     mMode = getIntent().getIntExtra("mode", MODE_MY);
     setTopTitle(mMode == MODE_MY ? getString(R.string.my_circles) : getString(R.string.select_circle));
 
-    getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
-      @Override
-      public String getTitle(int position) {
-        return getString(R.string.create);
-      }
+    if (mMode == MODE_MY) {
+      getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
+        @Override
+        public String getTitle(int position) {
+          return getString(R.string.create);
+        }
 
-      @Override
-      public Drawable getIcon(int position) {
-        return null;
-      }
+        @Override
+        public Drawable getIcon(int position) {
+          return null;
+        }
 
-      @Override
-      public Drawable getBackgroundDrawable(int position) {
-        return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
-      }
+        @Override
+        public Drawable getBackgroundDrawable(int position) {
+          return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
+        }
 
-      @Override
-      public void onClick(View view, int position) {
-        startActivity(new Intent(BaseCirclesActivity.this, CircleCreateActivity.class));
-      }
+        @Override
+        public void onClick(View view, int position) {
+          startActivity(new Intent(BaseCirclesActivity.this, CircleCreateActivity.class));
+        }
 
-      @Override
-      public int getCount() {
-        return 1;
-      }
+        @Override
+        public int getCount() {
+          return 1;
+        }
 
-      @Override
-      public FrameLayout.LayoutParams getLayoutParams(int position) {
-        return new FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT);
-      }
-    });
-
-    mLvCircles.setEmptyView(mTvEmptyText);
+        @Override
+        public TopBar.LayoutParams getLayoutParams(int position) {
+          return new TopBar.LayoutParams(WRAP_CONTENT, MATCH_PARENT);
+        }
+      });
+    }
 
     if (U.useFixture()) {
       mCircleListAdapter = new CircleListAdapter(U.getFixture(Circle.class, 20, "valid"));
@@ -215,6 +230,10 @@ public class BaseCirclesActivity extends BaseActivity {
 
         @Override
         public boolean onLoadMoreStart() {
+          if (mPageInfo != null) {
+            U.getAnalyser().trackEvent(BaseCirclesActivity.this,
+                "circle_load_more", String.valueOf(mPageInfo.currPage + 1));
+          }
           if (mRefreshed) {
             requestCircles(mPageInfo == null ? 1 : mPageInfo.currPage + 1);
           } else {
@@ -224,43 +243,46 @@ public class BaseCirclesActivity extends BaseActivity {
         }
       });
 
-      mRefresherView.setOnRefreshListener(new EmotionOnRefreshListener(mTvHead) {
-
+      mRefresherView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
         @Override
-        public void onPreRefresh() {
-          super.onPreRefresh();
+        public void onRefresh() {
+          showRefreshIndicator(true);
+          U.getAnalyser().trackEvent(BaseCirclesActivity.this, "circle_pull_refresh", "refresh");
           mRefreshed = true;
           requestCircles(1);
+          requestLocation();
         }
 
         @Override
-        public void onRefreshData() {
+        public void onDrag() {
+          showRefreshIndicator(false);
+        }
+
+        @Override
+        public void onCancel() {
+          hideRefreshIndicator();
         }
       });
     }
 
-    if (U.useFixture()) {
-      mRefresherView.setOnRefreshListener(new EmotionOnRefreshListener(mTvHead) {
-        @Override
-        public void onRefreshData() {
-          mCircleListAdapter = new CircleListAdapter(U.getFixture(Circle.class, 20, "valid"));
-          mLvCircles.setAdapter(mCircleListAdapter);
-        }
-      });
+    if (mMode == MODE_SELECT) {
+      setActionLeftDrawable(null);
     }
   }
 
   @Override
-  protected void onActionLeftOnClicked() {
-    if (mMode == MODE_MY) {
-      if (mRefreshed && mCircleListAdapter != null) {
-        FeedActivity.start(this, null, new ArrayList<Circle>(mCircleListAdapter.getCircles().subList(0, 10)));
-      } else {
-        FeedActivity.start(this);
-      }
-      finish();
-    } else if (mMode == MODE_SELECT) {
-      getQuitConfirmDialog().show();
+  public void onBackPressed() {
+    if (mMode != MODE_SELECT) {
+      super.onBackPressed();
+    }
+  }
+
+  private void requestLocation() {
+    long last = Env.getTimestamp("last_location");
+    long now = System.currentTimeMillis();
+    if (now - last > 7200000) { // 两个小时之后请求新的定位
+      M.getLocation().requestLocation();
+      Env.setTimestamp("last_location");
     }
   }
 
@@ -268,6 +290,30 @@ public class BaseCirclesActivity extends BaseActivity {
   @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();
+  }
+
+  protected void showCircleSetDialog(final Circle circle) {
+    mCircleSetDialog = new ThemedDialog(this);
+    mCircleSetDialog.setTitle(String.format("确认在[%s]上班么？", circle.shortName));
+    TextView textView = new TextView(this);
+    textView.setText("\n请注意：" + (U.getSyncClient().getSync() != null ? U.getSyncClient().getSync().selectFactoryDays : 15) + "天之内不能修改哦\n");
+    textView.setPadding(16, 16, 16, 16);
+    mCircleSetDialog.setContent(textView);
+
+    mCircleSetDialog.setPositive("设置在职", new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        requestCircleSet(circle);
+      }
+    });
+    mCircleSetDialog.setRbNegative("重新选择", new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        mCircleSetDialog.dismiss();
+      }
+    });
+
+    mCircleSetDialog.show();
   }
 
   private AlertDialog getQuitConfirmDialog() {
@@ -294,38 +340,75 @@ public class BaseCirclesActivity extends BaseActivity {
           if (page == 1) {
             mCircleListAdapter = new CircleListAdapter(response.object.lists);
             mLvCircles.setAdapter(mCircleListAdapter);
+
+            if (response.object.lists.size() == 0) {
+              mRstvEmpty.setVisibility(View.VISIBLE);
+            } else {
+              mRstvEmpty.setVisibility(View.GONE);
+            }
           } else if (mCircleListAdapter != null) {
             mCircleListAdapter.add(response.object.lists);
           }
           mPageInfo = response.object.page;
           mLvCircles.stopLoadMore();
-          hideProgressBar();
-        } else {
-          requestCircles(page);
         }
+        requestCircles(page);
       }
     }, CirclesResponse.class);
   }
 
   private void requestCircles(final int page) {
-    request(mMode == MODE_MY ? new MyCirclesRequest("", page) : new SelectCirclesRequest("", page), new OnResponse<CirclesResponse>() {
+    mRequestStarted = true;
+    request(mMode == MODE_MY ? new MyCirclesRequest("", page) : new SelectCirclesRequest("", page), new OnResponse2<CirclesResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        mLvCircles.stopLoadMore();
+        hideProgressBar();
+        hideRefreshIndicator();
+        mRefresherView.setRefreshing(false);
+        mRstvEmpty.setVisibility(View.VISIBLE);
+      }
+
       @Override
       public void onResponse(CirclesResponse response) {
-        if (response != null && response.code == 0) {
+        if (RESTRequester.responseOk(response)) {
           if (page == 1) {
             mCircleListAdapter = new CircleListAdapter(response.object.lists);
             mLvCircles.setAdapter(mCircleListAdapter);
+
+            if (response.object.lists.size() == 0) {
+              mRstvEmpty.setVisibility(View.VISIBLE);
+            } else {
+              mRstvEmpty.setVisibility(View.GONE);
+            }
           } else if (mCircleListAdapter != null) {
             mCircleListAdapter.add(response.object.lists);
           }
           mPageInfo = response.object.page;
         } else {
-          mTvEmptyText.setText(getString(R.string.no_circles));
+          if (mCircleListAdapter == null || mCircleListAdapter.getCount() == 0) {
+            mRstvEmpty.setVisibility(View.VISIBLE);
+          }
         }
         mLvCircles.stopLoadMore();
         hideProgressBar();
-        if (mRefreshed) mRefresherView.hideHeader();
+        hideRefreshIndicator();
+        mRefresherView.setRefreshing(false);
       }
+
+
     }, CirclesResponse.class);
+  }
+
+  private void requestCircleSet(final Circle circle) {
+    request(new CircleSetRequest(circle.id), new OnResponse<Response>() {
+      @Override
+      public void onResponse(Response response) {
+        if (RESTRequester.responseOk(response)) {
+          FeedActivity.start(BaseCirclesActivity.this, circle, true);
+          finish();
+        }
+      }
+    }, Response.class);
   }
 }

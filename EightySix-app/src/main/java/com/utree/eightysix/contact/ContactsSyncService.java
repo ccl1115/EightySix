@@ -6,30 +6,23 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Handler;
 import android.provider.ContactsContract;
-import static android.provider.ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME;
-import static android.provider.ContactsContract.CommonDataKinds.Phone.HAS_PHONE_NUMBER;
-import static android.provider.ContactsContract.CommonDataKinds.Phone.NUMBER;
-import static android.provider.ContactsContract.CommonDataKinds.Phone.RAW_CONTACT_ID;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonWriter;
 import com.jakewharton.disklrucache.DiskLruCache;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.U;
 import com.utree.eightysix.request.ImportContactsRequest;
-import com.utree.eightysix.rest.HandlerWrapper;
-import com.utree.eightysix.rest.OnResponse;
-import com.utree.eightysix.rest.RequestData;
-import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.rest.*;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.InputValidator;
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
+
+import static android.provider.ContactsContract.CommonDataKinds.Phone.*;
 
 /**
  * The workflow of syncing contacts:
@@ -67,16 +60,18 @@ public class ContactsSyncService extends IntentService {
 
   @Override
   protected void onHandleIntent(Intent intent) {
-    if (checkTimestamp() || intent.getBooleanExtra("force", false)) {
+    boolean force = intent.getBooleanExtra("force", false);
+    if (checkTimestamp() || force) {
 
       final List<Contact> cache = getContactsFromCache();
       final List<Contact> phone = getContactsFromPhone();
 
-      if (phone == null) {
+      if (phone == null || phone.size() == 0) {
         mHandler.post(new Runnable() {
           @Override
           public void run() {
-            U.getBus().post(new ContactsSyncEvent(false));
+            U.getBus().post(new ContactsSyncEvent(false, 0));
+            Env.setTimestamp(TIMESTAMP_KEY);
           }
         });
         return;
@@ -89,7 +84,7 @@ public class ContactsSyncService extends IntentService {
         }
       });
 
-      if (cache == null || !compareCacheAndPhone(cache, phone)) {
+      if (cache == null || force || !compareCacheAndPhone(cache, phone)) {
         cacheContacts(phone);
         uploadContact(phone);
       }
@@ -97,7 +92,11 @@ public class ContactsSyncService extends IntentService {
   }
 
   private boolean checkTimestamp() {
-    return new Date().getTime() - Env.getTimestamp(TIMESTAMP_KEY) > U.DAY_IN_MS;
+    Calendar target = Calendar.getInstance();
+    target.setTimeInMillis(Env.getTimestamp(TIMESTAMP_KEY));
+    Calendar now = Calendar.getInstance();
+
+    return now.get(Calendar.DAY_OF_YEAR) != target.get(Calendar.DAY_OF_YEAR);
   }
 
   private void uploadContact(final List<Contact> contacts) {
@@ -106,23 +105,27 @@ public class ContactsSyncService extends IntentService {
       public void run() {
         final ImportContactsRequest request = new ImportContactsRequest();
         RequestData data = U.getRESTRequester().convert(request);
-        for (int i = 0; i < contacts.size(); i++) {
-          Contact contact = contacts.get(i);
-          data.getParams().add(String.format("c[%d].name", i), contact.name);
-          data.getParams().add(String.format("c[%d].phone", i), contact.phone);
+        StringBuilder builder = new StringBuilder();
+        for (Contact contact : contacts) {
+          contact.name = contact.name.replaceAll(";;;|___", "");
+          contact.phone = contact.phone.replaceAll(";;;|___", "");
+          builder.append(contact.phone).append("___").append(contact.name).append(";;;");
         }
 
-        U.getRESTRequester().request(data, new HandlerWrapper<Response>(data, new OnResponse<Response>() {
+        data.getParams().add("contacts", builder.toString());
+
+        U.getRESTRequester().request(data, new HandlerWrapper<ContactsSyncResponse>(data, new OnResponse<ContactsSyncResponse>() {
           @Override
-          public void onResponse(Response response) {
-            if (response != null && response.code == 0) {
+          public void onResponse(ContactsSyncResponse response) {
+            if (RESTRequester.responseOk(response)) {
               Env.setTimestamp(TIMESTAMP_KEY);
-              U.getBus().post(new ContactsSyncEvent(true));
+              U.getBus().post(new ContactsSyncEvent(true, response.object.friendCount));
             } else {
-              U.getBus().post(new ContactsSyncEvent(false));
+              cacheContacts(new ArrayList<Contact>());
+              U.getBus().post(new ContactsSyncEvent(false, 0));
             }
           }
-        }, Response.class));
+        }, ContactsSyncResponse.class));
       }
     });
   }
@@ -131,7 +134,7 @@ public class ContactsSyncService extends IntentService {
     List<Contact> contacts = new ArrayList<Contact>();
     DiskLruCache.Snapshot snapshot = null;
     try {
-      snapshot = U.getContactsCache().get("contacts");
+      snapshot = U.getContactsCache().get(String.format("contacts_%s", Account.inst().getUserId()));
       if (snapshot == null) {
         return null;
       }
@@ -164,7 +167,7 @@ public class ContactsSyncService extends IntentService {
     OutputStreamWriter out = null;
     JsonWriter writer = null;
     try {
-      DiskLruCache.Editor editor = U.getContactsCache().edit("contacts");
+      DiskLruCache.Editor editor = U.getContactsCache().edit(String.format("contacts_%s", Account.inst().getUserId()));
       stream = editor.newOutputStream(0);
       out = new OutputStreamWriter(stream);
       writer = new JsonWriter(out);
@@ -194,10 +197,9 @@ public class ContactsSyncService extends IntentService {
 
     String[] projections = {RAW_CONTACT_ID, DISPLAY_NAME, NUMBER};
 
-    String selection = String.format("%s=1", HAS_PHONE_NUMBER);
 
     Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-        projections, selection, null, null);
+        projections, null, null, null);
 
     if (cursor == null) return null;
     if (!cursor.moveToFirst()) return contacts;

@@ -9,6 +9,7 @@ import butterknife.InjectView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.data.Circle;
+import com.utree.eightysix.utils.*;
 import java.util.Collection;
 import java.util.List;
 
@@ -25,6 +26,7 @@ class CircleBaseListAdapter extends BaseAdapter {
 
   public void add(Collection<Circle> list) {
     mBaseCircles.addAll(list);
+    notifyDataSetChanged();
   }
 
   @Override
@@ -57,10 +59,7 @@ class CircleBaseListAdapter extends BaseAdapter {
 
     Circle item = getItem(position);
 
-    final String info =
-        String.format("%.1fkm | 朋友(%d) | 工友(%d)", item.distance / 1000f, item.friendCount, item.workmateCount);
-
-    viewHolder.mTvCircleInfo.setText(info);
+    viewHolder.mTvCircleInfo.setText(item.info);
     viewHolder.mTvCircleName.setText(item.name);
 
     return convertView;

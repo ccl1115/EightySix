@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/rl_item"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:paddingLeft="10dp"
-              android:paddingRight="10dp">
+              android:paddingLeft="8dp"
+              android:paddingRight="8dp">
 
     <FrameLayout
+            android:id="@+id/fl_content"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
@@ -18,59 +20,38 @@
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"/>
 
-        <TextView
+        <View
+                android:id="@+id/v_mask"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/tv_content"
-                android:textSize="20sp"
-                android:textColor="@android:color/white"
-                android:gravity="center"
-                android:paddingLeft="40dp"
-                android:paddingRight="40dp"
-                android:background="@android:color/transparent"/>
+                android:background="#44000000"/>
 
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
+
+        <FrameLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:id="@+id/fl_panel"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:layout_marginBottom="5dp">
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp" >
 
             <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tv_source"
-                    android:singleLine="true"
-                    android:maxLines="1"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:textSize="14sp"
-                    android:textColor="@android:color/white"
-                    android:padding="5dp"/>
-
-            <TextView
+                    android:id="@+id/tv_hot"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tv_comment"
-                    android:drawableLeft="@drawable/ic_reply"
-                    android:gravity="center_vertical"
+                    android:background="@drawable/round_border_pressed"
+                    android:text="热帖"
                     android:textSize="14sp"
-                    android:textColor="@android:color/white"
-                    android:padding="5dp"/>
+                    android:textColor="#FFB3B3B3"
+                    android:padding="@dimen/feed_hot_padding"
+                    android:visibility="invisible"/>
+        </FrameLayout>
 
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tv_praise"
-                    android:gravity="center_vertical"
-                    android:textSize="14sp"
-                    android:textColor="@android:color/white"
-                    android:padding="5dp"/>
-
-        </LinearLayout>
+        <TextView
+                style="@style/TextView.PostStyle"
+                android:id="@+id/tv_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@android:color/white"
+                android:background="@android:color/transparent"/>
 
         <ImageView
                 android:id="@+id/iv_share"
@@ -80,20 +61,108 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:src="@drawable/ic_share"/>
+
+        <com.utree.eightysix.widget.GearsView
+                android:id="@+id/gv_loading"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:visibility="invisible"/>
+
+        <LinearLayout
+                android:id="@+id/fl_grid_panel"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="5dp">
+
+            <TextView
+                    android:id="@+id/tv_source"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/white"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="15dp"/>
+
+            <TextView
+                    android:id="@+id/tv_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_reply"
+                    android:gravity="center_vertical|right"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/white"
+                    android:minWidth="45dp"
+                    android:layout_marginRight="5dp"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_praise"
+                    android:gravity="center_vertical|right"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/white"
+                    android:minWidth="45dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="15dp"/>
+
+        </LinearLayout>
     </FrameLayout>
 
+    <View android:layout_width="match_parent"
+          android:layout_height="1px"
+          android:background="#09000000"/>
 
-    <TextView
-            android:id="@+id/tv_last_comment"
+
+    <LinearLayout
+            android:id="@+id/ll_comment"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:textSize="14sp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:gravity="left|center_vertical"
-            android:lines="1"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:textColor="@android:color/black"
-            android:background="@android:color/white"/>
+            android:layout_height="50dp"
+            android:background="@android:color/white"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+        <TextView
+                android:id="@+id/tv_last_comment_head"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textSize="14sp"
+                android:lines="1"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textColor="#ff8a8a8a"/>
+
+        <TextView
+                android:id="@+id/tv_last_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textSize="14sp"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp"
+                android:lines="1"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textColor="@android:color/black"/>
+
+        <TextView
+                android:id="@+id/tv_last_comment_tail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textSize="14sp"
+                android:lines="1"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textColor="#ff8a8a8a"/>
+    </LinearLayout>
+
 </LinearLayout>

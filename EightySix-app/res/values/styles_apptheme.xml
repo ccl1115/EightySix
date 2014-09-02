@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!-- Generated with http://android-holo-colors.com -->
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
     <style name="Widget"/>
 
     <style name="Widget.EditText.AppTheme" parent="android:Widget.EditText">
@@ -13,7 +13,9 @@
     </style>
 
     <style name="Widget.CheckBox.AppTheme" parent="android:Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/apptheme_btn_check_holo_light</item>
     </style>
+
 
     <style name="Widget.RadioButton.AppTheme" parent="android:Widget.CompoundButton.RadioButton">
     </style>
@@ -25,6 +27,12 @@
         <item name="titleColor">#fff7f7f7</item>
         <item name="topLineColor">#ff41454d</item>
         <item name="botLineColor">#ff2b2333</item>
+    </style>
+
+    <style name="Widget.RefreshIndicator"/>
+
+    <style name="Widget.RefreshIndicator.AppTheme">
+        <item name="android:background">#ff363940</item>
     </style>
 
     <style name="Widget.RoundedButton.Apptheme.Small">
@@ -57,20 +65,24 @@
         <item name="android:shadowColor">#FF333333</item>
         <item name="android:shadowDx">0</item>
         <item name="android:shadowDy">0</item>
-        <item name="android:shadowRadius">2</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:gravity">center</item>
-        <item name="android:padding">16dp</item>
+        <item name="android:shadowRadius">1</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="TextView.PostStyle">
+        <item name="android:textSize" tools:ignore="SpUsage">23dp</item>
+        <item name="android:maxLines">7</item>
+        <item name="android:paddingLeft">40dp</item>
+        <item name="android:paddingRight">40dp</item>
+        <item name="android:gravity">center</item>
+    </style>
 
     <style name="Widget.ListView.Apptheme" parent="android:Widget.ListView">
         <item name="android:listSelector">@drawable/apptheme_primary_list_selector</item>
         <item name="android:fadingEdge">none</item>
         <item name="android:divider">@null</item>
         <item name="android:dividerHeight">0dp</item>
-        <item name="android:overScrollMode">never</item>
+        <item name="android:overScrollMode">ifContentScrolls</item>
     </style>
 
     <style name="TextView"/>

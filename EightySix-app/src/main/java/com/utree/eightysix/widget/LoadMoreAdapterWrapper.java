@@ -1,5 +1,6 @@
 package com.utree.eightysix.widget;
 
+import android.database.DataSetObserver;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -85,7 +86,7 @@ class LoadMoreAdapterWrapper extends BaseAdapter {
 
   @Override
   public int getViewTypeCount() {
-    return (hasMore() ? 1 : 0) + mListAdapter.getViewTypeCount();
+    return 1 + mListAdapter.getViewTypeCount();
   }
 
   public void stopLoadMore() {
@@ -103,5 +104,17 @@ class LoadMoreAdapterWrapper extends BaseAdapter {
   public void notifyDataSetInvalidated() {
     super.notifyDataSetInvalidated();
     ((BaseAdapter) mListAdapter).notifyDataSetInvalidated();
+  }
+
+  @Override
+  public void registerDataSetObserver(DataSetObserver observer) {
+    super.registerDataSetObserver(observer);
+    mListAdapter.registerDataSetObserver(observer);
+  }
+
+  @Override
+  public void unregisterDataSetObserver(DataSetObserver observer) {
+    super.unregisterDataSetObserver(observer);
+    mListAdapter.unregisterDataSetObserver(observer);
   }
 }

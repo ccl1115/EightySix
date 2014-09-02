@@ -1,15 +1,18 @@
 package com.utree.eightysix.app.msg;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import com.utree.eightysix.U;
 import com.utree.eightysix.data.Post;
+import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 import java.util.List;
 
 /**
  * @author simon
  */
-class MsgAdapter extends BaseAdapter {
+abstract class MsgAdapter<T extends BaseMsgItemView> extends BaseAdapter {
 
   private List<Post> mPosts;
 
@@ -24,6 +27,12 @@ class MsgAdapter extends BaseAdapter {
       mPosts.addAll(posts);
     }
     notifyDataSetChanged();
+  }
+
+  public void remove(Post post) {
+    if (mPosts.remove(post)) {
+      notifyDataSetChanged();
+    }
   }
 
   @Override
@@ -48,11 +57,13 @@ class MsgAdapter extends BaseAdapter {
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
     if (convertView == null) {
-      convertView = new MsgItemView(parent.getContext());
+      convertView = newView(parent.getContext());
     }
 
-    ((MsgItemView) convertView).setData(getItem(position));
+    ((BaseMsgItemView) convertView).setData(getItem(position));
 
     return convertView;
   }
+
+  protected abstract T newView(Context context);
 }

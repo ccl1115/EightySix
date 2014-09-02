@@ -11,6 +11,12 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/activity_top_bar_height"/>
 
+    <com.utree.eightysix.widget.RefreshIndicator
+            android:id="@+id/refresh_indicator"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_top_bar_height"
+            android:visibility="invisible"/>
+
     <FrameLayout
             android:id="@+id/progress_bar"
             android:visibility="invisible"
@@ -19,16 +25,36 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true">
 
-        <FrameLayout
+        <View
+                android:id="@+id/v_progress_mask"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:clickable="true"
+                android:background="@color/apptheme_mandatory_mask_color"/>
+
+        <LinearLayout
                 android:id="@+id/fl_loading_wrapper"
                 android:padding="15dp"
+                android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center">
 
             <ProgressBar
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-        </FrameLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="8dp"/>
+
+            <TextView
+                    android:id="@+id/tv_loading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:visibility="gone"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"/>
+        </LinearLayout>
     </FrameLayout>
 </RelativeLayout>

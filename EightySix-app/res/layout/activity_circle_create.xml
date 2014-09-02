@@ -27,11 +27,13 @@
                 android:hint="@string/circle_abbreviation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:maxLength="6"
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"/>
 
         <TextView
+                style="@style/TextView.SingleLine"
                 android:id="@+id/tv_location"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
@@ -91,16 +93,5 @@
                 android:text="@string/create_circle"
                 android:textSize="16sp"/>
 
-        <CheckedTextView
-                android:id="@+id/ctv_invite"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:textSize="14sp"
-                android:text="@string/invite_people"
-                android:checkMark="@drawable/apptheme_check_mark"/>
     </LinearLayout>
 </ScrollView>

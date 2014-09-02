@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="apptheme_primary_light_color">#FF30b200</color>
-    <color name="apptheme_primary_light_color_pressed">#ff228000</color>
-    <color name="apptheme_primary_light_color_disabled">#fff0f0f0</color>
+    <color name="apptheme_primary_light_color">#ff8422e5</color>
+    <color name="apptheme_primary_light_color_pressed">#ff551694</color>
+    <color name="apptheme_primary_light_color_disabled">#fff7f7f7</color>
+
+    <color name="apptheme_primary_grey_color">#ffd8d8d8</color>
+    <color name="apptheme_primary_grey_color_pressed">#ff505050</color>
+    <color name="apptheme_primary_grey_color_disabled">#ffd8d8d8</color>
+
+    <color name="apptheme_primary_transparent_color">#33000000</color>
+    <color name="apptheme_primary_transparent_color_pressed">#88000000</color>
+
+    <color name="apptheme_primary_dark_color">#FFA2A2A2</color>
+
+    <color name="apptheme_progress_bar_bg">#88000000</color>
+    <color name="apptheme_mandatory_mask_color">#cc000000</color>
 
     <color name="apptheme_secondary_light_color">#ffe64545</color>
     <color name="apptheme_secondary_light_color_pressed">#ffa23131</color>
     <color name="apptheme_secondary_light_color_disabled">#ff505050</color>
 
-    <color name="apptheme_primary_dark_color">#FFA2A2A2</color>
-
-    <color name="apptheme_progress_bar_bg">#88000000</color>
+    <color name="apptheme_secondary_dark_color">#FF5e4680</color>
+    <color name="apptheme_secondary_dark_color_pressed">#ff3f2f56</color>
+    <color name="apptheme_secondary_dark_color_disabled">#fff7f7f7</color>
 </resources>

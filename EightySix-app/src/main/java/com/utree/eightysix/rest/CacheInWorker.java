@@ -29,6 +29,8 @@ public class CacheInWorker extends AsyncTask<Void, Void, Void> {
 
   @Override
   protected Void doInBackground(Void... voids) {
+    if (U.getApiCache() == null) return null;
+
     if (mInputStream != null) {
       cacheInputStream();
     } else if (mValue != null) {

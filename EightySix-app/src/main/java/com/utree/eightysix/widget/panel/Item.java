@@ -1,9 +1,8 @@
 package com.utree.eightysix.widget.panel;
 
 import android.util.TypedValue;
+import com.utree.eightysix.U;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -13,29 +12,65 @@ import org.xmlpull.v1.XmlPullParserException;
 public class Item {
 
   private Page mParent;
+  private TypedValue mValue;
+
+  public Item(Page parent, XmlPullParser parser) throws XmlPullParserException, IOException {
+    mParent = parent;
+    int eventType;
+    while ((eventType = parser.getEventType()) != XmlPullParser.END_TAG) {
+      if (eventType == XmlPullParser.START_TAG) {
+        if ("color".equals(parser.getName())) {
+          mValue = parseColor(parser);
+        } else if ("bg-image".equals(parser.getName())) {
+          mValue = parseBgImage(parser);
+        } else if ("local-image".equals(parser.getName())) {
+          mValue = parseLocalImage(parser);
+        }
+      }
+      parser.next();
+    }
+  }
 
   public Page getParent() {
     return mParent;
   }
 
-  public List<TypedValue> getValues() {
-    return mValues;
+  public TypedValue getValue() {
+    return mValue;
   }
 
-  private List<TypedValue> mValues = new ArrayList<TypedValue>();
+  @Override
+  public String toString() {
+    return "Item{" +
+        "mParent=" + mParent +
+        ", mValue=" + mValue +
+        '}';
+  }
 
-  public Item(Page parent, XmlPullParser parser) throws XmlPullParserException, IOException {
-    mParent = parent;
-    int eventType;
-    while((eventType = parser.getEventType()) != XmlPullParser.END_TAG) {
-      if (eventType == XmlPullParser.START_TAG) {
-        if ("color".equals(parser.getName())) {
-          TypedValue value = parseColor(parser);
-          if (value != null) mValues.add(value);
-        }
-      }
-      parser.next();
+  private TypedValue parseLocalImage(XmlPullParser parser) throws IOException, XmlPullParserException {
+    parser.next();
+    final String value = parser.getText();
+    final int id = U.getContext().getResources().getIdentifier(value, "drawable", U.getContext().getPackageName());
+    TypedValue tv = new TypedValue();
+    if (id != 0) {
+      tv.type = TypedValue.TYPE_REFERENCE;
+      tv.resourceId = id;
     }
+    parser.next();
+    parser.next();
+
+    return tv;
+  }
+
+  private TypedValue parseBgImage(XmlPullParser parser) throws XmlPullParserException, IOException {
+    parser.next();
+    final String url = String.format("http://%s.%s/%s", U.getBgBucket(), U.getConfig("storage.host"), parser.getText());
+    TypedValue tv = new TypedValue();
+    tv.string = url;
+    tv.type = TypedValue.TYPE_STRING;
+    parser.next();
+    parser.next();
+    return tv;
   }
 
   private TypedValue parseColor(XmlPullParser parser) throws XmlPullParserException, IOException {
@@ -52,13 +87,5 @@ public class Item {
     parser.next();
     parser.next();
     return null;
-  }
-
-  @Override
-  public String toString() {
-    return "Item{" +
-        "mParent=" + mParent +
-        ", mValues=" + mValues +
-        '}';
   }
 }

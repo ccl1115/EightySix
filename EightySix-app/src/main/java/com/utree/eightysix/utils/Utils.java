@@ -1,19 +1,17 @@
 package com.utree.eightysix.utils;
 
-import android.widget.Toast;
-import com.utree.eightysix.U;
-import java.util.Date;
-
 /**
  * @author simon
  */
 public class Utils {
 
-  public static int strToColor(String color) {
-    try {
-      return (int) Long.parseLong(color, 16);
-    } catch (NumberFormatException e) {
-      return 0x00000000;
+  public static String getDisplayDistance(int distance) {
+    if (distance < 100) {
+      return "小于100米";
+    } else if (distance < 1000) {
+      return String.format("%d千米", 100 * (distance / 100));
+    } else {
+      return String.format("%.1f千米", distance / 1000f);
     }
   }
 }

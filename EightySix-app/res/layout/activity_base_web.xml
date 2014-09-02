@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:orientation="vertical"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+    <WebView
+            android:id="@+id/wb_base"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    <com.utree.eightysix.widget.GearsView
+            android:id="@+id/gv_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+
+    <LinearLayout
+            android:id="@+id/ll_error"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:text="@string/web_load_failed"/>
+    </LinearLayout>
+</FrameLayout>

@@ -23,5 +23,11 @@
             <groupId>android</groupId>
             <artifactId>android</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.utree.eightysix</groupId>
+            <artifactId>EightySix-base</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

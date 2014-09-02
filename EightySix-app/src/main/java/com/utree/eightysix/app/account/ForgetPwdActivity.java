@@ -233,6 +233,12 @@ public class ForgetPwdActivity extends BaseActivity {
   }
 
   private void requestFindPwd3() {
+
+    if (!InputValidator.pwdRegex(mEtNewPwd.getText().toString())) {
+      showToast("密码格式错误，仅限字母和数字哦");
+      return;
+    }
+
     request(new FindPwd3Request(mEtPhoneNumber.getText().toString(), mEtNewPwd.getText().toString()),
         new OnResponse<Response>() {
           @Override
@@ -260,7 +266,7 @@ public class ForgetPwdActivity extends BaseActivity {
   }
 
   @Override
-  protected void onActionLeftOnClicked() {
+  public void onActionLeftClicked() {
     finish();
   }
 }

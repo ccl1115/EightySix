@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
               android:id="@+id/parent"
               android:orientation="vertical"
               android:layout_width="wrap_content"
-              android:layout_height="wrap_content">
+              android:layout_height="wrap_content"
+              android:gravity="center_horizontal">
 
     <TextView
             android:id="@+id/tv_title"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="55dp"
             android:padding="15dp"
             android:textSize="18sp"
             android:textColor="@color/apptheme_primary_light_color"
@@ -24,7 +27,7 @@
 
     <FrameLayout
             android:id="@+id/fl_content"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
     </FrameLayout>
@@ -38,31 +41,34 @@
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
 
         <com.utree.eightysix.widget.RoundedButton
                 android:id="@+id/rb_positive"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="35dp"
                 android:layout_weight="1"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:paddingLeft="50dp"
-                android:paddingRight="50dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
                 android:textSize="16sp"
                 android:visibility="gone"/>
 
         <com.utree.eightysix.widget.RoundedButton
                 android:id="@+id/rb_negative"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="35dp"
                 android:layout_weight="1"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:paddingLeft="50dp"
-                android:paddingRight="50dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
                 android:textSize="16sp"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:textColor="@color/apptheme_primary_grey_btn_text"
+                app:background="@color/apptheme_primary_grey_btn"/>
 
     </LinearLayout>
 </LinearLayout>

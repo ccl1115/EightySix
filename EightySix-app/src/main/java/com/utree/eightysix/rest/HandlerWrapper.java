@@ -1,14 +1,13 @@
 package com.utree.eightysix.rest;
 
 import android.widget.Toast;
+import com.google.gson.Gson;
 import com.loopj.android.http.BaseJsonHttpResponseHandler;
-import com.utree.eightysix.BuildConfig;
-import com.utree.eightysix.C;
-import com.utree.eightysix.R;
-import com.utree.eightysix.U;
+import com.utree.eightysix.*;
 import de.akquinet.android.androlog.Log;
-import java.net.ConnectException;
 import org.apache.http.HttpStatus;
+
+import java.net.ConnectException;
 
 /**
  * Wrapper of handler use to parse response data using Gson and cache automatically
@@ -20,6 +19,7 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
   private OnResponse<T> mOnResponse;
   private RequestData mRequestData;
   private Class<T> mClz;
+  private Gson mGson;
 
   /**
    * No cache constructor
@@ -33,8 +33,20 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
     mClz = clz;
   }
 
+  public HandlerWrapper(RequestData data, OnResponse<T> onResponse, Class<T> clz, Gson customGson) {
+    this(data, onResponse, clz);
+    mGson = customGson;
+  }
+
+  @Override
+  public void onStart() {
+    super.onStart();
+    Log.d(C.TAG.RR, "request starting:" + mRequestData.getApi());
+  }
+
   @Override
   public void onSuccess(int statusCode, org.apache.http.Header[] headers, String rawResponse, T response) {
+
     if (response != null) {
       handleObjectError(response);
 
@@ -49,18 +61,27 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
         Toast.makeText(U.getContext(), "HttpStatus: " + statusCode, Toast.LENGTH_SHORT).show();
       }
     }
-    mOnResponse.onResponse(response);
+    try {
+      mOnResponse.onResponse(response);
+    } catch (Throwable t) {
+      if (mOnResponse instanceof OnResponse2) {
+        ((OnResponse2) mOnResponse).onResponseError(t);
+      }
+    }
   }
 
   @Override
   public void onFailure(int statusCode, org.apache.http.Header[] headers, Throwable e, String rawData, T errorResponse) {
     if (e != null) {
       if (e instanceof ConnectException) {
-        Toast.makeText(U.getContext(), U.gs(R.string.server_connection_exception), Toast.LENGTH_SHORT).show();
+        U.showToast(U.getContext().getString(R.string.server_connection_exception));
+      } else {
+        U.showToast(U.getContext().getString(R.string.server_connection_exception));
       }
       if (BuildConfig.DEBUG) {
         e.printStackTrace();
       }
+      U.getReporter().reportRequestError(mRequestData, e);
     }
 
     if (statusCode > HttpStatus.SC_MULTIPLE_CHOICES) {
@@ -69,22 +90,58 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
       } else {
         U.showToast(U.gs(R.string.server_500));
       }
+      U.getReporter().reportRequestStatusCode(mRequestData, statusCode);
     }
-    mOnResponse.onResponse(null);
+    try {
+      mOnResponse.onResponse(null);
+    } catch (Throwable t) {
+      if (mOnResponse instanceof OnResponse2) {
+        ((OnResponse2) mOnResponse).onResponseError(t);
+      }
+    }
   }
 
   @Override
   public T parseResponse(String responseBody) throws Throwable {
     if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "response: " + responseBody);
-    return U.getGson().fromJson(responseBody, mClz);
+
+    if (mGson == null) {
+      return U.getGson().fromJson(responseBody, mClz);
+    } else {
+      return mGson.fromJson(responseBody, mClz);
+    }
   }
 
   private void handleObjectError(T response) {
     if (response.code != 0) {
-      if (BuildConfig.DEBUG) {
-        Toast.makeText(U.getContext(), String.format("%s(%h)", response.message, response.code), Toast.LENGTH_SHORT).show();
-      } else {
-        Toast.makeText(U.getContext(), response.message, Toast.LENGTH_SHORT).show();
+      if ((response.code & 0xffff) == 0x1014 || (response.code & 0xffff) == 0x1025
+          || (response.code & 0xffff) == 0x1024) {
+        // 用户token失效，退出客户端
+        Account.inst().logout();
+      }
+
+      switch (response.code & 0xf0000) {
+        case 0x10000:
+          // mta
+          U.getReporter().reportRequestStatusCode(mRequestData, response.code);
+          break;
+        case 0x20000:
+          // show
+          if (BuildConfig.DEBUG) {
+            U.showToast(String.format("%s(%h)", response.message, response.code));
+          } else {
+            U.showToast(response.message);
+          }
+          break;
+        case 0x30000:
+          // show + mta
+          if (BuildConfig.DEBUG) {
+            U.showToast(String.format("%s(%h)", response.message, response.code));
+          } else {
+            U.showToast(response.message);
+          }
+          U.getReporter().reportRequestStatusCode(mRequestData, response.code);
+          break;
       }
     }
   }

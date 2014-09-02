@@ -71,7 +71,7 @@ class MaskView extends ViewGroup {
 			if (child != null) {
 				LayoutParams lp = (LayoutParams) child.getLayoutParams();
 				if (lp == null) {
-					child.setLayoutParams(lp);
+					child.setLayoutParams(null);
 				}
 				measureChild(child, w + MeasureSpec.AT_MOST, h + MeasureSpec.AT_MOST);
 			}
@@ -214,11 +214,8 @@ class MaskView extends ViewGroup {
 	@Override
 	protected void dispatchDraw(Canvas canvas) {
 		final long drawingTime = getDrawingTime();
-		canvas.save();
-		// FIXME
-        canvas.clipRect(mTargetRect, Region.Op.DIFFERENCE);
+    //canvas.clipRect(mTargetRect, Region.Op.DIFFERENCE);
 		canvas.drawRect(mFullingRect, mFullingPaint);
-		canvas.restore();
 
 		try {
 			View child;

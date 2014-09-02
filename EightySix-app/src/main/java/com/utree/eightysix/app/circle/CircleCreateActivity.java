@@ -1,19 +1,23 @@
 package com.utree.eightysix.app.circle;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.CheckedTextView;
+import android.text.TextUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnFocusChange;
 import butterknife.OnTextChanged;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
-import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.C;
+import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
@@ -26,8 +30,8 @@ import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.widget.RoundedButton;
-import de.akquinet.android.androlog.Log;
 import java.io.File;
+import java.util.regex.Pattern;
 
 /**
  * @author simon
@@ -35,6 +39,8 @@ import java.io.File;
 @Layout (R.layout.activity_circle_create)
 @TopTitle (R.string.create_circle)
 public class CircleCreateActivity extends BaseActivity implements Location.OnResult, LogoutListener {
+
+  private static final Pattern sAbbreviationPattern = Pattern.compile("(股份)*(责任)*(有限)*(股份)*(责任)*第*(一|二|三|四|五|六|七|八|九|十|零)*分*(公司|厂)|集团|\\(.+\\)|（.+）");
 
   @InjectView (R.id.et_circle_name)
   public EditText mEtCircleName;
@@ -57,12 +63,18 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
   @InjectView (R.id.rb_create)
   public RoundedButton mRbCreate;
 
-  @InjectView (R.id.ctv_invite)
-  public CheckedTextView mCtvInvite;
+  private boolean mRequesting;
+  private Location.Result mResult;
 
-  @OnClick (R.id.ctv_invite)
-  public void onCtvInviteClicked() {
-    mCtvInvite.setChecked(!mCtvInvite.isChecked());
+  public static void start(Context context, String circle) {
+    Intent intent = new Intent(context, CircleCreateActivity.class);
+    intent.putExtra("circle", circle);
+
+    if (!(context instanceof Activity)) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    context.startActivity(intent);
   }
 
   @OnTextChanged (R.id.et_circle_name)
@@ -75,6 +87,11 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
     }
   }
 
+  @OnClick (R.id.iv_captcha)
+  public void onIvCaptchaClicked() {
+    requestCaptcha();
+  }
+
   @OnTextChanged (R.id.et_circle_abbreviation)
   public void onEtCircleAbbreviationTextChanged(CharSequence t) {
     final int length = U.getConfigInt("circle.short.length");
@@ -85,9 +102,26 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
     }
   }
 
+  @OnClick(R.id.tv_location)
+  public void onTvLocationClicked() {
+    M.getLocation().requestLocation();
+    mTvLocation.setText(R.string.locating);
+  }
+
+  @OnFocusChange(R.id.et_circle_abbreviation)
+  public void onEtCircleAbbreviationFocusChange(boolean focused) {
+    if (focused) {
+      if (mEtCircleAbbreviation.getText().length() == 0) {
+        String text = mEtCircleName.getText().toString();
+        text = sAbbreviationPattern.matcher(text).replaceAll("");
+        mEtCircleAbbreviation.setText(text);
+      }
+    }
+  }
+
   @OnClick (R.id.rb_reget_captcha)
   public void onRbRegetCaptchaClicked() {
-    showToast("TODO renew captcha");
+    requestCaptcha();
   }
 
   @OnClick (R.id.rb_create)
@@ -99,37 +133,23 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    String circle = getIntent().getStringExtra("circle");
+    mEtCircleName.setText(circle);
+
     requestCaptcha();
-  }
-
-  private void requestCaptcha() {
-    U.getRESTRequester().post(C.API_VALICODE_CREATE_FACTORY, null,
-        U.getRESTRequester().addAuthParams(null), null,
-        new FileAsyncHttpResponseHandler(IOUtils.createTmpFile("valicode.jpg")) {
-          @Override
-          public void onSuccess(File file) {
-            mIvCaptcha.setImageURI(Uri.fromFile(file));
-          }
-
-          @Override
-          public void onFailure(Throwable e, File response) {
-            if (BuildConfig.DEBUG) Log.d("CircleCreateActivity", e.getMessage());
-          }
-        });
   }
 
   @Override
   protected void onResume() {
     super.onResume();
 
-    U.getLocation().onResume(this);
+    M.getLocation().onResume(this);
 
     getHandler().postDelayed(new Runnable() {
       @Override
       public void run() {
-        U.getLocation().requestLocation();
+        M.getLocation().requestLocation();
         mTvLocation.setText(getString(R.string.locating));
-        showProgressBar();
       }
     }, 1000);
   }
@@ -138,17 +158,24 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
   protected void onPause() {
     super.onPause();
 
-    U.getLocation().onPause(this);
+    M.getLocation().onPause(this);
+  }
+
+  @Override
+  public void onActionLeftClicked() {
+    finish();
   }
 
   @Override
   public void onResult(Location.Result result) {
-    if (result != null) {
-      mTvLocation.setText(result.address);
-    } else {
-      mTvLocation.setText(getString(R.string.locating_failed));
+    if (mResult == null) {
+      if (result != null && !TextUtils.isEmpty(result.address)) {
+        mResult = result;
+        mTvLocation.setText(mResult.address);
+      } else {
+        mTvLocation.setText(getString(R.string.locating_failed));
+      }
     }
-    hideProgressBar();
   }
 
   /**
@@ -162,6 +189,27 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
     finish();
   }
 
+  private void requestCaptcha() {
+    if (mRequesting) return;
+    mRequesting = true;
+    U.getRESTRequester().post(C.API_VALICODE_CREATE_FACTORY, null,
+        U.getRESTRequester().addAuthParams(null), null,
+        new FileAsyncHttpResponseHandler(IOUtils.createTmpFile("valicode_" + System.currentTimeMillis())) {
+          @Override
+          public void onSuccess(File file) {
+            mIvCaptcha.setImageURI(Uri.fromFile(file));
+            mRequesting = false;
+            if (file != null) file.delete();
+          }
+
+          @Override
+          public void onFailure(Throwable e, File response) {
+            mRequesting = false;
+            if (response != null) response.delete();
+          }
+        });
+  }
+
   private void requestCreateFactory() {
     CreateCircleRequest request = new CreateCircleRequest(mEtCircleName.getText().toString(),
         CreateCircleRequest.TYPE_FACTORY,
@@ -171,16 +219,19 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
     request(request, new OnResponse<Response>() {
       @Override
       public void onResponse(Response response) {
+        hideProgressBar();
+        mEtCaptcha.setText("");
+        mRbCreate.setEnabled(true);
         if (response != null && response.code == 0) {
           showToast(getString(R.string.success_created), false);
           finish();
+        } else {
+          requestCaptcha();
         }
       }
     }, Response.class);
-  }
 
-  @Override
-  protected void onActionLeftOnClicked() {
-    finish();
+    mRbCreate.setEnabled(false);
+    showProgressBar(true);
   }
 }

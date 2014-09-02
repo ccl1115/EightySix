@@ -14,6 +14,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.contact.Contact;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -26,11 +27,14 @@ public class ContactsAdapter extends BaseAdapter {
 
   private List<Contact> mContacts;
 
+  private List<Contact> mFiltered;
+
   private SparseBooleanArray mChecked;
   private int mCheckedCount = 0;
 
   public ContactsAdapter(List<Contact> contact) {
     mContacts = contact;
+    mFiltered = mContacts;
     mChecked = new SparseBooleanArray();
   }
 
@@ -38,17 +42,7 @@ public class ContactsAdapter extends BaseAdapter {
     List<Contact> ret = new ArrayList<Contact>();
     for (int i = 0, size = mContacts.size(); i < size; i++) {
       if (mChecked.get(i)) {
-        ret.add(mContacts.get(i));
-      }
-    }
-    return ret;
-  }
-
-  public int getCheckedCount() {
-    int ret = 0;
-    for (int i = 0, size = mContacts.size(); i < size; i++) {
-      if (mChecked.get(i)) {
-        ret++;
+        ret.add(mFiltered.get(i));
       }
     }
     return ret;
@@ -65,12 +59,12 @@ public class ContactsAdapter extends BaseAdapter {
 
   @Override
   public int getCount() {
-    return mContacts == null ? 0 : mContacts.size() + 1;
+    return mFiltered == null ? 0 : mFiltered.size() + 1;
   }
 
   @Override
   public Contact getItem(int i) {
-    return i == 0 ? null : mContacts.get(i - 1);
+    return i == 0 ? null : mFiltered.get(i - 1);
   }
 
   @Override
@@ -93,8 +87,8 @@ public class ContactsAdapter extends BaseAdapter {
 
         Contact contact = getItem(position);
 
-        holder.mPosition = position;
-        holder.mCbCheck.setChecked(mChecked.get(position));
+        holder.mPosition = position - 1;
+        holder.mCbCheck.setChecked(mChecked.get(position - 1));
         holder.mTvName.setText(contact.name);
         holder.mTvPhone.setText(contact.phone);
         break;
@@ -120,6 +114,21 @@ public class ContactsAdapter extends BaseAdapter {
     return 2;
   }
 
+  public int getCheckedCount() {
+    return mCheckedCount;
+  }
+
+  public void setFilter(CharSequence cs) {
+    final List<Contact> list = new LinkedList<Contact>();
+    for (Contact contact : mContacts) {
+      if (contact.name.contains(cs)) {
+        list.add(contact);
+      }
+    }
+    mFiltered = list;
+    notifyDataSetChanged();
+  }
+
   public class ContactViewHolder {
     @InjectView (R.id.tv_name)
     public TextView mTvName;
@@ -138,9 +147,16 @@ public class ContactsAdapter extends BaseAdapter {
 
     @OnCheckedChanged (R.id.cb_check)
     public void onCbCheckChecked(boolean c) {
+      if (mChecked.get(mPosition) != c) {
+        if (c) {
+          mCheckedCount++;
+        } else {
+          mCheckedCount--;
+        }
+        U.getBus().post(new ContactsActivity.ContactCheckedCountChanged(mCheckedCount));
+      }
+
       mChecked.put(mPosition, c);
-      mCheckedCount = c ? mCheckedCount + 1 : mCheckedCount - 1;
-      U.getBus().post(new ContactsActivity.ContactCheckedCountChanged(mCheckedCount));
     }
   }
 

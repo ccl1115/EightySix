@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <declare-styleable name="IndicatorView">
+        <attr name="spacing" format="dimension"/>
+        <attr name="drawable" format="reference"/>
+        <attr name="selector" format="reference"/>
+        <attr name="autoHide" format="boolean"/>
+        <attr name="count" format="integer"/>
+    </declare-styleable>
+
     <declare-styleable name="TopBar">
+
         <attr name="titleColor" format="reference|color"/>
         <attr name="topLineColor" format="reference|color"/>
         <attr name="botLineColor" format="reference|color"/>
@@ -12,9 +21,16 @@
         <attr name="background" format="reference|color"/>
     </declare-styleable>
 
+    <declare-styleable name="RandomSceneTextView">
+        <attr name="text" format="string|reference"/>
+        <attr name="subText" format="string|reference"/>
+        <attr name="drawable"/>
+    </declare-styleable>
+
     <attr name="topBarStyle" format="reference"/>
     <attr name="roundedButtonStyle" format="reference"/>
     <attr name="postEditTextStyle" format="reference"/>
+    <attr name="refreshIndicatorStyle" format="reference"/>
 
     <attr name="alp_drawable_btn_code_lock_default_holo" format="reference" />
     <attr name="alp_drawable_btn_code_lock_touched_holo" format="reference" />

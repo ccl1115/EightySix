@@ -25,7 +25,7 @@ public class GetLockpatternActivity extends BaseActivity {
   }
 
   @Override
-  protected void onActionLeftOnClicked() {
+  public void onActionLeftClicked() {
   }
 
   /**

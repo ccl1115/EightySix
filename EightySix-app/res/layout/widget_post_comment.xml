@@ -24,6 +24,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"
+                android:maxLength="500"
+                android:maxHeight="100sp"
+                android:gravity="bottom"
                 android:hint="@string/anonymously_comment"/>
 
 
@@ -34,7 +37,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
                 android:enabled="false"
-                android:text="@string/post"/>
+                android:text="@string/publish"/>
 
     </LinearLayout>
 

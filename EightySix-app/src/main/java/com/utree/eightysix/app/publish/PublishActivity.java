@@ -9,48 +9,63 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnFocusChange;
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.ArgbEvaluator;
+import com.nineoldandroids.animation.ObjectAnimator;
+import com.nineoldandroids.animation.ValueAnimator;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.app.publish.event.PostPublishedEvent;
+import com.utree.eightysix.data.BaseItem;
+import com.utree.eightysix.data.Post;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.request.PublishRequest;
+import com.utree.eightysix.response.PublishPostResponse;
 import com.utree.eightysix.rest.OnResponse;
-import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.InputValidator;
+import com.utree.eightysix.widget.AsyncImageView;
+import com.utree.eightysix.widget.IndicatorView;
 import com.utree.eightysix.widget.PostEditText;
+import com.utree.eightysix.widget.TextActionButton;
+import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TopBar;
+import com.utree.eightysix.widget.panel.GridPanel;
 import com.utree.eightysix.widget.panel.Item;
+import de.akquinet.android.androlog.Log;
+
 import java.io.File;
+import java.util.List;
+import java.util.Random;
 
 /**
  */
-@TopTitle (R.string.post)
+@TopTitle(R.string.publish_content)
 public class PublishActivity extends BaseActivity {
 
   private static final String FIRST_RUN_KEY = "post_activity";
@@ -59,20 +74,23 @@ public class PublishActivity extends BaseActivity {
   private static final int REQUEST_CODE_ALBUM = 0x2;
   private static final int REQUEST_CODE_CROP = 0x4;
 
-  @InjectView (R.id.et_post_content)
+  @InjectView(R.id.et_post_content)
   public PostEditText mPostEditText;
 
-  @InjectView (R.id.tv_bottom)
+  @InjectView(R.id.tv_bottom)
   public TextView mTvBottom;
 
-  @InjectView (R.id.iv_post_bg)
-  public ImageView mIvPostBg;
+  @InjectView(R.id.aiv_post_bg)
+  public AsyncImageView mAivPostBg;
 
-  @InjectView (R.id.tv_post_tip)
+  @InjectView(R.id.tv_post_tip)
   public TextView mTvPostTip;
 
-  @InjectView (R.id.ll_bottom)
-  public LinearLayout mLlBottom;
+  @InjectView(R.id.gp_panel)
+  public GridPanel mGpPanel;
+
+  @InjectView(R.id.in_panel)
+  public IndicatorView mInPanel;
 
   protected PublishLayout mPublishLayout;
 
@@ -83,10 +101,12 @@ public class PublishActivity extends BaseActivity {
   private File mOutputFile;
 
   private boolean mIsOpened;
-  private boolean mToastShown;
   private boolean mRequestStarted;
   private boolean mImageUploadFinished;
   private boolean mUseColor = true;
+
+  private boolean mStartCamera = false;
+  private boolean mStartAlbum = false;
 
   private String mFileHash;
 
@@ -94,7 +114,8 @@ public class PublishActivity extends BaseActivity {
 
   private int mBgColor = Color.WHITE;
 
-  private int mFactoryId;
+  protected int mFactoryId;
+  private ThemedDialog mQuitConfirmDialog;
 
   public static void start(Context context, int factoryId) {
     Intent intent = new Intent(context, PublishActivity.class);
@@ -107,12 +128,12 @@ public class PublishActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
-  @OnClick (R.id.ll_bottom)
+  @OnClick(R.id.ll_bottom)
   public void onLlBottomClicked() {
-    mDescriptionDialog.show();
+    showDescriptionDialog();
   }
 
-  @OnClick (R.id.iv_shuffle)
+  @OnClick(R.id.iv_shuffle)
   public void onIvShuffleClicked() {
     if (mIsOpened) {
       hideSoftKeyboard(mPostEditText);
@@ -122,9 +143,28 @@ public class PublishActivity extends BaseActivity {
     }
   }
 
-  @OnClick (R.id.iv_camera)
+  @OnClick(R.id.iv_camera)
   public void onIvCameraClicked() {
     mCameraDialog.show();
+  }
+
+  @OnFocusChange(R.id.et_post_content)
+  public void onPostEditTextFocusChanged(boolean focused) {
+    if (focused) {
+      mPostEditText.setHintTextColor(0x88ffffff);
+    } else {
+      mPostEditText.setHintTextColor(0xffffffff);
+    }
+  }
+
+  @Override
+  public void onActionLeftClicked() {
+    confirmFinish();
+  }
+
+  protected String getHintText() {
+    return getString(R.string.post_anonymously);
+
   }
 
   @Override
@@ -141,7 +181,7 @@ public class PublishActivity extends BaseActivity {
     mPublishLayout = new PublishLayout(this);
     setContentView(mPublishLayout);
 
-    onIvShuffleClicked();
+    mTvPostTip.setText(getHintText());
 
     //region To detect soft keyboard visibility change
     final View activityRootView = findViewById(android.R.id.content);
@@ -153,10 +193,12 @@ public class PublishActivity extends BaseActivity {
 
           if (!mIsOpened) {
             mPublishLayout.hidePanel();
+            mTvPostTip.setText("");
           }
           mIsOpened = true;
         } else if (mIsOpened) {
           mPublishLayout.showPanel();
+          mTvPostTip.setText(getHintText());
           mIsOpened = false;
         }
       }
@@ -173,12 +215,12 @@ public class PublishActivity extends BaseActivity {
       public void onClick(DialogInterface dialog, int which) {
         switch (which) {
           case 0:
-            if (!startCamera()) {
+            if (!(mStartCamera = startCamera())) {
               showToast(R.string.error_start_camera);
             }
             break;
           case 1:
-            if (!startAlbum()) {
+            if (!(mStartAlbum = startAlbum())) {
               showToast(R.string.error_start_album);
             }
             break;
@@ -223,10 +265,6 @@ public class PublishActivity extends BaseActivity {
 
     mConfirmQuitDialog = builder.create();
 
-    if (Env.firstRun(FIRST_RUN_KEY)) {
-      mDescriptionDialog.show();
-    }
-
     mPostEditText.addTextChangedListener(new TextWatcher() {
       @Override
       public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -237,8 +275,10 @@ public class PublishActivity extends BaseActivity {
       public void onTextChanged(CharSequence s, int start, int before, int count) {
         if (s.length() == 0) {
           mTvPostTip.setVisibility(View.VISIBLE);
+          disablePublishButton();
         } else {
           mTvPostTip.setVisibility(View.INVISIBLE);
+          enablePublishButton();
         }
 
         if (s.length() > U.getConfigInt("post.length")) {
@@ -262,7 +302,7 @@ public class PublishActivity extends BaseActivity {
     getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
       @Override
       public String getTitle(int position) {
-        return getString(R.string.post);
+        return getString(R.string.publish_post);
       }
 
       @Override
@@ -282,7 +322,7 @@ public class PublishActivity extends BaseActivity {
           if (mPostEditText.getText().length() == 0) {
             showToast(getString(R.string.cannot_post_empty_content));
           } else {
-            requestPost();
+            requestPublish();
           }
         }
       }
@@ -293,23 +333,57 @@ public class PublishActivity extends BaseActivity {
       }
 
       @Override
-      public FrameLayout.LayoutParams getLayoutParams(int position) {
-        return new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
+      public TopBar.LayoutParams getLayoutParams(int position) {
+        return new TopBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.MATCH_PARENT);
       }
     });
+
+    randomItem();
+
+    mGpPanel.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+      @Override
+      public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        mInPanel.setPosition(position + positionOffset);
+      }
+
+      @Override
+      public void onPageSelected(int position) {
+
+      }
+
+      @Override
+      public void onPageScrollStateChanged(int state) {
+
+      }
+    });
+
+    getTopBar().getActionView(0).setActionBackgroundDrawable(
+        new RoundRectDrawable(U.dp2px(2),
+            getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
+    ((TextActionButton) getTopBar().getActionView(0)).setTextColor(
+        getResources().getColor(R.color.apptheme_primary_grey_color_disabled));
+
+    showDescriptionDialogWhenFirstRun();
+  }
+
+  private void randomItem() {
+    List<Item> itemsByPage = mGpPanel.getItemsByPage(0);
+    Item item = itemsByPage.get(new Random().nextInt(itemsByPage.size()));
+    switchItem(item, false);
+  }
+
+  protected void showDescriptionDialogWhenFirstRun() {
+    if (Env.firstRun(FIRST_RUN_KEY)) {
+      showDescriptionDialog();
+    }
   }
 
   @Override
   protected void onDestroy() {
+    Log.d("ImageUtils", "onDestroy PublishActivity");
     Env.setFirstRun(FIRST_RUN_KEY, false);
-
     super.onDestroy();
-  }
-
-  @Override
-  protected void onActionLeftOnClicked() {
-    confirmFinish();
   }
 
   @Override
@@ -318,24 +392,114 @@ public class PublishActivity extends BaseActivity {
     finish();
   }
 
-  @Override
-  public void onBackPressed() {
-    confirmFinish();
+  @Subscribe
+  public void onImageUploaded(ImageUtils.ImageUploadedEvent event) {
+    if (event.getHash() == null || event.getUrl() == null) {
+      mImageUploadFinished = false;
+      showToast("上传图片失败");
+      randomItem();
+      return;
+    }
+    if (event.getHash().equals(mFileHash)) {
+      mImageUploadFinished = true;
+      mImageUploadUrl = event.getUrl();
+    }
+
+    if (mRequestStarted) {
+      requestPublish();
+    }
+  }
+
+  @Subscribe
+  public void onGridPanelItemClicked(Item item) {
+    switchItem(item, true);
+  }
+
+  private void switchItem(Item item, boolean animation) {
+    final TypedValue tv = item.getValue();
+    if (tv.type == TypedValue.TYPE_INT_COLOR_ARGB8) {
+      ValueAnimator.clearAllAnimations();
+      ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), mBgColor, tv.data);
+      animator.setDuration(animation ? 500 : 0);
+      animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        @Override
+        public void onAnimationUpdate(ValueAnimator animation) {
+          mAivPostBg.setBackgroundColor((Integer) animation.getAnimatedValue());
+        }
+      });
+      animator.addListener(new Animator.AnimatorListener() {
+        @Override
+        public void onAnimationStart(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animation) {
+          mPostEditText.setTextColor(ColorUtil.monochromizing(tv.data));
+          mTvPostTip.setTextColor(ColorUtil.monochromizing(tv.data));
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationRepeat(Animator animation) {
+
+        }
+      });
+      animator.start();
+      mAivPostBg.setImageDrawable(null);
+      mUseColor = true;
+      mBgColor = tv.data;
+      mImageUploadUrl = "";
+    } else if (tv.type == TypedValue.TYPE_STRING) {
+      mAivPostBg.setBackgroundColor(Color.TRANSPARENT);
+      mAivPostBg.setUrl(tv.string.toString());
+      if (animation) {
+        fadeInAnimation(mAivPostBg);
+      }
+      mImageUploadFinished = true;
+      mImageUploadUrl = tv.string.toString();
+      mUseColor = false;
+      mBgColor = Color.WHITE;
+    } else if (tv.type == TypedValue.TYPE_REFERENCE) {
+      mAivPostBg.setBackgroundColor(Color.TRANSPARENT);
+      if (animation) {
+        fadeInAnimation(mAivPostBg);
+      }
+      mImageUploadUrl = U.getCloudStorage().getUrl(U.getBgBucket(),
+          "",
+          getResources().getResourceEntryName(tv.resourceId) + ".jpg");
+      mImageUploadFinished = true;
+
+      Bitmap bitmap = ImageUtils.syncLoadResourceBitmap(tv.resourceId, ImageUtils.getUrlHash(mImageUploadUrl));
+      mAivPostBg.setImageBitmap(bitmap);
+      mUseColor = false;
+      mBgColor = Color.WHITE;
+    }
+  }
+
+  private void fadeInAnimation(View view) {
+    ObjectAnimator animator = ObjectAnimator.ofFloat(view, "alpha", 0f, 1f);
+    animator.setDuration(500);
+    animator.start();
   }
 
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    if (resultCode == Activity.RESULT_CANCELED) return;
 
     switch (requestCode) {
       case REQUEST_CODE_ALBUM:
+        if (resultCode == RESULT_CANCELED) return;
         if (data != null) {
           Uri uri = data.getData();
 
           Cursor cursor = getContentResolver()
               .query(uri, new String[]{MediaStore.MediaColumns.DATA}, null, null, null);
 
-          if (cursor.moveToFirst()) {
+          if (cursor != null && cursor.moveToFirst()) {
             String p = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
             mOutputFile = new File(p);
             if (!startCrop()) {
@@ -345,6 +509,7 @@ public class PublishActivity extends BaseActivity {
         }
         break;
       case REQUEST_CODE_CAMERA:
+        if (resultCode == RESULT_CANCELED) return;
         if (mOutputFile != null) {
           if (!startCrop()) {
             setBgImage(mOutputFile.getAbsolutePath());
@@ -352,15 +517,22 @@ public class PublishActivity extends BaseActivity {
         }
         break;
       case REQUEST_CODE_CROP:
-        if (data != null) {
-          Uri uri = data.getData();
+        if (resultCode != RESULT_CANCELED) {
+          if (data != null) {
+            Uri uri = data.getData();
 
-          Cursor cursor = getContentResolver()
-              .query(uri, new String[]{MediaStore.MediaColumns.DATA}, null, null, null);
-
-          if (cursor.moveToFirst()) {
-            String p = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
-            setBgImage(p);
+            setBgImage(uri.getPath());
+          }
+        } else {
+          if (mStartAlbum) {
+            mStartAlbum = startAlbum();
+            mStartCamera = false;
+          } else if (mStartCamera) {
+            mStartCamera = startCamera();
+            mStartAlbum = false;
+          } else {
+            mStartAlbum = false;
+            mStartCamera = false;
           }
         }
         break;
@@ -369,35 +541,54 @@ public class PublishActivity extends BaseActivity {
     }
   }
 
-  @Subscribe
-  public void onImageUploaded(ImageUtils.ImageUploadedEvent event) {
-    if (event.getHash().equals(mFileHash)) {
-      mImageUploadFinished = true;
-      mImageUploadUrl = event.getUrl();
-    }
-
-    if (mRequestStarted) {
-      requestPost();
-    }
+  @Override
+  public void onBackPressed() {
+    confirmFinish();
   }
 
-  @Subscribe
-  public void onGridPanelItemClicked(Item item) {
-    for (TypedValue tv : item.getValues()) {
-      if (tv.type == TypedValue.TYPE_INT_COLOR_ARGB8) {
-        mIvPostBg.setImageDrawable(new ColorDrawable(tv.data));
-        mPostEditText.setTextColor(monochromizing(tv.data));
-        mTvPostTip.setTextColor(monochromizing(tv.data));
-        mBgColor = tv.data;
-      }
+  protected void showDescriptionDialog() {
+    if (mDescriptionDialog == null) {
+      AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+      builder.setTitle(R.string.who_will_see_this_secret).setMessage(R.string.post_description)
+          .setPositiveButton(getString(R.string.got_it), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              if (which == Dialog.BUTTON_POSITIVE) {
+                dialog.dismiss();
+              }
+            }
+          });
+
+      mDescriptionDialog = builder.create();
     }
+
+    mDescriptionDialog.show();
   }
 
   private void confirmFinish() {
     if (TextUtils.isEmpty(mPostEditText.getText())) {
       super.onBackPressed();
     } else {
-      mConfirmQuitDialog.show();
+      if (mQuitConfirmDialog == null) {
+        mQuitConfirmDialog = new ThemedDialog(this);
+        mQuitConfirmDialog.setTitle("你有内容未发表，确认离开？");
+        mQuitConfirmDialog.setPositive(R.string.okay, new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            finish();
+          }
+        });
+        mQuitConfirmDialog.setRbNegative(R.string.cancel, new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            mQuitConfirmDialog.dismiss();
+          }
+        });
+      }
+      if (!mQuitConfirmDialog.isShowing()) {
+        mQuitConfirmDialog.show();
+      }
     }
   }
 
@@ -409,8 +600,8 @@ public class PublishActivity extends BaseActivity {
     mPostEditText.setTextColor(Color.WHITE);
     mPostEditText.setShadowLayer(2, 0, 0, Color.BLACK);
     mTvPostTip.setTextColor(Color.WHITE);
-    mIvPostBg.setImageBitmap(bitmap);
-    mIvPostBg.setScaleType(ImageView.ScaleType.CENTER_CROP);
+    mAivPostBg.setImageBitmap(bitmap);
+    mAivPostBg.setScaleType(ImageView.ScaleType.CENTER_CROP);
     mUseColor = false;
     mImageUploadFinished = false;
   }
@@ -442,7 +633,7 @@ public class PublishActivity extends BaseActivity {
 
   private boolean startCrop() {
     try {
-      Intent cropIntent = new Intent("com.android.camera.action.CROP");
+      Intent cropIntent = new Intent(this, ImageCropActivity.class);
       // indicate image type and Uri
       cropIntent.setDataAndType(Uri.fromFile(mOutputFile), "image/*");
       // set crop properties
@@ -459,12 +650,7 @@ public class PublishActivity extends BaseActivity {
     }
   }
 
-  private int monochromizing(int color) {
-    return (color & 0xff) > 0x88 && ((color >> 8) & 0xff) > 0x88 && ((color >> 16) & 0xff) > 0x88
-        ? Color.BLACK : Color.WHITE;
-  }
-
-  private void requestPost() {
+  private void requestPublish() {
     mRequestStarted = true;
 
     if (mImageUploadFinished || mUseColor) {
@@ -472,24 +658,60 @@ public class PublishActivity extends BaseActivity {
       final PublishRequest request = new PublishRequest(mFactoryId, mPostEditText.getText().toString(),
           mUseColor ? String.format("%h", mBgColor) : "", mImageUploadUrl);
 
-      request(request, new OnResponse<Response>() {
+      disablePublishButton();
+
+      request(request, new OnResponse<PublishPostResponse>() {
         @Override
-        public void onResponse(Response response) {
-          if (response != null) {
-            if (response.code == 0) {
-              showToast(R.string.send_succeed, false);
+        public void onResponse(PublishPostResponse response) {
+          if (RESTRequester.responseOk(response)) {
+            showToast(R.string.send_succeed, false);
 
-              InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-              imm.hideSoftInputFromWindow(mPostEditText.getWindowToken(), 0);
+            Post post = new Post();
+            post.bgColor = String.format("%h", mBgColor);
+            post.bgUrl = mImageUploadUrl;
+            post.id = response.object.id;
+            post.content = mPostEditText.getText().toString();
+            post.source = "认识的人";
+            post.type = BaseItem.TYPE_POST;
+            U.getBus().post(new PostPublishedEvent(post, mFactoryId));
 
-              finish();
-            }
+            finish();
           }
           hideProgressBar();
+          enablePublishButton();
         }
-      }, Response.class);
+      }, PublishPostResponse.class);
     }
 
-    showProgressBar();
+    hideSoftKeyboard(mPostEditText);
+    showProgressBar(true);
   }
+
+  protected void disablePublishButton() {
+    getHandler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        getTopBar().getActionView(0).setEnabled(false);
+        getTopBar().getActionView(0).setActionBackgroundDrawable(
+            new RoundRectDrawable(U.dp2px(2),
+                getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
+        ((TextActionButton) getTopBar().getActionView(0)).setTextColor(
+            getResources().getColor(R.color.apptheme_primary_grey_color_disabled));
+      }
+    }, 200);
+  }
+
+  protected void enablePublishButton() {
+    getHandler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        getTopBar().getActionView(0).setEnabled(true);
+        getTopBar().getActionView(0).setActionBackgroundDrawable(
+            new RoundRectDrawable(U.dp2px(2),
+                getResources().getColorStateList(R.color.apptheme_primary_btn_light)));
+        ((TextActionButton) getTopBar().getActionView(0)).setTextColor(Color.WHITE);
+      }
+    }, 200);
+  }
+
 }

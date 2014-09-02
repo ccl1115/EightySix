@@ -100,10 +100,9 @@ class CircleListAdapter extends BaseAdapter {
     }
 
     Circle item = getItem(position);
-    final String info =
-        String.format("%.1fkm | 朋友(%d) | 工友(%d)", item.distance / 1000f, item.friendCount, item.workmateCount);
-    holder.mTvCircleInfo.setText(info);
-    holder.mTvCircleName.setText(item.name);
+
+    holder.mTvCircleInfo.setText(item.info);
+    holder.mTvCircleName.setText(item.shortName);
     if (item.circleType == 1) {
       holder.mRbIcon.setText(U.gs(R.string.factory));
       holder.mRbIcon.setBackgroundColor(0xff6a51a5);
@@ -140,7 +139,7 @@ class CircleListAdapter extends BaseAdapter {
       }
     }
     Circle pre = null;
-    for (int i = 0, size = mCircles.size(); i < size; i++) {
+    for (int i = 0; i < mCircles.size(); i++) {
       Circle circle = mCircles.get(i);
       if (circle == null) continue;
 

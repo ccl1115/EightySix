@@ -1,14 +1,17 @@
 package com.utree.eightysix.app.feed;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -17,37 +20,36 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
-import com.utree.eightysix.Account;
-import com.utree.eightysix.R;
-import com.utree.eightysix.U;
+import com.utree.eightysix.*;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.account.ContactsActivity;
-import com.utree.eightysix.app.account.ImportContactActivity;
-import com.utree.eightysix.app.account.PraiseStaticActivity;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
-import com.utree.eightysix.app.feed.event.InviteClickedEvent;
-import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
+import com.utree.eightysix.app.feed.event.*;
+import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.MsgActivity;
+import com.utree.eightysix.app.msg.PraiseActivity;
 import com.utree.eightysix.app.publish.FeedbackActivity;
 import com.utree.eightysix.app.publish.PublishActivity;
+import com.utree.eightysix.app.settings.HelpActivity;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.Circle;
-import com.utree.eightysix.request.MyCirclesRequest;
+import com.utree.eightysix.data.Sync;
+import com.utree.eightysix.event.HasNewPraiseEvent;
+import com.utree.eightysix.event.NewCommentCountEvent;
+import com.utree.eightysix.request.CircleSideRequest;
 import com.utree.eightysix.response.CirclesResponse;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.utils.Env;
-import com.utree.eightysix.utils.ShareUtils;
 import com.utree.eightysix.widget.AdvancedListView;
+import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TopBar;
-import java.util.ArrayList;
-import java.util.Iterator;
+import de.akquinet.android.androlog.Log;
+
 import java.util.List;
 
 /**
@@ -66,13 +68,12 @@ public class FeedActivity extends BaseActivity {
   @InjectView (R.id.ll_side)
   public LinearLayout mLlSide;
 
-  @InjectView (R.id.v_mask)
-  public View mVMask;
+  @InjectView (R.id.content)
+  public DrawerLayout mDlContent;
 
   private SideCirclesAdapter mSideCirclesAdapter;
 
   private PopupWindow mPopupMenu;
-  private LinearLayout mMenu;
 
   private boolean mSideShown;
 
@@ -91,6 +92,8 @@ public class FeedActivity extends BaseActivity {
   private ThemedDialog mNoPermDialog;
 
   private boolean mRefreshed;
+  private MenuViewHolder mMenuViewHolder;
+  private ThemedDialog mUnlockDialog;
 
   public static void start(Context context) {
     Intent intent = new Intent(context, FeedActivity.class);
@@ -103,10 +106,10 @@ public class FeedActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
-  public static void start(Context context, Circle circle, ArrayList<Circle> side) {
+  public static void start(Context context, Circle circle, boolean skipCache) {
     Intent intent = new Intent(context, FeedActivity.class);
     intent.putExtra("circle", circle);
-    intent.putParcelableArrayListExtra("side", side);
+    intent.putExtra("skipCache", skipCache);
     context.startActivity(intent);
   }
 
@@ -116,41 +119,88 @@ public class FeedActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
+  public static void start(Context context, int id, boolean skipCache) {
+    Intent intent = new Intent(context, FeedActivity.class);
+    intent.putExtra("id", id);
+    intent.putExtra("skipCache", skipCache);
+    context.startActivity(intent);
+  }
+
+  public static Intent getIntent(Context context, int id, boolean skipCache) {
+    Intent intent = new Intent(context, FeedActivity.class);
+    intent.putExtra("id", id);
+    intent.putExtra("skipCache", skipCache);
+    if (!(context instanceof Activity)) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+    intent.setAction(String.valueOf(id));
+    return intent;
+  }
+
   @OnClick (R.id.ib_send)
   public void onIbSendClicked() {
-    if (mFeedFragment.getCircle() != null) {
-      if (mFeedFragment.getCircle().lock == 1) {
-        showNoPermDialog();
-      } else {
-        PublishActivity.start(this, mFeedFragment.getCircle().id);
-      }
+    U.getAnalyser().trackEvent(this, "feed_publish", "feed_publish");
+    if (!mFeedFragment.canPublish()) {
+      showNoPermDialog();
+    } else {
+      PublishActivity.start(this, mFeedFragment.getCircleId());
     }
   }
 
   @OnClick (R.id.tv_more)
   public void onSideMoreClicked() {
+    U.getAnalyser().trackEvent(this, "side_more", "side_more");
     startActivity(new Intent(this, BaseCirclesActivity.class));
   }
 
   @OnItemClick (R.id.lv_side_circles)
   public void onLvSideItemClicked(int position) {
+    U.getAnalyser().trackEvent(this, "side_switch", "side_switch");
     Circle circle = mSideCircles.get(position);
-    if (circle != null && !circle.selected) {
+    if (circle != null) {
       for (Circle c : mSideCircles) {
         c.selected = false;
       }
 
-      mFeedFragment.setCircle(circle);
-      setTitle(circle);
+      mFeedFragment.setCircle(circle, true);
+      setSideHighlight(circle);
+      mDlContent.closeDrawer(mLlSide);
+      mFeedFragment.mRefresherView.setRefreshing(true);
+      getHandler().postDelayed(new Runnable() {
+        @Override
+        public void run() {
+          requestSideCircle();
+        }
+      }, 1000);
     }
-    hideSide();
-    hideMask();
   }
 
-  @OnClick (R.id.v_mask)
-  public void onVMaskClicked() {
-    hideSide();
-    hideMask();
+  @Override
+  public void onActionLeftClicked() {
+    U.getAnalyser().trackEvent(this, "feed_title", "feed_title");
+    if (mDlContent.isDrawerOpen(mLlSide)) {
+      mDlContent.closeDrawer(mLlSide);
+    } else {
+      mDlContent.openDrawer(mLlSide);
+    }
+    if (mSideCirclesAdapter == null || mSideCirclesAdapter.getCount() == 0) {
+      requestSideCircle();
+      showProgressBar();
+    }
+  }
+
+  @Override
+  public void onActionOverflowClicked() {
+    U.getAnalyser().trackEvent(this, "feed_more", "feed_more");
+    if (!mPopupMenu.isShowing()) {
+      mPopupMenu.showAsDropDown(getTopBar().mActionOverFlow);
+      mDlContent.closeDrawer(mLlSide);
+    }
+  }
+
+  @Override
+  public boolean showActionOverflow() {
+    return true;
   }
 
   @Override
@@ -161,36 +211,14 @@ public class FeedActivity extends BaseActivity {
 
     setActionLeftDrawable(getResources().getDrawable(R.drawable.ic_drawer));
 
-    getTopBar().setOnActionOverflowClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        if (mPopupMenu == null) {
-          mMenu = (LinearLayout) View.inflate(FeedActivity.this, R.layout.widget_feed_menu, null);
-          mPopupMenu = new PopupWindow(mMenu, dp2px(190), dp2px(225) + 4);
-          new MenuViewHolder(mMenu);
-          mPopupMenu.setFocusable(true);
-          mPopupMenu.setOutsideTouchable(true);
-          mPopupMenu.setBackgroundDrawable(new BitmapDrawable(getResources()));
-          mPopupMenu.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-              hideMask();
-            }
-          });
-        }
-
-        if (!mPopupMenu.isShowing()) {
-          mPopupMenu.showAsDropDown(getTopBar().mActionOverFlow);
-          showMask();
-          hideSide();
-        }
-
-      }
-    });
-
-    //getTopBar().mTitle.setCompoundDrawablesWithIntrinsicBounds(null, null,
-    //    getResources().getDrawable(R.drawable.top_bar_arrow_down), null);
-
+    if (mPopupMenu == null) {
+      LinearLayout menu = (LinearLayout) View.inflate(FeedActivity.this, R.layout.widget_feed_menu, null);
+      mPopupMenu = new PopupWindow(menu, dp2px(190), dp2px(225) + 4);
+      mMenuViewHolder = new MenuViewHolder(menu);
+      mPopupMenu.setFocusable(true);
+      mPopupMenu.setOutsideTouchable(true);
+      mPopupMenu.setBackgroundDrawable(new BitmapDrawable(getResources()));
+    }
 
     getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
       @Override
@@ -202,8 +230,6 @@ public class FeedActivity extends BaseActivity {
       public Drawable getIcon(int position) {
         if (position == 0) {
           return getResources().getDrawable(R.drawable.ic_action_msg);
-        } else if (position == 1) {
-          return getResources().getDrawable(R.drawable.ic_action_refresh);
         }
         return null;
       }
@@ -216,20 +242,19 @@ public class FeedActivity extends BaseActivity {
       @Override
       public void onClick(View view, int position) {
         if (position == 0) {
-          startActivity(new Intent(FeedActivity.this, MsgActivity.class));
-        } else if (position == 1) {
-          mFeedFragment.refresh();
+          U.getAnalyser().trackEvent(FeedActivity.this, "feed_msg", "feed_msg");
+          MsgActivity.start(FeedActivity.this, Account.inst().getNewCommentCount() > 0);
         }
       }
 
       @Override
       public int getCount() {
-        return 2;
+        return 1;
       }
 
       @Override
-      public FrameLayout.LayoutParams getLayoutParams(int position) {
-        return new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+      public TopBar.LayoutParams getLayoutParams(int position) {
+        return new TopBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
       }
     });
 
@@ -240,24 +265,8 @@ public class FeedActivity extends BaseActivity {
 
     mFeedFragment = new FeedFragment();
     getSupportFragmentManager().beginTransaction().add(R.id.fl_feed, mFeedFragment, "feed").commitAllowingStateLoss();
+
     onNewIntent(getIntent());
-
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-
-    U.getBus().register(mLvSideCircles);
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-
-    U.getBus().unregister(mLvSideCircles);
-
-    Env.setLastCircle(mFeedFragment.getCircle());
   }
 
   @Override
@@ -267,14 +276,49 @@ public class FeedActivity extends BaseActivity {
   }
 
   @Override
-  protected void onActionLeftOnClicked() {
-    if (mSideShown) {
-      hideSide();
-      hideMask();
-    } else {
-      showSide();
-      showMask();
+  protected void onStart() {
+    super.onStart();
+
+    startService(new Intent(this, FetchNotificationService.class));
+  }
+
+  @Override
+  protected void onStop() {
+    Log.d("FeedActivity", "onStop");
+    super.onStop();
+    mDlContent.closeDrawer(mLlSide);
+
+    stopService(new Intent(this, FetchNotificationService.class));
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    M.getRegisterHelper().unregister(mLvSideCircles);
+    Env.setLastCircle(mFeedFragment.getCircle());
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    M.getRegisterHelper().register(mLvSideCircles);
+
+    Sync sync = U.getSyncClient().getSync();
+    if (sync != null && sync.upgrade != null) {
+      int v = 0;
+      try {
+        v = Integer.parseInt(sync.upgrade.version);
+      } catch (NumberFormatException ignored) {
+      }
+      if (v > C.VERSION) {
+        getTopBar().getActionOverflow().setHasNew(true);
+        mMenuViewHolder.mRbSettingsDot.setVisibility(View.VISIBLE);
+      } else {
+        getTopBar().getActionOverflow().setHasNew(false);
+        mMenuViewHolder.mRbSettingsDot.setVisibility(View.INVISIBLE);
+      }
     }
+
   }
 
   @Override
@@ -283,77 +327,134 @@ public class FeedActivity extends BaseActivity {
     finish();
   }
 
-  @Override
-  public void onBackPressed() {
-    if (mSideShown) {
-      hideSide();
-      hideMask();
+  @Subscribe
+  public void onNewCommentCountEvent(NewCommentCountEvent event) {
+    getTopBar().getActionView(0).setCount(event.getCount());
+  }
+
+  @Subscribe
+  public void onHasNewPraiseEvent(HasNewPraiseEvent event) {
+    getTopBar().getActionOverflow().setHasNew(event.has());
+    if (event.has()) {
+      mMenuViewHolder.mRbNewPraiseDot.setVisibility(View.VISIBLE);
     } else {
-      moveTaskToBack(true);
+      mMenuViewHolder.mRbNewPraiseDot.setVisibility(View.INVISIBLE);
     }
   }
 
+  @Subscribe
+  public void onSetPraiseCountEvent(UpdatePraiseCountEvent event) {
+    if (mMenuViewHolder != null) {
+      if (event.getCount() == 0) {
+        mMenuViewHolder.mTvPraiseCount.setText("我收到的赞");
+      } else {
+        mMenuViewHolder.mTvPraiseCount.setText(String.format("收到%d个赞", event.getCount()));
+      }
+    }
+  }
+
+  @Override
+  public void onBackPressed() {
+    if (mFeedFragment.onBackPressed()) {
+      return;
+    }
+
+    moveTaskToBack(true);
+  }
+
+  @Override
   protected void onNewIntent(Intent intent) {
+
     //region 标题栏数据处理
     Circle circle = intent.getParcelableExtra("circle");
 
-    mFeedFragment.setCircle(circle);
+    boolean skipCache = intent.getBooleanExtra("skipCache", false);
+
+    if (circle != null) {
+      mFeedFragment.setCircle(circle, skipCache);
+    } else {
+      final int circleId = intent.getIntExtra("id", 0);
+      mFeedFragment.setCircle(circleId, skipCache);
+    }
 
     if (mFeedFragment.getCircle() != null) {
-      setTitle(mFeedFragment.getCircle());
+      setSideHighlight(mFeedFragment.getCircle());
     }
     //endregion
 
 
     //region 侧边栏数据处理
-    List<Circle> circles = intent.getParcelableArrayListExtra("side");
-
-    if (circles != null) {
-      mSideCircles = circles;
-      if (mFeedFragment.getCircle() == null && mSideCircles.size() > 0) {
-        mFeedFragment.setCircle(mSideCircles.get(0));
-        setTitle(mFeedFragment.getCircle());
-      }
-    }
-
-    if (mSideCircles != null) {
-      for (Iterator<Circle> iterator = mSideCircles.iterator(); iterator.hasNext(); ) {
-        Circle c = iterator.next();
-        if (c == null) iterator.remove();
-      }
-      selectSideCircle(mSideCircles);
-      mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
-      mLvSideCircles.setAdapter(mSideCirclesAdapter);
-    } else if (U.useFixture()) {
-      mSideCircles = U.getFixture(Circle.class, 10, "valid");
-      selectSideCircle(mSideCircles);
-      mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
-      mLvSideCircles.setAdapter(mSideCirclesAdapter);
-    } else {
-      cacheOutSideCircle();
-    }
-    //endregion
-
-
     getHandler().postDelayed(new Runnable() {
       @Override
       public void run() {
-        hideSide();
-        hideMask();
+        requestSideCircle();
       }
-    }, 1000);
+    }, 500);
+    //if (mSideCircles != null) {
+    //  for (Iterator<Circle> iterator = mSideCircles.iterator(); iterator.hasNext(); ) {
+    //    Circle c = iterator.next()
+    // ;
+    //    if (c == null) iterator.remove();
+    //  }
+    //  selectSideCircle(mSideCircles);
+    //  mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
+    //  mLvSideCircles.setAdapter(mSideCirclesAdapter);
+    //} else if (U.useFixture()) {
+    //  mSideCircles = U.getFixture(Circle.class, 10, "valid");
+    //  selectSideCircle(mSideCircles);
+    //  mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
+    //  mLvSideCircles.setAdapter(mSideCirclesAdapter);
+    //} else {
+    //  cacheOutSideCircle();
+    //}
+    //endregion
+
+    setHasNewPraise();
+    setNewCommentCount();
+  }
+
+  @Subscribe
+  public void onUploadClicked(UploadClickedEvent event) {
+    ContactsSyncService.start(this, true);
+    showProgressBar(true);
+  }
+
+  @Subscribe
+  public void onUnlockClicked(UnlockClickedEvent event) {
+    showUnlockDialog();
+    ContactsSyncService.start(this, true);
+  }
+
+  @Subscribe
+  public void onInviteClicked(InviteClickedEvent event) {
+    showInviteDialog();
+  }
+  @Subscribe
+  public void onStartPublishActivity(StartPublishActivityEvent event) {
+    if (!mFeedFragment.canPublish()) {
+      showNoPermDialog();
+    } else {
+      PublishActivity.start(this, mFeedFragment.getCircleId());
+    }
   }
 
   private void showNoPermDialog() {
     if (mNoPermDialog == null) {
       mNoPermDialog = new ThemedDialog(this);
-      View view = LayoutInflater.from(this).inflate(R.layout.dialog_content_locked, null);
+      View view = LayoutInflater.from(this).inflate(R.layout.dialog_publish_locked, null);
       NoPermViewHolder noPermViewHolder = new NoPermViewHolder(view);
-      noPermViewHolder.mTvFriendCount.setText(getString(R.string.current_friend_count, mFeedFragment.getCircle().friendCount));
+      String tip = getString(R.string.no_perm_tip);
+      int index = tip.indexOf("解锁条件");
+      ForegroundColorSpan span = new ForegroundColorSpan(
+          getResources().getColor(R.color.apptheme_primary_light_color));
+      SpannableString spannableString = new SpannableString(tip);
+      spannableString.setSpan(span, index, index + 4, 0);
+      noPermViewHolder.mTvNoPermTip.setText(spannableString);
       mNoPermDialog.setContent(view);
       mNoPermDialog.setPositive(R.string.invite_people, new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+          mNoPermDialog.dismiss();
           showInviteDialog();
         }
       });
@@ -365,38 +466,32 @@ public class FeedActivity extends BaseActivity {
     }
   }
 
-  private void showMask() {
-    mVMask.setVisibility(View.VISIBLE);
-    ObjectAnimator animator = ObjectAnimator.ofFloat(mVMask, "alpha", 0f, 1f);
-    animator.setDuration(150);
-    animator.start();
-  }
+  private void showUnlockDialog() {
+    if (mUnlockDialog == null) {
+      mUnlockDialog = new ThemedDialog(this);
+      View view = LayoutInflater.from(this).inflate(R.layout.dialog_unlock, null);
+      TextView tipView = (TextView) view.findViewById(R.id.tv_unlock_tip);
+      String tip = getString(R.string.unlock_tip, U.getSyncClient().getSync().unlockFriends, U.getSyncClient().getSync().unlockFriends);
+      int index = tip.indexOf("解锁条件");
+      ForegroundColorSpan span = new ForegroundColorSpan(
+          getResources().getColor(R.color.apptheme_primary_light_color));
+      SpannableString spannableString = new SpannableString(tip);
+      spannableString.setSpan(span, index, index +4, 0);
+      tipView.setText(spannableString);
+      mUnlockDialog.setContent(view);
+      mUnlockDialog.setPositive(R.string.invite_people, new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          mUnlockDialog.dismiss();
+          showInviteDialog();
+        }
+      });
+      mUnlockDialog.setTitle("秘密为什么会隐藏");
+    }
 
-  private void hideMask() {
-    ObjectAnimator animator = ObjectAnimator.ofFloat(mVMask, "alpha", 1f, 0f);
-    animator.setDuration(150);
-    animator.addListener(new Animator.AnimatorListener() {
-      @Override
-      public void onAnimationStart(Animator animation) {
-
-      }
-
-      @Override
-      public void onAnimationEnd(Animator animation) {
-        mVMask.setVisibility(View.INVISIBLE);
-      }
-
-      @Override
-      public void onAnimationCancel(Animator animation) {
-
-      }
-
-      @Override
-      public void onAnimationRepeat(Animator animation) {
-
-      }
-    });
-    animator.start();
+    if (!mUnlockDialog.isShowing()) {
+      mUnlockDialog.show();
+    }
   }
 
   private void selectSideCircle(List<Circle> sideCircles) {
@@ -416,68 +511,15 @@ public class FeedActivity extends BaseActivity {
     }
   }
 
-  private void setTitle(Circle circle) {
-    if (circle == null) return;
-
-    setTopTitle(circle.shortName);
-    setTopSubTitle(String.format(getString(R.string.friends_info), circle.friendCount, circle.workmateCount));
-    if (circle.lock == 1) {
-      getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(
-          getResources().getDrawable(R.drawable.ic_lock_small), null, null, null);
-      getTopBar().mSubTitle.setCompoundDrawablePadding(U.dp2px(5));
-    } else {
-      getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-    }
-  }
-
-  private void showSide() {
-    mSideShown = true;
-
-    mLlSide.setVisibility(View.VISIBLE);
-    Animator animator = ObjectAnimator.ofFloat(mLlSide, "translationX", -mLvSideCircles.getMeasuredWidth(), 0f);
-    animator.setDuration(150);
-    animator.start();
-  }
-
-  private void hideSide() {
-    mSideShown = false;
-
-    ObjectAnimator animator = ObjectAnimator.ofFloat(mLlSide, "translationX", 0f, -mLlSide.getMeasuredWidth());
-    animator.setDuration(150);
-    animator.addListener(new Animator.AnimatorListener() {
-      @Override
-      public void onAnimationStart(Animator animation) {
-
-      }
-
-      @Override
-      public void onAnimationEnd(Animator animation) {
-        mLlSide.setVisibility(View.INVISIBLE);
-      }
-
-      @Override
-      public void onAnimationCancel(Animator animation) {
-
-      }
-
-      @Override
-      public void onAnimationRepeat(Animator animation) {
-
-      }
-    });
-    animator.start();
-  }
-
   private void cacheOutSideCircle() {
-    cacheOut(new MyCirclesRequest("", 1), new OnResponse<CirclesResponse>() {
+    cacheOut(new CircleSideRequest("", 1), new OnResponse<CirclesResponse>() {
       @Override
       public void onResponse(CirclesResponse response) {
         if (response != null && response.code == 0 && response.object != null) {
-          mSideCircles = response.object.lists.subList(0, 10);
-          if (mFeedFragment.getCircle() == null && mSideCircles.size() > 0) {
-            mFeedFragment.setCircle(mSideCircles.get(0));
-            setTitle(mFeedFragment.getCircle());
-          }
+          mSideCircles = response.object.lists.size() > 10 ?
+              response.object.lists.subList(0, 10) : response.object.lists;
+
+          setSideHighlight(mFeedFragment.getCircle());
           selectSideCircle(mSideCircles);
 
           mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
@@ -488,63 +530,92 @@ public class FeedActivity extends BaseActivity {
         }
       }
     }, CirclesResponse.class);
+
+    showProgressBar();
   }
-
-  private void cacheInSideCircle(String string) {
-    cacheIn(new MyCirclesRequest("", 1), string);
-  }
-
-  private void requestSideCircle() {
-    request(new MyCirclesRequest("", 1), new OnResponse<CirclesResponse>() {
-
-      @Override
-      public void onResponse(CirclesResponse response) {
-        if (response != null && response.code == 0 && response.object != null) {
-          mSideCircles = response.object.lists.subList(0, 10);
-          if (mFeedFragment.getCircle() == null && mSideCircles.size() > 0) {
-            mFeedFragment.setCircle(mSideCircles.get(0));
-            setTitle(mFeedFragment.getCircle());
-          }
-          selectSideCircle(mSideCircles);
-
-          mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
-          mLvSideCircles.setAdapter(mSideCirclesAdapter);
-
-        }
-      }
-    }, CirclesResponse.class);
-  }
-
 
   private void showInviteDialog() {
     if (mInviteDialog == null) {
-      mInviteDialog = new ThemedDialog(this);
-      mInviteDialog.setTitle("分享给厂里的朋友");
-      mInviteDialog.setCanceledOnTouchOutside(true);
-      View view = getLayoutInflater().inflate(R.layout.dialog_content_share, null);
-      mInviteDialog.setContent(view);
-      new ShareViewHolder(view);
+      mInviteDialog = U.getShareManager().shareAppDialog(this, mFeedFragment.getCircle());
     }
     if (!mInviteDialog.isShowing()) {
       mInviteDialog.show();
     }
   }
 
-  @Subscribe
-  public void onInviteClicked(InviteClickedEvent event) {
-    startActivity(new Intent(this, ImportContactActivity.class));
+  private void setSideHighlight(Circle circle) {
+    if (mSideCircles == null || circle == null) return;
+    for (Circle c : mSideCircles) {
+      c.selected = circle.equals(c);
+    }
+    setTitle(circle);
+    if (mSideCirclesAdapter != null) mSideCirclesAdapter.notifyDataSetChanged();
   }
 
-  @Subscribe
-  public void onUnlockClicked(UnlockClickedEvent event) {
-    showInviteDialog();
+  private void setHasNewPraise() {
+    mMenuViewHolder.mRbNewPraiseDot.setVisibility(Account.inst().getHasNewPraise() ? View.VISIBLE : View.INVISIBLE);
+    getTopBar().getActionOverflow().setHasNew(Account.inst().getHasNewPraise());
+  }
+
+  private void setNewCommentCount() {
+    getTopBar().getActionView(0).setCount(Account.inst().getNewCommentCount());
+  }
+
+  void requestSideCircle() {
+    request(new CircleSideRequest("", 1), new OnResponse2<CirclesResponse>() {
+
+      @Override
+      public void onResponseError(Throwable e) {
+      }
+
+      @Override
+      public void onResponse(CirclesResponse response) {
+        if (response != null && response.code == 0 && response.object != null) {
+          mSideCircles = response.object.lists.size() > 10 ?
+              response.object.lists.subList(0, 10) : response.object.lists;
+
+          setSideHighlight(mFeedFragment.getCircle());
+          selectSideCircle(mSideCircles);
+
+          mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
+          mLvSideCircles.setAdapter(mSideCirclesAdapter);
+
+        }
+        hideProgressBar();
+      }
+
+
+    }, CirclesResponse.class);
+  }
+
+  void setTitle(Circle circle) {
+    if (circle == null) return;
+
+    setTopTitle(circle.shortName);
+//    setTopSubTitle(String.format(getString(R.string.friends_info),
+//        mFeedFragment.getCurrFriends(), mFeedFragment.getWorkerCount()));
+    if (circle.lock == 1) {
+      getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(
+          getResources().getDrawable(R.drawable.ic_lock_small), null, null, null);
+      getTopBar().mSubTitle.setCompoundDrawablePadding(U.dp2px(5));
+    } else {
+      getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+    }
+  }
+
+  void setMyPraiseCount(int count, String praisePercent, int variant) {
+    if (count == 0) {
+      mMenuViewHolder.mTvPraiseCount.setText("我收到的赞");
+    } else {
+      mMenuViewHolder.mTvPraiseCount.setText(String.format("收到%d个赞", count));
+    }
   }
 
   @Keep
   class NoPermViewHolder {
 
-    @InjectView (R.id.tv_friend_count)
-    TextView mTvFriendCount;
+    @InjectView (R.id.tv_no_perm_tip)
+    TextView mTvNoPermTip;
 
     NoPermViewHolder(View view) {
       ButterKnife.inject(this, view);
@@ -554,6 +625,14 @@ public class FeedActivity extends BaseActivity {
   @Keep
   class MenuViewHolder {
 
+    @InjectView (R.id.tv_praise_count)
+    TextView mTvPraiseCount;
+
+    @InjectView (R.id.rb_new_praise_dot)
+    RoundedButton mRbNewPraiseDot;
+
+    @InjectView(R.id.rb_settings_dot)
+    RoundedButton mRbSettingsDot;
 
     MenuViewHolder(View view) {
       ButterKnife.inject(this, view);
@@ -567,19 +646,13 @@ public class FeedActivity extends BaseActivity {
 
     @OnClick (R.id.ll_praise_count)
     void onLlPraiseCountClicked() {
-      startActivity(new Intent(FeedActivity.this, PraiseStaticActivity.class));
+      PraiseActivity.start(FeedActivity.this, Account.inst().getHasNewPraise());
       mPopupMenu.dismiss();
     }
 
     @OnClick (R.id.ll_feedback)
     void onLlFeedbackClicked() {
-      startActivity(new Intent(FeedActivity.this, FeedbackActivity.class));
-      mPopupMenu.dismiss();
-    }
-
-    @OnClick (R.id.ll_about)
-    void onLlAboutClicked() {
-      showToast("TODO about");
+      FeedbackActivity.start(FeedActivity.this);
       mPopupMenu.dismiss();
     }
 
@@ -588,22 +661,12 @@ public class FeedActivity extends BaseActivity {
       startActivity(new Intent(FeedActivity.this, MainSettingsActivity.class));
       mPopupMenu.dismiss();
     }
-  }
 
-  @Keep
-  class ShareViewHolder {
-    ShareViewHolder(View view) {
-      ButterKnife.inject(this, view);
-    }
-
-    @OnClick (R.id.tv_sms)
-    void onTvSmsClicked() {
-      startActivity(new Intent(FeedActivity.this, ContactsActivity.class));
-    }
-
-    @OnClick (R.id.tv_qq_friends)
-    void onQQFriendsClicked() {
-      ShareUtils.shareAppToQQ(FeedActivity.this);
+    @OnClick(R.id.ll_help)
+    void onLlHelpClicked() {
+      startActivity(new Intent(FeedActivity.this, HelpActivity.class));
+      mPopupMenu.dismiss();
     }
   }
+
 }

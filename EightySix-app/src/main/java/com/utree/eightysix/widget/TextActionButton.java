@@ -4,7 +4,10 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
+import com.utree.eightysix.U;
+import de.akquinet.android.androlog.Log;
 
 /**
  * @author simon
@@ -19,14 +22,9 @@ public class TextActionButton extends ActionButton {
 
   public TextActionButton(Context context, AttributeSet attrs) {
     super(context, attrs);
-
-    setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
     mTextAction = new TextView(context, attrs);
-    LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-    mTextAction.setLayoutParams(lp);
-
     addView(mTextAction, 0);
+    mTextAction.setDuplicateParentStateEnabled(true);
   }
 
   @Override
@@ -39,6 +37,15 @@ public class TextActionButton extends ActionButton {
     mTextAction.setBackgroundDrawable(drawable);
   }
 
+  @Override
+  public void setLayoutParams(ViewGroup.LayoutParams params) {
+    LayoutParams p = new LayoutParams(params);
+    int h = U.dp2px(8);
+    int v = U.dp2px(12);
+    p.setMargins(h, v, h, v);
+    mTextAction.setLayoutParams(p);
+    super.setLayoutParams(params);
+  }
 
   public void setGravity(int gravity) {
     mTextAction.setGravity(gravity);

@@ -1,5 +1,6 @@
 package com.utree.eightysix.location;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import com.baidu.location.BDLocation;
@@ -54,11 +55,11 @@ public class BdLocationImpl implements Location, BDLocationListener {
   };
   private final List<OnResult> mTransientOnResult;
 
-  public BdLocationImpl() {
-    mLocationClient = new LocationClient(U.getContext());
+  public BdLocationImpl(Context context) {
+    mLocationClient = new LocationClient(context.getApplicationContext());
     LocationClientOption option = new LocationClientOption();
     option.setOpenGps(true);
-    option.setProdName(U.getContext().getResources().getString(R.string.app_name));
+    option.setProdName("eightysix");
     option.setAddrType("all");// 返回的定位结果包含地址信息
     option.setCoorType("bd09ll");// 返回的定位结果是百度经纬度,默认值gcj02
     option.setScanSpan(2000);// 设置发起定位请求的间隔时间为500ms,一次定位
@@ -73,37 +74,42 @@ public class BdLocationImpl implements Location, BDLocationListener {
 
   @Override
   public void onReceiveLocation(BDLocation bdLocation) {
+    final Result result;
     if (bdLocation != null) {
-      Log.d(this, "getLocTypeError: " + bdLocation.getLocType());
       mHandler.removeMessages(MSG_REQ_TIMEOUT);
-      if (bdLocation.getLocType() == BDLocation.TypeCriteriaException
-          || bdLocation.getLocType() == BDLocation.TypeNetWorkException
-          || bdLocation.getLocType() == BDLocation.TypeOffLineLocationFail
-          || bdLocation.getLocType() == BDLocation.TypeOffLineLocationNetworkFail
-          || bdLocation.getLocType() > BDLocation.TypeNetWorkLocation) {
-        return;
+      if (bdLocation.getLocType() != BDLocation.TypeCriteriaException
+          && bdLocation.getLocType() != BDLocation.TypeNetWorkException
+          && bdLocation.getLocType() != BDLocation.TypeOffLineLocationFail
+          && bdLocation.getLocType() != BDLocation.TypeOffLineLocationNetworkFail
+          && bdLocation.getLocType() <= BDLocation.TypeNetWorkLocation) {
+        result = new Result();
+        result.address = bdLocation.getAddrStr();
+        result.city = bdLocation.getCity();
+        result.latitude = bdLocation.getLatitude();
+        result.longitude = bdLocation.getLongitude();
+        result.poi = bdLocation.getPoi();
+
+        Env.setLastLatitude(result.latitude);
+        Env.setLastLongitude(result.longitude);
+        Env.setLastCity(result.city);
+      } else {
+        result = null;
       }
-      final Result result = new Result();
-      result.address = bdLocation.getAddrStr();
-      result.city = bdLocation.getCity();
-      result.latitude = bdLocation.getLatitude();
-      result.longitude = bdLocation.getLongitude();
-      result.poi = bdLocation.getPoi();
-
-      for (OnResult onResult : mOnResults) {
-        onResult.onResult(result);
-      }
-
-      for (OnResult onResult : mTransientOnResult) {
-        onResult.onResult(result);
-      }
-
-      mTransientOnResult.clear();
-
-      Env.setLastLatitude(result.latitude);
-      Env.setLastLongitude(result.longitude);
-      Env.setLastCity(result.city);
+    } else {
+      result = null;
     }
+
+    for (OnResult onResult : mOnResults) {
+      onResult.onResult(result);
+    }
+
+    for (OnResult onResult : mTransientOnResult) {
+      onResult.onResult(result);
+    }
+
+    mTransientOnResult.clear();
+
+    mLocationClient.stop();
   }
 
   @Override

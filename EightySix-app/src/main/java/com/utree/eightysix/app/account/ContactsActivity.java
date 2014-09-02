@@ -1,18 +1,18 @@
 package com.utree.eightysix.app.account;
 
-import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.telephony.SmsManager;
-import android.view.Gravity;
+import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import butterknife.InjectView;
+import butterknife.OnTextChanged;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
@@ -27,6 +27,9 @@ import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.TextActionButton;
 import com.utree.eightysix.widget.TopBar;
+import de.akquinet.android.androlog.Log;
+
+import java.util.ArrayList;
 
 /**
  * @author simon
@@ -36,6 +39,8 @@ import com.utree.eightysix.widget.TopBar;
 public class ContactsActivity extends BaseActivity {
 
 
+  private static final String TAG = "ContactsActivity";
+
   @InjectView (R.id.alv_contacts)
   public AdvancedListView mAlvContacts;
 
@@ -43,21 +48,44 @@ public class ContactsActivity extends BaseActivity {
   public TextView mTvEmptyView;
 
   @InjectView (R.id.tv_search_hint)
-  public EditText mRbSearchHint;
+  public EditText mEtSearchHint;
 
   private ContactsAdapter mContactsAdapter;
 
+  public static void start(Context context, String textToShare) {
+    Intent intent = new Intent(context, ContactsActivity.class);
+    intent.putExtra("textToShare", textToShare);
+    context.startActivity(intent);
+  }
+
   @Subscribe
   public void onContactCheckedChanged(ContactCheckedCountChanged changed) {
-    ((TextActionButton) getTopBar().getActionView(0)).setText(String.format("完成(%d)", changed.getCount()));
+    if (changed.getCount() == 0) {
+      disableSendButton();
+    } else {
+      enableSendButton();
+    }
+  }
+
+  @OnTextChanged (R.id.tv_search_hint)
+  public void onEtSearchHintTextChanged(CharSequence cs) {
+    if (mContactsAdapter != null) {
+      mContactsAdapter.setFilter(cs);
+    }
+  }
+
+  @Override
+  public void onActionLeftClicked() {
+    finish();
   }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    mRbSearchHint.setHint(R.string.search_contact);
-    mRbSearchHint.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(2), Color.WHITE));
+    mEtSearchHint.setInputType(InputType.TYPE_CLASS_TEXT);
+    mEtSearchHint.setHint(R.string.search_contact);
+    mEtSearchHint.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(2), Color.WHITE));
 
     showProgressBar();
 
@@ -80,8 +108,13 @@ public class ContactsActivity extends BaseActivity {
       @Override
       public void onClick(View view, int position) {
         for (Contact contact : mContactsAdapter.getChecked()) {
-          sendSMS(contact.phone, "来自蓝莓");
+          String textToShare = String.format("%s, %s", contact.name, getIntent().getStringExtra("textToShare"));
+          Log.d(TAG, "send Share msg to " + contact.toString());
+          Log.d(TAG, "with share msg " + textToShare);
+          sendSMS(contact.phone, textToShare);
         }
+
+        showToast(getString(R.string.share_succeed), false);
         finish();
       }
 
@@ -91,18 +124,21 @@ public class ContactsActivity extends BaseActivity {
       }
 
       @Override
-      public FrameLayout.LayoutParams getLayoutParams(int position) {
-        return new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
+      public TopBar.LayoutParams getLayoutParams(int position) {
+        TopBar.LayoutParams layoutParams = new TopBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.rightMargin = U.dp2px(8);
+        return layoutParams;
       }
     });
 
     ContactsSyncService.start(this, true);
-  }
 
-  @Override
-  protected void onActionLeftOnClicked() {
-    finish();
+    getTopBar().getActionView(0).setActionBackgroundDrawable(
+        new RoundRectDrawable(U.dp2px(2),
+            getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
+    ((TextActionButton) getTopBar().getActionView(0)).setTextColor(
+        getResources().getColor(R.color.apptheme_primary_grey_color_disabled));
   }
 
   @Override
@@ -126,9 +162,10 @@ public class ContactsActivity extends BaseActivity {
   }
 
   private void sendSMS(String phoneNumber, String message) {
-    PendingIntent intent = PendingIntent.getActivity(this, 0, new Intent(this, ContactsActivity.class), 0);
+    if (message == null) return;
     SmsManager sms = SmsManager.getDefault();
-    sms.sendTextMessage(phoneNumber, null, message, null, null);
+    ArrayList<String> strings = SmsManager.getDefault().divideMessage(message);
+    sms.sendMultipartTextMessage(phoneNumber, null, strings, null, null);
   }
 
   public static class ContactCheckedCountChanged {
@@ -143,4 +180,20 @@ public class ContactsActivity extends BaseActivity {
     }
   }
 
+  protected void enableSendButton() {
+    getTopBar().getActionView(0).setEnabled(true);
+    getTopBar().getActionView(0).setActionBackgroundDrawable(
+        new RoundRectDrawable(U.dp2px(2),
+            getResources().getColorStateList(R.color.apptheme_primary_btn_light)));
+    ((TextActionButton) getTopBar().getActionView(0)).setTextColor(Color.WHITE);
+  }
+
+  private void disableSendButton() {
+    getTopBar().getActionView(0).setEnabled(false);
+    getTopBar().getActionView(0).setActionBackgroundDrawable(
+        new RoundRectDrawable(U.dp2px(2),
+            getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
+    ((TextActionButton) getTopBar().getActionView(0)).setTextColor(
+        getResources().getColor(R.color.apptheme_primary_grey_color_disabled));
+  }
 }

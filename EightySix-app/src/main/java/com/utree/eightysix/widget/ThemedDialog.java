@@ -59,10 +59,12 @@ public class ThemedDialog extends Dialog {
     mVBotDivider.setVisibility(View.INVISIBLE);
   }
 
-  @SuppressLint ("InflateParams")
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    setCancelable(true);
+    setCanceledOnTouchOutside(true);
 
     setContentView(mBase);
   }
@@ -90,6 +92,10 @@ public class ThemedDialog extends Dialog {
     if (mShownNegative) {
       layoutParams.leftMargin = U.dp2px(20);
       layoutParams.rightMargin = U.dp2px(10);
+
+      ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) mRbNegative.getLayoutParams();
+      lp.leftMargin = U.dp2px(10);
+      lp.rightMargin = U.dp2px(20);
     } else {
       layoutParams.leftMargin = U.dp2px(50);
       layoutParams.rightMargin = U.dp2px(50);
@@ -99,7 +105,7 @@ public class ThemedDialog extends Dialog {
   }
 
   public void setRbNegative(int textId, View.OnClickListener listener) {
-    setPositive(getContext().getString(textId), listener);
+    setRbNegative(getContext().getString(textId), listener);
   }
 
   public void setRbNegative(CharSequence cs, View.OnClickListener listener) {
@@ -109,8 +115,12 @@ public class ThemedDialog extends Dialog {
 
     ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mRbNegative.getLayoutParams();
     if (mShownPositive) {
-      layoutParams.leftMargin = U.dp2px(20);
-      layoutParams.rightMargin = U.dp2px(10);
+      layoutParams.leftMargin = U.dp2px(10);
+      layoutParams.rightMargin = U.dp2px(20);
+
+      ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) mRbPositive.getLayoutParams();
+      lp.leftMargin = U.dp2px(20);
+      lp.rightMargin = U.dp2px(10);
     } else {
       layoutParams.leftMargin = U.dp2px(50);
       layoutParams.rightMargin = U.dp2px(50);

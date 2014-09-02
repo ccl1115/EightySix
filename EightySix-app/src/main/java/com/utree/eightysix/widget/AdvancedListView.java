@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import com.squareup.otto.Subscribe;
-import com.utree.eightysix.U;
+import com.utree.eightysix.R;
 import com.utree.eightysix.event.AdapterDataSetChangedEvent;
 
 /**
@@ -25,16 +25,17 @@ public final class AdvancedListView extends ListView {
   private float mLastDownY;
 
   public AdvancedListView(Context context) {
-    super(context);
+    this(context, null, 0);
   }
 
   public AdvancedListView(Context context, AttributeSet attrs) {
-    super(context, attrs);
+    this(context, attrs, 0);
   }
 
   public AdvancedListView(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
-
+    setCacheColorHint(0x00000000);
+    setSelector(getResources().getDrawable(R.drawable.transparent));
   }
 
   @Override

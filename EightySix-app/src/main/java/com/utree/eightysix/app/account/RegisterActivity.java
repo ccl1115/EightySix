@@ -1,14 +1,12 @@
 package com.utree.eightysix.app.account;
 
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
@@ -17,13 +15,16 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.circle.BaseCirclesActivity;
+import com.utree.eightysix.contact.ContactsSyncEvent;
+import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.User;
 import com.utree.eightysix.request.RegisterRequest;
 import com.utree.eightysix.response.UserResponse;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.widget.RoundedButton;
-import com.utree.eightysix.widget.TopBar;
 
 /**
  */
@@ -39,20 +40,18 @@ public class RegisterActivity extends BaseActivity {
   @InjectView (R.id.btn_register)
   public RoundedButton mBtnRegister;
 
-  @InjectView (R.id.btn_import_contact)
-  public RoundedButton mRbImportContact;
-
   private boolean mCorrectPhoneNumber;
   private boolean mCorrectPwd;
+
+  public static void start(Context context, String number) {
+    Intent intent = new Intent(context, RegisterActivity.class);
+    intent.putExtra("phoneNumber", number);
+    context.startActivity(intent);
+  }
 
   @OnClick (R.id.btn_register)
   public void onBtnRegisterClicked() {
     requestRegister();
-  }
-
-  @OnClick (R.id.btn_import_contact)
-  public void onBtnImportContactClicked() {
-    startActivity(new Intent(this, ImportContactActivity.class));
   }
 
   public void onCreate(Bundle savedInstanceState) {
@@ -60,8 +59,6 @@ public class RegisterActivity extends BaseActivity {
     setContentView(R.layout.activity_register);
 
     setTopTitle(getString(R.string.register) + getString(R.string.app_name));
-
-    mRbImportContact.setVisibility(U.useFixture() ? View.VISIBLE : View.GONE);
 
     mEtPhoneNumber.addTextChangedListener(new TextWatcher() {
       @Override
@@ -120,46 +117,22 @@ public class RegisterActivity extends BaseActivity {
       }
     });
 
-    getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
-      @Override
-      public String getTitle(int position) {
-        if (position == 0) {
-          return getString(R.string.login);
-        }
-        return null;
-      }
+    String phoneNumber = getIntent().getStringExtra("phoneNumber");
 
-      @Override
-      public Drawable getIcon(int position) {
-        return null;
-      }
-
-      @Override
-      public Drawable getBackgroundDrawable(int position) {
-        return U.gd(R.drawable.apptheme_primary_btn_dark);
-      }
-
-      @Override
-      public void onClick(View view, int position) {
-        if (position == 0) {
-          startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-        }
-      }
-
-      @Override
-      public int getCount() {
-        return 1;
-      }
-
-      @Override
-      public FrameLayout.LayoutParams getLayoutParams(int position) {
-        return new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-      }
-    });
+    if (phoneNumber != null) {
+      mEtPhoneNumber.setText(phoneNumber);
+      mEtPhoneNumber.setSelection(mEtPhoneNumber.getText().length());
+    }
   }
 
   @Override
-  protected void onActionLeftOnClicked() {
+  protected void onDestroy() {
+    super.onDestroy();
+    Env.setFirstRun(false);
+  }
+
+  @Override
+  public void onActionLeftClicked() {
     finish();
   }
 
@@ -169,6 +142,12 @@ public class RegisterActivity extends BaseActivity {
   }
 
   private void requestRegister() {
+
+    if (!InputValidator.pwdRegex(mEtPwd.getText().toString())) {
+      showToast("密码格式错误，仅限字母和数字哦");
+      return;
+    }
+
     request(new RegisterRequest(mEtPhoneNumber.getText().toString(), mEtPwd.getText().toString()),
         new OnResponse<UserResponse>() {
           @Override
@@ -179,8 +158,8 @@ public class RegisterActivity extends BaseActivity {
                 if (user != null) {
                   Account.inst().login(user.userId, user.token);
                   showToast(R.string.register_success, false);
-                  startActivity(new Intent(RegisterActivity.this, ImportContactActivity.class));
-                  finish();
+                  setLoadingText("身份验证中");
+                  ContactsSyncService.start(RegisterActivity.this, true);
                   return;
                 } else {
                   showToast(R.string.server_object_error);
@@ -193,6 +172,17 @@ public class RegisterActivity extends BaseActivity {
         }, UserResponse.class);
 
     showProgressBar();
+    hideSoftKeyboard(mEtPwd);
     mBtnRegister.setEnabled(false);
+  }
+
+  @Subscribe
+  public void onContactsSyncEvent(ContactsSyncEvent event) {
+    BaseCirclesActivity.startSelect(this);
+    finish();
+  }
+
+  @Subscribe
+  public void onLoginEvent(Account.LoginEvent event) {
   }
 }

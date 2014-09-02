@@ -7,7 +7,10 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import java.io.IOException;
+import java.util.List;
+import java.util.Random;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -37,6 +40,10 @@ public class GridPanel extends ViewPager {
     }
 
     setAdapter(new PanelAdapter());
+  }
+
+  public List<Item> getItemsByPage(int page) {
+    return mPanel.getPages().get(page).getItems();
   }
 
   private class PanelAdapter extends PagerAdapter {

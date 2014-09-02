@@ -20,8 +20,10 @@ public class OSSImpl implements Storage {
 
     private static final String TAG = "OSSImpl";
 
-    private static final String ACCESS_KEY_ID = "tUDRZZW0ErGfob0D";
-    private static final String ACCESS_KEY_SECRET = "THPrVUnQiAv2wgdp2rSd8MHdUJyMW9";
+    private static final String ACCESS_KEY_ID =
+        BuildConfig.DEBUG ? "tUDRZZW0ErGfob0D" : "UMJhKPxxc9LvurmF";
+    private static final String ACCESS_KEY_SECRET =
+        BuildConfig.DEBUG ? "THPrVUnQiAv2wgdp2rSd8MHdUJyMW9" : "7gXr5CXy4ns8lNEkXtZ3UyBn13NAnx";
 
     private final PathValidator mPathValidator = new PathValidator();
     private OSSClient mOSSClient;
@@ -58,6 +60,7 @@ public class OSSImpl implements Storage {
             if (BuildConfig.DEBUG) {
                 e.printStackTrace();
             }
+            result.error = 1;
             result.msg = e.getErrorCode();
         }
         return result;

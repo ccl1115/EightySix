@@ -16,7 +16,7 @@ import com.utree.eightysix.drawable.RoundRectDrawable;
 /**
  * @author simon
  */
-public abstract class ActionButton extends FrameLayout {
+public class ActionButton extends FrameLayout {
 
   private boolean mHasNew;
 
@@ -34,8 +34,8 @@ public abstract class ActionButton extends FrameLayout {
   public ActionButton(Context context, AttributeSet attrs) {
     super(context, attrs);
 
-    kIndicatorMargin = U.dp2px(10);
-    kIndicatorSize = U.dp2px(10);
+    kIndicatorMargin = U.dp2px(8);
+    kIndicatorSize = U.dp2px(8);
 
     mNewIndicator =
         new RoundRectDrawable(U.dp2px(10), getResources().getColor(R.color.apptheme_secondary_light_color));
@@ -44,7 +44,7 @@ public abstract class ActionButton extends FrameLayout {
     mCountIndicator.setSingleLine(true);
     mCountIndicator.setTextSize(12);
     mCountIndicator.setTextColor(Color.WHITE);
-    final int p = U.dp2px(4);
+    final int p = U.dp2px(5);
     mCountIndicator.setPadding(p, 0, p, 0);
     mCountIndicator.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(10),
         getResources().getColor(R.color.apptheme_secondary_light_color)));
@@ -55,12 +55,14 @@ public abstract class ActionButton extends FrameLayout {
     params.gravity = Gravity.RIGHT;
     mCountIndicator.setLayoutParams(params);
     addView(mCountIndicator);
-    mCountIndicator.setVisibility(INVISIBLE);
+    mCountIndicator.setVisibility(GONE);
+
+    mNewIndicator.setCallback(this);
   }
 
-  public abstract void setActionLayoutParams(LayoutParams params);
+  public void setActionLayoutParams(LayoutParams params) {}
 
-  public abstract void setActionBackgroundDrawable(Drawable drawable);
+  public void setActionBackgroundDrawable(Drawable drawable) {}
 
   public void setHasNew(boolean n) {
     mHasNew = n;
@@ -69,11 +71,14 @@ public abstract class ActionButton extends FrameLayout {
   }
 
   public void setCount(int c) {
+    if (c > 99) {
+      c = 99;
+    }
     mCountIndicator.setText(String.valueOf(c));
     if (c > 0) {
       mCountIndicator.setVisibility(VISIBLE);
     } else {
-      mCountIndicator.setVisibility(INVISIBLE);
+      mCountIndicator.setVisibility(GONE);
     }
     requestLayout();
     invalidate();
