@@ -14,7 +14,6 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
@@ -510,9 +509,6 @@ public class FeedFragment extends BaseFragment {
             mFeedAdapter.add(response.object.posts.lists);
           }
           mPageInfo = response.object.posts.page;
-
-          ((FeedActivity) getBaseActivity())
-              .setMyPraiseCount(response.object.myPraiseCount, response.object.praisePercent, response.object.upDown);
 
           ((FeedActivity) getBaseActivity()).mSend.setImageResource(response.object.lock != 1 || response.object.current == 1 ?
               R.drawable.ic_post_pen : R.drawable.ic_post_pen_disabled);
