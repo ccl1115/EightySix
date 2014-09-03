@@ -219,6 +219,8 @@ public class ContactsSyncService extends IntentService {
 
       number = b.toString();
 
+      number = number.replaceAll(" ", "");
+
       if (number.startsWith("86")) {
         number = number.substring(2);
       }
