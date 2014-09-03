@@ -1,12 +1,15 @@
 package com.utree.eightysix.app.msg;
 
+import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.U;
+import com.utree.eightysix.data.PullNotification;
 import com.utree.eightysix.request.FetchNotificationRequest;
 import com.utree.eightysix.response.FetchResponse;
 import com.utree.eightysix.rest.HandlerWrapper;
@@ -14,6 +17,7 @@ import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.RequestData;
 import de.akquinet.android.androlog.Log;
+import java.util.List;
 
 /**
  * @author simon
@@ -24,6 +28,7 @@ public class FetchNotificationService extends Service {
   private static final int FETCH_INTERVAL = 60000;
   private static final int MSG_FETCH = 0x1;
 
+  private NotifyUtil mNotifyUtil;
 
   private Handler mHandler = new Handler() {
     @Override
@@ -38,6 +43,12 @@ public class FetchNotificationService extends Service {
     Log.d(TAG, "start FetchService");
     mHandler.sendEmptyMessage(MSG_FETCH);
     return START_NOT_STICKY;
+  }
+
+  @Override
+  public void onCreate() {
+    super.onCreate();
+    mNotifyUtil = new NotifyUtil(this);
   }
 
   @Override
@@ -66,6 +77,38 @@ public class FetchNotificationService extends Service {
           }
 
           Account.inst().setNewCommentCount(count);
+
+
+          PullNotification newPost = response.object.newPost;
+          if (newPost != null) {
+            if (newPost.lists != null && newPost.lists.size() != 0) {
+              List<PullNotification.Item> lists = newPost.lists;
+              for (int i = 0, listsSize = lists.size(); i < listsSize; i++) {
+                PullNotification.Item item = lists.get(i);
+                getNM().notify(item.value, NotifyUtil.ID_POST, mNotifyUtil.buildPost(i, item.value, item.shortName));
+              }
+            }
+          }
+
+          PullNotification unlock = response.object.newFactoryUnlock;
+          if (unlock != null) {
+            if (unlock.lists != null && unlock.lists.size() != 0) {
+              for (PullNotification.Item item : unlock.lists) {
+                getNM().notify(item.value, NotifyUtil.ID_FRIEND_L1_JOIN,
+                    mNotifyUtil.buildFriendJoin(item.value, item.shortName, item.friendCount));
+              }
+            }
+          }
+
+          PullNotification friendL1Join = response.object.friendL1Join;
+          if (friendL1Join != null) {
+            if (friendL1Join.lists != null && friendL1Join.lists.size() != 0) {
+              for (PullNotification.Item item : friendL1Join.lists) {
+                getNM().notify(item.value, NotifyUtil.ID_FRIEND_L1_JOIN,
+                    mNotifyUtil.buildFriendJoin(item.value, item.shortName, item.friendCount));
+              }
+            }
+          }
         }
       }
 
@@ -74,6 +117,10 @@ public class FetchNotificationService extends Service {
         e.printStackTrace();
       }
     }, FetchResponse.class));
+  }
+
+  private NotificationManager getNM() {
+    return (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
   }
 
   @Override

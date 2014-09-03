@@ -15,4 +15,13 @@ public class FetchNotification {
 
   @SerializedName("myPostComment")
   public PullNotification myPostComment;
+
+  @SerializedName("newPost")
+  public PullNotification newPost;
+
+  @SerializedName("newFactoryPass")
+  public PullNotification newFactoryUnlock;
+
+  @SerializedName("friendL1Join")
+  public PullNotification friendL1Join;
 }
