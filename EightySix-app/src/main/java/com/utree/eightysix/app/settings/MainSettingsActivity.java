@@ -51,8 +51,19 @@ public class MainSettingsActivity extends BaseActivity {
   @OnClick (R.id.ll_check_update)
   public void onLlCheckUpdateClicked() {
     Sync sync = U.getSyncClient().getSync();
+    int version = 0;
     if (sync != null && sync.upgrade != null) {
-      new UpgradeDialog(this, sync.upgrade).show();
+      try {
+        version = Integer.parseInt(sync.upgrade.version);
+      } catch (NumberFormatException ignored) {
+      }
+      if (version > C.VERSION) {
+        new UpgradeDialog(this, sync.upgrade).show();
+      } else {
+        showToast(getString(R.string.newest_version));
+      }
+    } else {
+      showToast(getString(R.string.newest_version));
     }
   }
 

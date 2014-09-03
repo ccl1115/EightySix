@@ -75,11 +75,11 @@ public class IntroActivity extends BaseActivity {
     getHandler().postDelayed(new Runnable() {
       @Override
       public void run() {
-        if (Env.firstRun()) {
-          startActivity(new Intent(IntroActivity.this, GuideActivity.class));
-          finish();
-        } else if (Account.inst().isLogin()) {
+        if (Account.inst().isLogin()) {
           startActivity(new Intent(IntroActivity.this, FeedActivity.class));
+          finish();
+        } else if (Env.firstRun()) {
+          startActivity(new Intent(IntroActivity.this, GuideActivity.class));
           finish();
         } else {
           showLogin();
