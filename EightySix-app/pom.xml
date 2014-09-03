@@ -12,10 +12,10 @@
     <artifactId>EightySix-app</artifactId>
     <packaging>apk</packaging>
     <name>EightySix-app - Application</name>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 
     <properties>
-        <android.manifest.versionCode>2</android.manifest.versionCode>
+        <android.manifest.versionCode>3</android.manifest.versionCode>
         <android.manifest.versionName>${project.version}</android.manifest.versionName>
     </properties>
 

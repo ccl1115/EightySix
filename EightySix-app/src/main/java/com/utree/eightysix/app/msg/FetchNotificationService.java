@@ -114,7 +114,6 @@ public class FetchNotificationService extends Service {
 
       @Override
       public void onResponseError(Throwable e) {
-        e.printStackTrace();
       }
     }, FetchResponse.class));
   }
