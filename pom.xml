@@ -301,18 +301,6 @@
     </distributionManagement>
 
     <profiles>
-        <profile>
-            <id>debug</id>
-            <activation>
-                <property>
-                    <name>environment</name>
-                    <value>development</value>
-                </property>
-            </activation>
-            <modules>
-                <module>EightySix-it</module>
-            </modules>
-        </profile>
 
         <profile>
             <id>release</id>
