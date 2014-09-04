@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -115,7 +116,6 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}-${project.version}-${android.manifest.versionCode}</finalName>
         <plugins>
             <plugin>
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>
@@ -131,52 +131,56 @@
                 </executions>
             </plugin>
 
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>qrcode</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <executable>qr</executable>
+                    <commandlineArgs>
+                        ${JOB_URL}lastSuccessfulBuild/artifact/EightySix-app/target/${build.finalName} > ${build.finalName}.png
+                    </commandlineArgs>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
     <profiles>
         <profile>
-            <id>mail</id>
+            <id>nightly</id>
+
+            <properties>
+                <maven.build.timestamp.format>yyyy/MM/dd-HH:mm</maven.build.timestamp.format>
+                <buildNumber>nightly-${android.manifest.versionName}-${maven.build.timestamp}
+                </buildNumber>
+            </properties>
 
             <build>
-                <plugins>
-                    <plugin>
+                <finalName>lanmei-${buildNumber}</finalName>
+            </build>
+        </profile>
 
-                        <groupId>ch.fortysix</groupId>
-                        <artifactId>maven-postman-plugin</artifactId>
-                        <version>0.1.6</version>
-                        <executions>
-                            <execution>
-                                <id>send-mail</id>
-                                <phase>install</phase>
-                                <goals>
-                                    <goal>send-mail</goal>
-                                </goals>
 
-                                <inherited>false</inherited>
-                                <configuration>
-                                    <from>yulu@utree.cn</from>
-                                    <failonerror>true</failonerror>
-                                    <mailhost>smtp.exmail.qq.com</mailhost>
-                                    <mailport>465</mailport>
-                                    <mailuser>yulu@utree.com</mailuser>
-                                    <mailpassword>0612053qq</mailpassword>
-                                    <receivers>
-                                        <receiver>all@utree.cn</receiver>
-                                    </receivers>
-                                    <subject>EightySix-app</subject>
-                                    <fileSets>
-                                        <fileSet>
-                                            <directory>target</directory>
-                                            <include>*.apk</include>
-                                        </fileSet>
-                                    </fileSets>
-                                </configuration>
+        <profile>
+            <id>hourly</id>
 
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
+            <properties>
+                <maven.build.timestamp.format>yyyy/MM/dd-HH:mm</maven.build.timestamp.format>
+                <buildNumber>hourly-${android.manifest.versionName}-${maven.build.timestamp}
+                </buildNumber>
+            </properties>
+
+            <build>
+                <finalName>lanmei-${buildNumber}</finalName>
             </build>
         </profile>
 
