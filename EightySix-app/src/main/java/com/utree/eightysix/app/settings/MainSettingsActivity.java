@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 import butterknife.InjectView;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
@@ -26,6 +28,9 @@ public class MainSettingsActivity extends BaseActivity {
 
   @InjectView (R.id.rb_upgrade_dot)
   public RoundedButton mRbUpgradeDot;
+
+  @InjectView(R.id.cb_silent_mode)
+  public CheckBox mCbSilentMode;
 
   @OnClick (R.id.rb_logout)
   public void onRbLogoutClicked() {
@@ -51,14 +56,25 @@ public class MainSettingsActivity extends BaseActivity {
   @OnClick (R.id.ll_check_update)
   public void onLlCheckUpdateClicked() {
     Sync sync = U.getSyncClient().getSync();
+    int version = 0;
     if (sync != null && sync.upgrade != null) {
-      new UpgradeDialog(this, sync.upgrade).show();
+      try {
+        version = Integer.parseInt(sync.upgrade.version);
+      } catch (NumberFormatException ignored) {
+      }
+      if (version > C.VERSION) {
+        new UpgradeDialog(this, sync.upgrade).show();
+      } else {
+        showToast(getString(R.string.newest_version));
+      }
+    } else {
+      showToast(getString(R.string.newest_version));
     }
   }
 
-  @OnClick (R.id.tv_help)
-  public void onTvHelpClicked() {
-
+  @OnCheckedChanged(R.id.cb_silent_mode)
+  public void onCbSilentModeChecked(boolean checked){
+    Account.inst().setSilentMode(checked);
   }
 
   @Override
@@ -83,6 +99,8 @@ public class MainSettingsActivity extends BaseActivity {
         mRbUpgradeDot.setVisibility(View.INVISIBLE);
       }
     }
+
+    mCbSilentMode.setChecked(Account.inst().getSilentMode());
   }
 
   @Override

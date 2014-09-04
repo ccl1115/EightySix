@@ -102,6 +102,9 @@ public class Sync {
     @SerializedName("version")
     public String version;
 
+    @SerializedName("versionName")
+    public String versionName;
+
     /**
      * 是否提醒
      */

@@ -285,6 +285,11 @@
                     <artifactId>maven-jarsigner-plugin</artifactId>
                     <version>1.2</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>1.1.1</version>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -301,18 +306,6 @@
     </distributionManagement>
 
     <profiles>
-        <profile>
-            <id>debug</id>
-            <activation>
-                <property>
-                    <name>environment</name>
-                    <value>development</value>
-                </property>
-            </activation>
-            <modules>
-                <module>EightySix-it</module>
-            </modules>
-        </profile>
 
         <profile>
             <id>release</id>

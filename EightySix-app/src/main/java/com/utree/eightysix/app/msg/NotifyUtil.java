@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.C;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -81,7 +82,7 @@ public class NotifyUtil {
     return new NotificationCompat.Builder(mContext)
         .setTicker(mContext.getString(R.string.notification_friend_new_post))
         .setAutoCancel(true)
-        .setDefaults(Notification.DEFAULT_ALL)
+        .setDefaults(Account.inst().getSilentMode()? Notification.DEFAULT_VIBRATE : Notification.DEFAULT_ALL)
         .setLargeIcon(sLargeIcon)
         .setSmallIcon(R.drawable.ic_launcher)
         .setContentTitle(shortName)
@@ -96,7 +97,7 @@ public class NotifyUtil {
     return new NotificationCompat.Builder(mContext).setTicker(mContext.getString(R.string.notification_circle_unlocked))
         .setLargeIcon(sLargeIcon)
         .setAutoCancel(true)
-        .setDefaults(Notification.DEFAULT_ALL)
+        .setDefaults(Account.inst().getSilentMode()? Notification.DEFAULT_VIBRATE : Notification.DEFAULT_ALL)
         .setSmallIcon(R.drawable.ic_launcher)
         .setContentTitle(mContext.getString(R.string.notification_circle_unlocked))
         .setContentText(mContext.getString(R.string.notification_circle_unlocked_tip, circleName))
@@ -111,7 +112,7 @@ public class NotifyUtil {
     builder.setContentTitle(mContext.getString(R.string.notification_new))
         .setAutoCancel(true)
         .setTicker(mContext.getString(R.string.notification_new))
-        .setDefaults(Notification.DEFAULT_ALL)
+        .setDefaults(Account.inst().getSilentMode()? Notification.DEFAULT_VIBRATE : Notification.DEFAULT_ALL)
         .setSmallIcon(R.drawable.ic_launcher)
         .setLargeIcon(sLargeIcon);
     if (count == 1) {
@@ -135,7 +136,7 @@ public class NotifyUtil {
         .setLargeIcon(sLargeIcon)
         .setAutoCancel(true)
         .setTicker(mContext.getString(R.string.notification_circle_create_approve))
-        .setDefaults(Notification.DEFAULT_ALL)
+        .setDefaults(Account.inst().getSilentMode()? Notification.DEFAULT_VIBRATE : Notification.DEFAULT_ALL)
         .setSmallIcon(R.drawable.ic_launcher)
         .setContentTitle(mContext.getString(R.string.notification_circle_create_approve))
         .setContentText(mContext.getString(R.string.notification_circle_create_approve_tip, circleName))

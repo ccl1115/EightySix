@@ -105,18 +105,24 @@ public class Account {
     int value = getNewCommentCount() + count;
     U.getBus().post(new NewCommentCountEvent(value));
     getAccountSharedPreferences().edit().putInt("new_comment_count", value).apply();
-    Log.d(C.TAG.ACCOUNT, "incNewCommentCount: " + value);
   }
 
   public void decNewCommentCount(int count) {
     int value = Math.max(getNewCommentCount() - count, 0);
     U.getBus().post(new NewCommentCountEvent(value));
     getAccountSharedPreferences().edit().putInt("new_comment_count", value).apply();
-    Log.d(C.TAG.ACCOUNT, "incNewCommentCount: " + value);
   }
 
   public int getNewCommentCount() {
     return getAccountSharedPreferences().getInt("new_comment_count", 0);
+  }
+
+  public void setSilentMode(boolean toggle) {
+    getAccountSharedPreferences().edit().putBoolean("settings_silent_mode", toggle).apply();
+  }
+
+  public boolean getSilentMode() {
+    return getAccountSharedPreferences().getBoolean("settings_silent_mode", false);
   }
 
   private boolean setToken(String token) {

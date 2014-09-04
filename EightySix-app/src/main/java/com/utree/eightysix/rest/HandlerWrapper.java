@@ -1,13 +1,22 @@
 package com.utree.eightysix.rest;
 
+import android.os.SystemClock;
 import android.widget.Toast;
 import com.google.gson.Gson;
 import com.loopj.android.http.BaseJsonHttpResponseHandler;
 import com.utree.eightysix.*;
+import com.utree.eightysix.utils.IOUtils;
 import de.akquinet.android.androlog.Log;
 import org.apache.http.HttpStatus;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.net.ConnectException;
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import org.apache.http.NoHttpResponseException;
 
 /**
@@ -74,17 +83,33 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
   @Override
   public void onFailure(int statusCode, org.apache.http.Header[] headers, Throwable e, String rawData, T errorResponse) {
     if (e != null) {
-      if (e instanceof ConnectException) {
-        U.showToast(U.getContext().getString(R.string.server_connection_exception));
-      } else if (e instanceof NoHttpResponseException) {
-
-      } else {
+      if (!(e instanceof NoHttpResponseException)) {
         U.showToast(U.getContext().getString(R.string.server_connection_exception));
       }
       if (BuildConfig.DEBUG) {
-        e.printStackTrace();
+        File tmp = IOUtils.createTmpFile(
+            String.format("server_error_%d_%d", statusCode, System.currentTimeMillis()));
+        PrintWriter writer = null;
+        try {
+
+          writer = new PrintWriter(tmp);
+
+          writer.write(DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL).format(new Date()));
+          writer.write("\nAPI: " + mRequestData.getApi());
+          writer.write("\nParams: " + mRequestData.getParams().toString());
+          writer.write("\n\n");
+          e.printStackTrace(writer);
+          writer.write("\n\n");
+          writer.write(rawData);
+        } catch (Exception ignored) {
+        } finally {
+          if (writer != null) {
+            writer.close();
+          }
+        }
+      } else {
+        U.getReporter().reportRequestError(mRequestData, e);
       }
-      U.getReporter().reportRequestError(mRequestData, e);
     }
 
     if (statusCode > HttpStatus.SC_MULTIPLE_CHOICES) {
