@@ -44,7 +44,7 @@ public class UpgradeDialog extends ThemedDialog {
     ViewHolder viewHolder = new ViewHolder(mFlContent);
 
     viewHolder.mTvInfo.setText(mUpgrade.info);
-    viewHolder.mTvVersion.setText(U.gfs(R.string.new_version, mUpgrade.version));
+    viewHolder.mTvVersion.setText(U.gfs(R.string.new_version, mUpgrade.versionName));
 
     setPositive(R.string.download_upgrade, new View.OnClickListener() {
       @Override

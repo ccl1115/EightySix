@@ -265,4 +265,5 @@
 
     <!-- MainSettingsActivity -->
     <string name="newest_version">已经是最新版本</string>
+    <string name="silent_mode">静音模式</string>
 </resources>

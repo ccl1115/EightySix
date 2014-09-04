@@ -117,6 +117,14 @@ public class Account {
     return getAccountSharedPreferences().getInt("new_comment_count", 0);
   }
 
+  public void setSilentMode(boolean toggle) {
+    getAccountSharedPreferences().edit().putBoolean("settings_silent_mode", toggle).apply();
+  }
+
+  public boolean getSilentMode() {
+    return getAccountSharedPreferences().getBoolean("settings_silent_mode", false);
+  }
+
   private boolean setToken(String token) {
     mToken = token;
 
