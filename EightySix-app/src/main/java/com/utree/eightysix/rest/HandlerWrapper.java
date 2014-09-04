@@ -4,10 +4,18 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.loopj.android.http.BaseJsonHttpResponseHandler;
 import com.utree.eightysix.*;
+import com.utree.eightysix.utils.IOUtils;
 import de.akquinet.android.androlog.Log;
 import org.apache.http.HttpStatus;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.net.ConnectException;
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import org.apache.http.NoHttpResponseException;
 
 /**
@@ -82,7 +90,17 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
         U.showToast(U.getContext().getString(R.string.server_connection_exception));
       }
       if (BuildConfig.DEBUG) {
-        e.printStackTrace();
+        File tmp = IOUtils.createTmpFile("server_log_%s" + DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(new Date()));
+        PrintWriter writer = null;
+        try {
+          writer = new PrintWriter(tmp);
+          e.printStackTrace(writer);
+        } catch (FileNotFoundException ignored) {
+        } finally {
+          if (writer != null) {
+            writer.close();
+          }
+        }
       }
       U.getReporter().reportRequestError(mRequestData, e);
     }
