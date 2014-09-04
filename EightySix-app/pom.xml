@@ -132,26 +132,6 @@
             </plugin>
 
 
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>qrcode</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <executable>qr</executable>
-                    <commandlineArgs>
-                        ${JOB_URL}lastSuccessfulBuild/artifact/EightySix-app/target/${build.finalName}
-                    </commandlineArgs>
-                    <outputFile>${build.finalName}.png</outputFile>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
@@ -160,7 +140,7 @@
             <id>nightly</id>
 
             <properties>
-                <maven.build.timestamp.format>yyyy/MM/dd-HH:mm</maven.build.timestamp.format>
+                <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
                 <buildNumber>nightly-${android.manifest.versionName}-${maven.build.timestamp}
                 </buildNumber>
             </properties>
@@ -175,7 +155,7 @@
             <id>hourly</id>
 
             <properties>
-                <maven.build.timestamp.format>yyyy/MM/dd-HH:mm</maven.build.timestamp.format>
+                <maven.build.timestamp.format>yyyy-MM-dd-HH:mm</maven.build.timestamp.format>
                 <buildNumber>hourly-${android.manifest.versionName}-${maven.build.timestamp}
                 </buildNumber>
             </properties>
