@@ -147,8 +147,9 @@
                 <configuration>
                     <executable>qr</executable>
                     <commandlineArgs>
-                        ${JOB_URL}lastSuccessfulBuild/artifact/EightySix-app/target/${build.finalName} > ${build.finalName}.png
+                        ${JOB_URL}lastSuccessfulBuild/artifact/EightySix-app/target/${build.finalName}
                     </commandlineArgs>
+                    <outputFile>${build.finalName}.png</outputFile>
                 </configuration>
             </plugin>
         </plugins>
