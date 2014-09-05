@@ -52,12 +52,16 @@
 
         <com.utree.eightysix.widget.RoundedButton
                 android:id="@+id/rb_new_praise_dot"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
                 android:layout_gravity="center_vertical"
-                android:visibility="invisible"
-                app:radius="5dp"
+                android:text="新"
+                android:textSize="12sp"
+                android:minHeight="0dp"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                app:radius="2dp"
                 app:background="@color/apptheme_secondary_light_color"/>
 
     </LinearLayout>
