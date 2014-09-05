@@ -441,15 +441,16 @@ public class FeedFragment extends BaseFragment {
             mCircle = response.object.circle;
             U.getBus().post(mCircle);
 
+            mFeedAdapter = new FeedAdapter(response.object);
+            M.getRegisterHelper().register(mFeedAdapter);
+            mLvFeed.setAdapter(mFeedAdapter);
+
             if (response.object.posts.lists.size() == 0) {
               mRstvEmpty.setVisibility(View.VISIBLE);
             } else {
               mRstvEmpty.setVisibility(View.GONE);
             }
 
-            mFeedAdapter = new FeedAdapter(response.object);
-            M.getRegisterHelper().register(mFeedAdapter);
-            mLvFeed.setAdapter(mFeedAdapter);
 
             ((FeedActivity) getBaseActivity()).setTitle(mCircle);
             getBaseActivity().setTopSubTitle(String.format(getString(R.string.friends_info),
@@ -477,7 +478,9 @@ public class FeedFragment extends BaseFragment {
                 response.object.fetch.newPraise.percent));
           }
         } else {
-          mRstvEmpty.setVisibility(View.VISIBLE);
+          if (mFeedAdapter != null && mFeedAdapter.getCount() == 0) {
+            mRstvEmpty.setVisibility(View.VISIBLE);
+          }
           if (mCircle != null) {
             getBaseActivity().setTopTitle(mCircle.shortName);
           }

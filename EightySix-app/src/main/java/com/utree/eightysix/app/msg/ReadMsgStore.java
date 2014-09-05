@@ -13,13 +13,13 @@ import java.util.Set;
 /**
  * @author simon
  */
-class ReadMsgStore {
+public class ReadMsgStore {
 
   private Set<String> sStore;
 
   private static ReadMsgStore sReadMsgStore;
 
-  static ReadMsgStore inst() {
+  public static ReadMsgStore inst() {
     if (sReadMsgStore == null) {
       sReadMsgStore = new ReadMsgStore();
     }
@@ -43,7 +43,7 @@ class ReadMsgStore {
     }
   }
 
-  void addRead(String postId) {
+  public void addRead(String postId) {
     sStore.add(postId);
     StringBuilder builder = new StringBuilder();
     for (String s : sStore) {
@@ -53,7 +53,7 @@ class ReadMsgStore {
         .edit().putString(Account.inst().getUserId(), builder.toString()).apply();
   }
 
-  void clearRead() {
+  public void clearRead() {
     if (sStore != null) {
       sStore.clear();
     }
@@ -61,7 +61,7 @@ class ReadMsgStore {
         .edit().remove(Account.inst().getUserId()).apply();
   }
 
-  boolean isRead(String postId) {
+  public boolean isRead(String postId) {
     return sStore.contains(postId);
   }
 

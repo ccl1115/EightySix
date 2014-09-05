@@ -23,6 +23,7 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.OverlayTipUtil;
 import com.utree.eightysix.app.feed.event.*;
+import com.utree.eightysix.app.msg.ReadMsgStore;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.*;
@@ -247,11 +248,7 @@ public class PostActivity extends BaseActivity {
       mLvComments.setAdapter(mPostCommentsAdapter);
     }
 
-    if (mPost != null) {
-      cacheOutComments(1);
-    } else if (mPostId != null) {
-      cacheOutComments(1);
-    }
+    cacheOutComments(1);
   }
 
   @Override
@@ -438,6 +435,7 @@ public class PostActivity extends BaseActivity {
     final int isHot = mPost == null ? 0 : mPost.isHot;
     final int isRepost = mPost == null ? 0 : mPost.isRepost;
     showProgressBar();
+    ReadMsgStore.inst().addRead(id);
     request(new PostCommentsRequest(id, viewType, isHot, isRepost, page), new OnResponse<PostCommentsResponse>() {
       @Override
       public void onResponse(PostCommentsResponse response) {
