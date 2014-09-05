@@ -109,7 +109,6 @@ public class MsgActivity extends BaseActivity {
         showRefreshIndicator(true);
         mRefreshed = true;
         requestMsgs(1);
-        ReadMsgStore.inst().clearRead();
       }
 
       @Override
@@ -162,6 +161,7 @@ public class MsgActivity extends BaseActivity {
     if (page == 1) {
       mRvMsg.setRefreshing(true);
       showRefreshIndicator(true);
+      ReadMsgStore.inst().clearRead();
     }
     request(new MsgsRequest(page), new OnResponse2<MsgsResponse>() {
       @Override
