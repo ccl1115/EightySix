@@ -36,7 +36,7 @@ public class ViewHighlighter {
     pRect.offsetTo(0, 0);
 
     Paint src = new Paint();
-    src.setColor(0xCC000000);
+    src.setColor(0x88000000);
 
     Paint dst = new Paint();
     dst.setColor(0x00000000);
