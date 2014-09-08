@@ -30,6 +30,11 @@ public class ViewHighlighter {
 
     mParent.getGlobalVisibleRect(pRect);
     mTarget.getGlobalVisibleRect(tRect);
+
+    if (pRect.width() == 0 || pRect.height() == 0) {
+      return null;
+    }
+
     tRect.set(tRect.left - MARGIN, tRect.top - MARGIN, tRect.right + MARGIN, tRect.bottom + MARGIN);
 
     tRect.offset(-pRect.left, -pRect.top);
