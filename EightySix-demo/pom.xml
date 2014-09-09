@@ -9,7 +9,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>EightySix-demo</artifactId>
-    <packaging>aar</packaging>
+    <packaging>apk</packaging>
     <name>EightySix-demo</name>
 
 
@@ -35,10 +35,14 @@
             <artifactId>androlog</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.utree.eightysix</groupId>
+            <artifactId>EightySix-base</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>

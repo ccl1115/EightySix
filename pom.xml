@@ -15,6 +15,7 @@
         <module>EightySix-data</module>
         <module>EightySix-base</module>
         <module>EightySix-config-tool</module>
+        <module>EightySix-demo</module>
     </modules>
 
     <properties>
@@ -252,6 +253,19 @@
                 <version>1.0.1</version>
                 <type>aar</type>
             </dependency>
+
+            <dependency>
+                <groupId>com.google.zxing</groupId>
+                <artifactId>core</artifactId>
+                <version>3.1.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.zxing</groupId>
+                <artifactId>android-core</artifactId>
+                <version>3.1.0</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
