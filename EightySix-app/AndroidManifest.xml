@@ -118,7 +118,12 @@
         <activity android:exported="@bool/exported" android:name=".report.ReporterActivity" android:process=":report" android:screenOrientation="portrait"/>
 
         <activity android:exported="@bool/exported" android:name=".app.publish.ImageCropActivity" android:screenOrientation="portrait"/>
+
         <activity android:exported="@bool/exported" android:name=".app.settings.HelpActivity" android:screenOrientation="portrait"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.account.MyQRCodeActivity" android:screenOrientation="portrait"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.account.AccountActivity" android:screenOrientation="portrait"/>
 
         <service android:enabled="true" android:name="com.baidu.location.f" android:process=":remote"/>
 

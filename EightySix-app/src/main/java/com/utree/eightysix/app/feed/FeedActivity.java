@@ -25,6 +25,7 @@ import com.utree.eightysix.*;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.account.AccountActivity;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.event.*;
 import com.utree.eightysix.app.msg.FetchNotificationService;
@@ -213,7 +214,7 @@ public class FeedActivity extends BaseActivity {
 
     if (mPopupMenu == null) {
       LinearLayout menu = (LinearLayout) View.inflate(FeedActivity.this, R.layout.widget_feed_menu, null);
-      mPopupMenu = new PopupWindow(menu, dp2px(190), dp2px(225) + 4);
+      mPopupMenu = new PopupWindow(menu, dp2px(190), dp2px(270) + 5);
       mMenuViewHolder = new MenuViewHolder(menu);
       mPopupMenu.setFocusable(true);
       mPopupMenu.setOutsideTouchable(true);
@@ -636,6 +637,12 @@ public class FeedActivity extends BaseActivity {
 
     MenuViewHolder(View view) {
       ButterKnife.inject(this, view);
+    }
+
+    @OnClick(R.id.ll_my_friends)
+    void onLlMyFriendsClicked() {
+      startActivity(new Intent(FeedActivity.this, AccountActivity.class));
+      mPopupMenu.dismiss();
     }
 
     @OnClick (R.id.ll_invite)

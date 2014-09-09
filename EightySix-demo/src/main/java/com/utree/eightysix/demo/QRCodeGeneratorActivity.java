@@ -36,7 +36,7 @@ public class QRCodeGeneratorActivity extends Activity implements Camera.PreviewC
   private static final int MSG_DECODE_INTERVAL = 3;
 
   private static final int INTERVAL = 1000;
-  public static final String TAG = "QRCode";
+  private static final String TAG = "QRCode";
 
   @InjectView(R.id.iv_qrcode)
   ImageView mIvQRCode;
