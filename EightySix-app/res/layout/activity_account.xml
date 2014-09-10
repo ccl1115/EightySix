@@ -95,6 +95,8 @@
             android:layout_marginRight="16dp"
             android:gravity="center_vertical|left"
             android:drawableRight="@drawable/ic_right_arrow"
+            android:drawableLeft="@drawable/ic_contacts"
+            android:drawablePadding="8dp"
             android:text="通讯录联系人 (%d)"/>
 
 
@@ -107,6 +109,8 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:drawableRight="@drawable/ic_right_arrow"
+            android:drawableLeft="@drawable/ic_qrcode"
+            android:drawablePadding="8dp"
             android:gravity="center_vertical|left"
             android:text="来自扫一扫添加 (%d)"/>
 
