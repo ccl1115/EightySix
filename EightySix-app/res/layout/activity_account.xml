@@ -8,17 +8,35 @@
     <RelativeLayout
             android:id="@+id/rl_id"
             android:layout_width="match_parent"
-            android:layout_height="88dp">
+            android:layout_height="88dp"
+            android:background="@drawable/apptheme_primary_list_selector">
 
-        <TextView
-                android:id="@+id/tv_id"
+        <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
                 android:layout_toLeftOf="@+id/iv_qr_code"
-                android:text="我的用户ID："/>
+                android:orientation="vertical">
+
+            <TextView
+                    android:id="@+id/tv_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:textSize="16sp"
+                    android:text="我的蓝莓ID："/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="2dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/apptheme_primary_dark_color"
+                    android:text="让朋友扫一扫，即可互相成为朋友"/>
+        </LinearLayout>
+
 
         <ImageView
                 android:id="@+id/iv_qr_code"
@@ -28,4 +46,98 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"/>
     </RelativeLayout>
+
+    <include layout="@layout/widget_primary_divider"/>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:textSize="14sp"
+            android:text="%d个认识你的人会收到你发的秘密"
+            android:textColor="@color/apptheme_primary_dark_color"/>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="16dp"
+            android:paddingTop="6dp"
+            android:gravity="center_vertical"
+            android:textSize="14sp"
+            android:textColor="@color/apptheme_primary_dark_color"
+            android:text="@string/my_friends"/>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="bottom"
+            android:background="#ffd9d9d9"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:orientation="horizontal">
+
+        <TextView
+                android:id="@+id/tv_contact"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:gravity="center_vertical"
+                android:text="通讯录联系人 (%d)"/>
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+
+    <include layout="@layout/widget_primary_divider"/>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:orientation="horizontal">
+
+        <TextView
+                android:id="@+id/tv_scan"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:gravity="center_vertical"
+                android:text="来自扫一扫 (%d)"/>
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+
+    <include layout="@layout/widget_primary_divider"/>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="16dp"
+            android:paddingTop="6dp"
+            android:gravity="center_vertical"
+            android:textSize="14sp"
+            android:textColor="@color/apptheme_primary_dark_color"
+            android:text="我认识的人"/>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="bottom"
+            android:background="#ffd9d9d9"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
 </LinearLayout>

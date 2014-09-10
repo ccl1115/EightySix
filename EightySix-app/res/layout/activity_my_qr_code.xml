@@ -33,7 +33,7 @@
             <ImageView
                     android:id="@+id/iv_bg"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_margin="16dp"
                     android:layout_gravity="center"
                     android:src="@drawable/bg_20"/>
@@ -41,7 +41,7 @@
             <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#AAFFFFFF"/>
+                    android:background="#88FFFFFF"/>
 
             <ImageView
                     android:id="@+id/iv_qr_code"
