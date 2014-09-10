@@ -66,7 +66,7 @@ public class ContactsSyncService extends IntentService {
       final List<Contact> cache = getContactsFromCache();
       final List<Contact> phone = getContactsFromPhone();
 
-      if (phone == null || phone.size() == 0) {
+      if (phone == null) {
         mHandler.post(new Runnable() {
           @Override
           public void run() {
