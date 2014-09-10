@@ -61,6 +61,7 @@
 
 
     <LinearLayout
+            android:id="@+id/ll_upload_contacts"
             android:layout_width="match_parent"
             android:layout_height="72dp"
             android:paddingLeft="16dp"
@@ -100,6 +101,7 @@
     <include layout="@layout/widget_primary_divider"/>
 
     <LinearLayout
+            android:id="@+id/ll_qq"
             android:layout_width="match_parent"
             android:layout_height="72dp"
             android:paddingLeft="16dp"
@@ -146,6 +148,7 @@
     <include layout="@layout/widget_primary_divider"/>
 
     <LinearLayout
+            android:id="@+id/ll_qzone"
             android:layout_width="match_parent"
             android:layout_height="72dp"
             android:paddingLeft="16dp"

@@ -10,6 +10,8 @@ import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.QRCodeScanFragment;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.event.QRCodeScanEvent;
+import com.utree.eightysix.contact.ContactsSyncEvent;
+import com.utree.eightysix.contact.ContactsSyncService;
 
 /**
  * @author simon
@@ -31,6 +33,12 @@ public class AddFriendActivity extends BaseActivity {
         .commit();
   }
 
+  @OnClick(R.id.ll_upload_contacts)
+  public void onLlUploadContacts() {
+    ContactsSyncService.start(this, true);
+    showProgressBar(true);
+  }
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -44,6 +52,16 @@ public class AddFriendActivity extends BaseActivity {
   @Override
   public void onActionLeftClicked() {
     finish();
+  }
+
+  @Subscribe
+  public void onContactsSyncService(ContactsSyncEvent event) {
+    if (event.isSucceed()) {
+      showToast("更新通讯录成功");
+    } else {
+      showToast("更新通讯录失败");
+    }
+    hideProgressBar();
   }
 
   @Subscribe
