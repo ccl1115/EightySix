@@ -26,6 +26,7 @@ import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.AccountActivity;
+import com.utree.eightysix.app.account.AddFriendActivity;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.event.*;
 import com.utree.eightysix.app.msg.FetchNotificationService;
@@ -642,6 +643,12 @@ public class FeedActivity extends BaseActivity {
     @OnClick(R.id.ll_my_friends)
     void onLlMyFriendsClicked() {
       startActivity(new Intent(FeedActivity.this, AccountActivity.class));
+      mPopupMenu.dismiss();
+    }
+
+    @OnClick(R.id.rb_add)
+    void onRbAddClicked() {
+      startActivity(new Intent(FeedActivity.this, AddFriendActivity.class));
       mPopupMenu.dismiss();
     }
 
