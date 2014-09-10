@@ -16,7 +16,7 @@ public class PushHelperImpl implements PushHelper {
   }
 
   public void startWork() {
-    PushManager.startWork(U.getContext(), PushConstants.LOGIN_TYPE_API_KEY, BuildConfig.DEBUG ? U.getConfig("bd.api_key") : U.getConfig("bd.api_key.release"));
+    PushManager.startWork(U.getContext(), PushConstants.LOGIN_TYPE_API_KEY, U.getConfig("bd.api_key.release"));
   }
 
   public void stopWork() {

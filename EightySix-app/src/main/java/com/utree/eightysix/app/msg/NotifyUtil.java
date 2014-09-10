@@ -36,7 +36,7 @@ public class NotifyUtil {
   static final int TYPE_FRIEND_L1_JOIN = 3;
 
   /**
-   * 自己发布的帖子被评论
+   * 关注的帖子被评论
    */
   static final int TYPE_FOLLOW_COMMENT = 4;
 
@@ -51,7 +51,7 @@ public class NotifyUtil {
   static final int TYPE_CIRCLE_CREATION_APPROVE = 6;
 
   /**
-   * 关注的帖子被评论
+   * 自己发布的帖子被评论
    */
   static final int TYPE_OWN_COMMENT = 7;
 
@@ -88,7 +88,7 @@ public class NotifyUtil {
         .setContentTitle(shortName)
         .setContentText(mContext.getString(R.string.notification_friend_new_post))
         .setContentIntent(PendingIntent.getActivity(mContext, 0,
-            PostActivity.getIntent(mContext, postId), PendingIntent.FLAG_UPDATE_CURRENT))
+            PostActivity.getIntent(mContext, postId, "post_"), PendingIntent.FLAG_UPDATE_CURRENT))
         .build();
   }
 
@@ -119,7 +119,7 @@ public class NotifyUtil {
       builder.setContentText(mContext.getString(type == TYPE_FOLLOW_COMMENT ?
           R.string.notification_new_follow_comment : R.string.notification_new_own_comment));
       builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
-          PostActivity.getIntent(mContext, id), PendingIntent.FLAG_UPDATE_CURRENT));
+          PostActivity.getIntent(mContext, id, "comment_"), PendingIntent.FLAG_UPDATE_CURRENT));
     } else {
       builder.setContentText(mContext.getString(type == TYPE_FOLLOW_COMMENT ?
           R.string.notification_new_follow_comments : R.string.notification_new_own_comments, count));

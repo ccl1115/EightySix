@@ -13,10 +13,10 @@
     <artifactId>EightySix-app</artifactId>
     <packaging>apk</packaging>
     <name>EightySix-app - Application</name>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 
     <properties>
-        <android.manifest.versionCode>3</android.manifest.versionCode>
+        <android.manifest.versionCode>4</android.manifest.versionCode>
         <android.manifest.versionName>${project.version}</android.manifest.versionName>
     </properties>
 
@@ -112,6 +112,16 @@
             <groupId>com.utree.eightysix</groupId>
             <artifactId>EightySix-base</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>android-core</artifactId>
         </dependency>
     </dependencies>
 

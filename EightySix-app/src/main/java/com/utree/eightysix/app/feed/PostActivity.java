@@ -76,18 +76,18 @@ public class PostActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
-  public static Intent getIntent(Context context, String postId) {
+  public static Intent getIntent(Context context, String postId, String action) {
     Intent intent = new Intent(context, PostActivity.class);
     if (!(context instanceof Activity)) {
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     }
-    intent.setAction(postId);
+    intent.setAction(action + postId);
     intent.putExtra("id", postId);
     return intent;
   }
 
   public static void start(Context context, String postId) {
-    context.startActivity(getIntent(context, postId));
+    context.startActivity(getIntent(context, postId, "start_"));
   }
 
   private static final Pattern POST_CONTENT_PATTERN = Pattern.compile("[ \r\n]*");

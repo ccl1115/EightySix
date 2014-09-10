@@ -3,6 +3,7 @@ package com.utree.eightysix.app.feed;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.GearsView;
+import com.utree.eightysix.widget.ViewHighlighter;
 
 /**
  */
@@ -301,6 +303,9 @@ public class FeedPostView extends BasePostView {
       mTipOverlayShare = LayoutInflater.from(getContext())
           .inflate(R.layout.overlay_tip_share, this, false);
 
+      mTipOverlayShare.setBackgroundDrawable(new BitmapDrawable(getResources(),
+          new ViewHighlighter(mIvShare, mFlContent).genMask()));
+
       mTipOverlayShare.findViewById(R.id.ll_tip).setBackgroundDrawable(
           new RoundRectDrawable(U.dp2px(8), Color.WHITE));
       mFlContent.addView(mTipOverlayShare);
@@ -332,6 +337,9 @@ public class FeedPostView extends BasePostView {
       mTipOverlaySource = LayoutInflater.from(getContext())
           .inflate(R.layout.overlay_tip_source, this, false);
 
+      mTipOverlaySource.setBackgroundDrawable(new BitmapDrawable(getResources(),
+          new ViewHighlighter(mTvSource, mFlContent).genMask()));
+
       mTipOverlaySource.findViewById(R.id.ll_tip).setBackgroundDrawable(
           new RoundRectDrawable(U.dp2px(8), Color.WHITE));
       mFlContent.addView(mTipOverlaySource);
@@ -361,6 +369,9 @@ public class FeedPostView extends BasePostView {
     if (mTipOverlayPraise == null) {
       mTipOverlayPraise = LayoutInflater.from(getContext())
           .inflate(R.layout.overlay_tip_praise, this, false);
+
+      mTipOverlayPraise.setBackgroundDrawable(new BitmapDrawable(getResources(),
+          new ViewHighlighter(mTvPraise, mFlContent).genMask()));
 
       mTipOverlayPraise.findViewById(R.id.ll_tip).setBackgroundDrawable(
           new RoundRectDrawable(U.dp2px(8), Color.WHITE));
@@ -392,6 +403,9 @@ public class FeedPostView extends BasePostView {
     if (mTipOverlayRepost == null) {
       mTipOverlayRepost = LayoutInflater.from(getContext())
           .inflate(R.layout.overlay_tip_repost, this, false);
+
+      mTipOverlayRepost.setBackgroundDrawable(new BitmapDrawable(getResources(),
+          new ViewHighlighter(mTvSource, mFlContent).genMask()));
 
       mTipOverlayRepost.findViewById(R.id.ll_tip).setBackgroundDrawable(
           new RoundRectDrawable(U.dp2px(8), Color.WHITE));

@@ -171,6 +171,7 @@ public class PraiseActivity extends BaseActivity {
     if (page == 1) {
       showRefreshIndicator(true);
       mRvMsg.setRefreshing(true);
+      ReadMsgStore.inst().clearRead();
     }
     request(new PraisesRequest(page), new OnResponse2<MsgsResponse>() {
       @Override
