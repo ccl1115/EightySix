@@ -97,6 +97,8 @@ public class FeedActivity extends BaseActivity {
   private MenuViewHolder mMenuViewHolder;
   private ThemedDialog mUnlockDialog;
 
+  private boolean mShouldExit;
+
   public static void start(Context context) {
     Intent intent = new Intent(context, FeedActivity.class);
     context.startActivity(intent);
@@ -361,7 +363,18 @@ public class FeedActivity extends BaseActivity {
       return;
     }
 
-    moveTaskToBack(true);
+    if (mShouldExit) {
+      finish();
+    } else {
+      mShouldExit = true;
+      showToast("再按一次返回键退出");
+      getHandler().postDelayed(new Runnable() {
+        @Override
+        public void run() {
+          mShouldExit = false;
+        }
+      }, 1000);
+    }
   }
 
   @Override

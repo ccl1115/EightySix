@@ -413,7 +413,6 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   protected void onDestroy() {
     cancelAll();
 
-
     M.getRegisterHelper().unregister(this);
 
     hideProgressBar();
@@ -425,20 +424,15 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   protected void onPause() {
     super.onPause();
     U.getAnalyser().onPause(this);
+
+    if (mInActivityToast != null) mInActivityToast.cancel();
   }
 
   @Override
   protected void onResume() {
     super.onResume();
     U.getAnalyser().onResume(this);
-    //if (mResumed) {
-    //  overridePendingTransition(R.anim.activity_exit_in, R.anim.activity_exit_out);
-    //} else {
-    //  overridePendingTransition(R.anim.activity_enter_in, R.anim.activity_enter_out);
-    //}
     mResumed = true;
-
-    if (mInActivityToast != null) mInActivityToast.cancel();
   }
 
   protected final void hideTopBar(boolean animate) {

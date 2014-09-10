@@ -56,6 +56,8 @@ public class C {
   public static final String API_MSG_LIST = "/remind/list.do";
   public static final String API_PRAISE_LIST = "/remind/praiseList.do";
 
+  public static final String API_MY_FRIENDS = "/friend/myFriend.do";
+
   public static final String API_PROMOTION = "/activity.do";
 
   public static final String API_SYNC = "/system/sync.do";
