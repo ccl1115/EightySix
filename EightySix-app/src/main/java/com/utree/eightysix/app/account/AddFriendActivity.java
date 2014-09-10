@@ -5,13 +5,16 @@ import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.QRCodeScanFragment;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.event.QRCodeScanEvent;
+import com.utree.eightysix.app.share.ShareManager;
 import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
+import com.utree.eightysix.utils.Env;
 
 /**
  * @author simon
@@ -37,6 +40,16 @@ public class AddFriendActivity extends BaseActivity {
   public void onLlUploadContacts() {
     ContactsSyncService.start(this, true);
     showProgressBar(true);
+  }
+
+  @OnClick(R.id.ll_qq)
+  public void onLlQqClicked() {
+    U.getShareManager().shareAppToQQ(this, Env.getLastCircle());
+  }
+
+  @OnClick(R.id.ll_qzone)
+  public void onLlQzoneClicked() {
+    U.getShareManager().shareAppToQzone(this, Env.getLastCircle());
   }
 
   @Override

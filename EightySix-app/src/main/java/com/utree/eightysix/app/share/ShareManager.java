@@ -50,6 +50,32 @@ public class ShareManager {
     };
   }
 
+  public void shareAppToQzone(final Activity activity, final Circle circle) {
+    mShortener.shorten(shareLinkForApp(circle.id), new Shortener.Callback() {
+      @Override
+      public void onShorten(String shorten) {
+        if (shorten != null) {
+          mShareToQzone.shareApp(activity, circle, shorten);
+        } else {
+          mShareToQzone.shareApp(activity, circle, shareLinkForApp(circle.id));
+        }
+      }
+    });
+  }
+
+  public void shareAppToQQ(final Activity activity, final Circle circle) {
+    mShortener.shorten(shareLinkForApp(circle.id), new Shortener.Callback() {
+      @Override
+      public void onShorten(String shorten) {
+        if (shorten != null) {
+          mShareToQQ.shareApp(activity, circle, shorten);
+        } else {
+          mShareToQQ.shareApp(activity, circle, shareLinkForApp(circle.id));
+        }
+      }
+    });
+  }
+
   public ThemedDialog shareCommentDialog(final Activity activity, final Post post, final String comment) {
     return new ShareDialog(activity) {
       @Override
