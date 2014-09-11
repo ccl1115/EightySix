@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,6 +83,7 @@ public class FeedActivity extends BaseActivity {
   private List<Circle> mSideCircles;
 
   private FeedFragment mFeedFragment;
+  private RewardFragment mRewardFragment;
 
   /**
    * 邀请好友对话框
@@ -195,8 +197,14 @@ public class FeedActivity extends BaseActivity {
 
   @Override
   public void onActionOverflowClicked() {
+    openMenu();
+  }
+
+  private void openMenu() {
     U.getAnalyser().trackEvent(this, "feed_more", "feed_more");
-    if (!mPopupMenu.isShowing()) {
+    if (mPopupMenu.isShowing()) {
+      mPopupMenu.dismiss();
+    } else {
       mPopupMenu.showAsDropDown(getTopBar().mActionOverFlow);
       mDlContent.closeDrawer(mLlSide);
     }
@@ -220,7 +228,7 @@ public class FeedActivity extends BaseActivity {
       mPopupMenu = new PopupWindow(menu, dp2px(190), dp2px(270) + 5);
       mMenuViewHolder = new MenuViewHolder(menu);
       mPopupMenu.setFocusable(true);
-      mPopupMenu.setOutsideTouchable(true);
+      mPopupMenu.setIgnoreCheekPress();
       mPopupMenu.setBackgroundDrawable(new BitmapDrawable(getResources()));
     }
 
@@ -234,13 +242,20 @@ public class FeedActivity extends BaseActivity {
       public Drawable getIcon(int position) {
         if (position == 0) {
           return getResources().getDrawable(R.drawable.ic_action_msg);
+        } else if (position == 1) {
+          return getResources().getDrawable(R.drawable.ic_action_reward);
         }
         return null;
       }
 
       @Override
       public Drawable getBackgroundDrawable(int position) {
-        return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
+        if (position == 0) {
+          return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
+        } else if (position == 1) {
+          return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
+        }
+        return null;
       }
 
       @Override
@@ -248,12 +263,21 @@ public class FeedActivity extends BaseActivity {
         if (position == 0) {
           U.getAnalyser().trackEvent(FeedActivity.this, "feed_msg", "feed_msg");
           MsgActivity.start(FeedActivity.this, Account.inst().getNewCommentCount() > 0);
+        } else if (position == 1) {
+          if (mRewardFragment == null) {
+            mRewardFragment = new RewardFragment();
+            getSupportFragmentManager().beginTransaction()
+                .add(android.R.id.content, mRewardFragment)
+                .commit();
+          } else if (mRewardFragment.isDetached()) {
+            getSupportFragmentManager().beginTransaction().attach(mRewardFragment).commit();
+          }
         }
       }
 
       @Override
       public int getCount() {
-        return 1;
+        return 2;
       }
 
       @Override
@@ -444,6 +468,7 @@ public class FeedActivity extends BaseActivity {
   public void onInviteClicked(InviteClickedEvent event) {
     showInviteDialog();
   }
+
   @Subscribe
   public void onStartPublishActivity(StartPublishActivityEvent event) {
     if (!mFeedFragment.canPublish()) {
@@ -451,6 +476,15 @@ public class FeedActivity extends BaseActivity {
     } else {
       PublishActivity.start(this, mFeedFragment.getCircleId());
     }
+  }
+
+  @Override
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    if (keyCode == KeyEvent.KEYCODE_MENU) {
+      openMenu();
+      return true;
+    }
+    return false;
   }
 
   private void showNoPermDialog() {

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:padding="16dp">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textSize="18sp"
+            android:text="500个星座抱枕，送玩为止"/>
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
+
+        <TextView
+                android:id="@+id/tv_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="领取条件：%1$d个朋友在玩"
+                android:textSize="12sp"
+                android:textColor="@color/apptheme_primary_dark_color"/>
+
+        <com.utree.eightysix.widget.RoundedButton
+                android:id="@+id/rb_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="4dp"
+                android:paddingLeft="4dp"
+                android:paddingTop="2dp"
+                android:paddingRight="4dp"
+                android:paddingBottom="2dp"
+                android:textSize="12sp"
+                android:text="已完成"
+                android:textColor="@android:color/white"
+                android:minHeight="0dp"
+                app:background="#ff48a156"/>
+    </LinearLayout>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="领取地点：B区宿舍、中华园宿舍门口"
+            android:textSize="12sp"
+            android:textColor="@color/apptheme_primary_dark_color"/>
+</LinearLayout>

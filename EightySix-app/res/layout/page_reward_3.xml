@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:padding="16dp">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="现在领取，扫一扫"
+            android:textSize="18sp"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="在活动领取现场，扫一扫活动现场的二维码即可领取星座抱枕。和小伙伴们一起来领取吧"
+            android:textSize="12sp"
+            android:textColor="@color/apptheme_primary_dark_color"/>
+</LinearLayout>
