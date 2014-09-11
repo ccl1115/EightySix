@@ -4,14 +4,14 @@ import android.os.Bundle;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.QRCodeScanFragment;
+import com.utree.eightysix.qrcode.QRCodeScanFragment;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.event.QRCodeScanEvent;
-import com.utree.eightysix.app.share.ShareManager;
 import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.utils.Env;
@@ -29,11 +29,16 @@ public class AddFriendActivity extends BaseActivity {
   public void onLlScanClicked() {
     if (mQRCodeScanFragment == null) {
       mQRCodeScanFragment = new QRCodeScanFragment();
+      getSupportFragmentManager().beginTransaction()
+          .setCustomAnimations(R.anim.enter_from_top, R.anim.exit_to_bottom)
+          .add(android.R.id.content, mQRCodeScanFragment)
+          .commit();
+    } else {
+      getSupportFragmentManager().beginTransaction()
+          .setCustomAnimations(R.anim.enter_from_top, R.anim.exit_to_bottom)
+          .attach(mQRCodeScanFragment)
+          .commit();
     }
-    getSupportFragmentManager().beginTransaction()
-        .setCustomAnimations(R.anim.enter_from_top, R.anim.exit_to_bottom)
-        .add(android.R.id.content, mQRCodeScanFragment)
-        .commit();
   }
 
   @OnClick(R.id.ll_upload_contacts)
@@ -80,27 +85,29 @@ public class AddFriendActivity extends BaseActivity {
   @Subscribe
   public void onQRCodeScanEvent(QRCodeScanEvent event) {
     if (mQRCodeScanFragment != null) {
-      if (mQRCodeScanFragment.isVisible()) {
+      if (mQRCodeScanFragment.isAdded()) {
         getSupportFragmentManager().beginTransaction()
             .setCustomAnimations(R.anim.enter_from_top, R.anim.exit_to_bottom)
-            .remove(mQRCodeScanFragment)
+            .detach(mQRCodeScanFragment)
             .commit();
-        mQRCodeScanFragment = null;
       }
     }
 
-    showToast("scanned: " + event.getText());
+    if (BuildConfig.DEBUG) {
+      showToast("scanned: " + event.getText());
+    }
+
+    U.getQRCodeActionDispatcher().dispatch(event.getText());
   }
 
   @Override
   public void onBackPressed() {
     if (mQRCodeScanFragment != null) {
-      if (mQRCodeScanFragment.isVisible()) {
+      if (mQRCodeScanFragment.isAdded()) {
         getSupportFragmentManager().beginTransaction()
             .setCustomAnimations(R.anim.enter_from_top, R.anim.exit_to_bottom)
-            .remove(mQRCodeScanFragment)
+            .detach(mQRCodeScanFragment)
             .commit();
-        mQRCodeScanFragment = null;
         return;
       }
     }

@@ -53,10 +53,14 @@ public class AccountActivity extends BaseActivity {
 
   @InjectView(R.id.ll_parent)
   public LinearLayout mLlParent;
+  private QRCodeGenerator mQRCodeGenerator;
+  private String mId;
 
   @OnClick(R.id.rl_id)
   public void onRlIdClicked() {
-    startActivity(new Intent(this, MyQRCodeActivity.class));
+    if (mId != null) {
+      MyQRCodeActivity.start(this, mId);
+    }
   }
 
   @Override
@@ -73,12 +77,7 @@ public class AccountActivity extends BaseActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    new QRCodeGenerator().generate("http://baidu.com", new QRCodeGenerator.OnResult() {
-      @Override
-      public void onResult(Bitmap bitmap) {
-        mIvQRCode.setImageBitmap(bitmap);
-      }
-    });
+    mQRCodeGenerator = new QRCodeGenerator();
 
     getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
       @Override
@@ -137,10 +136,18 @@ public class AccountActivity extends BaseActivity {
       @Override
       public void onResponse(MyFriendsResponse response) {
         if (RESTRequester.responseOk(response)) {
-          mTvMyId.setText(getString(R.string.my_id, response.object.myViewId));
+          mId = response.object.myViewId;
+          mTvMyId.setText(getString(R.string.my_id, mId));
           mTvPeopleCount.setText(getString(R.string.people_know_you_count, response.object.friendCount));
           mTvContact.setText(getString(R.string.friends_in_contact, response.object.contactsCount));
           mTvScan.setText(getString(R.string.friends_from_scan, response.object.qrCodeFriends));
+
+          mQRCodeGenerator.generate("eightysix://friend/add/" + response.object.myViewId, new QRCodeGenerator.OnResult() {
+            @Override
+            public void onResult(Bitmap bitmap) {
+              mIvQRCode.setImageBitmap(bitmap);
+            }
+          });
 
           addItems(response.object);
         }

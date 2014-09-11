@@ -19,10 +19,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.google.zxing.*;
 import com.google.zxing.client.android.camera.CameraConfigurationUtils;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.common.DecoderResult;
 import com.google.zxing.common.HybridBinarizer;
-import com.google.zxing.qrcode.decoder.Decoder;
 import com.utree.eightysix.utils.QRCodeGenerator;
 import de.akquinet.android.androlog.Log;
 

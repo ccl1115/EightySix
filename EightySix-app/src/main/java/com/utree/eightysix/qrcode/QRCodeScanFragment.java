@@ -1,4 +1,4 @@
-package com.utree.eightysix.app;
+package com.utree.eightysix.qrcode;
 
 import android.graphics.Color;
 import android.graphics.Point;
@@ -37,6 +37,8 @@ public class QRCodeScanFragment extends Fragment implements Camera.PreviewCallba
   private boolean mShouldDecode;
 
   private Camera mCamera;
+
+  private String mChannel;
 
   private class DecodeHandler extends Handler {
     @Override
@@ -83,6 +85,16 @@ public class QRCodeScanFragment extends Fragment implements Camera.PreviewCallba
     ButterKnife.inject(this, view);
 
     mLlBg.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(8), Color.WHITE));
+  }
+
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+
+    Bundle arguments = getArguments();
+    if (arguments != null) {
+      mChannel = arguments.getString("channel");
+    }
   }
 
   @Override
@@ -212,7 +224,11 @@ public class QRCodeScanFragment extends Fragment implements Camera.PreviewCallba
 
     if (result != null) {
       mDecodeHandler.sendEmptyMessage(MSG_SCAN_FIN);
-      U.getBus().post(new QRCodeScanEvent(result.getText()));
+      if (mChannel == null) {
+        U.getBus().post(new QRCodeScanEvent(result.getText()));
+      } else {
+        U.getBus(mChannel).post(new QRCodeScanEvent(result.getText()));
+      }
     } else {
       mDecodeHandler.sendEmptyMessageDelayed(MSG_SCAN_START, INTERVAL);
     }

@@ -332,9 +332,9 @@
         </profile>
 
         <profile>
-            <id>config-tool</id>
+            <id>it</id>
             <modules>
-                <module>EightySix-config-tool</module>
+                <module>EightySix-it</module>
             </modules>
         </profile>
     </profiles>

@@ -18,6 +18,8 @@ import com.utree.eightysix.app.feed.BaseItemDeserializer;
 import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.push.PushHelper;
 import com.utree.eightysix.push.PushHelperImpl;
+import com.utree.eightysix.qrcode.ActionDispatcher;
+import com.utree.eightysix.qrcode.actions.AddFriendAction;
 import com.utree.eightysix.rest.IRESTRequester;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.app.share.ShareManager;
@@ -32,6 +34,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
@@ -262,6 +265,22 @@ public class U {
     return sBus;
   }
 
+  private static HashMap<String, Bus> sPrivateBuses = new HashMap<String, Bus>();
+
+  public static Bus getBus(String channel) {
+    M.checkThread();
+
+    Bus b = sPrivateBuses.get(channel);
+
+    if (b != null) {
+      return b;
+    } else {
+      b = new Bus(channel);
+      sPrivateBuses.put(channel, b);
+      return b;
+    }
+  }
+
   public static int dp2px(int dp) {
     return (int) (U.getContext().getResources().getDisplayMetrics().density * dp + 0.5f);
   }
@@ -319,6 +338,19 @@ public class U {
     }
     sToast = Toast.makeText(getContext(), string, Toast.LENGTH_SHORT);
     sToast.show();
+  }
+
+  private static ActionDispatcher sActionDispatcher;
+
+  public static ActionDispatcher getQRCodeActionDispatcher(){
+    M.checkThread();
+
+    if (sActionDispatcher == null) {
+      sActionDispatcher = new ActionDispatcher();
+      sActionDispatcher.register(new AddFriendAction());
+    }
+
+    return sActionDispatcher;
   }
 
   public static boolean useFixture() {

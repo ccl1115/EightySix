@@ -32,8 +32,7 @@
                 android:layout_marginBottom="16dp"
                 android:gravity="center_horizontal"
                 android:textSize="14sp"
-                android:textColor="@color/apptheme_primary_dark_color"
-                android:text="扫描别人的二维码添加他为好友"/>
+                android:textColor="@color/apptheme_primary_dark_color"/>
     </LinearLayout>
 
 

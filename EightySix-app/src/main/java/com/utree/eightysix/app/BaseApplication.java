@@ -30,7 +30,7 @@ public class BaseApplication extends FrontiaApplication {
 
     try {
       C.VERSION = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-    } catch (PackageManager.NameNotFoundException e) {
+    } catch (Throwable e) {
       C.VERSION = -1;
     }
 

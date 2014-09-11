@@ -17,6 +17,8 @@ import java.util.WeakHashMap;
  */
 public class QRCodeGenerator {
 
+  private static final int DEFAULT_SCALE = 8;
+
   private WeakHashMap<String, Bitmap> mCachedQRCode = new WeakHashMap<String, Bitmap>();
 
   public interface OnResult {
@@ -27,13 +29,16 @@ public class QRCodeGenerator {
   }
 
   public Bitmap generate(String source) {
-    Bitmap bitmap = null;
+    return generate(source, DEFAULT_SCALE);
+  }
+
+  public Bitmap generate(String source, int scale) {
+    Bitmap bitmap;
 
     if ((bitmap = mCachedQRCode.get(source)) != null) {
       return bitmap;
     }
 
-    int scale = 8;
     try {
       QRCode code = Encoder.encode(source, ErrorCorrectionLevel.M);
       ByteMatrix matrix = code.getMatrix();

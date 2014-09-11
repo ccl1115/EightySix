@@ -1,5 +1,8 @@
 package com.utree.eightysix.app.account;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -24,6 +27,17 @@ public class MyQRCodeActivity extends BaseActivity {
   @InjectView(R.id.iv_bg)
   public ImageView mIvBg;
 
+  public static void start(Context context, String id) {
+    Intent intent = new Intent(context, MyQRCodeActivity.class);
+
+    intent.putExtra("id", id);
+    if (!(context instanceof Activity)) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    context.startActivity(intent);
+  }
+
   @Override
   public void onLogout(Account.LogoutEvent event) {
     finish();
@@ -38,7 +52,14 @@ public class MyQRCodeActivity extends BaseActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    new QRCodeGenerator().generate("http://baidu.com", new QRCodeGenerator.OnResult() {
+    final String id = getIntent().getStringExtra("id");
+
+    if (id == null) {
+      finish();
+      return;
+    }
+
+    new QRCodeGenerator().generate("eightysix://friend/add/" + id, new QRCodeGenerator.OnResult() {
       @Override
       public void onResult(Bitmap bitmap) {
         mIvQRCode.setImageBitmap(bitmap);
