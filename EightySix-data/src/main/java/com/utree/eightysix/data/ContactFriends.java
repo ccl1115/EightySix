@@ -19,7 +19,7 @@ public class ContactFriends {
     @SerializedName("name")
     public String name;
 
-    @SerializedName("phone")
-    public String phone;
+    @SerializedName("viewId")
+    public String viewId;
   }
 }

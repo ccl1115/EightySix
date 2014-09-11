@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.account;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,15 +13,11 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.data.ContactFriends;
 import com.utree.eightysix.request.ContactFriendsRequest;
 import com.utree.eightysix.response.ContactFriendsResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.rest.Response;
-import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.LoadMoreCallback;
 
 /**
  * @author simon
@@ -143,7 +138,7 @@ public class ContactFriendsActivity extends BaseActivity {
 
       ContactFriends.Friend friend = getItem(position);
 
-      holder.mTvInfo.setText(friend.phone);
+      holder.mTvInfo.setText(friend.viewId);
       holder.mTvName.setText(friend.name);
 
       return convertView;

@@ -387,6 +387,11 @@ public class FeedActivity extends BaseActivity {
       return;
     }
 
+    if (mRewardFragment != null && mRewardFragment.isVisible()) {
+      getSupportFragmentManager().beginTransaction().detach(mRewardFragment).commit();
+      return;
+    }
+
     if (mShouldExit) {
       finish();
     } else {
@@ -484,7 +489,7 @@ public class FeedActivity extends BaseActivity {
       openMenu();
       return true;
     }
-    return false;
+    return super.onKeyDown(keyCode, event);
   }
 
   private void showNoPermDialog() {

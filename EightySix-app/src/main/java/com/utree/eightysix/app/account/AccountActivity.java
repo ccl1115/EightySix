@@ -55,6 +55,7 @@ public class AccountActivity extends BaseActivity {
   public LinearLayout mLlParent;
   private QRCodeGenerator mQRCodeGenerator;
   private String mId;
+  private boolean mResumed;
 
   @OnClick(R.id.rl_id)
   public void onRlIdClicked() {
@@ -133,6 +134,10 @@ public class AccountActivity extends BaseActivity {
   protected void onResume() {
     super.onResume();
 
+    if (!mResumed) {
+      showProgressBar();
+      mResumed = true;
+    }
     requestMyFriend();
   }
 
@@ -140,7 +145,7 @@ public class AccountActivity extends BaseActivity {
     request(new MyFriendsRequest(), new OnResponse2<MyFriendsResponse>() {
       @Override
       public void onResponseError(Throwable e) {
-
+        hideProgressBar();
       }
 
       @Override
@@ -161,6 +166,8 @@ public class AccountActivity extends BaseActivity {
 
           addItems(response.object);
         }
+
+        hideProgressBar();
       }
     }, MyFriendsResponse.class);
   }

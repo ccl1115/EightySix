@@ -78,11 +78,11 @@
     </style>
 
     <style name="Widget.ListView.Apptheme" parent="android:Widget.ListView">
-        <item name="android:listSelector">@drawable/apptheme_primary_list_selector</item>
         <item name="android:fadingEdge">none</item>
         <item name="android:divider">@null</item>
         <item name="android:dividerHeight">0dp</item>
         <item name="android:overScrollMode">ifContentScrolls</item>
+        <item name="android:cacheColorHint">#00000000</item>
     </style>
 
     <style name="TextView"/>
