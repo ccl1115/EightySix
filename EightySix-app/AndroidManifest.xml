@@ -126,6 +126,8 @@
 
         <activity android:exported="@bool/exported" android:name=".app.account.AccountActivity" android:screenOrientation="portrait"/>
         <activity android:name=".app.account.AddFriendActivity"/>
+        <activity android:name=".app.account.ContactFriendsActivity"/>
+        <activity android:name=".app.account.ScanFriendsActivity"/>
 
         <service android:enabled="true" android:name="com.baidu.location.f" android:process=":remote"/>
 

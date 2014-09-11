@@ -37,7 +37,6 @@ public class C {
   public static final String API_FACTORY_SIDE = "/factory/side.do";
   public static final String API_VALICODE_CREATE_FACTORY = "/factory/valiCode.do";
 
-  public static final String API_UPLOAD_CONTACTS = "/friend/upContacts.do";
 
   public static final String API_FEED_ADD = "/feed/add.do";
   public static final String API_FEED_DELETE = "/feed/delete.do";
@@ -57,9 +56,12 @@ public class C {
   public static final String API_PRAISE_LIST = "/remind/praiseList.do";
 
   public static final String API_MY_FRIENDS = "/friend/myFriend.do";
+  public static final String API_CONTACT_FRIENDS = "/friend/contactFriends.do";
+  public static final String API_SCAN_FRIENDS = "/friend/qrCodeFriends.do";
+  public static final String API_UPLOAD_CONTACTS = "/friend/upContacts.do";
+  public static final String API_ADD_FRIEND = "/friend/addFriend.do";
 
   public static final String API_PROMOTION = "/activity.do";
-  public static final String API_ADD_FRIEND = "/friend/addFriend.do";
 
   public static final String API_SYNC = "/system/sync.do";
 

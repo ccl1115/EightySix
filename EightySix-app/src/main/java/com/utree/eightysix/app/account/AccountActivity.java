@@ -63,6 +63,16 @@ public class AccountActivity extends BaseActivity {
     }
   }
 
+  @OnClick(R.id.tv_contact)
+  public void onTvContactClicked() {
+    startActivity(new Intent(this, ContactFriendsActivity.class));
+  }
+
+  @OnClick(R.id.tv_scan)
+  public void onTvScanClicked() {
+    startActivity(new Intent(this, ScanFriendsActivity.class));
+  }
+
   @Override
   public void onLogout(Account.LogoutEvent event) {
     finish();
