@@ -439,6 +439,9 @@ public class FeedFragment extends BaseFragment {
         if (RESTRequester.responseOk(response)) {
           if (page == 1) {
             mCircle = response.object.circle;
+
+            Env.setLastCircle(mCircle);
+
             U.getBus().post(mCircle);
 
             mFeedAdapter = new FeedAdapter(response.object);

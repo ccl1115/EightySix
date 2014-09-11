@@ -4,10 +4,8 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v4.app.NotificationManagerCompat;
 import android.text.TextUtils;
 import com.google.gson.reflect.TypeToken;
-import com.utree.eightysix.app.account.LoginActivity;
 import com.utree.eightysix.app.intro.IntroActivity;
 import com.utree.eightysix.data.User;
 import com.utree.eightysix.event.HasNewPraiseEvent;
@@ -15,10 +13,8 @@ import com.utree.eightysix.event.NewCommentCountEvent;
 import com.utree.eightysix.request.LogoutRequest;
 import com.utree.eightysix.rest.HandlerWrapper;
 import com.utree.eightysix.rest.OnResponse;
-import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.RequestData;
 import com.utree.eightysix.rest.Response;
-import de.akquinet.android.androlog.Log;
 import java.util.List;
 
 /**

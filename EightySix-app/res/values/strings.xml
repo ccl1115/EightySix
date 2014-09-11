@@ -267,6 +267,16 @@
     <string name="newest_version">已经是最新版本</string>
     <string name="silent_mode">静音模式</string>
     <string name="my_qr_code">我的二维码</string>
+
+
+    <!-- AccountActivity -->
     <string name="my_friends">我的朋友</string>
     <string name="add_new_friend">添加新朋友</string>
+    <string name="my_id">我的蓝莓ID：%1$s</string>
+    <string name="scan_to_be_friend">让朋友扫一扫，即可互相成为朋友</string>
+    <string name="people_know_you_count">* %1$d个认识你的人会收到你发的秘密</string>
+    <string name="friends_in_contact">通讯录联系人 (%1$d)</string>
+    <string name="friends_from_scan">来自扫一扫添加 (%1$d)</string>
+    <string name="known_people">我认识的人</string>
+
 </resources>

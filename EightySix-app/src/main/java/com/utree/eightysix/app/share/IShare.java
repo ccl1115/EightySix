@@ -7,7 +7,7 @@ import com.utree.eightysix.data.Post;
 /**
  * @author simon
  */
-abstract class IShare {
+public abstract class IShare {
 
   String mShortenAppLink;
   String mShortenPostLink;
