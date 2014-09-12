@@ -1,10 +1,12 @@
 package com.utree.eightysix.app.account;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -159,8 +161,14 @@ public class ContactFriendsActivity extends BaseActivity {
         convertView = LayoutInflater.from(ContactFriendsActivity.this)
             .inflate(R.layout.item_unreg, parent, false);
 
-        ((TextView) convertView.findViewById(R.id.tv_unreg))
-            .setText(String.format("短信邀请通讯录好友（%d人未加入）", mContactFriends.unRegCount));
+        TextView view = (TextView) convertView.findViewById(R.id.tv_unreg);
+        view.setText(String.format("短信邀请通讯录好友（%d人未加入）", mContactFriends.unRegCount));
+        view.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            startActivity(new Intent(ContactFriendsActivity.this, ContactsActivity.class));
+          }
+        });
       }
       return convertView;
     }

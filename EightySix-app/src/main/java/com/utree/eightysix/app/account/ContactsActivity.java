@@ -23,31 +23,38 @@ import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.contact.Contact;
 import com.utree.eightysix.contact.ContactsReadEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
+import com.utree.eightysix.data.UnregContacts;
 import com.utree.eightysix.drawable.RoundRectDrawable;
+import com.utree.eightysix.request.UnregContactsRequest;
+import com.utree.eightysix.response.UnregContactsResponse;
+import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.TextActionButton;
 import com.utree.eightysix.widget.TopBar;
 import de.akquinet.android.androlog.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author simon
  */
-@Layout (R.layout.activity_contacts)
-@TopTitle (R.string.who_to_invite)
+@Layout(R.layout.activity_contacts)
+@TopTitle(R.string.who_to_invite)
 public class ContactsActivity extends BaseActivity {
 
 
   private static final String TAG = "ContactsActivity";
 
-  @InjectView (R.id.alv_contacts)
+  @InjectView(R.id.alv_contacts)
   public AdvancedListView mAlvContacts;
 
-  @InjectView (R.id.tv_empty_text)
+  @InjectView(R.id.tv_empty_text)
   public TextView mTvEmptyView;
 
-  @InjectView (R.id.tv_search_hint)
+  @InjectView(R.id.tv_search_hint)
   public EditText mEtSearchHint;
 
   private ContactsAdapter mContactsAdapter;
@@ -67,7 +74,7 @@ public class ContactsActivity extends BaseActivity {
     }
   }
 
-  @OnTextChanged (R.id.tv_search_hint)
+  @OnTextChanged(R.id.tv_search_hint)
   public void onEtSearchHintTextChanged(CharSequence cs) {
     if (mContactsAdapter != null) {
       mContactsAdapter.setFilter(cs);
@@ -132,33 +139,18 @@ public class ContactsActivity extends BaseActivity {
       }
     });
 
-    ContactsSyncService.start(this, true);
-
     getTopBar().getActionView(0).setActionBackgroundDrawable(
         new RoundRectDrawable(U.dp2px(2),
             getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
     ((TextActionButton) getTopBar().getActionView(0)).setTextColor(
         getResources().getColor(R.color.apptheme_primary_grey_color_disabled));
+
+    requestUnregContacts();
   }
 
   @Override
   public void onLogout(Account.LogoutEvent event) {
     finish();
-  }
-
-  @Subscribe
-  public void onContactsSync(ContactsReadEvent event) {
-    mAlvContacts.setEmptyView(mTvEmptyView);
-    mContactsAdapter = new ContactsAdapter(event.getContacts());
-    mAlvContacts.setAdapter(mContactsAdapter);
-
-    if (event.getContacts() == null) {
-      mTvEmptyView.setText(getString(R.string.no_permission_to_read_contacts));
-    } else if (event.getContacts().size() == 0) {
-      mTvEmptyView.setText(getString(R.string.contacts_empty));
-    }
-
-    hideProgressBar();
   }
 
   private void sendSMS(String phoneNumber, String message) {
@@ -195,5 +187,34 @@ public class ContactsActivity extends BaseActivity {
             getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
     ((TextActionButton) getTopBar().getActionView(0)).setTextColor(
         getResources().getColor(R.color.apptheme_primary_grey_color_disabled));
+  }
+
+  private void requestUnregContacts() {
+    request(new UnregContactsRequest(), new OnResponse2<UnregContactsResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+        hideProgressBar();
+      }
+
+      @Override
+      public void onResponse(UnregContactsResponse response) {
+        if (RESTRequester.responseOk(response)) {
+          List<Contact> contacts = new ArrayList<Contact>();
+          for (UnregContacts.UnregContact contact : response.object.unregContacts) {
+            Contact c = new Contact();
+            c.name = contact.name;
+            c.phone = contact.phone;
+            contacts.add(c);
+          }
+
+          if (contacts.size() == 0) {
+            mTvEmptyView.setText(getString(R.string.contacts_empty));
+          }
+        }
+
+        hideProgressBar();
+      }
+    }, UnregContactsResponse.class);
   }
 }
