@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.account;
 
+import android.content.Intent;
 import android.os.Bundle;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
@@ -97,7 +98,9 @@ public class AddFriendActivity extends BaseActivity {
       showToast("scanned: " + event.getText());
     }
 
-    U.getQRCodeActionDispatcher().dispatch(event.getText());
+    if (U.getQRCodeActionDispatcher().dispatch(event.getText())) {
+      startActivity(new Intent(this, ScanFriendsActivity.class));
+    }
   }
 
   @Override
