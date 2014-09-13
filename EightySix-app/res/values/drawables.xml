@@ -17,4 +17,5 @@
 
     <drawable name="apptheme_transparent_bg_normal">#00000000</drawable>
     <drawable name="apptheme_transparent_bg_pressed">#88000000</drawable>
+    <drawable name="white">@android:color/white</drawable>
 </resources>

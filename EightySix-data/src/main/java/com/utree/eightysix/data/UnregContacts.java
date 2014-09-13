@@ -13,7 +13,7 @@ public class UnregContacts {
   public List<UnregContact> unregContacts;
 
   public static class UnregContact {
-    @SerializedName("phone")
+    @SerializedName("viewId")
     public String phone;
 
     @SerializedName("name")

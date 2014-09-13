@@ -33,7 +33,7 @@ class FeedAdapter extends BaseAdapter {
 
   private static final int TIP_NOT_SHOWN = -1;
 
-  public static final int TYPE_COUNT = 10;
+  public static final int TYPE_COUNT = 11;
   static final int TYPE_PLACEHOLDER = 0;
   static final int TYPE_UNLOCK = 1;
   static final int TYPE_UPLOAD = 2;
@@ -44,6 +44,7 @@ class FeedAdapter extends BaseAdapter {
   static final int TYPE_QUESTION = 7;
   static final int TYPE_INVITE_FRIEND = 8;
   static final int TYPE_INVITE_FACTORY = 9;
+  static final int TYPE_OPTION_SET = 10;
 
   private SparseBooleanArray mAnimated = new SparseBooleanArray();
 
@@ -164,6 +165,9 @@ class FeedAdapter extends BaseAdapter {
       case TYPE_INVITE_FRIEND:
         convertView = getInviteFriendView(convertView, parent);
         break;
+      case TYPE_OPTION_SET:
+        convertView = getOptionSetView(position, convertView, parent);
+        break;
     }
 
     animateConvertView(position, convertView);
@@ -184,6 +188,8 @@ class FeedAdapter extends BaseAdapter {
           return TYPE_PROMO;
         case BaseItem.TYPE_QUESTION_SET:
           return TYPE_QUESTION;
+        case BaseItem.TYPE_OPTION_SET:
+          return TYPE_OPTION_SET;
         case TYPE_UPLOAD:
         case TYPE_UNLOCK:
         case TYPE_SELECT:
@@ -399,6 +405,15 @@ class FeedAdapter extends BaseAdapter {
       holder = (InviteFactoryViewHolder) convertView.getTag();
     }
 
+    return convertView;
+  }
+
+  private View getOptionSetView(int position, View convertView, final ViewGroup parent) {
+    if (convertView == null) {
+      convertView = new FeedOptionSetView(parent.getContext());
+    }
+
+    ((FeedOptionSetView) convertView).setData(mFeeds.circle.id, (OptionSet) getItem(position));
     return convertView;
   }
 

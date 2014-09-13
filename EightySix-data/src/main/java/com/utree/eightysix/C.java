@@ -43,6 +43,7 @@ public class C {
   public static final String API_FEED_LIST = "/feed/list.do";
   public static final String API_FEED_PRAISE = "/feed/praise.do";
   public static final String API_FEED_PRAISE_CANCEL = "/feed/cancelPraise.do";
+  public static final String API_SUBMIT_ANSWER = "/feed/submitAnswer.do";
 
   public static final String API_COMMENT_ADD = "/comment/add.do";
   public static final String API_COMMENT_DELETE = "/comment/delete.do";

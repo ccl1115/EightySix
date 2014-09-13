@@ -6,10 +6,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.utree.eightysix.data.BaseItem;
-import com.utree.eightysix.data.Post;
-import com.utree.eightysix.data.Promotion;
-import com.utree.eightysix.data.QuestionSet;
+import com.utree.eightysix.data.*;
 import de.akquinet.android.androlog.Log;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -21,7 +18,6 @@ public class BaseItemDeserializer implements JsonDeserializer<BaseItem> {
 
   @Override
   public BaseItem deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-    Log.d("GSON", "deserialize BaseItem: " + typeOfT.toString());
     if (json.isJsonObject()) {
       JsonObject jObj = (JsonObject) json;
       if (jObj.has("type")) {
@@ -33,6 +29,8 @@ public class BaseItemDeserializer implements JsonDeserializer<BaseItem> {
             return getPromotion(jObj);
           case BaseItem.TYPE_QUESTION_SET:
             return getQuestionSet(jObj);
+          case BaseItem.TYPE_OPTION_SET:
+            return getOptionSet(jObj);
         }
       }
       return getBaseItem(jObj);
@@ -98,6 +96,65 @@ public class BaseItemDeserializer implements JsonDeserializer<BaseItem> {
     post.circle = safeGetAsString(jObj.get("factoryName"));
     post.shortName = safeGetAsString(jObj.get("factoryShortName"));
     return post;
+  }
+
+  protected OptionSet getOptionSet(JsonObject jObj) {
+    OptionSet optionSet = new OptionSet();
+
+    serializeBaseItem(jObj, optionSet);
+
+    optionSet.step = safeGetAsInt(jObj.get("step"));
+    JsonArray options = jObj.getAsJsonArray("namesListView");
+    optionSet.options = new ArrayList<OptionSet.Option>(options.size());
+
+    for (JsonElement element : options) {
+      JsonObject optionObj = element.getAsJsonObject();
+      OptionSet.Option option = new OptionSet.Option();
+      option.bgColor = safeGetAsString(optionObj.get("bgColor"));
+      option.bgUrl = safeGetAsString(optionObj.get("bgUrl"));
+      option.title = safeGetAsString(optionObj.get("title"));
+      option.subTitle = safeGetAsString(optionObj.get("subTitle"));
+      option.nextTitle = safeGetAsString(optionObj.get("nextTitle"));
+      option.quesId = safeGetAsInt(optionObj.get("quesId"));
+
+      JsonArray choices = optionObj.getAsJsonArray("options");
+      option.choices = new ArrayList<OptionSet.Choice>(choices.size());
+
+      for (JsonElement e : choices) {
+        JsonObject choiceObj = e.getAsJsonObject();
+        OptionSet.Choice choice = new OptionSet.Choice();
+        choice.value = safeGetAsString(choiceObj.get("value"));
+        choice.text = safeGetAsString(choiceObj.get("text"));
+
+        option.choices.add(choice);
+      }
+
+      optionSet.options.add(option);
+    }
+
+    optionSet.step2View = getStepView(jObj.getAsJsonObject("step2View"));
+    optionSet.step3View = getStepView(jObj.getAsJsonObject("step3View"));
+
+    return optionSet;
+  }
+
+  private OptionSet.StepView getStepView(JsonObject jObj) {
+    OptionSet.StepView stepView = new OptionSet.StepView();
+
+    stepView.answerHelper = safeGetAsString(jObj.get("answerHelper"));
+    stepView.bgColor = safeGetAsString(jObj.get("bgColor"));
+    stepView.bgUrl = safeGetAsString(jObj.get("bgUrl"));
+    stepView.buttonText = safeGetAsString(jObj.get("buttonText"));
+    stepView.content = safeGetAsString(jObj.get("content"));
+    stepView.nextTitle = safeGetAsString(jObj.get("nextTitle"));
+    stepView.subTitle = safeGetAsString(jObj.get("subTitle"));
+    stepView.step = safeGetAsInt(jObj.get("step"));
+    stepView.title = safeGetAsString(jObj.get("title"));
+    stepView.type = safeGetAsInt(jObj.get("type"));
+    stepView.viewName = safeGetAsString(jObj.get("viewName"));
+    stepView.quesId = safeGetAsInt(jObj.get("quesId"));
+
+    return stepView;
   }
 
   private void serializeBaseItem(JsonObject jObj, BaseItem item) {

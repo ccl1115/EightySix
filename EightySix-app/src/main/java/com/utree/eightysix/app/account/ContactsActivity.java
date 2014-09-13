@@ -211,6 +211,8 @@ public class ContactsActivity extends BaseActivity {
           if (contacts.size() == 0) {
             mTvEmptyView.setText(getString(R.string.contacts_empty));
           }
+
+          mAlvContacts.setAdapter(new ContactsAdapter(contacts));
         }
 
         hideProgressBar();
