@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -65,6 +66,9 @@ public class FeedOptionSetView extends FrameLayout {
   @InjectView(R.id.fl_progress)
   public FrameLayout mFlProgress;
 
+  @InjectView(R.id.iv_refresh)
+  public ImageView mIvRefresh;
+
   private int mCircleId;
 
   @OnClick(R.id.iv_refresh)
@@ -114,6 +118,11 @@ public class FeedOptionSetView extends FrameLayout {
           mData.step2View.answerHelper,
           mData.step2View.viewName,
           mCircleId);
+    } else if (mState == STATE_PUBLISHED) {
+      OptionPublishActivity.start(getContext(),
+          mData.step2View.answerHelper,
+          mData.step2View.viewName,
+          mCircleId);
     }
   }
 
@@ -157,6 +166,14 @@ public class FeedOptionSetView extends FrameLayout {
         mTvSubTitle.setText(mData.step2View.subTitle);
         mTvTip.setText(mData.step2View.content);
       }
+    } else if (mData.step == 2) {
+      if (mData.step3View != null) {
+        switchToPublished();
+        mRbAction.setText(mData.step3View.buttonText);
+        mTvTitle.setText(mData.step3View.title);
+        mTvSubTitle.setText(mData.step3View.subTitle);
+        mTvTip.setText(mData.step3View.content);
+      }
     }
   }
 
@@ -196,6 +213,8 @@ public class FeedOptionSetView extends FrameLayout {
 
     mRbAction.setVisibility(GONE);
 
+    mIvRefresh.setVisibility(VISIBLE);
+
     mState = STATE_SELECT;
   }
 
@@ -210,7 +229,25 @@ public class FeedOptionSetView extends FrameLayout {
 
     mRbAction.setVisibility(VISIBLE);
 
+    mIvRefresh.setVisibility(VISIBLE);
+
     mState = STATE_CHOSEN;
+  }
+
+  private void switchToPublished() {
+    mTvQ1.setVisibility(GONE);
+    mTvQ2.setVisibility(GONE);
+    mTvQ3.setVisibility(GONE);
+    mTvOther.setVisibility(GONE);
+    mEtOther.setVisibility(GONE);
+
+    mTvTip.setVisibility(VISIBLE);
+
+    mRbAction.setVisibility(VISIBLE);
+
+    mIvRefresh.setVisibility(INVISIBLE);
+
+    mState = STATE_PUBLISHED;
   }
 
   private void requestSubmit(String text) {
