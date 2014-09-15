@@ -27,7 +27,7 @@
                 android:layout_gravity="right"
                 android:minHeight="0dp"
                 android:padding="4dp"
-                android:text="发送"/>
+                android:text="@string/send"/>
     </FrameLayout>
 
     <EditText
@@ -35,9 +35,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:singleLine="false"
-            android:lines="10"
-            android:inputType="text"
+            android:gravity="bottom"
+            android:minLines="4"
+            android:inputType="textMultiLine"
             android:maxLength="77"/>
 
     <LinearLayout
@@ -51,8 +51,7 @@
                 android:id="@+id/tv_display"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="显示名："/>
+                android:layout_weight="1"/>
 
         <TextView
                 android:id="@+id/tv_shuffle"

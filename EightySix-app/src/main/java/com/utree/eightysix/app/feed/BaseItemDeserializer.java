@@ -132,13 +132,15 @@ public class BaseItemDeserializer implements JsonDeserializer<BaseItem> {
       optionSet.options.add(option);
     }
 
-    optionSet.step2View = getStepView(jObj.getAsJsonObject("step2View"));
-    optionSet.step3View = getStepView(jObj.getAsJsonObject("step3View"));
+    optionSet.step2View = getStepView(safeGetJsonObject(jObj, "step2View"));
+    optionSet.step3View = getStepView(safeGetJsonObject(jObj, "step3View"));
 
     return optionSet;
   }
 
   private OptionSet.StepView getStepView(JsonObject jObj) {
+    if (jObj == null) return null;
+
     OptionSet.StepView stepView = new OptionSet.StepView();
 
     stepView.answerHelper = safeGetAsString(jObj.get("answerHelper"));
@@ -172,5 +174,14 @@ public class BaseItemDeserializer implements JsonDeserializer<BaseItem> {
   private int safeGetAsInt(JsonElement element) {
     if (element == null || element.isJsonNull()) return 0;
     else return element.getAsInt();
+  }
+
+  private JsonObject safeGetJsonObject(JsonObject object, String key) {
+    JsonElement element = object.get(key);
+    if (element instanceof JsonObject) {
+      return element.getAsJsonObject();
+    } else {
+      return null;
+    }
   }
 }

@@ -13,9 +13,13 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.ChangeNameRequest;
+import com.utree.eightysix.request.PublishRequest;
+import com.utree.eightysix.response.PublishPostResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
@@ -32,8 +36,10 @@ public class OptionPublishActivity extends BaseActivity {
     finish();
   }
 
-  @InjectView(R.id.rb_send)
-  public RoundedButton mRbSend;
+  @OnClick(R.id.rb_send)
+  public void onRbSendClicked() {
+    requestPublish();
+  }
 
   @OnClick(R.id.iv_close)
   public void onIvCloseClicked() {
@@ -106,5 +112,34 @@ public class OptionPublishActivity extends BaseActivity {
         }
       }
     }, Response.class);
+  }
+
+  private void requestPublish() {
+    showProgressBar(true);
+    request(new PublishRequest("", "0xff000000", mEtPostContent.getText().toString(), mCircleId, 1), new OnResponse2<PublishPostResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
+      @Override
+      public void onResponse(PublishPostResponse response) {
+        if (RESTRequester.responseOk(response)) {
+          Post post = new Post();
+          post.id = response.object.id;
+          post.content = mEtPostContent.getText().toString();
+          post.source = mTvDisplay.getText().toString();
+          post.bgColor = "#FF000000";
+
+          U.getBus().post(post);
+
+          showToast("发表成功");
+          finish();
+        } else {
+          showToast("发表失败，请重试");
+        }
+        hideProgressBar();
+      }
+    }, PublishPostResponse.class);
   }
 }

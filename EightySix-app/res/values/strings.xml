@@ -278,5 +278,6 @@
     <string name="friends_in_contact">通讯录联系人 (%1$d)</string>
     <string name="friends_from_scan">来自扫一扫添加 (%1$d)</string>
     <string name="known_people">我认识的人</string>
+    <string name="send">发送</string>
 
 </resources>

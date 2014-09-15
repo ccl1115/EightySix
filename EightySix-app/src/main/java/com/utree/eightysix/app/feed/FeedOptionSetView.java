@@ -13,6 +13,7 @@ import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.data.OptionSet;
+import com.utree.eightysix.request.OptionBackRequest;
 import com.utree.eightysix.request.SubmitAnswerRequest;
 import com.utree.eightysix.response.OptionSetResponse;
 import com.utree.eightysix.rest.*;
@@ -69,6 +70,10 @@ public class FeedOptionSetView extends FrameLayout {
   @OnClick(R.id.iv_refresh)
   public void onIvRefreshClicked() {
     if (mData == null) {
+      return;
+    }
+
+    if (mState == STATE_PUBLISHED) {
       return;
     }
 
@@ -214,6 +219,24 @@ public class FeedOptionSetView extends FrameLayout {
         new SubmitAnswerRequest(mCircleId,
             text,
             mData.options.get(mCurrent).quesId));
+
+    U.getRESTRequester().request(data, new HandlerWrapper<OptionSetResponse>(data, new OnResponse2<OptionSetResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
+      @Override
+      public void onResponse(OptionSetResponse response) {
+        setData(mCircleId, response.object);
+        hideProgress();
+      }
+    }, OptionSetResponse.class));
+  }
+
+  private void requestBack() {
+    showProgress();
+    RequestData data = U.getRESTRequester().convert(new OptionBackRequest(mCircleId));
 
     U.getRESTRequester().request(data, new HandlerWrapper<OptionSetResponse>(data, new OnResponse2<OptionSetResponse>() {
       @Override
