@@ -125,9 +125,14 @@
         <activity android:exported="@bool/exported" android:name=".app.account.MyQRCodeActivity" android:screenOrientation="portrait"/>
 
         <activity android:exported="@bool/exported" android:name=".app.account.AccountActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".app.account.AddFriendActivity"/>
-        <activity android:name=".app.account.ContactFriendsActivity"/>
-        <activity android:name=".app.account.ScanFriendsActivity"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.account.AddFriendActivity" android:screenOrientation="portrait"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.account.ContactFriendsActivity" android:screenOrientation="portrait"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.account.ScanFriendsActivity" android:screenOrientation="portrait"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.feed.OptionPublishActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme.Dialog" android:windowSoftInputMode="adjustResize|stateVisible"/>
 
         <service android:enabled="true" android:name="com.baidu.location.f" android:process=":remote"/>
 

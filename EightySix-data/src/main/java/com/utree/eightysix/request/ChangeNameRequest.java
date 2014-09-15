@@ -8,22 +8,17 @@ import com.utree.eightysix.rest.Token;
 /**
  * @author simon
  */
-@Api(C.API_FEED_SUBMIT_ANSWER)
+@Api(C.API_FEED_CHANGE_NAME)
 @Token
-public class SubmitAnswerRequest {
+public class ChangeNameRequest {
 
   @Param("factoryId")
   public int circleId;
 
   @Param("content")
-  public String content;
+  public String content = "_";
 
-  @Param("questionId")
-  public int questionId;
-
-  public SubmitAnswerRequest(int circleId, String content, int questionId) {
+  public ChangeNameRequest(int circleId) {
     this.circleId = circleId;
-    this.content = content;
-    this.questionId = questionId;
   }
 }

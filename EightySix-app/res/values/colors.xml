@@ -6,4 +6,6 @@
 
     <color name="red">#FF0000</color>
 
+    <color name="translucent">#AA000000</color>
+    <color name="transparent">#00000000</color>
 </resources>

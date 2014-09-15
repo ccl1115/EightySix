@@ -32,7 +32,7 @@ public class FeedOptionSetView extends FrameLayout {
 
   private int mCurrent;
 
-  private int mStage;
+  private int mState;
 
   @InjectView(R.id.tv_title)
   public TextView mTvTitle;
@@ -72,7 +72,7 @@ public class FeedOptionSetView extends FrameLayout {
       return;
     }
 
-    if (mStage == STATE_SELECT) {
+    if (mState == STATE_SELECT) {
       mCurrent = mCurrent == mData.options.size() - 1 ? 0 : mCurrent + 1;
     }
 
@@ -102,7 +102,14 @@ public class FeedOptionSetView extends FrameLayout {
 
   @OnClick(R.id.rb_next)
   public void onRbNextClicked(View v) {
-    requestSubmit(mEtOther.getText().toString());
+    if (mState == STATE_INPUT) {
+      requestSubmit(mEtOther.getText().toString());
+    } else if (mState == STATE_CHOSEN) {
+      OptionPublishActivity.start(getContext(),
+          mData.step2View.answerHelper,
+          mData.step2View.viewName,
+          mCircleId);
+    }
   }
 
   public FeedOptionSetView(Context context) {
@@ -170,7 +177,7 @@ public class FeedOptionSetView extends FrameLayout {
 
     mRbAction.setVisibility(VISIBLE);
 
-    mStage = STATE_INPUT;
+    mState = STATE_INPUT;
   }
 
   private void switchToQuestion() {
@@ -184,7 +191,7 @@ public class FeedOptionSetView extends FrameLayout {
 
     mRbAction.setVisibility(GONE);
 
-    mStage = STATE_SELECT;
+    mState = STATE_SELECT;
   }
 
   private void switchToChosen() {
@@ -198,7 +205,7 @@ public class FeedOptionSetView extends FrameLayout {
 
     mRbAction.setVisibility(VISIBLE);
 
-    mStage = STATE_CHOSEN;
+    mState = STATE_CHOSEN;
   }
 
   private void requestSubmit(String text) {

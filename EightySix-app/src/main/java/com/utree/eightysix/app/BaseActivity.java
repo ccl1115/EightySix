@@ -84,8 +84,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     }
     View inflate = LayoutInflater.from(this).inflate(layoutResID, mBaseView, false);
     inflate.setId(R.id.content);
-    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-        ViewGroup.LayoutParams.MATCH_PARENT);
+    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) inflate.getLayoutParams();
     params.topMargin = mFillContent ? 0 : getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
 
     mBaseView.addView(inflate, 0, params);
@@ -106,8 +105,11 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
       mBaseView.removeView(content);
     }
     contentView.setId(R.id.content);
-    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-        ViewGroup.LayoutParams.MATCH_PARENT);
+    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) contentView.getLayoutParams();
+    if (params == null) {
+      params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+          ViewGroup.LayoutParams.MATCH_PARENT);
+    }
     params.topMargin = mFillContent ? 0 : getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
 
     mBaseView.addView(contentView, 0, params);

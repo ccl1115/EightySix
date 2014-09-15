@@ -25,6 +25,10 @@ public class PublishRequest {
   @Param ("factoryId")
   public int factoryId;
 
+  @Param("sourceType")
+  @Optional
+  public int sourceType;
+
   public PublishRequest(int factoryId, String content, String bgColor, String bgUrl) {
     this.factoryId = factoryId;
     this.content = content;
@@ -32,4 +36,11 @@ public class PublishRequest {
     this.bgUrl = bgUrl;
   }
 
+  public PublishRequest(String bgUrl, String bgColor, String content, int factoryId, int sourceType) {
+    this.bgUrl = bgUrl;
+    this.bgColor = bgColor;
+    this.content = content;
+    this.factoryId = factoryId;
+    this.sourceType = sourceType;
+  }
 }
