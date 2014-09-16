@@ -57,7 +57,7 @@
                     android:layout_marginRight="16dp"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
-                    android:src="@drawable/ic_right_arrow"/>
+                    android:src="@drawable/ic_forward"/>
         </RelativeLayout>
 
         <include layout="@layout/widget_primary_divider"/>
@@ -98,7 +98,7 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:gravity="center_vertical|left"
-                android:drawableRight="@drawable/ic_right_arrow"
+                android:drawableRight="@drawable/ic_forward"
                 android:drawableLeft="@drawable/ic_contacts"
                 android:drawablePadding="8dp"
                 android:background="@drawable/apptheme_primary_list_selector"/>
@@ -113,7 +113,7 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:gravity="center_vertical|left"
-                android:drawableRight="@drawable/ic_right_arrow"
+                android:drawableRight="@drawable/ic_forward"
                 android:drawableLeft="@drawable/ic_qrcode"
                 android:drawablePadding="8dp"
                 android:background="@drawable/apptheme_primary_list_selector"/>

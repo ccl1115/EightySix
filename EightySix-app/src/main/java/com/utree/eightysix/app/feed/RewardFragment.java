@@ -165,8 +165,12 @@ public class RewardFragment extends BaseFragment {
         return true;
       }
 
-      manager.beginTransaction().detach(this).commit();
-      return true;
+      if (!isDetached()) {
+        manager.beginTransaction().detach(this).commit();
+        return true;
+      } else {
+        return false;
+      }
     }
 
     return false;

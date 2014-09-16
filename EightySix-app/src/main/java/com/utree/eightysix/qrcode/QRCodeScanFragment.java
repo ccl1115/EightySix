@@ -127,7 +127,8 @@ public class QRCodeScanFragment extends Fragment implements Camera.PreviewCallba
       Camera.Parameters parameters = mCamera.getParameters();
 
       CameraConfigurationUtils.setBarcodeSceneMode(parameters);
-      Point point = CameraConfigurationUtils.findBestPreviewSizeValue(parameters, new Point(400, 400));
+      Point point = CameraConfigurationUtils.findBestPreviewSizeValue(parameters,
+          new Point(U.dp2px(240), U.dp2px(240)));
       parameters.setPreviewSize(point.x, point.y);
 
       CameraConfigurationUtils.setFocus(parameters, true, false, false);

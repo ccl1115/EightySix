@@ -103,7 +103,7 @@ public class AccountActivity extends BaseActivity {
 
       @Override
       public Drawable getBackgroundDrawable(int position) {
-        return new RoundRectDrawable(dp2px(4), getResources().getColorStateList(R.color.apptheme_primary_btn_light));
+        return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
       }
 
       @Override
@@ -119,7 +119,7 @@ public class AccountActivity extends BaseActivity {
       @Override
       public TopBar.LayoutParams getLayoutParams(int position) {
         return new TopBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT);
+            ViewGroup.LayoutParams.MATCH_PARENT);
       }
     });
 
