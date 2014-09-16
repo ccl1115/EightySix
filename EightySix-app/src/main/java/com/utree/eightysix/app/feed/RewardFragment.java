@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.feed;
 
-import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,14 +16,18 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.event.QRCodeScanEvent;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.qrcode.QRCodeScanFragment;
+import com.utree.eightysix.request.ActiveAcceptRequest;
 import com.utree.eightysix.request.ActiveJoinRequest;
 import com.utree.eightysix.response.ActiveJoinResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.QRCodeGenerator;
 import com.utree.eightysix.widget.IndicatorView;
 import com.utree.eightysix.widget.RoundedButton;
@@ -36,6 +39,8 @@ public class RewardFragment extends BaseFragment {
 
   private PageReward1ViewHolder mPageReward1ViewHolder;
   private PageReward2ViewHolder mPageReward2ViewHolder;
+
+  private QRCodeScanFragment mQRCodeFragment;
 
   @OnClick(R.id.fl_parent)
   public void onFlParentClicked() {
@@ -63,7 +68,13 @@ public class RewardFragment extends BaseFragment {
   public void onRbActionClicked() {
     FragmentManager manager = getFragmentManager();
     if (manager != null) {
-      manager.beginTransaction().add(android.R.id.content, new QRCodeScanFragment()).commit();
+
+      if (mQRCodeFragment == null) {
+        mQRCodeFragment = new QRCodeScanFragment();
+        manager.beginTransaction().add(android.R.id.content, mQRCodeFragment).commit();
+      } else if (mQRCodeFragment.isDetached()) {
+        manager.beginTransaction().attach(mQRCodeFragment).commit();
+      }
     }
   }
 
@@ -142,6 +153,51 @@ public class RewardFragment extends BaseFragment {
     });
 
     requestActiveJoin();
+  }
+
+  public boolean onBackPressed() {
+    FragmentManager manager = getFragmentManager();
+
+
+    if (manager != null) {
+      if (mQRCodeFragment != null && mQRCodeFragment.isAdded()) {
+        manager.beginTransaction().detach(mQRCodeFragment).commit();
+        return true;
+      }
+
+      manager.beginTransaction().detach(this).commit();
+      return true;
+    }
+
+    return false;
+  }
+
+  @Subscribe
+  public void onQRCodeScanEvent(QRCodeScanEvent event) {
+    if ("LANMEI_QRCODE:c.lanmeiquan.com/acceptingAward".equals(event.getText())) {
+      FragmentManager manager = getFragmentManager();
+      if (manager != null) {
+        manager.beginTransaction().detach(mQRCodeFragment).commit();
+      }
+
+      requestAccept();
+    }
+  }
+
+  private void requestAccept() {
+    getBaseActivity().request(new ActiveAcceptRequest(), new OnResponse2<Response>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
+      @Override
+      public void onResponse(Response response) {
+        if (RESTRequester.responseOk(response)) {
+          U.showToast("领取成功");
+        }
+      }
+    }, Response.class);
   }
 
   private void requestActiveJoin() {

@@ -382,8 +382,7 @@ public class FeedActivity extends BaseActivity {
       return;
     }
 
-    if (mRewardFragment != null && mRewardFragment.isVisible()) {
-      getSupportFragmentManager().beginTransaction().detach(mRewardFragment).commit();
+    if (mRewardFragment.onBackPressed()){
       return;
     }
 

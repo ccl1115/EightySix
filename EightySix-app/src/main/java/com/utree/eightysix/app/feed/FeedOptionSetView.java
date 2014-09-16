@@ -4,15 +4,14 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.*;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.event.QRCodeScanEvent;
 import com.utree.eightysix.data.OptionSet;
 import com.utree.eightysix.request.OptionBackRequest;
 import com.utree.eightysix.request.SubmitAnswerRequest;
@@ -137,8 +136,6 @@ public class FeedOptionSetView extends FrameLayout {
   public FeedOptionSetView(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
     LayoutInflater.from(context).inflate(R.layout.item_feed_options, this, true);
-    setBackgroundResource(R.drawable.item_feed_options_bg);
-
     ButterKnife.inject(this);
   }
 

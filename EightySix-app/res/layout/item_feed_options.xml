@@ -6,11 +6,13 @@
        android:layout_height="match_parent">
 
     <LinearLayout
-            android:id="@+id/ll_step_0"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:padding="16dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@drawable/item_feed_options_bg">
 
         <FrameLayout
                 android:layout_width="match_parent"
@@ -136,7 +138,10 @@
             android:id="@+id/fl_progress"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:visibility="gone">
+
         <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
