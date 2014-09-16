@@ -11,18 +11,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.drawable.RoundRectDrawable;
+import com.utree.eightysix.request.ActiveJoinRequest;
+import com.utree.eightysix.response.ActiveJoinResponse;
+import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.widget.IndicatorView;
+import com.utree.eightysix.widget.RoundedButton;
 
 /**
  * @author simon
  */
 public class RewardFragment extends BaseFragment {
+
+  private PageReward1ViewHolder mPageReward1ViewHolder;
 
   @OnClick(R.id.fl_parent)
   public void onFlParentClicked() {
@@ -88,7 +96,9 @@ public class RewardFragment extends BaseFragment {
           case 0: {
             View view = LayoutInflater.from(RewardFragment.this.getActivity())
                 .inflate(R.layout.page_reward_1, container, false);
+            mPageReward1ViewHolder = new PageReward1ViewHolder(view);
             container.addView(view);
+            requestActiveJoin();
             return view;
           }
           case 1: {
@@ -112,5 +122,49 @@ public class RewardFragment extends BaseFragment {
         container.removeView((View) object);
       }
     });
+  }
+
+  private void requestActiveJoin() {
+    getBaseActivity().request(new ActiveJoinRequest(), new OnResponse2<ActiveJoinResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
+      @Override
+      public void onResponse(ActiveJoinResponse response) {
+        if (RESTRequester.responseOk(response)) {
+          mPageReward1ViewHolder.mTvMsg1.setText(response.object.msg1);
+          mPageReward1ViewHolder.mTvMsg2.setText(response.object.msg2);
+          mPageReward1ViewHolder.mTvMsg3.setText(response.object.msg3);
+
+          if (response.object.needFriends == 0) {
+            mPageReward1ViewHolder.mRbStatus.setText("已完成");
+            mPageReward1ViewHolder.mRbStatus.setBackgroundColor(Color.GREEN);
+          } else {
+            mPageReward1ViewHolder.mRbStatus.setText("还差" + response.object.needFriends + "个");
+            mPageReward1ViewHolder.mRbStatus.setBackgroundColor(Color.RED);
+          }
+        }
+      }
+    }, ActiveJoinResponse.class);
+  }
+
+  class PageReward1ViewHolder {
+    @InjectView(R.id.tv_msg1)
+    TextView mTvMsg1;
+
+    @InjectView(R.id.tv_msg2)
+    TextView mTvMsg2;
+
+    @InjectView(R.id.tv_msg3)
+    TextView mTvMsg3;
+
+    @InjectView(R.id.rb_status)
+    RoundedButton mRbStatus;
+
+    PageReward1ViewHolder(View view) {
+      ButterKnife.inject(this, view);
+    }
   }
 }

@@ -21,6 +21,8 @@ public class Sync {
   @SerializedName("portraite")
   public Portrait portrait;
 
+  public int activeSys;
+
   public static class Portrait implements Parcelable {
 
 

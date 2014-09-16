@@ -67,6 +67,9 @@ public class C {
 
   public static final String API_PROMOTION = "/activity.do";
 
+  public static final String API_ACTIVE_ACCEPT = "/active/acceptPrize.do";
+  public static final String API_ACTIVE_JOIN = "/active/join.do";
+
   public static final String API_SYNC = "/system/sync.do";
 
 
