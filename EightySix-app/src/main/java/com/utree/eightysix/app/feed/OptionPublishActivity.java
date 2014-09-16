@@ -16,6 +16,8 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.publish.event.PostPublishedEvent;
+import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.ChangeNameRequest;
 import com.utree.eightysix.request.PublishRequest;
@@ -23,18 +25,16 @@ import com.utree.eightysix.response.PublishPostResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.storage.oss.OSSImpl;
 import com.utree.eightysix.widget.RoundedButton;
+
+import java.util.Random;
 
 /**
  * @author simon
  */
 @Layout(R.layout.activity_option_publish)
 public class OptionPublishActivity extends BaseActivity {
-
-  @OnClick(R.id.content)
-  public void onFlContentClicked() {
-    finish();
-  }
 
   @OnClick(R.id.rb_send)
   public void onRbSendClicked() {
@@ -58,6 +58,12 @@ public class OptionPublishActivity extends BaseActivity {
   }
 
   public int mCircleId;
+
+  private static final String[] BG_NAME = {
+      "bg_13.jpg", "bg_20.jpg", "bg_24.jpg", "bg_28.jpg", "bg_31.jpg", "bg_40.jpg",
+      "bg_40.jpg", "bg_200.jpg", "bg_49.jpg", "bg_201.jpg", "bg_63.jpg", "bg_94.jpg",
+      "bg_96.jpg", "bg_101.jpg", "bg_105.jpg"
+  };
 
   public static void start(Context context, String hint, String name, int circleId) {
     Intent intent = new Intent(context, OptionPublishActivity.class);
@@ -89,7 +95,6 @@ public class OptionPublishActivity extends BaseActivity {
 
     mEtPostContent.setHint(getIntent().getStringExtra("hint"));
     mTvDisplay.setText(getIntent().getStringExtra("name"));
-
   }
 
   @Override
@@ -116,30 +121,35 @@ public class OptionPublishActivity extends BaseActivity {
 
   private void requestPublish() {
     showProgressBar(true);
-    request(new PublishRequest("", "0xff000000", mEtPostContent.getText().toString(), mCircleId, 1), new OnResponse2<PublishPostResponse>() {
-      @Override
-      public void onResponseError(Throwable e) {
+    final String url = U.getCloudStorage().getUrl(U.getBgBucket(), "",
+        BG_NAME[new Random().nextInt(BG_NAME.length - 1)]);
+    request(new PublishRequest(url, "", mEtPostContent.getText().toString(), mCircleId, 1),
+        new OnResponse2<PublishPostResponse>() {
+          @Override
+          public void onResponseError(Throwable e) {
 
-      }
+          }
 
-      @Override
-      public void onResponse(PublishPostResponse response) {
-        if (RESTRequester.responseOk(response)) {
-          Post post = new Post();
-          post.id = response.object.id;
-          post.content = mEtPostContent.getText().toString();
-          post.source = mTvDisplay.getText().toString();
-          post.bgColor = "#FF000000";
+          @Override
+          public void onResponse(PublishPostResponse response) {
+            if (RESTRequester.responseOk(response)) {
+              Post post = new Post();
+              post.id = response.object.id;
+              post.content = mEtPostContent.getText().toString();
+              post.source = mTvDisplay.getText().toString();
+              post.bgColor = "";
+              post.bgUrl = url;
+              post.type = BaseItem.TYPE_POST;
 
-          U.getBus().post(post);
+              U.getBus().post(new PostPublishedEvent(post, mCircleId));
 
-          showToast("发表成功");
-          finish();
-        } else {
-          showToast("发表失败，请重试");
-        }
-        hideProgressBar();
-      }
-    }, PublishPostResponse.class);
+              showToast("发表成功");
+              finish();
+            } else {
+              showToast("发表失败，请重试");
+            }
+            hideProgressBar();
+          }
+        }, PublishPostResponse.class);
   }
 }
