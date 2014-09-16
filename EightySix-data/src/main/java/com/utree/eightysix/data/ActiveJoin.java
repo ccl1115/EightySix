@@ -24,4 +24,7 @@ public class ActiveJoin {
 
   @SerializedName("currentFactory")
   public int currentFactory;
+
+  @SerializedName("accepted")
+  public int accepted;
 }

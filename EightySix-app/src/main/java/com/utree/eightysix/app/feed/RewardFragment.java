@@ -228,6 +228,11 @@ public class RewardFragment extends BaseFragment {
             mRbAction.setText("我也要参加");
           }
 
+          if (response.object.accepted == 1) {
+            mRbAction.setText("已领取");
+            mRbAction.setEnabled(true);
+          }
+
           new QRCodeGenerator().generate("eightysix://friend/add/" + response.object.virtualId, new QRCodeGenerator.OnResult() {
             @Override
             public void onResult(Bitmap bitmap) {
