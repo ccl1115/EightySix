@@ -1,6 +1,7 @@
 package com.utree.eightysix.app.feed;
 
 import android.app.Fragment;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -18,10 +20,12 @@ import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.drawable.RoundRectDrawable;
+import com.utree.eightysix.qrcode.QRCodeScanFragment;
 import com.utree.eightysix.request.ActiveJoinRequest;
 import com.utree.eightysix.response.ActiveJoinResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.utils.QRCodeGenerator;
 import com.utree.eightysix.widget.IndicatorView;
 import com.utree.eightysix.widget.RoundedButton;
 
@@ -31,6 +35,7 @@ import com.utree.eightysix.widget.RoundedButton;
 public class RewardFragment extends BaseFragment {
 
   private PageReward1ViewHolder mPageReward1ViewHolder;
+  private PageReward2ViewHolder mPageReward2ViewHolder;
 
   @OnClick(R.id.fl_parent)
   public void onFlParentClicked() {
@@ -51,6 +56,17 @@ public class RewardFragment extends BaseFragment {
   @InjectView(R.id.in_page)
   public IndicatorView mInPage;
 
+  @InjectView(R.id.rb_action)
+  public RoundedButton mRbAction;
+
+  @OnClick(R.id.rb_action)
+  public void onRbActionClicked() {
+    FragmentManager manager = getFragmentManager();
+    if (manager != null) {
+      manager.beginTransaction().add(android.R.id.content, new QRCodeScanFragment()).commit();
+    }
+  }
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     return inflater.inflate(R.layout.fragment_reward, container, false);
@@ -61,6 +77,8 @@ public class RewardFragment extends BaseFragment {
     ButterKnife.inject(this, view);
 
     mLlFrame.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(8), Color.WHITE));
+
+    mVpPage.setOffscreenPageLimit(2);
 
     mVpPage.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
       @Override
@@ -98,12 +116,12 @@ public class RewardFragment extends BaseFragment {
                 .inflate(R.layout.page_reward_1, container, false);
             mPageReward1ViewHolder = new PageReward1ViewHolder(view);
             container.addView(view);
-            requestActiveJoin();
             return view;
           }
           case 1: {
             View view = LayoutInflater.from(RewardFragment.this.getActivity())
                 .inflate(R.layout.page_reward_2, container, false);
+            mPageReward2ViewHolder = new PageReward2ViewHolder(view);
             container.addView(view);
             return view;
           }
@@ -122,6 +140,8 @@ public class RewardFragment extends BaseFragment {
         container.removeView((View) object);
       }
     });
+
+    requestActiveJoin();
   }
 
   private void requestActiveJoin() {
@@ -145,6 +165,19 @@ public class RewardFragment extends BaseFragment {
             mPageReward1ViewHolder.mRbStatus.setText("还差" + response.object.needFriends + "个");
             mPageReward1ViewHolder.mRbStatus.setBackgroundColor(Color.RED);
           }
+
+          if (response.object.currentFactory == 1){
+            mRbAction.setText("扫一扫，领取奖品");
+          } else {
+            mRbAction.setText("我也要参加");
+          }
+
+          new QRCodeGenerator().generate("eightysix://friend/add/" + response.object.virtualId, new QRCodeGenerator.OnResult() {
+            @Override
+            public void onResult(Bitmap bitmap) {
+              mPageReward2ViewHolder.mIvQrCode.setImageBitmap(bitmap);
+            }
+          });
         }
       }
     }, ActiveJoinResponse.class);
@@ -164,6 +197,16 @@ public class RewardFragment extends BaseFragment {
     RoundedButton mRbStatus;
 
     PageReward1ViewHolder(View view) {
+      ButterKnife.inject(this, view);
+    }
+  }
+
+  class PageReward2ViewHolder {
+
+    @InjectView(R.id.iv_qr_code)
+    ImageView mIvQrCode;
+
+    PageReward2ViewHolder(View view) {
       ButterKnife.inject(this, view);
     }
   }

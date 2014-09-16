@@ -242,7 +242,7 @@ public class FeedActivity extends BaseActivity {
       public Drawable getIcon(int position) {
         if (position == 0) {
           return getResources().getDrawable(R.drawable.ic_action_msg);
-        } else if (position == 1) {
+        } else if (position == 1 || U.getSyncClient().getSync().activeSys == 1) {
           return getResources().getDrawable(R.drawable.ic_action_reward);
         }
         return null;
@@ -252,7 +252,7 @@ public class FeedActivity extends BaseActivity {
       public Drawable getBackgroundDrawable(int position) {
         if (position == 0) {
           return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
-        } else if (position == 1) {
+        } else if (position == 1 || U.getSyncClient().getSync().activeSys == 1) {
           return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
         }
         return null;
@@ -263,7 +263,7 @@ public class FeedActivity extends BaseActivity {
         if (position == 0) {
           U.getAnalyser().trackEvent(FeedActivity.this, "feed_msg", "feed_msg");
           MsgActivity.start(FeedActivity.this, Account.inst().getNewCommentCount() > 0);
-        } else if (position == 1) {
+        } else if (position == 1 || U.getSyncClient().getSync().activeSys == 1) {
           if (mRewardFragment == null) {
             mRewardFragment = new RewardFragment();
             getSupportFragmentManager().beginTransaction()
@@ -277,7 +277,7 @@ public class FeedActivity extends BaseActivity {
 
       @Override
       public int getCount() {
-        return 2;
+        return 1 + ((U.getSyncClient().getSync().activeSys == 1) ? 1 : 0);
       }
 
       @Override
@@ -285,11 +285,6 @@ public class FeedActivity extends BaseActivity {
         return new TopBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
       }
     });
-
-    if (U.useFixture()) {
-      getTopBar().getActionView(0).setCount(99);
-      getTopBar().getActionOverflow().setHasNew(true);
-    }
 
     mFeedFragment = new FeedFragment();
     getSupportFragmentManager().beginTransaction().add(R.id.fl_feed, mFeedFragment, "feed").commitAllowingStateLoss();
