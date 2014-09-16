@@ -11,6 +11,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.baidu.android.common.util.CommonParam;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.C;
 import com.utree.eightysix.R;
@@ -99,7 +100,7 @@ public class FeedPromotionView extends FrameLayout {
   public void onTvContentClicked(View view) {
     U.getAnalyser().trackEvent(U.getContext(), "feed_promote", "feed_promote");
     BaseWebActivity.start(view.getContext(), mPromotion.activeWebViewName,
-        String.format("%s%s?userid=%s&factoryid=%d", U.getConfig("api.host"),
-            C.API_PROMOTION, Account.inst().getUserId(), mFactoryId));
+        String.format("%s%s?userid=%s&factoryid=%d&virtualImei=%s", U.getConfig("api.host"),
+            C.API_PROMOTION, Account.inst().getUserId(), mFactoryId, CommonParam.getCUID(U.getContext())));
   }
 }
