@@ -38,6 +38,10 @@ public class OptionPublishActivity extends BaseActivity {
 
   public static final int REQUEST_PUBLISH_OPTION = 1;
 
+  public boolean mRequesting;
+
+  public int mCircleId;
+
   @OnClick(R.id.tv_send)
   public void onRbSendClicked() {
     requestPublish();
@@ -60,7 +64,6 @@ public class OptionPublishActivity extends BaseActivity {
     requestChangeName();
   }
 
-  public int mCircleId;
 
   private static final String[] BG_NAME = {
       "bg_13.jpg", "bg_20.jpg", "bg_24.jpg", "bg_28.jpg", "bg_31.jpg", "bg_40.jpg",
@@ -107,11 +110,16 @@ public class OptionPublishActivity extends BaseActivity {
 
 
   private void requestChangeName() {
+    if (mRequesting) {
+      return;
+    }
     showProgressBar(true);
+    mRequesting = true;
     request(new ChangeNameRequest(mCircleId), new OnResponse2<Response>() {
       @Override
       public void onResponseError(Throwable e) {
         hideProgressBar();
+        mRequesting = false;
       }
 
       @Override
@@ -120,6 +128,7 @@ public class OptionPublishActivity extends BaseActivity {
           mTvDisplay.setText("显示名：" + response.message);
         }
         hideProgressBar();
+        mRequesting = false;
       }
     }, Response.class);
   }
