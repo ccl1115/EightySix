@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.feed;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -150,6 +151,11 @@ public class RewardFragment extends BaseFragment {
       }
     });
 
+  }
+
+  @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
     requestActiveJoin();
   }
 

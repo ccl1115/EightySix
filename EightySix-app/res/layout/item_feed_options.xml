@@ -10,13 +10,13 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:padding="12dp"
             android:orientation="vertical"
             android:background="@drawable/item_feed_options_bg">
 
         <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:padding="12dp">
 
             <com.utree.eightysix.widget.RoundedButton
                     android:id="@+id/rb_sub_title"
@@ -41,6 +41,11 @@
                     android:src="@drawable/ic_action_refresh"/>
 
         </FrameLayout>
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
 
         <TextView
                 android:id="@+id/tv_title"
@@ -87,11 +92,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:gravity="center"
                 android:text="以上都不是"
-                android:textColor="@color/apptheme_primary_white_btn"
                 android:background="@android:color/white"/>
 
         <EditText

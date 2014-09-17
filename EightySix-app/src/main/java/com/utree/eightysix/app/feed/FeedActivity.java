@@ -254,7 +254,7 @@ public class FeedActivity extends BaseActivity {
           return getResources().getDrawable(R.drawable.ic_action_msg);
         } else {
           Sync sync = U.getSyncClient().getSync();
-          if (position == 1 || (sync != null && sync.activeSys == 1)) {
+          if (position == 1 || sync == null || sync.activeSys == 1) {
             return getResources().getDrawable(R.drawable.ic_action_reward);
           }
         }
@@ -267,7 +267,7 @@ public class FeedActivity extends BaseActivity {
           return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
         } else {
           Sync sync = U.getSyncClient().getSync();
-          if (position == 1 || (sync != null && sync.activeSys == 1)) {
+          if (position == 1 || sync == null || sync.activeSys == 1) {
             return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
           }
         }
@@ -281,7 +281,7 @@ public class FeedActivity extends BaseActivity {
           MsgActivity.start(FeedActivity.this, Account.inst().getNewCommentCount() > 0);
         } else {
           Sync sync = U.getSyncClient().getSync();
-          if (position == 1 || (sync != null && sync.activeSys == 1)) {
+          if (position == 1 || sync == null || sync.activeSys == 1) {
             if (mRewardFragment == null) {
               mRewardFragment = new RewardFragment();
               getSupportFragmentManager().beginTransaction()
@@ -297,7 +297,7 @@ public class FeedActivity extends BaseActivity {
       @Override
       public int getCount() {
         Sync sync = U.getSyncClient().getSync();
-        return 1 + ((sync != null && sync.activeSys == 1) ? 1 : 0);
+        return 1 + ((sync == null || sync.activeSys == 1) ? 1 : 0);
       }
 
       @Override
@@ -382,20 +382,8 @@ public class FeedActivity extends BaseActivity {
 
   @Subscribe
   public void onSyncEvent(Sync sync) {
-    if (sync != null) {
-      setActionAdapter();
-    }
+    setActionAdapter();
   }
-//  @Subscribe
-//  public void onSetPraiseCountEvent(UpdatePraiseCountEvent event) {
-//    if (mMenuViewHolder != null) {
-//      if (event.getCount() == 0) {
-//        mMenuViewHolder.mTvPraiseCount.setText("我收到的赞");
-//      } else {
-//        mMenuViewHolder.mTvPraiseCount.setText(String.format("收到%d个赞", event.getCount()));
-//      }
-//    }
-//  }
 
   @Override
   public void onBackPressed() {
