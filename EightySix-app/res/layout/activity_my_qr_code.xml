@@ -11,6 +11,7 @@
              android:background="#FF333435">
 
     <LinearLayout
+            android:id="@+id/parent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -23,31 +24,30 @@
                 android:layout_marginTop="16dp"
                 android:textSize="14sp"
                 android:textColor="@color/apptheme_primary_grey_color_pressed"
-                android:text="扫一扫下面的二维码图案，添加我为好友"/>
+                android:text="扫一扫下面的二维码，添加我为朋友"/>
 
 
         <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            <ImageView
-                    android:id="@+id/iv_bg"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="16dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/bg_20"/>
+                android:layout_height="wrap_content"
+                android:padding="16dp">
 
             <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#88FFFFFF"/>
+                    android:background="#ff666666"/>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="2dp"
+                    android:background="#ff888888"/>
 
             <ImageView
                     android:id="@+id/iv_qr_code"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="44dp"
+                    android:layout_margin="20dp"
                     android:layout_gravity="center"/>
         </FrameLayout>
 

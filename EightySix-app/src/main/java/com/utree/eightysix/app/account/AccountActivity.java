@@ -23,6 +23,7 @@ import com.utree.eightysix.request.MyFriendsRequest;
 import com.utree.eightysix.response.MyFriendsResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.QRCodeGenerator;
 import com.utree.eightysix.widget.TopBar;
 
@@ -141,10 +142,40 @@ public class AccountActivity extends BaseActivity {
     requestMyFriend();
   }
 
+  private void cacheOutMyFriend() {
+    cacheOut(new MyFriendsRequest(), new OnResponse2<MyFriendsResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
+      @Override
+      public void onResponse(MyFriendsResponse response) {
+        if (RESTRequester.responseOk(response)) {
+          mId = response.object.myViewId;
+          mTvMyId.setText(getString(R.string.my_id, mId));
+          mTvPeopleCount.setText(getString(R.string.people_know_you_count, response.object.friendCount));
+          mTvContact.setText(getString(R.string.friends_in_contact, response.object.contactsCount));
+          mTvScan.setText(getString(R.string.friends_from_scan, response.object.qrCodeFriends));
+
+          mQRCodeGenerator.generate("eightysix://friend/add/" + response.object.myViewId, new QRCodeGenerator.OnResult() {
+            @Override
+            public void onResult(Bitmap bitmap) {
+              mIvQRCode.setImageBitmap(bitmap);
+            }
+          });
+
+          addItems(response.object);
+        }
+      }
+    }, MyFriendsResponse.class);
+  }
+
   private void requestMyFriend() {
     request(new MyFriendsRequest(), new OnResponse2<MyFriendsResponse>() {
       @Override
       public void onResponseError(Throwable e) {
+        cacheOutMyFriend();
         hideProgressBar();
       }
 
@@ -165,6 +196,8 @@ public class AccountActivity extends BaseActivity {
           });
 
           addItems(response.object);
+        } else {
+          cacheOutMyFriend();
         }
 
         hideProgressBar();

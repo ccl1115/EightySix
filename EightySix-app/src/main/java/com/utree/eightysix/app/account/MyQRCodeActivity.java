@@ -4,14 +4,18 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import butterknife.InjectView;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.utils.QRCodeGenerator;
 
 /**
@@ -24,8 +28,8 @@ public class MyQRCodeActivity extends BaseActivity {
   @InjectView(R.id.iv_qr_code)
   public ImageView mIvQRCode;
 
-  @InjectView(R.id.iv_bg)
-  public ImageView mIvBg;
+  @InjectView(R.id.parent)
+  public LinearLayout mParent;
 
   public static void start(Context context, String id) {
     Intent intent = new Intent(context, MyQRCodeActivity.class);
@@ -58,6 +62,8 @@ public class MyQRCodeActivity extends BaseActivity {
       finish();
       return;
     }
+
+    mParent.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(8), Color.WHITE));
 
     new QRCodeGenerator().generate("eightysix://friend/add/" + id, new QRCodeGenerator.OnResult() {
       @Override
