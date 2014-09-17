@@ -13,6 +13,7 @@
             android:layout_gravity="center"
             android:orientation="vertical"
             android:layout_margin="16dp"
+            android:clickable="true"
             android:background="@android:color/white">
 
 

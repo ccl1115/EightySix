@@ -203,6 +203,7 @@ public class RewardFragment extends BaseFragment {
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
           U.showToast("领取成功");
+          requestActiveJoin();
         }
       }
     }, Response.class);
@@ -232,13 +233,15 @@ public class RewardFragment extends BaseFragment {
 
           if (response.object.currentFactory == 1){
             mRbAction.setText("扫一扫，领取抱枕");
+            mRbAction.setEnabled(true);
           } else {
             mRbAction.setText("我也要参加");
+            mRbAction.setEnabled(true);
           }
 
           if (response.object.accepted == 1) {
             mRbAction.setText("已领取");
-            mRbAction.setEnabled(true);
+            mRbAction.setEnabled(false);
           }
         }
       }
