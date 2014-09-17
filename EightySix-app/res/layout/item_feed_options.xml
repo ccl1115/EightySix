@@ -45,18 +45,21 @@
         <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"/>
+                android:layout_weight="0.5"/>
 
         <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:textSize="24sp"
+                android:textSize="28sp"
                 android:textColor="@android:color/white"
                 android:text="标题"/>
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"/>
 
 
         <TextView
@@ -74,6 +77,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:layout_marginTop="1dp"
                 android:gravity="center"
                 android:text="Q2"
                 android:background="@android:color/white"/>
@@ -83,6 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:layout_marginTop="1dp"
                 android:gravity="center"
                 android:text="Q3"
                 android:background="@android:color/white"/>
@@ -92,32 +97,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:layout_marginBottom="8dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="24dp"
                 android:gravity="center"
                 android:text="以上都不是"
                 android:background="@android:color/white"/>
 
         <EditText
                 android:id="@+id/et_other"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_margin="32dp"
                 android:layout_gravity="center_horizontal"
-                android:padding="16dp"
+                android:padding="12dp"
                 android:maxLength="4"
                 android:textColor="@color/apptheme_primary_light_color"
                 android:textColorHint="@color/apptheme_primary_dark_color"
                 android:hint="请填写他的姓名"
                 android:inputType="text"
-                android:background="@drawable/white"
+                android:background="@color/apptheme_primary_grey_color"
                 android:visibility="gone"/>
 
         <TextView
                 android:id="@+id/tv_tip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="32dp"
                 android:textSize="20sp"
                 android:textColor="@android:color/white"/>
 
@@ -125,13 +131,13 @@
                 android:id="@+id/rb_next"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
+                android:layout_margin="32dp"
                 android:layout_gravity="center_horizontal"
                 android:textSize="18sp"
                 android:textColor="@color/apptheme_primary_light_color"
                 android:visibility="gone"
                 android:text="下一步"
-                app:background="@color/apptheme_primary_white_btn"/>
+                app:background="@android:color/white"/>
     </LinearLayout>
 
     <FrameLayout

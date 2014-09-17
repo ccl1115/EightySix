@@ -86,8 +86,6 @@ public class FeedOptionSetView extends FrameLayout {
       mCurrent = mCurrent == mData.options.size() - 1 ? 0 : mCurrent + 1;
     }
 
-
-
     switchToQuestion();
     setOption();
   }
@@ -266,12 +264,15 @@ public class FeedOptionSetView extends FrameLayout {
     U.getRESTRequester().request(data, new HandlerWrapper<OptionSetResponse>(data, new OnResponse2<OptionSetResponse>() {
       @Override
       public void onResponseError(Throwable e) {
-
+        hideProgress();
       }
 
       @Override
       public void onResponse(OptionSetResponse response) {
-        setData(mCircleId, response.object);
+        if (RESTRequester.responseOk(response)) {
+          U.getBus().post(response.object);
+          setData(mCircleId, response.object);
+        }
         hideProgress();
       }
     }, OptionSetResponse.class));
@@ -284,12 +285,15 @@ public class FeedOptionSetView extends FrameLayout {
     U.getRESTRequester().request(data, new HandlerWrapper<OptionSetResponse>(data, new OnResponse2<OptionSetResponse>() {
       @Override
       public void onResponseError(Throwable e) {
-
+        hideProgress();
       }
 
       @Override
       public void onResponse(OptionSetResponse response) {
-        setData(mCircleId, response.object);
+        if (RESTRequester.responseOk(response)) {
+          U.getBus().post(response.object);
+          setData(mCircleId, response.object);
+        }
         hideProgress();
       }
     }, OptionSetResponse.class));

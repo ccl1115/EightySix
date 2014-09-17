@@ -114,6 +114,18 @@ class FeedAdapter extends BaseAdapter {
     return mFeeds;
   }
 
+  @Subscribe
+  public void onOptionSetEvent(OptionSet optionSet) {
+    List<BaseItem> lists = mFeeds.posts.lists;
+    for (int i = 0; i < lists.size(); i++) {
+      BaseItem item = lists.get(i);
+      if (item.type == BaseItem.TYPE_OPTION_SET) {
+        lists.set(i, optionSet);
+        break;
+      }
+    }
+  }
+
   @Override
   public int getCount() {
     return mFeeds.posts.lists == null ? 0 : mFeeds.posts.lists.size() + 2; // top/bot padding item

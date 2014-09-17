@@ -154,9 +154,10 @@ public class RewardFragment extends BaseFragment {
   }
 
   @Override
-  public void onAttach(Activity activity) {
-    super.onAttach(activity);
-    requestActiveJoin();
+  public void onHiddenChanged(boolean hidden) {
+    if (!hidden) {
+      requestActiveJoin();
+    }
   }
 
   public boolean onBackPressed() {

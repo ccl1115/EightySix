@@ -387,13 +387,14 @@ public class FeedActivity extends BaseActivity {
 
   @Override
   public void onBackPressed() {
+    if (mRewardFragment != null && mRewardFragment.onBackPressed()){
+      return;
+    }
+
     if (mFeedFragment != null && mFeedFragment.onBackPressed()) {
       return;
     }
 
-    if (mRewardFragment != null && mRewardFragment.onBackPressed()){
-      return;
-    }
 
     if (mShouldExit) {
       finish();
