@@ -70,7 +70,7 @@
                 android:layout_marginTop="8dp"
                 android:gravity="center"
                 android:text="Q1"
-                android:background="@android:color/white"/>
+                android:background="@drawable/apptheme_primary_list_selector"/>
 
         <TextView
                 android:id="@+id/tv_q2"
@@ -80,7 +80,7 @@
                 android:layout_marginTop="1dp"
                 android:gravity="center"
                 android:text="Q2"
-                android:background="@android:color/white"/>
+                android:background="@drawable/apptheme_primary_list_selector"/>
 
         <TextView
                 android:id="@+id/tv_q3"
@@ -90,7 +90,7 @@
                 android:layout_marginTop="1dp"
                 android:gravity="center"
                 android:text="Q3"
-                android:background="@android:color/white"/>
+                android:background="@drawable/apptheme_primary_list_selector"/>
 
         <TextView
                 android:id="@+id/tv_other"
@@ -101,7 +101,7 @@
                 android:layout_marginBottom="24dp"
                 android:gravity="center"
                 android:text="以上都不是"
-                android:background="@android:color/white"/>
+                android:background="@drawable/apptheme_primary_list_selector"/>
 
         <EditText
                 android:id="@+id/et_other"
@@ -137,7 +137,7 @@
                 android:textColor="@color/apptheme_primary_light_color"
                 android:visibility="gone"
                 android:text="下一步"
-                app:background="@android:color/white"/>
+                app:background="@color/apptheme_primary_white_btn"/>
     </LinearLayout>
 
     <FrameLayout

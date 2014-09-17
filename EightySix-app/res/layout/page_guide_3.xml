@@ -34,7 +34,7 @@
             android:text="注册加入"
             android:textSize="16sp"
             app:radius="4dp"
-            app:background="@color/apptheme_primary_transparent_btn"/>
+            app:background="@color/apptheme_primary_white_btn"/>
 
     <TextView
             android:id="@+id/tv_login"

@@ -225,10 +225,10 @@ public class RewardFragment extends BaseFragment {
 
           if (response.object.needFriends == 0) {
             mPageReward1ViewHolder.mRbStatus.setText("已完成");
-            mPageReward1ViewHolder.mRbStatus.setBackgroundColor(Color.GREEN);
+            mPageReward1ViewHolder.mRbStatus.setBackgroundColor(0xff00a600);
           } else {
             mPageReward1ViewHolder.mRbStatus.setText("还差" + response.object.needFriends + "个");
-            mPageReward1ViewHolder.mRbStatus.setBackgroundColor(Color.RED);
+            mPageReward1ViewHolder.mRbStatus.setBackgroundColor(0xff930000);
           }
 
           if (response.object.currentFactory == 1){

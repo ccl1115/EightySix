@@ -89,7 +89,7 @@
                 android:textSize="16sp"
                 android:textColor="@android:color/black"/>
 
-        <TextView
+        <com.utree.eightysix.widget.RoundedButton
                 android:id="@+id/rb_add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -101,8 +101,10 @@
                 android:paddingRight="8dp"
                 android:paddingBottom="4dp"
                 android:text="添加"
-                android:textSize="12sp"
-                android:textColor="@android:color/black"/>
+                android:textSize="14sp"
+                android:textColor="@android:color/black"
+                app:radius="14dp"
+                app:background="@color/apptheme_primary_grey_btn"/>
 
     </LinearLayout>
 
