@@ -36,7 +36,7 @@ import java.util.Random;
 @Layout(R.layout.activity_option_publish)
 public class OptionPublishActivity extends BaseActivity {
 
-  private static final int REQUEST_PUBLISH_OPTION = 1;
+  public static final int REQUEST_PUBLISH_OPTION = 1;
 
   @OnClick(R.id.rb_send)
   public void onRbSendClicked() {
