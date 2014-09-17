@@ -8,6 +8,7 @@ import android.widget.*;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -34,6 +35,8 @@ public class FeedOptionSetView extends FrameLayout {
   private int mCurrent;
 
   private int mState;
+
+  private int mCircleId;
 
   @InjectView(R.id.tv_title)
   public TextView mTvTitle;
@@ -68,8 +71,6 @@ public class FeedOptionSetView extends FrameLayout {
   @InjectView(R.id.iv_refresh)
   public ImageView mIvRefresh;
 
-  private int mCircleId;
-
   @OnClick(R.id.iv_refresh)
   public void onIvRefreshClicked() {
     if (mData == null) {
@@ -80,9 +81,15 @@ public class FeedOptionSetView extends FrameLayout {
       return;
     }
 
+    if (mState == STATE_CHOSEN) {
+      requestBack();
+    }
+
     if (mState == STATE_SELECT) {
       mCurrent = mCurrent == mData.options.size() - 1 ? 0 : mCurrent + 1;
     }
+
+
 
     switchToQuestion();
     setOption();
@@ -196,6 +203,9 @@ public class FeedOptionSetView extends FrameLayout {
 
     mRbAction.setVisibility(VISIBLE);
 
+    mIvRefresh.setVisibility(VISIBLE);
+    mIvRefresh.setImageResource(R.drawable.ic_option_back);
+
     mState = STATE_INPUT;
   }
 
@@ -211,6 +221,7 @@ public class FeedOptionSetView extends FrameLayout {
     mRbAction.setVisibility(GONE);
 
     mIvRefresh.setVisibility(VISIBLE);
+    mIvRefresh.setImageResource(R.drawable.ic_option_refresh);
 
     mState = STATE_SELECT;
   }
@@ -227,6 +238,7 @@ public class FeedOptionSetView extends FrameLayout {
     mRbAction.setVisibility(VISIBLE);
 
     mIvRefresh.setVisibility(VISIBLE);
+    mIvRefresh.setImageResource(R.drawable.ic_option_back);
 
     mState = STATE_CHOSEN;
   }

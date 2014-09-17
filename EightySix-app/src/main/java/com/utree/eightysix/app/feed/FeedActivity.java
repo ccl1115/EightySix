@@ -26,6 +26,7 @@ import com.utree.eightysix.*;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.SyncClient;
 import com.utree.eightysix.app.account.AccountActivity;
 import com.utree.eightysix.app.account.AddFriendActivity;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
@@ -277,7 +278,7 @@ public class FeedActivity extends BaseActivity {
 
       @Override
       public int getCount() {
-        return 1 + ((U.getSyncClient().getSync().activeSys == 1) ? 1 : 0);
+        return 1 + ((U.getSyncClient().getSync() == null && U.getSyncClient().getSync().activeSys == 1) ? 1 : 0);
       }
 
       @Override
@@ -365,6 +366,10 @@ public class FeedActivity extends BaseActivity {
     }
   }
 
+  @Subscribe
+  public void onSyncEvent(Sync sync) {
+
+  }
 //  @Subscribe
 //  public void onSetPraiseCountEvent(UpdatePraiseCountEvent event) {
 //    if (mMenuViewHolder != null) {

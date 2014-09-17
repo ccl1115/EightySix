@@ -38,7 +38,6 @@ import com.utree.eightysix.widget.RoundedButton;
 public class RewardFragment extends BaseFragment {
 
   private PageReward1ViewHolder mPageReward1ViewHolder;
-  private PageReward2ViewHolder mPageReward2ViewHolder;
 
   private QRCodeScanFragment mQRCodeFragment;
 
@@ -132,7 +131,6 @@ public class RewardFragment extends BaseFragment {
           case 1: {
             View view = LayoutInflater.from(RewardFragment.this.getActivity())
                 .inflate(R.layout.page_reward_2, container, false);
-            mPageReward2ViewHolder = new PageReward2ViewHolder(view);
             container.addView(view);
             return view;
           }
@@ -227,7 +225,7 @@ public class RewardFragment extends BaseFragment {
           }
 
           if (response.object.currentFactory == 1){
-            mRbAction.setText("扫一扫，领取奖品");
+            mRbAction.setText("扫一扫，领取抱枕");
           } else {
             mRbAction.setText("我也要参加");
           }
@@ -236,13 +234,6 @@ public class RewardFragment extends BaseFragment {
             mRbAction.setText("已领取");
             mRbAction.setEnabled(true);
           }
-
-          new QRCodeGenerator().generate("eightysix://friend/add/" + response.object.virtualId, new QRCodeGenerator.OnResult() {
-            @Override
-            public void onResult(Bitmap bitmap) {
-              mPageReward2ViewHolder.mIvQrCode.setImageBitmap(bitmap);
-            }
-          });
         }
       }
     }, ActiveJoinResponse.class);
@@ -266,13 +257,4 @@ public class RewardFragment extends BaseFragment {
     }
   }
 
-  class PageReward2ViewHolder {
-
-    @InjectView(R.id.iv_qr_code)
-    ImageView mIvQrCode;
-
-    PageReward2ViewHolder(View view) {
-      ButterKnife.inject(this, view);
-    }
-  }
 }

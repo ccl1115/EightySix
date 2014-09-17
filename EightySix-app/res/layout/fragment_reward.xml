@@ -28,7 +28,7 @@
                 android:id="@+id/in_page"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="4dp"
                 app:count="3"
                 app:drawable="@drawable/indicator_dot"
                 app:selector="@drawable/indicator_dot_selected"
