@@ -233,6 +233,15 @@ public class FeedActivity extends BaseActivity {
       mPopupMenu.setBackgroundDrawable(new BitmapDrawable(getResources()));
     }
 
+    setActionAdapter();
+
+    mFeedFragment = new FeedFragment();
+    getSupportFragmentManager().beginTransaction().add(R.id.fl_feed, mFeedFragment, "feed").commitAllowingStateLoss();
+
+    onNewIntent(getIntent());
+  }
+
+  private void setActionAdapter() {
     getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
       @Override
       public String getTitle(int position) {
@@ -243,8 +252,11 @@ public class FeedActivity extends BaseActivity {
       public Drawable getIcon(int position) {
         if (position == 0) {
           return getResources().getDrawable(R.drawable.ic_action_msg);
-        } else if (position == 1 || U.getSyncClient().getSync().activeSys == 1) {
-          return getResources().getDrawable(R.drawable.ic_action_reward);
+        } else {
+          Sync sync = U.getSyncClient().getSync();
+          if (position == 1 || (sync != null && sync.activeSys == 1)) {
+            return getResources().getDrawable(R.drawable.ic_action_reward);
+          }
         }
         return null;
       }
@@ -253,8 +265,11 @@ public class FeedActivity extends BaseActivity {
       public Drawable getBackgroundDrawable(int position) {
         if (position == 0) {
           return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
-        } else if (position == 1 || U.getSyncClient().getSync().activeSys == 1) {
-          return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
+        } else {
+          Sync sync = U.getSyncClient().getSync();
+          if (position == 1 || (sync != null && sync.activeSys == 1)) {
+            return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
+          }
         }
         return null;
       }
@@ -264,21 +279,25 @@ public class FeedActivity extends BaseActivity {
         if (position == 0) {
           U.getAnalyser().trackEvent(FeedActivity.this, "feed_msg", "feed_msg");
           MsgActivity.start(FeedActivity.this, Account.inst().getNewCommentCount() > 0);
-        } else if (position == 1 || U.getSyncClient().getSync().activeSys == 1) {
-          if (mRewardFragment == null) {
-            mRewardFragment = new RewardFragment();
-            getSupportFragmentManager().beginTransaction()
-                .add(android.R.id.content, mRewardFragment)
-                .commit();
-          } else if (mRewardFragment.isDetached()) {
-            getSupportFragmentManager().beginTransaction().attach(mRewardFragment).commit();
+        } else {
+          Sync sync = U.getSyncClient().getSync();
+          if (position == 1 || (sync != null && sync.activeSys == 1)) {
+            if (mRewardFragment == null) {
+              mRewardFragment = new RewardFragment();
+              getSupportFragmentManager().beginTransaction()
+                  .add(android.R.id.content, mRewardFragment)
+                  .commit();
+            } else if (mRewardFragment.isDetached()) {
+              getSupportFragmentManager().beginTransaction().attach(mRewardFragment).commit();
+            }
           }
         }
       }
 
       @Override
       public int getCount() {
-        return 1 + ((U.getSyncClient().getSync() == null && U.getSyncClient().getSync().activeSys == 1) ? 1 : 0);
+        Sync sync = U.getSyncClient().getSync();
+        return 1 + ((sync != null && sync.activeSys == 1) ? 1 : 0);
       }
 
       @Override
@@ -286,11 +305,6 @@ public class FeedActivity extends BaseActivity {
         return new TopBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
       }
     });
-
-    mFeedFragment = new FeedFragment();
-    getSupportFragmentManager().beginTransaction().add(R.id.fl_feed, mFeedFragment, "feed").commitAllowingStateLoss();
-
-    onNewIntent(getIntent());
   }
 
   @Override
@@ -368,7 +382,9 @@ public class FeedActivity extends BaseActivity {
 
   @Subscribe
   public void onSyncEvent(Sync sync) {
-
+    if (sync != null) {
+      setActionAdapter();
+    }
   }
 //  @Subscribe
 //  public void onSetPraiseCountEvent(UpdatePraiseCountEvent event) {

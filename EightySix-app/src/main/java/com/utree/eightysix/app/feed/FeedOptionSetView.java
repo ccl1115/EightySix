@@ -8,11 +8,8 @@ import android.widget.*;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import butterknife.OnTextChanged;
-import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.app.event.QRCodeScanEvent;
 import com.utree.eightysix.data.OptionSet;
 import com.utree.eightysix.request.OptionBackRequest;
 import com.utree.eightysix.request.SubmitAnswerRequest;
@@ -41,8 +38,8 @@ public class FeedOptionSetView extends FrameLayout {
   @InjectView(R.id.tv_title)
   public TextView mTvTitle;
 
-  @InjectView(R.id.tv_sub_title)
-  public TextView mTvSubTitle;
+  @InjectView(R.id.rb_sub_title)
+  public RoundedButton mRbSubTitle;
 
   @InjectView(R.id.tv_q1)
   public TextView mTvQ1;
@@ -167,7 +164,7 @@ public class FeedOptionSetView extends FrameLayout {
         switchToChosen();
         mRbAction.setText(mData.step2View.buttonText);
         mTvTitle.setText(mData.step2View.title);
-        mTvSubTitle.setText(mData.step2View.subTitle);
+        mRbSubTitle.setText(mData.step2View.subTitle);
         mTvTip.setText(mData.step2View.content);
       }
     } else if (mData.step == 2) {
@@ -175,7 +172,7 @@ public class FeedOptionSetView extends FrameLayout {
         switchToPublished();
         mRbAction.setText(mData.step3View.buttonText);
         mTvTitle.setText(mData.step3View.title);
-        mTvSubTitle.setText(mData.step3View.subTitle);
+        mRbSubTitle.setText(mData.step3View.subTitle);
         mTvTip.setText(mData.step3View.content);
       }
     }
@@ -184,7 +181,7 @@ public class FeedOptionSetView extends FrameLayout {
   private void setOption() {
     OptionSet.Option option = mData.options.get(mCurrent);
     mTvTitle.setText(option.title);
-    mTvSubTitle.setText(option.subTitle);
+    mRbSubTitle.setText(option.subTitle);
 
     mTvQ1.setText(option.choices.get(0).text);
     mTvQ2.setText(option.choices.get(1).text);
