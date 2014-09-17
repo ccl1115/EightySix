@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.feed;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -115,12 +116,12 @@ public class FeedOptionSetView extends FrameLayout {
     if (mState == STATE_INPUT) {
       requestSubmit(mEtOther.getText().toString());
     } else if (mState == STATE_CHOSEN) {
-      OptionPublishActivity.start(getContext(),
+      OptionPublishActivity.start(((Activity) getContext()),
           mData.step2View.answerHelper,
           mData.step2View.viewName,
           mCircleId);
     } else if (mState == STATE_PUBLISHED) {
-      OptionPublishActivity.start(getContext(),
+      OptionPublishActivity.start(((Activity) getContext()),
           mData.step2View.answerHelper,
           mData.step2View.viewName,
           mCircleId);
