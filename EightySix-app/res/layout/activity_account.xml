@@ -80,7 +80,7 @@
                 android:layout_marginLeft="16dp"
                 android:paddingTop="6dp"
                 android:gravity="center_vertical"
-                android:textSize="14sp"
+                android:textSize="13sp"
                 android:textColor="@color/apptheme_primary_dark_color"
                 android:text="@string/my_friends"/>
 
@@ -128,7 +128,7 @@
                 android:layout_marginLeft="16dp"
                 android:paddingTop="6dp"
                 android:gravity="center_vertical"
-                android:textSize="14sp"
+                android:textSize="13sp"
                 android:textColor="@color/apptheme_primary_dark_color"
                 android:text="@string/known_people"/>
 
