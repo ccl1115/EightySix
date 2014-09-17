@@ -165,6 +165,7 @@ public class FeedOptionSetView extends FrameLayout {
         mTvTitle.setText(mData.step2View.title);
         mRbSubTitle.setText(mData.step2View.subTitle);
         mTvTip.setText(mData.step2View.content);
+        mEtOther.setHint(mData.step2View.nextTitle);
       }
     } else if (mData.step == 2) {
       if (mData.step3View != null) {
@@ -173,6 +174,7 @@ public class FeedOptionSetView extends FrameLayout {
         mTvTitle.setText(mData.step3View.title);
         mRbSubTitle.setText(mData.step3View.subTitle);
         mTvTip.setText(mData.step3View.content);
+        mEtOther.setHint(mData.step2View.nextTitle);
       }
     }
   }

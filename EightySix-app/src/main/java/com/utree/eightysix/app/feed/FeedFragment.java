@@ -1,6 +1,7 @@
 package com.utree.eightysix.app.feed;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -381,6 +382,11 @@ public class FeedFragment extends BaseFragment {
         mRstvEmpty.setVisibility(View.INVISIBLE);
         mLvFeed.setSelection(0);
       }
+    }
+    if (mCircle != null) {
+      requestFeeds(mCircle.id, 1);
+    } else {
+      requestFeeds(0, 1);
     }
   }
 
