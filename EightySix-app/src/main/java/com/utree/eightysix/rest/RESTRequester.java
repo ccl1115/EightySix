@@ -152,17 +152,17 @@ public class RESTRequester implements IRESTRequester {
 
   @Override
   public RequestHandle get(String api, Header[] headers, RequestParams params, ResponseHandlerInterface handler) {
-    Log.d(C.TAG.RR, "   get: " + mHost + api);
+    if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "   get: " + mHost + api);
     putBaseParams(params);
-    Log.d(C.TAG.RR, "params: " + params.toString());
+    if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "params: " + params.toString());
     return mAsyncHttpClient.get(U.getContext(), mHost + api, headers, params, handler);
   }
 
   @Override
   public RequestHandle post(String api, Header[] headers, RequestParams params, String contentType, ResponseHandlerInterface handler) {
-    Log.d(C.TAG.RR, "  post: " + mHost + api);
+    if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "  post: " + mHost + api);
     putBaseParams(params);
-    Log.d(C.TAG.RR, "params: " + params.toString());
+    if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "params: " + params.toString());
     return mAsyncHttpClient.post(U.getContext(), mHost + api, headers, params, contentType, handler);
   }
 

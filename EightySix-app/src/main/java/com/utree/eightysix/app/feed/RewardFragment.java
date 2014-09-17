@@ -151,13 +151,12 @@ public class RewardFragment extends BaseFragment {
       }
     });
 
-  }
-
-  @Override
-  public void onHiddenChanged(boolean hidden) {
-    if (!hidden) {
-      requestActiveJoin();
-    }
+    getBaseActivity().getHandler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        requestActiveJoin();
+      }
+    }, 100);
   }
 
   public boolean onBackPressed() {

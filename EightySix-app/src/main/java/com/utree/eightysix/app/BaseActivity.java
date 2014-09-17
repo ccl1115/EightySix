@@ -359,7 +359,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     showToast(string, true);
   }
 
-  protected final Handler getHandler() {
+  public final Handler getHandler() {
     return mHandler;
   }
 

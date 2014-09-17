@@ -36,6 +36,8 @@ import java.util.Random;
 @Layout(R.layout.activity_option_publish)
 public class OptionPublishActivity extends BaseActivity {
 
+  private static final int REQUEST_PUBLISH_OPTION = 1;
+
   @OnClick(R.id.rb_send)
   public void onRbSendClicked() {
     requestPublish();
@@ -43,6 +45,7 @@ public class OptionPublishActivity extends BaseActivity {
 
   @OnClick(R.id.iv_close)
   public void onIvCloseClicked() {
+    setResult(RESULT_CANCELED);
     finish();
   }
 
@@ -65,18 +68,16 @@ public class OptionPublishActivity extends BaseActivity {
       "bg_96.jpg", "bg_101.jpg", "bg_105.jpg"
   };
 
-  public static void start(Context context, String hint, String name, int circleId) {
-    Intent intent = new Intent(context, OptionPublishActivity.class);
+  public static void start(Activity activity, String hint, String name, int circleId) {
+    Intent intent = new Intent(activity, OptionPublishActivity.class);
 
     intent.putExtra("hint", hint);
     intent.putExtra("name", name);
     intent.putExtra("id", circleId);
 
-    if (!(context instanceof Activity)) {
-      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    }
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-    context.startActivity(intent);
+    activity.startActivityForResult(intent, REQUEST_PUBLISH_OPTION);
   }
 
   @Override
@@ -89,6 +90,7 @@ public class OptionPublishActivity extends BaseActivity {
 
     if (mCircleId == 0) {
       showToast("没有对应的朋友圈", false);
+      setResult(RESULT_CANCELED);
       finish();
       return;
     }
@@ -99,6 +101,7 @@ public class OptionPublishActivity extends BaseActivity {
 
   @Override
   public void onLogout(Account.LogoutEvent event) {
+    setResult(RESULT_CANCELED);
     finish();
   }
 
@@ -127,7 +130,8 @@ public class OptionPublishActivity extends BaseActivity {
         new OnResponse2<PublishPostResponse>() {
           @Override
           public void onResponseError(Throwable e) {
-
+            showToast("发表失败，请重试");
+            hideProgressBar();
           }
 
           @Override
@@ -144,6 +148,8 @@ public class OptionPublishActivity extends BaseActivity {
               U.getBus().post(new PostPublishedEvent(post, mCircleId));
 
               showToast("发表成功");
+
+              setResult(RESULT_OK);
               finish();
             } else {
               showToast("发表失败，请重试");
