@@ -6,7 +6,6 @@
              android:layout_height="match_parent"
              android:background="#88000000">
 
-
     <LinearLayout
             android:id="@+id/ll_bg"
             android:layout_width="wrap_content"
@@ -28,6 +27,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:visibility="invisible"/>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="24dp"
+                    android:background="@drawable/qrcode_border"/>
         </com.utree.eightysix.widget.RectLayout>
 
         <TextView
@@ -38,8 +43,8 @@
                 android:layout_marginBottom="16dp"
                 android:gravity="center_horizontal"
                 android:textSize="14sp"
-                android:textColor="@color/apptheme_primary_dark_color"/>
+                android:textColor="@color/apptheme_primary_dark_color"
+                android:text="将取景框对准二维码，即可自动扫描"/>
     </LinearLayout>
-
 
 </FrameLayout>

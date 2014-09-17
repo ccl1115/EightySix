@@ -22,7 +22,7 @@ public class ActiveJoin {
   @SerializedName("virtualId")
   public String virtualId;
 
-  @SerializedName("currentFactory")
+  @SerializedName("currFactory")
   public int currentFactory;
 
   @SerializedName("accepted")
