@@ -19,7 +19,7 @@
     <string name="cancel">取消</string>
     <string name="done">完成</string>
     <string name="settings">设置</string>
-    <string name="more">我的工友圈</string>
+    <string name="more">我的朋友圈</string>
     <string name="use_camera">使用相机</string>
     <string name="select_album">选择相册</string>
     <string name="feedback">意见反馈</string>
@@ -43,10 +43,10 @@
     <string name="server_500">服务器内部错误</string>
 
     <!-- Not found -->
-    <string name="not_found_circle">还没有跟你相关的工友圈</string>
+    <string name="not_found_circle">还没有跟你相关的朋友圈</string>
     <string name="not_found_circle_tip">你可以搜索或者创建一个</string>
     <string name="not_found_history">你还没有搜索历史</string>
-    <string name="not_found_history_tip">搜索跟你相关的工友圈吧</string>
+    <string name="not_found_history_tip">搜索跟你相关的朋友圈吧</string>
     <string name="not_found_post">哎哟！这里空空如也</string>
     <string name="not_found_post_tip">点击右下角按钮，抢先发帖吧</string>
     <string name="not_found_comment">还没有人评论，抢个沙发吧</string>
@@ -134,7 +134,7 @@
     <string name="publish">发表</string>
     <string name="who_will_see_this_secret">谁会看到这条秘密</string>
     <string name="add_photo">添加照片</string>
-    <string name="post_description">你在厂里的朋友会看到这条秘密，并知道是厂里面认识的人发的，但是无法猜到谁是作者。\n\n如果秘密被赞的数量较多，将自动转发到其他工友圈，让更多的人看到！</string>
+    <string name="post_description">你在厂里的朋友会看到这条秘密，并知道是厂里面认识的人发的，但是无法猜到谁是作者。\n\n如果秘密被赞的数量较多，将自动转发到其他朋友圈，让更多的人看到！</string>
     <string name="got_it">知道啦</string>
     <string name="post_anonymously">匿名发表秘密或小心情</string>
     <string name="shuffle_bg_color">随机切换一种色彩</string>
@@ -151,8 +151,8 @@
     <!-- BaseCirclesActivity -->
     <string name="select_circle">你在哪里工作？</string>
     <string name="search_circles">请输入你的企业名称查找</string>
-    <string name="my_circles">我的工友圈</string>
-    <string name="no_circles">没有找到工友圈</string>
+    <string name="my_circles">我的朋友圈</string>
+    <string name="no_circles">没有找到朋友圈</string>
     <string name="factory">工</string>
     <string name="business">商</string>
     <string name="most_friends">朋友最多</string>
@@ -162,25 +162,25 @@
     <!-- CircleSearchActivity -->
     <string name="enter_search_keyword">请输入搜索内容</string>
     <string name="clear_search_history">清除搜索记录</string>
-    <string name="no_search_result">没有找到 “%1$s” 相关的工友圈</string>
-    <string name="try_other_search_keyword">你可以尝试更改搜索关键词，或申请创建工友圈</string>
-    <string name="create_circle">创建工友圈</string>
+    <string name="no_search_result">没有找到 “%1$s” 相关的朋友圈</string>
+    <string name="try_other_search_keyword">你可以尝试更改搜索关键词，或申请创建朋友圈</string>
+    <string name="create_circle">创建朋友圈</string>
 
     <!-- CircleCreateActivity -->
-    <string name="circle_full_name">工友圈全称</string>
-    <string name="circle_abbreviation">工友圈短名称</string>
+    <string name="circle_full_name">朋友圈全称</string>
+    <string name="circle_abbreviation">朋友圈短名称</string>
     <string name="current_location">当前位置</string>
     <string name="enter_captcha">输入验证码</string>
     <string name="change_captcha">换一张</string>
     <string name="invite_people">邀请朋友</string>
     <string name="invite_people_info">邀请好友进入（需要3个朋友加入，才可以开通）</string>
-    <string name="circle_name_length_long">工友圈名字太长</string>
-    <string name="circle_short_name_length_long">工友圈短名称太长</string>
+    <string name="circle_name_length_long">朋友圈名字太长</string>
+    <string name="circle_short_name_length_long">朋友圈短名称太长</string>
     <string name="success_created">提交成功，若审核通过，我们会及时通知，请耐心等候</string>
 
     <!-- FeedActivity -->
     <string name="not_select_circle">不设置在哪里上班，没法玩啊</string>
-    <string name="friends_info">朋友(%1$d) | 工友(%2$d)</string>
+    <string name="friends_info">朋友(%1$d) | 朋友(%2$d)</string>
     <string name="hidden_friends_feed">你朋友发了%1$d条秘密，但是被隐藏了</string>
     <string name="unlock_to_view">解锁查看</string>
     <string name="introduce_to_friends">介绍给朋友</string>
@@ -201,7 +201,7 @@
     <!-- PraiseStaticActivity -->
     <string name="praise_count">我收到的赞</string>
     <string name="praise_count_obtained">我收到的赞</string>
-    <string name="praise_status">帖子获%1$d赞，评论获%2$d赞，超过全国%3$s的工友</string>
+    <string name="praise_status">帖子获%1$d赞，评论获%2$d赞，超过全国%3$s的朋友</string>
     <string name="no_new_praise">没有新赞</string>
     <string name="praise_no_praise">你还没有收到赞</string>
 
@@ -232,7 +232,7 @@
 
     <!-- Notifications -->
     <string name="notification_friend_new_post">你的朋友发了一条新帖子</string>
-    <string name="notification_circle_unlocked">新的工友圈解锁了！</string>
+    <string name="notification_circle_unlocked">新的朋友圈解锁了！</string>
     <string name="notification_circle_unlocked_tip">看看［%1$s］里的朋友发的秘密吧</string>
     <string name="notification_new">新提醒</string>
     <string name="notification_new_follow_comment">你关注的秘密有了新的评论</string>

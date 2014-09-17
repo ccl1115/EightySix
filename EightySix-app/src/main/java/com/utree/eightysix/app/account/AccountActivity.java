@@ -176,7 +176,7 @@ public class AccountActivity extends BaseActivity {
     View view = LayoutInflater.from(this).inflate(R.layout.item_circle_friends, mLlParent, false);
 
     ((TextView) view.findViewById(R.id.tv_name)).setText(friend.name);
-    ((TextView) view.findViewById(R.id.tv_count)).setText(String.valueOf(friend.friendCount));
+    ((TextView) view.findViewById(R.id.tv_count)).setText(String.valueOf(friend.friendCount) + "人");
 
     return view;
   }

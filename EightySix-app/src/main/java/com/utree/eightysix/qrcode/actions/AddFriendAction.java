@@ -55,8 +55,6 @@ public class AddFriendAction implements Action {
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
           U.showToast("添加好友成功");
-        } else {
-          U.showToast("添加好友失败，请重新扫描");
         }
       }
     }, Response.class));
