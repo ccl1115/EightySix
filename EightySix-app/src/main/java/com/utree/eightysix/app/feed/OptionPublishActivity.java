@@ -38,7 +38,7 @@ public class OptionPublishActivity extends BaseActivity {
 
   public static final int REQUEST_PUBLISH_OPTION = 1;
 
-  @OnClick(R.id.rb_send)
+  @OnClick(R.id.tv_send)
   public void onRbSendClicked() {
     requestPublish();
   }
@@ -96,7 +96,7 @@ public class OptionPublishActivity extends BaseActivity {
     }
 
     mEtPostContent.setHint(getIntent().getStringExtra("hint"));
-    mTvDisplay.setText(getIntent().getStringExtra("name"));
+    mTvDisplay.setText("显示名：" + getIntent().getStringExtra("name"));
   }
 
   @Override
@@ -107,17 +107,19 @@ public class OptionPublishActivity extends BaseActivity {
 
 
   private void requestChangeName() {
+    showProgressBar(true);
     request(new ChangeNameRequest(mCircleId), new OnResponse2<Response>() {
       @Override
       public void onResponseError(Throwable e) {
-
+        hideProgressBar();
       }
 
       @Override
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
-          mTvDisplay.setText(response.message);
+          mTvDisplay.setText("显示名：" + response.message);
         }
+        hideProgressBar();
       }
     }, Response.class);
   }
