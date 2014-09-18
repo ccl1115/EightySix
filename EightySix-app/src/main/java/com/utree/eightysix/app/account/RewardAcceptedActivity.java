@@ -42,8 +42,8 @@ public class RewardAcceptedActivity extends BaseActivity{
   }
 
   @OnClick(R.id.rb_share)
-  public void onRbShare() {
-    U.getShareManager().shareAppDialog(this, ((Circle) getIntent().getParcelableExtra("circle")));
+  public void onRbShareClicked() {
+    U.getShareManager().shareAppDialog(this, ((Circle) getIntent().getParcelableExtra("circle"))).show();
   }
 
   @Override

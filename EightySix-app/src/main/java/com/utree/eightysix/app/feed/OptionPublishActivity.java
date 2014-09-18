@@ -111,7 +111,7 @@ public class OptionPublishActivity extends BaseActivity {
     }
 
     mEtPostContent.setHint(getIntent().getStringExtra("hint"));
-    mTvDisplay.setText("显示名：" + getIntent().getStringExtra("name"));
+    mTvDisplay.setText("临时名：" + getIntent().getStringExtra("name"));
   }
 
   @Override
@@ -137,7 +137,7 @@ public class OptionPublishActivity extends BaseActivity {
       @Override
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
-          mTvDisplay.setText("显示名：" + response.message);
+          mTvDisplay.setText("临时名：" + response.message);
         }
         hideProgressBar();
         mRequesting = false;
