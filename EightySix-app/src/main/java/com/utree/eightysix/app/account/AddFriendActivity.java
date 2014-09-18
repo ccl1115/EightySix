@@ -31,12 +31,10 @@ public class AddFriendActivity extends BaseActivity {
     if (mQRCodeScanFragment == null) {
       mQRCodeScanFragment = new QRCodeScanFragment();
       getSupportFragmentManager().beginTransaction()
-          .setCustomAnimations(R.anim.enter_from_top, R.anim.exit_to_bottom)
           .add(android.R.id.content, mQRCodeScanFragment)
           .commit();
-    } else {
+    } else if (mQRCodeScanFragment.isDetached()) {
       getSupportFragmentManager().beginTransaction()
-          .setCustomAnimations(R.anim.enter_from_top, R.anim.exit_to_bottom)
           .attach(mQRCodeScanFragment)
           .commit();
     }

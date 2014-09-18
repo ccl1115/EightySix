@@ -70,7 +70,7 @@ public class QRCodeScanFragment extends Fragment implements Camera.PreviewCallba
     if (manager != null) {
       manager.beginTransaction()
           .setCustomAnimations(R.anim.enter_from_top, R.anim.exit_to_bottom)
-          .remove(this)
+          .detach(this)
           .commit();
     }
   }
