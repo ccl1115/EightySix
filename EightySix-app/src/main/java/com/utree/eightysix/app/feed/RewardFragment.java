@@ -22,6 +22,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.account.RewardAcceptedActivity;
 import com.utree.eightysix.app.event.QRCodeScanEvent;
+import com.utree.eightysix.data.ActiveJoin;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.qrcode.QRCodeScanFragment;
@@ -45,15 +46,11 @@ public class RewardFragment extends BaseFragment {
   private QRCodeScanFragment mQRCodeFragment;
 
   private Circle mCircle;
+  private ActiveJoin mData;
 
   @OnClick(R.id.fl_parent)
   public void onFlParentClicked() {
-    FragmentManager manager = getFragmentManager();
-    if (manager != null) {
-      manager.beginTransaction()
-          .detach(this)
-          .commit();
-    }
+    detachSelf();
   }
 
   @InjectView(R.id.ll_frame)
@@ -114,48 +111,6 @@ public class RewardFragment extends BaseFragment {
       }
     });
 
-    mVpPage.setAdapter(new PagerAdapter() {
-      @Override
-      public int getCount() {
-        return 3;
-      }
-
-      @Override
-      public boolean isViewFromObject(View view, Object object) {
-        return view.equals(object);
-      }
-
-      @Override
-      public Object instantiateItem(ViewGroup container, int position) {
-        switch (position) {
-          case 0: {
-            View view = LayoutInflater.from(RewardFragment.this.getActivity())
-                .inflate(R.layout.page_reward_1, container, false);
-            mPageReward1ViewHolder = new PageReward1ViewHolder(view);
-            container.addView(view);
-            return view;
-          }
-          case 1: {
-            View view = LayoutInflater.from(RewardFragment.this.getActivity())
-                .inflate(R.layout.page_reward_2, container, false);
-            container.addView(view);
-            return view;
-          }
-          case 2: {
-            View view = LayoutInflater.from(RewardFragment.this.getActivity())
-                .inflate(R.layout.page_reward_3, container, false);
-            container.addView(view);
-            return view;
-          }
-        }
-        return null;
-      }
-
-      @Override
-      public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((View) object);
-      }
-    });
 
     getBaseActivity().getHandler().postDelayed(new Runnable() {
       @Override
@@ -212,12 +167,7 @@ public class RewardFragment extends BaseFragment {
           requestActiveJoin();
 
 
-          FragmentManager manager = getFragmentManager();
-          if (manager != null) {
-            if (!isDetached()) {
-              manager.beginTransaction().detach(RewardFragment.this).commit();
-            }
-          }
+          detachSelf();
 
           RewardAcceptedActivity.start(getBaseActivity(), mCircle);
         }
@@ -229,39 +179,98 @@ public class RewardFragment extends BaseFragment {
     getBaseActivity().request(new ActiveJoinRequest(), new OnResponse2<ActiveJoinResponse>() {
       @Override
       public void onResponseError(Throwable e) {
-
+        detachSelf();
       }
 
       @Override
       public void onResponse(ActiveJoinResponse response) {
         if (RESTRequester.responseOk(response)) {
-          mPageReward1ViewHolder.mTvMsg1.setText(response.object.msg1);
-          mPageReward1ViewHolder.mTvMsg2.setText(response.object.msg2);
-          mPageReward1ViewHolder.mTvMsg3.setText(response.object.msg3);
 
-          if (response.object.needFriends == 0) {
-            mPageReward1ViewHolder.mRbStatus.setText("已完成");
-            mPageReward1ViewHolder.mRbStatus.setBackgroundColor(0xff00a600);
-          } else {
-            mPageReward1ViewHolder.mRbStatus.setText("还差" + response.object.needFriends + "个");
-            mPageReward1ViewHolder.mRbStatus.setBackgroundColor(0xff930000);
-          }
+          mData = response.object;
 
-          if (response.object.currentFactory == 1){
-            mRbAction.setText("扫一扫，领取抱枕");
-            mRbAction.setEnabled(true);
-          } else {
-            mRbAction.setText("我也要参加");
-            mRbAction.setEnabled(true);
-          }
+          mLlFrame.setVisibility(View.VISIBLE);
 
-          if (response.object.accepted == 1) {
-            mRbAction.setText("已领取");
-            mRbAction.setEnabled(false);
-          }
+          mVpPage.setAdapter(new PagerAdapter() {
+            @Override
+            public int getCount() {
+              return 3;
+            }
+
+            @Override
+            public boolean isViewFromObject(View view, Object object) {
+              return view.equals(object);
+            }
+
+            @Override
+            public Object instantiateItem(ViewGroup container, int position) {
+              switch (position) {
+                case 0: {
+                  View view = LayoutInflater.from(RewardFragment.this.getActivity())
+                      .inflate(R.layout.page_reward_1, container, false);
+                  mPageReward1ViewHolder = new PageReward1ViewHolder(view);
+
+                  mPageReward1ViewHolder.mTvMsg1.setText(mData.msg1);
+                  mPageReward1ViewHolder.mTvMsg2.setText(mData.msg2);
+                  mPageReward1ViewHolder.mTvMsg3.setText(mData.msg3);
+
+                  if (mData.needFriends == 0) {
+                    mPageReward1ViewHolder.mRbStatus.setText("已完成");
+                    mPageReward1ViewHolder.mRbStatus.setBackgroundColor(0xff00a600);
+                  } else {
+                    mPageReward1ViewHolder.mRbStatus.setText("还差" + mData.needFriends + "个");
+                    mPageReward1ViewHolder.mRbStatus.setBackgroundColor(0xff930000);
+                  }
+
+                  if (mData.currentFactory == 1){
+                    mRbAction.setText("扫一扫，领取抱枕");
+                    mRbAction.setEnabled(true);
+                  } else {
+                    mRbAction.setText("我也要参加");
+                    mRbAction.setEnabled(true);
+                  }
+
+                  if (mData.accepted == 1) {
+                    mRbAction.setText("已领取");
+                    mRbAction.setEnabled(false);
+                  }
+                  container.addView(view);
+                  return view;
+                }
+                case 1: {
+                  View view = LayoutInflater.from(RewardFragment.this.getActivity())
+                      .inflate(R.layout.page_reward_2, container, false);
+                  container.addView(view);
+                  return view;
+                }
+                case 2: {
+                  View view = LayoutInflater.from(RewardFragment.this.getActivity())
+                      .inflate(R.layout.page_reward_3, container, false);
+                  container.addView(view);
+                  return view;
+                }
+              }
+              return null;
+            }
+
+            @Override
+            public void destroyItem(ViewGroup container, int position, Object object) {
+              container.removeView((View) object);
+            }
+          });
+        } else {
+          detachSelf();
         }
       }
     }, ActiveJoinResponse.class);
+  }
+
+  private void detachSelf() {
+    FragmentManager manager = getFragmentManager();
+    if (manager != null) {
+      if (!isDetached()) {
+        manager.beginTransaction().detach(this).commit();
+      }
+    }
   }
 
   class PageReward1ViewHolder {

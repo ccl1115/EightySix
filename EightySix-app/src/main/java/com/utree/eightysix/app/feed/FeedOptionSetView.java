@@ -196,10 +196,12 @@ public class FeedOptionSetView extends FrameLayout {
     mTvOther.setVisibility(GONE);
 
     mEtOther.setVisibility(VISIBLE);
+    mEtOther.setHint(mData.options.get(mCurrent).nextTitle);
 
     mTvTip.setVisibility(GONE);
 
     mRbAction.setVisibility(VISIBLE);
+    mRbAction.setText("下一步");
 
     mIvRefresh.setVisibility(VISIBLE);
     mIvRefresh.setImageResource(R.drawable.ic_option_back);
