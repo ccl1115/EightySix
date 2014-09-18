@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -59,11 +60,22 @@ public class OptionPublishActivity extends BaseActivity {
   @InjectView(R.id.tv_display)
   public TextView mTvDisplay;
 
+  @InjectView(R.id.tv_send)
+  public TextView mTvSend;
+
   @OnClick(R.id.tv_shuffle)
   public void onTvShuffleClicked() {
     requestChangeName();
   }
 
+  @OnTextChanged(R.id.et_post_content)
+  public void onEtPostContentChanged(CharSequence cs) {
+    if (cs.length() == 0) {
+      mTvSend.setEnabled(false);
+    } else {
+      mTvSend.setEnabled(true);
+    }
+  }
 
   private static final String[] BG_NAME = {
       "bg_13.jpg", "bg_20.jpg", "bg_24.jpg", "bg_28.jpg", "bg_31.jpg", "bg_40.jpg",
