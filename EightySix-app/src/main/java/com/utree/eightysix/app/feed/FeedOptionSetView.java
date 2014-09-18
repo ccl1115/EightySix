@@ -39,8 +39,8 @@ public class FeedOptionSetView extends FrameLayout {
   @InjectView(R.id.tv_title)
   public TextView mTvTitle;
 
-  @InjectView(R.id.rb_sub_title)
-  public RoundedButton mRbSubTitle;
+  @InjectView(R.id.tv_sub_title)
+  public TextView mTvSubTitle;
 
   @InjectView(R.id.tv_q1)
   public TextView mTvQ1;
@@ -163,7 +163,7 @@ public class FeedOptionSetView extends FrameLayout {
         switchToChosen();
         mRbAction.setText(mData.step2View.buttonText);
         mTvTitle.setText(mData.step2View.title);
-        mRbSubTitle.setText(mData.step2View.subTitle);
+        mTvSubTitle.setText(mData.step2View.subTitle);
         mTvTip.setText(mData.step2View.content);
         mEtOther.setHint(mData.step2View.nextTitle);
       }
@@ -172,7 +172,7 @@ public class FeedOptionSetView extends FrameLayout {
         switchToPublished();
         mRbAction.setText(mData.step3View.buttonText);
         mTvTitle.setText(mData.step3View.title);
-        mRbSubTitle.setText(mData.step3View.subTitle);
+        mTvSubTitle.setText(mData.step3View.subTitle);
         mTvTip.setText(mData.step3View.content);
         mEtOther.setHint(mData.step2View.nextTitle);
       }
@@ -182,7 +182,7 @@ public class FeedOptionSetView extends FrameLayout {
   private void setOption() {
     OptionSet.Option option = mData.options.get(mCurrent);
     mTvTitle.setText(option.title);
-    mRbSubTitle.setText(option.subTitle);
+    mTvSubTitle.setText(option.subTitle);
 
     mTvQ1.setText(option.choices.get(0).text);
     mTvQ2.setText(option.choices.get(1).text);
@@ -196,10 +196,12 @@ public class FeedOptionSetView extends FrameLayout {
     mTvOther.setVisibility(GONE);
 
     mEtOther.setVisibility(VISIBLE);
+    mEtOther.setHint(mData.options.get(mCurrent).nextTitle);
 
     mTvTip.setVisibility(GONE);
 
     mRbAction.setVisibility(VISIBLE);
+    mRbAction.setText("下一步");
 
     mIvRefresh.setVisibility(VISIBLE);
     mIvRefresh.setImageResource(R.drawable.ic_option_back);

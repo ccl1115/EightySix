@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="让已经安装蓝莓的朋友，在应用里扫一扫你的二维码，就可以成为朋友啦"
+            android:text="让已经安装蓝莓的小伙伴，在应用里扫一扫你的二维码，就可以成为朋友啦"
             android:textSize="12sp"
             android:textColor="@color/apptheme_primary_dark_color"/>
 </LinearLayout>

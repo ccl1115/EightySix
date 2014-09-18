@@ -2,8 +2,10 @@ package com.utree.eightysix.app.account;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -184,7 +186,12 @@ public class AccountActivity extends BaseActivity {
         if (RESTRequester.responseOk(response)) {
           mId = response.object.myViewId;
           mTvMyId.setText(getString(R.string.my_id, mId));
-          mTvPeopleCount.setText(getString(R.string.people_know_you_count, response.object.friendCount));
+          if (response.object.friendCount == 0) {
+            mTvPeopleCount.setVisibility(View.GONE);
+          } else {
+            mTvPeopleCount.setVisibility(View.VISIBLE);
+            mTvPeopleCount.setText(getString(R.string.people_know_you_count, response.object.friendCount));
+          }
           mTvContact.setText(getString(R.string.friends_in_contact, response.object.contactsCount));
           mTvScan.setText(getString(R.string.friends_from_scan, response.object.qrCodeFriends));
 
@@ -226,10 +233,31 @@ public class AccountActivity extends BaseActivity {
   private void addItems(MyFriends myFriends) {
     removeItems();
 
+    if (myFriends.circleFriends.size() == 0) {
+      buildEmptyView();
+      return;
+    }
+
     for (MyFriends.CircleFriends friends : myFriends.circleFriends) {
       View child = buildItem(friends);
       mViews.add(child);
       mLlParent.addView(child);
     }
+  }
+
+  private void buildEmptyView() {
+    TextView tv = new TextView(this);
+    tv.setText("还没有认识的人，去添加更多朋友吧");
+    tv.setPadding(0, dp2px(24), 0, dp2px(150));
+    tv.setTextSize(16);
+    tv.setBackgroundColor(Color.WHITE);
+    tv.setGravity(Gravity.CENTER_HORIZONTAL);
+    tv.setTextColor(getResources().getColor(R.color.apptheme_primary_grey_color));
+
+    LinearLayout.LayoutParams layoutParams =
+        new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
+    mViews.add(tv);
+    mLlParent.addView(tv, layoutParams);
   }
 }

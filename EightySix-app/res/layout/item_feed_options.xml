@@ -18,27 +18,25 @@
                 android:layout_height="wrap_content"
                 android:padding="12dp">
 
-            <com.utree.eightysix.widget.RoundedButton
-                    android:id="@+id/rb_sub_title"
+            <TextView
+                    android:id="@+id/tv_sub_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="@color/apptheme_primary_light_color"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="6dp"
-                    android:paddingBottom="6dp"
+                    android:textColor="@android:color/white"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
                     android:text="系列"
                     android:minHeight="0dp"
-                    app:background="@android:color/white"
-                    app:radius="16dp"/>
+                    android:background="@drawable/round_border_normal"/>
 
             <ImageView
                     android:id="@+id/iv_refresh"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:src="@drawable/ic_action_refresh"/>
+                    android:layout_gravity="right"/>
 
         </FrameLayout>
 
@@ -53,6 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:textSize="28sp"
+                android:gravity="center_horizontal"
                 android:textColor="@android:color/white"
                 android:text="标题"/>
 
@@ -70,7 +69,7 @@
                 android:layout_marginTop="8dp"
                 android:gravity="center"
                 android:text="Q1"
-                android:background="@android:color/white"/>
+                android:background="@drawable/apptheme_primary_list_selector"/>
 
         <TextView
                 android:id="@+id/tv_q2"
@@ -80,7 +79,7 @@
                 android:layout_marginTop="1dp"
                 android:gravity="center"
                 android:text="Q2"
-                android:background="@android:color/white"/>
+                android:background="@drawable/apptheme_primary_list_selector"/>
 
         <TextView
                 android:id="@+id/tv_q3"
@@ -90,7 +89,7 @@
                 android:layout_marginTop="1dp"
                 android:gravity="center"
                 android:text="Q3"
-                android:background="@android:color/white"/>
+                android:background="@drawable/apptheme_primary_list_selector"/>
 
         <TextView
                 android:id="@+id/tv_other"
@@ -101,7 +100,7 @@
                 android:layout_marginBottom="24dp"
                 android:gravity="center"
                 android:text="以上都不是"
-                android:background="@android:color/white"/>
+                android:background="@drawable/apptheme_primary_list_selector"/>
 
         <EditText
                 android:id="@+id/et_other"
@@ -124,6 +123,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="32dp"
+                android:gravity="center_horizontal"
                 android:textSize="20sp"
                 android:textColor="@android:color/white"/>
 
@@ -137,7 +137,7 @@
                 android:textColor="@color/apptheme_primary_light_color"
                 android:visibility="gone"
                 android:text="下一步"
-                app:background="@android:color/white"/>
+                app:background="@color/apptheme_primary_white_btn"/>
     </LinearLayout>
 
     <FrameLayout

@@ -180,7 +180,7 @@
 
     <!-- FeedActivity -->
     <string name="not_select_circle">不设置在哪里上班，没法玩啊</string>
-    <string name="friends_info">朋友(%1$d) | 朋友(%2$d)</string>
+    <string name="friends_info">朋友(%1$d) | 工友(%2$d)</string>
     <string name="hidden_friends_feed">你朋友发了%1$d条秘密，但是被隐藏了</string>
     <string name="unlock_to_view">解锁查看</string>
     <string name="introduce_to_friends">介绍给朋友</string>
@@ -273,7 +273,7 @@
     <string name="my_friends">我的朋友</string>
     <string name="add_new_friend">添加新朋友</string>
     <string name="my_id">我的蓝莓ID：%1$s</string>
-    <string name="scan_to_be_friend">让朋友扫一扫，即可互相成为朋友</string>
+    <string name="scan_to_be_friend">让小伙伴扫一扫，即可加为蓝莓朋友</string>
     <string name="people_know_you_count">* %1$d个认识你的人会收到你发的秘密</string>
     <string name="friends_in_contact">通讯录联系人 (%1$d)</string>
     <string name="friends_from_scan">来自扫一扫添加 (%1$d)</string>

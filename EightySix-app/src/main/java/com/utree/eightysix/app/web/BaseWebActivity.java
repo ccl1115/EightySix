@@ -24,6 +24,9 @@ import com.utree.eightysix.drawable.GearsDrawable;
 import com.utree.eightysix.widget.GearsView;
 import de.akquinet.android.androlog.Log;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+
 /**
  * @author simon
  */
@@ -101,19 +104,30 @@ public class BaseWebActivity extends BaseActivity {
       @Override
       public boolean shouldOverrideUrlLoading(WebView view, String url) {
         Log.d("BaseWebActivity", "overriding url loading: " + url);
+        int factoryId = 0;
+        String shortName = "";
         if (url.contains("?")) {
           String[] str = url.split("\\?")[1].split("&");
           for (String s : str) {
             String[] kv = s.split("=");
             if (kv.length == 2) {
               if (kv[0].equals("factoryId")) {
-                Circle circle = new Circle();
-                circle.id = Integer.parseInt(kv[1]);
-                U.getShareManager().shareAppDialog(BaseWebActivity.this, circle).show();
-                return true;
+                factoryId = Integer.parseInt(kv[1]);
+                continue;
+              }
+              if (kv[0].equals("shortName")) {
+                shortName = kv[1];
+                shortName = URLDecoder.decode(shortName);
               }
             }
           }
+        }
+        if (factoryId != 0 || !shortName.equals("")) {
+          Circle circle = new Circle();
+          circle.id = factoryId;
+          circle.shortName = shortName;
+          U.getShareManager().shareAppDialog(BaseWebActivity.this, circle).show();
+          return true;
         }
         return super.shouldOverrideUrlLoading(view, url);
       }

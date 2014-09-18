@@ -70,7 +70,7 @@ public class QRCodeScanFragment extends Fragment implements Camera.PreviewCallba
     if (manager != null) {
       manager.beginTransaction()
           .setCustomAnimations(R.anim.enter_from_top, R.anim.exit_to_bottom)
-          .remove(this)
+          .detach(this)
           .commit();
     }
   }
@@ -107,9 +107,9 @@ public class QRCodeScanFragment extends Fragment implements Camera.PreviewCallba
         mSvScan.setVisibility(View.VISIBLE);
         openCamera();
       }
-    }, 1000);
+    }, 500);
 
-    mDecodeHandler.sendEmptyMessageDelayed(MSG_SCAN_START, 2000);
+    mDecodeHandler.sendEmptyMessageDelayed(MSG_SCAN_START, 1000);
   }
 
   @Override

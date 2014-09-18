@@ -134,6 +134,8 @@
 
         <activity android:exported="@bool/exported" android:name=".app.feed.OptionPublishActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme.Dialog" android:windowSoftInputMode="adjustResize|stateVisible"/>
 
+        <activity android:exported="@bool/exported" android:name=".app.account.RewardAcceptedActivity" android:screenOrientation="portrait"/>
+
         <service android:enabled="true" android:name="com.baidu.location.f" android:process=":remote"/>
 
         <service android:enabled="true" android:name=".contact.ContactsSyncService"/>

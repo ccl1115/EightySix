@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -38,7 +39,11 @@ public class OptionPublishActivity extends BaseActivity {
 
   public static final int REQUEST_PUBLISH_OPTION = 1;
 
-  @OnClick(R.id.rb_send)
+  public boolean mRequesting;
+
+  public int mCircleId;
+
+  @OnClick(R.id.tv_send)
   public void onRbSendClicked() {
     requestPublish();
   }
@@ -55,12 +60,22 @@ public class OptionPublishActivity extends BaseActivity {
   @InjectView(R.id.tv_display)
   public TextView mTvDisplay;
 
+  @InjectView(R.id.tv_send)
+  public TextView mTvSend;
+
   @OnClick(R.id.tv_shuffle)
   public void onTvShuffleClicked() {
     requestChangeName();
   }
 
-  public int mCircleId;
+  @OnTextChanged(R.id.et_post_content)
+  public void onEtPostContentChanged(CharSequence cs) {
+    if (cs.length() == 0) {
+      mTvSend.setEnabled(false);
+    } else {
+      mTvSend.setEnabled(true);
+    }
+  }
 
   private static final String[] BG_NAME = {
       "bg_13.jpg", "bg_20.jpg", "bg_24.jpg", "bg_28.jpg", "bg_31.jpg", "bg_40.jpg",
@@ -96,7 +111,7 @@ public class OptionPublishActivity extends BaseActivity {
     }
 
     mEtPostContent.setHint(getIntent().getStringExtra("hint"));
-    mTvDisplay.setText(getIntent().getStringExtra("name"));
+    mTvDisplay.setText("临时名：" + getIntent().getStringExtra("name"));
   }
 
   @Override
@@ -107,17 +122,25 @@ public class OptionPublishActivity extends BaseActivity {
 
 
   private void requestChangeName() {
+    if (mRequesting) {
+      return;
+    }
+    showProgressBar(true);
+    mRequesting = true;
     request(new ChangeNameRequest(mCircleId), new OnResponse2<Response>() {
       @Override
       public void onResponseError(Throwable e) {
-
+        hideProgressBar();
+        mRequesting = false;
       }
 
       @Override
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
-          mTvDisplay.setText(response.message);
+          mTvDisplay.setText("临时名：" + response.message);
         }
+        hideProgressBar();
+        mRequesting = false;
       }
     }, Response.class);
   }
