@@ -284,6 +284,9 @@ public class FeedActivity extends BaseActivity {
           if (position == 1 || sync == null || sync.activeSys == 1) {
             if (mRewardFragment == null) {
               mRewardFragment = new RewardFragment();
+              Bundle args = new Bundle();
+              args.putParcelable("circle", mFeedFragment.getCircle());
+              mRewardFragment.setArguments(args);
               getSupportFragmentManager().beginTransaction()
                   .add(android.R.id.content, mRewardFragment)
                   .commit();

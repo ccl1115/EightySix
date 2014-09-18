@@ -20,7 +20,9 @@ import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.account.RewardAcceptedActivity;
 import com.utree.eightysix.app.event.QRCodeScanEvent;
+import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.qrcode.QRCodeScanFragment;
 import com.utree.eightysix.request.ActiveAcceptRequest;
@@ -41,6 +43,8 @@ public class RewardFragment extends BaseFragment {
   private PageReward1ViewHolder mPageReward1ViewHolder;
 
   private QRCodeScanFragment mQRCodeFragment;
+
+  private Circle mCircle;
 
   @OnClick(R.id.fl_parent)
   public void onFlParentClicked() {
@@ -86,6 +90,8 @@ public class RewardFragment extends BaseFragment {
   @Override
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
+
+    mCircle = getArguments().getParcelable("circle");
 
     mLlFrame.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(8), Color.WHITE));
 
@@ -204,6 +210,16 @@ public class RewardFragment extends BaseFragment {
         if (RESTRequester.responseOk(response)) {
           U.showToast("领取成功");
           requestActiveJoin();
+
+
+          FragmentManager manager = getFragmentManager();
+          if (manager != null) {
+            if (!isDetached()) {
+              manager.beginTransaction().detach(RewardFragment.this).commit();
+            }
+          }
+
+          RewardAcceptedActivity.start(getBaseActivity(), mCircle);
         }
       }
     }, Response.class);
