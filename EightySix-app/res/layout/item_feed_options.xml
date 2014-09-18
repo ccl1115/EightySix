@@ -24,10 +24,10 @@
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
                     android:textColor="@android:color/white"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="6dp"
-                    android:paddingBottom="6dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
                     android:text="系列"
                     android:minHeight="0dp"
                     android:background="@drawable/round_border_normal"/>
@@ -36,8 +36,7 @@
                     android:id="@+id/iv_refresh"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:src="@drawable/ic_action_refresh"/>
+                    android:layout_gravity="right"/>
 
         </FrameLayout>
 
