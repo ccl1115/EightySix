@@ -94,8 +94,8 @@ public class FeedPromotionView extends FrameLayout {
     super.onMeasure(widthMeasureSpec, widthSize - U.dp2px(40) + MeasureSpec.EXACTLY);
   }
 
-  @OnClick (R.id.tv_content)
-  public void onTvContentClicked(View view) {
+  @OnClick (R.id.fl_content)
+  public void onFlContentClicked(View view) {
     U.getAnalyser().trackEvent(U.getContext(), "feed_promote", "feed_promote");
     BaseWebActivity.start(view.getContext(), mPromotion.activeWebViewName,
         String.format("%s%s?userid=%s&factoryid=%d&virtualImei=%s", U.getConfig("api.host"),

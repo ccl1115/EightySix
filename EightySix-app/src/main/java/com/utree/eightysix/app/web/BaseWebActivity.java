@@ -24,6 +24,9 @@ import com.utree.eightysix.drawable.GearsDrawable;
 import com.utree.eightysix.widget.GearsView;
 import de.akquinet.android.androlog.Log;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+
 /**
  * @author simon
  */
@@ -114,6 +117,7 @@ public class BaseWebActivity extends BaseActivity {
               }
               if (kv[0].equals("shortName")) {
                 shortName = kv[1];
+                shortName = URLDecoder.decode(shortName);
               }
             }
           }
