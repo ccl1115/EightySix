@@ -233,22 +233,22 @@ public class AccountActivity extends BaseActivity {
   private void addItems(MyFriends myFriends) {
     removeItems();
 
-    buildEmptyView();
-//    if (myFriends.circleFriends.size() == 0) {
-//      return;
-//    }
-//
-//    for (MyFriends.CircleFriends friends : myFriends.circleFriends) {
-//      View child = buildItem(friends);
-//      mViews.add(child);
-//      mLlParent.addView(child);
-//    }
+    if (myFriends.circleFriends.size() == 0) {
+      buildEmptyView();
+      return;
+    }
+
+    for (MyFriends.CircleFriends friends : myFriends.circleFriends) {
+      View child = buildItem(friends);
+      mViews.add(child);
+      mLlParent.addView(child);
+    }
   }
 
   private void buildEmptyView() {
     TextView tv = new TextView(this);
     tv.setText("还没有认识的人，去添加更多朋友吧");
-    tv.setPadding(0, dp2px(24), 0, dp2px(100));
+    tv.setPadding(0, dp2px(24), 0, dp2px(150));
     tv.setTextSize(16);
     tv.setBackgroundColor(Color.WHITE);
     tv.setGravity(Gravity.CENTER_HORIZONTAL);
