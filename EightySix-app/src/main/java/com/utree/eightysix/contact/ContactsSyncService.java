@@ -142,8 +142,7 @@ public class ContactsSyncService extends IntentService {
           new TypeToken<ArrayList<Contact>>() {
           }.getType()
       );
-    } catch (IOException e) {
-      U.getAnalyser().reportException(this, e);
+    } catch (IOException ignored) {
     } finally {
       if (snapshot != null) snapshot.close();
     }
@@ -174,8 +173,7 @@ public class ContactsSyncService extends IntentService {
       U.getGson().toJson(phone, new TypeToken<ArrayList<Contact>>() {
       }.getType(), writer);
       editor.commit();
-    } catch (IOException e) {
-      U.getAnalyser().reportException(this, new Exception("Failed to invalidate cache", e));
+    } catch (IOException ignored) {
     } finally {
       closeQuietly(writer);
       closeQuietly(out);

@@ -37,16 +37,11 @@ public final class PushMessageReceiver extends FrontiaPushMessageReceiver {
       Log.v("PushService", "   userId = " + userId);
       Env.setPushChannelId(channelId);
       Env.setPushUserId(userId);
-    } else {
-      U.getAnalyser().reportError(context, "bind push service failed : " + errorCode);
     }
   }
 
   @Override
   public void onUnbind(Context context, int errorCode, String requestId) {
-    if (errorCode != 0) {
-      U.getAnalyser().reportError(context, "unbind push service failed");
-    }
   }
 
   @Override

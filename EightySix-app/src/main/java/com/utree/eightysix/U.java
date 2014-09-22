@@ -230,8 +230,7 @@ public class U {
   private static void loadInternalConfig() {
     try {
       sConfiguration.load(U.getContext().getResources().openRawResource(R.raw.configuration));
-    } catch (IOException e) {
-      U.getAnalyser().reportException(U.getContext(), e);
+    } catch (IOException ignored) {
     }
   }
 
@@ -239,7 +238,6 @@ public class U {
     try {
       return Integer.parseInt(getConfig(key));
     } catch (NumberFormatException e) {
-      U.getAnalyser().reportException(U.getContext(), e);
       return 0;
     }
   }
@@ -248,7 +246,6 @@ public class U {
     try {
       return Long.parseLong(getConfig(key));
     } catch (NumberFormatException e) {
-      U.getAnalyser().reportException(U.getContext(), e);
       return 0L;
     }
   }

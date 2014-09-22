@@ -141,7 +141,6 @@ public class RESTRequester implements IRESTRequester {
         headers.toArray(data.getHeaders());
       }
     } catch (Throwable t) {
-      U.getAnalyser().reportException(U.getContext(), t);
       if (BuildConfig.DEBUG) {
         throw new IllegalArgumentException("Request object parse failed", t);
       }

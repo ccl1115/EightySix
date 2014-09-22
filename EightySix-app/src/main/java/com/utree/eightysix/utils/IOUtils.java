@@ -14,15 +14,19 @@ import java.io.OutputStream;
 public class IOUtils {
 
   public static void copyFile(InputStream in, OutputStream os) {
-    final byte[] buffer = new byte[1024 * 1024];
+    final byte[] buffer;
+    try {
+      buffer = new byte[1024 * 1024];
+    } catch (OutOfMemoryError error) {
+      return;
+    }
     int n;
 
     try {
       while ((n = in.read(buffer)) != -1) {
         os.write(buffer, 0, n);
       }
-    } catch (IOException e) {
-      U.getAnalyser().reportException(U.getContext(), e);
+    } catch (IOException ignored) {
     }
   }
 

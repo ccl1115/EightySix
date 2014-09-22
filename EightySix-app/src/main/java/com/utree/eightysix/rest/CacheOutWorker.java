@@ -34,8 +34,7 @@ public class CacheOutWorker<T extends Response> extends AsyncTask<Void, Void, T>
       } else {
         return null;
       }
-    } catch (IOException e) {
-      U.getAnalyser().reportException(U.getContext(), e);
+    } catch (Exception ignored) {
     } finally {
       if (is != null) {
         try {

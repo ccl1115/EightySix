@@ -325,7 +325,6 @@ public class ImageUtils {
         Log.e(TAG, "Get snapshot IOException: " + ignored.getMessage());
         U.getBus().post(new ImageLoadedEvent(hash, null));
       } catch (OutOfMemoryError e) {
-        U.getAnalyser().reportException(U.getContext(), e);
         U.getBus().post(new ImageLoadedEvent(hash, null));
       }
     } else {
@@ -365,7 +364,6 @@ public class ImageUtils {
         Log.e(TAG, "Get snapshot IOException: " + ignored.getMessage());
         U.getBus().post(new ImageLoadedEvent(hash, null));
       } catch (OutOfMemoryError e) {
-        U.getAnalyser().reportException(U.getContext(), e);
         U.getBus().post(new ImageLoadedEvent(hash, null));
       }
     } else {
@@ -583,7 +581,6 @@ public class ImageUtils {
             return safeDecodeBitmap(mHash);
           }
         } catch (OutOfMemoryError e) {
-          U.getAnalyser().reportException(U.getContext(), e);
           return null;
         }
       }
@@ -680,7 +677,6 @@ public class ImageUtils {
             return safeDecodeBitmap(mFile);
           }
         } catch (OutOfMemoryError e) {
-          U.getAnalyser().reportException(U.getContext(), e);
           return null;
         }
       } else {

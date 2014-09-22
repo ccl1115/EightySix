@@ -619,7 +619,6 @@ public class PublishActivity extends BaseActivity {
       startActivityForResult(i, REQUEST_CODE_CAMERA);
       return true;
     } catch (Exception e) {
-      U.getAnalyser().reportException(this, e);
       return false;
     }
   }
@@ -631,7 +630,6 @@ public class PublishActivity extends BaseActivity {
       startActivityForResult(i, REQUEST_CODE_ALBUM);
       return true;
     } catch (Exception e) {
-      U.getAnalyser().reportException(this, e);
       return false;
     }
   }
@@ -650,7 +648,6 @@ public class PublishActivity extends BaseActivity {
       startActivityForResult(cropIntent, REQUEST_CODE_CROP);
       return true;
     } catch (Exception e) {
-      U.getAnalyser().reportException(this, e);
       return false;
     }
   }

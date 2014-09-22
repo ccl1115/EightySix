@@ -33,8 +33,7 @@ public class CacheUtils {
       try {
         cache = DiskLruCache.open(getOrCreateCacheDir(dir), version, count, size);
         mDiskLruCache.put(dir, cache);
-      } catch (Exception e) {
-        U.getAnalyser().reportException(U.getContext(), e);
+      } catch (Exception ignored) {
       }
     }
     return cache;

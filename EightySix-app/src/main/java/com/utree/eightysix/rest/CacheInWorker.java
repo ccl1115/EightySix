@@ -44,8 +44,7 @@ public class CacheInWorker extends AsyncTask<Void, Void, Void> {
     try {
       edit = U.getApiCache().edit(mKey);
       edit.set(0, mValue);
-    } catch (IOException e) {
-      U.getAnalyser().reportException(U.getContext(), e);
+    } catch (Exception ignored) {
     } finally {
       if (edit != null) {
         try {
@@ -63,8 +62,7 @@ public class CacheInWorker extends AsyncTask<Void, Void, Void> {
       edit = U.getApiCache().edit(mKey);
       os = edit.newOutputStream(0);
       IOUtils.copyFile(mInputStream, os);
-    } catch (IOException e) {
-      U.getAnalyser().reportException(U.getContext(), e);
+    } catch (Exception ignored) {
     } finally {
 
       if (os != null) {

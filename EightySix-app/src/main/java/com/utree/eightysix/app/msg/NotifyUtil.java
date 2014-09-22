@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
@@ -87,8 +88,8 @@ public class NotifyUtil {
         .setSmallIcon(R.drawable.ic_launcher)
         .setContentTitle(shortName)
         .setContentText(mContext.getString(R.string.notification_friend_new_post))
-        .setContentIntent(PendingIntent.getActivity(mContext, 0,
-            PostActivity.getIntent(mContext, postId, "post_"), PendingIntent.FLAG_UPDATE_CURRENT))
+        .setContentIntent(PendingIntent.getActivities(mContext, 0,
+            wrapIntent(PostActivity.getIntent(mContext, postId, "post_")), PendingIntent.FLAG_UPDATE_CURRENT))
         .build();
   }
 
@@ -118,13 +119,13 @@ public class NotifyUtil {
     if (count == 1) {
       builder.setContentText(mContext.getString(type == TYPE_FOLLOW_COMMENT ?
           R.string.notification_new_follow_comment : R.string.notification_new_own_comment));
-      builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
-          PostActivity.getIntent(mContext, id, "comment_"), PendingIntent.FLAG_UPDATE_CURRENT));
+      builder.setContentIntent(PendingIntent.getActivities(mContext, 0,
+          wrapIntent(PostActivity.getIntent(mContext, id, "comment_")), PendingIntent.FLAG_UPDATE_CURRENT));
     } else {
       builder.setContentText(mContext.getString(type == TYPE_FOLLOW_COMMENT ?
           R.string.notification_new_follow_comments : R.string.notification_new_own_comments, count));
-      builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
-          MsgActivity.getIntent(mContext, true), PendingIntent.FLAG_UPDATE_CURRENT));
+      builder.setContentIntent(PendingIntent.getActivities(mContext, 0,
+          wrapIntent(MsgActivity.getIntent(mContext, true)), PendingIntent.FLAG_UPDATE_CURRENT));
     }
     return builder.build();
   }
@@ -158,5 +159,12 @@ public class NotifyUtil {
         .setContentIntent(PendingIntent.getActivity(mContext, 0,
             FeedActivity.getIntent(mContext, Integer.parseInt(circleId), true), PendingIntent.FLAG_UPDATE_CURRENT))
         .build();
+  }
+
+  private Intent[] wrapIntent(Intent intent) {
+    Intent[] intents = new Intent[2];
+    intents[0] = FeedActivity.getIntent(mContext, 0, false);
+    intents[1] = intent;
+    return intents;
   }
 }

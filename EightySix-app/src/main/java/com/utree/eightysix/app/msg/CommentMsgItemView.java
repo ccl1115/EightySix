@@ -25,6 +25,7 @@ public class CommentMsgItemView extends BaseMsgItemView {
     if (left.read == 1 || ReadMsgStore.inst().isRead(left.id)) {
       mVMaskLeft.setVisibility(VISIBLE);
       left.comments = 0;
+      mTvCountLeft.setText("");
     } else {
       mVMaskLeft.setVisibility(INVISIBLE);
       if (left.comments == 0) {
@@ -45,6 +46,7 @@ public class CommentMsgItemView extends BaseMsgItemView {
     if (right.read == 1 || ReadMsgStore.inst().isRead(right.id)) {
       mVMaskRight.setVisibility(VISIBLE);
       right.comments = 0;
+      mTvCountRight.setText("");
     } else {
       mVMaskRight.setVisibility(INVISIBLE);
       if (right.comments == 0) {

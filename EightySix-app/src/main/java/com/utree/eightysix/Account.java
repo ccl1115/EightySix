@@ -29,8 +29,8 @@ public class Account {
   private boolean mIsLogin;
 
   private Account() {
-    mUserId = U.getContext().getSharedPreferences("account", Context.MODE_PRIVATE).getString("user_id", "");
-    mToken = U.getContext().getSharedPreferences("account", Context.MODE_PRIVATE).getString("token", "");
+    mUserId = getSharedPreferences().getString("user_id", "");
+    mToken = getSharedPreferences().getString("token", "");
     mIsLogin = !TextUtils.isEmpty(mUserId) && !TextUtils.isEmpty(mToken);
   }
 
@@ -62,9 +62,6 @@ public class Account {
 
   public void logout() {
     U.getBus().post(new LogoutEvent());
-    if (!setUserId("") && !setToken("")) {
-      mIsLogin = false;
-    }
   }
 
   public boolean isLogin() {
@@ -178,6 +175,10 @@ public class Account {
       U.getContext().startActivity(intent);
 
       ((NotificationManager) U.getContext().getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+
+      if (!Account.inst().setUserId("") && !Account.inst().setToken("")) {
+        Account.inst().mIsLogin = false;
+      }
     }
   }
 
