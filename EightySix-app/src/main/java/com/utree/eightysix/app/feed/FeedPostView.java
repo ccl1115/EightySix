@@ -186,9 +186,11 @@ public class FeedPostView extends BasePostView {
       } else {
         mGvLoading.setVisibility(INVISIBLE);
       }
+      mAivBg.setVisibility(VISIBLE);
       mAivBg.setUrl(post.bgUrl);
     } else {
       mGvLoading.setVisibility(INVISIBLE);
+      mAivBg.setVisibility(INVISIBLE);
       mFlContent.setBackgroundColor(ColorUtil.strToColor(post.bgColor));
       mAivBg.setUrl(null);
     }
