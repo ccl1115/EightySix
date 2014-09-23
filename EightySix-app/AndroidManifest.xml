@@ -53,12 +53,21 @@
     <!--<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />-->
 
 
+    <!-- easemob -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
+
     <application android:allowBackup="true" android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:name=".app.BaseApplication" android:theme="@style/AppTheme">
 
         <meta-data android:name="TA_APPKEY" android:value="AKP9JJ18EC8B"/>
 
         <meta-data android:name="com.baidu.lbsapi.API_KEY" android:value="Z6S9LBSSdPUi96GkdLS6zO0L"/>
 
+        <meta-data android:name="EASEMOB_APPKEY" android:value="utree-test#eightysix"/>
 
         <!-- Tencent open sdk -->
         <activity android:launchMode="singleInstance" android:name="com.tencent.tauth.AuthActivity" android:noHistory="true" android:screenOrientation="portrait">
@@ -135,6 +144,7 @@
         <activity android:exported="@bool/exported" android:name=".app.feed.OptionPublishActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme.Dialog" android:windowSoftInputMode="adjustResize|stateVisible"/>
 
         <activity android:exported="@bool/exported" android:name=".app.account.RewardAcceptedActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".app.chat.ChatActivity"/>
 
         <service android:enabled="true" android:name="com.baidu.location.f" android:process=":remote"/>
 
@@ -184,6 +194,7 @@
         <service android:name=".app.settings.UpgradeService"/>
         <!-- push结束 -->
 
+        <service android:name="com.easemob.chat.EMChatService"/>
     </application>
 
 </manifest>

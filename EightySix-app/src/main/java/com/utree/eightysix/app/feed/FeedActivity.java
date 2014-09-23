@@ -423,14 +423,13 @@ public class FeedActivity extends BaseActivity {
 
     if (circle != null) {
       mFeedFragment.setCircle(circle, skipCache);
+    } else if (mFeedFragment.getCircle() != null) {
+      setSideHighlight(mFeedFragment.getCircle());
     } else {
       final int circleId = intent.getIntExtra("id", 0);
       mFeedFragment.setCircle(circleId, skipCache);
     }
 
-    if (mFeedFragment.getCircle() != null) {
-      setSideHighlight(mFeedFragment.getCircle());
-    }
     //endregion
 
 

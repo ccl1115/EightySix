@@ -4,6 +4,8 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import com.baidu.frontia.FrontiaApplication;
+import com.easemob.chat.EMChat;
+import com.easemob.chat.EMChatManager;
 import com.utree.eightysix.C;
 import com.utree.eightysix.M;
 import com.utree.eightysix.U;
@@ -41,6 +43,9 @@ public class BaseApplication extends FrontiaApplication {
 
       U.getReporter().init();
       U.getSyncClient().getSync();
+
+
+      EMChat.getInstance().init(this);
     }
   }
 
