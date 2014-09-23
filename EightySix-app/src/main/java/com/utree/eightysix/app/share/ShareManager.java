@@ -13,6 +13,7 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
+import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.utils.Shortener;
@@ -32,7 +33,7 @@ public class ShareManager {
 
   private Shortener mShortener = new WeiboShortener();
 
-  public ThemedDialog shareAppDialog(final Activity activity, final Circle circle) {
+  public ThemedDialog shareAppDialog(final BaseActivity activity, final Circle circle) {
     return new ShareDialog(activity) {
       @Override
       protected Object getViewHolder(ShareDialog dialog) {
@@ -41,7 +42,7 @@ public class ShareManager {
     };
   }
 
-  public ThemedDialog sharePostDialog(final Activity activity, final Post post) {
+  public ThemedDialog sharePostDialog(final BaseActivity activity, final Post post) {
     return new ShareDialog(activity) {
       @Override
       protected Object getViewHolder(ShareDialog dialog) {
@@ -50,7 +51,7 @@ public class ShareManager {
     };
   }
 
-  public void shareAppToQzone(final Activity activity, final Circle circle) {
+  public void shareAppToQzone(final BaseActivity activity, final Circle circle) {
     mShortener.shorten(shareLinkForApp(circle.id), new Shortener.Callback() {
       @Override
       public void onShorten(String shorten) {
@@ -63,7 +64,7 @@ public class ShareManager {
     });
   }
 
-  public void shareAppToQQ(final Activity activity, final Circle circle) {
+  public void shareAppToQQ(final BaseActivity activity, final Circle circle) {
     mShortener.shorten(shareLinkForApp(circle.id), new Shortener.Callback() {
       @Override
       public void onShorten(String shorten) {
@@ -76,7 +77,7 @@ public class ShareManager {
     });
   }
 
-  public ThemedDialog shareCommentDialog(final Activity activity, final Post post, final String comment) {
+  public ThemedDialog shareCommentDialog(final BaseActivity activity, final Post post, final String comment) {
     return new ShareDialog(activity) {
       @Override
       protected Object getViewHolder(ShareDialog dialog) {
@@ -100,7 +101,7 @@ public class ShareManager {
   }
   @Keep
   public class ShareCommentViewHolder {
-    private Activity mActivity;
+    private BaseActivity mActivity;
     private ShareDialog mDialog;
     private Post mPost;
     private String mComment;
@@ -114,7 +115,7 @@ public class ShareManager {
     @InjectView(R.id.rb_clipboard)
     RoundedButton mRbClipboard;
 
-    ShareCommentViewHolder(Activity activity, ShareDialog dialog, Post post, String comment) {
+    ShareCommentViewHolder(BaseActivity activity, ShareDialog dialog, Post post, String comment) {
       mActivity = activity;
       mDialog = dialog;
       mPost = post;
@@ -194,7 +195,7 @@ public class ShareManager {
 
   @Keep
   public class SharePostViewHolder {
-    private Activity mActivity;
+    private BaseActivity mActivity;
     private ShareDialog mDialog;
     private Post mPost;
 
@@ -207,7 +208,7 @@ public class ShareManager {
     @InjectView(R.id.rb_clipboard)
     RoundedButton mRbClipboard;
 
-    SharePostViewHolder(Activity activity, ShareDialog dialog, Post post) {
+    SharePostViewHolder(BaseActivity activity, ShareDialog dialog, Post post) {
       mActivity = activity;
       mDialog = dialog;
       mPost = post;
@@ -286,11 +287,11 @@ public class ShareManager {
 
   @Keep
   public class ShareAppViewHolder {
-    private Activity mActivity;
+    private BaseActivity mActivity;
     private ShareDialog mDialog;
     private Circle mCircle;
 
-    ShareAppViewHolder(Activity activity, ShareDialog dialog, Circle circle) {
+    ShareAppViewHolder(BaseActivity activity, ShareDialog dialog, Circle circle) {
       mActivity = activity;
       mDialog = dialog;
       mCircle = circle;

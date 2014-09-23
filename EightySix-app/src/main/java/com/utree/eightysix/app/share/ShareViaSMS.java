@@ -1,6 +1,6 @@
 package com.utree.eightysix.app.share;
 
-import android.app.Activity;
+import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.account.ContactsActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Post;
@@ -10,19 +10,19 @@ import com.utree.eightysix.data.Post;
  */
 class ShareViaSMS extends IShare {
   @Override
-  public void shareApp(Activity activity, Circle circle, String url) {
+  public void shareApp(BaseActivity activity, Circle circle, String url) {
     ContactsActivity.start(activity,
         String.format(shareContentForApp(), circle.shortName, circle.shortName) + url);
   }
 
   @Override
-  public void sharePost(Activity activity, Post post, String url) {
+  public void sharePost(BaseActivity activity, Post post, String url) {
     ContactsActivity.start(activity,
         String.format(shareContentForPost(), post.shortName, post.shortName) + url);
   }
 
   @Override
-  public void shareComment(Activity activity, Post post, String comment, String url) {
+  public void shareComment(BaseActivity activity, Post post, String comment, String url) {
     ContactsActivity.start(activity, String.format("“%s”，%s", comment, url));
   }
 

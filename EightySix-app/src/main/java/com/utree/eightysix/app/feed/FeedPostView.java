@@ -17,6 +17,7 @@ import com.squareup.otto.Subscribe;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.drawable.RoundRectDrawable;
@@ -219,7 +220,7 @@ public class FeedPostView extends BasePostView {
 
   @OnClick (R.id.iv_share)
   public void onIvShareClicked() {
-    U.getShareManager().sharePostDialog((Activity) getContext(), mPost).show();
+    U.getShareManager().sharePostDialog((BaseActivity) getContext(), mPost).show();
   }
 
   @OnClick (R.id.tv_praise)

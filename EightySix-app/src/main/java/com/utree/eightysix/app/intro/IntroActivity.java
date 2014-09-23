@@ -97,20 +97,6 @@ public class IntroActivity extends BaseActivity {
   }
 
   @Override
-  protected void onResume() {
-    super.onResume();
-
-    if (!mResumed) {
-      // start push service in main entry activity
-      // note:
-      // put this in Application#onCreate() entry, if push service crashed,
-      // it will cause app restart infinitely.
-      U.getPushHelper().startWork();
-      mResumed = true;
-    }
-  }
-
-  @Override
   protected boolean shouldCheckUpgrade() {
     return false;
   }

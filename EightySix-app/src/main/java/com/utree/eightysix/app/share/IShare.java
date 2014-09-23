@@ -1,6 +1,7 @@
 package com.utree.eightysix.app.share;
 
 import android.app.Activity;
+import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Post;
 
@@ -12,11 +13,11 @@ public abstract class IShare {
   String mShortenAppLink;
   String mShortenPostLink;
 
-  public abstract void shareApp(Activity activity, Circle circle, String url);
+  public abstract void shareApp(BaseActivity activity, Circle circle, String url);
 
-  public abstract void sharePost(Activity activity, Post post, String url);
+  public abstract void sharePost(BaseActivity activity, Post post, String url);
 
-  public abstract void shareComment(Activity activity, Post post, String comment, String url);
+  public abstract void shareComment(BaseActivity activity, Post post, String comment, String url);
 
 
   protected String shareTitleForApp() {

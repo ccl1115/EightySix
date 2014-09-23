@@ -54,7 +54,6 @@ public class U {
   private static Storage sCloudStorage;
   private static IRESTRequester sRESTRequester;
   private static CacheUtils sCacheUtils;
-  private static Bus sBus;
   private static Reporter sReporter;
   private static ShareManager sShareManager;
   private static PushHelper sPushHelper;
@@ -65,6 +64,9 @@ public class U {
   private static SyncClient sSyncClient;
 
   private static final Object lock = new Object();
+
+  private static Bus sBus;
+  private static Bus sChatBus;
 
   public static ShareManager getShareManager() {
     if (sShareManager == null) {
@@ -260,6 +262,14 @@ public class U {
       sBus = new Bus(ThreadEnforcer.MAIN);
     }
     return sBus;
+  }
+
+  public static Bus getChatBus() {
+    M.checkThread();
+    if (sChatBus == null) {
+      sChatBus = new Bus(ThreadEnforcer.MAIN, "chat");
+    }
+    return sChatBus;
   }
 
   private static HashMap<String, Bus> sPrivateBuses = new HashMap<String, Bus>();

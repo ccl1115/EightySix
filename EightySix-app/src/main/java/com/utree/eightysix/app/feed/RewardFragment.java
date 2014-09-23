@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -64,6 +65,9 @@ public class RewardFragment extends BaseFragment {
 
   @InjectView(R.id.rb_action)
   public RoundedButton mRbAction;
+
+  @InjectView(R.id.fl_parent)
+  public FrameLayout mFlParent;
 
   @OnClick(R.id.rb_action)
   public void onRbActionClicked() {
@@ -176,10 +180,12 @@ public class RewardFragment extends BaseFragment {
   }
 
   private void requestActiveJoin() {
+    getBaseActivity().showProgressBar(true);
     getBaseActivity().request(new ActiveJoinRequest(), new OnResponse2<ActiveJoinResponse>() {
       @Override
       public void onResponseError(Throwable e) {
         detachSelf();
+        getBaseActivity().hideProgressBar();
       }
 
       @Override
@@ -188,7 +194,7 @@ public class RewardFragment extends BaseFragment {
 
           mData = response.object;
 
-          mLlFrame.setVisibility(View.VISIBLE);
+          mFlParent.setVisibility(View.VISIBLE);
 
           mVpPage.setAdapter(new PagerAdapter() {
             @Override
@@ -260,6 +266,8 @@ public class RewardFragment extends BaseFragment {
         } else {
           detachSelf();
         }
+
+        getBaseActivity().hideProgressBar();
       }
     }, ActiveJoinResponse.class);
   }
