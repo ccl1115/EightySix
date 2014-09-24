@@ -83,7 +83,7 @@ public class FeedActivity extends BaseActivity {
 
   private List<Circle> mSideCircles;
 
-  private FeedFragment mFeedFragment;
+  private TabFragment mTabFragment;
   private RewardFragment mRewardFragment;
 
   /**
@@ -96,7 +96,6 @@ public class FeedActivity extends BaseActivity {
    */
   private ThemedDialog mNoPermDialog;
 
-  private boolean mRefreshed;
   private MenuViewHolder mMenuViewHolder;
   private ThemedDialog mUnlockDialog;
 
@@ -147,10 +146,10 @@ public class FeedActivity extends BaseActivity {
   @OnClick (R.id.ib_send)
   public void onIbSendClicked() {
     U.getAnalyser().trackEvent(this, "feed_publish", "feed_publish");
-    if (!mFeedFragment.canPublish()) {
+    if (!mTabFragment.canPublish()) {
       showNoPermDialog();
     } else {
-      PublishActivity.start(this, mFeedFragment.getCircleId());
+      PublishActivity.start(this, mTabFragment.getCircleId());
     }
   }
 
@@ -165,7 +164,7 @@ public class FeedActivity extends BaseActivity {
     U.getAnalyser().trackEvent(this, "side_switch", "side_switch");
     Circle circle = mSideCircles.get(position);
     if (circle != null) {
-      mFeedFragment.setCircle(circle, true);
+      mTabFragment.setCircle(circle, true);
       setSideHighlight(circle);
       mDlContent.closeDrawer(mLlSide);
       getHandler().postDelayed(new Runnable() {
@@ -230,8 +229,8 @@ public class FeedActivity extends BaseActivity {
 
     setActionAdapter();
 
-    mFeedFragment = new FeedFragment();
-    getSupportFragmentManager().beginTransaction().add(R.id.fl_feed, mFeedFragment, "feed").commitAllowingStateLoss();
+    mTabFragment = new TabFragment();
+    getSupportFragmentManager().beginTransaction().add(R.id.fl_feed, mTabFragment, "tab").commit();
 
     onNewIntent(getIntent());
   }
@@ -280,7 +279,7 @@ public class FeedActivity extends BaseActivity {
             if (mRewardFragment == null) {
               mRewardFragment = new RewardFragment();
               Bundle args = new Bundle();
-              args.putParcelable("circle", mFeedFragment.getCircle());
+              args.putParcelable("circle", mTabFragment.getCircle());
               mRewardFragment.setArguments(args);
               getSupportFragmentManager().beginTransaction()
                   .add(android.R.id.content, mRewardFragment)
@@ -331,7 +330,7 @@ public class FeedActivity extends BaseActivity {
   protected void onPause() {
     super.onPause();
     M.getRegisterHelper().unregister(mLvSideCircles);
-    Env.setLastCircle(mFeedFragment.getCircle());
+    Env.setLastCircle(mTabFragment.getCircle());
   }
 
   @Override
@@ -389,7 +388,7 @@ public class FeedActivity extends BaseActivity {
       return;
     }
 
-    if (mFeedFragment != null && mFeedFragment.onBackPressed()) {
+    if (mTabFragment != null && mTabFragment.onBackPressed()) {
       return;
     }
 
@@ -417,12 +416,12 @@ public class FeedActivity extends BaseActivity {
     boolean skipCache = intent.getBooleanExtra("skipCache", false);
 
     if (circle != null) {
-      mFeedFragment.setCircle(circle, skipCache);
-    } else if (mFeedFragment.getCircle() != null) {
-      setSideHighlight(mFeedFragment.getCircle());
+      mTabFragment.setCircle(circle, skipCache);
+    } else if (mTabFragment.getCircle() != null) {
+      setSideHighlight(mTabFragment.getCircle());
     } else {
       final int circleId = intent.getIntExtra("id", 0);
-      mFeedFragment.setCircle(circleId, skipCache);
+      mTabFragment.setCircle(circleId, skipCache);
     }
 
     //endregion
@@ -477,10 +476,10 @@ public class FeedActivity extends BaseActivity {
 
   @Subscribe
   public void onStartPublishActivity(StartPublishActivityEvent event) {
-    if (!mFeedFragment.canPublish()) {
+    if (!mTabFragment.canPublish()) {
       showNoPermDialog();
     } else {
-      PublishActivity.start(this, mFeedFragment.getCircleId());
+      PublishActivity.start(this, mTabFragment.getCircleId());
     }
   }
 
@@ -555,10 +554,10 @@ public class FeedActivity extends BaseActivity {
         c.selected = false;
       }
 
-      if (mFeedFragment.getCircle() == null) return;
+      if (mTabFragment.getCircle() == null) return;
 
       for (Circle c : sideCircles) {
-        if (mFeedFragment.getCircle().name.equals(c.name)) {
+        if (mTabFragment.getCircle().name.equals(c.name)) {
           c.selected = true;
           break;
         }
@@ -566,32 +565,9 @@ public class FeedActivity extends BaseActivity {
     }
   }
 
-  private void cacheOutSideCircle() {
-    cacheOut(new CircleSideRequest("", 1), new OnResponse<CirclesResponse>() {
-      @Override
-      public void onResponse(CirclesResponse response) {
-        if (response != null && response.code == 0 && response.object != null) {
-          mSideCircles = response.object.lists.size() > 10 ?
-              response.object.lists.subList(0, 10) : response.object.lists;
-
-          setSideHighlight(mFeedFragment.getCircle());
-          selectSideCircle(mSideCircles);
-
-          mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
-          mLvSideCircles.setAdapter(mSideCirclesAdapter);
-
-        } else {
-          requestSideCircle();
-        }
-      }
-    }, CirclesResponse.class);
-
-    showProgressBar();
-  }
-
   private void showInviteDialog() {
     if (mInviteDialog == null) {
-      mInviteDialog = U.getShareManager().shareAppDialog(this, mFeedFragment.getCircle());
+      mInviteDialog = U.getShareManager().shareAppDialog(this, mTabFragment.getCircle());
     }
     if (!mInviteDialog.isShowing()) {
       mInviteDialog.show();
@@ -634,7 +610,7 @@ public class FeedActivity extends BaseActivity {
           mSideCircles = response.object.lists.size() > 10 ?
               response.object.lists.subList(0, 10) : response.object.lists;
 
-          setSideHighlight(mFeedFragment.getCircle());
+          setSideHighlight(mTabFragment.getCircle());
           selectSideCircle(mSideCircles);
 
           mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
