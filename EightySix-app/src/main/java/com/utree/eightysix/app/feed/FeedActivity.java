@@ -165,14 +165,9 @@ public class FeedActivity extends BaseActivity {
     U.getAnalyser().trackEvent(this, "side_switch", "side_switch");
     Circle circle = mSideCircles.get(position);
     if (circle != null) {
-      for (Circle c : mSideCircles) {
-        c.selected = false;
-      }
-
       mFeedFragment.setCircle(circle, true);
       setSideHighlight(circle);
       mDlContent.closeDrawer(mLlSide);
-      mFeedFragment.mRefresherView.setRefreshing(true);
       getHandler().postDelayed(new Runnable() {
         @Override
         public void run() {
@@ -605,6 +600,11 @@ public class FeedActivity extends BaseActivity {
 
   private void setSideHighlight(Circle circle) {
     if (mSideCircles == null || circle == null) return;
+
+    for (Circle c : mSideCircles) {
+      c.selected = false;
+    }
+
     for (Circle c : mSideCircles) {
       c.selected = circle.equals(c);
     }

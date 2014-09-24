@@ -43,7 +43,6 @@ public final class AdvancedListView extends ListView {
       super.setAdapter(mAdapterWrapper);
     } else {
       mAdapterWrapper = null;
-      mLoadMoreCallback = null;
       super.setAdapter(null);
     }
   }
