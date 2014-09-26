@@ -226,8 +226,6 @@ public class LoginActivity extends BaseActivity {
               showToast(R.string.login_success, false);
               finish();
               startActivity(new Intent(LoginActivity.this, FeedActivity.class));
-            } else {
-              showToast(R.string.server_object_error);
             }
           } else if (response.code == 2450 || response.code == 140371) {
             mLlCaptcha.setVisibility(View.VISIBLE);

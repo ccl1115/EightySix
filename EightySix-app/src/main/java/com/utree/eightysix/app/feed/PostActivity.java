@@ -240,7 +240,7 @@ public class PostActivity extends BaseActivity {
 
     Log.d("PostActivity", "postId: " + ((mPost != null) ? mPost.id : mPostId));
 
-    if (mPost == null && mPostId == null) {
+    if (mPost == null && TextUtils.isEmpty(mPostId)) {
       showToast(getString(R.string.post_not_found), false);
       finish();
     } else {

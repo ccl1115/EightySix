@@ -77,7 +77,7 @@ public class ChatAccount {
   }
 
   @Subscribe
-  public void onLogoutEvent() {
+  public void onLogoutEvent(Account.LogoutEvent event) {
     EMChatManager.getInstance().logout();
 
     if (mNewMessageBroadcastReceiver != null) {
