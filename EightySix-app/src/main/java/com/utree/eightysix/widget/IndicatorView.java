@@ -17,338 +17,353 @@ import com.utree.eightysix.R;
 /**
  */
 public class IndicatorView extends View {
-    private static final String TAG = "IndicatorView$IndicatorView";
+  private static final String TAG = "IndicatorView";
 
-    private static final int DEFAULT_SPACING = 50;
-    private static final int INVALID_DIMENSION = -1;
+  private static final int DEFAULT_SPACING = 50;
+  private static final int INVALID_DIMENSION = -1;
 
-    private boolean mAutoHide;
+  private boolean mAutoHide;
 
-    private int mSpacing;
-    private int mCount;
+  private int mSpacing;
+  private int mCount;
 
-    private float mPosition;
-    private float mTargetPosition;
+  private float mPosition;
+  private float mTargetPosition;
 
-    private Drawable mDrawable;
-    private Drawable mSelector;
+  private Drawable mDrawable;
+  private Drawable mSelector;
 
-    private final ViewDelegate mViewInjector = new HorizontalViewInjector();
+  private final ViewDelegate mViewInjector = new HorizontalViewInjector();
 
-    public IndicatorView(Context context) {
-        this(context, null, 0);
+  public IndicatorView(Context context) {
+    this(context, null, 0);
+  }
+
+  public IndicatorView(Context context, AttributeSet attrs) {
+    this(context, attrs, 0);
+  }
+
+  public IndicatorView(Context context, AttributeSet attrs, int defStyle) {
+    super(context, attrs, defStyle);
+
+    final float density = getResources().getDisplayMetrics().density;
+    int defaultSpacing = (int) (DEFAULT_SPACING * density + 0.5f);
+
+    TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.IndicatorView);
+
+    mSpacing = ta.getDimensionPixelSize(R.styleable.IndicatorView_spacing, INVALID_DIMENSION);
+    if (mSpacing == INVALID_DIMENSION) {
+      mSpacing = defaultSpacing;
     }
 
-    public IndicatorView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+    mCount = ta.getInteger(R.styleable.IndicatorView_count, 0);
+
+    mDrawable = ta.getDrawable(R.styleable.IndicatorView_drawable);
+
+    if (mDrawable == null) {
+      Log.d(TAG, "Drawable not defined in xml");
+    } else {
+      mDrawable.setBounds(0, 0, mDrawable.getIntrinsicWidth(), mDrawable.getIntrinsicHeight());
+      Log.d(TAG, "Drawable bounds=" + mDrawable.getBounds());
     }
 
-    public IndicatorView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
+    mSelector = ta.getDrawable(R.styleable.IndicatorView_selector);
 
-        final float density = getResources().getDisplayMetrics().density;
-        int defaultSpacing = (int) (DEFAULT_SPACING * density + 0.5f);
+    if (mSelector == null) {
+      Log.d(TAG, "Selector not defined in xml");
+    } else {
+      mSelector.setBounds(0, 0, mSelector.getIntrinsicWidth(), mSelector.getIntrinsicHeight());
+      Log.d(TAG, "Selector bound=" + mSelector.getBounds());
+    }
 
-        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.IndicatorView);
+    mAutoHide = ta.getBoolean(R.styleable.IndicatorView_autoHide, false);
+  }
 
-        mSpacing = ta.getDimensionPixelSize(R.styleable.IndicatorView_spacing, INVALID_DIMENSION);
-        if (mSpacing == INVALID_DIMENSION) {
-            mSpacing = defaultSpacing;
-        }
+  @Override
+  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    mViewInjector.measure(widthMeasureSpec, heightMeasureSpec);
+  }
 
-        mCount = ta.getInteger(R.styleable.IndicatorView_count, 0);
 
-        mDrawable = ta.getDrawable(R.styleable.IndicatorView_drawable);
+  @Override
+  protected void onDraw(Canvas canvas) {
+    mViewInjector.draw(canvas);
+  }
 
-        if (mDrawable == null) {
-            Log.d(TAG, "Drawable not defined in xml");
-        } else {
-            mDrawable.setBounds(0, 0, mDrawable.getIntrinsicWidth(), mDrawable.getIntrinsicHeight());
-            Log.d(TAG, "Drawable bounds=" + mDrawable.getBounds());
-        }
+  public boolean isAutoHide() {
+    return mAutoHide;
+  }
 
-        mSelector = ta.getDrawable(R.styleable.IndicatorView_selector);
+  public void setAutoHide(boolean autoHide) {
+    mAutoHide = autoHide;
+  }
 
-        if (mSelector == null) {
-            Log.d(TAG, "Selector not defined in xml");
-        } else {
-            mSelector.setBounds(0, 0, mSelector.getIntrinsicWidth(), mSelector.getIntrinsicHeight());
-            Log.d(TAG, "Selector bound=" + mSelector.getBounds());
-        }
+  public void setDrawable(Drawable drawable) {
+    mDrawable = drawable;
+    requestLayout();
+    invalidate();
+  }
 
-        mAutoHide = ta.getBoolean(R.styleable.IndicatorView_autoHide, false);
+  public Drawable getDrawable() {
+    return mDrawable;
+  }
+
+  public void setSelector(Drawable drawable) {
+    mSelector = drawable;
+    requestLayout();
+    invalidate();
+  }
+
+  public Drawable getSelector() {
+    return mSelector;
+  }
+
+  public void setSpacing(int spacing) {
+    mSpacing = spacing;
+    requestLayout();
+    invalidate();
+  }
+
+  public int getSpacing() {
+    return mSpacing;
+  }
+
+  public int getCount() {
+    return mCount;
+  }
+
+  public void setCount(int count) {
+    mCount = count;
+    requestLayout();
+    invalidate();
+  }
+
+  public void setPosition(float position) {
+    mPosition = position;
+    invalidate();
+  }
+
+  public float getPosition() {
+    return mPosition;
+  }
+
+  public void animateTo(int position) {
+  }
+
+  public void animateNext() {
+  }
+
+  public void animatePre() {
+
+  }
+
+  private class HorizontalViewInjector implements ViewDelegate {
+    private final int kVelocity;
+
+    private long lastAnimationTime;
+    private long currentAnimatingTime;
+    private int animatingVelocity;
+    private float animatingPosition;
+    private float animatingDistance;
+    private boolean animating;
+    private final AnimationHandler handler = new AnimationHandler();
+
+    HorizontalViewInjector() {
+      final float density = getResources().getDisplayMetrics().density;
+      kVelocity = (int) (density * 1 + 0.5f);
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        mViewInjector.measure(widthMeasureSpec, heightMeasureSpec);
+    public void measure(int widthMeasureSpec, int heightMeasureSpec) {
+      if (mDrawable == null || mSelector == null || mCount == 0) {
+        setWillNotDraw(true);
+        setMeasuredDimension(0, 0);
+        Log.d(TAG, "will not draw.");
+        return;
+      }
+
+      setWillNotDraw(false);
+      final int measuredWidth = measureWidth(widthMeasureSpec);
+      final int measuredHeight = measureHeight(heightMeasureSpec);
+      setMeasuredDimension(measuredWidth, measuredHeight);
+
+      // offset the select drawable to center of the normal drawable;
+
+      int drawableWidth = mDrawable.getIntrinsicWidth();
+      int selectorWidth = mSelector.getIntrinsicWidth();
+
+      drawableWidth = Math.max(drawableWidth, (measuredWidth - ((mCount - 1) * mSpacing)) / mCount);
+      Log.d(TAG, "Drawable width =" + drawableWidth);
+      mDrawable.getBounds().left = 0;
+      mDrawable.getBounds().right = drawableWidth;
+
+      selectorWidth = Math.max(selectorWidth, (measuredWidth - ((mCount - 1) * mSpacing)) / mCount);
+      Log.d(TAG, "Selector width =" + selectorWidth);
+      mSelector.getBounds().left = 0;
+      mSelector.getBounds().right = selectorWidth;
+
+      if (drawableWidth - selectorWidth > 0) {
+        mSelector.getBounds().offset((drawableWidth - selectorWidth) >> 1, 0);
+      } else {
+        mDrawable.getBounds().offset((selectorWidth - drawableWidth) >> 1, 0);
+      }
+
+      int drawableHeight = mDrawable.getIntrinsicHeight();
+      int selectorHeight = mSelector.getIntrinsicHeight();
+
+      if (drawableHeight == 0) {
+        drawableHeight = measuredHeight;
+        mDrawable.getBounds().top = 0;
+        mDrawable.getBounds().bottom = drawableHeight;
+      }
+
+      if (selectorHeight == 0) {
+        selectorHeight = measuredHeight;
+        mSelector.getBounds().top = 0;
+        mSelector.getBounds().bottom = selectorHeight;
+      }
+
+      if (drawableHeight > selectorHeight) {
+        mSelector.getBounds().offset(0, (drawableHeight - selectorHeight) >> 1);
+      } else {
+        mDrawable.getBounds().offset(0, (selectorHeight - drawableHeight) >> 1);
+      }
+
+      Log.d(TAG, "Drawable bounds=" + mDrawable.getBounds());
+      Log.d(TAG, "Selector bounds=" + mSelector.getBounds());
     }
 
+    private int measureWidth(int widthMeasureSpec) {
+      final int mode = widthMeasureSpec & (0x3 << 30);
+      final int size = widthMeasureSpec & ~(0x3 << 30);
+
+      final int suppose = (mSpacing * (mCount - 1)) +
+          (Math.max(mDrawable.getIntrinsicWidth(), mSelector.getIntrinsicWidth()) * mCount);
+      switch (mode) {
+        case MeasureSpec.AT_MOST:
+          return Math.min(size, suppose);
+        case MeasureSpec.EXACTLY:
+          return size;
+        case MeasureSpec.UNSPECIFIED:
+          return suppose;
+      }
+      return size;
+    }
+
+    private int measureHeight(int heightMeasureSpec) {
+      final int mode = heightMeasureSpec & (0x3 << 30);
+      final int size = heightMeasureSpec & ~(0x3 << 30);
+
+      final int suppose = Math.max(mDrawable.getIntrinsicHeight(), mSelector.getIntrinsicHeight());
+      switch (mode) {
+        case MeasureSpec.AT_MOST:
+          return Math.min(size, suppose);
+        case MeasureSpec.EXACTLY:
+          return size;
+        case MeasureSpec.UNSPECIFIED:
+          return suppose;
+      }
+      return size;
+    }
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        mViewInjector.draw(canvas);
+    public void draw(Canvas canvas) {
+      final int savedCount = canvas.save();
+      for (int i = 0; i < mCount; i++) {
+        mDrawable.draw(canvas);
+        canvas.translate(mDrawable.getBounds().width() + mSpacing, 0);
+      }
+      canvas.restoreToCount(savedCount);
+
+      final int savedCount2 = canvas.save();
+      canvas.translate((mSelector.getBounds().width() + mSpacing) * mPosition, 0);
+      mSelector.draw(canvas);
+      canvas.restoreToCount(savedCount2);
     }
 
-    public boolean isAutoHide() {
-        return mAutoHide;
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+      return false;
     }
 
-    public void setAutoHide(boolean autoHide) {
-        mAutoHide = autoHide;
+    @Override
+    public boolean interceptionTouchEvent(MotionEvent event) {
+      return false;
     }
 
-    public void setDrawable(Drawable drawable) {
-        mDrawable = drawable;
-        requestLayout();
-        invalidate();
+    @Override
+    public boolean touchEvent(MotionEvent event) {
+      return false;
     }
 
-    public Drawable getDrawable() {
-        return mDrawable;
+    @Override
+    public void animate(int msg) {
+      if (mTargetPosition > mPosition) {
+        animatingVelocity = kVelocity;
+      } else if (mTargetPosition < mPosition) {
+        animatingVelocity = -kVelocity;
+      } else {
+        return;
+      }
+      animatingDistance = mTargetPosition - mPosition;
+      animatingPosition = mPosition;
+
+      lastAnimationTime = SystemClock.uptimeMillis();
+      currentAnimatingTime = lastAnimationTime + ViewConfig.ANIMATION_FRAME_DURATION;
+      handler.removeMessages(AnimationHandler.MSG_ANIMATE);
+      handler.sendEmptyMessageAtTime(AnimationHandler.MSG_ANIMATE, currentAnimatingTime);
     }
 
-    public void setSelector(Drawable drawable) {
-        mSelector = drawable;
-        requestLayout();
-        invalidate();
+    @Override
+    public boolean isAnimating() {
+      return animating;
     }
 
-    public Drawable getSelector() {
-        return mSelector;
-    }
+    private void compute() {
+      final long now = SystemClock.uptimeMillis();
+      final float t = (now - lastAnimationTime) / ViewConfig.ONE_SECOND_FLOAT;
 
-    public void setSpacing(int spacing) {
-        mSpacing = spacing;
-        requestLayout();
-        invalidate();
-    }
+      animatingPosition += animatingVelocity * t;
 
-    public int getSpacing() {
-        return mSpacing;
-    }
+      lastAnimationTime = now;
+      currentAnimatingTime = lastAnimationTime + ViewConfig.ANIMATION_FRAME_DURATION;
 
-    public int getCount() {
-        return mCount;
-    }
+      if (animatingVelocity < 0) {
+        if (animatingPosition < mTargetPosition) {
+          mPosition = mTargetPosition;
+          animating = false;
+        } else {
+          mPosition = animatingPosition;
 
-    public void setCount(int count) {
-        mCount = count;
-        requestLayout();
-        invalidate();
-    }
-
-    public void setPosition(float position) {
-        mPosition = position;
-        invalidate();
-    }
-
-    public float getPosition() {
-        return mPosition;
-    }
-
-    public void animateTo(int position) {
-    }
-
-    public void animateNext() {
-    }
-
-    public void animatePre() {
-
-    }
-
-    private class HorizontalViewInjector implements ViewDelegate {
-        private final int kVelocity;
-
-        private long lastAnimationTime;
-        private long currentAnimatingTime;
-        private int animatingVelocity;
-        private float animatingPosition;
-        private float animatingDistance;
-        private boolean animating;
-        private final AnimationHandler handler = new AnimationHandler();
-
-        HorizontalViewInjector() {
-            final float density = getResources().getDisplayMetrics().density;
-            kVelocity = (int) (density * 1 + 0.5f);
+          handler.removeMessages(AnimationHandler.MSG_ANIMATE);
+          handler.sendEmptyMessageAtTime(AnimationHandler.MSG_ANIMATE, currentAnimatingTime);
         }
+      } else {
+        if (animatingPosition > mTargetPosition) {
+          mPosition = mTargetPosition;
+          animating = false;
+        } else {
+          mPosition = animatingPosition;
 
-        @Override
-        public void measure(int widthMeasureSpec, int heightMeasureSpec) {
-            if ((mDrawable == null || mDrawable.getBounds().isEmpty())
-                    || (mSelector == null || mSelector.getBounds().isEmpty())
-                    || mCount == 0) {
-                setWillNotDraw(true);
-                setMeasuredDimension(0, 0);
-                Log.d(TAG, "will not draw.");
-                return;
-            }
-
-            setWillNotDraw(false);
-            final int measuredWidth = measureWidth(widthMeasureSpec);
-            final int measuredHeight = measureHeight(heightMeasureSpec);
-            setMeasuredDimension(measuredWidth, measuredHeight);
-
-            // offset the select drawable to center of the normal drawable;
-
-            final int drawableWidth = mDrawable.getIntrinsicWidth();
-            final int selectorWidth = mSelector.getIntrinsicWidth();
-
-            if (drawableWidth - selectorWidth > 0) {
-                final Rect bounds = mSelector.getBounds();
-                bounds.offset((drawableWidth - selectorWidth) >> 1, 0);
-                mSelector.setBounds(bounds);
-            } else {
-                final Rect bounds = mDrawable.getBounds();
-                bounds.offset((selectorWidth - drawableWidth) >> 1, 0);
-                mDrawable.setBounds(bounds);
-            }
-
-            final int drawableHeight = mDrawable.getIntrinsicHeight();
-            final int selectorHeight = mSelector.getIntrinsicHeight();
-
-            if (drawableHeight > selectorHeight) {
-                final Rect bounds = mSelector.getBounds();
-                bounds.offset(0, (drawableHeight - selectorHeight) >> 1);
-                mSelector.setBounds(bounds);
-            } else {
-                final Rect bounds = mDrawable.getBounds();
-                bounds.offset(0, (selectorHeight - drawableHeight) >> 1);
-                mSelector.setBounds(bounds);
-            }
+          handler.removeMessages(AnimationHandler.MSG_ANIMATE);
+          handler.sendEmptyMessageAtTime(AnimationHandler.MSG_ANIMATE, currentAnimatingTime);
         }
+      }
 
-        private int measureWidth(int widthMeasureSpec) {
-            final int mode = widthMeasureSpec & (0x3 << 30);
-            final int size = widthMeasureSpec & ~(0x3 << 30);
-
-            final int suppose = (mSpacing * (mCount - 1)) +
-                    (Math.max(mDrawable.getIntrinsicWidth(), mSelector.getIntrinsicWidth()) * mCount);
-            switch (mode) {
-                case MeasureSpec.AT_MOST:
-                    return Math.min(size, suppose);
-                case MeasureSpec.EXACTLY:
-                    return size;
-                case MeasureSpec.UNSPECIFIED:
-                    return suppose;
-            }
-            return size;
-        }
-
-        private int measureHeight(int heightMeasureSpec) {
-            final int mode = heightMeasureSpec & (0x3 << 30);
-            final int size = heightMeasureSpec & ~(0x3 << 30);
-
-            final int suppose = Math.max(mDrawable.getIntrinsicHeight(), mSelector.getIntrinsicHeight());
-            switch (mode) {
-                case MeasureSpec.AT_MOST:
-                    return Math.min(size, suppose);
-                case MeasureSpec.EXACTLY:
-                    return size;
-                case MeasureSpec.UNSPECIFIED:
-                    return suppose;
-            }
-            return size;
-        }
-
-        @Override
-        public void draw(Canvas canvas) {
-            final int savedCount = canvas.save();
-            for (int i = 0; i < mCount; i++) {
-                mDrawable.draw(canvas);
-                canvas.translate(mDrawable.getIntrinsicWidth() + mSpacing, 0);
-            }
-            canvas.restoreToCount(savedCount);
-
-            final int savedCount2 = canvas.save();
-            canvas.translate((mSelector.getIntrinsicWidth() + mSpacing) * mPosition, 0);
-            mSelector.draw(canvas);
-            canvas.restoreToCount(savedCount2);
-        }
-
-        @Override
-        public boolean dispatchTouchEvent(MotionEvent event) {
-            return false;
-        }
-
-        @Override
-        public boolean interceptionTouchEvent(MotionEvent event) {
-            return false;
-        }
-
-        @Override
-        public boolean touchEvent(MotionEvent event) {
-            return false;
-        }
-
-        @Override
-        public void animate(int msg) {
-            if (mTargetPosition > mPosition) {
-                animatingVelocity = kVelocity;
-            } else if (mTargetPosition < mPosition) {
-                animatingVelocity = -kVelocity;
-            } else {
-                return;
-            }
-            animatingDistance = mTargetPosition - mPosition;
-            animatingPosition = mPosition;
-
-            lastAnimationTime = SystemClock.uptimeMillis();
-            currentAnimatingTime = lastAnimationTime + ViewConfig.ANIMATION_FRAME_DURATION;
-            handler.removeMessages(AnimationHandler.MSG_ANIMATE);
-            handler.sendEmptyMessageAtTime(AnimationHandler.MSG_ANIMATE, currentAnimatingTime);
-        }
-
-        @Override
-        public boolean isAnimating() {
-            return animating;
-        }
-
-        private void compute() {
-            final long now = SystemClock.uptimeMillis();
-            final float t = (now - lastAnimationTime) / ViewConfig.ONE_SECOND_FLOAT;
-
-            animatingPosition += animatingVelocity * t;
-
-            lastAnimationTime = now;
-            currentAnimatingTime = lastAnimationTime + ViewConfig.ANIMATION_FRAME_DURATION;
-
-            if (animatingVelocity < 0) {
-                if (animatingPosition < mTargetPosition) {
-                    mPosition = mTargetPosition;
-                    animating = false;
-                } else {
-                    mPosition = animatingPosition;
-
-                    handler.removeMessages(AnimationHandler.MSG_ANIMATE);
-                    handler.sendEmptyMessageAtTime(AnimationHandler.MSG_ANIMATE, currentAnimatingTime);
-                }
-            } else {
-                if (animatingPosition > mTargetPosition) {
-                    mPosition = mTargetPosition;
-                    animating = false;
-                } else {
-                    mPosition = animatingPosition;
-
-                    handler.removeMessages(AnimationHandler.MSG_ANIMATE);
-                    handler.sendEmptyMessageAtTime(AnimationHandler.MSG_ANIMATE, currentAnimatingTime);
-                }
-            }
-
-            invalidate();
-        }
-
-        private class AnimationHandler extends Handler {
-            private static final int MSG_ANIMATE = 1000;
-
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case MSG_ANIMATE:
-                        compute();
-                        break;
-                }
-            }
-        }
+      invalidate();
     }
+
+    private class AnimationHandler extends Handler {
+      private static final int MSG_ANIMATE = 1000;
+
+      @Override
+      public void handleMessage(Message msg) {
+        switch (msg.what) {
+          case MSG_ANIMATE:
+            compute();
+            break;
+        }
+      }
+    }
+  }
 }

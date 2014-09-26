@@ -69,24 +69,28 @@ public class TitleTab extends FrameLayout {
     if (adapter != null) {
       mInTab.setCount(adapter.getCount());
       for (int i = 0, size = adapter.getCount(); i < size; i++) {
-        mLlTabs.addView(buildTab(adapter.getPageTitle(i)));
+        mLlTabs.addView(buildTab(adapter.getPageTitle(i), i));
       }
     }
   }
 
-  private View buildTab(CharSequence name) {
+  private View buildTab(CharSequence name, final int i) {
     TextView tv = new TextView(getContext());
     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-    lp.leftMargin = U.dp2px(8);
-    lp.topMargin = U.dp2px(8);
-    lp.rightMargin = U.dp2px(8);
-    lp.bottomMargin = U.dp2px(8);
 
     lp.weight = 1;
     tv.setLayoutParams(lp);
     tv.setText(name);
     tv.setGravity(Gravity.CENTER);
+    final int p = U.dp2px(8);
+    tv.setPadding(p, p, p, p);
+
+    tv.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        mViewPager.setCurrentItem(i, true);
+      }
+    });
     return tv;
   }
 }

@@ -1,4 +1,4 @@
-package com.utree.eightysix.app.feed;
+package com.utree.eightysix.app;
 
 import android.app.Activity;
 import android.support.v4.app.Fragment;
@@ -11,7 +11,7 @@ import com.utree.eightysix.app.BaseActivity;
  */
 public class BaseFragment extends Fragment {
 
-  BaseActivity getBaseActivity() {
+  public BaseActivity getBaseActivity() {
     return (BaseActivity) getActivity();
   }
 

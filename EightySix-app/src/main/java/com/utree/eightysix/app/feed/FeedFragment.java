@@ -1,7 +1,6 @@
 package com.utree.eightysix.app.feed;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +14,7 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.app.feed.event.RefreshFeedEvent;
@@ -43,7 +43,7 @@ import java.util.Iterator;
 /**
  * @author simon
  */
-public class FeedFragment extends BaseFragment {
+class FeedFragment extends BaseFragment {
 
   @InjectView(R.id.lv_feed)
   public AdvancedListView mLvFeed;

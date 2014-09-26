@@ -1,7 +1,5 @@
 package com.utree.eightysix.app.feed;
 
-import android.app.Activity;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -21,6 +18,7 @@ import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.account.RewardAcceptedActivity;
 import com.utree.eightysix.app.event.QRCodeScanEvent;
 import com.utree.eightysix.data.ActiveJoin;
@@ -33,14 +31,13 @@ import com.utree.eightysix.response.ActiveJoinResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
-import com.utree.eightysix.utils.QRCodeGenerator;
 import com.utree.eightysix.widget.IndicatorView;
 import com.utree.eightysix.widget.RoundedButton;
 
 /**
  * @author simon
  */
-public class RewardFragment extends BaseFragment {
+class RewardFragment extends BaseFragment {
 
   private PageReward1ViewHolder mPageReward1ViewHolder;
 

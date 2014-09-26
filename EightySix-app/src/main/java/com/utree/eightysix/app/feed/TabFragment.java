@@ -1,11 +1,9 @@
 package com.utree.eightysix.app.feed;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,13 +11,14 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.utree.eightysix.R;
+import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.widget.TitleTab;
 
 /**
  * @author simon
  */
-public class TabFragment extends BaseFragment {
+class TabFragment extends BaseFragment {
 
   @InjectView(R.id.vp_tab)
   public ViewPager mVpTab;
@@ -28,6 +27,8 @@ public class TabFragment extends BaseFragment {
   public TitleTab mTtTab;
 
   private FeedFragment mFeedFragment;
+  private HotFragment mHotFragment;
+  private FriendsFragment mFriendsFragment;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,7 +40,8 @@ public class TabFragment extends BaseFragment {
     ButterKnife.inject(this, view);
 
     mFeedFragment = new FeedFragment();
-
+    mHotFragment = new HotFragment();
+    mFriendsFragment = new FriendsFragment();
 
     mVpTab.setOffscreenPageLimit(2);
 
@@ -49,6 +51,10 @@ public class TabFragment extends BaseFragment {
         switch (position) {
           case 0:
             return mFeedFragment;
+          case 1:
+            return mHotFragment;
+          case 2:
+            return mFriendsFragment;
         }
         return null;
 
@@ -60,16 +66,16 @@ public class TabFragment extends BaseFragment {
           case 0:
             return "全部";
           case 1:
-            return "认识的人";
-          case 2:
             return "热贴";
+          case 2:
+            return "认识的人";
         }
         return "";
       }
 
       @Override
       public int getCount() {
-        return 1;
+        return 3;
       }
     });
 
