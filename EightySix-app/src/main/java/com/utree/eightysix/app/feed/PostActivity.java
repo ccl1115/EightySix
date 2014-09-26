@@ -65,14 +65,23 @@ public class PostActivity extends BaseActivity {
   private boolean mResumed;
   private Guide mPortraitTip;
   private ThemedDialog mQuitConfirmDialog;
+  private AlertDialog mCommentContextDialog;
 
   private boolean mPostPraiseRequesting;
   private boolean mPostCommentPraiseRequesting;
-  private AlertDialog mCommentContextDialog;
+
+  private boolean mGotoBottom;
 
   public static void start(Context context, Post post) {
     Intent intent = new Intent(context, PostActivity.class);
     intent.putExtra("post", post);
+    context.startActivity(intent);
+  }
+
+  public static void start(Context context, Post post, boolean bottom) {
+    Intent intent = new Intent(context, PostActivity.class);
+    intent.putExtra("post", post);
+    intent.putExtra("bottom", bottom);
     context.startActivity(intent);
   }
 
@@ -86,8 +95,15 @@ public class PostActivity extends BaseActivity {
     return intent;
   }
 
-  public static void start(Context context, String postId) {
-    context.startActivity(getIntent(context, postId, "start_"));
+  public static Intent getIntent(Context context, String postId, String action, boolean bottom) {
+    Intent intent = new Intent(context, PostActivity.class);
+    if (!(context instanceof Activity)) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+    intent.setAction(action + postId);
+    intent.putExtra("id", postId);
+    intent.putExtra("bottom", bottom);
+    return intent;
   }
 
   private static final Pattern POST_CONTENT_PATTERN = Pattern.compile("[ \r\n]*");
@@ -237,6 +253,7 @@ public class PostActivity extends BaseActivity {
 
     mPost = intent.getParcelableExtra("post");
     mPostId = intent.getStringExtra("id");
+    mGotoBottom = intent.getBooleanExtra("bottom", false);
 
     Log.d("PostActivity", "postId: " + ((mPost != null) ? mPost.id : mPostId));
 
@@ -400,7 +417,7 @@ public class PostActivity extends BaseActivity {
 
   @Subscribe
   public void onReloadCommentEvent(ReloadCommentEvent event) {
-    requestComment(1, false);
+    requestComment(1, mGotoBottom);
   }
 
   void finishOrShowQuitConfirmDialog() {
@@ -475,7 +492,7 @@ public class PostActivity extends BaseActivity {
         } else {
           showProgressBar();
         }
-        requestComment(page, false);
+        requestComment(page, mGotoBottom);
       }
     }, PostCommentsResponse.class);
   }

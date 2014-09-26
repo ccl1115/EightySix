@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import com.utree.eightysix.Account;
@@ -80,17 +81,26 @@ public class NotifyUtil {
 
   Notification buildPost(int i, String postId, String shortName) {
     Log.d(C.TAG.NT, "build post: " + postId);
-    return new NotificationCompat.Builder(mContext)
-        .setTicker(mContext.getString(R.string.notification_friend_new_post))
+    NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext);
+    builder.setTicker(mContext.getString(R.string.notification_friend_new_post))
         .setAutoCancel(true)
-        .setDefaults(Account.inst().getSilentMode()? Notification.DEFAULT_VIBRATE : Notification.DEFAULT_ALL)
+        .setDefaults(Account.inst().getSilentMode() ? Notification.DEFAULT_VIBRATE : Notification.DEFAULT_ALL)
         .setLargeIcon(sLargeIcon)
         .setSmallIcon(R.drawable.ic_launcher)
         .setContentTitle(shortName)
-        .setContentText(mContext.getString(R.string.notification_friend_new_post))
-        .setContentIntent(PendingIntent.getActivities(mContext, 0,
-            wrapIntent(PostActivity.getIntent(mContext, postId, "post_")), PendingIntent.FLAG_UPDATE_CURRENT))
-        .build();
+        .setContentText(mContext.getString(R.string.notification_friend_new_post));
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+      builder.setContentIntent(PendingIntent.getActivities(mContext, 0,
+          wrapIntent(PostActivity.getIntent(mContext, postId, "post_", true)),
+          PendingIntent.FLAG_UPDATE_CURRENT));
+    } else {
+      builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
+          PostActivity.getIntent(mContext, postId, "post_", true),
+          PendingIntent.FLAG_UPDATE_CURRENT));
+    }
+
+
+    return builder.build();
   }
 
   Notification buildUnlockCircle(String circleId, String circleName) {
@@ -98,7 +108,7 @@ public class NotifyUtil {
     return new NotificationCompat.Builder(mContext).setTicker(mContext.getString(R.string.notification_circle_unlocked))
         .setLargeIcon(sLargeIcon)
         .setAutoCancel(true)
-        .setDefaults(Account.inst().getSilentMode()? Notification.DEFAULT_VIBRATE : Notification.DEFAULT_ALL)
+        .setDefaults(Account.inst().getSilentMode() ? Notification.DEFAULT_VIBRATE : Notification.DEFAULT_ALL)
         .setSmallIcon(R.drawable.ic_launcher)
         .setContentTitle(mContext.getString(R.string.notification_circle_unlocked))
         .setContentText(mContext.getString(R.string.notification_circle_unlocked_tip, circleName))
@@ -113,19 +123,31 @@ public class NotifyUtil {
     builder.setContentTitle(mContext.getString(R.string.notification_new))
         .setAutoCancel(true)
         .setTicker(mContext.getString(R.string.notification_new))
-        .setDefaults(Account.inst().getSilentMode()? Notification.DEFAULT_VIBRATE : Notification.DEFAULT_ALL)
+        .setDefaults(Account.inst().getSilentMode() ? Notification.DEFAULT_VIBRATE : Notification.DEFAULT_ALL)
         .setSmallIcon(R.drawable.ic_launcher)
         .setLargeIcon(sLargeIcon);
     if (count == 1) {
       builder.setContentText(mContext.getString(type == TYPE_FOLLOW_COMMENT ?
           R.string.notification_new_follow_comment : R.string.notification_new_own_comment));
-      builder.setContentIntent(PendingIntent.getActivities(mContext, 0,
-          wrapIntent(PostActivity.getIntent(mContext, id, "comment_")), PendingIntent.FLAG_UPDATE_CURRENT));
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        builder.setContentIntent(PendingIntent.getActivities(mContext, 0,
+            wrapIntent(PostActivity.getIntent(mContext, id, "comment_", true)),
+            PendingIntent.FLAG_UPDATE_CURRENT));
+      } else {
+        builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
+            PostActivity.getIntent(mContext, id, "comment_", true),
+            PendingIntent.FLAG_UPDATE_CURRENT));
+      }
     } else {
       builder.setContentText(mContext.getString(type == TYPE_FOLLOW_COMMENT ?
           R.string.notification_new_follow_comments : R.string.notification_new_own_comments, count));
-      builder.setContentIntent(PendingIntent.getActivities(mContext, 0,
-          wrapIntent(MsgActivity.getIntent(mContext, true)), PendingIntent.FLAG_UPDATE_CURRENT));
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        builder.setContentIntent(PendingIntent.getActivities(mContext, 0,
+            wrapIntent(MsgActivity.getIntent(mContext, true)), PendingIntent.FLAG_UPDATE_CURRENT));
+      } else {
+        builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
+            MsgActivity.getIntent(mContext, true), PendingIntent.FLAG_UPDATE_CURRENT));
+      }
     }
     return builder.build();
   }
@@ -137,7 +159,7 @@ public class NotifyUtil {
         .setLargeIcon(sLargeIcon)
         .setAutoCancel(true)
         .setTicker(mContext.getString(R.string.notification_circle_create_approve))
-        .setDefaults(Account.inst().getSilentMode()? Notification.DEFAULT_VIBRATE : Notification.DEFAULT_ALL)
+        .setDefaults(Account.inst().getSilentMode() ? Notification.DEFAULT_VIBRATE : Notification.DEFAULT_ALL)
         .setSmallIcon(R.drawable.ic_launcher)
         .setContentTitle(mContext.getString(R.string.notification_circle_create_approve))
         .setContentText(mContext.getString(R.string.notification_circle_create_approve_tip, circleName))
