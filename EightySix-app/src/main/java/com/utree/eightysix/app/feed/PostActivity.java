@@ -265,7 +265,7 @@ public class PostActivity extends BaseActivity {
       mLvComments.setAdapter(mPostCommentsAdapter);
     }
 
-    cacheOutComments(1);
+    cacheOutComments(1, mGotoBottom);
   }
 
   @Override
@@ -477,7 +477,7 @@ public class PostActivity extends BaseActivity {
     }, PostCommentsResponse.class);
   }
 
-  private void cacheOutComments(final int page) {
+  private void cacheOutComments(final int page, final boolean bottom) {
     final String id = mPost == null ? mPostId : mPost.id;
     final int viewType = mPost == null ? 0 : mPost.viewType;
     final int isHot = mPost == null ? 0 : mPost.isHot;
@@ -489,6 +489,10 @@ public class PostActivity extends BaseActivity {
           mPostCommentsAdapter = new PostCommentsAdapter(response.object.post, response.object.comments.lists);
           mLvComments.setAdapter(mPostCommentsAdapter);
           mPost = response.object.post;
+
+          if (bottom) {
+            mLvComments.setSelection(Integer.MAX_VALUE);
+          }
         } else {
           showProgressBar();
         }
