@@ -90,13 +90,21 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
   }
 
   @Override
+  public void onProgress(int bytesWritten, int totalSize) {
+  }
+
+  @Override
   public void onFailure(int statusCode, org.apache.http.Header[] headers, Throwable e, String rawData, T errorResponse) {
 
     mStatAppMonitor = new StatAppMonitor(mRequestData.getApi());
 
     mStatAppMonitor.setMillisecondsConsume(System.currentTimeMillis() - mRequestData.getRequestTime());
 
-    mStatAppMonitor.setRespSize(rawData.length() * 2);
+    if (rawData != null) {
+      mStatAppMonitor.setRespSize(rawData.length() * 2);
+    } else {
+      mStatAppMonitor.setRespSize(0);
+    }
     mStatAppMonitor.setReqSize(mRequestData.getParams().toString().length() * 2);
     mStatAppMonitor.setResultType(StatAppMonitor.FAILURE_RESULT_TYPE);
 

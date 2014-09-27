@@ -6,7 +6,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.ResponseHandlerInterface;
-import com.tencent.cloudsdk.defaultsdk.mna.http.TAndroidHttpClient;
+import com.tencent.cloudsdk.http.TDefaultHttpClient;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.C;
@@ -45,9 +45,9 @@ public class RESTRequester implements IRESTRequester {
     compact();
 
     try {
-      Field field = AsyncHttpClient.class.getField("httpClient");
+      Field field = AsyncHttpClient.class.getDeclaredField("httpClient");
       field.setAccessible(true);
-      field.set(mAsyncHttpClient, TAndroidHttpClient.newInstance("lanmei_mna").getHttpClient());
+      field.set(mAsyncHttpClient, new TDefaultHttpClient().getDefaultHttpClient());
     } catch (NoSuchFieldException e) {
       e.printStackTrace();
     } catch (IllegalAccessException e) {
