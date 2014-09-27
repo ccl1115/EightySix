@@ -10,8 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseFragment;
+import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
+import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
+import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.widget.TitleTab;
 
@@ -114,5 +118,20 @@ class TabFragment extends BaseFragment {
     if (mFeedFragment != null) {
       mFeedFragment.setCircle(circleId, skipCache);
     }
+  }
+
+  @Subscribe
+  public void onNewAllPostCountEvent(NewAllPostCountEvent event) {
+    mTtTab.setTabBudget(0, String.valueOf(event.getCount()), event.getCount() == 0);
+  }
+
+  @Subscribe
+  public void onNewHotPostCountEvent(NewHotPostCountEvent event) {
+    mTtTab.setTabBudget(1, String.valueOf(event.getCount()), event.getCount() == 0);
+  }
+
+  @Subscribe
+  public void onNewFriendsPostCountEvent(NewFriendsPostCountEvent event) {
+    mTtTab.setTabBudget(2, String.valueOf(event.getCount()), event.getCount() == 0);
   }
 }

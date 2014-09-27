@@ -4,17 +4,14 @@ import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.utree.eightysix.R;
-import com.utree.eightysix.U;
 
 /**
  * @author simon
@@ -75,22 +72,26 @@ public class TitleTab extends FrameLayout {
   }
 
   private View buildTab(CharSequence name, final int i) {
-    TextView tv = new TextView(getContext());
-    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+    View view = LayoutInflater.from(getContext()).inflate(R.layout.widget_title_tab_item, mLlTabs, false);
 
-    lp.weight = 1;
-    tv.setLayoutParams(lp);
-    tv.setText(name);
-    tv.setGravity(Gravity.CENTER);
-    final int p = U.dp2px(8);
-    tv.setPadding(p, p, p, p);
+    ((TextView) view.findViewById(R.id.tv_title)).setText(name);
 
-    tv.setOnClickListener(new OnClickListener() {
+    view.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
         mViewPager.setCurrentItem(i, true);
       }
     });
-    return tv;
+    return view;
+  }
+
+  public void setTabBudget(int position, String text, boolean hide) {
+    RoundedButton roundedButton = (RoundedButton) mLlTabs.getChildAt(position).findViewById(R.id.rb_budget);
+    if (hide) {
+      roundedButton.setVisibility(INVISIBLE);
+    } else {
+      roundedButton.setVisibility(VISIBLE);
+    }
+    roundedButton.setText(text);
   }
 }

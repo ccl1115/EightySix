@@ -1,8 +1,5 @@
 package com.utree.eightysix.app.feed;
 
-import com.utree.eightysix.Account;
-import com.utree.eightysix.app.BaseFragment;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,23 +10,26 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
 import com.squareup.otto.Subscribe;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.app.feed.event.RefreshFeedEvent;
 import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
 import com.utree.eightysix.app.msg.FetchNotificationService;
+import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
+import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
+import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
 import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.data.*;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
-import com.utree.eightysix.request.FeedsRequest;
 import com.utree.eightysix.request.PostPraiseCancelRequest;
 import com.utree.eightysix.request.PostPraiseRequest;
 import com.utree.eightysix.response.FeedsResponse;
-import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
@@ -479,6 +479,10 @@ public abstract class AbsFeedFragment extends BaseFragment {
         U.getBus().post(new UpdatePraiseCountEvent(response.object.fetch.newPraise.praiseCount,
             response.object.fetch.newPraise.percent));
       }
+
+      U.getBus().post(new NewAllPostCountEvent(mCircle.id, response.object.fetch.newPostAllCount));
+      U.getBus().post(new NewHotPostCountEvent(mCircle.id, response.object.fetch.newPostHotCount));
+      U.getBus().post(new NewFriendsPostCountEvent(mCircle.id, response.object.fetch.newPostFriendsCount));
 
       FetchNotificationService.setCircleId(mCircle.id);
     } else {

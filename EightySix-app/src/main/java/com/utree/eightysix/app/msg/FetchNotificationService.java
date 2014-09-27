@@ -9,6 +9,9 @@ import android.os.IBinder;
 import android.os.Message;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
+import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
+import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.data.PullNotification;
 import com.utree.eightysix.request.FetchNotificationRequest;
 import com.utree.eightysix.response.FetchResponse;
@@ -17,6 +20,7 @@ import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.RequestData;
 import de.akquinet.android.androlog.Log;
+
 import java.util.List;
 
 /**
@@ -47,7 +51,7 @@ public class FetchNotificationService extends Service {
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
     Log.d(TAG, "start FetchService");
-    mHandler.sendEmptyMessageDelayed(MSG_FETCH, FETCH_INTERVAL);
+    mHandler.sendEmptyMessageDelayed(MSG_FETCH, 5000);
     return START_NOT_STICKY;
   }
 
@@ -68,6 +72,8 @@ public class FetchNotificationService extends Service {
 
     RequestData data = U.getRESTRequester().convert(new FetchNotificationRequest(sCircleId));
     U.getRESTRequester().request(data, new HandlerWrapper<FetchResponse>(data, new OnResponse2<FetchResponse>() {
+
+      private final int circleId = sCircleId;
 
       @Override
       public void onResponse(FetchResponse response) {
@@ -117,6 +123,10 @@ public class FetchNotificationService extends Service {
               }
             }
           }
+
+          U.getBus().post(new NewAllPostCountEvent(circleId, response.object.newPostAllCount));
+          U.getBus().post(new NewHotPostCountEvent(circleId, response.object.newPostHotCount));
+          U.getBus().post(new NewFriendsPostCountEvent(circleId, response.object.newPostFriendsCount));
         }
       }
 

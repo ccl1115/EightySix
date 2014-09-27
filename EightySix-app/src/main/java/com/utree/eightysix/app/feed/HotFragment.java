@@ -1,12 +1,5 @@
 package com.utree.eightysix.app.feed;
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import com.utree.eightysix.R;
-import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.request.FeedsFriendsRequest;
 import com.utree.eightysix.request.FeedsHotRequest;
 import com.utree.eightysix.response.FeedsResponse;
@@ -41,4 +34,5 @@ class HotFragment extends AbsFeedFragment {
       }
     }, FeedsResponse.class);
   }
+
 }
