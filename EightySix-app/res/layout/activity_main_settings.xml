@@ -63,27 +63,13 @@
     <include layout="@layout/widget_primary_divider"/>
 
     <TextView
-            android:id="@+id/tv_help"
+            android:id="@+id/tv_logout"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:paddingLeft="10dp"
             android:gravity="center_vertical"
             android:textSize="16sp"
-            android:text="@string/help"
-            android:visibility="invisible"
+            android:text="@string/logout"
             android:background="@drawable/apptheme_primary_list_selector"/>
 
-    <!--<include layout="@layout/widget_primary_divider"/>-->
-
-    <com.utree.eightysix.widget.RoundedButton
-            android:id="@+id/rb_logout"
-            android:layout_width="match_parent"
-            android:layout_height="47dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/logout"
-            android:textSize="16sp"
-            app:radius="5dp"
-            app:background="@color/apptheme_secondary_btn_light"/>
 </LinearLayout>

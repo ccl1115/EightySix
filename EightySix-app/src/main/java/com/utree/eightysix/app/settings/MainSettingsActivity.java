@@ -32,7 +32,7 @@ public class MainSettingsActivity extends BaseActivity {
   @InjectView(R.id.cb_silent_mode)
   public CheckBox mCbSilentMode;
 
-  @OnClick (R.id.rb_logout)
+  @OnClick (R.id.tv_logout)
   public void onRbLogoutClicked() {
     AlertDialog dialog = new AlertDialog.Builder(this)
         .setTitle("确认要注销帐号么？")
