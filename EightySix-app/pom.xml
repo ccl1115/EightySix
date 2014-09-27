@@ -41,6 +41,11 @@
         </dependency>
 
         <dependency>
+            <groupId>mid-sdk</groupId>
+            <artifactId>mid-sdk</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>locSDK</groupId>
             <artifactId>locSDK</artifactId>
         </dependency>

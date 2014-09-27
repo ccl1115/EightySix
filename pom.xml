@@ -95,7 +95,13 @@
             <dependency>
                 <groupId>mta-sdk</groupId>
                 <artifactId>mta-sdk</artifactId>
-                <version>1.7.2</version>
+                <version>2.0.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>mid-sdk</groupId>
+                <artifactId>mid-sdk</artifactId>
+                <version>2.10</version>
             </dependency>
 
             <dependency>
