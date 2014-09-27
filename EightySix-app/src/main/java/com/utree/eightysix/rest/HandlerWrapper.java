@@ -133,6 +133,8 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
             writer.close();
           }
         }
+
+        e.printStackTrace();
       } else {
         U.getReporter().reportRequestError(mRequestData, e);
       }
