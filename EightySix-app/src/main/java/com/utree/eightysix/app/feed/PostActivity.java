@@ -85,6 +85,10 @@ public class PostActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
+  public static void start(Context context, String postId) {
+    context.startActivity(getIntent(context, postId, "start_"));
+  }
+
   public static Intent getIntent(Context context, String postId, String action) {
     Intent intent = new Intent(context, PostActivity.class);
     if (!(context instanceof Activity)) {

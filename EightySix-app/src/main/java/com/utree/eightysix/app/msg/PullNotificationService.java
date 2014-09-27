@@ -11,6 +11,7 @@ import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.M;
 import com.utree.eightysix.U;
 import com.utree.eightysix.data.PullNotification;
+import com.utree.eightysix.push.PushMessageReceiver;
 import com.utree.eightysix.request.PullNotificationRequest;
 import com.utree.eightysix.response.PullNotificationResponse;
 import com.utree.eightysix.rest.HandlerWrapper;
@@ -101,7 +102,7 @@ public class PullNotificationService extends Service {
 
   private void handleType(PullNotificationResponse response, int type) {
     switch (type) {
-      case NotifyUtil.TYPE_NEW_POST:
+      case PushMessageReceiver.TYPE_NEW_POST:
         if (response.object.lists == null || response.object.lists.size() == 0) break;
         List<PullNotification.Item> lists = response.object.lists;
         for (int i = 0, listsSize = lists.size(); i < listsSize; i++) {
@@ -109,37 +110,37 @@ public class PullNotificationService extends Service {
           getNM().notify(item.value, NotifyUtil.ID_POST, mNotifyUtil.buildPost(i, item.value, item.shortName));
         }
         break;
-      case NotifyUtil.TYPE_UNLOCK_CIRCLE:
+      case PushMessageReceiver.TYPE_UNLOCK_CIRCLE:
         if (response.object.lists == null || response.object.lists.size() == 0) break;
         for (PullNotification.Item item : response.object.lists) {
           getNM().notify(item.value, NotifyUtil.ID_UNLOCK_FACTORY, mNotifyUtil.buildUnlockCircle(item.value, item.shortName));
         }
         break;
-      case NotifyUtil.TYPE_FRIEND_L1_JOIN:
+      case PushMessageReceiver.TYPE_FRIEND_L1_JOIN:
         if (response.object.lists == null || response.object.lists.size() == 0) break;
         for (PullNotification.Item item : response.object.lists) {
           getNM().notify(item.value, NotifyUtil.ID_FRIEND_L1_JOIN, mNotifyUtil.buildFriendJoin(item.value, item.shortName, item.friendCount));
         }
         break;
-      case NotifyUtil.TYPE_OWN_COMMENT:
-      case NotifyUtil.TYPE_FOLLOW_COMMENT:
+      case PushMessageReceiver.TYPE_OWN_COMMENT:
+      case PushMessageReceiver.TYPE_FOLLOW_COMMENT:
         int count = 0;
         if (response.object.lists != null) {
           count = response.object.unread;
         }
         if (count == 1) {
-          getNM().notify(type == NotifyUtil.TYPE_FOLLOW_COMMENT ? NotifyUtil.ID_FOLLOW_COMMENT : NotifyUtil.ID_OWN_COMMENT,
+          getNM().notify(type == PushMessageReceiver.TYPE_FOLLOW_COMMENT ? NotifyUtil.ID_FOLLOW_COMMENT : NotifyUtil.ID_OWN_COMMENT,
               mNotifyUtil.buildComment(count, response.object.lists.get(0).value, type));
         } else if (count > 1) {
-          getNM().notify(type == NotifyUtil.TYPE_FOLLOW_COMMENT ? NotifyUtil.ID_FOLLOW_COMMENT : NotifyUtil.ID_OWN_COMMENT,
+          getNM().notify(type == PushMessageReceiver.TYPE_FOLLOW_COMMENT ? NotifyUtil.ID_FOLLOW_COMMENT : NotifyUtil.ID_OWN_COMMENT,
               mNotifyUtil.buildComment(count, null, type));
         }
         Account.inst().setNewCommentCount(count);
         break;
-      case NotifyUtil.TYPE_PRAISE:
+      case PushMessageReceiver.TYPE_PRAISE:
         Account.inst().setHasNewPraise(true);
         break;
-      case NotifyUtil.TYPE_CIRCLE_CREATION_APPROVE:
+      case PushMessageReceiver.TYPE_CIRCLE_CREATION_APPROVE:
         if (response.object.lists == null || response.object.lists.size() == 0) break;
         for (PullNotification.Item item : response.object.lists) {
           getNM().notify(item.value, NotifyUtil.ID_APPROVE, mNotifyUtil.buildApprove(item.value, item.shortName));

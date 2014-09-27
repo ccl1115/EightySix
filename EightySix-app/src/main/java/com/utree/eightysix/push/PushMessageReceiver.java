@@ -1,11 +1,8 @@
 package com.utree.eightysix.push;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import com.baidu.frontia.api.FrontiaPushMessageReceiver;
@@ -14,10 +11,15 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.feed.FeedActivity;
+import com.utree.eightysix.app.feed.PostActivity;
+import com.utree.eightysix.app.msg.MsgActivity;
+import com.utree.eightysix.app.msg.PraiseActivity;
 import com.utree.eightysix.app.msg.PullNotificationService;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.IOUtils;
 import de.akquinet.android.androlog.Log;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -29,6 +31,39 @@ import java.util.List;
 /**
  */
 public final class PushMessageReceiver extends FrontiaPushMessageReceiver {
+  /**
+   * 新帖子
+   */
+  public static final int TYPE_NEW_POST = 1;
+  /**
+   * 圈子解锁
+   */
+  public static final int TYPE_UNLOCK_CIRCLE = 2;
+  /**
+   * 新朋友加入
+   */
+  public static final int TYPE_FRIEND_L1_JOIN = 3;
+  /**
+   * 关注的帖子被评论
+   */
+  public static final int TYPE_FOLLOW_COMMENT = 4;
+  /**
+   * 被赞
+   */
+  public static final int TYPE_PRAISE = 5;
+  /**
+   * 圈子创建审核通过
+   */
+  public static final int TYPE_CIRCLE_CREATION_APPROVE = 6;
+  /**
+   * 自己发布的帖子被评论
+   */
+  public static final int TYPE_OWN_COMMENT = 7;
+
+  public static final int TYPE_CMD = 1000;
+
+  public CmdHandler mCmdHandler = new CmdHandler();
+
   @Override
   public void onBind(Context context, int errorCode, String appId, String userId, String channelId, String requestId) {
 
@@ -113,7 +148,22 @@ public final class PushMessageReceiver extends FrontiaPushMessageReceiver {
 
   @Override
   public void onNotificationClicked(Context context, String s, String s2, String s3) {
+    Log.v("PushService", "s = " + s);
+    Log.v("PushService", "s2 = " + s2);
+    Log.v("PushService", "s3 = " + s3);
 
+    try {
+      Message m = U.getGson().fromJson(s3, Message.class);
+      if (m.type == TYPE_CMD) {
+        mCmdHandler.handle(context, m.cmd);
+      }
+    } catch (Exception e) {
+      if (BuildConfig.DEBUG) {
+        e.printStackTrace();
+      } else {
+        U.getAnalyser().reportException(context, e);
+      }
+    }
   }
 
 
@@ -124,6 +174,37 @@ public final class PushMessageReceiver extends FrontiaPushMessageReceiver {
 
     @SerializedName("pushFlag")
     String pushFlag;
+
+    @SerializedName("cmd")
+    String cmd;
   }
 
+  /**
+   * feed:id
+   *
+   * post:id
+   *
+   * msg
+   *
+   * praise
+   *
+   */
+  class CmdHandler {
+    void handle(Context context, String cmd) {
+      String[] args = cmd.split(":");
+
+      if ("feed".equals(args[0])) {
+        FeedActivity.start(context, Integer.parseInt(args[1]), true);
+      } else if ("post".equals(args[0])) {
+        FeedActivity.start(context);
+        PostActivity.start(context, args[1]);
+      } else if ("msg".equals(args[0])) {
+        FeedActivity.start(context);
+        MsgActivity.start(context, true);
+      } else if ("praise".equals(args[0])) {
+        FeedActivity.start(context);
+        PraiseActivity.start(context, true);
+      }
+    }
+  }
 }

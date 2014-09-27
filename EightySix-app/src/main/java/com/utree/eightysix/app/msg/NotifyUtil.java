@@ -16,46 +16,12 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.app.feed.PostActivity;
+import com.utree.eightysix.push.PushMessageReceiver;
 
 /**
  * @author simon
  */
 public class NotifyUtil {
-
-  /**
-   * 新帖子
-   */
-  static final int TYPE_NEW_POST = 1;
-
-  /**
-   * 圈子解锁
-   */
-  static final int TYPE_UNLOCK_CIRCLE = 2;
-
-  /**
-   * 新朋友加入
-   */
-  static final int TYPE_FRIEND_L1_JOIN = 3;
-
-  /**
-   * 关注的帖子被评论
-   */
-  static final int TYPE_FOLLOW_COMMENT = 4;
-
-  /**
-   * 被赞
-   */
-  static final int TYPE_PRAISE = 5;
-
-  /**
-   * 圈子创建审核通过
-   */
-  static final int TYPE_CIRCLE_CREATION_APPROVE = 6;
-
-  /**
-   * 自己发布的帖子被评论
-   */
-  static final int TYPE_OWN_COMMENT = 7;
 
   static final int ID_POST = 0x1000;
   static final int ID_UNLOCK_FACTORY = 0x2000;
@@ -127,7 +93,7 @@ public class NotifyUtil {
         .setSmallIcon(R.drawable.ic_launcher)
         .setLargeIcon(sLargeIcon);
     if (count == 1) {
-      builder.setContentText(mContext.getString(type == TYPE_FOLLOW_COMMENT ?
+      builder.setContentText(mContext.getString(type == PushMessageReceiver.TYPE_FOLLOW_COMMENT ?
           R.string.notification_new_follow_comment : R.string.notification_new_own_comment));
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
         builder.setContentIntent(PendingIntent.getActivities(mContext, 0,
@@ -139,7 +105,7 @@ public class NotifyUtil {
             PendingIntent.FLAG_UPDATE_CURRENT));
       }
     } else {
-      builder.setContentText(mContext.getString(type == TYPE_FOLLOW_COMMENT ?
+      builder.setContentText(mContext.getString(type == PushMessageReceiver.TYPE_FOLLOW_COMMENT ?
           R.string.notification_new_follow_comments : R.string.notification_new_own_comments, count));
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
         builder.setContentIntent(PendingIntent.getActivities(mContext, 0,

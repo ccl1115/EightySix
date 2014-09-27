@@ -26,11 +26,13 @@ import com.utree.eightysix.*;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.SyncClient;
 import com.utree.eightysix.app.account.AccountActivity;
 import com.utree.eightysix.app.account.AddFriendActivity;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
-import com.utree.eightysix.app.feed.event.*;
+import com.utree.eightysix.app.feed.event.InviteClickedEvent;
+import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
+import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
+import com.utree.eightysix.app.feed.event.UploadClickedEvent;
 import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.msg.PraiseActivity;
@@ -45,7 +47,6 @@ import com.utree.eightysix.event.HasNewPraiseEvent;
 import com.utree.eightysix.event.NewCommentCountEvent;
 import com.utree.eightysix.request.CircleSideRequest;
 import com.utree.eightysix.response.CirclesResponse;
-import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
@@ -103,12 +104,22 @@ public class FeedActivity extends BaseActivity {
 
   public static void start(Context context) {
     Intent intent = new Intent(context, FeedActivity.class);
+
+    if (!(context instanceof Activity)) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
     context.startActivity(intent);
   }
 
   public static void start(Context context, Circle circle) {
     Intent intent = new Intent(context, FeedActivity.class);
     intent.putExtra("circle", circle);
+
+    if (!(context instanceof Activity)) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
     context.startActivity(intent);
   }
 
@@ -116,12 +127,22 @@ public class FeedActivity extends BaseActivity {
     Intent intent = new Intent(context, FeedActivity.class);
     intent.putExtra("circle", circle);
     intent.putExtra("skipCache", skipCache);
+
+    if (!(context instanceof Activity)) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
     context.startActivity(intent);
   }
 
   public static void start(Context context, int id) {
     Intent intent = new Intent(context, FeedActivity.class);
     intent.putExtra("id", id);
+
+    if (!(context instanceof Activity)) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
     context.startActivity(intent);
   }
 
@@ -129,6 +150,11 @@ public class FeedActivity extends BaseActivity {
     Intent intent = new Intent(context, FeedActivity.class);
     intent.putExtra("id", id);
     intent.putExtra("skipCache", skipCache);
+
+    if (!(context instanceof Activity)) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
     context.startActivity(intent);
   }
 
@@ -136,9 +162,11 @@ public class FeedActivity extends BaseActivity {
     Intent intent = new Intent(context, FeedActivity.class);
     intent.putExtra("id", id);
     intent.putExtra("skipCache", skipCache);
+
     if (!(context instanceof Activity)) {
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     }
+
     intent.setAction(String.valueOf(id));
     return intent;
   }
@@ -412,16 +440,16 @@ public class FeedActivity extends BaseActivity {
 
     //region 标题栏数据处理
     Circle circle = intent.getParcelableExtra("circle");
+    int id = intent.getIntExtra("id", -1);
 
     boolean skipCache = intent.getBooleanExtra("skipCache", false);
 
     if (circle != null) {
       mTabFragment.setCircle(circle, skipCache);
+    } else if (id != -1) {
+      mTabFragment.setCircle(id, skipCache);
     } else if (mTabFragment.getCircle() != null) {
       setSideHighlight(mTabFragment.getCircle());
-    } else {
-      final int circleId = intent.getIntExtra("id", 0);
-      mTabFragment.setCircle(circleId, skipCache);
     }
 
     //endregion
