@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.settings;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -17,6 +16,8 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.data.Sync;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.MD5Util;
+import org.apache.http.Header;
+
 import java.io.File;
 
 /**
@@ -82,17 +83,17 @@ public class UpgradeService extends Service {
             }
 
             @Override
-            public void onSuccess(File file) {
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
+              mBuilder.setContentText("下载失败");
+              mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, File file) {
               Intent i = new Intent(Intent.ACTION_VIEW);
               i.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
               i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
               startActivity(i);
-            }
-
-            @Override
-            public void onFailure(Throwable e, File response) {
-              mBuilder.setContentText("下载失败");
-              mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
             }
           });
     }

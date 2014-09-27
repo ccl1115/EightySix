@@ -15,14 +15,9 @@ import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.U;
 import com.utree.eightysix.storage.Storage;
 import de.akquinet.android.androlog.Log;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import org.apache.http.Header;
+
+import java.io.*;
 
 /**
  */
@@ -302,14 +297,9 @@ public class ImageUtils {
           new ImageDiskDecodeWorker(url, hash, snapshot, width, height).execute();
         } else {
           sClient.get(U.getContext(), url, new FileAsyncHttpResponseHandler(IOUtils.createTmpFile(hash)) {
-            @Override
-            public void onSuccess(File file) {
-              Log.d(TAG, "onSuccess");
-              new ImageRemoteDecodeWorker(hash, file, width, height).execute();
-            }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] binaryData, Throwable error) {
+            public void onFailure(int i, Header[] headers, Throwable error, File file) {
               Log.w(TAG, "onFailure");
               if (error != null) {
                 Log.e(TAG, "Get remote error: " + error.getMessage());
@@ -318,6 +308,12 @@ public class ImageUtils {
                 }
               }
               U.getBus().post(new ImageLoadedEvent(hash, null));
+            }
+
+            @Override
+            public void onSuccess(int i, Header[] headers, File file) {
+              Log.d(TAG, "onSuccess");
+              new ImageRemoteDecodeWorker(hash, file, width, height).execute();
             }
           });
         }
@@ -341,14 +337,9 @@ public class ImageUtils {
           new ImageDiskDecodeWorker(url, hash, snapshot).execute();
         } else {
           sClient.get(U.getContext(), url, new FileAsyncHttpResponseHandler(IOUtils.createTmpFile(hash)) {
-            @Override
-            public void onSuccess(File file) {
-              Log.d(TAG, "onSuccess");
-              new ImageRemoteDecodeWorker(hash, file).execute();
-            }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] binaryData, Throwable error) {
+            public void onFailure(int i, Header[] headers, Throwable error, File file) {
               Log.d(TAG, "onFailure");
               if (error != null) {
                 Log.d(TAG, "Get remote error: " + error.getMessage());
@@ -357,6 +348,12 @@ public class ImageUtils {
                 }
               }
               U.getBus().post(new ImageLoadedEvent(hash, null));
+            }
+
+            @Override
+            public void onSuccess(int i, Header[] headers, File file) {
+              Log.d(TAG, "onSuccess");
+              new ImageRemoteDecodeWorker(hash, file).execute();
             }
           });
         }
@@ -604,13 +601,9 @@ public class ImageUtils {
       } else {
         Log.d(TAG, "onFailed from disk");
         sClient.get(U.getContext(), mUrl, new FileAsyncHttpResponseHandler(IOUtils.createTmpFile(mHash)) {
-          @Override
-          public void onSuccess(File file) {
-            new ImageRemoteDecodeWorker(mHash, file).execute();
-          }
 
           @Override
-          public void onFailure(int statusCode, Header[] headers, byte[] binaryData, Throwable error) {
+          public void onFailure(int i, Header[] headers, Throwable error, File file) {
             Log.d(TAG, "onFailure from remote");
             if (error != null) {
               Log.d(TAG, "Get remote error: " + error.getMessage());
@@ -618,6 +611,12 @@ public class ImageUtils {
                 error.printStackTrace();
               }
             }
+
+          }
+
+          @Override
+          public void onSuccess(int i, Header[] headers, File file) {
+            new ImageRemoteDecodeWorker(mHash, file).execute();
           }
         });
       }

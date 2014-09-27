@@ -151,7 +151,7 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
   }
 
   @Override
-  public T parseResponse(String responseBody) throws Throwable {
+  protected T parseResponse(String responseBody, boolean b) throws Throwable {
     if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "response: " + responseBody);
 
     if (mGson == null) {
@@ -160,6 +160,7 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
       return mGson.fromJson(responseBody, mClz);
     }
   }
+
 
   private void handleObjectError(T response) {
     if (response.code != 0) {

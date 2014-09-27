@@ -30,6 +30,8 @@ import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.widget.RoundedButton;
+import org.apache.http.Header;
+
 import java.io.File;
 import java.util.regex.Pattern;
 
@@ -195,17 +197,18 @@ public class CircleCreateActivity extends BaseActivity implements Location.OnRes
     U.getRESTRequester().post(C.API_VALICODE_CREATE_FACTORY, null,
         U.getRESTRequester().addAuthParams(null), null,
         new FileAsyncHttpResponseHandler(IOUtils.createTmpFile("valicode_" + System.currentTimeMillis())) {
+
           @Override
-          public void onSuccess(File file) {
-            mIvCaptcha.setImageURI(Uri.fromFile(file));
+          public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
             mRequesting = false;
             if (file != null) file.delete();
           }
 
           @Override
-          public void onFailure(Throwable e, File response) {
+          public void onSuccess(int statusCode, Header[] headers, File file) {
+            mIvCaptcha.setImageURI(Uri.fromFile(file));
             mRequesting = false;
-            if (response != null) response.delete();
+            if (file != null) file.delete();
           }
         });
   }

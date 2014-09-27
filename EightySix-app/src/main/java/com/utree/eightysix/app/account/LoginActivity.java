@@ -2,14 +2,12 @@ package com.utree.eightysix.app.account;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -27,7 +25,6 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.feed.FeedActivity;
-import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.request.LoginRequest;
 import com.utree.eightysix.response.UserResponse;
 import com.utree.eightysix.rest.OnResponse;
@@ -35,7 +32,8 @@ import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.widget.RoundedButton;
-import com.utree.eightysix.widget.TopBar;
+import org.apache.http.Header;
+
 import java.io.File;
 
 /**
@@ -259,20 +257,22 @@ public class LoginActivity extends BaseActivity {
     U.getRESTRequester().post(C.API_VALICODE_FIND_PWD, null,
         new RequestParams("phone", mEtPhoneNumber.getText().toString()), null,
         new FileAsyncHttpResponseHandler(IOUtils.createTmpFile("valicode_" + System.currentTimeMillis())) {
+
           @Override
-          public void onSuccess(File file) {
-            mIvCaptcha.setImageURI(Uri.fromFile(file));
+          public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
+            showToast("获取验证码失败，请重新尝试");
             if (file != null) {
               file.delete();
             }
             mRequesting = false;
+
           }
 
           @Override
-          public void onFailure(Throwable e, File response) {
-            showToast("获取验证码失败，请重新尝试");
-            if (response != null) {
-              response.delete();
+          public void onSuccess(int statusCode, Header[] headers, File file) {
+            mIvCaptcha.setImageURI(Uri.fromFile(file));
+            if (file != null) {
+              file.delete();
             }
             mRequesting = false;
           }

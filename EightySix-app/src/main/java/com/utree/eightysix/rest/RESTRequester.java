@@ -6,6 +6,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.ResponseHandlerInterface;
+import com.tencent.cloudsdk.defaultsdk.mna.http.TAndroidHttpClient;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.C;
@@ -14,18 +15,15 @@ import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.MD5Util;
 import de.akquinet.android.androlog.Log;
 import org.apache.http.Header;
-import org.apache.http.NoHttpResponseException;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpRequestRetryHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.params.HttpProtocolParams;
-import org.apache.http.protocol.HttpContext;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +43,16 @@ public class RESTRequester implements IRESTRequester {
     mAsyncHttpClient.setMaxConnections(U.getConfigInt("api.connections"));
     mAsyncHttpClient.setMaxRetriesAndTimeout(U.getConfigInt("api.retry"), U.getConfigInt("api.timeout"));
     compact();
+
+    try {
+      Field field = AsyncHttpClient.class.getField("httpClient");
+      field.setAccessible(true);
+      field.set(mAsyncHttpClient, TAndroidHttpClient.newInstance("lanmei_mna").getHttpClient());
+    } catch (NoSuchFieldException e) {
+      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    }
   }
 
   public static String genCacheKey(String api, RequestParams params) {
@@ -206,24 +214,9 @@ public class RESTRequester implements IRESTRequester {
   }
 
   private void compact() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-      HttpProtocolParams.setUseExpectContinue(mAsyncHttpClient.getHttpClient().getParams(), false);
-      HttpRequestRetryHandler retryHandler = new HttpRequestRetryHandler() {
-
-        public boolean retryRequest(IOException exception, int executionCount,
-                                    HttpContext context) {
-          if (executionCount >= 5) {
-            return false;
-          }
-          if (exception instanceof NoHttpResponseException) {
-            return true;
-          } else if (exception instanceof ClientProtocolException) {
-            return true;
-          }
-          return false;
-        }
-      };
-      ((DefaultHttpClient) mAsyncHttpClient.getHttpClient()).setHttpRequestRetryHandler(retryHandler);
-    }
+    HttpProtocolParams.setUseExpectContinue(mAsyncHttpClient.getHttpClient().getParams(), false);
+    AsyncHttpClient.allowRetryExceptionClass(ClientProtocolException.class);
+    AsyncHttpClient.allowRetryExceptionClass(SocketTimeoutException.class);
+    AsyncHttpClient.allowRetryExceptionClass(ConnectTimeoutException.class);
   }
 }

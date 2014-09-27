@@ -2,17 +2,14 @@ package com.utree.eightysix.app;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import com.baidu.frontia.FrontiaApplication;
 import com.easemob.chat.EMChat;
-import com.easemob.chat.EMChatManager;
+import com.tencent.cloudsdk.tsocket.GlobalContext;
 import com.utree.eightysix.C;
-import com.utree.eightysix.M;
 import com.utree.eightysix.U;
-import com.utree.eightysix.utils.Env;
 import de.akquinet.android.androlog.Constants;
 import de.akquinet.android.androlog.Log;
-import java.util.Calendar;
+
 import java.util.List;
 
 /**
@@ -46,6 +43,8 @@ public class BaseApplication extends FrontiaApplication {
 
 
       EMChat.getInstance().init(this);
+
+      GlobalContext.initialize(sContext);
     }
   }
 

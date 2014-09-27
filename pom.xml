@@ -99,6 +99,12 @@
             </dependency>
 
             <dependency>
+                <groupId>mna_sdk</groupId>
+                <artifactId>mna_sdk</artifactId>
+                <version>1.7.0</version>
+            </dependency>
+
+            <dependency>
                 <groupId>mid-sdk</groupId>
                 <artifactId>mid-sdk</artifactId>
                 <version>2.10</version>
@@ -189,7 +195,7 @@
             <dependency>
                 <groupId>com.loopj.android</groupId>
                 <artifactId>android-async-http</artifactId>
-                <version>1.4.4</version>
+                <version>1.4.6</version>
             </dependency>
 
             <dependency>
