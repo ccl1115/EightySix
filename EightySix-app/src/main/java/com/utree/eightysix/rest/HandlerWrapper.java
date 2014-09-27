@@ -1,23 +1,19 @@
 package com.utree.eightysix.rest;
 
-import android.os.SystemClock;
 import android.widget.Toast;
 import com.google.gson.Gson;
 import com.loopj.android.http.BaseJsonHttpResponseHandler;
+import com.tencent.stat.StatAppMonitor;
 import com.utree.eightysix.*;
 import com.utree.eightysix.utils.IOUtils;
 import de.akquinet.android.androlog.Log;
 import org.apache.http.HttpStatus;
+import org.apache.http.NoHttpResponseException;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.net.ConnectException;
 import java.text.DateFormat;
-import java.util.Calendar;
 import java.util.Date;
-
-import org.apache.http.NoHttpResponseException;
 
 /**
  * Wrapper of handler use to parse response data using Gson and cache automatically
@@ -30,6 +26,8 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
   private RequestData mRequestData;
   private Class<T> mClz;
   private Gson mGson;
+
+  private StatAppMonitor mStatAppMonitor;
 
   /**
    * No cache constructor
@@ -57,6 +55,13 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
   @Override
   public void onSuccess(int statusCode, org.apache.http.Header[] headers, String rawResponse, T response) {
 
+    mStatAppMonitor = new StatAppMonitor(mRequestData.getApi());
+
+    mStatAppMonitor.setMillisecondsConsume(System.currentTimeMillis() - mRequestData.getRequestTime());
+
+    mStatAppMonitor.setRespSize(rawResponse.length() * 2);
+    mStatAppMonitor.setReqSize(mRequestData.getParams().toString().length() * 2);
+
     if (response != null) {
       handleObjectError(response);
 
@@ -70,6 +75,8 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
       if (BuildConfig.DEBUG) {
         Toast.makeText(U.getContext(), "HttpStatus: " + statusCode, Toast.LENGTH_SHORT).show();
       }
+      mStatAppMonitor.setReturnCode(statusCode);
+      mStatAppMonitor.setResultType(StatAppMonitor.FAILURE_RESULT_TYPE);
     }
     try {
       mOnResponse.onResponse(response);
@@ -78,10 +85,21 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
         ((OnResponse2) mOnResponse).onResponseError(t);
       }
     }
+
+    U.getAnalyser().reportHttpRequest(U.getContext(), mStatAppMonitor);
   }
 
   @Override
   public void onFailure(int statusCode, org.apache.http.Header[] headers, Throwable e, String rawData, T errorResponse) {
+
+    mStatAppMonitor = new StatAppMonitor(mRequestData.getApi());
+
+    mStatAppMonitor.setMillisecondsConsume(System.currentTimeMillis() - mRequestData.getRequestTime());
+
+    mStatAppMonitor.setRespSize(rawData.length() * 2);
+    mStatAppMonitor.setReqSize(mRequestData.getParams().toString().length() * 2);
+    mStatAppMonitor.setResultType(StatAppMonitor.FAILURE_RESULT_TYPE);
+
     if (e != null) {
       if (!(e instanceof NoHttpResponseException)) {
         U.showToast(U.getContext().getString(R.string.server_connection_exception));
@@ -119,6 +137,7 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
         U.showToast(U.gs(R.string.server_500));
       }
       U.getReporter().reportRequestStatusCode(mRequestData, statusCode);
+      mStatAppMonitor.setReturnCode(statusCode);
     }
     try {
       mOnResponse.onResponse(null);
@@ -127,6 +146,8 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
         ((OnResponse2) mOnResponse).onResponseError(t);
       }
     }
+
+    U.getAnalyser().reportHttpRequest(U.getContext(), mStatAppMonitor);
   }
 
   @Override

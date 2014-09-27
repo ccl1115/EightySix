@@ -12,6 +12,15 @@ public class RequestData {
   RequestParams params;
   int method;
   org.apache.http.Header[] headers;
+  long requestTime;
+
+  public long getRequestTime() {
+    return requestTime;
+  }
+
+  public void setRequestTime(long requestTime) {
+    this.requestTime = requestTime;
+  }
 
   public boolean isCache() {
     return cache;

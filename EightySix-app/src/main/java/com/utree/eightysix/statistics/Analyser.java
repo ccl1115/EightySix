@@ -26,4 +26,6 @@ public interface Analyser {
     <ID, KV> void trackBeginKVEvent(Context context, ID id, KV properties);
 
     <ID, KV> void trackEndKVEvent(Context context, ID id, KV properties);
+
+  <STAT> void reportHttpRequest(Context context, STAT stat);
 }

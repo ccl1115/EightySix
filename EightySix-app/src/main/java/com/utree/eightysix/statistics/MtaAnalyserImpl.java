@@ -1,6 +1,7 @@
 package com.utree.eightysix.statistics;
 
 import android.content.Context;
+import com.tencent.stat.StatAppMonitor;
 import com.tencent.stat.StatConfig;
 import com.tencent.stat.StatService;
 import com.utree.eightysix.BuildConfig;
@@ -79,6 +80,13 @@ public class MtaAnalyserImpl implements Analyser {
   public <ID, KV> void trackEndKVEvent(Context context, ID id, KV properties) {
     if (id instanceof String && properties instanceof Properties) {
       StatService.trackCustomEndKVEvent(context, (String) id, (Properties) properties);
+    }
+  }
+
+  @Override
+  public <STAT> void reportHttpRequest(Context context, STAT stat) {
+    if (stat instanceof StatAppMonitor) {
+      StatService.reportAppMonitorStat(context, (StatAppMonitor) stat);
     }
   }
 }

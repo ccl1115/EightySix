@@ -13,14 +13,6 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.MD5Util;
 import de.akquinet.android.androlog.Log;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import org.apache.http.Header;
 import org.apache.http.NoHttpResponseException;
 import org.apache.http.client.ClientProtocolException;
@@ -29,6 +21,15 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HttpContext;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  */
@@ -72,6 +73,7 @@ public class RESTRequester implements IRESTRequester {
 
   @Override
   public RequestHandle request(RequestData data, ResponseHandlerInterface handler) {
+    data.setRequestTime(System.currentTimeMillis());
     if (data.getMethod() == Method.GET) {
       return get(data.getApi(), data.getHeaders(), data.getParams(), handler);
     } else if (data.getMethod() == Method.POST) {
