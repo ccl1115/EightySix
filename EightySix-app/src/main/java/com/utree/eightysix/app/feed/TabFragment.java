@@ -68,7 +68,7 @@ class TabFragment extends BaseFragment {
           case 1:
             return "热贴";
           case 2:
-            return "认识的人";
+            return "@";
         }
         return "";
       }

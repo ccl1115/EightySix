@@ -28,4 +28,8 @@ public class BaseFragment extends Fragment {
 
     M.getRegisterHelper().unregister(this);
   }
+
+  protected void onActive() {
+
+  }
 }

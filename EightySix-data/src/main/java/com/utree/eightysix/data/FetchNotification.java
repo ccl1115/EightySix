@@ -24,4 +24,13 @@ public class FetchNotification {
 
   @SerializedName("friendL1Join")
   public PullNotification friendL1Join;
+
+  @SerializedName("newPostAllCount")
+  public int newPostAllCount;
+
+  @SerializedName("newPostHotCount")
+  public int newPostHotCount;
+
+  @SerializedName("newPostFriendsCount")
+  public int newPostFriendsCount;
 }

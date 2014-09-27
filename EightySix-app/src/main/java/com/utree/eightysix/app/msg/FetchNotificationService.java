@@ -28,6 +28,8 @@ public class FetchNotificationService extends Service {
   private static final int FETCH_INTERVAL = 60000;
   private static final int MSG_FETCH = 0x1;
 
+  private static int sCircleId;
+
   private NotifyUtil mNotifyUtil;
 
   private Handler mHandler = new Handler() {
@@ -38,10 +40,14 @@ public class FetchNotificationService extends Service {
     }
   };
 
+  public static void setCircleId(int circleId) {
+    sCircleId = circleId;
+  }
+
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
     Log.d(TAG, "start FetchService");
-    mHandler.sendEmptyMessage(MSG_FETCH);
+    mHandler.sendEmptyMessageDelayed(MSG_FETCH, FETCH_INTERVAL);
     return START_NOT_STICKY;
   }
 
@@ -58,7 +64,9 @@ public class FetchNotificationService extends Service {
 
   private void requestFetch() {
     Log.d(TAG, "requestFetch");
-    RequestData data = U.getRESTRequester().convert(new FetchNotificationRequest());
+    if (sCircleId == 0) return;
+
+    RequestData data = U.getRESTRequester().convert(new FetchNotificationRequest(sCircleId));
     U.getRESTRequester().request(data, new HandlerWrapper<FetchResponse>(data, new OnResponse2<FetchResponse>() {
 
       @Override

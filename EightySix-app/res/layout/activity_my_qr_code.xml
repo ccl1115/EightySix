@@ -27,29 +27,13 @@
                 android:text="扫一扫下面的二维码，添加我为朋友"/>
 
 
-        <FrameLayout
+
+        <ImageView
+                android:id="@+id/iv_qr_code"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp">
-
-            <View
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#ff666666"/>
-
-            <View
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="2dp"
-                    android:background="#ff888888"/>
-
-            <ImageView
-                    android:id="@+id/iv_qr_code"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="20dp"
-                    android:layout_gravity="center"/>
-        </FrameLayout>
+                android:layout_height="match_parent"
+                android:layout_margin="36dp"
+                android:layout_gravity="center"/>
 
     </LinearLayout>
 

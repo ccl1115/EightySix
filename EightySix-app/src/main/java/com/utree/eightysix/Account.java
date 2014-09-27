@@ -116,7 +116,7 @@ public class Account {
   }
 
   public boolean getSilentMode() {
-    return getAccountSharedPreferences().getBoolean("settings_silent_mode", false);
+    return getAccountSharedPreferences().getBoolean("settings_silent_mode", true);
   }
 
   private boolean setToken(String token) {

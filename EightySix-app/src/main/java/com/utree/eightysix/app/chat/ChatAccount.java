@@ -51,7 +51,7 @@ public class ChatAccount {
             @Override
             public void onSuccess() {
               mIsLogin = true;
-              U.getChatBus().post(new ChatStatusEvent(ChatStatusEvent.EVENT_LOGIN_SUC, "登录成功"));
+//              U.getChatBus().post(new ChatStatusEvent(ChatStatusEvent.EVENT_LOGIN_SUC, "登录成功"));
 
               mNewMessageBroadcastReceiver = new NewMessageBroadcastReceiver();
               U.getContext().registerReceiver(mNewMessageBroadcastReceiver,
@@ -61,12 +61,12 @@ public class ChatAccount {
             @Override
             public void onError(int i, String s) {
               mIsLogin = false;
-              U.getChatBus().post(new ChatStatusEvent(ChatStatusEvent.EVENT_LOGIN_ERR, String.format("登录失败：%s(%d)", s, i)));
+//              U.getChatBus().post(new ChatStatusEvent(ChatStatusEvent.EVENT_LOGIN_ERR, String.format("登录失败：%s(%d)", s, i)));
             }
 
             @Override
             public void onProgress(int i, String s) {
-              U.getChatBus().post(new ChatStatusEvent(ChatStatusEvent.EVENT_LOGIN_PROGRESS, String.format("%s(%d)", s, i)));
+//              U.getChatBus().post(new ChatStatusEvent(ChatStatusEvent.EVENT_LOGIN_PROGRESS, String.format("%s(%d)", s, i)));
             }
           });
     }

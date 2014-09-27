@@ -41,6 +41,8 @@ public class C {
   public static final String API_FEED_ADD = "/feed/add.do";
   public static final String API_FEED_DELETE = "/feed/delete.do";
   public static final String API_FEED_LIST = "/feed/list.do";
+  public static final String API_FEED_HOT_LIST = "/feed/listHot.do";
+  public static final String API_FEED_FRIENDS_LIST = "/feed/listFriends.do";
   public static final String API_FEED_PRAISE = "/feed/praise.do";
   public static final String API_FEED_PRAISE_CANCEL = "/feed/cancelPraise.do";
   public static final String API_FEED_SUBMIT_ANSWER = "/feed/submitAnswer.do";
