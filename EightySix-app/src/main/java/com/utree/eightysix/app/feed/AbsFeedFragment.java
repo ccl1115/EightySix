@@ -64,7 +64,7 @@ public abstract class AbsFeedFragment extends BaseFragment {
 
   private boolean mRefreshed;
 
-  private boolean mPostPraiseRequesting;
+  protected boolean mPostPraiseRequesting;
 
   @OnItemClick (R.id.lv_feed)
   public void onLvFeedItemClicked(int position, View view) {
@@ -248,109 +248,6 @@ public abstract class AbsFeedFragment extends BaseFragment {
     }
   }
 
-  @Subscribe
-  public void onFeedPostPraiseEvent(final FeedPostPraiseEvent event) {
-    if (mPostPraiseRequesting) {
-      return;
-    }
-    mPostPraiseRequesting = true;
-    if (event.isCancel()) {
-      getBaseActivity().request(new PostPraiseCancelRequest(event.getPost().id), new OnResponse2<Response>() {
-        @Override
-        public void onResponse(Response response) {
-          if (RESTRequester.responseOk(response)) {
-            U.getBus().post(event.getPost());
-          } else if ((response.code & 0xffff) == 0x2286) {
-            event.getPost().praised = 0;
-          } else {
-            event.getPost().praised = 0;
-            event.getPost().praise++;
-          }
-          mFeedAdapter.notifyDataSetChanged();
-
-          mPostPraiseRequesting = false;
-        }
-
-        @Override
-        public void onResponseError(Throwable e) {
-          mPostPraiseRequesting = false;
-        }
-      }, Response.class);
-    } else {
-      getBaseActivity().request(new PostPraiseRequest(event.getPost().id), new OnResponse2<Response>() {
-        @Override
-        public void onResponse(Response response) {
-          if (RESTRequester.responseOk(response)) {
-            U.getBus().post(event.getPost());
-          } else if ((response.code & 0xffff) == 0x2286) {
-            event.getPost().praised = 1;
-          } else {
-            event.getPost().praised = 1;
-            event.getPost().praise = Math.max(0, event.getPost().praise - 1);
-          }
-          mFeedAdapter.notifyDataSetChanged();
-
-          mPostPraiseRequesting = false;
-        }
-
-        @Override
-        public void onResponseError(Throwable e) {
-          mPostPraiseRequesting = false;
-        }
-      }, Response.class);
-    }
-  }
-
-  @Subscribe
-  public void onPostPublishedEvent(PostPublishedEvent event) {
-    if (mFeedAdapter != null) {
-      if (mCircle != null && mCircle.id == event.getCircleId()) {
-        mFeedAdapter.add(event.getPost());
-        mRstvEmpty.setVisibility(View.INVISIBLE);
-        mLvFeed.setSelection(0);
-      }
-    }
-    if (mCircle != null) {
-      requestFeeds(mCircle.id, 1);
-    } else {
-      requestFeeds(0, 1);
-    }
-  }
-
-  @Subscribe
-  public void onPostDeleteEvent(PostDeleteEvent event) {
-    if (mFeedAdapter == null || mFeedAdapter.getFeeds() == null) return;
-    for (Iterator<BaseItem> iterator = mFeedAdapter.getFeeds().posts.lists.iterator(); iterator.hasNext(); ) {
-      BaseItem item = iterator.next();
-      if (item != null && item instanceof Post) {
-        Post p = ((Post) item);
-        if (p.equals(event.getPost())) {
-          iterator.remove();
-          mFeedAdapter.notifyDataSetChanged();
-          break;
-        }
-      }
-    }
-  }
-
-  @Subscribe
-  public void onContactsSyncEvent(ContactsSyncEvent event) {
-    if (mFeedAdapter != null && mFeedAdapter.getFeeds().upContact == 0) {
-      if (event.isSucceed()) {
-        U.showToast("上传通讯录成功");
-      } else {
-        U.showToast("上传通讯录失败");
-      }
-    }
-
-    refresh();
-    getBaseActivity().hideProgressBar();
-  }
-
-  @Subscribe
-  public void onRefreshFeedEvent(RefreshFeedEvent event) {
-    refresh();
-  }
 
 
   public int getWorkerCount() {
