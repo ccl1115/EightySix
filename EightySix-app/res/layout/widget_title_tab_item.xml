@@ -13,7 +13,7 @@
             android:layout_centerInParent="true"
             android:padding="8dp"
             android:gravity="center"
-            android:textColor="@color/apptheme_primary_grey_color"/>
+            android:textColor="@color/apptheme_primary_grey_color_pressed"/>
 
     <com.utree.eightysix.widget.RoundedButton
             android:id="@+id/rb_budget"

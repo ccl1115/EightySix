@@ -1,7 +1,6 @@
 package com.utree.eightysix.widget;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -62,7 +61,7 @@ public class TitleTab extends FrameLayout {
           mListener.onPageSelected(position);
 
           for (int i = 0, size = mLlTabs.getChildCount(); i < size; i++) {
-            ((TextView) mLlTabs.getChildAt(i).findViewById(R.id.tv_title)).setTextColor(Color.GRAY);
+            ((TextView) mLlTabs.getChildAt(i).findViewById(R.id.tv_title)).setTextColor(getResources().getColor(R.color.apptheme_primary_grey_color_pressed));
           }
 
           ((TextView) mLlTabs.getChildAt(position).findViewById(R.id.tv_title)).setTextColor(getResources().getColor(R.color.apptheme_primary_light_color));

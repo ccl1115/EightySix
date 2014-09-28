@@ -78,9 +78,9 @@ class TabFragment extends BaseFragment {
           case 0:
             return "全部";
           case 1:
-            return "热贴";
+            return "热门";
           case 2:
-            return "@";
+            return "与我相关";
         }
         return "";
       }
