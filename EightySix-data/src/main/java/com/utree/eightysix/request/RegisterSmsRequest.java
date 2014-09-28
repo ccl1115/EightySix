@@ -10,10 +10,10 @@ import com.utree.eightysix.rest.Param;
 @Api(C.API_ACCOUNT_REG_SMS)
 public class RegisterSmsRequest {
 
-  @Param("phoneNumber")
-  public String phoneNumber;
+  @Param("phone")
+  public String phone;
 
-  public RegisterSmsRequest(String phoneNumber) {
-    this.phoneNumber = phoneNumber;
+  public RegisterSmsRequest(String phone) {
+    this.phone = phone;
   }
 }

@@ -12,7 +12,8 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:padding="8dp"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:textColor="@color/apptheme_primary_grey_color"/>
 
     <com.utree.eightysix.widget.RoundedButton
             android:id="@+id/rb_budget"
