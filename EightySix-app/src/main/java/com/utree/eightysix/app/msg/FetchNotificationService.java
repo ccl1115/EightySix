@@ -124,9 +124,12 @@ public class FetchNotificationService extends Service {
             }
           }
 
-          U.getBus().post(new NewAllPostCountEvent(circleId, response.object.newPostAllCount));
-          U.getBus().post(new NewHotPostCountEvent(circleId, response.object.newPostHotCount));
-          U.getBus().post(new NewFriendsPostCountEvent(circleId, response.object.newPostFriendsCount));
+//          U.getBus().post(new NewAllPostCountEvent(circleId, response.object.newPostAllCount));
+//          U.getBus().post(new NewHotPostCountEvent(circleId, response.object.newPostHotCount));
+//          U.getBus().post(new NewFriendsPostCountEvent(circleId, response.object.newPostFriendsCount));
+          U.getBus().post(new NewAllPostCountEvent(circleId, 9));
+          U.getBus().post(new NewHotPostCountEvent(circleId, 20));
+          U.getBus().post(new NewFriendsPostCountEvent(circleId, 1));
         }
       }
 
