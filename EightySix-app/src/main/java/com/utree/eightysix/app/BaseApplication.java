@@ -3,7 +3,6 @@ package com.utree.eightysix.app;
 import android.app.ActivityManager;
 import android.content.Context;
 import com.baidu.frontia.FrontiaApplication;
-import com.easemob.chat.EMChat;
 import com.tencent.cloudsdk.tsocket.GlobalContext;
 import com.utree.eightysix.C;
 import com.utree.eightysix.U;
@@ -42,7 +41,7 @@ public class BaseApplication extends FrontiaApplication {
       U.getSyncClient().getSync();
 
 
-      EMChat.getInstance().init(this);
+//      EMChat.getInstance().init(this);
 
       GlobalContext.initialize(sContext);
     }
