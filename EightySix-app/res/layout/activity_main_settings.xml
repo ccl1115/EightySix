@@ -72,4 +72,5 @@
             android:text="@string/logout"
             android:background="@drawable/apptheme_primary_list_selector"/>
 
+    <include layout="@layout/widget_primary_divider"/>
 </LinearLayout>

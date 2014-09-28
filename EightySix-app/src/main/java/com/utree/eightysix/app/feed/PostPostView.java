@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.feed;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,7 +20,6 @@ import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
-import com.utree.eightysix.app.chat.ChatActivity;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.PostDeleteRequest;
@@ -136,7 +134,7 @@ public class PostPostView extends BasePostView {
 
     U.getAnalyser().trackEvent(U.getContext(), "post_more", "post_more");
     new AlertDialog.Builder(getContext()).setTitle(U.gs(R.string.post_action))
-        .setItems(new String[]{U.gs(R.string.share), "匿名聊天", U.gs(R.string.report),
+        .setItems(new String[]{U.gs(R.string.share), U.gs(R.string.report),
                 mPost.praised == 1 ? U.gs(R.string.unlike) : U.gs(R.string.like),
                 U.gs(R.string.delete)},
             new DialogInterface.OnClickListener() {
@@ -148,12 +146,10 @@ public class PostPostView extends BasePostView {
                     U.getShareManager().sharePostDialog(((BaseActivity) getContext()), mPost).show();
                     break;
                   case 1:
-                    break;
-                  case 2:
                     U.getAnalyser().trackEvent(U.getContext(), "post_more_report", "post_more_report");
                     new ReportDialog(getContext(), mPost.id).show();
                     break;
-                  case 3:
+                  case 2:
                     if (mPost == null) return;
                     if (mPost.praised == 1) {
                       U.getAnalyser().trackEvent(U.getContext(), "post_more_praise", "cancel");
@@ -164,7 +160,7 @@ public class PostPostView extends BasePostView {
                     }
                     ((BaseAdapter) ((AdapterView) getParent()).getAdapter()).notifyDataSetChanged();
                     break;
-                  case 4:
+                  case 3:
                     U.getAnalyser().trackEvent(U.getContext(), "post_more_delete", "post_more_delete");
                     U.getBus().post(new PostDeleteRequest(mPost.id));
                     break;
