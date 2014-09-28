@@ -16,7 +16,7 @@
     <version>1.1.0-SNAPSHOT</version>
 
     <properties>
-        <android.manifest.versionCode>10</android.manifest.versionCode>
+        <android.manifest.versionCode>15</android.manifest.versionCode>
         <android.manifest.versionName>${project.version}</android.manifest.versionName>
     </properties>
 

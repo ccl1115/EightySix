@@ -192,7 +192,7 @@ public class FeedActivity extends BaseActivity {
     U.getAnalyser().trackEvent(this, "side_switch", "side_switch");
     Circle circle = mSideCircles.get(position);
     if (circle != null) {
-      mTabFragment.setCircle(circle, true);
+      mTabFragment.setCircle(circle);
       setSideHighlight(circle);
       mDlContent.closeDrawer(mLlSide);
       getHandler().postDelayed(new Runnable() {
@@ -445,9 +445,9 @@ public class FeedActivity extends BaseActivity {
     boolean skipCache = intent.getBooleanExtra("skipCache", false);
 
     if (circle != null) {
-      mTabFragment.setCircle(circle, skipCache);
+      mTabFragment.setCircle(circle);
     } else if (id != -1) {
-      mTabFragment.setCircle(id, skipCache);
+      mTabFragment.setCircle(id);
     } else if (mTabFragment.getCircle() != null) {
       setSideHighlight(mTabFragment.getCircle());
     }

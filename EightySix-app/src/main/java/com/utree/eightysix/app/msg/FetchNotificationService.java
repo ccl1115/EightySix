@@ -51,7 +51,7 @@ public class FetchNotificationService extends Service {
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
     Log.d(TAG, "start FetchService");
-    mHandler.sendEmptyMessageDelayed(MSG_FETCH, 5000);
+    mHandler.sendEmptyMessageDelayed(MSG_FETCH, 1000);
     return START_NOT_STICKY;
   }
 
@@ -124,12 +124,9 @@ public class FetchNotificationService extends Service {
             }
           }
 
-//          U.getBus().post(new NewAllPostCountEvent(circleId, response.object.newPostAllCount));
-//          U.getBus().post(new NewHotPostCountEvent(circleId, response.object.newPostHotCount));
-//          U.getBus().post(new NewFriendsPostCountEvent(circleId, response.object.newPostFriendsCount));
-          U.getBus().post(new NewAllPostCountEvent(circleId, 9));
-          U.getBus().post(new NewHotPostCountEvent(circleId, 20));
-          U.getBus().post(new NewFriendsPostCountEvent(circleId, 1));
+          U.getBus().post(new NewAllPostCountEvent(circleId, response.object.newPostAllCount));
+          U.getBus().post(new NewHotPostCountEvent(circleId, response.object.newPostHotCount));
+          U.getBus().post(new NewFriendsPostCountEvent(circleId, response.object.newPostFriendsCount));
         }
       }
 

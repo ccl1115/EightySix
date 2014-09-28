@@ -15,6 +15,8 @@ import com.utree.eightysix.rest.OnResponse;
  */
 class FriendsFragment extends AbsFeedFragment {
 
+  public FriendsFragment() {}
+
   @Override
   protected void requestFeeds(int id, final int page) {
     if (mRefresherView != null && page == 1) {

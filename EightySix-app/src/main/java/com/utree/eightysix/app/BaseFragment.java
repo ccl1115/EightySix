@@ -15,6 +15,21 @@ public class BaseFragment extends Fragment {
     return (BaseActivity) getActivity();
   }
 
+  private boolean mActive;
+
+  public void setActive(boolean active) {
+    if (mActive != active) {
+      mActive = active;
+      if (mActive) {
+        onActive();
+      }
+    }
+  }
+
+  public boolean isActive() {
+    return mActive;
+  }
+
   @Override
   public void onAttach(Activity activity) {
     super.onAttach(activity);

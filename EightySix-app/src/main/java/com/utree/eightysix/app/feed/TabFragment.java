@@ -24,15 +24,18 @@ import com.utree.eightysix.widget.TitleTab;
  */
 class TabFragment extends BaseFragment {
 
-  @InjectView(R.id.vp_tab)
+  @InjectView (R.id.vp_tab)
   public ViewPager mVpTab;
 
-  @InjectView(R.id.tt_tab)
+  @InjectView (R.id.tt_tab)
   public TitleTab mTtTab;
-
   private FeedFragment mFeedFragment;
   private HotFragment mHotFragment;
   private FriendsFragment mFriendsFragment;
+  private Circle mCircle;
+
+  public TabFragment() {
+  }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,6 +68,11 @@ class TabFragment extends BaseFragment {
       }
 
       @Override
+      public int getCount() {
+        return 3;
+      }
+
+      @Override
       public CharSequence getPageTitle(int position) {
         switch (position) {
           case 0:
@@ -76,14 +84,43 @@ class TabFragment extends BaseFragment {
         }
         return "";
       }
-
-      @Override
-      public int getCount() {
-        return 3;
-      }
     });
 
     mTtTab.setViewPager(mVpTab);
+
+    mTtTab.setOnPageChangedListener(new ViewPager.OnPageChangeListener() {
+      @Override
+      public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+      }
+
+      @Override
+      public void onPageSelected(int position) {
+        switch (position) {
+          case 0:
+            mFeedFragment.setActive(true);
+            break;
+          case 1:
+            mHotFragment.setActive(true);
+            break;
+          case 2:
+            mFriendsFragment.setActive(true);
+            break;
+        }
+      }
+
+      @Override
+      public void onPageScrollStateChanged(int state) {
+
+      }
+    });
+
+    getBaseActivity().getHandler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        mFeedFragment.setActive(true);
+      }
+    }, 500);
   }
 
   public boolean canPublish() {
@@ -91,33 +128,81 @@ class TabFragment extends BaseFragment {
   }
 
   public int getCircleId() {
+    if (mCircle != null) {
+      return mCircle.id;
+    }
     if (mFeedFragment != null) {
       return mFeedFragment.getCircleId();
     }
     return 0;
   }
 
-  public void setCircle(Circle circle, boolean b) {
-    if (mFeedFragment != null) {
-      mFeedFragment.setCircle(circle, b);
+  public void setCircle(Circle circle) {
+    clearActive();
+
+    mCircle = circle;
+
+    mFeedFragment.setCircle(circle);
+    mHotFragment.setCircle(circle);
+    mFriendsFragment.setCircle(circle);
+
+    switch (mVpTab.getCurrentItem()) {
+      case 0:
+        mFeedFragment.setActive(true);
+        break;
+      case 1:
+        mHotFragment.setActive(true);
+        break;
+      case 2:
+        mFriendsFragment.setActive(true);
+        break;
     }
   }
 
   public Circle getCircle() {
+    if (mCircle != null) {
+      return mCircle;
+    }
     if (mFeedFragment != null) {
       return mFeedFragment.getCircle();
     }
     return null;
   }
 
-  public boolean onBackPressed() {
-    return mFeedFragment != null && mFeedFragment.onBackPressed();
+  public void setCircle(int circleId) {
+    clearActive();
+
+    if (mCircle != null) {
+      mCircle.id = circleId;
+    } else {
+      mCircle = new Circle();
+      mCircle.id = circleId;
+    }
+
+    mFeedFragment.setCircle(circleId);
+    mHotFragment.setCircle(circleId);
+    mFriendsFragment.setCircle(circleId);
+
+    switch (mVpTab.getCurrentItem()) {
+      case 0:
+        mFeedFragment.setActive(true);
+        break;
+      case 1:
+        mHotFragment.setActive(true);
+        break;
+      case 2:
+        mFriendsFragment.setActive(true);
+        break;
+    }
   }
 
-  public void setCircle(int circleId, boolean skipCache) {
-    if (mFeedFragment != null) {
-      mFeedFragment.setCircle(circleId, skipCache);
-    }
+  public boolean onBackPressed() {
+    return false;
+  }
+
+  @Subscribe
+  public void onCircleEvent(Circle circle) {
+    if (circle != null) mCircle = circle;
   }
 
   @Subscribe
@@ -133,5 +218,11 @@ class TabFragment extends BaseFragment {
   @Subscribe
   public void onNewFriendsPostCountEvent(NewFriendsPostCountEvent event) {
     mTtTab.setTabBudget(2, String.valueOf(event.getCount()), event.getCount() == 0);
+  }
+
+  private void clearActive() {
+    mFeedFragment.setActive(false);
+    mHotFragment.setActive(false);
+    mFriendsFragment.setActive(false);
   }
 }

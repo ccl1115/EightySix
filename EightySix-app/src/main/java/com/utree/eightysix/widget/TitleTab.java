@@ -25,6 +25,7 @@ public class TitleTab extends FrameLayout {
 
   @InjectView(R.id.in_tab)
   public IndicatorView mInTab;
+  private ViewPager.OnPageChangeListener mListener;
 
   public TitleTab(Context context) {
     this(context, null, 0);
@@ -49,16 +50,23 @@ public class TitleTab extends FrameLayout {
       @Override
       public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         mInTab.setPosition(position + positionOffset);
+        if (mListener != null) {
+          mListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
+        }
       }
 
       @Override
       public void onPageSelected(int position) {
-
+        if (mListener != null) {
+          mListener.onPageSelected(position);
+        }
       }
 
       @Override
       public void onPageScrollStateChanged(int state) {
-
+        if (mListener != null) {
+          mListener.onPageScrollStateChanged(state);
+        }
       }
     });
 
@@ -69,6 +77,10 @@ public class TitleTab extends FrameLayout {
         mLlTabs.addView(buildTab(adapter.getPageTitle(i), i));
       }
     }
+  }
+
+  public void setOnPageChangedListener(ViewPager.OnPageChangeListener listener) {
+    mListener = listener;
   }
 
   private View buildTab(CharSequence name, final int i) {

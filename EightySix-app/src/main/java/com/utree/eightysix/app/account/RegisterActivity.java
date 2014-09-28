@@ -3,6 +3,7 @@ package com.utree.eightysix.app.account;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -20,17 +21,23 @@ import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.User;
 import com.utree.eightysix.request.RegisterRequest;
+import com.utree.eightysix.request.RegisterSmsRequest;
 import com.utree.eightysix.response.UserResponse;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.widget.RoundedButton;
+import java.util.Date;
 
 /**
  */
 @Layout (R.layout.activity_register)
 public class RegisterActivity extends BaseActivity {
 
+  private static final int MSG_COUNTDOWN = 0;
   @InjectView (R.id.et_phone_number)
   public EditText mEtPhoneNumber;
 
@@ -39,6 +46,20 @@ public class RegisterActivity extends BaseActivity {
 
   @InjectView (R.id.btn_register)
   public RoundedButton mBtnRegister;
+
+  @InjectView(R.id.et_captcha)
+  public EditText mEtCaptcha;
+
+  @InjectView(R.id.btn_get_captcha)
+  public RoundedButton mRbGetCaptcha;
+
+  private long mTargetTime;
+
+  @OnClick(R.id.btn_get_captcha)
+  public void onRbGetCaptchaClicked() {
+    requestCaptcha();
+    mRbGetCaptcha.setEnabled(false);
+  }
 
   private boolean mCorrectPhoneNumber;
   private boolean mCorrectPwd;
@@ -82,6 +103,7 @@ public class RegisterActivity extends BaseActivity {
           if (mCorrectPwd) {
             mBtnRegister.setEnabled(true);
           }
+          mRbGetCaptcha.setEnabled(true);
         } else {
           mBtnRegister.setEnabled(false);
         }
@@ -148,7 +170,7 @@ public class RegisterActivity extends BaseActivity {
       return;
     }
 
-    request(new RegisterRequest(mEtPhoneNumber.getText().toString(), mEtPwd.getText().toString()),
+    request(new RegisterRequest(mEtPhoneNumber.getText().toString(), mEtPwd.getText().toString(), mEtCaptcha.getText().toString()),
         new OnResponse<UserResponse>() {
           @Override
           public void onResponse(UserResponse response) {
@@ -176,6 +198,25 @@ public class RegisterActivity extends BaseActivity {
     mBtnRegister.setEnabled(false);
   }
 
+  private void requestCaptcha() {
+    request(new RegisterSmsRequest(mEtPhoneNumber.getText().toString()), new OnResponse2<Response>() {
+      @Override
+      public void onResponse(Response response) {
+        if (RESTRequester.responseOk(response)) {
+          showToast("发送验证码成功。");
+          startCountdown();
+        } else {
+          mRbGetCaptcha.setEnabled(true);
+        }
+      }
+
+      @Override
+      public void onResponseError(Throwable e) {
+        mRbGetCaptcha.setEnabled(true);
+      }
+    }, Response.class);
+  }
+
   @Subscribe
   public void onContactsSyncEvent(ContactsSyncEvent event) {
     BaseCirclesActivity.startSelect(this);
@@ -184,5 +225,27 @@ public class RegisterActivity extends BaseActivity {
 
   @Subscribe
   public void onLoginEvent(Account.LoginEvent event) {
+
+  }
+
+  private void startCountdown() {
+    mTargetTime = new Date().getTime() + U.getConfigInt("activity.find_pwd.captcha.countdown");
+
+    getHandler().sendEmptyMessageDelayed(MSG_COUNTDOWN, 1000);
+  }
+
+  @Override
+  protected void onHandleMessage(Message message) {
+    if (message.what == MSG_COUNTDOWN) {
+      final long now = new Date().getTime();
+      if (now < mTargetTime) {
+        final int t = (int) ((mTargetTime - now) / 1000);
+        mRbGetCaptcha.setText(String.format(getString(R.string.reget_captcha), t));
+        getHandler().sendEmptyMessageDelayed(MSG_COUNTDOWN, 1000);
+      } else {
+        mRbGetCaptcha.setText(R.string.get_captcha);
+        mRbGetCaptcha.setEnabled(true);
+      }
+    }
   }
 }

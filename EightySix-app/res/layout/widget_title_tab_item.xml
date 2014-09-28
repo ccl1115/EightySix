@@ -20,13 +20,14 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/tv_title"
             android:layout_centerVertical="true"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
             android:textSize="12sp"
             android:minHeight="0dp"
             android:textColor="@android:color/white"
             android:visibility="invisible"
+            android:clickable="false"
             app:background="@color/apptheme_secondary_light_color"
-            app:radius="16dp"/>
+            app:radius="10dp"/>
 
 </RelativeLayout>

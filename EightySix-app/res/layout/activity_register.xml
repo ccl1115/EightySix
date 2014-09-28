@@ -13,6 +13,8 @@
 
     <include layout="@layout/widget_pwd"/>
 
+    <include layout="@layout/widget_captcha"/>
+
     <com.utree.eightysix.widget.RoundedButton
             app:radius="2dp"
             app:background="@color/apptheme_primary_btn_light"

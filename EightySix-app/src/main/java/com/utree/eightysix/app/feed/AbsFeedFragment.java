@@ -25,7 +25,11 @@ import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
 import com.utree.eightysix.contact.ContactsSyncEvent;
-import com.utree.eightysix.data.*;
+import com.utree.eightysix.data.BaseItem;
+import com.utree.eightysix.data.Circle;
+import com.utree.eightysix.data.Feeds;
+import com.utree.eightysix.data.Paginate;
+import com.utree.eightysix.data.Post;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
 import com.utree.eightysix.request.PostPraiseCancelRequest;
 import com.utree.eightysix.request.PostPraiseRequest;
@@ -39,20 +43,19 @@ import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RandomSceneTextView;
 import com.utree.eightysix.widget.guide.Guide;
-
 import java.util.Iterator;
 
 /**
  * @author simon
  */
 public abstract class AbsFeedFragment extends BaseFragment {
-  @InjectView(R.id.lv_feed)
+  @InjectView (R.id.lv_feed)
   public AdvancedListView mLvFeed;
 
-  @InjectView(R.id.refresh_view)
+  @InjectView (R.id.refresh_view)
   public SwipeRefreshLayout mRefresherView;
 
-  @InjectView(R.id.tv_empty_text)
+  @InjectView (R.id.tv_empty_text)
   public RandomSceneTextView mRstvEmpty;
 
   protected FeedAdapter mFeedAdapter;
@@ -61,13 +64,9 @@ public abstract class AbsFeedFragment extends BaseFragment {
 
   private boolean mRefreshed;
 
-  private Guide mSourceTip;
-  private Guide mPraiseTip;
-  private Guide mShareTip;
-  private int mWorkerCount;
   private boolean mPostPraiseRequesting;
 
-  @OnItemClick(R.id.lv_feed)
+  @OnItemClick (R.id.lv_feed)
   public void onLvFeedItemClicked(int position, View view) {
     Object item = mLvFeed.getAdapter().getItem(position);
     if (item == null || !(item instanceof Post)) return;
@@ -186,12 +185,18 @@ public abstract class AbsFeedFragment extends BaseFragment {
     }
   }
 
-  public boolean onBackPressed() {
-    return hidePraiseTip() || hideSourceTip() || hideShareTip();
-  }
-
   public Circle getCircle() {
     return mCircle;
+  }
+
+  public void setCircle(int id) {
+    if (mCircle != null && mCircle.id != id) {
+      if (mLvFeed != null) mLvFeed.setAdapter(null);
+      mCircle.id = id;
+    } else {
+      mCircle = new Circle();
+      mCircle.id = id;
+    }
   }
 
   public int getFriendCount() {
@@ -210,98 +215,22 @@ public abstract class AbsFeedFragment extends BaseFragment {
     mCircle = circle;
 
     if (mCircle == null) {
-      if (U.useFixture()) {
-        mCircle = U.getFixture(Circle.class, "valid");
-      } else {
-        mCircle = Env.getLastCircle();
-      }
-    }
-
-    if (mCircle != null) {
-      if (mLvFeed != null) mLvFeed.setAdapter(null);
-
-      if (isAdded()) {
-        cacheOutFeeds(mCircle.id, 1);
-      }
-    }
-  }
-
-  public void setCircle(int id) {
-    if (mCircle != null && mCircle.id != id) {
-      if (mLvFeed != null) mLvFeed.setAdapter(null);
-    }
-
-    if (isAdded()) {
-      cacheOutFeeds(id, 1);
-    }
-  }
-
-  public void setCircle(int id, boolean skipCache) {
-    if (mCircle != null && mCircle.id != id) {
-      if (mLvFeed != null) mLvFeed.setAdapter(null);
-    }
-
-    if (isAdded()) {
-      if (skipCache) {
-        requestFeeds(id, 1);
-      } else {
-        cacheOutFeeds(id, 1);
-      }
-    }
-  }
-
-  public void setCircle(Circle circle, boolean skipCache) {
-    if (circle == null || !circle.equals(mCircle)) {
-      if (mLvFeed != null) mLvFeed.setAdapter(null);
-    }
-
-    mCircle = circle;
-
-    if (mCircle == null) {
       mCircle = Env.getLastCircle();
-    }
-
-    if (mCircle != null) {
-      if (mLvFeed != null) mLvFeed.setAdapter(null);
-
-      if (isAdded()) {
-        if (skipCache) {
-          requestFeeds(mCircle.id, 1);
-        } else {
-          cacheOutFeeds(mCircle.id, 1);
-        }
-      }
     }
   }
 
   @Override
-  public void onAttach(Activity activity) {
-    super.onAttach(activity);
-
+  protected void onActive() {
     if (mCircle != null) {
       if (mLvFeed != null) mLvFeed.setAdapter(null);
 
       if (isAdded()) {
-        cacheOutFeeds(mCircle.id, 1);
+        requestFeeds(mCircle.id, 1);
       }
     } else {
-      if (isAdded()) {
+      if (isActive()) {
         requestFeeds(0, 1);
       }
-    }
-  }
-
-  public int getCurrFriends() {
-//    if (mLvFeed != null && mFeedAdapter.getFeeds() != null) {
-//      return mFeedAdapter.getFeeds().circle.friendCount;
-//    } else {
-//      return 0;
-//    }
-//
-    if (mCircle != null) {
-      return mCircle.friendCount;
-    } else {
-      return 0;
     }
   }
 
@@ -537,36 +466,6 @@ public abstract class AbsFeedFragment extends BaseFragment {
     getBaseActivity().hideRefreshIndicator();
   }
 
-  boolean hidePraiseTip() {
-    if (mPraiseTip != null) {
-      if (mPraiseTip.isShowing()) {
-        mPraiseTip.dismiss();
-        return true;
-      }
-    }
-    return false;
-  }
-
-  boolean hideSourceTip() {
-    if (mSourceTip != null) {
-      if (mSourceTip.isShowing()) {
-        mSourceTip.dismiss();
-        return true;
-      }
-    }
-    return false;
-  }
-
-  boolean hideShareTip() {
-    if (mShareTip != null) {
-      if (mShareTip.isShowing()) {
-        mShareTip.dismiss();
-        return true;
-      }
-    }
-    return false;
-  }
-
   boolean canPublish() {
     if (mFeedAdapter != null) {
       Feeds feeds = mFeedAdapter.getFeeds();
@@ -574,5 +473,6 @@ public abstract class AbsFeedFragment extends BaseFragment {
     }
     return false;
   }
+
 
 }

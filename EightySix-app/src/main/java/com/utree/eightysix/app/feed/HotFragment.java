@@ -10,6 +10,8 @@ import com.utree.eightysix.rest.OnResponse;
  */
 class HotFragment extends AbsFeedFragment {
 
+  public HotFragment() {}
+
   @Override
   protected void requestFeeds(int id, final int page) {
     if (mRefresherView != null && page == 1) {
