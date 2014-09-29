@@ -33,6 +33,7 @@
                     android:background="@drawable/round_border_normal"
                     android:text="热帖"
                     android:textSize="14sp"
+                    android:textColor="@android:color/white"
                     android:padding="@dimen/feed_hot_padding"
                     android:visibility="invisible"/>
         </FrameLayout>
