@@ -130,7 +130,8 @@
 
     <!-- PostActivity -->
     <string name="publish_content">发表内容</string>
-    <string name="publish_post">提交</string>
+    <string name="publish_post">发表</string>
+    <string name="publish_submit">提交</string>
     <string name="publish">发表</string>
     <string name="who_will_see_this_secret">谁会看到这条秘密</string>
     <string name="add_photo">添加照片</string>

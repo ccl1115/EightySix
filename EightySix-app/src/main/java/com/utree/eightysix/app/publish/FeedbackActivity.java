@@ -12,8 +12,8 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.TopTitle;
-import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.ImageUtils;
+import com.utree.eightysix.widget.TextActionButton;
 import com.utree.eightysix.widget.panel.Item;
 
 /**
@@ -46,6 +46,8 @@ public class FeedbackActivity extends PublishActivity {
     showSoftKeyboard(mPostEditText);
 
     onIvShuffleClicked();
+
+    ((TextActionButton) getTopBar().getActionView(0)).setText(R.string.publish_submit);
   }
 
   @Override
