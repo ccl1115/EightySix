@@ -48,10 +48,10 @@
     <string name="not_found_history">你还没有搜索历史</string>
     <string name="not_found_history_tip">搜索跟你相关的朋友圈吧</string>
     <string name="not_found_post">哎哟！这里空空如也</string>
-    <string name="not_found_post_tip">点击右下角按钮，抢先发帖吧</string>
+    <string name="not_found_post_tip">去附近热门的圈子逛逛吧</string>
     <string name="not_found_comment">还没有人评论，抢个沙发吧</string>
     <string name="not_found_msg">还没有新消息哦</string>
-    <string name="not_found_msg_tip">多多发帖、互动，和大家畅快的交流吧</string>
+    <string name="not_found_msg_tip">点赞、评论过的帖子有更新时，将收到消息提醒</string>
     <string name="not_found_praise">还没有收到赞哦</string>
     <string name="not_found_praise_tip">多多发帖、回帖，积累赞数吧</string>
 
@@ -130,7 +130,7 @@
 
     <!-- PostActivity -->
     <string name="publish_content">发表内容</string>
-    <string name="publish_post">发帖</string>
+    <string name="publish_post">提交</string>
     <string name="publish">发表</string>
     <string name="who_will_see_this_secret">谁会看到这条秘密</string>
     <string name="add_photo">添加照片</string>

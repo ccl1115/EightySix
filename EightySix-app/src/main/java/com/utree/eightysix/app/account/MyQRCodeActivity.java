@@ -5,18 +5,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import butterknife.InjectView;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.app.event.QRCodeScanEvent;
 import com.utree.eightysix.drawable.RoundRectDrawable;
+import com.utree.eightysix.qrcode.QRCodeScanFragment;
 import com.utree.eightysix.utils.QRCodeGenerator;
+import com.utree.eightysix.widget.TopBar;
 
 /**
  * @author simon
@@ -30,6 +38,7 @@ public class MyQRCodeActivity extends BaseActivity {
 
   @InjectView(R.id.parent)
   public LinearLayout mParent;
+  private QRCodeScanFragment mQRCodeScanFragment;
 
   public static void start(Context context, String id) {
     Intent intent = new Intent(context, MyQRCodeActivity.class);
@@ -71,5 +80,80 @@ public class MyQRCodeActivity extends BaseActivity {
         mIvQRCode.setImageBitmap(bitmap);
       }
     });
+
+    getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
+      @Override
+      public String getTitle(int position){
+        return "扫码";
+      }
+
+      @Override
+      public Drawable getIcon(int position) {
+        return null;
+      }
+
+      @Override
+      public Drawable getBackgroundDrawable(int position) {
+        return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
+      }
+
+      @Override
+      public void onClick(View view, int position) {
+        if (position == 0) {
+          if (mQRCodeScanFragment == null) {
+            mQRCodeScanFragment = new QRCodeScanFragment();
+            getSupportFragmentManager().beginTransaction()
+                .add(android.R.id.content, mQRCodeScanFragment)
+                .commit();
+          } else if (mQRCodeScanFragment.isDetached()) {
+            getSupportFragmentManager().beginTransaction()
+                .attach(mQRCodeScanFragment)
+                .commit();
+          }
+        }
+      }
+
+      @Override
+      public int getCount() {
+        return 1;
+      }
+
+      @Override
+      public TopBar.LayoutParams getLayoutParams(int position) {
+        return new TopBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT);
+      }
+    });
+  }
+
+  @Override
+  public void onBackPressed() {
+    if (mQRCodeScanFragment != null) {
+      if (!mQRCodeScanFragment.isDetached()) {
+        getSupportFragmentManager().beginTransaction().detach(mQRCodeScanFragment).commit();
+        return;
+      }
+    }
+    super.onBackPressed();
+  }
+
+  @Subscribe
+  public void onQRCodeScanEvent(QRCodeScanEvent event) {
+    if (mQRCodeScanFragment != null) {
+      if (mQRCodeScanFragment.isAdded()) {
+        getSupportFragmentManager().beginTransaction()
+            .setCustomAnimations(R.anim.enter_from_top, R.anim.exit_to_bottom)
+            .detach(mQRCodeScanFragment)
+            .commit();
+      }
+    }
+
+    if (BuildConfig.DEBUG) {
+      showToast("scanned: " + event.getText());
+    }
+
+    if (U.getQRCodeActionDispatcher().dispatch(event.getText())) {
+      startActivity(new Intent(this, ScanFriendsActivity.class));
+    }
   }
 }

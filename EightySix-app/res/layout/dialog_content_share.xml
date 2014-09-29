@@ -22,7 +22,7 @@
             android:layout_marginBottom="20dp"
             android:textSize="13sp"
             android:textColor="#ffa2a2a2"
-            android:text="扫描二维码，立即下载"/>
+            android:text="面对面扫描二维码，即可安装"/>
 
     <View
             android:background="#fff0f0f0"

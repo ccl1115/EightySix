@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.share;
 
-import android.app.Activity;
 import android.content.Context;
 import android.text.ClipboardManager;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
@@ -34,7 +32,7 @@ public class ShareManager {
   private Shortener mShortener = new WeiboShortener();
 
   public ThemedDialog shareAppDialog(final BaseActivity activity, final Circle circle) {
-    return new ShareDialog(activity) {
+    return new ShareDialog(activity, "邀请厂里的朋友") {
       @Override
       protected Object getViewHolder(ShareDialog dialog) {
         return new ShareAppViewHolder(activity, dialog, circle);
@@ -43,7 +41,7 @@ public class ShareManager {
   }
 
   public ThemedDialog sharePostDialog(final BaseActivity activity, final Post post) {
-    return new ShareDialog(activity) {
+    return new ShareDialog(activity, "转发内容至") {
       @Override
       protected Object getViewHolder(ShareDialog dialog) {
         return new SharePostViewHolder(activity, dialog, post);
@@ -78,7 +76,7 @@ public class ShareManager {
   }
 
   public ThemedDialog shareCommentDialog(final BaseActivity activity, final Post post, final String comment) {
-    return new ShareDialog(activity) {
+    return new ShareDialog(activity, "转发内容至") {
       @Override
       protected Object getViewHolder(ShareDialog dialog) {
         return new ShareCommentViewHolder(activity, dialog, post, comment);

@@ -42,19 +42,36 @@
             android:orientation="horizontal"
             android:background="@drawable/apptheme_primary_list_selector">
 
-        <TextView
+        <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:paddingLeft="10dp"
-                android:gravity="center_vertical"
-                android:textSize="16sp"
-                android:text="@string/silent_mode"/>
+                android:orientation="vertical">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:textSize="16sp"
+                    android:text="@string/silent_mode"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:textSize="12sp"
+                    android:textColor="@color/apptheme_primary_grey_color"
+                    android:text="开启后无提示音及震动"/>
+
+        </LinearLayout>
 
         <CheckBox
                 android:id="@+id/cb_silent_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_marginRight="16dp"
                 android:checked="false"/>
 

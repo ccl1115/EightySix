@@ -20,12 +20,10 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.data.MyFriends;
-import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.request.MyFriendsRequest;
 import com.utree.eightysix.response.MyFriendsResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.QRCodeGenerator;
 import com.utree.eightysix.widget.TopBar;
 
@@ -96,7 +94,7 @@ public class AccountActivity extends BaseActivity {
     getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
       @Override
       public String getTitle(int position) {
-        return "添加";
+        return "添加新朋友";
       }
 
       @Override

@@ -102,7 +102,13 @@ class CircleListAdapter extends BaseAdapter {
     Circle item = getItem(position);
 
     holder.mTvCircleInfo.setText(item.info);
-    holder.mTvCircleName.setText(item.shortName);
+
+    if ("我所在的圈子".equals(item.viewGroupType)) {
+      holder.mTvCircleName.setText(item.shortName + "(在职)");
+    } else {
+      holder.mTvCircleName.setText(item.shortName);
+    }
+
     if (item.circleType == 1) {
       holder.mRbIcon.setText(U.gs(R.string.factory));
       holder.mRbIcon.setBackgroundColor(0xff6a51a5);

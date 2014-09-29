@@ -33,7 +33,6 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
-import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
@@ -46,20 +45,10 @@ import com.utree.eightysix.request.PublishRequest;
 import com.utree.eightysix.response.PublishPostResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.utils.ColorUtil;
-import com.utree.eightysix.utils.Env;
-import com.utree.eightysix.utils.IOUtils;
-import com.utree.eightysix.utils.ImageUtils;
-import com.utree.eightysix.utils.InputValidator;
-import com.utree.eightysix.widget.AsyncImageView;
-import com.utree.eightysix.widget.IndicatorView;
-import com.utree.eightysix.widget.PostEditText;
-import com.utree.eightysix.widget.TextActionButton;
-import com.utree.eightysix.widget.ThemedDialog;
-import com.utree.eightysix.widget.TopBar;
+import com.utree.eightysix.utils.*;
+import com.utree.eightysix.widget.*;
 import com.utree.eightysix.widget.panel.GridPanel;
 import com.utree.eightysix.widget.panel.Item;
-import de.akquinet.android.androlog.Log;
 
 import java.io.File;
 import java.util.List;
@@ -386,7 +375,6 @@ public class PublishActivity extends BaseActivity {
 
   @Override
   protected void onDestroy() {
-    Log.d("ImageUtils", "onDestroy PublishActivity");
     Env.setFirstRun(FIRST_RUN_KEY, false);
     super.onDestroy();
   }

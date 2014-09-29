@@ -21,15 +21,12 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.contact.Contact;
-import com.utree.eightysix.contact.ContactsReadEvent;
-import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.UnregContacts;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.request.UnregContactsRequest;
 import com.utree.eightysix.response.UnregContactsResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.TextActionButton;
 import com.utree.eightysix.widget.TopBar;
@@ -98,8 +95,8 @@ public class ContactsActivity extends BaseActivity {
 
     getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
       @Override
-      public String getTitle(int position) {
-        return getString(R.string.done);
+      public String getTitle(int position){
+        return "发送";
       }
 
       @Override

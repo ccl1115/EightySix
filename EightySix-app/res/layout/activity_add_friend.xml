@@ -96,7 +96,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
                     android:textColor="@color/apptheme_primary_dark_color"
-                    android:text="没匹配出新朋友，试试手动更新吧"/>
+                    android:text="没匹配出新朋友？试试手动更新吧"/>
         </LinearLayout>
 
         <ImageView
