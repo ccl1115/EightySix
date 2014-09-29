@@ -28,6 +28,7 @@
             android:clickable="false"
             android:paddingLeft="2dp"
             android:paddingRight="2dp"
+            android:minWidth="12dp"
             app:background="@color/apptheme_primary_light_color"
             app:radius="2dp"/>
 
