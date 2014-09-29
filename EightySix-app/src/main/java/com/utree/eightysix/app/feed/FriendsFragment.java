@@ -5,7 +5,6 @@ import com.squareup.otto.Subscribe;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
-import com.utree.eightysix.app.feed.event.RefreshFeedEvent;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
 import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.data.BaseItem;
@@ -24,7 +23,7 @@ import java.util.Iterator;
 /**
  * @author simon
  */
-class FriendsFragment extends AbsFeedFragment {
+public class FriendsFragment extends AbsFeedFragment {
 
   public FriendsFragment() {}
 
@@ -115,11 +114,6 @@ class FriendsFragment extends AbsFeedFragment {
         mLvFeed.setSelection(0);
       }
     }
-    if (mCircle != null) {
-      requestFeeds(mCircle.id, 1);
-    } else {
-      requestFeeds(0, 1);
-    }
   }
 
   @Subscribe
@@ -152,8 +146,4 @@ class FriendsFragment extends AbsFeedFragment {
     getBaseActivity().hideProgressBar();
   }
 
-  @Subscribe
-  public void onRefreshFeedEvent(RefreshFeedEvent event) {
-    refresh();
-  }
 }

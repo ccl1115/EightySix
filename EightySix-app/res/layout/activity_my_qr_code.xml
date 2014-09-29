@@ -5,9 +5,9 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:paddingLeft="24dp"
-             android:paddingTop="64dp"
+             android:paddingTop="100dp"
              android:paddingRight="24dp"
-             android:paddingBottom="64dp"
+             android:paddingBottom="100dp"
              android:background="#FF333435">
 
     <LinearLayout

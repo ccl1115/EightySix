@@ -24,7 +24,7 @@ import java.util.Iterator;
 /**
  * @author simon
  */
-class FeedFragment extends AbsFeedFragment {
+public class FeedFragment extends AbsFeedFragment {
 
   public FeedFragment() {
   }

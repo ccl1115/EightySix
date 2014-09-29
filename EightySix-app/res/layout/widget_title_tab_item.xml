@@ -28,7 +28,7 @@
             android:textColor="@android:color/white"
             android:visibility="invisible"
             android:clickable="false"
-            app:background="@color/apptheme_secondary_light_color"
-            app:radius="10dp"/>
+            app:background="@color/apptheme_primary_light_color"
+            app:radius="2dp"/>
 
 </RelativeLayout>

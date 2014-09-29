@@ -30,10 +30,9 @@
                     android:id="@+id/tv_hot"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/round_border_pressed"
+                    android:background="@drawable/round_border_normal"
                     android:text="热帖"
                     android:textSize="14sp"
-                    android:textColor="#FFB3B3B3"
                     android:padding="@dimen/feed_hot_padding"
                     android:visibility="invisible"/>
         </FrameLayout>

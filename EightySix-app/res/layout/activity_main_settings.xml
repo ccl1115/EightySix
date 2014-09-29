@@ -62,7 +62,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:textSize="12sp"
-                    android:textColor="@color/apptheme_primary_grey_color"
+                    android:textColor="@color/apptheme_primary_grey_color_pressed"
                     android:text="开启后无提示音及震动"/>
 
         </LinearLayout>

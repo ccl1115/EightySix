@@ -22,7 +22,7 @@ import com.utree.eightysix.widget.TitleTab;
 /**
  * @author simon
  */
-class TabFragment extends BaseFragment {
+public class TabFragment extends BaseFragment {
 
   @InjectView (R.id.vp_tab)
   public ViewPager mVpTab;
@@ -207,17 +207,17 @@ class TabFragment extends BaseFragment {
 
   @Subscribe
   public void onNewAllPostCountEvent(NewAllPostCountEvent event) {
-    mTtTab.setTabBudget(0, String.valueOf(event.getCount()), event.getCount() == 0);
+    mTtTab.setTabBudget(0, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
   }
 
   @Subscribe
   public void onNewHotPostCountEvent(NewHotPostCountEvent event) {
-    mTtTab.setTabBudget(1, String.valueOf(event.getCount()), event.getCount() == 0);
+    mTtTab.setTabBudget(1, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
   }
 
   @Subscribe
   public void onNewFriendsPostCountEvent(NewFriendsPostCountEvent event) {
-    mTtTab.setTabBudget(2, String.valueOf(event.getCount()), event.getCount() == 0);
+    mTtTab.setTabBudget(2, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
   }
 
   private void clearActive() {
