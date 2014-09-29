@@ -243,9 +243,5 @@ public class RESTRequester implements IRESTRequester {
 
   private void compact() {
     HttpProtocolParams.setUseExpectContinue(mAsyncHttpClient.getHttpClient().getParams(), false);
-    AsyncHttpClient.allowRetryExceptionClass(ClientProtocolException.class);
-    AsyncHttpClient.allowRetryExceptionClass(SocketTimeoutException.class);
-    AsyncHttpClient.allowRetryExceptionClass(ConnectTimeoutException.class);
-    AsyncHttpClient.allowRetryExceptionClass(SocketException.class);
   }
 }
