@@ -74,10 +74,11 @@ public class RESTRequester implements IRESTRequester {
           new TDefaultHttpClient(new ThreadSafeClientConnManager(httpParams, schemeRegistry), httpParams)
               .getDefaultHttpClient());
     } catch (NoSuchFieldException e) {
-      e.printStackTrace();
+      if (BuildConfig.DEBUG) e.printStackTrace();
     } catch (IllegalAccessException e) {
-      e.printStackTrace();
+      if (BuildConfig.DEBUG) e.printStackTrace();
     }
+    mAsyncHttpClient.setMaxRetriesAndTimeout(U.getConfigInt("api.retry"), U.getConfigInt("api.retry.timeout"));
     compact();
   }
 
