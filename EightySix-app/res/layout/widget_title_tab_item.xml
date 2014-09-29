@@ -26,6 +26,7 @@
             android:textColor="@android:color/white"
             android:visibility="invisible"
             android:clickable="false"
+            android:padding="2dp"
             app:background="@color/apptheme_primary_light_color"
             app:radius="2dp"/>
 
