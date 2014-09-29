@@ -136,7 +136,7 @@ public class PostActivity extends BaseActivity {
 
     String[] items;
     String like = comment.praised == 1 ? getString(R.string.unlike) : getString(R.string.like);
-    if (comment.self == 1 || comment.owner == 1) {
+    if (comment.self == 1) {
       items = new String[]{like, getString(R.string.share), getString(R.string.report), getString(R.string.delete)};
     } else {
       items = new String[]{like, getString(R.string.share), getString(R.string.report)};

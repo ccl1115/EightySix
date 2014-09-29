@@ -34,12 +34,33 @@ public class WeiboShortener implements Shortener {
           }
 
           @Override
+          public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+            super.onSuccess(statusCode, headers, response);
+          }
+
+          @Override
+          public void onSuccess(int statusCode, Header[] headers, String responseString) {
+            super.onSuccess(statusCode, headers, responseString);
+          }
+
+          @Override
           public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
             if (BuildConfig.DEBUG) {
               throwable.printStackTrace();
             }
             callback.onShorten(null);
           }
+
+          @Override
+          public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+            super.onFailure(statusCode, headers, throwable, errorResponse);
+          }
+
+          @Override
+          public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+            super.onFailure(statusCode, headers, throwable, errorResponse);
+          }
+
         });
 
   }
