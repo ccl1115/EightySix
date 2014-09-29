@@ -114,7 +114,7 @@
                 android:textColorHint="@color/apptheme_primary_dark_color"
                 android:hint="请填写他的姓名"
                 android:inputType="text"
-                android:background="@color/apptheme_primary_grey_color"
+                android:background="@color/apptheme_primary_grey_color_disabled"
                 android:visibility="gone"/>
 
         <TextView
