@@ -1,17 +1,14 @@
 package com.utree.eightysix.app.feed;
 
-import android.view.View;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
-import com.utree.eightysix.app.publish.event.PostPublishedEvent;
 import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.FeedsFriendsRequest;
 import com.utree.eightysix.request.FeedsHotRequest;
-import com.utree.eightysix.request.PostPraiseCancelRequest;
 import com.utree.eightysix.request.PostPraiseRequest;
 import com.utree.eightysix.response.FeedsResponse;
 import com.utree.eightysix.rest.OnResponse;
@@ -59,29 +56,7 @@ public class HotFragment extends AbsFeedFragment {
       return;
     }
     mPostPraiseRequesting = true;
-    if (event.isCancel()) {
-      getBaseActivity().request(new PostPraiseCancelRequest(event.getPost().id), new OnResponse2<Response>() {
-        @Override
-        public void onResponse(Response response) {
-          if (RESTRequester.responseOk(response)) {
-            U.getBus().post(event.getPost());
-          } else if ((response.code & 0xffff) == 0x2286) {
-            event.getPost().praised = 0;
-          } else {
-            event.getPost().praised = 0;
-            event.getPost().praise++;
-          }
-          mFeedAdapter.notifyDataSetChanged();
-
-          mPostPraiseRequesting = false;
-        }
-
-        @Override
-        public void onResponseError(Throwable e) {
-          mPostPraiseRequesting = false;
-        }
-      }, Response.class);
-    } else {
+    if (!event.isCancel()) {
       getBaseActivity().request(new PostPraiseRequest(event.getPost().id), new OnResponse2<Response>() {
         @Override
         public void onResponse(Response response) {
@@ -103,17 +78,6 @@ public class HotFragment extends AbsFeedFragment {
           mPostPraiseRequesting = false;
         }
       }, Response.class);
-    }
-  }
-
-  @Subscribe
-  public void onPostPublishedEvent(PostPublishedEvent event) {
-    if (mFeedAdapter != null) {
-      if (mCircle != null && mCircle.id == event.getCircleId()) {
-        mFeedAdapter.add(event.getPost());
-        mRstvEmpty.setVisibility(View.INVISIBLE);
-        mLvFeed.setSelection(0);
-      }
     }
   }
 

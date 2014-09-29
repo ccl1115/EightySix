@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.feed;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -225,19 +224,7 @@ public class FeedPostView extends BasePostView {
 
   @OnClick (R.id.tv_praise)
   public void onTvPraiseClicked() {
-    if (mPost.praised == 1) {
-      U.getAnalyser().trackEvent(U.getContext(), "feed_post_praise", "cancel");
-      AnimatorSet unlikeAnimator = new AnimatorSet();
-      unlikeAnimator.setDuration(500);
-      unlikeAnimator.playTogether(
-          ObjectAnimator.ofFloat(mTvPraise, "scaleX", 1, 0.8f, 1),
-          ObjectAnimator.ofFloat(mTvPraise, "scaleY", 1, 0.8f, 1)
-      );
-      unlikeAnimator.start();
-      mPost.praised = 0;
-      mPost.praise--;
-      U.getBus().post(new FeedPostPraiseEvent(mPost, true));
-    } else {
+    if (mPost.praised != 1) {
       U.getAnalyser().trackEvent(U.getContext(), "feed_post_praise", "praise");
       AnimatorSet praiseAnimator = new AnimatorSet();
       praiseAnimator.setDuration(800);

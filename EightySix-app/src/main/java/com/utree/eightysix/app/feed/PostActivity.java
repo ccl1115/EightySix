@@ -300,21 +300,7 @@ public class PostActivity extends BaseActivity {
     }
 
     mPostCommentPraiseRequesting = true;
-    if (event.isCancel()) {
-      request(new CommentPraiseCancelRequest(mPost.id, event.getComment().id), new OnResponse<Response>() {
-        @Override
-        public void onResponse(Response response) {
-          if (response == null || response.code != 0) {
-            event.getComment().praised = 1;
-            event.getComment().praise++;
-          } else if ((response.code & 0xffff) == 0x2117) {
-            event.getComment().praised = 0;
-          }
-          mPostCommentsAdapter.notifyDataSetChanged();
-          mPostCommentPraiseRequesting = false;
-        }
-      }, Response.class);
-    } else {
+    if (!event.isCancel()) {
       request(new CommentPraiseRequest(mPost.id, event.getComment().id), new OnResponse<Response>() {
         @Override
         public void onResponse(Response response) {
@@ -337,28 +323,7 @@ public class PostActivity extends BaseActivity {
     if (mPostPraiseRequesting) return;
 
     mPostPraiseRequesting = true;
-    if (event.isCancel()) {
-      request(new PostPraiseCancelRequest(event.getPost().id), new OnResponse2<Response>() {
-        @Override
-        public void onResponse(Response response) {
-          if (RESTRequester.responseOk(response)) {
-            U.getBus().post(event.getPost());
-          } else if ((response.code & 0xffff) == 0x2286) {
-            event.getPost().praised = 0;
-          } else {
-            event.getPost().praised = 0;
-            event.getPost().praise++;
-          }
-          mPostCommentsAdapter.notifyDataSetChanged();
-          mPostPraiseRequesting = false;
-        }
-
-        @Override
-        public void onResponseError(Throwable e) {
-          mPostPraiseRequesting = false;
-        }
-      }, Response.class);
-    } else {
+    if (!event.isCancel()) {
       request(new PostPraiseRequest(event.getPost().id), new OnResponse2<Response>() {
         @Override
         public void onResponse(Response response) {

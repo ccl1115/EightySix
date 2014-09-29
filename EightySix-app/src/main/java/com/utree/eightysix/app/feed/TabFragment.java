@@ -16,6 +16,7 @@ import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
+import com.utree.eightysix.app.publish.event.PostPublishedEvent;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.widget.TitleTab;
 
@@ -220,9 +221,14 @@ public class TabFragment extends BaseFragment {
     mTtTab.setTabBudget(2, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
   }
 
+  @Subscribe
+  public void onPostPublishedEvent(PostPublishedEvent event) {
+    mVpTab.setCurrentItem(0);
+  }
+
   private void clearActive() {
-    mFeedFragment.setActive(false);
-    mHotFragment.setActive(false);
-    mFriendsFragment.setActive(false);
+    if (mFeedFragment != null)  mFeedFragment.setActive(false);
+    if (mHotFragment != null) mHotFragment.setActive(false);
+    if (mFriendsFragment != null)  mFriendsFragment.setActive(false);
   }
 }

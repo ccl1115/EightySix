@@ -135,7 +135,7 @@ public class PostPostView extends BasePostView {
     U.getAnalyser().trackEvent(U.getContext(), "post_more", "post_more");
     new AlertDialog.Builder(getContext()).setTitle(U.gs(R.string.post_action))
         .setItems(new String[]{U.gs(R.string.share), U.gs(R.string.report),
-                mPost.praised == 1 ? U.gs(R.string.unlike) : U.gs(R.string.like),
+                U.gs(R.string.like),
                 U.gs(R.string.delete)},
             new DialogInterface.OnClickListener() {
               @Override
@@ -151,10 +151,7 @@ public class PostPostView extends BasePostView {
                     break;
                   case 2:
                     if (mPost == null) return;
-                    if (mPost.praised == 1) {
-                      U.getAnalyser().trackEvent(U.getContext(), "post_more_praise", "cancel");
-                      doCancelPraise();
-                    } else {
+                    if (mPost.praised != 1) {
                       U.getAnalyser().trackEvent(U.getContext(), "post_more_praise", "praise");
                       doPraise();
                     }
@@ -172,10 +169,7 @@ public class PostPostView extends BasePostView {
   @OnClick (R.id.tv_praise)
   public void onTvPraiseClicked() {
     if (mPost == null) return;
-    if (mPost.praised == 1) {
-      U.getAnalyser().trackEvent(U.getContext(), "post_praise", "cancel");
-      doCancelPraise();
-    } else {
+    if (mPost.praised != 1) {
       U.getAnalyser().trackEvent(U.getContext(), "post_praise", "praise");
       doPraise();
     }
@@ -193,19 +187,6 @@ public class PostPostView extends BasePostView {
     mPost.praised = 1;
     mPost.praise++;
     U.getBus().post(new PostPostPraiseEvent(mPost, false));
-  }
-
-  private void doCancelPraise() {
-    AnimatorSet unlikeAnimator = new AnimatorSet();
-    unlikeAnimator.setDuration(500);
-    unlikeAnimator.playTogether(
-        ObjectAnimator.ofFloat(mTvPraise, "scaleX", 1, 0.8f, 1),
-        ObjectAnimator.ofFloat(mTvPraise, "scaleY", 1, 0.8f, 1)
-    );
-    unlikeAnimator.start();
-    mPost.praised = 0;
-    mPost.praise--;
-    U.getBus().post(new PostPostPraiseEvent(mPost, true));
   }
 
   @Override

@@ -166,14 +166,9 @@ class PostCommentsAdapter extends BaseAdapter {
     holder.mIvHeart.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        comment.praised = comment.praised == 1 ? 0 : 1;
-        if (comment.praised == 1) {
-          comment.praise++;
-          U.getBus().post(new PostCommentPraiseEvent(comment, false));
-        } else {
-          comment.praise--;
-          U.getBus().post(new PostCommentPraiseEvent(comment, true));
-        }
+        comment.praised = 1;
+        comment.praise--;
+        U.getBus().post(new PostCommentPraiseEvent(comment, true));
         notifyDataSetChanged();
       }
     });
