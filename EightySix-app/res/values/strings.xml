@@ -172,7 +172,7 @@
     <string name="current_location">当前位置</string>
     <string name="enter_captcha">输入验证码</string>
     <string name="change_captcha">换一张</string>
-    <string name="invite_people">邀请朋友</string>
+    <string name="invite_people">去邀请朋友</string>
     <string name="invite_people_info">邀请好友进入（需要3个朋友加入，才可以开通）</string>
     <string name="circle_name_length_long">朋友圈名字太长</string>
     <string name="circle_short_name_length_long">朋友圈短名称太长</string>
@@ -187,7 +187,7 @@
     <string name="about">蓝莓的故事</string>
     <string name="no_publish_perm_tip">如果这里有%1$d个朋友在职，就能证明你也在这里工作过，就可以发帖啦。</string>
     <string name="no_perm_tip">为杜绝捣乱，只有证明你曾经在这里工作过，才可以发帖！\n\n解锁条件：当你有三个朋友把这里设为在职时，就能解锁发帖啦！</string>
-    <string name="unlock_tip">当在厂里的朋友数量小于%1$d时，就太容易被你猜出作者是谁啦！为了保护作者，系统将隐藏他们发的秘密。\n\n解锁条件：厂里有%2$d个熟人在玩时，将立刻全部解锁。</string>
+    <string name="unlock_tip">当在厂里的朋友数量小于%1$d时，就太容易被你猜出作者是谁啦！为了保护作者，系统将隐藏他们发的秘密。\n\n解锁条件：厂里有%2$d个熟人在玩时，将立刻解锁朋友的秘密。</string>
 
     <!-- PostActivity -->
     <string name="comment">评论</string>
