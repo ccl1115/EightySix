@@ -167,7 +167,7 @@ class PostCommentsAdapter extends BaseAdapter {
       @Override
       public void onClick(View v) {
         comment.praised = 1;
-        comment.praise--;
+        comment.praise++;
         U.getBus().post(new PostCommentPraiseEvent(comment, true));
         notifyDataSetChanged();
       }
