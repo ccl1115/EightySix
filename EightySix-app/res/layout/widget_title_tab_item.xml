@@ -26,7 +26,10 @@
             android:textColor="@android:color/white"
             android:visibility="invisible"
             android:clickable="false"
-            android:padding="4dp"
+            android:paddingLeft="4dp"
+            android:paddingTop="2dp"
+            android:paddingRight="4dp"
+            android:paddingBottom="2dp"
             app:background="@color/apptheme_primary_light_color"
             app:radius="2dp"/>
 
