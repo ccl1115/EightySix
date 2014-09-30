@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.utree.eightysix</groupId>
 		<artifactId>EightySix-parent</artifactId>
-		<version>1.2.0</version>
+		<version>1.2.1</version>
 	</parent>
 
 	<artifactId>EightySix-it</artifactId>
@@ -30,7 +30,7 @@
 			<groupId>com.utree.eightysix</groupId>
 			<artifactId>EightySix-app</artifactId>
 			<type>apk</type>
-			<version>1.2.0</version>
+			<version>1.2.1</version>
             <exclusions>
                 <exclusion>
                     <groupId>*</groupId>
@@ -47,7 +47,7 @@
         <dependency>
             <groupId>com.utree.eightysix</groupId>
             <artifactId>EightySix-app</artifactId>
-            <version>1.2.0</version>
+            <version>1.2.1</version>
             <type>jar</type>
             <scope>provided</scope>
         </dependency>
@@ -55,7 +55,7 @@
         <dependency>
             <groupId>com.utree.eightysix</groupId>
             <artifactId>EightySix-data</artifactId>
-            <version>1.2.0</version>
+            <version>1.2.1</version>
         </dependency>
     </dependencies>
 

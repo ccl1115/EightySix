@@ -149,16 +149,10 @@ public class PostActivity extends BaseActivity {
               public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                   case 0:
-                    comment.praised = comment.praised == 1 ? 0 : 1;
-                    if (comment.praised == 1) {
-                      comment.praise++;
-                      U.getBus().post(new PostCommentPraiseEvent(comment, false));
-                      U.getAnalyser().trackEvent(U.getContext(), "comment_more_praise", "praise");
-                    } else {
-                      comment.praise = Math.max(0, comment.praise - 1);
-                      U.getBus().post(new PostCommentPraiseEvent(comment, true));
-                      U.getAnalyser().trackEvent(U.getContext(), "comment_more_praise", "cancel");
-                    }
+                    comment.praised = 1;
+                    comment.praise++;
+                    U.getBus().post(new PostCommentPraiseEvent(comment, false));
+                    U.getAnalyser().trackEvent(U.getContext(), "comment_more_praise", "praise");
                     mPostCommentsAdapter.notifyDataSetChanged();
                     break;
                   case 1:

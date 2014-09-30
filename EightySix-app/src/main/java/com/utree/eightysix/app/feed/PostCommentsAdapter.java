@@ -168,7 +168,7 @@ class PostCommentsAdapter extends BaseAdapter {
       public void onClick(View v) {
         comment.praised = 1;
         comment.praise++;
-        U.getBus().post(new PostCommentPraiseEvent(comment, true));
+        U.getBus().post(new PostCommentPraiseEvent(comment, false));
         notifyDataSetChanged();
       }
     });
