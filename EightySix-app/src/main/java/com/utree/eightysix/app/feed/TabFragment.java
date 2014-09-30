@@ -36,6 +36,9 @@ public class TabFragment extends BaseFragment {
   private Circle mCircle;
 
   public TabFragment() {
+    mFeedFragment = new FeedFragment();
+    mHotFragment = new HotFragment();
+    mFriendsFragment = new FriendsFragment();
   }
 
   @Override
@@ -46,10 +49,6 @@ public class TabFragment extends BaseFragment {
   @Override
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
-
-    mFeedFragment = new FeedFragment();
-    mHotFragment = new HotFragment();
-    mFriendsFragment = new FriendsFragment();
 
     mVpTab.setOffscreenPageLimit(2);
 
