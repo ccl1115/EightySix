@@ -135,11 +135,10 @@ public class PostActivity extends BaseActivity {
     U.getAnalyser().trackEvent(this, "comment_more", "comment_more");
 
     String[] items;
-    String like = comment.praised == 1 ? getString(R.string.unlike) : getString(R.string.like);
     if (comment.self == 1) {
-      items = new String[]{like, getString(R.string.share), getString(R.string.report), getString(R.string.delete)};
+      items = new String[]{getString(R.string.like), getString(R.string.share), getString(R.string.report), getString(R.string.delete)};
     } else {
-      items = new String[]{like, getString(R.string.share), getString(R.string.report)};
+      items = new String[]{getString(R.string.like), getString(R.string.share), getString(R.string.report)};
     }
 
     mCommentContextDialog = new AlertDialog.Builder(this).setTitle(getString(R.string.comment_action))
@@ -149,11 +148,13 @@ public class PostActivity extends BaseActivity {
               public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                   case 0:
-                    comment.praised = 1;
-                    comment.praise++;
-                    U.getBus().post(new PostCommentPraiseEvent(comment, false));
-                    U.getAnalyser().trackEvent(U.getContext(), "comment_more_praise", "praise");
-                    mPostCommentsAdapter.notifyDataSetChanged();
+                    if (comment.praised != 1) {
+                      comment.praised = 1;
+                      comment.praise++;
+                      U.getBus().post(new PostCommentPraiseEvent(comment, false));
+                      U.getAnalyser().trackEvent(U.getContext(), "comment_more_praise", "praise");
+                      mPostCommentsAdapter.notifyDataSetChanged();
+                    }
                     break;
                   case 1:
                     U.getAnalyser().trackEvent(PostActivity.this, "comment_more_share", "comment_more_share");
@@ -298,13 +299,6 @@ public class PostActivity extends BaseActivity {
       request(new CommentPraiseRequest(mPost.id, event.getComment().id), new OnResponse<Response>() {
         @Override
         public void onResponse(Response response) {
-          if (response == null || response.code != 0) {
-            event.getComment().praised = 0;
-            event.getComment().praise = Math.max(0, event.getComment().praise - 1);
-          } else if ((response.code & 0xffff) == 0x2117) {
-            event.getComment().praised = 1;
-          }
-          mPostCommentsAdapter.notifyDataSetChanged();
           mPostCommentPraiseRequesting = false;
         }
       }, Response.class);
