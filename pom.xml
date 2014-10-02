@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.utree.eightysix</groupId>
     <artifactId>EightySix-parent</artifactId>
-    <version>1.2.1</version>
+    <version>1.2.2</version>
     <packaging>pom</packaging>
     <name>EightySix - Parent</name>
 
@@ -219,13 +219,13 @@
             <dependency>
                 <groupId>com.squareup.dagger</groupId>
                 <artifactId>dagger</artifactId>
-                <version>1.2.1</version>
+                <version>1.2.2</version>
             </dependency>
 
             <dependency>
                 <groupId>com.squareup.dagger</groupId>
                 <artifactId>dagger-compiler</artifactId>
-                <version>1.2.1</version>
+                <version>1.2.2</version>
             </dependency>
 
             <dependency>

@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.feed;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,41 +8,28 @@ import android.widget.AbsListView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
-import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
-import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
-import com.utree.eightysix.app.feed.event.PostDeleteEvent;
-import com.utree.eightysix.app.feed.event.RefreshFeedEvent;
 import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
 import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
-import com.utree.eightysix.app.publish.event.PostPublishedEvent;
-import com.utree.eightysix.contact.ContactsSyncEvent;
-import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Feeds;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
-import com.utree.eightysix.request.PostPraiseCancelRequest;
-import com.utree.eightysix.request.PostPraiseRequest;
 import com.utree.eightysix.response.FeedsResponse;
-import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RandomSceneTextView;
-import com.utree.eightysix.widget.guide.Guide;
-import java.util.Iterator;
 
 /**
  * @author simon
@@ -61,8 +47,6 @@ public abstract class AbsFeedFragment extends BaseFragment {
   protected FeedAdapter mFeedAdapter;
   protected Circle mCircle;
   protected Paginate.Page mPageInfo;
-
-  private boolean mRefreshed;
 
   protected boolean mPostPraiseRequesting;
 
@@ -97,11 +81,7 @@ public abstract class AbsFeedFragment extends BaseFragment {
       @Override
       public boolean onLoadMoreStart() {
         U.getAnalyser().trackEvent(getActivity(), "feed_load_more", String.valueOf(mPageInfo.currPage + 1));
-        if (mRefreshed) {
-          requestFeeds(mCircle.id, mPageInfo == null ? 1 : mPageInfo.currPage + 1);
-        } else {
-          cacheOutFeeds(mCircle.id, mPageInfo == null ? 1 : mPageInfo.currPage + 1);
-        }
+        requestFeeds(mCircle.id, mPageInfo == null ? 1 : mPageInfo.currPage + 1);
         return true;
       }
     });
@@ -113,7 +93,6 @@ public abstract class AbsFeedFragment extends BaseFragment {
       public void onRefresh() {
         getBaseActivity().showRefreshIndicator(true);
         U.getAnalyser().trackEvent(getActivity(), "feed_pull_refresh", "feed_pull_refresh");
-        mRefreshed = true;
         if (mCircle != null) {
           requestFeeds(mCircle.id, 1);
         } else {
@@ -239,7 +218,6 @@ public abstract class AbsFeedFragment extends BaseFragment {
   }
 
   public void refresh() {
-    mRefreshed = true;
     getBaseActivity().showProgressBar();
     if (mCircle != null) {
       requestFeeds(mCircle.id, 1);
@@ -260,7 +238,7 @@ public abstract class AbsFeedFragment extends BaseFragment {
 
   protected abstract void requestFeeds(final int id, final int page);
 
-  protected void responseForRequest(FeedsResponse response, int page) {
+  protected void responseForRequest(int circleId, FeedsResponse response, int page) {
     if (RESTRequester.responseOk(response)) {
       if (page == 1) {
         mCircle = response.object.circle;
@@ -312,13 +290,7 @@ public abstract class AbsFeedFragment extends BaseFragment {
 
       FetchNotificationService.setCircleId(mCircle.id);
     } else {
-      if (mFeedAdapter != null && mFeedAdapter.getCount() == 0) {
-        mRstvEmpty.setVisibility(View.VISIBLE);
-      }
-      if (mCircle != null) {
-        getBaseActivity().setTopTitle(mCircle.shortName);
-      }
-      getBaseActivity().setTopSubTitle("");
+      cacheOutFeeds(circleId, page);
     }
     mRefresherView.setRefreshing(false);
     mLvFeed.stopLoadMore();
@@ -355,7 +327,13 @@ public abstract class AbsFeedFragment extends BaseFragment {
 
       FetchNotificationService.setCircleId(mCircle.id);
     } else {
-      requestFeeds(id, page);
+      if (mFeedAdapter != null && mFeedAdapter.getCount() == 0) {
+        mRstvEmpty.setVisibility(View.VISIBLE);
+      }
+      if (mCircle != null) {
+        getBaseActivity().setTopTitle(mCircle.shortName);
+      }
+      getBaseActivity().setTopSubTitle("");
     }
     mRefresherView.setRefreshing(false);
     mLvFeed.stopLoadMore();

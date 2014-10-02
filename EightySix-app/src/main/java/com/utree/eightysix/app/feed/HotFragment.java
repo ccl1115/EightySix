@@ -26,7 +26,7 @@ public class HotFragment extends AbsFeedFragment {
   public HotFragment() {}
 
   @Override
-  protected void requestFeeds(int id, final int page) {
+  protected void requestFeeds(final int id, final int page) {
     if (mRefresherView != null && page == 1) {
       mRefresherView.setRefreshing(true);
       getBaseActivity().setTopSubTitle("");
@@ -34,7 +34,7 @@ public class HotFragment extends AbsFeedFragment {
     getBaseActivity().request(new FeedsHotRequest(id, page), new OnResponse<FeedsResponse>() {
       @Override
       public void onResponse(FeedsResponse response) {
-        responseForRequest(response, page);
+        responseForRequest(id, response, page);
       }
     }, FeedsResponse.class);
 

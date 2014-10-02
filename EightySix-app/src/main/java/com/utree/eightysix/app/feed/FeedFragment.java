@@ -30,7 +30,7 @@ public class FeedFragment extends AbsFeedFragment {
   }
 
   @Override
-  protected void requestFeeds(int id, final int page) {
+  protected void requestFeeds(final int id, final int page) {
     if (getBaseActivity() == null) return;
     if (mRefresherView != null && page == 1) {
       mRefresherView.setRefreshing(true);
@@ -39,7 +39,7 @@ public class FeedFragment extends AbsFeedFragment {
     getBaseActivity().request(new FeedsRequest(id, page), new OnResponse<FeedsResponse>() {
       @Override
       public void onResponse(FeedsResponse response) {
-        responseForRequest(response, page);
+        responseForRequest(id, response, page);
       }
     }, FeedsResponse.class);
 
