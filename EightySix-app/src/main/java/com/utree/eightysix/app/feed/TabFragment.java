@@ -146,6 +146,8 @@ public class TabFragment extends BaseFragment {
     mHotFragment.setCircle(circle);
     mFriendsFragment.setCircle(circle);
 
+    if (mVpTab == null) return;
+
     switch (mVpTab.getCurrentItem()) {
       case 0:
         mFeedFragment.setActive(true);

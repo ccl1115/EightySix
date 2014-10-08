@@ -119,10 +119,12 @@ public class FeedFragment extends AbsFeedFragment {
         mLvFeed.setSelection(0);
       }
     }
-    if (mCircle != null) {
-      requestFeeds(mCircle.id, 1);
-    } else {
-      requestFeeds(0, 1);
+    if (isAdded()) {
+      if (mCircle != null) {
+        requestFeeds(mCircle.id, 1);
+      } else {
+        requestFeeds(0, 1);
+      }
     }
   }
 

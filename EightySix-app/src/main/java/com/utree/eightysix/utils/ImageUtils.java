@@ -652,7 +652,7 @@ public class ImageUtils {
           edit = U.getImageCache().edit(mHash);
           os = edit.newOutputStream(0);
           IOUtils.copyFile(new FileInputStream(mFile), os);
-        } catch (IOException ignored) {
+        } catch (Exception ignored) {
           Log.e(TAG, "Put disk cache IOException: " + ignored.getMessage());
         } finally {
           if (os != null) {

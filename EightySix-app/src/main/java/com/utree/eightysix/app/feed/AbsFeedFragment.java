@@ -35,13 +35,13 @@ import com.utree.eightysix.widget.RandomSceneTextView;
  * @author simon
  */
 public abstract class AbsFeedFragment extends BaseFragment {
-  @InjectView (R.id.lv_feed)
+  @InjectView(R.id.lv_feed)
   public AdvancedListView mLvFeed;
 
-  @InjectView (R.id.refresh_view)
+  @InjectView(R.id.refresh_view)
   public SwipeRefreshLayout mRefresherView;
 
-  @InjectView (R.id.tv_empty_text)
+  @InjectView(R.id.tv_empty_text)
   public RandomSceneTextView mRstvEmpty;
 
   protected FeedAdapter mFeedAdapter;
@@ -50,7 +50,7 @@ public abstract class AbsFeedFragment extends BaseFragment {
 
   protected boolean mPostPraiseRequesting;
 
-  @OnItemClick (R.id.lv_feed)
+  @OnItemClick(R.id.lv_feed)
   public void onLvFeedItemClicked(int position, View view) {
     Object item = mLvFeed.getAdapter().getItem(position);
     if (item == null || !(item instanceof Post)) return;
@@ -93,10 +93,12 @@ public abstract class AbsFeedFragment extends BaseFragment {
       public void onRefresh() {
         getBaseActivity().showRefreshIndicator(true);
         U.getAnalyser().trackEvent(getActivity(), "feed_pull_refresh", "feed_pull_refresh");
-        if (mCircle != null) {
-          requestFeeds(mCircle.id, 1);
-        } else {
-          requestFeeds(0, 1);
+        if (isAdded()) {
+          if (mCircle != null) {
+            requestFeeds(mCircle.id, 1);
+          } else {
+            requestFeeds(0, 1);
+          }
         }
       }
 
@@ -220,12 +222,15 @@ public abstract class AbsFeedFragment extends BaseFragment {
   public void refresh() {
     getBaseActivity().showProgressBar();
     if (mCircle != null) {
-      requestFeeds(mCircle.id, 1);
+      if (isAdded()) {
+        requestFeeds(mCircle.id, 1);
+      }
     } else {
-      requestFeeds(0, 1);
+      if (isAdded()) {
+        requestFeeds(0, 1);
+      }
     }
   }
-
 
 
   public int getWorkerCount() {
