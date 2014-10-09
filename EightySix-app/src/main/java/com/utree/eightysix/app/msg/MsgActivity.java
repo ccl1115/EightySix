@@ -51,7 +51,7 @@ public class MsgActivity extends BaseActivity {
   private MsgAdapter mMsgAdapter;
   private Paginate.Page mPageInfo;
 
-  private boolean mRefreshed;
+  private boolean mRefreshed = true;
 
   public static void start(Context context, boolean refresh) {
     Intent intent = new Intent(context, MsgActivity.class);
@@ -74,7 +74,6 @@ public class MsgActivity extends BaseActivity {
         R.color.apptheme_primary_light_color,
         R.color.apptheme_primary_light_color_pressed);
 
-    mRefreshed = getIntent().getBooleanExtra("refresh", false);
     if (mRefreshed) {
       requestMsgs(1);
     } else {
@@ -196,10 +195,7 @@ public class MsgActivity extends BaseActivity {
           }
           mPageInfo = response.object.posts.page;
         } else {
-          if (mMsgAdapter == null || mMsgAdapter.getCount() == 0) {
-            mRstvEmpty.setVisibility(View.VISIBLE);
-            mTvNoNewMsg.setVisibility(View.GONE);
-          }
+          cacheOutMsg(page);
         }
         hideProgressBar();
         hideRefreshIndicator();
@@ -255,7 +251,10 @@ public class MsgActivity extends BaseActivity {
           mAlvMsg.stopLoadMore();
           mRvMsg.setRefreshing(false);
         } else {
-          requestMsgs(page);
+          if (mMsgAdapter == null || mMsgAdapter.getCount() == 0) {
+            mRstvEmpty.setVisibility(View.VISIBLE);
+            mTvNoNewMsg.setVisibility(View.GONE);
+          }
         }
       }
 

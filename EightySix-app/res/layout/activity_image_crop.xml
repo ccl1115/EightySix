@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
              android:orientation="vertical"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
@@ -11,14 +12,32 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-    <com.utree.eightysix.widget.RoundedButton
-            android:id="@+id/rb_okay"
+    <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
             android:layout_marginBottom="24dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:text="@string/okay"/>
+            android:orientation="horizontal">
+
+        <com.utree.eightysix.widget.RoundedButton
+                android:id="@+id/rb_rotate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="32dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@string/rotate"
+                android:textColor="@color/apptheme_primary_text_dark"
+                app:background="@color/apptheme_primary_white_btn"/>
+
+        <com.utree.eightysix.widget.RoundedButton
+                android:id="@+id/rb_okay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@string/okay"/>
+
+    </LinearLayout>
 
 </FrameLayout>

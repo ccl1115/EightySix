@@ -16,6 +16,7 @@ import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.widget.RoundedButton;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -29,11 +30,18 @@ import java.io.OutputStream;
 @TopTitle(R.string.crop_image)
 public class ImageCropActivity extends BaseActivity {
 
+  private int mRotateDegree;
 
   @InjectView(R.id.civ_crop)
   public CropImageView mCivCrop;
 
-  @OnClick (R.id.rb_okay)
+  @OnClick(R.id.rb_rotate)
+  public void onRbRotateClicked() {
+    mRotateDegree += 90;
+    mCivCrop.rotateImage(mRotateDegree % 360);
+  }
+
+  @OnClick(R.id.rb_okay)
   public void onRbOkayClicked() {
     File cropped = IOUtils.createTmpFile("crop_image");
 
