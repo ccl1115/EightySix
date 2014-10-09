@@ -462,24 +462,7 @@ public class FeedActivity extends BaseActivity {
         requestSideCircle();
       }
     }, 500);
-    //if (mSideCircles != null) {
-    //  for (Iterator<Circle> iterator = mSideCircles.iterator(); iterator.hasNext(); ) {
-    //    Circle c = iterator.next()
-    // ;
-    //    if (c == null) iterator.remove();
-    //  }
-    //  selectSideCircle(mSideCircles);
-    //  mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
-    //  mLvSideCircles.setAdapter(mSideCirclesAdapter);
-    //} else if (U.useFixture()) {
-    //  mSideCircles = U.getFixture(Circle.class, 10, "valid");
-    //  selectSideCircle(mSideCircles);
-    //  mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
-    //  mLvSideCircles.setAdapter(mSideCirclesAdapter);
-    //} else {
-    //  cacheOutSideCircle();
-    //}
-    //endregion
+
 
     setHasNewPraise();
     setNewCommentCount();
@@ -656,8 +639,6 @@ public class FeedActivity extends BaseActivity {
     if (circle == null) return;
 
     setTopTitle(circle.shortName);
-//    setTopSubTitle(String.format(getString(R.string.friends_info),
-//        mFeedFragment.getCurrFriends(), mFeedFragment.getWorkerCount()));
     if (circle.lock == 1) {
       getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(
           getResources().getDrawable(R.drawable.ic_lock_small), null, null, null);
@@ -666,14 +647,6 @@ public class FeedActivity extends BaseActivity {
       getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
     }
   }
-
-//  void setMyPraiseCount(int count, String praisePercent, int variant) {
-//    if (count == 0) {
-//      mMenuViewHolder.mTvPraiseCount.setText("我收到的赞");
-//    } else {
-//      mMenuViewHolder.mTvPraiseCount.setText(String.format("收到%d个赞", count));
-//    }
-//  }
 
   @Keep
   class NoPermViewHolder {
