@@ -48,7 +48,7 @@ public class ImageCropActivity extends BaseActivity {
     OutputStream stream = null;
     try {
       stream = new FileOutputStream(cropped);
-      mCivCrop.getCroppedImage().compress(Bitmap.CompressFormat.JPEG, 85, stream);
+      mCivCrop.getCroppedImage().compress(Bitmap.CompressFormat.JPEG, 100, stream);
     } catch (FileNotFoundException ignored) {
     } finally {
       if (stream != null) {

@@ -46,7 +46,6 @@ public class Helper {
                 "E, dd MMM yyyy HH:mm:ss 'GMT'", Locale.ENGLISH);
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         String dateStr = dateFormat.format(date);
-        Log.d("Helper", dateStr);
         return dateStr;
     }
 

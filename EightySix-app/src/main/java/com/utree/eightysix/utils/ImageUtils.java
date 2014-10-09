@@ -16,6 +16,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.storage.Storage;
 import de.akquinet.android.androlog.Log;
 import org.apache.http.Header;
+import org.apache.http.HttpStatus;
 
 import java.io.*;
 
@@ -296,26 +297,7 @@ public class ImageUtils {
         if (snapshot != null) {
           new ImageDiskDecodeWorker(url, hash, snapshot, width, height).execute();
         } else {
-          sClient.get(U.getContext(), url, new FileAsyncHttpResponseHandler(IOUtils.createTmpFile(hash)) {
-
-            @Override
-            public void onFailure(int i, Header[] headers, Throwable error, File file) {
-              Log.w(TAG, "onFailure");
-              if (error != null) {
-                Log.e(TAG, "Get remote error: " + error.getMessage());
-                if (BuildConfig.DEBUG) {
-                  error.printStackTrace();
-                }
-              }
-              U.getBus().post(new ImageLoadedEvent(hash, null));
-            }
-
-            @Override
-            public void onSuccess(int i, Header[] headers, File file) {
-              Log.d(TAG, "onSuccess");
-              new ImageRemoteDecodeWorker(hash, file, width, height).execute();
-            }
-          });
+          sClient.get(U.getContext(), url, new ImageMyFileAsyncHttpResponseHandler(hash));
         }
       } catch (IOException ignored) {
         Log.e(TAG, "Get snapshot IOException: " + ignored.getMessage());
@@ -336,26 +318,7 @@ public class ImageUtils {
         if (snapshot != null) {
           new ImageDiskDecodeWorker(url, hash, snapshot).execute();
         } else {
-          sClient.get(U.getContext(), url, new FileAsyncHttpResponseHandler(IOUtils.createTmpFile(hash)) {
-
-            @Override
-            public void onFailure(int i, Header[] headers, Throwable error, File file) {
-              Log.d(TAG, "onFailure");
-              if (error != null) {
-                Log.d(TAG, "Get remote error: " + error.getMessage());
-                if (BuildConfig.DEBUG) {
-                  error.printStackTrace();
-                }
-              }
-              U.getBus().post(new ImageLoadedEvent(hash, null));
-            }
-
-            @Override
-            public void onSuccess(int i, Header[] headers, File file) {
-              Log.d(TAG, "onSuccess");
-              new ImageRemoteDecodeWorker(hash, file).execute();
-            }
-          });
+          sClient.get(U.getContext(), url, new ImageMyFileAsyncHttpResponseHandler(hash));
         }
       } catch (IOException ignored) {
         Log.e(TAG, "Get snapshot IOException: " + ignored.getMessage());
@@ -366,10 +329,6 @@ public class ImageUtils {
     } else {
       U.getBus().post(new ImageLoadedEvent(hash, bitmap));
     }
-  }
-
-  public static Bitmap getFromMem(String hash) {
-    return sLruCache.get(hash);
   }
 
   public static Bitmap getFromMemByUrl(String url) {
@@ -453,7 +412,7 @@ public class ImageUtils {
         mFileHash = hash;
         mUrl = url;
       } else {
-        Log.d(TAG, "upload error : " + result.msg);
+        U.getAnalyser().trackEvent(U.getContext(), "oss_put_error", result.msg);
       }
 
       return null;
@@ -600,25 +559,7 @@ public class ImageUtils {
         U.getBus().post(new ImageLoadedEvent(mHash, bitmap));
       } else {
         Log.d(TAG, "onFailed from disk");
-        sClient.get(U.getContext(), mUrl, new FileAsyncHttpResponseHandler(IOUtils.createTmpFile(mHash)) {
-
-          @Override
-          public void onFailure(int i, Header[] headers, Throwable error, File file) {
-            Log.d(TAG, "onFailure from remote");
-            if (error != null) {
-              Log.d(TAG, "Get remote error: " + error.getMessage());
-              if (BuildConfig.DEBUG) {
-                error.printStackTrace();
-              }
-            }
-
-          }
-
-          @Override
-          public void onSuccess(int i, Header[] headers, File file) {
-            new ImageRemoteDecodeWorker(mHash, file).execute();
-          }
-        });
+        sClient.get(U.getContext(), mUrl, new ImageMyFileAsyncHttpResponseHandler(mHash));
       }
 
     }
@@ -634,12 +575,6 @@ public class ImageUtils {
     private ImageRemoteDecodeWorker(String hash, File file) {
       mHash = hash;
       mFile = file;
-    }
-
-    private ImageRemoteDecodeWorker(String hash, File file, int width, int height) {
-      this(hash, file);
-      mWidth = width;
-      mHeight = height;
     }
 
     @Override
@@ -699,6 +634,38 @@ public class ImageUtils {
       mFile.delete();
 
       U.getBus().post(new ImageLoadedEvent(mHash, bitmap));
+    }
+  }
+
+  private static class ImageMyFileAsyncHttpResponseHandler extends FileAsyncHttpResponseHandler {
+
+    private final String hash;
+
+    public ImageMyFileAsyncHttpResponseHandler(String hash) {
+      super(IOUtils.createTmpFile(hash));
+      this.hash = hash;
+    }
+
+    @Override
+    public void onFailure(int i, Header[] headers, Throwable error, File file) {
+      Log.d(TAG, "onFailure");
+      if (error != null) {
+        Log.d(TAG, "Get remote error: " + error.getMessage());
+        if (BuildConfig.DEBUG) {
+          error.printStackTrace();
+        }
+      }
+      U.getBus().post(new ImageLoadedEvent(hash, null));
+    }
+
+    @Override
+    public void onSuccess(int i, Header[] headers, File file) {
+      Log.d(TAG, "onSuccess");
+      if (i <= HttpStatus.SC_OK) {
+        new ImageRemoteDecodeWorker(hash, file).execute();
+      } else {
+        U.getBus().post(new ImageLoadedEvent(hash, null));
+      }
     }
   }
 }
