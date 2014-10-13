@@ -67,10 +67,10 @@ public class PostActivity extends BaseActivity {
   private ThemedDialog mQuitConfirmDialog;
   private AlertDialog mCommentContextDialog;
 
-  private boolean mPostPraiseRequesting;
-  private boolean mPostCommentPraiseRequesting;
-
   private boolean mGotoBottom;
+
+  public PostActivity() {
+  }
 
   public static void start(Context context, Post post) {
     Intent intent = new Intent(context, PostActivity.class);
@@ -290,16 +290,15 @@ public class PostActivity extends BaseActivity {
 
   @Subscribe
   public void onPostCommentPraiseEvent(final PostCommentPraiseEvent event) {
-    if (mPostCommentPraiseRequesting) {
-      return;
-    }
-
-    mPostCommentPraiseRequesting = true;
     if (!event.isCancel()) {
       request(new CommentPraiseRequest(mPost.id, event.getComment().id), new OnResponse<Response>() {
         @Override
         public void onResponse(Response response) {
-          mPostCommentPraiseRequesting = false;
+          if (!RESTRequester.responseOk(response)) {
+            event.getComment().praised = 0;
+            event.getComment().praise--;
+            mPostCommentsAdapter.notifyDataSetChanged();
+          }
         }
       }, Response.class);
     }
@@ -308,9 +307,6 @@ public class PostActivity extends BaseActivity {
   @Subscribe
   public void onPostPostPraiseEvent(final PostPostPraiseEvent event) {
 
-    if (mPostPraiseRequesting) return;
-
-    mPostPraiseRequesting = true;
     if (!event.isCancel()) {
       request(new PostPraiseRequest(event.getPost().id), new OnResponse2<Response>() {
         @Override
@@ -324,12 +320,10 @@ public class PostActivity extends BaseActivity {
             event.getPost().praise = Math.max(0, event.getPost().praise - 1);
           }
           mPostCommentsAdapter.notifyDataSetChanged();
-          mPostPraiseRequesting = false;
         }
 
         @Override
         public void onResponseError(Throwable e) {
-          mPostPraiseRequesting = false;
         }
       }, Response.class);
     }
