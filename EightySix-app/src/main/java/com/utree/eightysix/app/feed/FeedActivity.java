@@ -28,6 +28,7 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.AccountActivity;
 import com.utree.eightysix.app.account.AddFriendActivity;
+import com.utree.eightysix.app.chat.StartChatActivity;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
 import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
@@ -274,9 +275,11 @@ public class FeedActivity extends BaseActivity {
       public Drawable getIcon(int position) {
         if (position == 0) {
           return getResources().getDrawable(R.drawable.ic_action_msg);
+        } else if (position == 1) {
+          return getResources().getDrawable(R.drawable.ic_contacts);
         } else {
           Sync sync = U.getSyncClient().getSync();
-          if (position == 1 || sync == null || sync.activeSys == 1) {
+          if (position == 2 || sync == null || sync.activeSys == 1) {
             return getResources().getDrawable(R.drawable.ic_action_reward);
           }
         }
@@ -285,15 +288,7 @@ public class FeedActivity extends BaseActivity {
 
       @Override
       public Drawable getBackgroundDrawable(int position) {
-        if (position == 0) {
-          return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
-        } else {
-          Sync sync = U.getSyncClient().getSync();
-          if (position == 1 || sync == null || sync.activeSys == 1) {
-            return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
-          }
-        }
-        return null;
+        return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
       }
 
       @Override
@@ -301,9 +296,11 @@ public class FeedActivity extends BaseActivity {
         if (position == 0) {
           U.getAnalyser().trackEvent(FeedActivity.this, "feed_msg", "feed_msg");
           MsgActivity.start(FeedActivity.this, Account.inst().getNewCommentCount() > 0);
+        } else if (position == 1) {
+          StartChatActivity.start(FeedActivity.this);
         } else {
           Sync sync = U.getSyncClient().getSync();
-          if (position == 1 || sync == null || sync.activeSys == 1) {
+          if (position == 2 || sync == null || sync.activeSys == 1) {
             if (mRewardFragment == null) {
               mRewardFragment = new RewardFragment();
               Bundle args = new Bundle();
@@ -322,7 +319,7 @@ public class FeedActivity extends BaseActivity {
       @Override
       public int getCount() {
         Sync sync = U.getSyncClient().getSync();
-        return 1 + ((sync == null || sync.activeSys == 1) ? 1 : 0);
+        return 2 + ((sync == null || sync.activeSys == 1) ? 1 : 0);
       }
 
       @Override

@@ -2,10 +2,14 @@ package com.utree.eightysix.app;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.os.Handler;
 import com.baidu.frontia.FrontiaApplication;
+import com.easemob.chat.EMChat;
+import com.easemob.chat.EMChatManager;
 import com.tencent.cloudsdk.tsocket.GlobalContext;
 import com.utree.eightysix.C;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.chat.ChatAccount;
 import de.akquinet.android.androlog.Constants;
 import de.akquinet.android.androlog.Log;
 
@@ -17,14 +21,23 @@ public class BaseApplication extends FrontiaApplication {
 
   private static Context sContext;
 
+  private static Handler sHandler;
+
   public static Context getContext() {
     return sContext;
+  }
+
+  public static Handler getHandler() {
+    return sHandler;
   }
 
   @Override
   public void onCreate() {
     super.onCreate();
     sContext = this;
+    sHandler = new Handler();
+
+    EMChat.getInstance().init(this);
 
     try {
       C.VERSION = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
@@ -40,10 +53,9 @@ public class BaseApplication extends FrontiaApplication {
       U.getReporter().init();
       U.getSyncClient().getSync();
 
-
-//      EMChat.getInstance().init(this);
-
       GlobalContext.initialize(sContext);
+
+      ChatAccount.inst();
     }
   }
 

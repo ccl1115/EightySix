@@ -9,7 +9,9 @@ public class ChatStatusEvent {
   public static final int EVENT_LOGIN_ERR = 3;
 
   public static final int EVENT_RECEIVE_MSG = 11;
-  public static final int EVENT_SENT_MSG = 12;
+  public static final int EVENT_SENT_MSG_SUCCESS = 12;
+  public static final int EVENT_SENDING_MSG = 13;
+  public static final int EVENT_SENT_MSG_ERROR = 14;
 
   private int mStatus;
 
