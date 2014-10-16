@@ -96,7 +96,7 @@ public class ContactsActivity extends BaseActivity {
     getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
       @Override
       public String getTitle(int position){
-        return "发送";
+        return getString(R.string.send);
       }
 
       @Override
