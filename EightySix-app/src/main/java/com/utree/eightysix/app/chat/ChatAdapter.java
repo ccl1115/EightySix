@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.chat;
 
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +9,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
 import com.utree.eightysix.R;
+import com.utree.eightysix.widget.RoundedButton;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -22,10 +24,11 @@ import java.util.*;
 public class ChatAdapter extends BaseAdapter {
 
 
-  private static final int TYPE_COUNT = 3;
+  private static final int TYPE_COUNT = 4;
   private static final int TYPE_INVALID = 0;
   private static final int TYPE_TEXT_FROM = 1;
   private static final int TYPE_TEXT_TO = 2;
+  private static final int TYPE_TIMESTAMP = 3;
 
   private List<EMMessage> mEMMessages;
   private Comparator<EMMessage> mEMMessageComparator;
@@ -53,14 +56,18 @@ public class ChatAdapter extends BaseAdapter {
     if (contains(message)) {
       return;
     }
+    trimCmdMessages();
     mEMMessages.add(message);
     Collections.sort(mEMMessages, mEMMessageComparator);
+    addTimestampMessages();
     notifyDataSetChanged();
   }
 
   public void add(List<EMMessage> messages) {
+    trimCmdMessages();
     mEMMessages.addAll(messages);
     Collections.sort(mEMMessages, mEMMessageComparator);
+    addTimestampMessages();
     notifyDataSetChanged();
   }
 
@@ -71,6 +78,60 @@ public class ChatAdapter extends BaseAdapter {
       }
     }
     return false;
+  }
+
+  private void addTimestampMessages() {
+    List<EMMessage> messages = new ArrayList<EMMessage>();
+    EMMessage pre = null;
+    for (EMMessage emMessage : mEMMessages) {
+      if (pre == null) {
+        messages.add(buildTimestampMessage(emMessage.getMsgTime()));
+      } else {
+        if (pre.getType() != EMMessage.Type.CMD
+            || !((CmdMessageBody) pre.getBody()).action.equals("timestamp")) {
+          if (emMessage.getMsgTime() - pre.getMsgTime() > 300000) {
+            messages.add(buildTimestampMessage(emMessage.getMsgTime()));
+          }
+        }
+      }
+
+      messages.add(emMessage);
+      pre = emMessage;
+    }
+    mEMMessages.clear();
+    mEMMessages = messages;
+  }
+
+  private void trimCmdMessages() {
+    for (Iterator<EMMessage> iterator = mEMMessages.iterator(); iterator.hasNext(); ) {
+      EMMessage emMessage = iterator.next();
+      if (emMessage.getType() == EMMessage.Type.CMD) {
+        iterator.remove();
+      }
+    }
+  }
+
+  private EMMessage buildTimestampMessage(long time) {
+    EMMessage message = EMMessage.createReceiveMessage(EMMessage.Type.CMD);
+    CmdMessageBody body = new CmdMessageBody("timestamp", new String[]{timestamp(time)});
+    message.setMsgId(String.valueOf(time));
+    message.addBody(body);
+    return message;
+  }
+
+  private String timestamp(long time) {
+    return SimpleDateFormat
+        .getDateTimeInstance(SimpleDateFormat.MEDIUM, SimpleDateFormat.MEDIUM, Locale.SIMPLIFIED_CHINESE)
+        .format(new Date(time));
+  }
+
+  public String getFirstMsgId() {
+    for (EMMessage emMessage : mEMMessages) {
+      if (emMessage.getType() != EMMessage.Type.CMD) {
+        return emMessage.getMsgId();
+      }
+    }
+    return null;
   }
 
   @Override
@@ -95,6 +156,8 @@ public class ChatAdapter extends BaseAdapter {
         return getTextFromView(position, convertView, parent);
       case TYPE_TEXT_TO:
         return getTextToView(position, convertView, parent);
+      case TYPE_TIMESTAMP:
+        return getTimestampView(position, convertView, parent);
     }
     return null;
   }
@@ -106,6 +169,10 @@ public class ChatAdapter extends BaseAdapter {
       case RECEIVE: {
         if (m.getType() == EMMessage.Type.TXT) {
           return TYPE_TEXT_FROM;
+        } else if (m.getType() == EMMessage.Type.CMD) {
+          if (((CmdMessageBody) m.getBody()).action.equals("timestamp")) {
+            return TYPE_TIMESTAMP;
+          }
         }
         break;
       }
@@ -162,6 +229,16 @@ public class ChatAdapter extends BaseAdapter {
     holder.mTvText.setText(text);
     holder.mPbLoading.setVisibility(message.status == EMMessage.Status.INPROGRESS ? View.VISIBLE : View.GONE);
     holder.mIvError.setVisibility(message.status == EMMessage.Status.FAIL ? View.VISIBLE : View.GONE);
+
+    return convertView;
+  }
+
+  private View getTimestampView(int position, View convertView, ViewGroup parent) {
+    if (convertView == null) {
+      convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_time, parent, false);
+    }
+
+    ((RoundedButton) convertView.findViewById(R.id.rb_time)).setText(((CmdMessageBody) getItem(position).getBody()).params[0]);
 
     return convertView;
   }
