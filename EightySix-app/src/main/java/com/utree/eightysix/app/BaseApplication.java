@@ -52,9 +52,13 @@ public class BaseApplication extends FrontiaApplication {
       U.getReporter().init();
       U.getSyncClient().getSync();
 
+      // 定时拉去消息服务
       FetchAlarmReceiver.setupAlarm(this);
+
+      // 腾讯移动加速初始化
       GlobalContext.initialize(this);
 
+      // 环信聊天初始化
       EMChat.getInstance().init(this);
       ChatAccount.inst();
     }
