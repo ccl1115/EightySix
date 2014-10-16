@@ -5,11 +5,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <com.utree.eightysix.widget.AdvancedListView
-            android:id="@+id/alv_chats"
+    <com.utree.eightysix.view.SwipeRefreshLayout
+            android:id="@+id/refresh_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/fl_send"/>
+            android:layout_above="@+id/fl_send">
+
+        <com.utree.eightysix.widget.AdvancedListView
+                android:id="@+id/alv_chats"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+    </com.utree.eightysix.view.SwipeRefreshLayout>
 
     <include
             layout="@layout/widget_post_comment"

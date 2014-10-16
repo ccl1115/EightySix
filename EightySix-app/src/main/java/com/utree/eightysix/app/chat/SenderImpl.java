@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Message;
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
 import com.utree.eightysix.U;
@@ -49,6 +50,9 @@ public class SenderImpl implements Sender {
 
     TextMessageBody body = new TextMessageBody(txt);
     m.addBody(body);
+
+    EMConversation conversation = EMChatManager.getInstance().getConversation(username);
+    conversation.addMessage(m);
 
     Message message = sSenderHandler.obtainMessage(MSG_SENDING, m);
     message.sendToTarget();

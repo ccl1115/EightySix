@@ -2,32 +2,38 @@
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="match_parent"
-             android:layout_height="48dp"
-             android:padding="8dp">
+             android:layout_height="wrap_content"
+             android:paddingLeft="8dp"
+             android:paddingRight="8dp"
+             android:paddingBottom="8dp">
 
-    <LinearLayout
+    <RelativeLayout
             android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
             android:background="@color/apptheme_secondary_light_color">
 
         <TextView
                 android:id="@+id/tv_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:padding="8dp"
                 android:textColor="@android:color/white"/>
 
         <ProgressBar
                 android:id="@+id/pb_loading"
+                android:layout_toRightOf="@+id/tv_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
         <ImageView
                 android:id="@+id/iv_error"
+                android:layout_toRightOf="@+id/pb_loading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:src="@drawable/ic_close"/>
-    </LinearLayout>
+    </RelativeLayout>
 </FrameLayout>

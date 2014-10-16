@@ -37,8 +37,6 @@ public class BaseApplication extends FrontiaApplication {
     sContext = this;
     sHandler = new Handler();
 
-    EMChat.getInstance().init(this);
-
     try {
       C.VERSION = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
     } catch (Throwable e) {
@@ -53,8 +51,9 @@ public class BaseApplication extends FrontiaApplication {
       U.getReporter().init();
       U.getSyncClient().getSync();
 
-      GlobalContext.initialize(sContext);
+      GlobalContext.initialize(this);
 
+      EMChat.getInstance().init(this);
       ChatAccount.inst();
     }
   }

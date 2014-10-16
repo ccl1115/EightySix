@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
 import butterknife.OnTextChanged;
 import com.easemob.EMCallBack;
 import com.easemob.chat.*;
@@ -18,6 +19,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.chat.event.ChatStatusEvent;
+import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.RoundedButton;
 
@@ -29,6 +31,9 @@ public class ChatActivity extends BaseActivity {
 
   @InjectView(R.id.fl_send)
   public FrameLayout mFlSend;
+
+  @InjectView(R.id.refresh_view)
+  public SwipeRefreshLayout mRefreshView;
 
   @InjectView(R.id.et_post_content)
   public EditText mEtPostContent;
@@ -42,6 +47,7 @@ public class ChatActivity extends BaseActivity {
   private ChatAdapter mChatAdapter;
 
   private String mUsername;
+  private EMConversation mConversation;
 
   public static void start(Context context, String username) {
     Intent intent = new Intent(context, ChatActivity.class);
@@ -65,6 +71,16 @@ public class ChatActivity extends BaseActivity {
     mRbPost.setEnabled(cs.length() > 0);
   }
 
+  @OnItemClick(R.id.alv_chats)
+  public void onAlvChatsItemClicked(int position) {
+    EMMessage m = mChatAdapter.getItem(position);
+    if (m != null) {
+      if (m.status == EMMessage.Status.FAIL) {
+
+      }
+    }
+  }
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -73,18 +89,41 @@ public class ChatActivity extends BaseActivity {
 
     mUsername = getIntent().getStringExtra("username");
 
+    setTopTitle("正在和" + mUsername + "聊天");
+
     if (mUsername == null) {
       finish();
     }
 
-    EMConversation conversation = EMChatManager.getInstance().getConversation(mUsername);
+    mConversation = EMChatManager.getInstance().getConversation(mUsername);
 
 
-    mChatAdapter.add(conversation.getAllMessages());
+    mChatAdapter.add(mConversation.getAllMessages());
     mAlvChats.setAdapter(mChatAdapter);
     mAlvChats.setSelection(Integer.MAX_VALUE);
 
     U.getChatBus().register(this);
+
+    mRefreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+      @Override
+      public void onRefresh() {
+        mChatAdapter.add(mConversation.loadMoreMsgFromDB(mChatAdapter.getItem(0).getMsgId(), 20));
+        mRefreshView.setRefreshing(false);
+      }
+
+      @Override
+      public void onDrag() {
+
+      }
+
+      @Override
+      public void onCancel() {
+
+      }
+    });
+
+    mRefreshView.setColorSchemeResources(R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed,
+        R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed);
   }
 
   @Subscribe
