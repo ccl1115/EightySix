@@ -77,7 +77,7 @@ public class ChatActivity extends BaseActivity {
   @OnItemClick(R.id.alv_chats)
   public void onAlvChatsItemClicked(int position) {
     EMMessage m = mChatAdapter.getItem(position);
-    if (m != null && m.getType() == EMMessage.Type.TXT && m.direct == EMMessage.Direct.SEND) {
+    if (m != null) {
       if (m.status == EMMessage.Status.FAIL) {
         showResendDialog(m);
       }
@@ -147,7 +147,7 @@ public class ChatActivity extends BaseActivity {
     mRefreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override
       public void onRefresh() {
-        mChatAdapter.add(mConversation.loadMoreMsgFromDB(mChatAdapter.getFirstMsgId(), 20));
+        mChatAdapter.add(mConversation.loadMoreMsgFromDB(mChatAdapter.getItem(0).getMsgId(), 20));
         mRefreshView.setRefreshing(false);
       }
 
@@ -195,5 +195,4 @@ public class ChatActivity extends BaseActivity {
 
     dialog.show();
   }
-
 }
