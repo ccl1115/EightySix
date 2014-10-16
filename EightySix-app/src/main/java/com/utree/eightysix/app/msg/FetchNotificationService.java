@@ -67,8 +67,6 @@ public class FetchNotificationService extends Service {
   }
 
   private void requestFetch() {
-    Log.d(TAG, "requestFetch");
-    if (sCircleId == 0) return;
 
     RequestData data = U.getRESTRequester().convert(new FetchNotificationRequest(sCircleId));
     U.getRESTRequester().request(data, new HandlerWrapper<FetchResponse>(data, new OnResponse2<FetchResponse>() {

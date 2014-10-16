@@ -7,9 +7,11 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import com.google.gson.reflect.TypeToken;
 import com.utree.eightysix.app.intro.IntroActivity;
+import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.data.User;
 import com.utree.eightysix.event.HasNewPraiseEvent;
 import com.utree.eightysix.event.NewCommentCountEvent;
+import com.utree.eightysix.push.FetchAlarmReceiver;
 import com.utree.eightysix.request.LogoutRequest;
 import com.utree.eightysix.rest.HandlerWrapper;
 import com.utree.eightysix.rest.OnResponse;
@@ -157,6 +159,8 @@ public class Account {
       public LoginEvent() {
         M.getRegisterHelper().register(U.getPushHelper());
         U.getPushHelper().startWork();
+
+        FetchAlarmReceiver.setupAlarm(U.getContext());
 
 //        M.getRegisterHelper().register(ChatAccount.inst());
 //        ChatAccount.inst().login();
