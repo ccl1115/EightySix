@@ -187,6 +187,12 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".push.FetchAlarmReceiver">
+            <intent-filter>
+                <action android:name="com.utree.eightysix.action.FETCH"/>
+            </intent-filter>
+        </receiver>
+
         <service android:exported="true" android:name="com.baidu.android.pushservice.PushService" android:process=":bdservice_v1">
             <intent-filter>
                 <action android:name="com.baidu.android.pushservice.action.PUSH_SERVICE"/>

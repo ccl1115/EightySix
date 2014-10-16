@@ -68,8 +68,6 @@ public final class PushMessageReceiver extends FrontiaPushMessageReceiver {
   public void onBind(Context context, int errorCode, String appId, String userId, String channelId, String requestId) {
 
     if (errorCode == 0) {
-      Log.v("PushService", "channelId = " + channelId);
-      Log.v("PushService", "   userId = " + userId);
       Env.setPushChannelId(channelId);
       Env.setPushUserId(userId);
     }
@@ -148,10 +146,6 @@ public final class PushMessageReceiver extends FrontiaPushMessageReceiver {
 
   @Override
   public void onNotificationClicked(Context context, String s, String s2, String s3) {
-    Log.v("PushService", "s = " + s);
-    Log.v("PushService", "s2 = " + s2);
-    Log.v("PushService", "s3 = " + s3);
-
     try {
       Message m = U.getGson().fromJson(s3, Message.class);
       if (m.type == TYPE_CMD) {

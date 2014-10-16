@@ -10,6 +10,7 @@ import com.tencent.cloudsdk.tsocket.GlobalContext;
 import com.utree.eightysix.C;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.chat.ChatAccount;
+import com.utree.eightysix.push.FetchAlarmReceiver;
 import de.akquinet.android.androlog.Constants;
 import de.akquinet.android.androlog.Log;
 
@@ -51,6 +52,7 @@ public class BaseApplication extends FrontiaApplication {
       U.getReporter().init();
       U.getSyncClient().getSync();
 
+      FetchAlarmReceiver.setupAlarm(this);
       GlobalContext.initialize(this);
 
       EMChat.getInstance().init(this);
