@@ -50,6 +50,9 @@ public class ChatAdapter extends BaseAdapter {
   }
 
   public void add(EMMessage message) {
+    if (contains(message)) {
+      return;
+    }
     mEMMessages.add(message);
     Collections.sort(mEMMessages, mEMMessageComparator);
     notifyDataSetChanged();
@@ -59,6 +62,15 @@ public class ChatAdapter extends BaseAdapter {
     mEMMessages.addAll(messages);
     Collections.sort(mEMMessages, mEMMessageComparator);
     notifyDataSetChanged();
+  }
+
+  private boolean contains(EMMessage message) {
+    for (EMMessage emMessage : mEMMessages) {
+      if (emMessage.getMsgId().equals(message.getMsgId())) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @Override

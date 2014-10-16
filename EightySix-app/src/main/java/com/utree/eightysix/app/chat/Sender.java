@@ -1,5 +1,7 @@
 package com.utree.eightysix.app.chat;
 
+import com.easemob.chat.EMMessage;
+
 import java.io.File;
 import java.io.InputStream;
 
@@ -7,6 +9,8 @@ import java.io.InputStream;
  * @author simon
  */
 public interface Sender {
+
+  void send(EMMessage emMessage);
 
   void txt(String username, String txt);
 

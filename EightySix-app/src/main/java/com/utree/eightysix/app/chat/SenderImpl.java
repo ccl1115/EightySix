@@ -21,25 +21,34 @@ public class SenderImpl implements Sender {
   private static final int MSG_SENDING = 1;
   private static final int MSG_SENT_SUCCESS = 2;
   private static final int MSG_SENT_ERROR = 3;
-
-  private static class SenderHandler extends Handler {
-    @Override
-    public void handleMessage(Message msg) {
-      switch (msg.what) {
-        case MSG_SENDING:
-          U.getChatBus().post(new ChatStatusEvent(ChatStatusEvent.EVENT_SENDING_MSG, msg.obj));
-          break;
-        case MSG_SENT_ERROR:
-          U.getChatBus().post(new ChatStatusEvent(ChatStatusEvent.EVENT_SENT_MSG_ERROR, msg.obj));
-          break;
-        case MSG_SENT_SUCCESS:
-          U.getChatBus().post(new ChatStatusEvent(ChatStatusEvent.EVENT_SENT_MSG_SUCCESS, msg.obj));
-          break;
-      }
-    }
-  }
-
   private static SenderHandler sSenderHandler = new SenderHandler();
+
+  @Override
+  public void send(final EMMessage emMessage) {
+    if (emMessage == null) return;
+
+    Message message = sSenderHandler.obtainMessage(MSG_SENDING, emMessage);
+    message.sendToTarget();
+
+    EMChatManager.getInstance().sendMessage(emMessage, new EMCallBack() {
+      @Override
+      public void onSuccess() {
+        Message message = sSenderHandler.obtainMessage(MSG_SENT_SUCCESS, emMessage);
+        message.sendToTarget();
+      }
+
+      @Override
+      public void onError(int i, String s) {
+        Message message = sSenderHandler.obtainMessage(MSG_SENT_ERROR, emMessage);
+        message.sendToTarget();
+      }
+
+      @Override
+      public void onProgress(int i, String s) {
+
+      }
+    });
+  }
 
   @Override
   public void txt(String username, String txt) {
@@ -94,5 +103,22 @@ public class SenderImpl implements Sender {
   @Override
   public void photo(String username, InputStream is) {
 
+  }
+
+  private static class SenderHandler extends Handler {
+    @Override
+    public void handleMessage(Message msg) {
+      switch (msg.what) {
+        case MSG_SENDING:
+          U.getChatBus().post(new ChatStatusEvent(ChatStatusEvent.EVENT_SENDING_MSG, msg.obj));
+          break;
+        case MSG_SENT_ERROR:
+          U.getChatBus().post(new ChatStatusEvent(ChatStatusEvent.EVENT_SENT_MSG_ERROR, msg.obj));
+          break;
+        case MSG_SENT_SUCCESS:
+          U.getChatBus().post(new ChatStatusEvent(ChatStatusEvent.EVENT_SENT_MSG_SUCCESS, msg.obj));
+          break;
+      }
+    }
   }
 }

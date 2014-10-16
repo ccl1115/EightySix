@@ -4,14 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.OnTextChanged;
-import com.easemob.EMCallBack;
-import com.easemob.chat.*;
+import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMConversation;
+import com.easemob.chat.EMMessage;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
@@ -22,10 +24,11 @@ import com.utree.eightysix.app.chat.event.ChatStatusEvent;
 import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.RoundedButton;
+import com.utree.eightysix.widget.ThemedDialog;
 
 /**
-* @author simon
-*/
+ * @author simon
+ */
 @Layout(R.layout.activity_chat)
 public class ChatActivity extends BaseActivity {
 
@@ -76,9 +79,46 @@ public class ChatActivity extends BaseActivity {
     EMMessage m = mChatAdapter.getItem(position);
     if (m != null) {
       if (m.status == EMMessage.Status.FAIL) {
-
+        showResendDialog(m);
       }
     }
+  }
+
+  @Subscribe
+  public void onChatStatusEvent(ChatStatusEvent event) {
+    switch (event.getStatus()) {
+      case ChatStatusEvent.EVENT_RECEIVE_MSG: {
+        EMMessage obj = (EMMessage) event.getObj();
+        if (obj.getFrom().equals(mUsername)) {
+          mChatAdapter.add(obj);
+          mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
+        }
+        break;
+      }
+      case ChatStatusEvent.EVENT_SENT_MSG_SUCCESS:
+      case ChatStatusEvent.EVENT_SENT_MSG_ERROR: {
+        mChatAdapter.notifyDataSetChanged();
+        mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
+        break;
+      }
+      case ChatStatusEvent.EVENT_SENDING_MSG: {
+        EMMessage obj = (EMMessage) event.getObj();
+        if (obj.getTo().equals(mUsername)) {
+          mChatAdapter.add(obj);
+        }
+        break;
+      }
+    }
+  }
+
+  @Override
+  public void onLogout(Account.LogoutEvent event) {
+    finish();
+  }
+
+  @Override
+  public void onActionLeftClicked() {
+    finish();
   }
 
   @Override
@@ -126,47 +166,33 @@ public class ChatActivity extends BaseActivity {
         R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed);
   }
 
-  @Subscribe
-  public void onChatStatusEvent(ChatStatusEvent event) {
-    switch (event.getStatus()) {
-      case ChatStatusEvent.EVENT_RECEIVE_MSG: {
-        EMMessage obj = (EMMessage) event.getObj();
-        if (obj.getFrom().equals(mUsername)) {
-          mChatAdapter.add(obj);
-          mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
-        }
-        break;
-      }
-      case ChatStatusEvent.EVENT_SENT_MSG_SUCCESS:
-      case ChatStatusEvent.EVENT_SENT_MSG_ERROR: {
-        mChatAdapter.notifyDataSetChanged();
-        mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
-        break;
-      }
-      case ChatStatusEvent.EVENT_SENDING_MSG: {
-        EMMessage obj = (EMMessage) event.getObj();
-        if (obj.getTo().equals(mUsername)) {
-          mChatAdapter.add(obj);
-        }
-        break;
-      }
-    }
-  }
-
-  @Override
-  public void onLogout(Account.LogoutEvent event) {
-    finish();
-  }
-
-  @Override
-  public void onActionLeftClicked() {
-    finish();
-  }
-
   @Override
   protected void onDestroy() {
     super.onDestroy();
 
     U.getChatBus().unregister(this);
+  }
+
+
+  private void showResendDialog(final EMMessage message) {
+    final ThemedDialog dialog = new ThemedDialog(this);
+
+    dialog.setTitle("是否重新发送？");
+    dialog.setPositive(R.string.okay, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        ChatAccount.inst().getSender().send(message);
+        dialog.dismiss();
+      }
+    });
+
+    dialog.setRbNegative(R.string.cancel, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        dialog.dismiss();
+      }
+    });
+
+    dialog.show();
   }
 }
