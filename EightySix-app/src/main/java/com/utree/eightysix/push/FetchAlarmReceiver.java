@@ -39,7 +39,9 @@ public class FetchAlarmReceiver extends BroadcastReceiver {
         wf.write('\n');
         wf.write("setup alarm at " + new Date().toString());
         wf.write('\n');
+        wf.flush();
       } catch (IOException e) {
+        e.printStackTrace();
         if (wf != null) {
           try {
             wf.close();
@@ -65,10 +67,11 @@ public class FetchAlarmReceiver extends BroadcastReceiver {
           wf.write('\n');
           wf.write("start fetch service at " + new Date().toString());
           wf.write('\n');
+          wf.flush();
         } catch (IOException e) {
+          e.printStackTrace();
           if (wf != null) {
             try {
-              wf.flush();
               wf.close();
             } catch (IOException ignored) {
             }

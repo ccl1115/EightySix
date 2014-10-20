@@ -296,7 +296,7 @@
                     <version>${android.plugin.version}</version>
                     <configuration>
                         <sdk>
-                            <platform>21</platform>
+                            <platform>19</platform>
                         </sdk>
                     </configuration>
                 </plugin>
