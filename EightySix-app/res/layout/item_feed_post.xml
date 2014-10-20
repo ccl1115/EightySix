@@ -24,7 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
-                android:paddingTop="10dp" >
+                android:paddingTop="10dp">
 
             <TextView
                     android:id="@+id/tv_hot"
@@ -94,10 +94,9 @@
                     android:layout_weight="1"/>
 
             <TextView
-                    android:id="@+id/tv_comment"
+                    android:id="@+id/tv_praise"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_reply"
                     android:gravity="center_vertical|right"
                     android:textSize="14sp"
                     android:textColor="@android:color/white"
@@ -105,9 +104,10 @@
                     android:layout_marginRight="5dp"/>
 
             <TextView
+                    android:id="@+id/tv_comment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tv_praise"
+                    android:drawableLeft="@drawable/ic_reply"
                     android:gravity="center_vertical|right"
                     android:textSize="14sp"
                     android:textColor="@android:color/white"
@@ -118,9 +118,10 @@
         </LinearLayout>
     </FrameLayout>
 
-    <View android:layout_width="match_parent"
-          android:layout_height="1px"
-          android:background="#09000000"/>
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#09000000"/>
 
 
     <LinearLayout
