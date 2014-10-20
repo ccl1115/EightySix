@@ -137,7 +137,16 @@
         <dependency>
             <groupId>easemobchat</groupId>
             <artifactId>easemobchat</artifactId>
-            <version>2.0.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>xg_sdk</groupId>
+            <artifactId>xg_sdk</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>wup</groupId>
+            <artifactId>wup</artifactId>
         </dependency>
 
     </dependencies>
