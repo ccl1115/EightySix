@@ -56,11 +56,6 @@
         </dependency>
 
         <dependency>
-            <groupId>pushservice</groupId>
-            <artifactId>pushservice</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>tencent.opensdk</groupId>
             <artifactId>opensdk</artifactId>
         </dependency>

@@ -1,9 +1,9 @@
 package com.utree.eightysix.app;
 
 import android.app.ActivityManager;
+import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
-import com.baidu.frontia.FrontiaApplication;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.tencent.cloudsdk.tsocket.GlobalContext;
@@ -18,7 +18,7 @@ import java.util.List;
 
 /**
  */
-public class BaseApplication extends FrontiaApplication {
+public class BaseApplication extends Application {
 
   private static Context sContext;
 
@@ -54,6 +54,8 @@ public class BaseApplication extends FrontiaApplication {
 
       // 定时拉去消息服务
       FetchAlarmReceiver.setupAlarm(this);
+
+      U.getPushHelper().startWork();
 
       // 腾讯移动加速初始化
       GlobalContext.initialize(this);
