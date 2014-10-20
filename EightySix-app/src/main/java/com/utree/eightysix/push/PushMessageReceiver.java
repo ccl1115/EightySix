@@ -70,7 +70,7 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
   @Override
   public void onRegisterResult(Context context, int i, XGPushRegisterResult xgPushRegisterResult) {
     if (i == 0) {
-      Env.setPushChannelId(xgPushRegisterResult.getDeviceId());
+      Env.setPushChannelId(xgPushRegisterResult.getToken());
       Env.setPushUserId(xgPushRegisterResult.getAccount());
     }
   }
