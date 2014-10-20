@@ -45,10 +45,9 @@
                 android:layout_marginLeft="15dp"/>
 
         <TextView
-                android:id="@+id/tv_comment"
+                android:id="@+id/tv_praise"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_reply"
                 android:gravity="center_vertical|right"
                 android:textSize="14sp"
                 android:textColor="@android:color/white"
@@ -56,9 +55,10 @@
                 android:layout_marginLeft="2dp"/>
 
         <TextView
-                android:id="@+id/tv_praise"
+                android:id="@+id/tv_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_reply"
                 android:gravity="center_vertical|right"
                 android:textSize="14sp"
                 android:textColor="@android:color/white"

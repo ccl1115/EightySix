@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="17" android:versionName="1.2.2" package="com.utree.eightysix">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="17" android:versionName="1.5.0-SNAPSHOT" package="com.utree.eightysix">
 
-    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="19"/>
+    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="21"/>
 
     <uses-feature android:name="android.hardware.camera"/>
 
@@ -38,21 +38,6 @@
     <!-- 允许应用读取低级别的系统日志文件-->
     <uses-permission android:name="android.permission.READ_LOGS"/>
 
-    <!-- PushService Permissions-->
-    <!--<uses-permission android:name="android.permission.INTERNET"/>-->
-    <!--<uses-permission android:name="android.permission.READ_PHONE_STATE" />-->
-    <!--<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />-->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
-    <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER"/>
-    <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION"/>
-    <!--<uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>-->
-    <!--<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />-->
-    <!--<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />-->
-
-
     <!-- easemob -->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.GET_TASKS"/>
@@ -60,6 +45,25 @@
     <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
+    <!-- 信鸽SDK所需权限 -->
+    <!--<uses-permission android:name="android.permission.INTERNET" />-->
+    <!--<uses-permission android:name="android.permission.READ_PHONE_STATE" />-->
+    <!--<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />-->
+    <!--<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.RESTART_PACKAGES" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
+    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
+    <!--<uses-permission android:name="android.permission.WAKE_LOCK" />-->
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+    <!--<uses-permission android:name="android.permission.GET_TASKS" />-->
+    <!--<uses-permission android:name="android.permission.READ_LOGS" />-->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- 【可选】 信鸽SDK所需权限 -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BATTERY_STATS" />
 
     <application android:allowBackup="true" android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:name=".app.BaseApplication" android:theme="@style/AppTheme">
 
@@ -68,6 +72,10 @@
         <meta-data android:name="com.baidu.lbsapi.API_KEY" android:value="Z6S9LBSSdPUi96GkdLS6zO0L"/>
 
         <meta-data android:name="EASEMOB_APPKEY" android:value="utree-test#eightysix"/>
+
+        <meta-data android:name="XG_V2_ACCESS_ID" android:value="2100052395" />
+
+        <meta-data android:name="XG_V2_ACCESS_KEY" android:value="AA9PU5RY976B" />
 
         <!-- Tencent open sdk -->
         <activity android:launchMode="singleInstance" android:name="com.tencent.tauth.AuthActivity" android:noHistory="true" android:screenOrientation="portrait">
@@ -155,56 +163,85 @@
 
         <service android:enabled="true" android:name=".app.msg.FetchNotificationService"/>
 
-        <!-- push应用定义消息receiver声明 -->
-        <receiver android:name="com.utree.eightysix.push.PushMessageReceiver">
-            <intent-filter>
-                <!-- 接收push消息 -->
-                <action android:name="com.baidu.android.pushservice.action.MESSAGE"/>
-                <!-- 接收bind,unbind,fetch,delete等反馈消息 -->
-                <action android:name="com.baidu.android.pushservice.action.RECEIVE"/>
-                <action android:name="com.baidu.android.pushservice.action.notification.CLICK"/>
-            </intent-filter>
-        </receiver>
-
-        <!-- push必须的receviver和service声明 -->
-        <receiver android:name="com.baidu.android.pushservice.PushServiceReceiver" android:process=":bdservice_v1">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
-                <action android:name="com.baidu.android.pushservice.action.notification.SHOW"/>
-                <action android:name="com.baidu.android.pushservice.action.media.CLICK"/>
-            </intent-filter>
-        </receiver>
-
-        <receiver android:name="com.baidu.android.pushservice.RegistrationReceiver" android:process=":bdservice_v1">
-            <intent-filter>
-                <action android:name="com.baidu.android.pushservice.action.METHOD"/>
-                <action android:name="com.baidu.android.pushservice.action.BIND_SYNC"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
-                <data android:scheme="package"/>
-            </intent-filter>
-        </receiver>
-
         <receiver android:name=".push.FetchAlarmReceiver">
             <intent-filter>
                 <action android:name="com.utree.eightysix.action.FETCH"/>
             </intent-filter>
         </receiver>
 
-        <service android:exported="true" android:name="com.baidu.android.pushservice.PushService" android:process=":bdservice_v1">
-            <intent-filter>
-                <action android:name="com.baidu.android.pushservice.action.PUSH_SERVICE"/>
-            </intent-filter>
-        </service>
-
         <service android:name=".app.SyncService"/>
         <service android:name=".app.msg.PullNotificationService"/>
         <service android:name=".app.settings.UpgradeService"/>
-        <!-- push结束 -->
+
+
 
         <service android:name="com.easemob.chat.EMChatService"/>
+
+        <receiver android:name="com.utree.eightysix.push.PushMessageReceiver" >
+            <intent-filter>
+                <!-- 接收消息透传 -->
+                <action android:name="com.tencent.android.tpush.action.PUSH_MESSAGE" />
+                <!-- 监听注册、反注册、设置/删除标签、通知被点击等处理结果 -->
+                <action android:name="com.tencent.android.tpush.action.FEEDBACK" />
+            </intent-filter>
+        </receiver>
+
+        <!-- 【必须】 信鸽receiver广播接收 -->
+        <receiver
+                android:name="com.tencent.android.tpush.XGPushReceiver"
+                android:process=":xg_service_v2" >
+            <intent-filter android:priority="0x7fffffff" >
+                <!-- 【必须】 信鸽SDK的内部广播 -->
+                <action android:name="com.tencent.android.tpush.action.SDK" />
+                <action android:name="com.tencent.android.tpush.action.INTERNAL_PUSH_MESSAGE" />
+                <!-- 【必须】 系统广播：开屏和网络切换 -->
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+
+                <!-- 【可选】 一些常用的系统广播，增强信鸽service的复活机会，请根据需要选择。当然，你也可以添加APP自定义的一些广播让启动service -->
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+            </intent-filter>
+            <!-- 【可选】 usb相关的系统广播，增强信鸽service的复活机会，请根据需要添加 -->
+            <intent-filter android:priority="0x7fffffff" >
+                <action android:name="android.intent.action.MEDIA_UNMOUNTED" />
+                <action android:name="android.intent.action.MEDIA_REMOVED" />
+                <action android:name="android.intent.action.MEDIA_CHECKING" />
+                <action android:name="android.intent.action.MEDIA_EJECT" />
+                <data android:scheme="file" />
+            </intent-filter>
+        </receiver>
+
+        <!-- 【必须】 (2.30及以上版新增)展示通知的activity -->
+        <!-- 【注意】 如果被打开的activity是启动模式为SingleTop，SingleTask或SingleInstance，请根据通知的异常自查列表第8点处理-->
+        <activity
+                android:name="com.tencent.android.tpush.XGPushActivity"
+                android:exported="false" >
+            <intent-filter>
+                <!-- 若使用AndroidStudio，请设置android:name="android.intent.action"-->
+                <action android:name="" />
+            </intent-filter>
+        </activity>
+
+        <!-- 【必须】 信鸽service -->
+        <service
+                android:name="com.tencent.android.tpush.service.XGPushService"
+                android:exported="true"
+                android:persistent="true"
+                android:process=":xg_service_v2" />
+
+        <!-- 【必须】 通知service，此选项有助于提高抵达率 -->
+        <service
+                android:name="com.tencent.android.tpush.rpc.XGRemoteService"
+                android:exported="true" >
+            <intent-filter>
+                <action android:name="com.utree.eightysix.PUSH_ACTION" />
+            </intent-filter>
+        </service>
+
+
     </application>
 
 </manifest>

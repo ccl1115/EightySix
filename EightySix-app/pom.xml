@@ -7,13 +7,13 @@
     <parent>
         <groupId>com.utree.eightysix</groupId>
         <artifactId>EightySix-parent</artifactId>
-        <version>1.2.2</version>
+        <version>1.5.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>EightySix-app</artifactId>
     <packaging>apk</packaging>
     <name>EightySix-app - Application</name>
-    <version>1.2.2</version>
+    <version>1.5.0-SNAPSHOT</version>
 
     <properties>
         <android.manifest.versionCode>17</android.manifest.versionCode>
@@ -53,11 +53,6 @@
         <dependency>
             <groupId>locSDK</groupId>
             <artifactId>locSDK</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>pushservice</groupId>
-            <artifactId>pushservice</artifactId>
         </dependency>
 
         <dependency>
@@ -115,13 +110,13 @@
         <dependency>
             <groupId>com.utree.eightysix</groupId>
             <artifactId>EightySix-data</artifactId>
-            <version>1.2.2</version>
+            <version>1.5.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>com.utree.eightysix</groupId>
             <artifactId>EightySix-base</artifactId>
-            <version>1.2.2</version>
+            <version>1.5.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -137,7 +132,16 @@
         <dependency>
             <groupId>easemobchat</groupId>
             <artifactId>easemobchat</artifactId>
-            <version>2.0.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>xg_sdk</groupId>
+            <artifactId>xg_sdk</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>wup</groupId>
+            <artifactId>wup</artifactId>
         </dependency>
 
     </dependencies>

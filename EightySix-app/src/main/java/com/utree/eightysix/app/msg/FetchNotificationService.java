@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.msg;
 
+import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
@@ -13,6 +14,7 @@ import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.data.PullNotification;
+import com.utree.eightysix.push.PushMessageReceiver;
 import com.utree.eightysix.request.FetchNotificationRequest;
 import com.utree.eightysix.response.FetchResponse;
 import com.utree.eightysix.rest.HandlerWrapper;
@@ -36,6 +38,8 @@ public class FetchNotificationService extends Service {
 
   private NotifyUtil mNotifyUtil;
 
+  private boolean mShowCommentNotify;
+
   private Handler mHandler = new Handler() {
     @Override
     public void handleMessage(Message msg) {
@@ -52,7 +56,20 @@ public class FetchNotificationService extends Service {
   public int onStartCommand(Intent intent, int flags, int startId) {
     Log.d(TAG, "start FetchService");
     mHandler.sendEmptyMessageDelayed(MSG_FETCH, 1000);
+    mShowCommentNotify = intent.getBooleanExtra("showCommentNotify", false);
     return START_NOT_STICKY;
+  }
+
+  public static void start(Context context, boolean showCommentNotify) {
+    Intent intent = new Intent(context, FetchNotificationService.class);
+
+    if (!(context instanceof Activity)) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    intent.putExtra("showCommentNotify", showCommentNotify);
+
+    context.startActivity(intent);
   }
 
   @Override
@@ -82,10 +99,27 @@ public class FetchNotificationService extends Service {
           }
 
           int count = 0;
+          int type = 0;
+
+          PullNotification comments = null;
           if (response.object.newComment != null) {
-            count = response.object.newComment.unread;
+            comments = response.object.newComment;
+            type = comments.type;
+            count = comments.unread;
           } else if (response.object.myPostComment != null) {
-            count = response.object.myPostComment.unread;
+            comments = response.object.myPostComment;
+            type = comments.type;
+            count = comments.unread;
+          }
+
+          if (mShowCommentNotify) {
+            if (count == 1) {
+              getNM().notify(type == PushMessageReceiver.TYPE_FOLLOW_COMMENT ? NotifyUtil.ID_FOLLOW_COMMENT : NotifyUtil.ID_OWN_COMMENT,
+                  mNotifyUtil.buildComment(count, comments.lists.get(0).value, type));
+            } else if (count > 1) {
+              getNM().notify(type == PushMessageReceiver.TYPE_FOLLOW_COMMENT ? NotifyUtil.ID_FOLLOW_COMMENT : NotifyUtil.ID_OWN_COMMENT,
+                  mNotifyUtil.buildComment(count, null, type));
+            }
           }
 
           Account.inst().setNewCommentCount(count);
