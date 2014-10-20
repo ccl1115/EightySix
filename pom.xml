@@ -19,7 +19,7 @@
     </modules>
 
     <properties>
-        <platform.version>4.4.2_r3</platform.version>
+        <platform.version>5.0_r1</platform.version>
         <android.plugin.version>3.8.2</android.plugin.version>
         <environment>development</environment>
     </properties>
@@ -296,7 +296,7 @@
                     <version>${android.plugin.version}</version>
                     <configuration>
                         <sdk>
-                            <platform>19</platform>
+                            <platform>21</platform>
                         </sdk>
                     </configuration>
                 </plugin>
