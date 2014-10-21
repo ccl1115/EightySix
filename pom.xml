@@ -20,7 +20,8 @@
 
     <properties>
         <platform.version>5.0_r1</platform.version>
-        <android.plugin.version>3.8.2</android.plugin.version>
+        <platform.target>21</platform.target>
+        <android.plugin.version>4.0.0-rc.1</android.plugin.version>
         <environment>development</environment>
     </properties>
 
@@ -308,7 +309,7 @@
                     <version>${android.plugin.version}</version>
                     <configuration>
                         <sdk>
-                            <platform>19</platform>
+                            <platform>${platform.target}</platform>
                         </sdk>
                     </configuration>
                 </plugin>
