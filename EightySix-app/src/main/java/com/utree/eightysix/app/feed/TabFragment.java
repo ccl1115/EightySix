@@ -12,6 +12,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
@@ -107,6 +108,8 @@ public class TabFragment extends BaseFragment {
             mFriendsFragment.setActive(true);
             break;
         }
+
+        U.getAnalyser().trackEvent(U.getContext(), "feed_tab_switch", String.valueOf(position));
       }
 
       @Override
