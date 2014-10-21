@@ -56,6 +56,11 @@
         </dependency>
 
         <dependency>
+            <groupId>pushservice</groupId>
+            <artifactId>pushservice</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>tencent.opensdk</groupId>
             <artifactId>opensdk</artifactId>
         </dependency>
@@ -134,16 +139,6 @@
             <artifactId>easemobchat</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>xg_sdk</groupId>
-            <artifactId>xg_sdk</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>wup</groupId>
-            <artifactId>wup</artifactId>
-        </dependency>
-
     </dependencies>
 
     <build>
@@ -158,6 +153,10 @@
                         <goals>
                             <goal>manifest-update</goal>
                         </goals>
+                        <configuration>
+                            <androidManifestFile>src/main/AndroidManifest.xml</androidManifestFile>
+                            <updatedManifestFile>src/main/AndroidManifest.xml</updatedManifestFile>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

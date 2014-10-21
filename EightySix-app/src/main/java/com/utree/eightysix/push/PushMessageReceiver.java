@@ -5,8 +5,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import com.baidu.frontia.api.FrontiaPushMessageReceiver;
 import com.google.gson.annotations.SerializedName;
-import com.tencent.android.tpush.*;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
@@ -26,10 +26,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  */
-public final class PushMessageReceiver extends XGPushBaseReceiver {
+public final class PushMessageReceiver extends FrontiaPushMessageReceiver {
   /**
    * 新帖子
    */
@@ -64,43 +65,48 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
   public CmdHandler mCmdHandler = new CmdHandler();
 
   @Override
-  public void onRegisterResult(Context context, int i, XGPushRegisterResult xgPushRegisterResult) {
-    if (i == 0) {
-      Env.setPushChannelId("100");
-      Env.setPushUserId(xgPushRegisterResult.getToken());
+  public void onBind(Context context, int errorCode, String appId, String userId, String channelId, String requestId) {
+
+    if (errorCode == 0) {
+      Env.setPushChannelId(channelId);
+      Env.setPushUserId(userId);
     }
   }
 
   @Override
-  public void onUnregisterResult(Context context, int i) {
+  public void onUnbind(Context context, int errorCode, String requestId) {
+  }
+
+  @Override
+  public void onSetTags(Context context, int i, List<String> strings, List<String> strings2, String s) {
 
   }
 
   @Override
-  public void onSetTagResult(Context context, int i, String s) {
+  public void onDelTags(Context context, int i, List<String> strings, List<String> strings2, String s) {
 
   }
 
   @Override
-  public void onDeleteTagResult(Context context, int i, String s) {
+  public void onListTags(Context context, int i, List<String> strings, String s) {
 
   }
 
   @Override
-  public void onTextMessage(Context context, XGPushTextMessage xgPushTextMessage) {
+  public void onMessage(Context context, String message, String customContentString) {
     Message m;
     try {
-      m = U.getGson().fromJson(xgPushTextMessage.getContent(), Message.class);
+      m = U.getGson().fromJson(message, Message.class);
     } catch (Exception e) {
       return;
     }
 
     if (BuildConfig.DEBUG) {
-      Log.d("PushService", "message = " + xgPushTextMessage.getContent());
+      Log.d("PushService", "message = " + message);
 
       NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
       builder.setContentTitle("PushService Debug");
-      builder.setContentText(xgPushTextMessage.getContent());
+      builder.setContentText(message);
       builder.setTicker("PushService Debug");
       builder.setSmallIcon(R.drawable.ic_app_icon);
       if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
@@ -118,7 +124,7 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
         os.write("\n\n");
         os.write(String.format("[%s]", DateFormat.getInstance().format(date)));
         os.write("\nuserId = " + Account.inst().getUserId());
-        os.write("\nmessage = " + xgPushTextMessage.getContent());
+        os.write("\nmessage = " + message);
         os.write("\ntype = " + m.type);
         os.write("\npushFlag = " + m.pushFlag);
         os.write("\n");
@@ -139,9 +145,9 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
   }
 
   @Override
-  public void onNotifactionClickedResult(Context context, XGPushClickedResult xgPushClickedResult) {
+  public void onNotificationClicked(Context context, String s, String s2, String s3) {
     try {
-      Message m = U.getGson().fromJson(xgPushClickedResult.getCustomContent(), Message.class);
+      Message m = U.getGson().fromJson(s3, Message.class);
       if (m.type == TYPE_CMD) {
         mCmdHandler.handle(context, m.cmd);
       }
@@ -152,11 +158,6 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
         U.getAnalyser().reportException(context, e);
       }
     }
-  }
-
-  @Override
-  public void onNotifactionShowedResult(Context context, XGPushShowedResult xgPushShowedResult) {
-
   }
 
 

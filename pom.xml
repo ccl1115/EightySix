@@ -285,18 +285,6 @@
                 <version>2.0.9</version>
             </dependency>
 
-            <dependency>
-                <groupId>xg_sdk</groupId>
-                <artifactId>xg_sdk</artifactId>
-                <version>2.35</version>
-            </dependency>
-
-            <dependency>
-                <groupId>wup</groupId>
-                <artifactId>wup</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-
         </dependencies>
     </dependencyManagement>
 
