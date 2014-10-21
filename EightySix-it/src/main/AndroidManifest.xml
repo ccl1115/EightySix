@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.utree.eightysix.test"
           android:versionCode="1"
-          android:versionName="1.5.0-SNAPSHOT">
+          android:versionName="1.2.3">
 
     <uses-sdk
             android:targetSdkVersion="19"
