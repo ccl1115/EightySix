@@ -49,6 +49,16 @@ public class FriendsFragment extends AbsFeedFragment {
     }, FeedsResponse.class);
   }
 
+  @Override
+  protected void onPullRefresh() {
+    U.getAnalyser().trackEvent(getActivity(), "feed_pull_refresh", "feed_friends");
+  }
+
+  @Override
+  protected void onLoadMore(int page) {
+    U.getAnalyser().trackEvent(getActivity(), "feed_load_more", String.valueOf(page), "feed_friends");
+  }
+
   @Subscribe
   public void onFeedPostPraiseEvent(final FeedPostPraiseEvent event) {
     if (mPostPraiseRequesting) {

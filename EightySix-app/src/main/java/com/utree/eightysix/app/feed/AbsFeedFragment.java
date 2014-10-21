@@ -80,7 +80,7 @@ public abstract class AbsFeedFragment extends BaseFragment {
 
       @Override
       public boolean onLoadMoreStart() {
-        U.getAnalyser().trackEvent(getActivity(), "feed_load_more", String.valueOf(mPageInfo.currPage + 1));
+        onLoadMore(mPageInfo.currPage + 1);
         requestFeeds(mCircle.id, mPageInfo == null ? 1 : mPageInfo.currPage + 1);
         return true;
       }
@@ -92,7 +92,7 @@ public abstract class AbsFeedFragment extends BaseFragment {
       @Override
       public void onRefresh() {
         getBaseActivity().showRefreshIndicator(true);
-        U.getAnalyser().trackEvent(getActivity(), "feed_pull_refresh", "feed_pull_refresh");
+        onPullRefresh();
         if (isAdded()) {
           if (mCircle != null) {
             requestFeeds(mCircle.id, 1);
@@ -345,6 +345,10 @@ public abstract class AbsFeedFragment extends BaseFragment {
     getBaseActivity().hideProgressBar();
     getBaseActivity().hideRefreshIndicator();
   }
+
+  protected abstract void onPullRefresh();
+
+  protected abstract void onLoadMore(int page);
 
   boolean canPublish() {
     if (mFeedAdapter != null) {
