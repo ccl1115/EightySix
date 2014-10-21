@@ -63,10 +63,6 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
 
   public CmdHandler mCmdHandler = new CmdHandler();
 
-//  @Override
-  public void onNotificationClicked(Context context, String s, String s2, String s3) {
-  }
-
   @Override
   public void onRegisterResult(Context context, int i, XGPushRegisterResult xgPushRegisterResult) {
     if (i == 0) {
@@ -94,13 +90,13 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
   public void onTextMessage(Context context, XGPushTextMessage xgPushTextMessage) {
     Message m;
     try {
-      m = U.getGson().fromJson(xgPushTextMessage.toString(), Message.class);
+      m = U.getGson().fromJson(xgPushTextMessage.getContent(), Message.class);
     } catch (Exception e) {
       return;
     }
 
     if (BuildConfig.DEBUG) {
-      Log.d("PushService", "message = " + xgPushTextMessage.toString());
+      Log.d("PushService", "message = " + xgPushTextMessage.getContent());
 
       NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
       builder.setContentTitle("PushService Debug");
