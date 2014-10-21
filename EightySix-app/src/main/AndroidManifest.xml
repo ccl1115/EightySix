@@ -230,6 +230,7 @@
                 <action android:name="com.utree.eightysix.PUSH_ACTION"/>
             </intent-filter>
         </service>
+        <service android:name=".utils.PingService"/>
 
 
     </application>

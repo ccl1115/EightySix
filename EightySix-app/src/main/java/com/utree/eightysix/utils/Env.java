@@ -135,6 +135,14 @@ public class Env {
     return getSharedPreferences().getLong(key, 0);
   }
 
+  public static void setHostIp(String ip) {
+    getSharedPreferences().edit().putString("host_ip", ip).apply();
+  }
+
+  public static String getHostIp() {
+    return getSharedPreferences().getString("host_ip", null);
+  }
+
   private static SharedPreferences getSharedPreferences() {
     return U.getContext().getSharedPreferences("env", Context.MODE_PRIVATE);
   }

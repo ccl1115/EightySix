@@ -23,6 +23,9 @@ public class Sync {
 
   public int activeSys;
 
+  @SerializedName("ip")
+  public String ip;
+
   public static class Portrait implements Parcelable {
 
 

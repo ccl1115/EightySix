@@ -281,5 +281,6 @@
     <string name="friends_from_scan">来自扫一扫添加 (%1$d)</string>
     <string name="known_people">我认识的人</string>
     <string name="rotate">旋转</string>
+    <string name="notification_friends_new_posts">你认识的人发了%d条帖子，去看看吧</string>
 
 </resources>

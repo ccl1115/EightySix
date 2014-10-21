@@ -32,7 +32,6 @@ public class NotifyUtil {
   static final int ID_OWN_COMMENT = 0x7000;
 
   private final Context mContext;
-  private NotificationManager mNotificationManager;
 
   private static Bitmap sLargeIcon;
 
@@ -42,7 +41,6 @@ public class NotifyUtil {
 
   NotifyUtil(Context context) {
     mContext = context;
-    mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
   }
 
   Notification buildPost(int i, String postId, String shortName) {
@@ -65,6 +63,28 @@ public class NotifyUtil {
           PendingIntent.FLAG_UPDATE_CURRENT));
     }
 
+
+    return builder.build();
+  }
+
+  Notification buildPosts(String shortName, int circleId, int count) {
+    NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext);
+    builder.setTicker(mContext.getString(R.string.notification_friends_new_posts, count))
+        .setAutoCancel(true)
+        .setDefaults(Account.inst().getSilentMode() ? Notification.DEFAULT_LIGHTS : Notification.DEFAULT_ALL)
+        .setLargeIcon(sLargeIcon)
+        .setSmallIcon(R.drawable.ic_launcher)
+        .setContentTitle(shortName)
+        .setContentText(mContext.getString(R.string.notification_friends_new_posts, count));
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+      builder.setContentIntent(PendingIntent.getActivities(mContext, 0,
+          wrapIntent(FeedActivity.getIntent(mContext, circleId, true)),
+          PendingIntent.FLAG_UPDATE_CURRENT));
+    } else {
+      builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
+          FeedActivity.getIntent(mContext, circleId, true),
+          PendingIntent.FLAG_UPDATE_CURRENT));
+    }
 
     return builder.build();
   }

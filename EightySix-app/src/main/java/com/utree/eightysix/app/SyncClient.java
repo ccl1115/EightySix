@@ -4,6 +4,7 @@ import com.squareup.otto.Subscribe;
 import com.utree.eightysix.M;
 import com.utree.eightysix.U;
 import com.utree.eightysix.data.Sync;
+import com.utree.eightysix.utils.Env;
 import de.akquinet.android.androlog.Log;
 
 /**
@@ -21,6 +22,7 @@ public class SyncClient {
   public void onSyncEvent(Sync sync) {
     Log.d("SyncClient", sync.toString());
     mSync = sync;
+    Env.setHostIp(mSync.ip);
   }
 
   public Sync getSync() {

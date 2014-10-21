@@ -108,6 +108,11 @@ public class RESTRequester implements IRESTRequester {
   }
 
   @Override
+  public void setHost(String host) {
+    mHost = host;
+  }
+
+  @Override
   public RequestHandle request(RequestData data, ResponseHandlerInterface handler) {
     data.setRequestTime(System.currentTimeMillis());
     if (data.getMethod() == Method.GET) {
