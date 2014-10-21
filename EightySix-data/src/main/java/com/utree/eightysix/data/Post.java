@@ -56,6 +56,9 @@ public class Post extends BaseItem implements Parcelable {
   @SerializedName("isHot")
   public int isHot;
 
+  @SerializedName("owner")
+  public int owner;
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;

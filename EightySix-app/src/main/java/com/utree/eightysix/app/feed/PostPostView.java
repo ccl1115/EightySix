@@ -133,10 +133,17 @@ public class PostPostView extends BasePostView {
     if (mPost == null) return;
 
     U.getAnalyser().trackEvent(U.getContext(), "post_more", "post_more");
+    String[] items;
+    if (mPost.owner == 1) {
+      items = new String[]{U.gs(R.string.share), U.gs(R.string.report),
+          U.gs(R.string.like),
+          U.gs(R.string.delete)};
+    } else {
+      items = new String[]{U.gs(R.string.share), U.gs(R.string.report),
+          U.gs(R.string.like)};
+    }
     new AlertDialog.Builder(getContext()).setTitle(U.gs(R.string.post_action))
-        .setItems(new String[]{U.gs(R.string.share), U.gs(R.string.report),
-                U.gs(R.string.like),
-                U.gs(R.string.delete)},
+        .setItems(items,
             new DialogInterface.OnClickListener() {
               @Override
               public void onClick(DialogInterface dialog, int which) {
