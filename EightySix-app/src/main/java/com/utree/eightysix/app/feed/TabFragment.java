@@ -148,6 +148,8 @@ public class TabFragment extends BaseFragment {
 
     if (mVpTab == null) return;
 
+    mVpTab.setCurrentItem(0);
+
     switch (mVpTab.getCurrentItem()) {
       case 0:
         mFeedFragment.setActive(true);
@@ -186,6 +188,8 @@ public class TabFragment extends BaseFragment {
     mFriendsFragment.setCircle(circleId);
 
     if (mVpTab == null) return;
+
+    mVpTab.setCurrentItem(0);
 
     switch (mVpTab.getCurrentItem()) {
       case 0:
