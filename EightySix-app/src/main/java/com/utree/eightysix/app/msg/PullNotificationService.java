@@ -105,9 +105,9 @@ public class PullNotificationService extends Service {
       case PushMessageReceiver.TYPE_NEW_POST:
         if (response.object.lists == null || response.object.lists.size() == 0) break;
         List<PullNotification.Item> lists = response.object.lists;
-        if (response.object.lists.size() == 1) {
-          PullNotification.Item item = lists.get(0);
-          getNM().notify(NotifyUtil.ID_POST, mNotifyUtil.buildPost(0, item.value, item.shortName));
+        for (int i = 0, listsSize = lists.size(); i < listsSize; i++) {
+          PullNotification.Item item = lists.get(i);
+          getNM().notify(item.value, NotifyUtil.ID_POST, mNotifyUtil.buildPost(i, item.value, item.shortName));
         }
         break;
       case PushMessageReceiver.TYPE_UNLOCK_CIRCLE:

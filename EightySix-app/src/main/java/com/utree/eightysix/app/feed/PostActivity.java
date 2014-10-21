@@ -404,6 +404,7 @@ public class PostActivity extends BaseActivity {
     final int isRepost = mPost == null ? 0 : mPost.isRepost;
     showProgressBar();
     ReadMsgStore.inst().addRead(id);
+    U.getAnalyser().trackEvent(this, "post_load", "post_load");
     request(new PostCommentsRequest(id, viewType, isHot, isRepost, page), new OnResponse<PostCommentsResponse>() {
       @Override
       public void onResponse(PostCommentsResponse response) {

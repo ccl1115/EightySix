@@ -58,15 +58,15 @@ public class BaseApplication extends Application {
       // 定时拉去消息服务
       FetchAlarmReceiver.setupAlarm(this);
 
+      // 推送服务
       U.getPushHelper().startWork();
 
       // 腾讯移动加速初始化
       GlobalContext.initialize(this);
 
       // 环信聊天初始化
-      EMChat.getInstance().init(this);
-      ChatAccount.inst();
-
+      //EMChat.getInstance().init(this);
+      //ChatAccount.inst();
 
       // 域名解析检查服务
       startService(new Intent(this, PingService.class));

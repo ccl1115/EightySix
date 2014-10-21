@@ -163,8 +163,8 @@ public class Account {
 
         FetchAlarmReceiver.setupAlarm(U.getContext());
 
-        M.getRegisterHelper().register(ChatAccount.inst());
-        ChatAccount.inst().login();
+        //M.getRegisterHelper().register(ChatAccount.inst());
+        //ChatAccount.inst().login();
       }
   }
 
