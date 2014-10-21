@@ -34,6 +34,7 @@ public class PingService extends Service {
           U.getRESTRequester().setHost("http://" + Env.getHostIp());
         } else {
           Log.d(TAG, "ping failed, no sync ip");
+          U.getRESTRequester().setHost("http://" + U.getConfig("api.ip"));
           U.getAnalyser().reportError(this, "PingService: failed to update host, not get ip from sync api");
         }
 
