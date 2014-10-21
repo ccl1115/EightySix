@@ -11,6 +11,7 @@ import com.utree.eightysix.C;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.chat.ChatAccount;
 import com.utree.eightysix.push.FetchAlarmReceiver;
+import com.utree.eightysix.utils.ImageUtils;
 import de.akquinet.android.androlog.Constants;
 import de.akquinet.android.androlog.Log;
 
@@ -79,5 +80,11 @@ public class BaseApplication extends Application {
       }
     }
     return false;
+  }
+
+  @Override
+  public void onLowMemory() {
+    super.onLowMemory();
+    ImageUtils.clear();
   }
 }

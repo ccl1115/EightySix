@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v4.util.LruCache;
 import android.text.TextUtils;
 import com.aliyun.android.util.MD5Util;
@@ -15,17 +16,23 @@ import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.U;
 import com.utree.eightysix.storage.Storage;
 import de.akquinet.android.androlog.Log;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import org.apache.http.Header;
 import org.apache.http.HttpStatus;
-
-import java.io.*;
 
 /**
  */
 public class ImageUtils {
-  private static final String TAG = "ImageUtils";
-
   public static final int MAX_SIZE = (((ActivityManager) U.getContext().getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass() >> 4) * 1024 * 1024;
+  private static final String TAG = "ImageUtils";
   private static LruCache<String, Bitmap> sLruCache = new LruCache<String, Bitmap>(
       MAX_SIZE) {
     @Override
@@ -44,8 +51,12 @@ public class ImageUtils {
       }
     }
   };
-
   private static AsyncHttpClient sClient = new AsyncHttpClient();
+  private static Executor sThreadPoolExecutor = Executors.newSingleThreadExecutor();
+
+  public static void clear() {
+    sLruCache.evictAll();
+  }
 
   private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
     final int height = options.outHeight;
@@ -276,12 +287,20 @@ public class ImageUtils {
       final int id = localResource(url);
 
       if (id != 0) {
-        new ImageResDecodeWorker(id, hash).execute();
+        executeTask(new ImageResDecodeWorker(id, hash));
       } else {
         asyncLoad(url, hash);
       }
     } else {
       U.getBus().post(new ImageLoadedEvent(hash, bitmap));
+    }
+  }
+
+  protected static <T extends AsyncTask<Void, Void, ?>> void executeTask(T task) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+      task.executeOnExecutor(sThreadPoolExecutor);
+    } else {
+      task.execute();
     }
   }
 
@@ -295,9 +314,9 @@ public class ImageUtils {
       try {
         final DiskLruCache.Snapshot snapshot = U.getImageCache().get(hash);
         if (snapshot != null) {
-          new ImageDiskDecodeWorker(url, hash, snapshot, width, height).execute();
+          executeTask(new ImageDiskDecodeWorker(url, hash, snapshot, width, height));
         } else {
-          sClient.get(U.getContext(), url, new ImageMyFileAsyncHttpResponseHandler(hash));
+          sClient.get(U.getContext(), url, new ImageAsyncHttpResponseHandler(hash));
         }
       } catch (IOException ignored) {
         Log.e(TAG, "Get snapshot IOException: " + ignored.getMessage());
@@ -316,9 +335,9 @@ public class ImageUtils {
       try {
         final DiskLruCache.Snapshot snapshot = U.getImageCache().get(hash);
         if (snapshot != null) {
-          new ImageDiskDecodeWorker(url, hash, snapshot).execute();
+          executeTask(new ImageDiskDecodeWorker(url, hash, snapshot));
         } else {
-          sClient.get(U.getContext(), url, new ImageMyFileAsyncHttpResponseHandler(hash));
+          sClient.get(U.getContext(), url, new ImageAsyncHttpResponseHandler(hash));
         }
       } catch (IOException ignored) {
         Log.e(TAG, "Get snapshot IOException: " + ignored.getMessage());
@@ -357,11 +376,27 @@ public class ImageUtils {
    * @param file the file to be cache
    */
   public static void cacheImage(String hash, File file) {
-    new ImageRemoteDecodeWorker(hash, file).execute();
+    executeTask(new ImageRemoteDecodeWorker(hash, file).execute());
   }
 
   public static void cacheImage(String hash, Bitmap bitmap) {
     sLruCache.put(hash, bitmap);
+  }
+
+  /**
+   * Detect whether this url image is in resource package,
+   * <p/>
+   * if true return the correspond id
+   *
+   * @param url the url
+   * @return the id of this resource
+   */
+  private static int localResource(String url) {
+    if (url.contains(U.getBgBucket())) {
+      String res = url.substring(url.lastIndexOf('/') + 1).split("\\.")[0];
+      return U.getContext().getResources().getIdentifier(res, "drawable", U.getContext().getPackageName());
+    }
+    return 0;
   }
 
   private static class UploadWorker extends AsyncTask<Void, Void, Void> {
@@ -422,22 +457,6 @@ public class ImageUtils {
     protected void onPostExecute(Void aVoid) {
       U.getBus().post(new ImageUploadedEvent(mFileHash, mUrl));
     }
-  }
-
-  /**
-   * Detect whether this url image is in resource package,
-   * <p/>
-   * if true return the correspond id
-   *
-   * @param url the url
-   * @return the id of this resource
-   */
-  private static int localResource(String url) {
-    if (url.contains(U.getBgBucket())) {
-      String res = url.substring(url.lastIndexOf('/') + 1).split("\\.")[0];
-      return U.getContext().getResources().getIdentifier(res, "drawable", U.getContext().getPackageName());
-    }
-    return 0;
   }
 
   /**
@@ -559,7 +578,7 @@ public class ImageUtils {
         U.getBus().post(new ImageLoadedEvent(mHash, bitmap));
       } else {
         Log.d(TAG, "onFailed from disk");
-        sClient.get(U.getContext(), mUrl, new ImageMyFileAsyncHttpResponseHandler(mHash));
+        sClient.get(U.getContext(), mUrl, new ImageAsyncHttpResponseHandler(mHash));
       }
 
     }
@@ -637,11 +656,11 @@ public class ImageUtils {
     }
   }
 
-  private static class ImageMyFileAsyncHttpResponseHandler extends FileAsyncHttpResponseHandler {
+  private static class ImageAsyncHttpResponseHandler extends FileAsyncHttpResponseHandler {
 
     private final String hash;
 
-    public ImageMyFileAsyncHttpResponseHandler(String hash) {
+    public ImageAsyncHttpResponseHandler(String hash) {
       super(IOUtils.createTmpFile(hash));
       this.hash = hash;
     }
@@ -662,7 +681,7 @@ public class ImageUtils {
     public void onSuccess(int i, Header[] headers, File file) {
       Log.d(TAG, "onSuccess");
       if (i <= HttpStatus.SC_OK) {
-        new ImageRemoteDecodeWorker(hash, file).execute();
+        executeTask(new ImageRemoteDecodeWorker(hash, file));
       } else {
         U.getBus().post(new ImageLoadedEvent(hash, null));
       }
