@@ -20,6 +20,8 @@ import com.utree.eightysix.push.PushHelper;
 import com.utree.eightysix.push.XGPushHelper;
 import com.utree.eightysix.qrcode.ActionDispatcher;
 import com.utree.eightysix.qrcode.actions.AddFriendAction;
+import com.utree.eightysix.report.logger.EntryLogger;
+import com.utree.eightysix.report.logger.LoggerImpl;
 import com.utree.eightysix.rest.IRESTRequester;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.app.share.ShareManager;
@@ -62,6 +64,7 @@ public class U {
   private static Fixture sFixture;
   private static Toast sToast;
   private static SyncClient sSyncClient;
+  private static EntryLogger sEntryLogger;
 
   private static final Object lock = new Object();
 
@@ -360,16 +363,22 @@ public class U {
     return sActionDispatcher;
   }
 
+  public static EntryLogger getEntryLogger() {
+    M.checkThread();
+
+    if (sEntryLogger == null) {
+      sEntryLogger = new LoggerImpl(U.getContext(), U.getConfig("app.logger.host"));
+    }
+
+    return sEntryLogger;
+  }
+
   public static boolean useFixture() {
     return getConfigBoolean("debug.fixture");
   }
 
   public static <T> List<T> getFixture(Class<T> clz, int quantity, String template) {
     return sFixture == null ? null : sFixture.get(clz, quantity, template);
-  }
-
-  public static <T> T getFixture(Class<T> clz, String template) {
-    return sFixture == null ? null : sFixture.get(clz, template);
   }
 
   static {

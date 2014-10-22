@@ -13,12 +13,17 @@ import com.utree.eightysix.data.User;
 import com.utree.eightysix.event.HasNewPraiseEvent;
 import com.utree.eightysix.event.NewCommentCountEvent;
 import com.utree.eightysix.push.FetchAlarmReceiver;
+import com.utree.eightysix.report.logger.EntryAdapter;
+import com.utree.eightysix.report.logger.Payload;
 import com.utree.eightysix.request.LogoutRequest;
 import com.utree.eightysix.rest.HandlerWrapper;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RequestData;
 import com.utree.eightysix.rest.Response;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -165,6 +170,21 @@ public class Account {
 
         //M.getRegisterHelper().register(ChatAccount.inst());
         //ChatAccount.inst().login();
+
+        U.getEntryLogger().log(new EntryAdapter() {
+          @Override
+          public String getApi() {
+            return "/api/LoginEntries";
+          }
+
+          @Override
+          public Payload getPayload() {
+            Payload payload = new Payload();
+            payload.add("user_id", Account.inst().getUserId());
+            payload.add("timestamp", SimpleDateFormat.getDateTimeInstance().format(new Date()));
+            return payload;
+          }
+        });
       }
   }
 
