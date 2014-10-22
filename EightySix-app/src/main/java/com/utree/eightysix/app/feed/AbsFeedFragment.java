@@ -80,7 +80,9 @@ public abstract class AbsFeedFragment extends BaseFragment {
 
       @Override
       public boolean onLoadMoreStart() {
-        onLoadMore(mPageInfo.currPage + 1);
+        if (mPageInfo != null) {
+          onLoadMore(mPageInfo.currPage + 1);
+        }
         requestFeeds(mCircle.id, mPageInfo == null ? 1 : mPageInfo.currPage + 1);
         return true;
       }
@@ -339,6 +341,8 @@ public abstract class AbsFeedFragment extends BaseFragment {
         getBaseActivity().setTopTitle(mCircle.shortName);
       }
       getBaseActivity().setTopSubTitle("");
+
+      mPageInfo = null;
     }
     mRefresherView.setRefreshing(false);
     mLvFeed.stopLoadMore();
