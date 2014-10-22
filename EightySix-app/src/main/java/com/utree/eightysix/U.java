@@ -17,7 +17,7 @@ import com.utree.eightysix.app.SyncClient;
 import com.utree.eightysix.app.feed.BaseItemDeserializer;
 import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.push.PushHelper;
-import com.utree.eightysix.push.PushHelperImpl;
+import com.utree.eightysix.push.XGPushHelper;
 import com.utree.eightysix.qrcode.ActionDispatcher;
 import com.utree.eightysix.qrcode.actions.AddFriendAction;
 import com.utree.eightysix.rest.IRESTRequester;
@@ -147,7 +147,7 @@ public class U {
   public static PushHelper getPushHelper() {
     M.checkThread();
     if (sPushHelper == null) {
-      sPushHelper = new PushHelperImpl();
+      sPushHelper = new XGPushHelper();
     }
     return sPushHelper;
   }

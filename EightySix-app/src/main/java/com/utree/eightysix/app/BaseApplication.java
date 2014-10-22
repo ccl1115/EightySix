@@ -5,7 +5,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
-import com.baidu.frontia.FrontiaApplication;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.tencent.cloudsdk.tsocket.GlobalContext;
@@ -13,6 +12,7 @@ import com.utree.eightysix.C;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.chat.ChatAccount;
 import com.utree.eightysix.push.FetchAlarmReceiver;
+import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.PingService;
 import de.akquinet.android.androlog.Constants;
 import de.akquinet.android.androlog.Log;
@@ -21,7 +21,7 @@ import java.util.List;
 
 /**
  */
-public class BaseApplication extends FrontiaApplication {
+public class BaseApplication extends Application {
 
   private static Context sContext;
 
@@ -86,5 +86,11 @@ public class BaseApplication extends FrontiaApplication {
       }
     }
     return false;
+  }
+
+  @Override
+  public void onLowMemory() {
+    super.onLowMemory();
+    ImageUtils.clear();
   }
 }
