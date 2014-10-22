@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.settings;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -10,15 +11,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.utree.eightysix.R;
-import com.utree.eightysix.U;
 import com.utree.eightysix.data.Sync;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.MD5Util;
-import org.apache.http.Header;
-
 import java.io.File;
+import org.apache.http.Header;
 
 /**
  * @author simon
@@ -29,6 +29,7 @@ public class UpgradeService extends Service {
 
   private NotificationCompat.Builder mBuilder;
   private NotificationManager mNotificationManager;
+  private Notification mNotification;
 
   public static void start(Context context, Sync.Upgrade upgrade) {
     Intent intent = new Intent(context, UpgradeService.class);
@@ -66,36 +67,35 @@ public class UpgradeService extends Service {
       startActivity(i);
     } else {
       if (tmpFile.exists()) tmpFile.delete();
-      U.getRESTRequester().getClient()
-          .get(this, upgrade.url, null, new FileAsyncHttpResponseHandler(tmpFile) {
+      new AsyncHttpClient().get(this, upgrade.url, null, new FileAsyncHttpResponseHandler(tmpFile) {
 
-            @Override
-            public void onStart() {
-              mBuilder.setContentText("开始下载");
-              mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-            }
+        @Override
+        public void onStart() {
+          mBuilder.setContentText("开始下载");
+          mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        }
 
-            @Override
-            public void onProgress(int bytesWritten, int totalSize) {
-              updateNotification((int) (100 * (bytesWritten / (float) totalSize)),
-                  bytesWritten / 1024, totalSize / 1024);
+        @Override
+        public void onProgress(int bytesWritten, int totalSize) {
+          updateNotification((int) (100 * (bytesWritten / (float) totalSize)),
+              bytesWritten / 1024, totalSize / 1024);
 
-            }
+        }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
-              mBuilder.setContentText("下载失败");
-              mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-            }
+        @Override
+        public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
+          mBuilder.setContentText("下载失败");
+          mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        }
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, File file) {
-              Intent i = new Intent(Intent.ACTION_VIEW);
-              i.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
-              i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-              startActivity(i);
-            }
-          });
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, File file) {
+          Intent i = new Intent(Intent.ACTION_VIEW);
+          i.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+          i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+          startActivity(i);
+        }
+      });
     }
     return START_NOT_STICKY;
   }
