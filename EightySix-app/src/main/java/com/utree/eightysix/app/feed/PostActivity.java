@@ -421,12 +421,7 @@ public class PostActivity extends BaseActivity {
         }
 
         if (bottom) {
-          getHandler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-              mLvComments.setSelection(Integer.MAX_VALUE);
-            }
-          }, 200);
+          mLvComments.setSelection(Integer.MAX_VALUE);
         }
 
         hideProgressBar();

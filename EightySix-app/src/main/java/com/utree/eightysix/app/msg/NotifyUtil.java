@@ -55,11 +55,11 @@ public class NotifyUtil {
         .setContentText(mContext.getString(R.string.notification_friend_new_post));
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
       builder.setContentIntent(PendingIntent.getActivities(mContext, 0,
-          wrapIntent(PostActivity.getIntent(mContext, postId, "post_", true)),
+          wrapIntent(PostActivity.getIntent(mContext, postId, "post_", false)),
           PendingIntent.FLAG_UPDATE_CURRENT));
     } else {
       builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
-          PostActivity.getIntent(mContext, postId, "post_", true),
+          PostActivity.getIntent(mContext, postId, "post_", false),
           PendingIntent.FLAG_UPDATE_CURRENT));
     }
 

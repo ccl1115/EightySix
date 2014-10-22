@@ -7,6 +7,7 @@ import com.tencent.stat.StatAppMonitor;
 import com.utree.eightysix.*;
 import com.utree.eightysix.utils.IOUtils;
 import de.akquinet.android.androlog.Log;
+import java.net.UnknownHostException;
 import org.apache.http.HttpStatus;
 import org.apache.http.NoHttpResponseException;
 
@@ -112,6 +113,11 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
       if (!(e instanceof NoHttpResponseException)) {
         U.showToast(U.getContext().getString(R.string.server_connection_exception));
       }
+
+      if (e instanceof UnknownHostException) {
+        U.getRESTRequester().setHost("http://" + U.getConfig("api.ip"));
+      }
+
       if (BuildConfig.DEBUG) {
         File tmp = IOUtils.createTmpFile(
             String.format("server_error_%d_%d", statusCode, System.currentTimeMillis()));
@@ -126,7 +132,7 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
           writer.write("\n\n");
           e.printStackTrace(writer);
           writer.write("\n\n");
-          writer.write(rawData);
+          if (rawData != null) writer.write(rawData);
         } catch (Exception ignored) {
         } finally {
           if (writer != null) {
