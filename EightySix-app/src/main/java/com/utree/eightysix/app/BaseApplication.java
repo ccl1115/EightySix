@@ -3,6 +3,7 @@ package com.utree.eightysix.app;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import com.baidu.frontia.FrontiaApplication;
 import com.easemob.chat.EMChat;
@@ -12,6 +13,7 @@ import com.utree.eightysix.C;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.chat.ChatAccount;
 import com.utree.eightysix.push.FetchAlarmReceiver;
+import com.utree.eightysix.utils.PingService;
 import de.akquinet.android.androlog.Constants;
 import de.akquinet.android.androlog.Log;
 
@@ -61,6 +63,9 @@ public class BaseApplication extends FrontiaApplication {
 
       // 腾讯移动加速初始化
       GlobalContext.initialize(this);
+
+      // 域名检查
+      startService(new Intent(this, PingService.class));
 
       // 环信聊天初始化
       //EMChat.getInstance().init(this);

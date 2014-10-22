@@ -203,6 +203,7 @@
         <service android:name=".app.SyncService"/>
         <service android:name=".app.msg.PullNotificationService"/>
         <service android:name=".app.settings.UpgradeService"/>
+        <service android:name=".utils.PingService"/>
 
         <!--<service android:name="com.easemob.chat.EMChatService"/>-->
     </application>
