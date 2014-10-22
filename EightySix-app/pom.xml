@@ -7,16 +7,16 @@
     <parent>
         <groupId>com.utree.eightysix</groupId>
         <artifactId>EightySix-parent</artifactId>
-        <version>1.2.3</version>
+        <version>1.2.4</version>
     </parent>
 
     <artifactId>EightySix-app</artifactId>
     <packaging>apk</packaging>
     <name>EightySix-app - Application</name>
-    <version>1.2.3</version>
+    <version>1.2.4</version>
 
     <properties>
-        <android.manifest.versionCode>18</android.manifest.versionCode>
+        <android.manifest.versionCode>19</android.manifest.versionCode>
         <android.manifest.versionName>${project.version}</android.manifest.versionName>
     </properties>
 
@@ -115,13 +115,13 @@
         <dependency>
             <groupId>com.utree.eightysix</groupId>
             <artifactId>EightySix-data</artifactId>
-            <version>1.2.3</version>
+            <version>1.2.4</version>
         </dependency>
 
         <dependency>
             <groupId>com.utree.eightysix</groupId>
             <artifactId>EightySix-base</artifactId>
-            <version>1.2.3</version>
+            <version>1.2.4</version>
         </dependency>
 
         <dependency>
