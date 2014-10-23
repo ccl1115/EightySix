@@ -209,11 +209,6 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   }
 
   @Override
-  public void onActionLeftClicked() {
-
-  }
-
-  @Override
   public void onActionOverflowClicked() {
 
   }

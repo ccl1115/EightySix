@@ -219,6 +219,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".app.tag.TagTabActivity"/>
+        <activity
+                android:name=".app.topic.TopicListActivity"
+                android:label="全部话题"/>
+        <activity
+                android:name=".app.topic.TopicActivity"
+                android:label="话题详情"/>
 
         <!-- 【必须】 信鸽service -->
         <service android:exported="true" android:name="com.tencent.android.tpush.service.XGPushService" android:persistent="true" android:process=":xg_service_v2"/>
