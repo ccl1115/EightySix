@@ -367,7 +367,7 @@ public class ImageUtils {
    * @param file the file
    */
   public static void asyncUpload(File file) {
-    new UploadWorker(file).execute();
+    executeTask(new UploadWorker(file));
   }
 
   /**
@@ -376,7 +376,7 @@ public class ImageUtils {
    * @param file the file to be cache
    */
   public static void cacheImage(String hash, File file) {
-    executeTask(new ImageRemoteDecodeWorker(hash, file).execute());
+    executeTask(new ImageRemoteDecodeWorker(hash, file));
   }
 
   public static void cacheImage(String hash, Bitmap bitmap) {

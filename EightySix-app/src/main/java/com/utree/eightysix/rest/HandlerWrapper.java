@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.loopj.android.http.BaseJsonHttpResponseHandler;
 import com.tencent.stat.StatAppMonitor;
 import com.utree.eightysix.*;
+import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.utils.IOUtils;
 import de.akquinet.android.androlog.Log;
 import java.net.UnknownHostException;
@@ -26,7 +27,6 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
   private OnResponse<T> mOnResponse;
   private RequestData mRequestData;
   private Class<T> mClz;
-  private Gson mGson;
 
   private StatAppMonitor mStatAppMonitor;
 
@@ -40,11 +40,6 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
     mOnResponse = onResponse;
     mRequestData = data;
     mClz = clz;
-  }
-
-  public HandlerWrapper(RequestData data, OnResponse<T> onResponse, Class<T> clz, Gson customGson) {
-    this(data, onResponse, clz);
-    mGson = customGson;
   }
 
   @Override
@@ -111,7 +106,9 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
 
     if (e != null) {
       if (!(e instanceof NoHttpResponseException)) {
-        U.showToast(U.getContext().getString(R.string.server_connection_exception));
+        if (!BaseActivity.isBackground()) {
+          U.showToast(U.getContext().getString(R.string.server_connection_exception));
+        }
       }
 
       if (e instanceof UnknownHostException) {
@@ -150,7 +147,9 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
       if (BuildConfig.DEBUG) {
         Toast.makeText(U.getContext(), "HttpStatus: " + statusCode, Toast.LENGTH_SHORT).show();
       } else {
-        U.showToast(U.gs(R.string.server_500));
+        if (!BaseActivity.isBackground()) {
+          U.showToast(U.gs(R.string.server_500));
+        }
         U.getReporter().reportRequestStatusCode(mRequestData, statusCode);
       }
       mStatAppMonitor.setReturnCode(statusCode);
@@ -170,11 +169,7 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
   protected T parseResponse(String responseBody, boolean b) throws Throwable {
     if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "response: " + responseBody);
 
-    if (mGson == null) {
-      return U.getGson().fromJson(responseBody, mClz);
-    } else {
-      return mGson.fromJson(responseBody, mClz);
-    }
+    return U.getGson().fromJson(responseBody, mClz);
   }
 
 
