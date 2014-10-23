@@ -61,15 +61,17 @@ public class FetchNotificationService extends Service {
   }
 
   public static void start(Context context, boolean showCommentNotify) {
-    Intent intent = new Intent(context, FetchNotificationService.class);
+    if (Account.inst().isLogin()) {
+      Intent intent = new Intent(context, FetchNotificationService.class);
 
-    if (!(context instanceof Activity)) {
-      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      if (!(context instanceof Activity)) {
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      }
+
+      intent.putExtra("showCommentNotify", showCommentNotify);
+
+      context.startActivity(intent);
     }
-
-    intent.putExtra("showCommentNotify", showCommentNotify);
-
-    context.startActivity(intent);
   }
 
   @Override
