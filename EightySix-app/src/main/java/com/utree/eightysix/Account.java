@@ -211,6 +211,21 @@ public class Account {
       if (!Account.inst().setUserId("") && !Account.inst().setToken("")) {
         Account.inst().mIsLogin = false;
       }
+
+      U.getEntryLogger().log(new EntryAdapter() {
+        @Override
+        public String getApi() {
+          return "/api/LogoutEntries";
+        }
+
+        @Override
+        public Payload getPayload() {
+          Payload payload = new Payload();
+          payload.add("user_id", Account.inst().getUserId());
+          payload.add("timestamp", SimpleDateFormat.getDateTimeInstance().format(new Date()));
+          return payload;
+        }
+      });
     }
   }
 
