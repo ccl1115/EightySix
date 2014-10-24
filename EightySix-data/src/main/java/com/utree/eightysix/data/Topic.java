@@ -10,6 +10,9 @@ public class Topic {
   @SerializedName("id")
   public String id;
 
+  @SerializedName("content")
+  public String content;
+
   @SerializedName("tags")
   public List<Tag> tags;
 
