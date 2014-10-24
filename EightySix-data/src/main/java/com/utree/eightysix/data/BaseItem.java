@@ -11,6 +11,7 @@ public class BaseItem {
   public static final int TYPE_PROMOTION = 1002;
   public static final int TYPE_QUESTION_SET = 1003;
   public static final int TYPE_OPTION_SET = 1004;
+  public static final int TYPE_TOPIC = 1005;
 
   @SerializedName ("bgUrl")
   public String bgUrl;

@@ -7,9 +7,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.utree.eightysix.data.*;
-import de.akquinet.android.androlog.Log;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author simon
@@ -31,6 +31,8 @@ public class BaseItemDeserializer implements JsonDeserializer<BaseItem> {
             return getQuestionSet(jObj);
           case BaseItem.TYPE_OPTION_SET:
             return getOptionSet(jObj);
+          case BaseItem.TYPE_TOPIC:
+            return getPostTopicView(jObj);
         }
       }
       return getBaseItem(jObj);
@@ -157,6 +159,39 @@ public class BaseItemDeserializer implements JsonDeserializer<BaseItem> {
     stepView.quesId = safeGetAsInt(jObj.get("quesId"));
 
     return stepView;
+  }
+
+  private PostTopic getPostTopicView(JsonObject jObj) {
+    if (jObj == null) return null;
+
+    PostTopic postTopic = new PostTopic();
+
+    postTopic.headTitle = safeGetAsString(jObj.get("headTitle"));
+
+    Topic topic = new Topic();
+
+    JsonObject topicObj = safeGetJsonObject(jObj, "postTopic");
+
+    topic.id = safeGetAsString(jObj.get("id"));
+    topic.postCount = safeGetAsInt(jObj.get("postCount"));
+
+    List<Tag> tags = new ArrayList<Tag>();
+
+    JsonArray array = topicObj.getAsJsonArray("tags");
+
+    for (JsonElement element : array) {
+      JsonObject tagObj = element.getAsJsonObject();
+      Tag tag = new Tag();
+      tag.id = safeGetAsString(tagObj.get("id"));
+      tag.content = safeGetAsString(tagObj.get("content"));
+      tags.add(tag);
+    }
+
+    topic.tags = tags;
+
+    postTopic.postTopic = topic;
+
+    return postTopic;
   }
 
   private void serializeBaseItem(JsonObject jObj, BaseItem item) {

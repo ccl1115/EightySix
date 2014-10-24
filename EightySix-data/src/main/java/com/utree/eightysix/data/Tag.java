@@ -9,7 +9,7 @@ public class Tag implements Parcelable {
 
   public String id;
 
-  public String tag;
+  public String content;
 
   @Override
   public int describeContents() {
@@ -19,7 +19,7 @@ public class Tag implements Parcelable {
   @Override
   public void writeToParcel(Parcel dest, int flags) {
     dest.writeString(this.id);
-    dest.writeString(this.tag);
+    dest.writeString(this.content);
   }
 
   public Tag() {
@@ -27,7 +27,7 @@ public class Tag implements Parcelable {
 
   private Tag(Parcel in) {
     this.id = in.readString();
-    this.tag = in.readString();
+    this.content = in.readString();
   }
 
   public static final Parcelable.Creator<Tag> CREATOR = new Parcelable.Creator<Tag>() {
