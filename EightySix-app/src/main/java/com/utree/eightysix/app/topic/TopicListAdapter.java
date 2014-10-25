@@ -1,16 +1,20 @@
 package com.utree.eightysix.app.topic;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.data.Topic;
 import com.utree.eightysix.data.Topics;
+import com.utree.eightysix.drawable.RoundRectDrawable;
 import java.util.List;
 
 /**
@@ -41,17 +45,15 @@ public class TopicListAdapter extends BaseAdapter {
 
   @Override
   public Object getItem(int i) {
+    int newTopicSize = 1 + mTopics.newTopic.postTopics.lists.size();
     if (i == 0) {
       return null;
-    } else {
-      int newTopicSize = 1 + mTopics.newTopic.postTopics.lists.size();
-      if (i > 0 && i < newTopicSize) {
-        return mTopics.newTopic.postTopics.lists.get(i);
-      } else if (i == newTopicSize) {
-        return null;
-      } else if (i > newTopicSize) {
-        return mTopics.hotTopic.postTopics.lists.get(i - newTopicSize);
-      }
+    } else if (i > 0 && i < newTopicSize) {
+      return mTopics.newTopic.postTopics.lists.get(i - 1);
+    } else if (i == newTopicSize) {
+      return null;
+    } else if (i > newTopicSize) {
+      return mTopics.hotTopic.postTopics.lists.get(i - 1 - newTopicSize);
     }
     return null;
   }
@@ -74,17 +76,15 @@ public class TopicListAdapter extends BaseAdapter {
 
   @Override
   public int getItemViewType(int i) {
+    int newTopicSize = 1 + mTopics.newTopic.postTopics.lists.size();
     if (i == 0) {
       return TYPE_HEAD;
-    } else {
-      int newTopicSize = mTopics.newTopic.postTopics.lists.size();
-      if (i > 0 && i < newTopicSize) {
-        return TYPE_TOPIC;
-      } else if (i == 1 + newTopicSize) {
-        return TYPE_HEAD;
-      } else if (i > 1 + newTopicSize) {
-        return TYPE_TOPIC;
-      }
+    } else if (i > 0 && i < newTopicSize) {
+      return TYPE_TOPIC;
+    } else if (i == newTopicSize) {
+      return TYPE_HEAD;
+    } else if (i > newTopicSize) {
+      return TYPE_TOPIC;
     }
     return TYPE_HEAD;
   }
@@ -128,13 +128,13 @@ public class TopicListAdapter extends BaseAdapter {
       Tag g = tags.get(i);
       switch (i) {
         case 0:
-          holder.mTvTag1.setText(g.content);
+          holder.mTvTag1.setText("#" + g.content);
           break;
         case 1:
-          holder.mTvTag2.setText(g.content);
+          holder.mTvTag2.setText("#" + g.content);
           break;
         case 2:
-          holder.mTvTag3.setText(g.content);
+          holder.mTvTag3.setText("#" + g.content);
           break;
       }
     }
@@ -159,8 +159,13 @@ public class TopicListAdapter extends BaseAdapter {
     @InjectView (R.id.tv_more)
     public TextView mTvMore;
 
+    @InjectView (R.id.ll_parent)
+    public LinearLayout mFlParent;
+
     public TopicViewHolder(View view) {
       ButterKnife.inject(this, view);
+      mFlParent.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(4),
+          U.getContext().getResources().getColorStateList(R.color.apptheme_primary_list_selector)));
     }
   }
 }

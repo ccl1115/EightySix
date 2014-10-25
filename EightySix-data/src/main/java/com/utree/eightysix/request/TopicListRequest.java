@@ -10,5 +10,9 @@ import com.utree.eightysix.rest.Token;
 @Api(C.API_TOPIC_LIST)
 @Cache
 @Token
-public class TopicListRequest {
+public class TopicListRequest extends Paginate {
+
+  public TopicListRequest(int currPage) {
+    super(currPage);
+  }
 }

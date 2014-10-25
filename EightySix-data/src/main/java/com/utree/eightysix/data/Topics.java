@@ -20,8 +20,5 @@ public class Topics {
 
     @SerializedName("postTopics")
     public Paginate<Topic> postTopics;
-
-    @SerializedName("postTopics")
-    public Paginate<Topic> lists;
   }
 }
