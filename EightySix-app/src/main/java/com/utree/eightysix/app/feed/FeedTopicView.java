@@ -63,6 +63,21 @@ public class FeedTopicView extends FrameLayout {
     TopicListActivity.start(getContext());
   }
 
+  @OnClick (R.id.tv_tag_1)
+  public void onTvTag1Clicked() {
+
+  }
+
+  @OnClick (R.id.tv_tag_2)
+  public void onTvTag2Clicked() {
+
+  }
+
+  @OnClick (R.id.tv_tag_3)
+  public void onTvTag3Clicked() {
+
+  }
+
 
   public void setData(PostTopic topic) {
     if (topic == null) return;

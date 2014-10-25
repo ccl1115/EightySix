@@ -23,7 +23,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:padding="4dp"
-                    android:background="@drawable/round_border"
+                    android:background="@drawable/round_border_normal"
                     android:textColor="@android:color/white"/>
 
             <TextView
