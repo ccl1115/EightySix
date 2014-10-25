@@ -166,18 +166,16 @@ public class BaseItemDeserializer implements JsonDeserializer<BaseItem> {
 
     PostTopic postTopic = new PostTopic();
 
+    serializeBaseItem(jObj, postTopic);
+
     postTopic.headTitle = safeGetAsString(jObj.get("headTitle"));
 
-    Topic topic = new Topic();
-
-    JsonObject topicObj = safeGetJsonObject(jObj, "postTopic");
-
-    topic.id = safeGetAsString(jObj.get("id"));
-    topic.postCount = safeGetAsInt(jObj.get("postCount"));
+    postTopic.id = safeGetAsInt(jObj.get("id"));
+    postTopic.postCount = safeGetAsInt(jObj.get("postCount"));
 
     List<Tag> tags = new ArrayList<Tag>();
 
-    JsonArray array = topicObj.getAsJsonArray("tags");
+    JsonArray array = jObj.getAsJsonArray("tags");
 
     for (JsonElement element : array) {
       JsonObject tagObj = element.getAsJsonObject();
@@ -187,9 +185,7 @@ public class BaseItemDeserializer implements JsonDeserializer<BaseItem> {
       tags.add(tag);
     }
 
-    topic.tags = tags;
-
-    postTopic.postTopic = topic;
+    postTopic.tags = tags;
 
     return postTopic;
   }

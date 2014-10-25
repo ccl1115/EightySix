@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-             android:orientation="vertical"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:paddingLeft="8dp"
-             android:paddingRight="8dp">
+       xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
+       android:orientation="vertical"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@drawable/item_gradient_bg"
+            android:padding="8dp">
 
         <FrameLayout
                 android:layout_width="match_parent"
@@ -21,39 +22,56 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_margin="8dp"/>
+                    android:padding="4dp"
+                    android:background="@drawable/round_border"
+                    android:textColor="@android:color/white"/>
 
             <TextView
                     android:id="@+id/tv_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|right"
-                    android:layout_margin="8dp"/>
+                    android:padding="4dp"
+                    android:text="更多话题"
+                    android:textColor="@color/apptheme_primary_text_light"/>
         </FrameLayout>
 
         <TextView
                 android:id="@+id/tv_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="24dp"/>
+                android:layout_margin="24dp"
+                android:layout_gravity="center"
+                android:textSize="26sp"
+                android:textColor="@android:color/white"/>
 
         <LinearLayout
                 android:id="@+id/ll_tags"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingBottom="16dp">
+
             <TextView
                     android:id="@+id/tv_tag_1"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/apptheme_primary_text_light"
+                    android:paddingRight="4dp"/>
+
             <TextView
                     android:id="@+id/tv_tag_2"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/apptheme_primary_text_light"
+                    android:paddingRight="4dp"/>
+
             <TextView
                     android:id="@+id/tv_tag_3"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/apptheme_primary_text_light"/>
+
         </LinearLayout>
 
         <LinearLayout
@@ -65,15 +83,18 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_margin="8dp"/>
+                    android:layout_marginRight="8dp"
+                    android:textColor="@color/apptheme_primary_text_dark"
+                    app:background="@color/apptheme_primary_list_selector"/>
 
             <com.utree.eightysix.widget.RoundedButton
                     android:id="@+id/rb_publish"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_margin="8dp"
-                    android:text="@string/publish_anonymous"/>
+                    android:text="@string/publish_anonymous"
+                    android:textColor="@color/apptheme_primary_text_dark"
+                    app:background="@color/apptheme_primary_list_selector"/>
 
         </LinearLayout>
     </LinearLayout>

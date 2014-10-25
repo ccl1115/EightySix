@@ -1,5 +1,8 @@
 package com.utree.eightysix.app.topic;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +33,16 @@ public class TopicListActivity extends BaseActivity {
   private TopicListAdapter mTopicListAdapter;
 
   private Paginate.Page mPageInfo;
+
+  public static void start(Context context) {
+    Intent intent = new Intent(context, TopicListActivity.class);
+
+    if (!(context instanceof Activity)) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    context.startActivity(intent);
+  }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
