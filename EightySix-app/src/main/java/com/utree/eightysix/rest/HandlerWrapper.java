@@ -28,8 +28,6 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
   private RequestData mRequestData;
   private Class<T> mClz;
 
-  private StatAppMonitor mStatAppMonitor;
-
   /**
    * No cache constructor
    *
@@ -51,12 +49,6 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
   @Override
   public void onSuccess(int statusCode, org.apache.http.Header[] headers, String rawResponse, T response) {
 
-    mStatAppMonitor = new StatAppMonitor(mRequestData.getApi());
-
-    mStatAppMonitor.setMillisecondsConsume(System.currentTimeMillis() - mRequestData.getRequestTime());
-
-    mStatAppMonitor.setRespSize(rawResponse.length() * 2);
-    mStatAppMonitor.setReqSize(mRequestData.getParams().toString().length() * 2);
 
     if (response != null) {
       handleObjectError(response);
@@ -71,8 +63,6 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
       if (BuildConfig.DEBUG) {
         Toast.makeText(U.getContext(), "HttpStatus: " + statusCode, Toast.LENGTH_SHORT).show();
       }
-      mStatAppMonitor.setReturnCode(statusCode);
-      mStatAppMonitor.setResultType(StatAppMonitor.FAILURE_RESULT_TYPE);
     }
     try {
       mOnResponse.onResponse(response);
@@ -82,7 +72,6 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
       }
     }
 
-    U.getAnalyser().reportHttpRequest(U.getContext(), mStatAppMonitor);
   }
 
   @Override
@@ -91,18 +80,6 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
 
   @Override
   public void onFailure(int statusCode, org.apache.http.Header[] headers, Throwable e, String rawData, T errorResponse) {
-
-    mStatAppMonitor = new StatAppMonitor(mRequestData.getApi());
-
-    mStatAppMonitor.setMillisecondsConsume(System.currentTimeMillis() - mRequestData.getRequestTime());
-
-    if (rawData != null) {
-      mStatAppMonitor.setRespSize(rawData.length() * 2);
-    } else {
-      mStatAppMonitor.setRespSize(0);
-    }
-    mStatAppMonitor.setReqSize(mRequestData.getParams().toString().length() * 2);
-    mStatAppMonitor.setResultType(StatAppMonitor.FAILURE_RESULT_TYPE);
 
     if (e != null) {
       if (!(e instanceof NoHttpResponseException)) {
@@ -152,7 +129,6 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
         }
         U.getReporter().reportRequestStatusCode(mRequestData, statusCode);
       }
-      mStatAppMonitor.setReturnCode(statusCode);
     }
     try {
       mOnResponse.onResponse(null);
@@ -161,8 +137,6 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
         ((OnResponse2) mOnResponse).onResponseError(t);
       }
     }
-
-    U.getAnalyser().reportHttpRequest(U.getContext(), mStatAppMonitor);
   }
 
   @Override
