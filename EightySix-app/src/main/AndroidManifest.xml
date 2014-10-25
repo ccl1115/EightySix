@@ -155,6 +155,12 @@
 
         <activity android:exported="@bool/exported" android:name=".app.chat.StartChatActivity" android:screenOrientation="portrait"/>
 
+        <activity android:exported="@bool/exported" android:name=".app.tag.TagTabActivity" android:label="标签详情" android:screenOrientation="portrait"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.topic.TopicListActivity" android:label="全部话题" android:screenOrientation="portrait"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.topic.TopicActivity" android:label="话题详情" android:screenOrientation="portrait"/>
+
         <service android:enabled="true" android:name="com.baidu.location.f" android:process=":bdservice_v1"/>
 
         <service android:enabled="true" android:name=".contact.ContactsSyncService"/>
@@ -218,13 +224,6 @@
                 <action android:name=""/>
             </intent-filter>
         </activity>
-        <activity android:name=".app.tag.TagTabActivity"/>
-        <activity
-                android:name=".app.topic.TopicListActivity"
-                android:label="全部话题"/>
-        <activity
-                android:name=".app.topic.TopicActivity"
-                android:label="话题详情"/>
 
         <!-- 【必须】 信鸽service -->
         <service android:exported="true" android:name="com.tencent.android.tpush.service.XGPushService" android:persistent="true" android:process=":xg_service_v2"/>

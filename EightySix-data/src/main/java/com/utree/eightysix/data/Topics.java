@@ -19,6 +19,9 @@ public class Topics {
     public String headTitle;
 
     @SerializedName("postTopics")
-    public List<Topic> postTopics;
+    public Paginate<Topic> postTopics;
+
+    @SerializedName("postTopics")
+    public Paginate<Topic> lists;
   }
 }
