@@ -9,6 +9,7 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.utils.IOUtils;
 import de.akquinet.android.androlog.Log;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
 import org.apache.http.HttpStatus;
 import org.apache.http.NoHttpResponseException;
 
@@ -93,8 +94,10 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
       }
 
       if (BuildConfig.DEBUG) {
-        File tmp = IOUtils.createTmpFile(
-            String.format("server_error_%d_%d", statusCode, System.currentTimeMillis()));
+        File tmp = IOUtils.createTmpFile(String.format("server_error+_%s_%d_%s",
+            e.getClass().getSimpleName(),
+            statusCode,
+            SimpleDateFormat.getDateTimeInstance().format(new Date())));
         PrintWriter writer = null;
         try {
 
