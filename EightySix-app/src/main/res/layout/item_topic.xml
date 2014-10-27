@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+    <LinearLayout
+            android:id="@+id/ll_top"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:orientation="vertical"
+            android:background="@drawable/item_gradient_bg">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+            <TextView
+                    android:id="@+id/tv_tag_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="4dp"/>
+
+            <TextView
+                    android:id="@+id/tv_tag_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="4dp"/>
+
+            <TextView
+                    android:id="@+id/tv_tag_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="4dp"/>
+
+            <TextView
+                    android:id="@+id/tv_feed_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <TextView
+                android:id="@+id/tv_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/ll_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_top"
+            android:orientation="horizontal"
+            android:baselineAligned="false">
+
+        <LinearLayout
+                android:id="@+id/ll_tab_left"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:text="最新"/>
+
+            <View
+                    android:id="@+id/v_tab_left"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/apptheme_primary_light_color"/>
+        </LinearLayout>
+
+        <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="@color/apptheme_primary_light_color"/>
+
+        <LinearLayout
+                android:id="@+id/ll_tab_right"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:text="精选"/>
+
+            <View
+                    android:id="@+id/v_tab_righty"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/apptheme_primary_light_color"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

@@ -52,6 +52,8 @@ import static com.nineoldandroids.view.ViewHelper.getTranslationY;
  */
 public abstract class BaseActivity extends FragmentActivity implements LogoutListener, TopBar.Callback {
 
+  private static boolean sBackground;
+
   private final Handler mHandler = new Handler() {
     @Override
     public void handleMessage(Message msg) {
@@ -75,6 +77,10 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
 
   private boolean mResumed;
   private boolean mFillContent;
+
+  public static boolean isBackground() {
+    return sBackground;
+  }
 
   @Override
   public final void setContentView(int layoutResID) {
@@ -206,11 +212,6 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     RequestData data = U.getRESTRequester().convert(request);
 
     new CacheOutWorker<T>(RESTRequester.genCacheKey(data.getApi(), data.getParams()), onResponse, clz).execute();
-  }
-
-  @Override
-  public void onActionLeftClicked() {
-
   }
 
   @Override
@@ -428,6 +429,8 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     U.getAnalyser().onPause(this);
 
     if (mInActivityToast != null) mInActivityToast.cancel();
+
+    sBackground = true;
   }
 
   @Override
@@ -435,6 +438,8 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     super.onResume();
     U.getAnalyser().onResume(this);
     mResumed = true;
+
+    sBackground = false;
   }
 
   protected final void hideTopBar(boolean animate) {

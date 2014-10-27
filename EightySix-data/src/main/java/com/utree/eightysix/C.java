@@ -47,6 +47,12 @@ public class C {
   public static final String API_FEED_CHANGE_NAME = "/feed/changeName.do";
   public static final String API_FEED_OPTION_BACK = "/feed/back.do";
 
+  public static final String API_FEED_TAGS = "/feed/tags.do";
+
+  public static final String API_TOPIC_LIST = "/topic/list.do";
+  public static final String API_TOPIC_NEW = "/topic/new.do";
+  public static final String API_TOPIC_FEATURE = "/topic/feature.do";
+
   public static final String API_COMMENT_ADD = "/comment/add.do";
   public static final String API_COMMENT_DELETE = "/comment/delete.do";
   public static final String API_COMMENT_LIST = "/comment/list.do";

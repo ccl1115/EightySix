@@ -190,6 +190,7 @@
     <string name="no_publish_perm_tip">如果这里有%1$d个朋友在职，就能证明你也在这里工作过，就可以发帖啦。</string>
     <string name="no_perm_tip">为杜绝捣乱，只有证明你曾经在这里工作过，才可以发帖！\n\n解锁条件：当你有三个朋友把这里设为在职时，就能解锁发帖啦！</string>
     <string name="unlock_tip">当在厂里的朋友数量小于%1$d时，就太容易被你猜出作者是谁啦！为了保护作者，系统将隐藏他们发的秘密。\n\n解锁条件：厂里有%2$d个熟人在玩时，将立刻解锁朋友的秘密。</string>
+    <string name="display_more_feeds">查看%s条内容</string>
 
     <!-- PostActivity -->
     <string name="comment">评论</string>
@@ -234,6 +235,7 @@
 
     <!-- Notifications -->
     <string name="notification_friend_new_post">你的朋友发了一条新帖子</string>
+    <string name="notification_friends_new_posts">你认识的人发了%d条帖子，去看看吧</string>
     <string name="notification_circle_unlocked">新的朋友圈解锁了！</string>
     <string name="notification_circle_unlocked_tip">看看［%1$s］里的朋友发的秘密吧</string>
     <string name="notification_new">新提醒</string>
@@ -280,7 +282,9 @@
     <string name="friends_in_contact">通讯录联系人 (%1$d)</string>
     <string name="friends_from_scan">来自扫一扫添加 (%1$d)</string>
     <string name="known_people">我认识的人</string>
-    <string name="rotate">旋转</string>
-    <string name="notification_friends_new_posts">你认识的人发了%d条帖子，去看看吧</string>
 
+    <!-- ImageCropActivity -->
+    <string name="rotate">旋转</string>
+    <string name="publish_anonymous">匿名发帖</string>
+    <string name="all_topic">全部话题</string>
 </resources>

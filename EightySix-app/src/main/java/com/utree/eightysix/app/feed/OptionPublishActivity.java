@@ -120,6 +120,11 @@ public class OptionPublishActivity extends BaseActivity {
     finish();
   }
 
+  @Override
+  public void onActionLeftClicked() {
+    finish();
+  }
+
 
   private void requestChangeName() {
     if (mRequesting) {

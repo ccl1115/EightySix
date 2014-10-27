@@ -11,7 +11,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:orientation="vertical"
-            android:background="@drawable/item_feed_options_bg">
+            android:background="@drawable/item_gradient_bg">
 
         <FrameLayout
                 android:layout_width="match_parent"

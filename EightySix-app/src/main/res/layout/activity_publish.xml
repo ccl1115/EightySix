@@ -48,27 +48,60 @@
     </FrameLayout>
 
 
-    <FrameLayout
-            android:id="@+id/fl_panel"
-            android:background="@android:color/white"
+    <RelativeLayout
+            android:id="@+id/rl_panel"
             android:layout_width="match_parent"
             android:layout_height="45dp"
+            android:background="@android:color/white"
+            android:orientation="horizontal"
+            android:gravity="right"
             android:paddingLeft="15dp"
             android:paddingRight="15dp">
 
-        <ImageView
-                android:id="@+id/iv_camera"
-                android:layout_gravity="left|center_vertical"
+        <com.utree.eightysix.widget.RoundedButton
+                android:id="@+id/tv_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="8dp"
+                android:layout_centerVertical="true"
+                android:text="#"
+                android:textSize="12sp"
+                android:paddingLeft="6dp"
+                android:paddingTop="2dp"
+                android:paddingRight="6dp"
+                android:paddingBottom="2dp"
+                android:minHeight="0dp"
+                app:background="@color/apptheme_primary_dark_grey"
+                android:textColor="@android:color/white"/>
+
+        <EditText
+                android:id="@+id/et_temp_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_toRightOf="@id/tv_tag"
+                android:layout_marginRight="8dp"
+                android:paddingBottom="12dp"
+                android:hint="填个临时名字"/>
+
+        <ImageView
+                android:id="@+id/iv_camera"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/iv_shuffle"
+                android:layout_centerVertical="true"
                 android:padding="5dp"
                 android:src="@drawable/ic_action_camera"/>
 
         <ImageView
                 android:id="@+id/iv_shuffle"
-                android:layout_gravity="right|center_vertical"
+                android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:padding="5dp"
                 android:src="@drawable/ic_action_shuffle"/>
 
@@ -76,8 +109,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_gravity="bottom"
+                android:layout_alignParentBottom="true"
                 android:background="#ffe3e3e3"/>
-    </FrameLayout>
+    </RelativeLayout>
 
     <LinearLayout
             android:id="@+id/ll_bottom"
@@ -133,7 +167,7 @@
     <FrameLayout
             android:id="@+id/fl_grid_panel"
             android:layout_width="match_parent"
-            android:layout_height="229dp"
+            android:layout_height="230dp"
             android:visibility="gone">
 
         <com.utree.eightysix.widget.panel.GridPanel
@@ -155,6 +189,17 @@
                 app:drawable="@drawable/indicator_dot"
                 app:selector="@drawable/indicator_dot_selected"
                 app:spacing="4dp"/>
+    </FrameLayout>
+
+    <FrameLayout
+            android:id="@+id/fl_tags"
+            android:layout_width="match_parent"
+            android:layout_height="230dp">
+
+        <com.utree.eightysix.app.publish.TagsViewPager
+                android:id="@+id/vp_tags"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
     </FrameLayout>
 
 </merge>

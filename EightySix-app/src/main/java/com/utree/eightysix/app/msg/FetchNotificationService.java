@@ -54,22 +54,42 @@ public class FetchNotificationService extends Service {
 
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
-    Log.d(TAG, "start FetchService");
-    mHandler.sendEmptyMessageDelayed(MSG_FETCH, 1000);
     mShowCommentNotify = intent.getBooleanExtra("showCommentNotify", false);
+    if (intent.getBooleanExtra("loop", true)) {
+      mHandler.sendEmptyMessageDelayed(MSG_FETCH, 1000);
+    } else {
+      requestFetch();
+    }
     return START_NOT_STICKY;
   }
 
   public static void start(Context context, boolean showCommentNotify) {
-    Intent intent = new Intent(context, FetchNotificationService.class);
+    if (Account.inst().isLogin()) {
+      Intent intent = new Intent(context, FetchNotificationService.class);
 
-    if (!(context instanceof Activity)) {
-      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      if (!(context instanceof Activity)) {
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      }
+
+      intent.putExtra("showCommentNotify", showCommentNotify);
+
+      context.startActivity(intent);
     }
+  }
 
-    intent.putExtra("showCommentNotify", showCommentNotify);
+  public static void start (Context context, boolean showCommentNotify, boolean loop) {
+    if (Account.inst().isLogin()) {
+      Intent intent = new Intent(context, FetchNotificationService.class);
 
-    context.startActivity(intent);
+      if (!(context instanceof Activity)) {
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      }
+
+      intent.putExtra("showCommentNotify", showCommentNotify);
+      intent.putExtra("loop", loop);
+
+      context.startActivity(intent);
+    }
   }
 
   @Override
