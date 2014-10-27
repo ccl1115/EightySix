@@ -22,6 +22,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.InjectView;
@@ -45,18 +46,26 @@ import com.utree.eightysix.request.PublishRequest;
 import com.utree.eightysix.response.PublishPostResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.utils.*;
-import com.utree.eightysix.widget.*;
+import com.utree.eightysix.utils.ColorUtil;
+import com.utree.eightysix.utils.Env;
+import com.utree.eightysix.utils.IOUtils;
+import com.utree.eightysix.utils.ImageUtils;
+import com.utree.eightysix.utils.InputValidator;
+import com.utree.eightysix.widget.AsyncImageView;
+import com.utree.eightysix.widget.IndicatorView;
+import com.utree.eightysix.widget.PostEditText;
+import com.utree.eightysix.widget.TextActionButton;
+import com.utree.eightysix.widget.ThemedDialog;
+import com.utree.eightysix.widget.TopBar;
 import com.utree.eightysix.widget.panel.GridPanel;
 import com.utree.eightysix.widget.panel.Item;
-
 import java.io.File;
 import java.util.List;
 import java.util.Random;
 
 /**
  */
-@TopTitle(R.string.publish_content)
+@TopTitle (R.string.publish_content)
 public class PublishActivity extends BaseActivity {
 
   private static final String FIRST_RUN_KEY = "post_activity";
@@ -65,47 +74,45 @@ public class PublishActivity extends BaseActivity {
   private static final int REQUEST_CODE_ALBUM = 0x2;
   private static final int REQUEST_CODE_CROP = 0x4;
 
-  @InjectView(R.id.et_post_content)
+  @InjectView (R.id.et_post_content)
   public PostEditText mPostEditText;
 
-  @InjectView(R.id.tv_bottom)
+  @InjectView (R.id.tv_bottom)
   public TextView mTvBottom;
 
-  @InjectView(R.id.aiv_post_bg)
+  @InjectView (R.id.aiv_post_bg)
   public AsyncImageView mAivPostBg;
 
-  @InjectView(R.id.tv_post_tip)
+  @InjectView (R.id.tv_post_tip)
   public TextView mTvPostTip;
 
-  @InjectView(R.id.gp_panel)
+  @InjectView (R.id.gp_panel)
   public GridPanel mGpPanel;
 
-  @InjectView(R.id.in_panel)
+  @InjectView (R.id.in_panel)
   public IndicatorView mInPanel;
 
-  protected PublishLayout mPublishLayout;
+  @InjectView (R.id.tv_tag)
+  public TextView mTvTag;
 
+  @InjectView (R.id.et_temp_name)
+  public EditText mEtTempName;
+
+  protected PublishLayout mPublishLayout;
+  protected int mFactoryId;
   private Dialog mCameraDialog;
   private Dialog mDescriptionDialog;
   private Dialog mConfirmQuitDialog;
-
   private File mOutputFile;
-
   private boolean mIsOpened;
   private boolean mRequestStarted;
   private boolean mImageUploadFinished;
   private boolean mUseColor = true;
-
   private boolean mStartCamera = false;
   private boolean mStartAlbum = false;
-
   private String mFileHash;
-
   private String mImageUploadUrl;
-
   private int mBgColor = Color.WHITE;
-
-  protected int mFactoryId;
   private ThemedDialog mQuitConfirmDialog;
 
   public static void start(Context context, int factoryId) {
@@ -119,27 +126,42 @@ public class PublishActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
-  @OnClick(R.id.ll_bottom)
+  @OnClick (R.id.ll_bottom)
   public void onLlBottomClicked() {
     showDescriptionDialog();
   }
 
-  @OnClick(R.id.iv_shuffle)
+  @OnClick (R.id.iv_shuffle)
   public void onIvShuffleClicked() {
     if (mIsOpened) {
       hideSoftKeyboard(mPostEditText);
       mPublishLayout.switchToPanel(PublishLayout.PANEL_COLOR);
+    } else if (mPublishLayout.getCurrentPanel() == PublishLayout.PANEL_COLOR) {
+      mPublishLayout.switchToPanel(PublishLayout.PANEL_INFO);
     } else {
-      mPublishLayout.switchPanel();
+      mPublishLayout.switchToPanel(PublishLayout.PANEL_COLOR);
     }
   }
 
-  @OnClick(R.id.iv_camera)
+  @OnClick (R.id.tv_tag)
+  public void onTvTagClicked() {
+    if (mIsOpened) {
+      hideSoftKeyboard(mPostEditText);
+      mPublishLayout.switchToPanel(PublishLayout.PANEL_TAGS);
+    } else if (mPublishLayout.getCurrentPanel() == PublishLayout.PANEL_TAGS) {
+      mPublishLayout.switchToPanel(PublishLayout.PANEL_INFO);
+    } else {
+      mPublishLayout.switchToPanel(PublishLayout.PANEL_TAGS);
+    }
+  }
+
+
+  @OnClick (R.id.iv_camera)
   public void onIvCameraClicked() {
     mCameraDialog.show();
   }
 
-  @OnFocusChange(R.id.et_post_content)
+  @OnFocusChange (R.id.et_post_content)
   public void onPostEditTextFocusChanged(boolean focused) {
     if (focused) {
       mPostEditText.setHintTextColor(0x88ffffff);
@@ -151,11 +173,6 @@ public class PublishActivity extends BaseActivity {
   @Override
   public void onActionLeftClicked() {
     confirmFinish();
-  }
-
-  protected String getHintText() {
-    return getString(R.string.post_anonymously);
-
   }
 
   @Override
@@ -361,18 +378,6 @@ public class PublishActivity extends BaseActivity {
     showDescriptionDialogWhenFirstRun();
   }
 
-  private void randomItem() {
-    List<Item> itemsByPage = mGpPanel.getItemsByPage(0);
-    Item item = itemsByPage.get(new Random().nextInt(itemsByPage.size()));
-    switchItem(item, false);
-  }
-
-  protected void showDescriptionDialogWhenFirstRun() {
-    if (Env.firstRun(FIRST_RUN_KEY)) {
-      showDescriptionDialog();
-    }
-  }
-
   @Override
   protected void onDestroy() {
     Env.setFirstRun(FIRST_RUN_KEY, false);
@@ -408,76 +413,15 @@ public class PublishActivity extends BaseActivity {
     switchItem(item, true);
   }
 
-  private void switchItem(Item item, boolean animation) {
-    final TypedValue tv = item.getValue();
-    if (tv.type == TypedValue.TYPE_INT_COLOR_ARGB8) {
-      ValueAnimator.clearAllAnimations();
-      ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), mBgColor, tv.data);
-      animator.setDuration(animation ? 500 : 0);
-      animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-        @Override
-        public void onAnimationUpdate(ValueAnimator animation) {
-          mAivPostBg.setBackgroundColor((Integer) animation.getAnimatedValue());
-        }
-      });
-      animator.addListener(new Animator.AnimatorListener() {
-        @Override
-        public void onAnimationStart(Animator animation) {
+  protected String getHintText() {
+    return getString(R.string.post_anonymously);
 
-        }
-
-        @Override
-        public void onAnimationEnd(Animator animation) {
-          mPostEditText.setTextColor(ColorUtil.monochromizing(tv.data));
-          mTvPostTip.setTextColor(ColorUtil.monochromizing(tv.data));
-        }
-
-        @Override
-        public void onAnimationCancel(Animator animation) {
-
-        }
-
-        @Override
-        public void onAnimationRepeat(Animator animation) {
-
-        }
-      });
-      animator.start();
-      mAivPostBg.setImageDrawable(null);
-      mUseColor = true;
-      mBgColor = tv.data;
-      mImageUploadUrl = "";
-    } else if (tv.type == TypedValue.TYPE_STRING) {
-      mAivPostBg.setBackgroundColor(Color.TRANSPARENT);
-      mAivPostBg.setUrl(tv.string.toString());
-      if (animation) {
-        fadeInAnimation(mAivPostBg);
-      }
-      mImageUploadFinished = true;
-      mImageUploadUrl = tv.string.toString();
-      mUseColor = false;
-      mBgColor = Color.WHITE;
-    } else if (tv.type == TypedValue.TYPE_REFERENCE) {
-      mAivPostBg.setBackgroundColor(Color.TRANSPARENT);
-      if (animation) {
-        fadeInAnimation(mAivPostBg);
-      }
-      mImageUploadUrl = U.getCloudStorage().getUrl(U.getBgBucket(),
-          "",
-          getResources().getResourceEntryName(tv.resourceId) + ".jpg");
-      mImageUploadFinished = true;
-
-      Bitmap bitmap = ImageUtils.syncLoadResourceBitmap(tv.resourceId, ImageUtils.getUrlHash(mImageUploadUrl));
-      mAivPostBg.setImageBitmap(bitmap);
-      mUseColor = false;
-      mBgColor = Color.WHITE;
-    }
   }
 
-  private void fadeInAnimation(View view) {
-    ObjectAnimator animator = ObjectAnimator.ofFloat(view, "alpha", 0f, 1f);
-    animator.setDuration(500);
-    animator.start();
+  protected void showDescriptionDialogWhenFirstRun() {
+    if (Env.firstRun(FIRST_RUN_KEY)) {
+      showDescriptionDialog();
+    }
   }
 
   @Override
@@ -557,6 +501,111 @@ public class PublishActivity extends BaseActivity {
     }
 
     mDescriptionDialog.show();
+  }
+
+  protected void disablePublishButton() {
+    getHandler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        getTopBar().getActionView(0).setEnabled(false);
+        getTopBar().getActionView(0).setActionBackgroundDrawable(
+            new RoundRectDrawable(U.dp2px(2),
+                getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
+        ((TextActionButton) getTopBar().getActionView(0)).setTextColor(
+            getResources().getColor(R.color.apptheme_primary_grey_color_disabled));
+      }
+    }, 200);
+  }
+
+  protected void enablePublishButton() {
+    getHandler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        getTopBar().getActionView(0).setEnabled(true);
+        getTopBar().getActionView(0).setActionBackgroundDrawable(
+            new RoundRectDrawable(U.dp2px(2),
+                getResources().getColorStateList(R.color.apptheme_primary_btn_light)));
+        ((TextActionButton) getTopBar().getActionView(0)).setTextColor(Color.WHITE);
+      }
+    }, 200);
+  }
+
+  private void randomItem() {
+    List<Item> itemsByPage = mGpPanel.getItemsByPage(0);
+    Item item = itemsByPage.get(new Random().nextInt(itemsByPage.size()));
+    switchItem(item, false);
+  }
+
+  private void switchItem(Item item, boolean animation) {
+    final TypedValue tv = item.getValue();
+    if (tv.type == TypedValue.TYPE_INT_COLOR_ARGB8) {
+      ValueAnimator.clearAllAnimations();
+      ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), mBgColor, tv.data);
+      animator.setDuration(animation ? 500 : 0);
+      animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        @Override
+        public void onAnimationUpdate(ValueAnimator animation) {
+          mAivPostBg.setBackgroundColor((Integer) animation.getAnimatedValue());
+        }
+      });
+      animator.addListener(new Animator.AnimatorListener() {
+        @Override
+        public void onAnimationStart(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animation) {
+          mPostEditText.setTextColor(ColorUtil.monochromizing(tv.data));
+          mTvPostTip.setTextColor(ColorUtil.monochromizing(tv.data));
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationRepeat(Animator animation) {
+
+        }
+      });
+      animator.start();
+      mAivPostBg.setImageDrawable(null);
+      mUseColor = true;
+      mBgColor = tv.data;
+      mImageUploadUrl = "";
+    } else if (tv.type == TypedValue.TYPE_STRING) {
+      mAivPostBg.setBackgroundColor(Color.TRANSPARENT);
+      mAivPostBg.setUrl(tv.string.toString());
+      if (animation) {
+        fadeInAnimation(mAivPostBg);
+      }
+      mImageUploadFinished = true;
+      mImageUploadUrl = tv.string.toString();
+      mUseColor = false;
+      mBgColor = Color.WHITE;
+    } else if (tv.type == TypedValue.TYPE_REFERENCE) {
+      mAivPostBg.setBackgroundColor(Color.TRANSPARENT);
+      if (animation) {
+        fadeInAnimation(mAivPostBg);
+      }
+      mImageUploadUrl = U.getCloudStorage().getUrl(U.getBgBucket(),
+          "",
+          getResources().getResourceEntryName(tv.resourceId) + ".jpg");
+      mImageUploadFinished = true;
+
+      Bitmap bitmap = ImageUtils.syncLoadResourceBitmap(tv.resourceId, ImageUtils.getUrlHash(mImageUploadUrl));
+      mAivPostBg.setImageBitmap(bitmap);
+      mUseColor = false;
+      mBgColor = Color.WHITE;
+    }
+  }
+
+  private void fadeInAnimation(View view) {
+    ObjectAnimator animator = ObjectAnimator.ofFloat(view, "alpha", 0f, 1f);
+    animator.setDuration(500);
+    animator.start();
   }
 
   private void confirmFinish() {
@@ -675,33 +724,6 @@ public class PublishActivity extends BaseActivity {
 
     hideSoftKeyboard(mPostEditText);
     showProgressBar(true);
-  }
-
-  protected void disablePublishButton() {
-    getHandler().postDelayed(new Runnable() {
-      @Override
-      public void run() {
-        getTopBar().getActionView(0).setEnabled(false);
-        getTopBar().getActionView(0).setActionBackgroundDrawable(
-            new RoundRectDrawable(U.dp2px(2),
-                getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
-        ((TextActionButton) getTopBar().getActionView(0)).setTextColor(
-            getResources().getColor(R.color.apptheme_primary_grey_color_disabled));
-      }
-    }, 200);
-  }
-
-  protected void enablePublishButton() {
-    getHandler().postDelayed(new Runnable() {
-      @Override
-      public void run() {
-        getTopBar().getActionView(0).setEnabled(true);
-        getTopBar().getActionView(0).setActionBackgroundDrawable(
-            new RoundRectDrawable(U.dp2px(2),
-                getResources().getColorStateList(R.color.apptheme_primary_btn_light)));
-        ((TextActionButton) getTopBar().getActionView(0)).setTextColor(Color.WHITE);
-      }
-    }, 200);
   }
 
 }

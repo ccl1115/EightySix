@@ -95,7 +95,7 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
 
       if (BuildConfig.DEBUG) {
         File tmp = IOUtils.createTmpFile(String.format("server_error_%s_%d_%d",
-            e.getCause().getClass().getSimpleName(),
+            e.getClass().getSimpleName(),
             statusCode,
             new Date().getTime()));
         PrintWriter writer = null;
