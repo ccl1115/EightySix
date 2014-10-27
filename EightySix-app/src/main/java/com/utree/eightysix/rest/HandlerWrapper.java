@@ -94,16 +94,16 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
       }
 
       if (BuildConfig.DEBUG) {
-        File tmp = IOUtils.createTmpFile(String.format("server_error+_%s_%d_%s",
-            e.getClass().getSimpleName(),
+        File tmp = IOUtils.createTmpFile(String.format("server_error_%s_%d_%d",
+            e.getCause().getClass().getSimpleName(),
             statusCode,
-            SimpleDateFormat.getDateTimeInstance().format(new Date())));
+            new Date().getTime()));
         PrintWriter writer = null;
         try {
 
           writer = new PrintWriter(tmp);
 
-          writer.write(DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL).format(new Date()));
+          writer.write(SimpleDateFormat.getDateTimeInstance().format(new Date()));
           writer.write("\nAPI: " + mRequestData.getApi());
           writer.write("\nParams: " + mRequestData.getParams().toString());
           writer.write("\n\n");
