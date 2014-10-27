@@ -41,11 +41,16 @@ import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
 import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.data.Post;
+import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.request.PublishRequest;
+import com.utree.eightysix.request.TagsRequest;
 import com.utree.eightysix.response.PublishPostResponse;
+import com.utree.eightysix.response.TagsResponse;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.IOUtils;
@@ -114,6 +119,9 @@ public class PublishActivity extends BaseActivity {
   private String mImageUploadUrl;
   private int mBgColor = Color.WHITE;
   private ThemedDialog mQuitConfirmDialog;
+
+  private String mLastTempName;
+  private List<Tag> mTags;
 
   public static void start(Context context, int factoryId) {
     Intent intent = new Intent(context, PublishActivity.class);
@@ -376,6 +384,8 @@ public class PublishActivity extends BaseActivity {
         getResources().getColor(R.color.apptheme_primary_grey_color_disabled));
 
     showDescriptionDialogWhenFirstRun();
+
+    cacheOutTags();
   }
 
   @Override
@@ -724,6 +734,42 @@ public class PublishActivity extends BaseActivity {
 
     hideSoftKeyboard(mPostEditText);
     showProgressBar(true);
+  }
+
+  private void cacheOutTags() {
+    cacheOut(new TagsRequest(), new OnResponse2<TagsResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        requestTags();
+      }
+
+      @Override
+      public void onResponse(TagsResponse response) {
+        if (RESTRequester.responseOk(response)) {
+          mTags = response.object.tags;
+          mLastTempName = response.object.lastTempName;
+        } else {
+          requestTags();
+        }
+      }
+    }, TagsResponse.class);
+  }
+
+  private void requestTags() {
+    request(new TagsRequest(), new OnResponse2<TagsResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
+      @Override
+      public void onResponse(TagsResponse response) {
+        if (RESTRequester.responseOk(response)) {
+          mTags = response.object.tags;
+          mLastTempName = response.object.lastTempName;
+        }
+      }
+    }, TagsResponse.class);
   }
 
 }

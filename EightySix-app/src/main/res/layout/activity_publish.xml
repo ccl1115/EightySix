@@ -196,7 +196,7 @@
             android:layout_width="match_parent"
             android:layout_height="230dp">
 
-        <android.support.v4.view.ViewPager
+        <com.utree.eightysix.app.publish.TagsViewPager
                 android:id="@+id/vp_tags"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
