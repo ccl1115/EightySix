@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import com.google.gson.reflect.TypeToken;
 import com.utree.eightysix.app.chat.ChatAccount;
@@ -174,14 +175,14 @@ public class Account {
         U.getEntryLogger().log(new EntryAdapter() {
           @Override
           public String getApi() {
-            return "/api/LoginEntries";
+            return "login";
           }
 
           @Override
           public Payload getPayload() {
             Payload payload = new Payload();
-            payload.add("user_id", Account.inst().getUserId());
-            payload.add("timestamp", SimpleDateFormat.getDateTimeInstance().format(new Date()));
+            payload.put("user_id", Account.inst().getUserId());
+            payload.put("timestamp", String.valueOf(System.currentTimeMillis()));
             return payload;
           }
         });
@@ -215,14 +216,14 @@ public class Account {
       U.getEntryLogger().log(new EntryAdapter() {
         @Override
         public String getApi() {
-          return "/api/LogoutEntries";
+          return "logout";
         }
 
         @Override
         public Payload getPayload() {
           Payload payload = new Payload();
-          payload.add("user_id", Account.inst().getUserId());
-          payload.add("timestamp", SimpleDateFormat.getDateTimeInstance().format(new Date()));
+          payload.put("user_id", Account.inst().getUserId());
+          payload.put("timestamp", String.valueOf(System.currentTimeMillis()));
           return payload;
         }
       });

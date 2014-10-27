@@ -367,7 +367,7 @@ public class U {
     M.checkThread();
 
     if (sEntryLogger == null) {
-      sEntryLogger = new LoggerImpl(U.getContext(), U.getConfig("app.logger.host"));
+      sEntryLogger = new LoggerImpl(U.getConfig("app.logger.host"));
     }
 
     return sEntryLogger;
