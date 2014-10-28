@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.topic;
 
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,11 +31,10 @@ public class TopicFeedAdapter extends BaseAdapter {
   private Topic mTopic;
   private List<Post> mNewPosts = new ArrayList<Post>();
   private List<Post> mFeaturePosts = new ArrayList<Post>();
-
   private int mTab;
   private View mTopicView;
   private TopicViewHolder mTopicViewHolder;
-
+  private Callback mCallback;
 
   public TopicFeedAdapter(Topic topic) {
     mTopic = topic;
@@ -46,12 +44,31 @@ public class TopicFeedAdapter extends BaseAdapter {
     switchTab(TAB_NEW);
   }
 
+  public List<Post> getNewPosts() {
+    return mNewPosts;
+  }
+
+  public List<Post> getFeaturePosts() {
+    return mFeaturePosts;
+  }
+
+  public void setCallback(Callback callback) {
+    mCallback = callback;
+  }
+
+  public void setTopic(Topic topic) {
+    mTopic = topic;
+    notifyDataSetChanged();
+  }
+
   public void add(int tab, List<Post> posts) {
     switch (tab) {
       case TAB_NEW:
         mNewPosts.addAll(posts);
+        break;
       case TAB_FEATURE:
         mFeaturePosts.addAll(posts);
+        break;
     }
     notifyDataSetChanged();
   }
@@ -178,6 +195,14 @@ public class TopicFeedAdapter extends BaseAdapter {
     return convertView;
   }
 
+  public interface Callback {
+    void onTabLeftClicked();
+
+    void onTabRightClicked();
+
+    void onSendClicked();
+  }
+
   class TopicViewHolder {
 
     @InjectView (R.id.tv_tag_1)
@@ -207,18 +232,34 @@ public class TopicFeedAdapter extends BaseAdapter {
     @InjectView (R.id.v_tab_right)
     public View mVTabRight;
 
-    @OnClick(R.id.tv_tab_left)
-    public void onTvTabLeftClicked() {
-      switchTab(TAB_NEW);
-    }
-
-    @OnClick(R.id.tv_tab_right)
-    public void onTvTabRightClicked() {
-      switchTab(TAB_FEATURE);
-    }
-
     TopicViewHolder(View view) {
       ButterKnife.inject(this, view);
+    }
+
+    @OnClick (R.id.tv_tab_left)
+    public void onTvTabLeftClicked() {
+      switchTab(TAB_NEW);
+
+      if (mCallback != null) {
+        mCallback.onTabLeftClicked();
+      }
+    }
+
+    @OnClick (R.id.tv_tab_right)
+    public void onTvTabRightClicked() {
+      switchTab(TAB_FEATURE);
+
+      if (mCallback != null) {
+        mCallback.onTabRightClicked();
+      }
+    }
+
+    @OnClick (R.id.ib_send)
+    public void onIbSendClicked() {
+
+      if (mCallback != null) {
+        mCallback.onSendClicked();
+      }
     }
   }
 

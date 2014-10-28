@@ -1,13 +1,9 @@
 package com.utree.eightysix.app.feed;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -26,62 +22,28 @@ import com.utree.eightysix.response.PublishPostResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
-import com.utree.eightysix.storage.oss.OSSImpl;
-import com.utree.eightysix.widget.RoundedButton;
-
 import java.util.Random;
 
 /**
  * @author simon
  */
-@Layout(R.layout.activity_option_publish)
+@Layout (R.layout.activity_option_publish)
 public class OptionPublishActivity extends BaseActivity {
 
   public static final int REQUEST_PUBLISH_OPTION = 1;
-
-  public boolean mRequesting;
-
-  public int mCircleId;
-
-  @OnClick(R.id.tv_send)
-  public void onRbSendClicked() {
-    requestPublish();
-  }
-
-  @OnClick(R.id.iv_close)
-  public void onIvCloseClicked() {
-    setResult(RESULT_CANCELED);
-    finish();
-  }
-
-  @InjectView(R.id.et_post_content)
-  public EditText mEtPostContent;
-
-  @InjectView(R.id.tv_display)
-  public TextView mTvDisplay;
-
-  @InjectView(R.id.tv_send)
-  public TextView mTvSend;
-
-  @OnClick(R.id.tv_shuffle)
-  public void onTvShuffleClicked() {
-    requestChangeName();
-  }
-
-  @OnTextChanged(R.id.et_post_content)
-  public void onEtPostContentChanged(CharSequence cs) {
-    if (cs.length() == 0) {
-      mTvSend.setEnabled(false);
-    } else {
-      mTvSend.setEnabled(true);
-    }
-  }
-
   private static final String[] BG_NAME = {
       "bg_13.jpg", "bg_20.jpg", "bg_24.jpg", "bg_28.jpg", "bg_31.jpg", "bg_40.jpg",
       "bg_40.jpg", "bg_200.jpg", "bg_49.jpg", "bg_201.jpg", "bg_63.jpg", "bg_94.jpg",
       "bg_96.jpg", "bg_101.jpg", "bg_105.jpg"
   };
+  public boolean mRequesting;
+  public int mCircleId;
+  @InjectView (R.id.et_post_content)
+  public EditText mEtPostContent;
+  @InjectView (R.id.tv_display)
+  public TextView mTvDisplay;
+  @InjectView (R.id.tv_send)
+  public TextView mTvSend;
 
   public static void start(Activity activity, String hint, String name, int circleId) {
     Intent intent = new Intent(activity, OptionPublishActivity.class);
@@ -93,6 +55,31 @@ public class OptionPublishActivity extends BaseActivity {
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
     activity.startActivityForResult(intent, REQUEST_PUBLISH_OPTION);
+  }
+
+  @OnClick (R.id.tv_send)
+  public void onRbSendClicked() {
+    requestPublish();
+  }
+
+  @OnClick (R.id.iv_close)
+  public void onIvCloseClicked() {
+    setResult(RESULT_CANCELED);
+    finish();
+  }
+
+  @OnClick (R.id.tv_shuffle)
+  public void onTvShuffleClicked() {
+    requestChangeName();
+  }
+
+  @OnTextChanged (R.id.et_post_content)
+  public void onEtPostContentChanged(CharSequence cs) {
+    if (cs.length() == 0) {
+      mTvSend.setEnabled(false);
+    } else {
+      mTvSend.setEnabled(true);
+    }
   }
 
   @Override
@@ -154,7 +141,11 @@ public class OptionPublishActivity extends BaseActivity {
     showProgressBar(true);
     final String url = U.getCloudStorage().getUrl(U.getBgBucket(), "",
         BG_NAME[new Random().nextInt(BG_NAME.length - 1)]);
-    request(new PublishRequest(url, "", mEtPostContent.getText().toString(), mCircleId, 1),
+    request(new PublishRequest.Builder().bgUrl(url).bgColor("")
+            .content(mEtPostContent.getText().toString())
+            .sourceType(1)
+            .factoryId(mCircleId)
+            .build(),
         new OnResponse2<PublishPostResponse>() {
           @Override
           public void onResponseError(Throwable e) {

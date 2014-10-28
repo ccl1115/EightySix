@@ -10,11 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.feed.PostActivity;
+import com.utree.eightysix.app.publish.PublishActivity;
+import com.utree.eightysix.app.publish.event.PostPublishedEvent;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.data.Topic;
@@ -114,7 +117,23 @@ public class TopicActivity extends BaseActivity {
       }
     });
 
+    mTopicFeedAdapter.setCallback(new TopicFeedAdapter.Callback() {
+      @Override
+      public void onTabLeftClicked() {
+      }
+
+      @Override
+      public void onTabRightClicked() {
+      }
+
+      @Override
+      public void onSendClicked() {
+        PublishActivity.startWithTopicId(TopicActivity.this, mTopic.id);
+      }
+    });
+
     requestNewTopicFeed(1);
+    requestFeatureTopicFeed(1);
   }
 
   @Override
@@ -127,38 +146,64 @@ public class TopicActivity extends BaseActivity {
     finish();
   }
 
+  @Subscribe
+  public void onPostPublichedEvent(PostPublishedEvent event) {
+    if (mTopicFeedAdapter.getCurrentTab() == TAB_NEW) {
+      requestNewTopicFeed(1);
+    } else if (mTopicFeedAdapter.getCurrentTab() == TAB_FEATURE) {
+      requestFeatureTopicFeed(1);
+    }
+  }
+
   private void requestNewTopicFeed(final int page) {
+    if (page == 1) {
+      showProgressBar();
+    }
     request(new NewTopicFeedRequest(mTopic.id, page), new OnResponse2<TopicFeedResponse>() {
 
       @Override
       public void onResponseError(Throwable e) {
-
+        hideProgressBar();
       }
 
       @Override
       public void onResponse(TopicFeedResponse response) {
         if (RESTRequester.responseOk(response)) {
+          if (page == 1) {
+            mTopicFeedAdapter.getNewPosts().clear();
+            mTopicFeedAdapter.setTopic(response.object.topic);
+          }
           mTopicFeedAdapter.add(TAB_NEW, response.object.posts.lists);
           mNewPageInfo = response.object.posts.page;
         }
+
+        hideProgressBar();
       }
     }, TopicFeedResponse.class);
   }
 
   private void requestFeatureTopicFeed(final int page) {
+    if (page == 1) {
+      showProgressBar();
+    }
     request(new FeatureTopicFeedRequest(mTopic.id, page), new OnResponse2<TopicFeedResponse>() {
       @Override
       public void onResponseError(Throwable e) {
-
+        hideProgressBar();
       }
 
       @Override
       public void onResponse(TopicFeedResponse response) {
         if (RESTRequester.responseOk(response)) {
+          if (page == 1) {
+            mTopicFeedAdapter.getFeaturePosts().clear();
+            mTopicFeedAdapter.setTopic(response.object.topic);
+          }
           mTopicFeedAdapter.add(TAB_FEATURE, response.object.posts.lists);
           mFeaturePageInfo = response.object.posts.page;
         }
 
+        hideProgressBar();
       }
     }, TopicFeedResponse.class);
   }

@@ -105,9 +105,9 @@ public class PublishActivity extends BaseActivity {
 
   protected PublishLayout mPublishLayout;
   protected int mFactoryId;
+  protected int mTopicId;
   private Dialog mCameraDialog;
   private Dialog mDescriptionDialog;
-  private Dialog mConfirmQuitDialog;
   private File mOutputFile;
   private boolean mIsOpened;
   private boolean mRequestStarted;
@@ -126,6 +126,17 @@ public class PublishActivity extends BaseActivity {
   public static void start(Context context, int factoryId) {
     Intent intent = new Intent(context, PublishActivity.class);
     intent.putExtra("factoryId", factoryId);
+
+    if (!(context instanceof Activity)) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    context.startActivity(intent);
+  }
+
+  public static void startWithTopicId(Context context, int topicId) {
+    Intent intent = new Intent(context, PublishActivity.class);
+    intent.putExtra("topicId", topicId);
 
     if (!(context instanceof Activity)) {
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -188,11 +199,7 @@ public class PublishActivity extends BaseActivity {
     super.onCreate(savedInstanceState);
 
     mFactoryId = getIntent().getIntExtra("factoryId", -1);
-
-    if (mFactoryId == -1) {
-      showToast("没有找到圈子", false);
-      finish();
-    }
+    mTopicId = getIntent().getIntExtra("topicId", -1);
 
     mPublishLayout = new PublishLayout(this);
     setContentView(mPublishLayout);
@@ -281,8 +288,6 @@ public class PublishActivity extends BaseActivity {
             finish();
           }
         });
-
-    mConfirmQuitDialog = builder.create();
 
     mPostEditText.addTextChangedListener(new TextWatcher() {
       @Override
@@ -704,12 +709,23 @@ public class PublishActivity extends BaseActivity {
 
     if (mImageUploadFinished || mUseColor) {
 
-      final PublishRequest request = new PublishRequest(mFactoryId, mPostEditText.getText().toString(),
-          mUseColor ? String.format("%h", mBgColor) : "", mImageUploadUrl);
+      PublishRequest.Builder builder = new PublishRequest.Builder();
+      builder
+          .bgColor(mUseColor ? String.format("%h", mBgColor) : "")
+          .bgUrl(mImageUploadUrl)
+          .content(mPostEditText.getText().toString());
+
+      if (mTopicId != -1) {
+        builder.topicId(mTopicId);
+      }
+
+      if (mFactoryId != -1) {
+        builder.factoryId(mFactoryId);
+      }
 
       disablePublishButton();
 
-      request(request, new OnResponse<PublishPostResponse>() {
+      request(builder.build(), new OnResponse<PublishPostResponse>() {
         @Override
         public void onResponse(PublishPostResponse response) {
           if (RESTRequester.responseOk(response)) {
@@ -748,9 +764,8 @@ public class PublishActivity extends BaseActivity {
         if (RESTRequester.responseOk(response)) {
           mTags = response.object.tags;
           mLastTempName = response.object.lastTempName;
-        } else {
-          requestTags();
         }
+        requestTags();
       }
     }, TagsResponse.class);
   }

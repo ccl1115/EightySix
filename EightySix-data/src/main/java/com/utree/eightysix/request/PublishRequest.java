@@ -1,5 +1,6 @@
 package com.utree.eightysix.request;
 
+import android.os.Build;
 import com.utree.eightysix.C;
 import com.utree.eightysix.rest.Api;
 import com.utree.eightysix.rest.Optional;
@@ -23,24 +24,58 @@ public class PublishRequest {
   public String content;
 
   @Param ("factoryId")
+  @Optional
   public int factoryId;
 
   @Param("sourceType")
   @Optional
   public int sourceType;
 
-  public PublishRequest(int factoryId, String content, String bgColor, String bgUrl) {
-    this.factoryId = factoryId;
-    this.content = content;
-    this.bgColor = bgColor;
-    this.bgUrl = bgUrl;
+  @Param("topicId")
+  @Optional
+  public int topicId;
+
+  private PublishRequest() {
+
   }
 
-  public PublishRequest(String bgUrl, String bgColor, String content, int factoryId, int sourceType) {
-    this.bgUrl = bgUrl;
-    this.bgColor = bgColor;
-    this.content = content;
-    this.factoryId = factoryId;
-    this.sourceType = sourceType;
+  public static class Builder {
+
+    private PublishRequest mPublishRequest = new PublishRequest();
+
+    public Builder bgUrl(String url) {
+      mPublishRequest.bgUrl = url;
+      return this;
+    }
+
+    public Builder bgColor(String color) {
+      mPublishRequest.bgColor = color;
+      return this;
+    }
+
+    public Builder content(String content) {
+      mPublishRequest.content = content;
+      return this;
+    }
+
+    public Builder factoryId(int id) {
+      mPublishRequest.factoryId = id;
+      return this;
+    }
+
+    public Builder sourceType(int type) {
+      mPublishRequest.sourceType = type;
+      return this;
+    }
+
+    public Builder topicId(int id) {
+      mPublishRequest.topicId = id;
+      return this;
+    }
+
+    public PublishRequest build() {
+      return mPublishRequest;
+    }
+
   }
 }

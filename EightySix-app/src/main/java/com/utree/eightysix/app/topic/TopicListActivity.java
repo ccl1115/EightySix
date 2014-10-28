@@ -80,6 +80,9 @@ public class TopicListActivity extends BaseActivity {
   }
 
   private void requestTopicList(final int page) {
+    if (page == 1) {
+      showProgressBar();
+    }
     request(new TopicListRequest(page), new OnResponse2<TopicListResponse>() {
       @Override
       public void onResponseError(Throwable e) {
@@ -97,6 +100,8 @@ public class TopicListActivity extends BaseActivity {
           }
           mPageInfo = response.object.hotTopic.postTopics.page;
         }
+
+        hideProgressBar();
       }
     }, TopicListResponse.class);
   }
