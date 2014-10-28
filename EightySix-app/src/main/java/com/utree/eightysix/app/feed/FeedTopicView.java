@@ -51,15 +51,17 @@ public class FeedTopicView extends FrameLayout {
 
   @OnClick (R.id.rb_more)
   public void onRbMoreClicked() {
+    U.getAnalyser().trackEndEvent(getContext(), "feed_topic_view", "feed_topic_view");
   }
 
   @OnClick (R.id.rb_publish)
   public void onRbPublishClicked() {
-
+    U.getAnalyser().trackEvent(getContext(), "feed_topic_publish", "feed_topic_publish");
   }
 
   @OnClick (R.id.tv_more)
   public void onTvMoreClicked() {
+    U.getAnalyser().trackEvent(getContext(), "feed_topic_more", "feed_topic_more");
     TopicListActivity.start(getContext());
   }
 
