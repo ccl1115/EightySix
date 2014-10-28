@@ -9,16 +9,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.InjectView;
+import butterknife.OnItemClick;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.feed.PostActivity;
 import com.utree.eightysix.data.Paginate;
+import com.utree.eightysix.data.Post;
 import com.utree.eightysix.data.Topic;
+import com.utree.eightysix.data.TopicFeed;
+import com.utree.eightysix.request.FeatureTopicFeedRequest;
 import com.utree.eightysix.request.NewTopicFeedRequest;
 import com.utree.eightysix.response.TopicFeedResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 
@@ -38,6 +44,7 @@ public class TopicActivity extends BaseActivity {
   private Paginate.Page mNewPageInfo;
 
   private Paginate.Page mFeaturePageInfo;
+
   private Topic mTopic;
 
   public static void start(Context context, Topic topic) {
@@ -51,10 +58,17 @@ public class TopicActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
+  @OnItemClick(R.id.content)
+  public void onAlvTopicItemClicked(int position) {
+    if (position > 0) {
+      PostActivity.start(this, (Post) mTopicFeedAdapter.getItem(position));
+    }
+  }
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setTitle("话题");
+    setTopTitle("话题");
 
     mTopic = getIntent().getParcelableExtra("topic");
 
@@ -99,6 +113,8 @@ public class TopicActivity extends BaseActivity {
         return true;
       }
     });
+
+    requestNewTopicFeed(1);
   }
 
   @Override
@@ -122,14 +138,28 @@ public class TopicActivity extends BaseActivity {
       @Override
       public void onResponse(TopicFeedResponse response) {
         if (RESTRequester.responseOk(response)) {
-          mTopicFeedAdapter.add(TAB_NEW, response.topicFeed.posts.lists);
-          mNewPageInfo = response.topicFeed.posts.page;
+          mTopicFeedAdapter.add(TAB_NEW, response.object.posts.lists);
+          mNewPageInfo = response.object.posts.page;
         }
       }
     }, TopicFeedResponse.class);
   }
 
   private void requestFeatureTopicFeed(final int page) {
+    request(new FeatureTopicFeedRequest(mTopic.id, page), new OnResponse2<TopicFeedResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
 
+      }
+
+      @Override
+      public void onResponse(TopicFeedResponse response) {
+        if (RESTRequester.responseOk(response)) {
+          mTopicFeedAdapter.add(TAB_FEATURE, response.object.posts.lists);
+          mFeaturePageInfo = response.object.posts.page;
+        }
+
+      }
+    }, TopicFeedResponse.class);
   }
 }

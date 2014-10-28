@@ -13,10 +13,10 @@ import com.utree.eightysix.rest.Token;
 @Token
 public class FeatureTopicFeedRequest extends Paginate {
 
-  @Param("id")
-  public String id;
+  @Param("topicId")
+  public int id;
 
-  public FeatureTopicFeedRequest(String id, int currPage) {
+  public FeatureTopicFeedRequest(int id, int currPage) {
     super(currPage);
     this.id = id;
   }

@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.topic;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,7 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.FeedPostView;
 import static com.utree.eightysix.app.topic.TopicActivity.TAB_FEATURE;
 import static com.utree.eightysix.app.topic.TopicActivity.TAB_NEW;
@@ -31,9 +34,16 @@ public class TopicFeedAdapter extends BaseAdapter {
   private List<Post> mFeaturePosts = new ArrayList<Post>();
 
   private int mTab;
+  private View mTopicView;
+  private TopicViewHolder mTopicViewHolder;
+
 
   public TopicFeedAdapter(Topic topic) {
     mTopic = topic;
+    mTopicView = LayoutInflater.from(U.getContext()).inflate(R.layout.item_topic, null, false);
+    mTopicViewHolder = new TopicViewHolder(mTopicView);
+
+    switchTab(TAB_NEW);
   }
 
   public void add(int tab, List<Post> posts) {
@@ -48,6 +58,21 @@ public class TopicFeedAdapter extends BaseAdapter {
 
   public void switchTab(int tab) {
     mTab = tab;
+    switch (mTab) {
+      case TAB_NEW:
+        mTopicViewHolder.mTvTabLeft.setTextColor(U.getContext().getResources().getColor(R.color.apptheme_primary_light_color));
+        mTopicViewHolder.mVTabLeft.setVisibility(View.VISIBLE);
+        mTopicViewHolder.mTvTabRight.setTextColor(U.getContext().getResources().getColor(R.color.apptheme_primary_grey_color_pressed));
+        mTopicViewHolder.mVTabRight.setVisibility(View.INVISIBLE);
+        break;
+      case TAB_FEATURE:
+        mTopicViewHolder.mTvTabRight.setTextColor(U.getContext().getResources().getColor(R.color.apptheme_primary_light_color));
+        mTopicViewHolder.mVTabRight.setVisibility(View.VISIBLE);
+        mTopicViewHolder.mTvTabLeft.setTextColor(U.getContext().getResources().getColor(R.color.apptheme_primary_grey_color_pressed));
+        mTopicViewHolder.mVTabLeft.setVisibility(View.INVISIBLE);
+        break;
+    }
+
     notifyDataSetChanged();
   }
 
@@ -71,7 +96,7 @@ public class TopicFeedAdapter extends BaseAdapter {
     if (position == 0) {
       return mTopic;
     } else {
-      switch(mTab) {
+      switch (mTab) {
         case TAB_NEW:
           return mNewPosts.get(position - 1);
         case TAB_FEATURE:
@@ -100,40 +125,40 @@ public class TopicFeedAdapter extends BaseAdapter {
   @Override
   public int getItemViewType(int position) {
     if (position == 0) {
-      return TYPE_POST;
-    } else {
       return TYPE_TOPIC;
+    } else {
+      return TYPE_POST;
     }
   }
 
+  @Override
+  public int getViewTypeCount() {
+    return TYPE_COUNT;
+  }
+
   private View getTopicView(int position, View convertView, ViewGroup parent) {
-    TopicViewHolder holder;
     if (convertView == null) {
-      convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_topic, parent, false);
-      holder = new TopicViewHolder(convertView);
-      convertView.setTag(holder);
-    } else {
-      holder = (TopicViewHolder) convertView.getTag();
+      convertView = mTopicView;
     }
 
     final Topic topic = (Topic) getItem(position);
 
     if (topic != null) {
-      holder.mTvFeedCount.setText(topic.content);
-      holder.mTvText.setText(topic.content);
+      mTopicViewHolder.mTvFeedCount.setText(topic.postCount + "条内容");
+      mTopicViewHolder.mTvText.setText(topic.content);
 
       List<Tag> tags = topic.tags;
       for (int i = 0; i < tags.size(); i++) {
         Tag g = tags.get(i);
         switch (i) {
           case 0:
-            holder.mTvTag1.setText(g.content);
+            mTopicViewHolder.mTvTag1.setText("#" + g.content);
             break;
           case 1:
-            holder.mTvTag2.setText(g.content);
+            mTopicViewHolder.mTvTag2.setText("#" + g.content);
             break;
           case 2:
-            holder.mTvTag3.setText(g.content);
+            mTopicViewHolder.mTvTag3.setText("#" + g.content);
             break;
 
         }
@@ -153,7 +178,7 @@ public class TopicFeedAdapter extends BaseAdapter {
     return convertView;
   }
 
-  static class TopicViewHolder {
+  class TopicViewHolder {
 
     @InjectView (R.id.tv_tag_1)
     public TextView mTvTag1;
@@ -169,6 +194,28 @@ public class TopicFeedAdapter extends BaseAdapter {
 
     @InjectView (R.id.tv_feed_count)
     public TextView mTvFeedCount;
+
+    @InjectView (R.id.tv_tab_left)
+    public TextView mTvTabLeft;
+
+    @InjectView (R.id.v_tab_left)
+    public View mVTabLeft;
+
+    @InjectView (R.id.tv_tab_right)
+    public TextView mTvTabRight;
+
+    @InjectView (R.id.v_tab_right)
+    public View mVTabRight;
+
+    @OnClick(R.id.tv_tab_left)
+    public void onTvTabLeftClicked() {
+      switchTab(TAB_NEW);
+    }
+
+    @OnClick(R.id.tv_tab_right)
+    public void onTvTabRightClicked() {
+      switchTab(TAB_FEATURE);
+    }
 
     TopicViewHolder(View view) {
       ButterKnife.inject(this, view);

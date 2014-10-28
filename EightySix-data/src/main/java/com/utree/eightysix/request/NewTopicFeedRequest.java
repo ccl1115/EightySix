@@ -13,10 +13,10 @@ import com.utree.eightysix.rest.Token;
 @Token
 public class NewTopicFeedRequest extends Paginate {
 
-  @Param("id")
-  public String id;
+  @Param("topicId")
+  public int id;
 
-  public NewTopicFeedRequest(String id, int currPage) {
+  public NewTopicFeedRequest(int id, int currPage) {
     super(currPage);
     this.id = id;
   }

@@ -8,6 +8,6 @@ import com.utree.eightysix.rest.Response;
  */
 public class TopicFeedResponse extends Response {
 
-  @SerializedName ("topicFeed")
-  public TopicFeed topicFeed;
+  @SerializedName ("object")
+  public TopicFeed object;
 }

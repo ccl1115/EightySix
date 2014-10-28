@@ -10,6 +10,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
             android:orientation="vertical"
             android:background="@drawable/item_gradient_bg">
 

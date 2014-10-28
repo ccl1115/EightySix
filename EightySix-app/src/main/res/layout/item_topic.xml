@@ -8,7 +8,7 @@
     <LinearLayout
             android:id="@+id/ll_top"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/item_gradient_bg">
 
@@ -22,31 +22,43 @@
                     android:id="@+id/tv_tag_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingRight="4dp"/>
+                    android:paddingRight="4dp"
+                    android:textColor="@color/apptheme_primary_white_btn"/>
 
             <TextView
                     android:id="@+id/tv_tag_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingRight="4dp"/>
+                    android:paddingRight="4dp"
+                    android:textColor="@color/apptheme_primary_white_btn"/>
 
             <TextView
                     android:id="@+id/tv_tag_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingRight="4dp"/>
+                    android:paddingRight="4dp"
+                    android:textColor="@color/apptheme_primary_white_btn"/>
+
+            <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
 
             <TextView
                     android:id="@+id/tv_feed_count"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"/>
         </LinearLayout>
 
         <TextView
                 android:id="@+id/tv_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"/>
+                android:layout_margin="24dp"
+                android:layout_gravity="center"
+                android:textSize="26sp"
+                android:textColor="@android:color/white"/>
     </LinearLayout>
 
     <LinearLayout
@@ -55,20 +67,21 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/ll_top"
             android:orientation="horizontal"
-            android:baselineAligned="false">
+            android:baselineAligned="false"
+            android:background="@android:color/white">
 
         <LinearLayout
-                android:id="@+id/ll_tab_left"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
             <TextView
+                    android:id="@+id/tv_tab_left"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:padding="12dp"
+                    android:padding="8dp"
                     android:text="最新"/>
 
             <View
@@ -84,23 +97,24 @@
                 android:background="@color/apptheme_primary_light_color"/>
 
         <LinearLayout
-                android:id="@+id/ll_tab_right"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
             <TextView
+                    android:id="@+id/tv_tab_right"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:padding="12dp"
+                    android:padding="8dp"
                     android:text="精选"/>
 
             <View
-                    android:id="@+id/v_tab_righty"
+                    android:id="@+id/v_tab_right"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
+                    android:visibility="invisible"
                     android:background="@color/apptheme_primary_light_color"/>
         </LinearLayout>
     </LinearLayout>

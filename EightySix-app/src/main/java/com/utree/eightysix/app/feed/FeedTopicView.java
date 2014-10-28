@@ -8,9 +8,11 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.topic.TopicActivity;
 import com.utree.eightysix.app.topic.TopicListActivity;
 import com.utree.eightysix.data.PostTopic;
 import com.utree.eightysix.data.Tag;
+import com.utree.eightysix.data.Topic;
 import com.utree.eightysix.widget.RoundedButton;
 import java.util.List;
 
@@ -46,12 +48,18 @@ public class FeedTopicView extends FrameLayout {
     inflate(context, R.layout.item_feed_topic, this);
     ButterKnife.inject(this, this);
 
-    setPadding(U.dp2px(8), 0, U.dp2px(8), 0);
+    setPadding(U.dp2px(8), U.dp2px(8), U.dp2px(8), 0);
   }
 
   @OnClick (R.id.rb_more)
   public void onRbMoreClicked() {
     U.getAnalyser().trackEndEvent(getContext(), "feed_topic_view", "feed_topic_view");
+    Topic topic = new Topic();
+    topic.content = mTopic.content;
+    topic.id = mTopic.id;
+    topic.postCount = mTopic.postCount;
+    topic.tags = mTopic.tags;
+    TopicActivity.start(getContext(), topic);
   }
 
   @OnClick (R.id.rb_publish)

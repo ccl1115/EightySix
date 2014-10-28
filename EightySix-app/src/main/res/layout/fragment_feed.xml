@@ -28,7 +28,6 @@
                 android:id="@+id/lv_feed"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:dividerHeight="8dp"
                 android:smoothScrollbar="true"
                 android:listSelector="@drawable/transparent"/>
     </com.utree.eightysix.view.SwipeRefreshLayout>
