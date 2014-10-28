@@ -26,6 +26,7 @@ public class FriendsFragment extends AbsFeedFragment {
 
   @Override
   protected void requestFeeds(final int id, final int page) {
+    if (getBaseActivity() == null) return;
     if (mRefresherView != null && page == 1) {
       mRefresherView.setRefreshing(true);
       getBaseActivity().setTopSubTitle("");

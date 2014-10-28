@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.feed;
 
+import android.app.Activity;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
@@ -27,6 +28,7 @@ public class HotFragment extends AbsFeedFragment {
 
   @Override
   protected void requestFeeds(final int id, final int page) {
+    if (getBaseActivity() == null) return;
     if (mRefresherView != null && page == 1) {
       mRefresherView.setRefreshing(true);
       getBaseActivity().setTopSubTitle("");
@@ -37,7 +39,6 @@ public class HotFragment extends AbsFeedFragment {
         responseForRequest(id, response, page);
       }
     }, FeedsResponse.class);
-
   }
 
   @Override

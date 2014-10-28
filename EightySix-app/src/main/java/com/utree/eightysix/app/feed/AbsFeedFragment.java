@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.feed;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,6 +56,13 @@ public abstract class AbsFeedFragment extends BaseFragment {
     Object item = mLvFeed.getAdapter().getItem(position);
     if (item == null || !(item instanceof Post)) return;
     PostActivity.start(getActivity(), (Post) item);
+  }
+
+  @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
+
+    if (isActive()) requestFeeds(mCircle.id, 1);
   }
 
   @Override
