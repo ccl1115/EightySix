@@ -1,6 +1,7 @@
 package com.utree.eightysix.report.logger;
 
 import android.os.AsyncTask;
+import com.utree.eightysix.BuildConfig;
 import java.util.concurrent.TimeUnit;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
@@ -33,7 +34,13 @@ public class LoggerImpl implements EntryLogger {
         entryAdapter.getPayload().values().toArray(values);
         builder.values(values);
 
-        mInfluxDB.write("app-logger", TimeUnit.MILLISECONDS, builder.build());
+        try {
+          mInfluxDB.write("app-logger", TimeUnit.MILLISECONDS, builder.build());
+        } catch (Throwable t) {
+          if (BuildConfig.DEBUG) {
+            t.printStackTrace();
+          }
+        }
         return null;
       }
     }).execute();
