@@ -30,6 +30,7 @@ public class TagTabActivity extends BaseActivity {
   private FactoryTagFragment mFactoryTagFragment;
   private HotTagFragment mHotTagFragment;
   private MoreTagFragment mMoreTagFragment;
+  private Tag mTag;
 
   public static void start(Context context, Tag tag) {
     Intent i = new Intent(context, TagTabActivity.class);
@@ -62,6 +63,11 @@ public class TagTabActivity extends BaseActivity {
     mFactoryTagFragment = new FactoryTagFragment();
     mHotTagFragment = new HotTagFragment();
     mMoreTagFragment = new MoreTagFragment();
+
+    mTag = getIntent().getParcelableExtra("tag");
+
+    mFactoryTagFragment.setTag(mTag);
+    mHotTagFragment.setTag(mTag);
 
     mVpTab.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
       @Override

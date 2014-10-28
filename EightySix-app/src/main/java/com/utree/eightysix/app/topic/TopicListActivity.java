@@ -8,12 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.InjectView;
+import butterknife.OnItemClick;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.data.Paginate;
+import com.utree.eightysix.data.Topic;
 import com.utree.eightysix.request.TopicListRequest;
 import com.utree.eightysix.response.TopicListResponse;
 import com.utree.eightysix.rest.OnResponse2;
@@ -42,6 +44,15 @@ public class TopicListActivity extends BaseActivity {
     }
 
     context.startActivity(intent);
+  }
+
+  @OnItemClick(R.id.alv_topic)
+  public void onAlvTopicItemClicked(int position) {
+    Topic topic = (Topic) mTopicListAdapter.getItem(position);
+
+    if (topic != null) {
+      TopicActivity.start(this, topic);
+    }
   }
 
   @Override
@@ -86,7 +97,7 @@ public class TopicListActivity extends BaseActivity {
     request(new TopicListRequest(page), new OnResponse2<TopicListResponse>() {
       @Override
       public void onResponseError(Throwable e) {
-        e.printStackTrace();
+        hideProgressBar();
       }
 
       @Override

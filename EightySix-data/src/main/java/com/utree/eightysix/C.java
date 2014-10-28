@@ -49,6 +49,10 @@ public class C {
 
   public static final String API_FEED_TAGS = "/feed/tags.do";
 
+  public static final String API_FEED_TAG_HOT = "/feed/listHotWithTag.do";
+  public static final String API_FEED_TAG_FACTORY = "/feed/listWithTag.do";
+
+
   public static final String API_TOPIC_LIST = "/topic/list.do";
   public static final String API_TOPIC_NEW = "/topic/new.do";
   public static final String API_TOPIC_FEATURE = "/topic/feature.do";

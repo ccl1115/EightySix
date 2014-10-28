@@ -29,7 +29,7 @@ import java.util.List;
 
 /**
  */
-class FeedAdapter extends BaseAdapter {
+public class FeedAdapter extends BaseAdapter {
 
   private static final int TIP_NOT_SHOWN = -1;
 
@@ -39,7 +39,7 @@ class FeedAdapter extends BaseAdapter {
   static final int TYPE_UPLOAD = 2;
   static final int TYPE_SELECT = 3;
   static final int TYPE_UNKNOWN = 4;
-  static final int TYPE_POST = 5;
+  public static final int TYPE_POST = 5;
   static final int TYPE_PROMO = 6;
   static final int TYPE_QUESTION = 7;
   static final int TYPE_INVITE_FRIEND = 8;
@@ -56,7 +56,7 @@ class FeedAdapter extends BaseAdapter {
   private int mTipOverlaySharePosition = TIP_NOT_SHOWN;
   private int mTipOverlayRepostPosition = TIP_NOT_SHOWN;
 
-  FeedAdapter(Feeds feeds) {
+  public FeedAdapter(Feeds feeds) {
     mFeeds = feeds;
 
     if (mFeeds.selectFactory != 1) {
@@ -240,22 +240,22 @@ class FeedAdapter extends BaseAdapter {
     }
   }
 
-  void showTipOverlaySource(int position) {
+  public void showTipOverlaySource(int position) {
     mTipOverlaySourcePosition = position;
     notifyDataSetChanged();
   }
 
-  void showTipOverlayPraise(int position) {
+  public void showTipOverlayPraise(int position) {
     mTipOverlayPraisePosition = position;
     notifyDataSetChanged();
   }
 
-  void showTipOverlayShare(int position) {
+  public void showTipOverlayShare(int position) {
     mTipOverlaySharePosition = position;
     notifyDataSetChanged();
   }
 
-  void showTipOverlayRepost(int position) {
+  public void showTipOverlayRepost(int position) {
     mTipOverlayRepostPosition = position;
     notifyDataSetChanged();
   }
@@ -278,7 +278,7 @@ class FeedAdapter extends BaseAdapter {
     }
   }
 
-  boolean tipsShowing() {
+  public boolean tipsShowing() {
     return mTipOverlayPraisePosition != -1 || mTipOverlaySharePosition != -1 || mTipOverlaySourcePosition != -1 ||
         mTipOverlayRepostPosition != -1;
   }

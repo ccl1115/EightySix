@@ -8,6 +8,8 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.publish.PublishActivity;
+import com.utree.eightysix.app.tag.TagTabActivity;
 import com.utree.eightysix.app.topic.TopicActivity;
 import com.utree.eightysix.app.topic.TopicListActivity;
 import com.utree.eightysix.data.PostTopic;
@@ -67,6 +69,8 @@ public class FeedTopicView extends FrameLayout {
   @OnClick (R.id.rb_publish)
   public void onRbPublishClicked() {
     U.getAnalyser().trackEvent(getContext(), "feed_topic_publish", "feed_topic_publish");
+
+    PublishActivity.startWithTopicId(getContext(), mTopic.id);
   }
 
   @OnClick (R.id.tv_more)
@@ -77,17 +81,17 @@ public class FeedTopicView extends FrameLayout {
 
   @OnClick (R.id.tv_tag_1)
   public void onTvTag1Clicked() {
-
+    TagTabActivity.start(getContext(), mTopic.tags.get(0));
   }
 
   @OnClick (R.id.tv_tag_2)
   public void onTvTag2Clicked() {
-
+    TagTabActivity.start(getContext(), mTopic.tags.get(1));
   }
 
   @OnClick (R.id.tv_tag_3)
   public void onTvTag3Clicked() {
-
+    TagTabActivity.start(getContext(), mTopic.tags.get(2));
   }
 
 

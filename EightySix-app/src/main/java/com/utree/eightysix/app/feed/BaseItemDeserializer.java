@@ -180,7 +180,7 @@ public class BaseItemDeserializer implements JsonDeserializer<BaseItem> {
     for (JsonElement element : array) {
       JsonObject tagObj = element.getAsJsonObject();
       Tag tag = new Tag();
-      tag.id = safeGetAsString(tagObj.get("id"));
+      tag.id = safeGetAsInt(tagObj.get("id"));
       tag.content = safeGetAsString(tagObj.get("content"));
       tags.add(tag);
     }
