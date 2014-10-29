@@ -99,11 +99,14 @@ public class PublishActivity extends BaseActivity {
   @InjectView (R.id.tv_tag)
   public TextView mTvTag;
 
+  @InjectView (R.id.tv_tags)
+  public TextView mTvTags;
+
   @InjectView (R.id.et_temp_name)
   public EditText mEtTempName;
 
-  @InjectView (R.id.vp_tags)
-  public TagsViewPager mTagsViewPager;
+  @InjectView (R.id.tl_tags)
+  public TagsLayout mTagsLayout;
 
   protected PublishLayout mPublishLayout;
   protected int mFactoryId;
@@ -393,6 +396,18 @@ public class PublishActivity extends BaseActivity {
     showDescriptionDialogWhenFirstRun();
 
     cacheOutTags();
+
+    mTagsLayout.setOnSelectedTagsChangedListener(new TagsLayout.OnSelectedTagsChangedListener() {
+      @Override
+      public void onSelectedTagsChanged(List<Tag> tags) {
+        StringBuilder b = new StringBuilder();
+        for (Tag g : tags) {
+          b.append("#").append(g.content).append("  ");
+        }
+
+        mTvTags.setText(b.toString());
+      }
+    });
   }
 
   @Override
@@ -726,7 +741,7 @@ public class PublishActivity extends BaseActivity {
       }
 
       String tags = "";
-      for (Tag t : mTagsViewPager.getSelectedTags()) {
+      for (Tag t : mTagsLayout.getSelectedTags()) {
         tags = tags.concat(String.valueOf(t.id)).concat(",");
       }
 
@@ -778,7 +793,7 @@ public class PublishActivity extends BaseActivity {
           mTags = response.object.tags;
           mLastTempName = response.object.lastTempName;
 
-          mTagsViewPager.setTag(mTags);
+          mTagsLayout.setTag(mTags);
           mEtTempName.setText(mLastTempName);
         }
         requestTags();
@@ -799,7 +814,7 @@ public class PublishActivity extends BaseActivity {
           mTags = response.object.tags;
           mLastTempName = response.object.lastTempName;
 
-          mTagsViewPager.setTag(mTags);
+          mTagsLayout.setTag(mTags);
           mEtTempName.setText(mLastTempName);
         }
       }

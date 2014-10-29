@@ -1,8 +1,6 @@
 package com.utree.eightysix.app.publish;
 
 import android.content.Context;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,60 +15,28 @@ import java.util.List;
 
 /**
  */
-public class TagsViewPager extends ViewPager {
+public class TagsLayout extends FloatingLayout {
 
-
-
-  private List<Tag> mTags;
-
-  private List<TextView> mTextViews;
 
   private int mCount;
 
-  public TagsViewPager(Context context, AttributeSet attrs) {
+  private List<Tag> mSelectedTags = new ArrayList<Tag>();
+
+  private OnSelectedTagsChangedListener mOnSelectedTagsChangedListener;
+
+  public TagsLayout(Context context, AttributeSet attrs) {
     super(context, attrs);
-    mTextViews = new ArrayList<TextView>();
   }
 
   public void setTag(List<Tag> tags) {
-    mTags = tags;
-    mTextViews.clear();
+    final int padding = U.dp2px(16);
+    setPadding(padding, padding, padding, padding);
 
-    setAdapter(new PagerAdapter() {
-      @Override
-      public int getCount() {
-        return Math.round((mTags.size() + 10) / 10f);
-      }
+    List<TextView> tagViews = buildSpannable(tags);
 
-      @Override
-      public Object instantiateItem(ViewGroup container, int position) {
-        FloatingLayout child = new FloatingLayout(container.getContext());
-
-        child.setLayoutParams(new LayoutParams());
-
-        final int padding = U.dp2px(16);
-        child.setPadding(padding, padding, padding, padding);
-
-        List<TextView> tagViews = buildSpannable(
-            mTags.subList(position * 10, Math.min(mTags.size(), (position + 1) * 10)));
-
-        for (TextView v : tagViews) {
-          child.addView(v);
-        }
-        container.addView(child);
-        return child;
-      }
-
-      @Override
-      public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((View) object);
-      }
-
-      @Override
-      public boolean isViewFromObject(View view, Object object) {
-        return object.equals(view);
-      }
-    });
+    for (TextView v : tagViews) {
+      addView(v);
+    }
   }
 
   public List<TextView> buildSpannable(List<Tag> tags) {
@@ -93,8 +59,18 @@ public class TagsViewPager extends ViewPager {
           if (!selected && mCount == 3) {
             U.showToast("最多只能选择三个标签哦");
           } else {
-            mCount = selected ? mCount - 1 : mCount + 1;
+            if (selected) {
+              mSelectedTags.remove(v.getTag());
+              mCount = mCount - 1;
+            } else {
+              mSelectedTags.add((Tag) v.getTag());
+              mCount = mCount + 1;
+            }
             v.setSelected(!selected);
+
+            if (mOnSelectedTagsChangedListener != null) {
+              mOnSelectedTagsChangedListener.onSelectedTagsChanged(mSelectedTags);
+            }
           }
         }
       });
@@ -105,20 +81,19 @@ public class TagsViewPager extends ViewPager {
       view.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(4),
           getContext().getResources().getColorStateList(R.color.apptheme_primary_white_btn)));
       views.add(view);
-
-      mTextViews.add(view);
     }
     return views;
   }
 
   public List<Tag> getSelectedTags() {
-    List<Tag> tags = new ArrayList<Tag>();
-    for (TextView tv : mTextViews) {
-      if (tv.isSelected()) {
-        tags.add((Tag) tv.getTag());
-      }
-    }
+    return mSelectedTags;
+  }
 
-    return tags;
+  public void setOnSelectedTagsChangedListener(OnSelectedTagsChangedListener listener) {
+    mOnSelectedTagsChangedListener = listener;
+  }
+
+  public interface OnSelectedTagsChangedListener {
+    void onSelectedTagsChanged(List<Tag> tags);
   }
 }

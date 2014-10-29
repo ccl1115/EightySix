@@ -1,13 +1,10 @@
 package com.utree.eightysix.widget;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import com.utree.eightysix.BuildConfig;
-import com.utree.eightysix.R;
 import de.akquinet.android.androlog.Log;
 
 /**
@@ -39,12 +36,22 @@ public class FloatingLayout extends ViewGroup {
 
     measureHorizontal(widthMeasureSpec, heightMeasureSpec);
 
-    setMeasuredDimension(mMeasuredWidth, heightMeasureSpec & ~(0x3 << 30));
+    setMeasuredDimension(mMeasuredWidth, mMeasuredHeight);
 
     if (DEBUG) {
       Log.d(TAG, String.format("measured width: %d, height: %d", getMeasuredWidth(), getMeasuredHeight()));
     }
 
+  }
+
+  @Override
+  protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    layoutHorizontal();
+  }
+
+  @Override
+  protected MarginLayoutParams generateDefaultLayoutParams() {
+    return new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
   }
 
   private void measureHorizontal(int widthMeasureSpec, int heightMeasureSpec) {
@@ -77,12 +84,7 @@ public class FloatingLayout extends ViewGroup {
 
     }
 
-    mMeasuredHeight = Math.max(mUsedHeight, mMeasuredHeight);
-  }
-
-  @Override
-  protected void onLayout(boolean changed, int l, int t, int r, int b) {
-      layoutHorizontal();
+    mMeasuredHeight = mMeasuredHeight + mUsedHeight + getPaddingTop() + getPaddingBottom();
   }
 
   private void layoutHorizontal() {
@@ -128,10 +130,5 @@ public class FloatingLayout extends ViewGroup {
 
       }
     }
-  }
-
-  @Override
-  protected MarginLayoutParams generateDefaultLayoutParams() {
-    return new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
   }
 }

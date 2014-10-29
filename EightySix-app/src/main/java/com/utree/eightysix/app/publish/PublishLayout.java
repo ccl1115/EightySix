@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import butterknife.InjectView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -31,8 +32,8 @@ public class PublishLayout extends ViewGroup {
   @InjectView (R.id.fl_grid_panel)
   public FrameLayout mFlGridPanel;
 
-  @InjectView (R.id.fl_tags)
-  public FrameLayout mFlTags;
+  @InjectView (R.id.sl_tags)
+  public ScrollView mSvTags;
 
   private boolean mPanelHidden = false;
 
@@ -63,13 +64,13 @@ public class PublishLayout extends ViewGroup {
     if (mLastPanel == PANEL_COLOR) {
       mFlGridPanel.setVisibility(VISIBLE);
       mLlInfo.setVisibility(GONE);
-      mFlTags.setVisibility(GONE);
+      mSvTags.setVisibility(GONE);
     } else if (mLastPanel == PANEL_INFO) {
       mLlInfo.setVisibility(VISIBLE);
       mFlGridPanel.setVisibility(GONE);
-      mFlTags.setVisibility(GONE);
+      mSvTags.setVisibility(GONE);
     } else if (mLastPanel == PANEL_TAGS) {
-      mFlTags.setVisibility(VISIBLE);
+      mSvTags.setVisibility(VISIBLE);
       mFlGridPanel.setVisibility(GONE);
       mLlInfo.setVisibility(GONE);
     }
@@ -81,7 +82,7 @@ public class PublishLayout extends ViewGroup {
   public void hidePanel() {
     mFlGridPanel.setVisibility(GONE);
     mLlInfo.setVisibility(GONE);
-    mFlTags.setVisibility(GONE);
+    mSvTags.setVisibility(GONE);
     mPanelHidden = true;
   }
 
@@ -89,15 +90,15 @@ public class PublishLayout extends ViewGroup {
     if (mLastPanel == PANEL_COLOR) {
       mFlGridPanel.setVisibility(VISIBLE);
       mLlInfo.setVisibility(GONE);
-      mFlTags.setVisibility(GONE);
+      mSvTags.setVisibility(GONE);
     } else if (mLastPanel == PANEL_INFO) {
       mLlInfo.setVisibility(VISIBLE);
       mFlGridPanel.setVisibility(GONE);
-      mFlTags.setVisibility(GONE);
+      mSvTags.setVisibility(GONE);
     } else if (mLastPanel == PANEL_TAGS) {
       mLlInfo.setVisibility(GONE);
       mFlGridPanel.setVisibility(GONE);
-      mFlTags.setVisibility(VISIBLE);
+      mSvTags.setVisibility(VISIBLE);
     }
 
     mPanelHidden = false;
@@ -116,13 +117,13 @@ public class PublishLayout extends ViewGroup {
     } else if (mLastPanel == PANEL_INFO) {
       mLlInfo.layout(l, mRlPanel.getBottom(), r, mRlPanel.getBottom() + mLlInfo.getMeasuredHeight());
       mFlGridPanel.layout(0, 0, 0, 0);
-      mFlTags.layout(0, 0, 0, 0);
+      mSvTags.layout(0, 0, 0, 0);
     } else if (mLastPanel == PANEL_COLOR) {
       mFlGridPanel.layout(l, mRlPanel.getBottom(), r, mRlPanel.getBottom() + mFlGridPanel.getMeasuredHeight());
       mLlInfo.layout(0, 0, 0, 0);
-      mFlTags.layout(0, 0, 0, 0);
+      mSvTags.layout(0, 0, 0, 0);
     } else if (mLastPanel == PANEL_TAGS) {
-      mFlTags.layout(l, mRlPanel.getBottom(), r, mRlPanel.getBottom() + mFlTags.getMeasuredHeight());
+      mSvTags.layout(l, mRlPanel.getBottom(), r, mRlPanel.getBottom() + mSvTags.getMeasuredHeight());
       mFlGridPanel.layout(0, 0, 0, 0);
       mLlInfo.layout(0, 0, 0, 0);
     }
@@ -167,8 +168,8 @@ public class PublishLayout extends ViewGroup {
     }
 
     if (mLastPanel == PANEL_TAGS && !mPanelHidden) {
-      measureChild(mFlTags, widthMeasureSpec, heightSize + MeasureSpec.AT_MOST);
-      heightLeft -= mFlTags.getMeasuredHeight();
+      measureChild(mSvTags, widthMeasureSpec, heightSize + MeasureSpec.AT_MOST);
+      heightLeft -= mSvTags.getMeasuredHeight();
     }
 
     measureChild(mRlPanel, widthMeasureSpec, heightLeft + MeasureSpec.AT_MOST);
