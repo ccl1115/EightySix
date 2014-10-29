@@ -49,4 +49,10 @@
         <attr name="refresher_content" format="integer"/>
         <attr name="empty_view" format="integer"/>
     </declare-styleable>
+
+    <declare-styleable name="FloatingLayout_Layout">
+
+        <!-- regex: (before|after|both) -->
+        <attr name="layout_clear" format="string" />
+    </declare-styleable>
 </resources>

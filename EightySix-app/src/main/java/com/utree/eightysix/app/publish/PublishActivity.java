@@ -50,7 +50,6 @@ import com.utree.eightysix.response.TagsResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.IOUtils;
@@ -102,6 +101,9 @@ public class PublishActivity extends BaseActivity {
 
   @InjectView (R.id.et_temp_name)
   public EditText mEtTempName;
+
+  @InjectView (R.id.vp_tags)
+  public TagsViewPager mTagsViewPager;
 
   protected PublishLayout mPublishLayout;
   protected int mFactoryId;
@@ -723,6 +725,17 @@ public class PublishActivity extends BaseActivity {
         builder.factoryId(mFactoryId);
       }
 
+      String tags = "";
+      for (Tag t : mTagsViewPager.getSelectedTags()) {
+        tags = tags.concat(String.valueOf(t.id)).concat(",");
+      }
+
+      tags = tags.substring(0, tags.length() - 1);
+
+      if (!TextUtils.isEmpty(tags)) {
+        builder.tags(tags);
+      }
+
       disablePublishButton();
 
       request(builder.build(), new OnResponse<PublishPostResponse>() {
@@ -764,6 +777,9 @@ public class PublishActivity extends BaseActivity {
         if (RESTRequester.responseOk(response)) {
           mTags = response.object.tags;
           mLastTempName = response.object.lastTempName;
+
+          mTagsViewPager.setTag(mTags);
+          mEtTempName.setText(mLastTempName);
         }
         requestTags();
       }
@@ -782,6 +798,9 @@ public class PublishActivity extends BaseActivity {
         if (RESTRequester.responseOk(response)) {
           mTags = response.object.tags;
           mLastTempName = response.object.lastTempName;
+
+          mTagsViewPager.setTag(mTags);
+          mEtTempName.setText(mLastTempName);
         }
       }
     }, TagsResponse.class);

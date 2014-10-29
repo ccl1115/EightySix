@@ -14,7 +14,7 @@ public class TagsResponse extends Response {
 
   public static class Tags {
 
-    @SerializedName("tags")
+    @SerializedName("lists")
     public List<Tag> tags;
 
     @SerializedName("lastTempName")

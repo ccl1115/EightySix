@@ -79,7 +79,7 @@
                 android:id="@+id/et_temp_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_centerVertical="true"
                 android:layout_toRightOf="@id/tv_tag"
                 android:layout_marginRight="8dp"
                 android:paddingBottom="12dp"
@@ -194,7 +194,8 @@
     <FrameLayout
             android:id="@+id/fl_tags"
             android:layout_width="match_parent"
-            android:layout_height="230dp">
+            android:layout_height="200dp"
+            android:background="#fff0f0f0">
 
         <com.utree.eightysix.app.publish.TagsViewPager
                 android:id="@+id/vp_tags"

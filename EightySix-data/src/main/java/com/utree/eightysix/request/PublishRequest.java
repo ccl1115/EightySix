@@ -35,6 +35,10 @@ public class PublishRequest {
   @Optional
   public int topicId;
 
+  @Param("tags")
+  @Optional
+  public String tags;
+
   private PublishRequest() {
 
   }
@@ -70,6 +74,11 @@ public class PublishRequest {
 
     public Builder topicId(int id) {
       mPublishRequest.topicId = id;
+      return this;
+    }
+
+    public Builder tags(String tags) {
+      mPublishRequest.tags = tags;
       return this;
     }
 
