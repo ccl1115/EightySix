@@ -4,12 +4,9 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.SystemClock;
 import android.text.TextUtils;
 import com.google.gson.reflect.TypeToken;
-import com.utree.eightysix.app.chat.ChatAccount;
 import com.utree.eightysix.app.intro.IntroActivity;
-import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.data.User;
 import com.utree.eightysix.event.HasNewPraiseEvent;
 import com.utree.eightysix.event.NewCommentCountEvent;
@@ -22,9 +19,6 @@ import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RequestData;
 import com.utree.eightysix.rest.Response;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -172,7 +166,10 @@ public class Account {
         //M.getRegisterHelper().register(ChatAccount.inst());
         //ChatAccount.inst().login();
 
-        U.getEntryLogger().log(new EntryAdapter() {
+        U.getAppLogger().log(new EntryAdapter() {
+
+          private final Payload mPayload = new Payload();
+
           @Override
           public String getApi() {
             return "login";
@@ -180,10 +177,9 @@ public class Account {
 
           @Override
           public Payload getPayload() {
-            Payload payload = new Payload();
-            payload.put("user_id", Account.inst().getUserId());
-            payload.put("timestamp", String.valueOf(System.currentTimeMillis()));
-            return payload;
+            mPayload.put("user_id", Account.inst().getUserId());
+            mPayload.put("timestamp", String.valueOf(System.currentTimeMillis()));
+            return mPayload;
           }
         });
       }
@@ -213,7 +209,10 @@ public class Account {
         Account.inst().mIsLogin = false;
       }
 
-      U.getEntryLogger().log(new EntryAdapter() {
+      U.getAppLogger().log(new EntryAdapter() {
+
+        private final Payload mPayload = new Payload();
+
         @Override
         public String getApi() {
           return "logout";
@@ -221,10 +220,9 @@ public class Account {
 
         @Override
         public Payload getPayload() {
-          Payload payload = new Payload();
-          payload.put("user_id", Account.inst().getUserId());
-          payload.put("timestamp", String.valueOf(System.currentTimeMillis()));
-          return payload;
+          mPayload.put("user_id", Account.inst().getUserId());
+          mPayload.put("timestamp", String.valueOf(System.currentTimeMillis()));
+          return mPayload;
         }
       });
     }

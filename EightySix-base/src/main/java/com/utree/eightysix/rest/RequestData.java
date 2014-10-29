@@ -14,6 +14,10 @@ public class RequestData {
   org.apache.http.Header[] headers;
   long requestTime;
 
+  public RequestData() {
+    requestTime = System.currentTimeMillis();
+  }
+
   public long getRequestTime() {
     return requestTime;
   }

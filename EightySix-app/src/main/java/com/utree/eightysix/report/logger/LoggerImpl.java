@@ -26,12 +26,14 @@ public class LoggerImpl implements EntryLogger {
       protected Void doInBackground(Void... voids) {
         Serie.Builder builder = new Serie.Builder(entryAdapter.getApi());
 
-        String[] columns = new String[entryAdapter.getPayload().size()];
-        entryAdapter.getPayload().keySet().toArray(columns);
+        Payload payload = entryAdapter.getPayload();
+
+        String[] columns = new String[payload.size()];
+        payload.keySet().toArray(columns);
         builder.columns(columns);
 
-        String[] values = new String[entryAdapter.getPayload().size()];
-        entryAdapter.getPayload().values().toArray(values);
+        Object[] values = new Object[payload.size()];
+        payload.values().toArray(values);
         builder.values(values);
 
         try {

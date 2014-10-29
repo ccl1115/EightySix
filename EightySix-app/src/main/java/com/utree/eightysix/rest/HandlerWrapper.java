@@ -1,11 +1,11 @@
 package com.utree.eightysix.rest;
 
 import android.widget.Toast;
-import com.google.gson.Gson;
 import com.loopj.android.http.BaseJsonHttpResponseHandler;
-import com.tencent.stat.StatAppMonitor;
 import com.utree.eightysix.*;
 import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.report.logger.EntryAdapter;
+import com.utree.eightysix.report.logger.Payload;
 import com.utree.eightysix.utils.IOUtils;
 import de.akquinet.android.androlog.Log;
 import java.net.UnknownHostException;
@@ -15,7 +15,6 @@ import org.apache.http.NoHttpResponseException;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.text.DateFormat;
 import java.util.Date;
 
 /**
@@ -48,7 +47,7 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
   }
 
   @Override
-  public void onSuccess(int statusCode, org.apache.http.Header[] headers, String rawResponse, T response) {
+  public void onSuccess(int statusCode, org.apache.http.Header[] headers, final String rawResponse, T response) {
 
 
     if (response != null) {
@@ -73,6 +72,25 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
       }
     }
 
+    U.getAppLogger().log(new EntryAdapter() {
+
+      private Payload mPayload = new Payload();
+
+      @Override
+      public String getApi() {
+        return "request";
+      }
+
+      @Override
+      public Payload getPayload() {
+        long value = System.currentTimeMillis() - mRequestData.getRequestTime();
+        Log.d(C.TAG.RR, "duration: " + value);
+        mPayload.put("duration", value);
+        mPayload.put("api", mRequestData.getApi());
+        mPayload.put("size", rawResponse.length() * 2);
+        return mPayload;
+      }
+    });
   }
 
   @Override

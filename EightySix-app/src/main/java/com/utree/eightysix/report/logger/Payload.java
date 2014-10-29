@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  */
-public final class Payload extends HashMap<String, String> {
+public final class Payload extends HashMap<String, Object> {
 
 
 }

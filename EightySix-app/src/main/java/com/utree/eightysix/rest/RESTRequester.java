@@ -114,7 +114,6 @@ public class RESTRequester implements IRESTRequester {
 
   @Override
   public RequestHandle request(RequestData data, ResponseHandlerInterface handler) {
-    data.setRequestTime(System.currentTimeMillis());
     if (data.getMethod() == Method.GET) {
       return get(data.getApi(), data.getHeaders(), data.getParams(), handler);
     } else if (data.getMethod() == Method.POST) {

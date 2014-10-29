@@ -363,7 +363,7 @@ public class U {
     return sActionDispatcher;
   }
 
-  public static EntryLogger getEntryLogger() {
+  public static EntryLogger getAppLogger() {
     M.checkThread();
 
     if (sEntryLogger == null) {
