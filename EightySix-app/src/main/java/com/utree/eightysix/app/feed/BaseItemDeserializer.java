@@ -97,6 +97,22 @@ public class BaseItemDeserializer implements JsonDeserializer<BaseItem> {
     post.viewType = safeGetAsInt(jObj.get("viewType"));
     post.circle = safeGetAsString(jObj.get("factoryName"));
     post.shortName = safeGetAsString(jObj.get("factoryShortName"));
+
+    post.tags = new ArrayList<Tag>();
+
+    JsonElement e = jObj.get("tags");
+    if (!e.isJsonNull()) {
+      JsonArray array = jObj.getAsJsonArray("tags");
+
+      for (JsonElement tag : array) {
+        JsonObject t = tag.getAsJsonObject();
+        Tag g = new Tag();
+        g.id = safeGetAsInt(t.get("id"));
+        g.content = safeGetAsString(t.get("content"));
+        post.tags.add(g);
+      }
+    }
+
     return post;
   }
 

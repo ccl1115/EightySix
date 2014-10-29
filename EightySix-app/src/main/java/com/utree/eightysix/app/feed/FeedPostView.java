@@ -7,7 +7,12 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.nineoldandroids.animation.AnimatorSet;
@@ -18,7 +23,9 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
+import com.utree.eightysix.app.tag.TagTabActivity;
 import com.utree.eightysix.data.Post;
+import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.Env;
@@ -26,6 +33,7 @@ import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.GearsView;
 import com.utree.eightysix.widget.ViewHighlighter;
+import java.util.List;
 
 /**
  */
@@ -77,6 +85,30 @@ public class FeedPostView extends BasePostView {
 
   @InjectView (R.id.tv_hot)
   public TextView mTvHot;
+
+  @InjectView (R.id.tv_tag_1)
+  public TextView mTvTag1;
+
+  @InjectView (R.id.tv_tag_2)
+  public TextView mTvTag2;
+
+  @InjectView (R.id.tv_tag_3)
+  public TextView mTvTag3;
+
+  @OnClick(R.id.tv_tag_1)
+  public void onTvTag1Clicked() {
+    TagTabActivity.start(getContext(), mPost.tags.get(0));
+  }
+
+  @OnClick(R.id.tv_tag_2)
+  public void onTvTag2Clicked() {
+    TagTabActivity.start(getContext(), mPost.tags.get(1));
+  }
+
+  @OnClick(R.id.tv_tag_3)
+  public void onTvTag3Clicked() {
+    TagTabActivity.start(getContext(), mPost.tags.get(2));
+  }
 
   private Runnable mShareAnimation;
 
@@ -176,7 +208,7 @@ public class FeedPostView extends BasePostView {
     if (mPost.isHot == 1) {
       mTvHot.setVisibility(VISIBLE);
     } else {
-      mTvHot.setVisibility(INVISIBLE);
+      mTvHot.setVisibility(GONE);
     }
 
     if (!TextUtils.isEmpty(post.bgUrl)) {
@@ -210,6 +242,28 @@ public class FeedPostView extends BasePostView {
       mLlComment.setVisibility(GONE);
     } else {
       mLlComment.setVisibility(VISIBLE);
+    }
+
+    mTvTag1.setText("");
+    mTvTag2.setText("");
+    mTvTag3.setText("");
+
+    List<Tag> tags = mPost.tags;
+    if (tags != null) {
+      for (int i = 0; i < tags.size(); i++) {
+        Tag g = tags.get(i);
+        switch (i) {
+          case 0:
+            mTvTag1.setText("#" + g.content);
+            break;
+          case 1:
+            mTvTag2.setText("#" + g.content);
+            break;
+          case 2:
+            mTvTag3.setText("#" + g.content);
+            break;
+        }
+      }
     }
 
     mIvShare.setVisibility(INVISIBLE);
