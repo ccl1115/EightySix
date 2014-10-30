@@ -37,6 +37,7 @@
     <string name="pull_to_refresh">下拉刷新</string>
     <string name="loading_more">正在加载更多</string>
     <string name="copy_to_clipborad">复制至剪贴板</string>
+    <string name="app_crash">应用程序奔溃</string>
 
     <string name="server_error">服务器错误</string>
     <string name="server_object_error">服务器返回对象解析错误</string>

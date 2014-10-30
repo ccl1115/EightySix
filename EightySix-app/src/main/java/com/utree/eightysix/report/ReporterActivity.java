@@ -17,7 +17,7 @@ import com.utree.eightysix.widget.RoundedButton;
  * @author simon
  */
 @Layout(R.layout.activity_reporter)
-@TopTitle(R.string.report)
+@TopTitle(R.string.app_crash)
 public class ReporterActivity extends BaseActivity {
 
   @InjectView(R.id.rb_report)
@@ -29,6 +29,7 @@ public class ReporterActivity extends BaseActivity {
   public static void start(Context context, String stacktrace) {
     Intent intent = new Intent(context, ReporterActivity.class);
     intent.putExtra("stacktrace", stacktrace);
+    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     context.startActivity(intent);
   }
