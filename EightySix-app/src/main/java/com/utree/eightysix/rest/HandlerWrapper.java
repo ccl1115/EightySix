@@ -72,25 +72,27 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
       }
     }
 
-    U.getAppLogger().log(new EntryAdapter() {
+    if (mRequestData.isLog()) {
+      U.getAppLogger().log(new EntryAdapter() {
 
-      private Payload mPayload = new Payload();
+        private Payload mPayload = new Payload();
 
-      @Override
-      public String getApi() {
-        return "request";
-      }
+        @Override
+        public String getApi() {
+          return "request";
+        }
 
-      @Override
-      public Payload getPayload() {
-        long value = System.currentTimeMillis() - mRequestData.getRequestTime();
-        Log.d(C.TAG.RR, "duration: " + value);
-        mPayload.put("duration", value);
-        mPayload.put("api", mRequestData.getApi());
-        mPayload.put("size", rawResponse.length() * 2);
-        return mPayload;
-      }
-    });
+        @Override
+        public Payload getPayload() {
+          long value = System.currentTimeMillis() - mRequestData.getRequestTime();
+          Log.d(C.TAG.RR, "duration: " + value);
+          mPayload.put("duration", value);
+          mPayload.put("api", mRequestData.getApi());
+          mPayload.put("size", rawResponse.length() * 2);
+          return mPayload;
+        }
+      });
+    }
   }
 
   @Override

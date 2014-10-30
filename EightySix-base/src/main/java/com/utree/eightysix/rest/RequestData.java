@@ -9,6 +9,7 @@ import org.apache.http.Header;
 public class RequestData {
   String api;
   boolean cache;
+  boolean log;
   RequestParams params;
   int method;
   org.apache.http.Header[] headers;
@@ -16,6 +17,15 @@ public class RequestData {
 
   public RequestData() {
     requestTime = System.currentTimeMillis();
+  }
+
+  public boolean isLog() {
+
+    return log;
+  }
+
+  public void setLog(boolean log) {
+    this.log = log;
   }
 
   public long getRequestTime() {

@@ -136,6 +136,9 @@ public class RESTRequester implements IRESTRequester {
       Cache cache = clz.getAnnotation(Cache.class);
       data.setCache(cache != null);
 
+      com.utree.eightysix.rest.Log log = clz.getAnnotation(com.utree.eightysix.rest.Log.class);
+      data.setLog(log != null);
+
       Token token = clz.getAnnotation(Token.class);
       if (token != null && Account.inst().isLogin()) {
         addAuthParams(data.getParams());
