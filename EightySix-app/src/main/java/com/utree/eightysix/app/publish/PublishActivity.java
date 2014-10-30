@@ -28,6 +28,7 @@ import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
+import butterknife.OnTextChanged;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ArgbEvaluator;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -104,6 +105,9 @@ public class PublishActivity extends BaseActivity {
 
   @InjectView (R.id.et_temp_name)
   public EditText mEtTempName;
+
+  @InjectView (R.id.iv_temp_name)
+  public ImageView mIvTempName;
 
   @InjectView (R.id.tl_tags)
   public TagsLayout mTagsLayout;
@@ -191,6 +195,18 @@ public class PublishActivity extends BaseActivity {
       mPostEditText.setHintTextColor(0x88ffffff);
     } else {
       mPostEditText.setHintTextColor(0xffffffff);
+    }
+  }
+
+  @OnTextChanged (R.id.et_temp_name)
+  public void onEtTempNameClicked(CharSequence cs) {
+    mIvTempName.setSelected(cs.length() > 0);
+  }
+
+  @OnClick (R.id.iv_temp_name)
+  public void onIvTempNameClicked() {
+    if (mEtTempName.getText().length() > 0) {
+      mIvTempName.setSelected(!mIvTempName.isSelected());
     }
   }
 
@@ -750,6 +766,11 @@ public class PublishActivity extends BaseActivity {
         builder.tags(tags);
       }
 
+      if (mIvTempName.isSelected() && mEtTempName.getText().length() > 0) {
+        builder.tempName(mEtTempName.getText().toString());
+        builder.sourceType(2);
+      }
+
       disablePublishButton();
 
       request(builder.build(), new OnResponse<PublishPostResponse>() {
@@ -763,7 +784,8 @@ public class PublishActivity extends BaseActivity {
             post.bgUrl = mImageUploadUrl;
             post.id = response.object.id;
             post.content = mPostEditText.getText().toString();
-            post.source = "认识的人";
+            post.source = (mIvTempName.isSelected() && mEtTempName.getText().length() > 0) ?
+                mEtTempName.getText().toString() : "认识的人";
             post.type = BaseItem.TYPE_POST;
             U.getBus().post(new PostPublishedEvent(post, mFactoryId));
 
