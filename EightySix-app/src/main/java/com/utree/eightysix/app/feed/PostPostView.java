@@ -21,10 +21,14 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
+import com.utree.eightysix.app.tag.TagTabActivity;
 import com.utree.eightysix.data.Post;
+import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.request.PostDeleteRequest;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.widget.AsyncImageView;
+import com.utree.eightysix.widget.TagView;
+import java.util.List;
 
 /**
  * This is the post view in PostActivity
@@ -57,6 +61,15 @@ public class PostPostView extends BasePostView {
   @InjectView (R.id.iv_more)
   public ImageView mIvMore;
 
+  @InjectView (R.id.tv_tag_1)
+  public TagView mTvTag1;
+
+  @InjectView (R.id.tv_tag_2)
+  public TagView mTvTag2;
+
+  @InjectView (R.id.tv_tag_3)
+  public TagView mTvTag3;
+
   private Post mPost;
 
   private int mCloseRes;
@@ -81,6 +94,21 @@ public class PostPostView extends BasePostView {
     setPostTheme(Color.BLACK);
   }
 
+  @OnClick (R.id.tv_tag_1)
+  public void onTvTag1Clicked() {
+    TagTabActivity.start(getContext(), mPost.tags.get(0));
+  }
+
+  @OnClick (R.id.tv_tag_2)
+  public void onTvTag2Clicked() {
+    TagTabActivity.start(getContext(), mPost.tags.get(1));
+  }
+
+  @OnClick (R.id.tv_tag_3)
+  public void onTvTag3Clicked() {
+    TagTabActivity.start(getContext(), mPost.tags.get(2));
+  }
+
   public void setData(Post post) {
     mPost = post;
 
@@ -95,7 +123,7 @@ public class PostPostView extends BasePostView {
       mTvComment.setText("");
     }
     mTvPraise.setText(String.valueOf(post.praise));
-    
+
     if (mPost.isRepost == 1) {
       mTvSource.setText("转自" + mPost.source);
     } else {
@@ -119,6 +147,28 @@ public class PostPostView extends BasePostView {
     } else {
       mTvPraise.setText("");
       mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartOutlineRes, 0, 0, 0);
+    }
+
+    mTvTag1.setText("");
+    mTvTag2.setText("");
+    mTvTag3.setText("");
+
+    List<Tag> tags = mPost.tags;
+    if (tags != null) {
+      for (int i = 0; i < tags.size(); i++) {
+        Tag g = tags.get(i);
+        switch (i) {
+          case 0:
+            mTvTag1.setText("#" + g.content);
+            break;
+          case 1:
+            mTvTag2.setText("#" + g.content);
+            break;
+          case 2:
+            mTvTag3.setText("#" + g.content);
+            break;
+        }
+      }
     }
   }
 
