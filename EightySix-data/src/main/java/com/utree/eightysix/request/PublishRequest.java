@@ -39,6 +39,10 @@ public class PublishRequest {
   @Optional
   public String tags;
 
+  @Param("tempName")
+  @Optional
+  public String tempName;
+
   private PublishRequest() {
 
   }
@@ -79,6 +83,11 @@ public class PublishRequest {
 
     public Builder tags(String tags) {
       mPublishRequest.tags = tags;
+      return this;
+    }
+
+    public Builder tempName(String tempName) {
+      mPublishRequest.tempName = tempName;
       return this;
     }
 
