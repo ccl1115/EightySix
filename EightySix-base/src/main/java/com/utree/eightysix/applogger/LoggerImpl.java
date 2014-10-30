@@ -1,7 +1,7 @@
 package com.utree.eightysix.applogger;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
-import com.utree.eightysix.BuildConfig;
 import java.util.concurrent.TimeUnit;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
@@ -18,6 +18,7 @@ public class LoggerImpl implements EntryLogger {
     mInfluxDB = InfluxDBFactory.connect(host, "root", "root");
   }
 
+  @SuppressLint ("NewApi")
   @Override
   public <T extends EntryAdapter> void log(final T entryAdapter) {
     (new AsyncTask<Void, Void, Void>() {
@@ -38,10 +39,7 @@ public class LoggerImpl implements EntryLogger {
 
         try {
           mInfluxDB.write("app-logger", TimeUnit.MILLISECONDS, builder.build());
-        } catch (Throwable t) {
-          if (BuildConfig.DEBUG) {
-            t.printStackTrace();
-          }
+        } catch (Throwable ignored) {
         }
         return null;
       }
