@@ -4,8 +4,8 @@ import android.widget.Toast;
 import com.loopj.android.http.BaseJsonHttpResponseHandler;
 import com.utree.eightysix.*;
 import com.utree.eightysix.app.BaseActivity;
-import com.utree.eightysix.report.logger.EntryAdapter;
-import com.utree.eightysix.report.logger.Payload;
+import com.utree.eightysix.applogger.EntryAdapter;
+import com.utree.eightysix.applogger.Payload;
 import com.utree.eightysix.utils.IOUtils;
 import de.akquinet.android.androlog.Log;
 import java.net.UnknownHostException;
@@ -22,7 +22,7 @@ import java.util.Date;
  * <p/>
  * And it will do error handling and cache automation.
  */
-public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHandler<T> {
+public final class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHandler<T> {
 
   private OnResponse<T> mOnResponse;
   private RequestData mRequestData;
@@ -162,8 +162,10 @@ public class HandlerWrapper<T extends Response> extends BaseJsonHttpResponseHand
     }
   }
 
+
+
   @Override
-  protected T parseResponse(String responseBody, boolean b) throws Throwable {
+  protected final T parseResponse(String responseBody, boolean b) throws Throwable {
     if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "response: " + responseBody);
 
     return U.getGson().fromJson(responseBody, mClz);

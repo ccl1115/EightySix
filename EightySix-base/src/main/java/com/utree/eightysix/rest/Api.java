@@ -7,8 +7,12 @@ import java.lang.annotation.Target;
 
 /**
  */
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
+@Target (ElementType.TYPE)
+@Retention (RetentionPolicy.RUNTIME)
 public @interface Api {
-    String value();
+  String value();
+  boolean token() default false;
+  boolean cache() default false;
+  boolean log() default false;
+  CachePolicy cachePolicy() default CachePolicy.CACHE_IF_FAIL;
 }
