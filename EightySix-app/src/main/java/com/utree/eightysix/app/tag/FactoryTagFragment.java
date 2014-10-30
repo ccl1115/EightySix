@@ -3,6 +3,7 @@ package com.utree.eightysix.app.tag;
 import com.utree.eightysix.U;
 import com.utree.eightysix.request.FactoryTagRequest;
 import com.utree.eightysix.response.FeedsResponse;
+import com.utree.eightysix.response.TagFeedsResponse;
 import com.utree.eightysix.rest.OnResponse2;
 
 /**
@@ -17,12 +18,11 @@ public class FactoryTagFragment extends AbsTagFragment {
 
     if (mRefresherView != null && page == 1) {
       mRefresherView.setRefreshing(true);
-      getBaseActivity().showProgressBar();
     }
 
-    getBaseActivity().request(new FactoryTagRequest(page, id), new OnResponse2<FeedsResponse>() {
+    getBaseActivity().request(new FactoryTagRequest(page, id), new OnResponse2<TagFeedsResponse>() {
       @Override
-      public void onResponse(FeedsResponse response) {
+      public void onResponse(TagFeedsResponse response) {
         responseForRequest(id, response, page);
       }
 
@@ -30,7 +30,7 @@ public class FactoryTagFragment extends AbsTagFragment {
       public void onResponseError(Throwable e) {
 
       }
-    }, FeedsResponse.class);
+    }, TagFeedsResponse.class);
   }
 
   @Override
@@ -41,12 +41,11 @@ public class FactoryTagFragment extends AbsTagFragment {
 
     if (mRefresherView != null && page == 1) {
       mRefresherView.setRefreshing(true);
-      getBaseActivity().showProgressBar();
     }
 
-    getBaseActivity().request(new FactoryTagRequest(page, id), new OnResponse2<FeedsResponse>() {
+    getBaseActivity().request(new FactoryTagRequest(page, id), new OnResponse2<TagFeedsResponse>() {
       @Override
-      public void onResponse(FeedsResponse response) {
+      public void onResponse(TagFeedsResponse response) {
         responseForRequest(id, response, page);
       }
 
@@ -54,7 +53,7 @@ public class FactoryTagFragment extends AbsTagFragment {
       public void onResponseError(Throwable e) {
 
       }
-    }, FeedsResponse.class);
+    }, TagFeedsResponse.class);
   }
 
   @Override

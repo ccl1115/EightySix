@@ -13,14 +13,13 @@ import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
-import com.utree.eightysix.app.feed.FeedAdapter;
 import com.utree.eightysix.app.feed.PostActivity;
-import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
 import com.utree.eightysix.response.FeedsResponse;
+import com.utree.eightysix.response.TagFeedsResponse;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.view.SwipeRefreshLayout;
@@ -40,7 +39,7 @@ public abstract class AbsTagFragment extends BaseFragment {
   @InjectView(R.id.tv_empty_text)
   public RandomSceneTextView mRstvEmpty;
 
-  protected FeedAdapter mFeedAdapter;
+  protected TagFeedAdapter mFeedAdapter;
   protected Paginate.Page mPageInfo;
 
   private Tag mTag;
@@ -122,39 +121,6 @@ public abstract class AbsTagFragment extends BaseFragment {
     mRefresherView.setColorSchemeResources(R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed,
         R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed);
 
-    mLvFeed.setOnScrollListener(new AbsListView.OnScrollListener() {
-      @Override
-      public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if (scrollState == SCROLL_STATE_IDLE) {
-          U.getBus().post(new ListViewScrollStateIdledEvent());
-
-          if (view.getChildCount() <= 2) return;
-
-          final int firstItem = mLvFeed.getFirstVisiblePosition() + 1;
-
-          if (mFeedAdapter.tipsShowing() || mFeedAdapter.getItemViewType(firstItem) != FeedAdapter.TYPE_POST) return;
-
-          Post post = (Post) mFeedAdapter.getItem(firstItem);
-
-
-          if (post.isHot == 0 && post.isRepost == 0 && Env.firstRun("overlay_tip_source")) {
-            mFeedAdapter.showTipOverlaySource(firstItem);
-          } else if (Env.firstRun("overlay_tip_praise")) {
-            mFeedAdapter.showTipOverlayPraise(firstItem);
-          } else if (Env.firstRun("overlay_tip_share")) {
-            mFeedAdapter.showTipOverlayShare(firstItem);
-          } else if (post.isRepost == 1 && Env.firstRun("overlay_tip_repost")) {
-            mFeedAdapter.showTipOverlayRepost(firstItem);
-          }
-        }
-      }
-
-      @Override
-      public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-      }
-    });
-
     getBaseActivity().showRefreshIndicator(true);
     mRefresherView.setRefreshing(true);
   }
@@ -221,10 +187,10 @@ public abstract class AbsTagFragment extends BaseFragment {
 
   protected abstract void requestFeeds(final int id, final int page);
 
-  protected void responseForRequest(int circleId, FeedsResponse response, int page) {
+  protected void responseForRequest(int circleId, TagFeedsResponse response, int page) {
     if (RESTRequester.responseOk(response)) {
       if (page == 1) {
-        mFeedAdapter = new FeedAdapter(response.object);
+        mFeedAdapter = new TagFeedAdapter(response.object);
         M.getRegisterHelper().register(mFeedAdapter);
         mLvFeed.setAdapter(mFeedAdapter);
 
@@ -251,7 +217,7 @@ public abstract class AbsTagFragment extends BaseFragment {
 
   protected abstract void cacheOutFeeds(final int id, final int page);
 
-  protected void responseForCache(FeedsResponse response, int page, int id) {
+  protected void responseForCache(TagFeedsResponse response, int page, int id) {
     if (response != null && response.code == 0 && response.object != null) {
       if (page == 1) {
         if (response.object.posts.lists.size() == 0) {
@@ -260,7 +226,7 @@ public abstract class AbsTagFragment extends BaseFragment {
           mRstvEmpty.setVisibility(View.INVISIBLE);
         }
 
-        mFeedAdapter = new FeedAdapter(response.object);
+        mFeedAdapter = new TagFeedAdapter(response.object);
         M.getRegisterHelper().register(mFeedAdapter);
         mLvFeed.setAdapter(mFeedAdapter);
 

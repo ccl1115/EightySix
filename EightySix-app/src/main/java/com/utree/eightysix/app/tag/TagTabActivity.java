@@ -66,8 +66,12 @@ public class TagTabActivity extends BaseActivity {
 
     mTag = getIntent().getParcelableExtra("tag");
 
+    setTopTitle("#" + mTag.content);
+
     mFactoryTagFragment.setTag(mTag);
     mHotTagFragment.setTag(mTag);
+
+    mVpTab.setOffscreenPageLimit(2);
 
     mVpTab.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
       @Override
@@ -132,6 +136,13 @@ public class TagTabActivity extends BaseActivity {
 
       }
     });
+
+    getHandler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        mHotTagFragment.setActive(true);
+      }
+    }, 500);
   }
 
   @Override

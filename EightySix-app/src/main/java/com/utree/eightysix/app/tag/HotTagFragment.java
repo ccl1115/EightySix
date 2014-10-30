@@ -2,6 +2,7 @@ package com.utree.eightysix.app.tag;
 
 import com.utree.eightysix.request.HotTagRequest;
 import com.utree.eightysix.response.FeedsResponse;
+import com.utree.eightysix.response.TagFeedsResponse;
 import com.utree.eightysix.rest.OnResponse2;
 
 /**
@@ -15,12 +16,11 @@ public class HotTagFragment extends AbsTagFragment {
 
     if (mRefresherView != null && page == 1) {
       mRefresherView.setRefreshing(true);
-      getBaseActivity().showProgressBar();
     }
 
-    getBaseActivity().request(new HotTagRequest(page, id), new OnResponse2<FeedsResponse>() {
+    getBaseActivity().request(new HotTagRequest(page, id), new OnResponse2<TagFeedsResponse>() {
       @Override
-      public void onResponse(FeedsResponse response) {
+      public void onResponse(TagFeedsResponse response) {
         responseForRequest(id, response, page);
       }
 
@@ -28,7 +28,7 @@ public class HotTagFragment extends AbsTagFragment {
       public void onResponseError(Throwable e) {
 
       }
-    }, FeedsResponse.class);
+    }, TagFeedsResponse.class);
 
   }
 
@@ -40,12 +40,11 @@ public class HotTagFragment extends AbsTagFragment {
 
     if (mRefresherView != null && page == 1) {
       mRefresherView.setRefreshing(true);
-      getBaseActivity().showProgressBar();
     }
 
-    getBaseActivity().request(new HotTagRequest(page, id), new OnResponse2<FeedsResponse>() {
+    getBaseActivity().request(new HotTagRequest(page, id), new OnResponse2<TagFeedsResponse>() {
       @Override
-      public void onResponse(FeedsResponse response) {
+      public void onResponse(TagFeedsResponse response) {
         responseForRequest(id, response, page);
       }
 
@@ -53,7 +52,7 @@ public class HotTagFragment extends AbsTagFragment {
       public void onResponseError(Throwable e) {
 
       }
-    }, FeedsResponse.class);
+    }, TagFeedsResponse.class);
 
   }
 
