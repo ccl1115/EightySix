@@ -15,6 +15,7 @@ public class TagView extends TextView {
   public TagView(Context context, AttributeSet attrs) {
     super(context, attrs);
 
+    setTextColor(getResources().getColorStateList(R.color.apptheme_primary_white_btn));
   }
 
 

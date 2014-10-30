@@ -96,7 +96,7 @@ public class TopicActivity extends BaseActivity {
             break;
           case TAB_FEATURE:
             if (mFeaturePageInfo != null) {
-              return mFeaturePageInfo.currPage < mNewPageInfo.countPage;
+              return mFeaturePageInfo.currPage < mFeaturePageInfo.countPage;
             }
             break;
         }

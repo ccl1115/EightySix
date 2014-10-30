@@ -745,9 +745,8 @@ public class PublishActivity extends BaseActivity {
         tags = tags.concat(String.valueOf(t.id)).concat(",");
       }
 
-      tags = tags.substring(0, tags.length() - 1);
-
       if (!TextUtils.isEmpty(tags)) {
+        tags = tags.substring(0, tags.length() - 1);
         builder.tags(tags);
       }
 
