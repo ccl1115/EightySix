@@ -5,6 +5,7 @@ import com.utree.eightysix.rest.Api;
 import com.utree.eightysix.rest.Cache;
 import com.utree.eightysix.rest.Param;
 import com.utree.eightysix.rest.Token;
+import com.utree.eightysix.rest.Log;
 
 /**
  * @author simon
@@ -12,6 +13,7 @@ import com.utree.eightysix.rest.Token;
 @Api (C.API_FEED_HOT_LIST)
 @Token
 @Cache
+@Log
 public class FeedsHotRequest extends Paginate {
 
   @Param("factoryId")
