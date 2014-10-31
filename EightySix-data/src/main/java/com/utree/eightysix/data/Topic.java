@@ -22,6 +22,15 @@ public class Topic implements Parcelable {
   @SerializedName("postCount")
   public int postCount;
 
+  @SerializedName("bgUrl")
+  public String bgUrl;
+
+  @SerializedName("bgColor")
+  public String bgColor;
+
+  public Topic() {
+  }
+
   @Override
   public int describeContents() {
     return 0;
@@ -33,21 +42,21 @@ public class Topic implements Parcelable {
     dest.writeString(this.content);
     dest.writeTypedList(tags);
     dest.writeInt(this.postCount);
-  }
-
-  public Topic() {
-    tags = new ArrayList<Tag>();
+    dest.writeString(this.bgUrl);
+    dest.writeString(this.bgColor);
   }
 
   private Topic(Parcel in) {
-    this();
+    tags = new ArrayList<Tag>();
     this.id = in.readInt();
     this.content = in.readString();
     in.readTypedList(tags, Tag.CREATOR);
     this.postCount = in.readInt();
+    this.bgUrl = in.readString();
+    this.bgColor = in.readString();
   }
 
-  public static final Parcelable.Creator<Topic> CREATOR = new Parcelable.Creator<Topic>() {
+  public static final Creator<Topic> CREATOR = new Creator<Topic>() {
     public Topic createFromParcel(Parcel source) {
       return new Topic(source);
     }

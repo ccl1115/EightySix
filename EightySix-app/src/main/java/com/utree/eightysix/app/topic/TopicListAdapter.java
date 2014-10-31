@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.topic;
 
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +14,7 @@ import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.data.Topic;
 import com.utree.eightysix.data.Topics;
 import com.utree.eightysix.drawable.RoundRectDrawable;
+import com.utree.eightysix.utils.ColorUtil;
 import java.util.List;
 
 /**
@@ -122,6 +122,7 @@ public class TopicListAdapter extends BaseAdapter {
 
     holder.mTvMore.setText(String.format("%d条内容", topic.postCount));
     holder.mTvText.setText(topic.content);
+    holder.mLlParent.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(4), ColorUtil.strToColor(topic.bgColor)));
 
     List<Tag> tags = topic.tags;
     for (int i = 0; i < tags.size(); i++) {
@@ -160,11 +161,11 @@ public class TopicListAdapter extends BaseAdapter {
     public TextView mTvMore;
 
     @InjectView (R.id.ll_parent)
-    public LinearLayout mFlParent;
+    public LinearLayout mLlParent;
 
     public TopicViewHolder(View view) {
       ButterKnife.inject(this, view);
-      mFlParent.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(4),
+      mLlParent.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(4),
           U.getContext().getResources().getColorStateList(R.color.apptheme_primary_list_selector)));
     }
   }
