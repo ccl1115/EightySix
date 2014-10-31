@@ -36,14 +36,17 @@ public class MoreTagFragment extends BaseFragment {
 
   @Override
   protected void onActive() {
-    requireTagsByType();
+    if (getBaseActivity() != null) {
+      requireTagsByType();
+    }
   }
 
   private void requireTagsByType() {
+    getBaseActivity().showProgressBar();
     getBaseActivity().request(new TagsByTypeRequest(), new OnResponse2<TagsByTypeResponse>() {
       @Override
       public void onResponseError(Throwable e) {
-
+        getBaseActivity().hideProgressBar();
       }
 
       @Override
@@ -52,6 +55,7 @@ public class MoreTagFragment extends BaseFragment {
           mMoreTagAdapter = new MoreTagAdapter(response.object);
           mAlvTags.setAdapter(mMoreTagAdapter);
         }
+        getBaseActivity().hideProgressBar();
       }
     }, TagsByTypeResponse.class);
   }
