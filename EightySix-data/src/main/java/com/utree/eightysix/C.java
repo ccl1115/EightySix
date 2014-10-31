@@ -48,6 +48,7 @@ public class C {
   public static final String API_FEED_OPTION_BACK = "/feed/back.do";
 
   public static final String API_FEED_TAGS = "/feed/tags.do";
+  public static final String API_FEED_TAGS_BY_TYPE = "/feed/tagsByType.do";
 
   public static final String API_FEED_TAG_HOT = "/feed/listHotWithTag.do";
   public static final String API_FEED_TAG_FACTORY = "/feed/listWithTag.do";

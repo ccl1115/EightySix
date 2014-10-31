@@ -68,6 +68,8 @@ public class TagTabActivity extends BaseActivity {
 
     setTopTitle("#" + mTag.content);
 
+    showRefreshIndicator();
+
     mFactoryTagFragment.setTag(mTag);
     mHotTagFragment.setTag(mTag);
 
