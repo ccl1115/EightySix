@@ -4,11 +4,14 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import com.aliyun.android.util.MD5Util;
+import com.nineoldandroids.animation.ValueAnimator;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.M;
-import com.utree.eightysix.U;
+import com.utree.eightysix.drawable.GearsDrawable;
 import com.utree.eightysix.utils.ImageUtils;
-import de.akquinet.android.androlog.Log;
+import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.FROM_DISK;
+import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.FROM_MEM;
+import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.FROM_REMOTE;
 
 /**
  */
@@ -18,7 +21,7 @@ public class AsyncImageView extends ImageView {
 
   private String mUrlHash;
 
-  private String mUrl;
+  private GearsDrawable mGearsDrawable = new GearsDrawable();
 
   public AsyncImageView(Context context) {
     this(context, null, 0);
@@ -37,6 +40,21 @@ public class AsyncImageView extends ImageView {
   public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
     if (event.getHash().equals(mUrlHash)) {
       if (event.getBitmap() != null) {
+        switch (event.getFrom()) {
+          case FROM_MEM:
+            break;
+          case FROM_REMOTE:
+          case FROM_DISK:
+            ValueAnimator valueAnimator = ValueAnimator.ofInt(0, 255);
+            valueAnimator.setDuration(500).addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+              @Override
+              public void onAnimationUpdate(ValueAnimator animation) {
+                setImageAlpha((Integer) animation.getAnimatedValue());
+              }
+            });
+            valueAnimator.start();
+            break;
+        }
         setImageBitmap(event.getBitmap());
       }
     }
@@ -45,16 +63,15 @@ public class AsyncImageView extends ImageView {
   public void setUrl(String url) {
     if (url == null) {
       setImageBitmap(null);
-      mUrl = null;
       return;
     }
 
-    //if (url.equals(mUrl)) return;
-
-    mUrl = url;
     mUrlHash = MD5Util.getMD5String(url.getBytes()).toLowerCase();
 
     setImageBitmap(null);
+    setBackgroundDrawable(mGearsDrawable);
+
+    clearAnimation();
 
     ImageUtils.asyncLoadWithRes(url, mUrlHash);
   }

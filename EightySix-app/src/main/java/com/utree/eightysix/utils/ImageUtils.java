@@ -15,6 +15,9 @@ import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.U;
 import com.utree.eightysix.storage.Storage;
+import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.FROM_DISK;
+import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.FROM_MEM;
+import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.FROM_REMOTE;
 import de.akquinet.android.androlog.Log;
 import java.io.File;
 import java.io.FileInputStream;
@@ -292,7 +295,7 @@ public class ImageUtils {
         asyncLoad(url, hash);
       }
     } else {
-      U.getBus().post(new ImageLoadedEvent(hash, bitmap));
+      U.getBus().post(new ImageLoadedEvent(hash, bitmap, FROM_MEM));
     }
   }
 
@@ -320,12 +323,12 @@ public class ImageUtils {
         }
       } catch (IOException ignored) {
         Log.e(TAG, "Get snapshot IOException: " + ignored.getMessage());
-        U.getBus().post(new ImageLoadedEvent(hash, null));
+        U.getBus().post(new ImageLoadedEvent(hash, null, FROM_MEM));
       } catch (OutOfMemoryError e) {
-        U.getBus().post(new ImageLoadedEvent(hash, null));
+        U.getBus().post(new ImageLoadedEvent(hash, null, FROM_MEM));
       }
     } else {
-      U.getBus().post(new ImageLoadedEvent(hash, bitmap));
+      U.getBus().post(new ImageLoadedEvent(hash, bitmap, FROM_MEM));
     }
   }
 
@@ -341,12 +344,12 @@ public class ImageUtils {
         }
       } catch (IOException ignored) {
         Log.e(TAG, "Get snapshot IOException: " + ignored.getMessage());
-        U.getBus().post(new ImageLoadedEvent(hash, null));
+        U.getBus().post(new ImageLoadedEvent(hash, null, FROM_MEM));
       } catch (OutOfMemoryError e) {
-        U.getBus().post(new ImageLoadedEvent(hash, null));
+        U.getBus().post(new ImageLoadedEvent(hash, null, FROM_MEM));
       }
     } else {
-      U.getBus().post(new ImageLoadedEvent(hash, bitmap));
+      U.getBus().post(new ImageLoadedEvent(hash, bitmap, FROM_MEM));
     }
   }
 
@@ -465,10 +468,17 @@ public class ImageUtils {
   public static class ImageLoadedEvent {
     private Bitmap mBitmap;
     private String mHash;
+    private int mFrom;
 
-    public ImageLoadedEvent(String hash, Bitmap bitmap) {
+    public static final int FROM_MEM = 1000;
+    public static final int FROM_DISK = 1001;
+    public static final int FROM_REMOTE = 1002;
+
+
+    public ImageLoadedEvent(String hash, Bitmap bitmap, int from) {
       mBitmap = bitmap;
       mHash = hash;
+      mFrom = from;
     }
 
     public Bitmap getBitmap() {
@@ -477,6 +487,10 @@ public class ImageUtils {
 
     public String getHash() {
       return mHash;
+    }
+
+    public int getFrom() {
+      return mFrom;
     }
   }
 
@@ -521,7 +535,7 @@ public class ImageUtils {
         sLruCache.put(mHash, bitmap);
       }
 
-      U.getBus().post(new ImageLoadedEvent(mHash, bitmap));
+      U.getBus().post(new ImageLoadedEvent(mHash, bitmap, FROM_DISK));
     }
   }
 
@@ -575,7 +589,7 @@ public class ImageUtils {
           sLruCache.put(mHash, bitmap);
         }
         Log.d(TAG, "onSuccess from disk");
-        U.getBus().post(new ImageLoadedEvent(mHash, bitmap));
+        U.getBus().post(new ImageLoadedEvent(mHash, bitmap, FROM_DISK));
       } else {
         Log.d(TAG, "onFailed from disk");
         sClient.get(U.getContext(), mUrl, new ImageAsyncHttpResponseHandler(mHash));
@@ -652,7 +666,7 @@ public class ImageUtils {
 
       mFile.delete();
 
-      U.getBus().post(new ImageLoadedEvent(mHash, bitmap));
+      U.getBus().post(new ImageLoadedEvent(mHash, bitmap, FROM_REMOTE));
     }
   }
 
@@ -674,7 +688,7 @@ public class ImageUtils {
           error.printStackTrace();
         }
       }
-      U.getBus().post(new ImageLoadedEvent(hash, null));
+      U.getBus().post(new ImageLoadedEvent(hash, null, FROM_REMOTE));
     }
 
     @Override
@@ -683,7 +697,7 @@ public class ImageUtils {
       if (i <= HttpStatus.SC_OK) {
         executeTask(new ImageRemoteDecodeWorker(hash, file));
       } else {
-        U.getBus().post(new ImageLoadedEvent(hash, null));
+        U.getBus().post(new ImageLoadedEvent(hash, null, FROM_REMOTE));
       }
     }
   }
