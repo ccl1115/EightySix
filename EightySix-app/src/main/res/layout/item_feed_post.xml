@@ -84,13 +84,6 @@
                 android:layout_marginRight="10dp"
                 android:src="@drawable/ic_share"/>
 
-        <com.utree.eightysix.widget.GearsView
-                android:id="@+id/gv_loading"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/white"
-                android:visibility="invisible"/>
-
         <LinearLayout
                 android:id="@+id/fl_grid_panel"
                 android:orientation="horizontal"

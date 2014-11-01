@@ -28,6 +28,7 @@ import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
+import butterknife.OnTextChanged;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ArgbEvaluator;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -58,6 +59,7 @@ import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.IndicatorView;
 import com.utree.eightysix.widget.PostEditText;
+import com.utree.eightysix.widget.TagView;
 import com.utree.eightysix.widget.TextActionButton;
 import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TopBar;
@@ -99,11 +101,20 @@ public class PublishActivity extends BaseActivity {
   @InjectView (R.id.tv_tag)
   public TextView mTvTag;
 
-  @InjectView (R.id.tv_tags)
-  public TextView mTvTags;
+  @InjectView (R.id.tv_tag_1)
+  public TagView mTvTag1;
+
+  @InjectView (R.id.tv_tag_2)
+  public TagView mTvTag2;
+
+  @InjectView (R.id.tv_tag_3)
+  public TagView mTvTag3;
 
   @InjectView (R.id.et_temp_name)
   public EditText mEtTempName;
+
+  @InjectView (R.id.iv_temp_name)
+  public ImageView mIvTempName;
 
   @InjectView (R.id.tl_tags)
   public TagsLayout mTagsLayout;
@@ -191,6 +202,20 @@ public class PublishActivity extends BaseActivity {
       mPostEditText.setHintTextColor(0x88ffffff);
     } else {
       mPostEditText.setHintTextColor(0xffffffff);
+    }
+  }
+
+  @OnTextChanged (R.id.et_temp_name)
+  public void onEtTempNameClicked(CharSequence cs) {
+    if (mEtTempName.isFocused()) {
+      mIvTempName.setSelected(cs.length() > 0);
+    }
+  }
+
+  @OnClick (R.id.iv_temp_name)
+  public void onIvTempNameClicked() {
+    if (mEtTempName.getText().length() > 0) {
+      mIvTempName.setSelected(!mIvTempName.isSelected());
     }
   }
 
@@ -400,12 +425,24 @@ public class PublishActivity extends BaseActivity {
     mTagsLayout.setOnSelectedTagsChangedListener(new TagsLayout.OnSelectedTagsChangedListener() {
       @Override
       public void onSelectedTagsChanged(List<Tag> tags) {
-        StringBuilder b = new StringBuilder();
-        for (Tag g : tags) {
-          b.append("#").append(g.content).append("  ");
+        mTvTag1.setText("");
+        mTvTag2.setText("");
+        mTvTag3.setText("");
+        for (int i = 0; i < tags.size(); i++) {
+          Tag g = tags.get(i);
+          switch(i) {
+            case 0:
+              mTvTag1.setText("#" + g.content);
+              break;
+            case 1:
+              mTvTag2.setText("#" + g.content);
+              break;
+            case 2:
+              mTvTag3.setText("#" + g.content);
+              break;
+          }
         }
 
-        mTvTags.setText(b.toString());
       }
     });
   }
@@ -750,6 +787,11 @@ public class PublishActivity extends BaseActivity {
         builder.tags(tags);
       }
 
+      if (mIvTempName.isSelected() && mEtTempName.getText().length() > 0) {
+        builder.tempName(mEtTempName.getText().toString());
+        builder.sourceType(2);
+      }
+
       disablePublishButton();
 
       request(builder.build(), new OnResponse<PublishPostResponse>() {
@@ -763,7 +805,8 @@ public class PublishActivity extends BaseActivity {
             post.bgUrl = mImageUploadUrl;
             post.id = response.object.id;
             post.content = mPostEditText.getText().toString();
-            post.source = "认识的人";
+            post.source = (mIvTempName.isSelected() && mEtTempName.getText().length() > 0) ?
+                mEtTempName.getText().toString() : "认识的人";
             post.type = BaseItem.TYPE_POST;
             U.getBus().post(new PostPublishedEvent(post, mFactoryId));
 

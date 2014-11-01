@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.topic;
 
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +8,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.tag.TagTabActivity;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.data.Topic;
 import com.utree.eightysix.data.Topics;
 import com.utree.eightysix.drawable.RoundRectDrawable;
+import com.utree.eightysix.utils.ColorUtil;
 import java.util.List;
 
 /**
@@ -122,19 +124,42 @@ public class TopicListAdapter extends BaseAdapter {
 
     holder.mTvMore.setText(String.format("%d条内容", topic.postCount));
     holder.mTvText.setText(topic.content);
+    holder.mLlParent.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(4), ColorUtil.strToColor(topic.bgColor)));
+
+    holder.mTvTag1.setText("");
+    holder.mTvTag2.setText("");
+    holder.mTvTag3.setText("");
 
     List<Tag> tags = topic.tags;
     for (int i = 0; i < tags.size(); i++) {
-      Tag g = tags.get(i);
+      final Tag g = tags.get(i);
       switch (i) {
         case 0:
           holder.mTvTag1.setText("#" + g.content);
+          holder.mTvTag1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              TagTabActivity.start(v.getContext(), g);
+            }
+          });
           break;
         case 1:
           holder.mTvTag2.setText("#" + g.content);
+          holder.mTvTag2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              TagTabActivity.start(v.getContext(), g);
+            }
+          });
           break;
         case 2:
           holder.mTvTag3.setText("#" + g.content);
+          holder.mTvTag3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              TagTabActivity.start(v.getContext(), g);
+            }
+          });
           break;
       }
     }
@@ -142,7 +167,7 @@ public class TopicListAdapter extends BaseAdapter {
     return convertView;
   }
 
-  static class TopicViewHolder {
+  class TopicViewHolder {
 
     @InjectView (R.id.tv_tag_1)
     public TextView mTvTag1;
@@ -160,11 +185,11 @@ public class TopicListAdapter extends BaseAdapter {
     public TextView mTvMore;
 
     @InjectView (R.id.ll_parent)
-    public LinearLayout mFlParent;
+    public LinearLayout mLlParent;
 
     public TopicViewHolder(View view) {
       ButterKnife.inject(this, view);
-      mFlParent.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(4),
+      mLlParent.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(4),
           U.getContext().getResources().getColorStateList(R.color.apptheme_primary_list_selector)));
     }
   }

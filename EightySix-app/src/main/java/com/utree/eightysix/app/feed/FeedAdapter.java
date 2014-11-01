@@ -186,8 +186,6 @@ class FeedAdapter extends BaseAdapter {
         break;
     }
 
-    animateConvertView(position, convertView);
-
     return convertView;
   }
 
@@ -443,22 +441,6 @@ class FeedAdapter extends BaseAdapter {
     ((FeedTopicView) convertView).setData((PostTopic) getItem(position));
 
     return convertView;
-  }
-
-  private void animateConvertView(int position, View convertView) {
-    if (position > 5 && !mAnimated.get(position, false)) {
-      AnimatorSet set = new AnimatorSet();
-      set.playTogether(
-          ObjectAnimator.ofFloat(convertView, "translationY", U.dp2px(350), 0),
-          ObjectAnimator.ofFloat(convertView, "rotationX", 5, 0)
-      );
-      set.setDuration(300);
-      set.start();
-      mAnimated.put(position, true);
-    } else {
-      ViewHelper.setTranslationY(convertView, 0);
-      ViewHelper.setRotationX(convertView, 0);
-    }
   }
 
   @Keep

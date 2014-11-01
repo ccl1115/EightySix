@@ -174,7 +174,7 @@ class PostCommentsAdapter extends BaseAdapter {
         }
       }
     });
-    final String floor;
+    String floor;
     if (comment.owner == 1) {
       floor = "楼主";
       holder.mFpvPortrait.setEmotion(' ');
@@ -188,7 +188,14 @@ class PostCommentsAdapter extends BaseAdapter {
         holder.mFpvPortrait.setEmotionColor(ColorUtil.strToColor(comment.avatarColor));
       }
     }
-    holder.mTvInfo.setText(String.format("%s | %s | 赞(%d)", floor, comment.time, comment.praise));
+
+    if (position == 1) {
+      floor = "沙发";
+    } else if (position == 2) {
+      floor = "板凳";
+    }
+
+    holder.mTvInfo.setText(String.format("%s | %s | %s | 赞(%d)", floor, comment.time, comment.distance, comment.praise));
 
     if (comment.delete == 1) {
       holder.mTvComment.setText("该评论已被删除");

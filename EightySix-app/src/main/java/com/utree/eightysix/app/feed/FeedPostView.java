@@ -80,9 +80,6 @@ public class FeedPostView extends BasePostView {
   @InjectView (R.id.fl_content)
   public FrameLayout mFlContent;
 
-  @InjectView (R.id.gv_loading)
-  public GearsView mGvLoading;
-
   @InjectView (R.id.tv_hot)
   public TextView mTvHot;
 
@@ -148,13 +145,6 @@ public class FeedPostView extends BasePostView {
     setPostTheme(Color.BLACK);
   }
 
-  @Subscribe
-  public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
-    if (!TextUtils.isEmpty(mPost.bgUrl)) {
-      mGvLoading.setVisibility(INVISIBLE);
-    }
-  }
-
   public ImageView getIvShare() {
     return mIvShare;
   }
@@ -212,16 +202,10 @@ public class FeedPostView extends BasePostView {
     }
 
     if (!TextUtils.isEmpty(post.bgUrl)) {
-      if (ImageUtils.getFromMemByUrl(post.bgUrl) == null) {
-        mGvLoading.setVisibility(VISIBLE);
-        mFlContent.setBackgroundColor(Color.WHITE);
-      } else {
-        mGvLoading.setVisibility(INVISIBLE);
-      }
+      mFlContent.setBackgroundColor(Color.WHITE);
       mAivBg.setVisibility(VISIBLE);
       mAivBg.setUrl(post.bgUrl);
     } else {
-      mGvLoading.setVisibility(INVISIBLE);
       mAivBg.setVisibility(INVISIBLE);
       mFlContent.setBackgroundColor(ColorUtil.strToColor(post.bgColor));
       mAivBg.setUrl(null);

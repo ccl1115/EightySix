@@ -4,10 +4,12 @@ import com.utree.eightysix.C;
 import com.utree.eightysix.rest.Api;
 import com.utree.eightysix.rest.Optional;
 import com.utree.eightysix.rest.Param;
+import com.utree.eightysix.rest.Log;
 
 /**
  */
 @Api (C.API_ACCOUNT_LOGIN)
+@Log
 public class LoginRequest {
 
   @Param ("phone")

@@ -25,19 +25,23 @@ public class PublishRequest {
 
   @Param ("factoryId")
   @Optional
-  public int factoryId;
+  public Integer factoryId;
 
   @Param("sourceType")
   @Optional
-  public int sourceType;
+  public Integer sourceType;
 
   @Param("topicId")
   @Optional
-  public int topicId;
+  public Integer topicId;
 
   @Param("tags")
   @Optional
   public String tags;
+
+  @Param("tempName")
+  @Optional
+  public String tempName;
 
   private PublishRequest() {
 
@@ -62,23 +66,28 @@ public class PublishRequest {
       return this;
     }
 
-    public Builder factoryId(int id) {
+    public Builder factoryId(Integer id) {
       mPublishRequest.factoryId = id;
       return this;
     }
 
-    public Builder sourceType(int type) {
+    public Builder sourceType(Integer type) {
       mPublishRequest.sourceType = type;
       return this;
     }
 
-    public Builder topicId(int id) {
+    public Builder topicId(Integer id) {
       mPublishRequest.topicId = id;
       return this;
     }
 
     public Builder tags(String tags) {
       mPublishRequest.tags = tags;
+      return this;
+    }
+
+    public Builder tempName(String tempName) {
+      mPublishRequest.tempName = tempName;
       return this;
     }
 

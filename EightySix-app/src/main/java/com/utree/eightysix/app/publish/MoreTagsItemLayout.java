@@ -3,10 +3,10 @@ package com.utree.eightysix.app.publish;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.tag.TagTabActivity;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.widget.FloatingLayout;
@@ -15,16 +15,12 @@ import java.util.List;
 
 /**
  */
-public class TagsLayout extends FloatingLayout {
+public class MoreTagsItemLayout extends FloatingLayout {
 
-
-  private int mCount;
 
   private List<Tag> mSelectedTags = new ArrayList<Tag>();
 
-  private OnSelectedTagsChangedListener mOnSelectedTagsChangedListener;
-
-  public TagsLayout(Context context, AttributeSet attrs) {
+  public MoreTagsItemLayout(Context context, AttributeSet attrs) {
     super(context, attrs);
   }
 
@@ -33,7 +29,7 @@ public class TagsLayout extends FloatingLayout {
     removeAllViews();
 
     final int padding = U.dp2px(16);
-    setPadding(padding, padding, padding, padding);
+    setPadding(padding, 0, padding, padding);
 
     List<TextView> tagViews = buildSpannable(tags);
 
@@ -49,54 +45,26 @@ public class TagsLayout extends FloatingLayout {
       view.setText("#" + g.content);
       view.setTag(g);
       MarginLayoutParams params = new MarginLayoutParams(
-          ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+          LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
       final int margin = U.dp2px(4);
-      params.setMargins(margin, margin, margin, margin);
+      params.setMargins(margin * 2, margin, margin * 2, margin);
       view.setLayoutParams(params);
 
 
       view.setOnClickListener(new OnClickListener() {
         @Override
         public void onClick(View v) {
-          boolean selected = v.isSelected();
-          if (!selected && mCount == 3) {
-            U.showToast("最多只能选择三个标签哦");
-          } else {
-            if (selected) {
-              mSelectedTags.remove(v.getTag());
-              mCount = mCount - 1;
-            } else {
-              mSelectedTags.add((Tag) v.getTag());
-              mCount = mCount + 1;
-            }
-            v.setSelected(!selected);
-
-            if (mOnSelectedTagsChangedListener != null) {
-              mOnSelectedTagsChangedListener.onSelectedTagsChanged(mSelectedTags);
-            }
-          }
+          TagTabActivity.start(getContext(), (Tag) v.getTag());
         }
       });
 
       final int padding = U.dp2px(8);
-      view.setPadding(padding, padding, padding, padding);
+      view.setPadding(padding * 2, padding, padding * 2, padding);
 
       view.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(4),
           getContext().getResources().getColorStateList(R.color.apptheme_primary_white_btn)));
       views.add(view);
     }
     return views;
-  }
-
-  public List<Tag> getSelectedTags() {
-    return mSelectedTags;
-  }
-
-  public void setOnSelectedTagsChangedListener(OnSelectedTagsChangedListener listener) {
-    mOnSelectedTagsChangedListener = listener;
-  }
-
-  public interface OnSelectedTagsChangedListener {
-    void onSelectedTagsChanged(List<Tag> tags);
   }
 }

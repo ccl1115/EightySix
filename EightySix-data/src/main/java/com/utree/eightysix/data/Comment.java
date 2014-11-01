@@ -43,6 +43,9 @@ public class Comment implements Serializable {
   @SerializedName("commentViewTime")
   public String time;
 
+  @SerializedName("distance")
+  public String distance;
+
   /**
    * 1 deleted
    * 0 not deleted

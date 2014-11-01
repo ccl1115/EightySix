@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -16,6 +17,7 @@ import static com.utree.eightysix.app.topic.TopicActivity.TAB_NEW;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.data.Topic;
+import com.utree.eightysix.utils.ColorUtil;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -163,6 +165,7 @@ public class TopicFeedAdapter extends BaseAdapter {
     if (topic != null) {
       mTopicViewHolder.mTvFeedCount.setText(topic.postCount + "条内容");
       mTopicViewHolder.mTvText.setText(topic.content);
+      mTopicViewHolder.mLlTop.setBackgroundColor(ColorUtil.strToColor(topic.bgColor));
 
       List<Tag> tags = topic.tags;
       for (int i = 0; i < tags.size(); i++) {
@@ -188,6 +191,12 @@ public class TopicFeedAdapter extends BaseAdapter {
   private View getPostView(int position, View convertView, ViewGroup parent) {
     if (convertView == null) {
       convertView = new FeedPostView(parent.getContext());
+    }
+
+    if (position == getCount() - 1) {
+      convertView.setPadding(0, 0, 0, U.dp2px(8));
+    } else {
+      convertView.setPadding(0, 0, 0, 0);
     }
 
     ((FeedPostView) convertView).setData((Post) getItem(position));
@@ -231,6 +240,9 @@ public class TopicFeedAdapter extends BaseAdapter {
 
     @InjectView (R.id.v_tab_right)
     public View mVTabRight;
+
+    @InjectView (R.id.ll_top)
+    public LinearLayout mLlTop;
 
     TopicViewHolder(View view) {
       ButterKnife.inject(this, view);

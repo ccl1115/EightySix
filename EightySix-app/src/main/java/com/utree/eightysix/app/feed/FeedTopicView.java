@@ -2,6 +2,7 @@ package com.utree.eightysix.app.feed;
 
 import android.content.Context;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -15,6 +16,7 @@ import com.utree.eightysix.app.topic.TopicListActivity;
 import com.utree.eightysix.data.PostTopic;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.data.Topic;
+import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.widget.RoundedButton;
 import java.util.List;
 
@@ -43,6 +45,9 @@ public class FeedTopicView extends FrameLayout {
   @InjectView (R.id.rb_more)
   public RoundedButton mRbMoreFeeds;
 
+  @InjectView (R.id.ll_parent)
+  public LinearLayout mLlParent;
+
   private PostTopic mTopic;
 
   public FeedTopicView(Context context) {
@@ -61,6 +66,8 @@ public class FeedTopicView extends FrameLayout {
     topic.id = mTopic.id;
     topic.postCount = mTopic.postCount;
     topic.tags = mTopic.tags;
+    topic.bgColor = mTopic.bgColor;
+    topic.bgUrl = mTopic.bgUrl;
 
     TopicListActivity.start(getContext());
     TopicActivity.start(getContext(), topic);
@@ -102,6 +109,9 @@ public class FeedTopicView extends FrameLayout {
 
     mTvHead.setText(topic.headTitle);
     mTvContent.setText(topic.content);
+
+    mLlParent.setBackgroundColor(ColorUtil.strToColor(topic.bgColor));
+
     if (topic.postCount > 999) {
       mRbMoreFeeds.setText(getContext().getString(R.string.display_more_feeds, "999+"));
     } else {

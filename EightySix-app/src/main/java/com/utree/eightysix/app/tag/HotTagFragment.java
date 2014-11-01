@@ -27,6 +27,10 @@ public class HotTagFragment extends AbsTagFragment {
       @Override
       public void onResponseError(Throwable e) {
 
+        mRefresherView.setRefreshing(false);
+        mLvFeed.stopLoadMore();
+        getBaseActivity().hideProgressBar();
+        getBaseActivity().hideRefreshIndicator();
       }
     }, TagFeedsResponse.class);
 
@@ -50,6 +54,10 @@ public class HotTagFragment extends AbsTagFragment {
 
       @Override
       public void onResponseError(Throwable e) {
+        mRefresherView.setRefreshing(false);
+        mLvFeed.stopLoadMore();
+        getBaseActivity().hideProgressBar();
+        getBaseActivity().hideRefreshIndicator();
 
       }
     }, TagFeedsResponse.class);
