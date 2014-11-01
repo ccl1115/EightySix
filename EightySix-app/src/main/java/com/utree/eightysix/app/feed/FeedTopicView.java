@@ -61,22 +61,16 @@ public class FeedTopicView extends FrameLayout {
   @OnClick (R.id.rb_more)
   public void onRbMoreClicked() {
     U.getAnalyser().trackEndEvent(getContext(), "feed_topic_view", "feed_topic_view");
-    Topic topic = new Topic();
-    topic.content = mTopic.content;
-    topic.id = mTopic.id;
-    topic.postCount = mTopic.postCount;
-    topic.tags = mTopic.tags;
-    topic.bgColor = mTopic.bgColor;
-    topic.bgUrl = mTopic.bgUrl;
 
     TopicListActivity.start(getContext());
-    TopicActivity.start(getContext(), topic);
+    TopicActivity.start(getContext(), getTopic());
   }
 
   @OnClick (R.id.rb_publish)
   public void onRbPublishClicked() {
     U.getAnalyser().trackEvent(getContext(), "feed_topic_publish", "feed_topic_publish");
 
+    TopicActivity.start(getContext(), getTopic());
     PublishActivity.startWithTopicId(getContext(), mTopic.id);
   }
 
@@ -100,7 +94,6 @@ public class FeedTopicView extends FrameLayout {
   public void onTvTag3Clicked() {
     TagTabActivity.start(getContext(), mTopic.tags.get(2));
   }
-
 
   public void setData(PostTopic topic) {
     if (topic == null) return;
@@ -134,5 +127,16 @@ public class FeedTopicView extends FrameLayout {
           break;
       }
     }
+  }
+
+  protected Topic getTopic() {
+    Topic topic = new Topic();
+    topic.content = mTopic.content;
+    topic.id = mTopic.id;
+    topic.postCount = mTopic.postCount;
+    topic.tags = mTopic.tags;
+    topic.bgColor = mTopic.bgColor;
+    topic.bgUrl = mTopic.bgUrl;
+    return topic;
   }
 }
