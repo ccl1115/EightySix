@@ -26,6 +26,12 @@ class ShareViaSMS extends IShare {
     ContactsActivity.start(activity, String.format("“%s”，%s", comment, url));
   }
 
+  @Override
+  public void shareTag(BaseActivity activity, Circle circle, int tagId, String url) {
+    ContactsActivity.start(activity,
+        String.format(shareContentForApp(), circle.shortName, circle.shortName) + url);
+  }
+
   protected String shareContentForApp() {
     return "%s的某同事匿名邀请你加入【蓝莓-%s圈】。点击查看-";
   }

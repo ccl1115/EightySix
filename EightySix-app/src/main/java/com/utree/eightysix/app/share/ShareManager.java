@@ -40,6 +40,15 @@ public class ShareManager {
     };
   }
 
+  public ThemedDialog shareTagDialog(final BaseActivity activity, final Circle circle, final int tag) {
+    return new ShareDialog(activity, "转发标签至") {
+      @Override
+      protected Object getViewHolder(ShareDialog dialog) {
+        return new ShareTagViewHolder(activity, dialog, circle, tag);
+      }
+    };
+  }
+
   public ThemedDialog sharePostDialog(final BaseActivity activity, final Post post) {
     return new ShareDialog(activity, "转发内容至") {
       @Override
@@ -97,6 +106,7 @@ public class ShareManager {
   static String shareLinkForComment(String postId) {
     return shareLinkForPost(postId);
   }
+
   @Keep
   public class ShareCommentViewHolder {
     private BaseActivity mActivity;
@@ -355,5 +365,84 @@ public class ShareManager {
       });
       mDialog.dismiss();
     }
+  }
+
+  @Keep
+  public class ShareTagViewHolder {
+
+    private final BaseActivity mActivity;
+    private ShareDialog mDialog;
+    private final Circle mCircle;
+    private final int mTagId;
+
+    public ShareTagViewHolder(BaseActivity activity, ShareDialog dialog, Circle circle, int tagId) {
+      mActivity = activity;
+      mDialog = dialog;
+      mCircle = circle;
+      mTagId = tagId;
+      ButterKnife.inject(this, dialog);
+    }
+
+    @OnClick(R.id.tv_qzone)
+    void onQzoneClicked() {
+      U.getAnalyser().trackEvent(mActivity, "share_by_qzone", "tag");
+
+      if (mCircle == null) return;
+      mActivity.showProgressBar();
+      mShortener.shorten(shareLinkForTag(mCircle.id, mTagId), new Shortener.Callback() {
+        @Override
+        public void onShorten(String shorten) {
+          if (shorten == null) {
+            mShareToQzone.shareTag(mActivity, mCircle, mTagId, shareLinkForTag(mCircle.id, mTagId));
+          } else {
+            mShareToQzone.shareTag(mActivity, mCircle, mTagId, shorten);
+          }
+        }
+      });
+
+      mDialog.dismiss();
+    }
+
+    @OnClick(R.id.tv_qq_friends)
+    void onQQClicked() {
+      U.getAnalyser().trackEvent(mActivity, "share_by_qq", "tag");
+
+      if (mCircle == null) return;
+      mActivity.showProgressBar();
+      mShortener.shorten(shareLinkForTag(mCircle.id, mTagId), new Shortener.Callback() {
+        @Override
+        public void onShorten(String shorten) {
+          if (shorten == null) {
+            mShareToQQ.shareTag(mActivity, mCircle, mTagId, shareLinkForTag(mCircle.id, mTagId));
+          } else {
+            mShareToQQ.shareTag(mActivity, mCircle, mTagId, shorten);
+          }
+        }
+      });
+
+      mDialog.dismiss();
+    }
+
+    @OnClick (R.id.tv_sms)
+    void onTvSmsClicked() {
+      U.getAnalyser().trackEvent(mActivity, "share_by_msg", "tag");
+      if (mCircle == null) return;
+      mActivity.showProgressBar();
+      mShortener.shorten(shareLinkForTag(mCircle.id, mTagId), new Shortener.Callback() {
+        @Override
+        public void onShorten(String shorten) {
+          if (shorten == null) {
+            mShareViaSMS.shareTag(mActivity, mCircle, mTagId, shareLinkForTag(mCircle.id, mTagId));
+          } else {
+            mShareViaSMS.shareTag(mActivity, mCircle, mTagId, shorten);
+          }
+        }
+      });
+      mDialog.dismiss();
+    }
+  }
+
+  private String shareLinkForTag(int id, int tagId) {
+    return String.format("%s/shareTag.do?factoryId=%d&tagId=%d", U.getConfig("api.host"), id, tagId);
   }
 }

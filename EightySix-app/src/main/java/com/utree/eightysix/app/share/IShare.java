@@ -19,6 +19,7 @@ public abstract class IShare {
 
   public abstract void shareComment(BaseActivity activity, Post post, String comment, String url);
 
+  public abstract void shareTag(BaseActivity activity, Circle circle, int tagId, String url);
 
   protected String shareTitleForApp() {
     return "和我一起玩【蓝莓】吧！";

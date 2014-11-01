@@ -111,6 +111,11 @@ class ShareToQQ extends IShare {
     }.execute();
   }
 
+  @Override
+  public void shareTag(BaseActivity activity, Circle circle, int tagId, String url) {
+    shareApp(activity, circle, url);
+  }
+
   private IUiListener defaultListener() {
     return new IUiListener() {
       @Override
