@@ -193,6 +193,12 @@ public class TopicFeedAdapter extends BaseAdapter {
       convertView = new FeedPostView(parent.getContext());
     }
 
+    if (position == getCount() - 1) {
+      convertView.setPadding(0, 0, 0, U.dp2px(8));
+    } else {
+      convertView.setPadding(0, 0, 0, 0);
+    }
+
     ((FeedPostView) convertView).setData((Post) getItem(position));
 
     return convertView;

@@ -200,7 +200,9 @@ public class PublishActivity extends BaseActivity {
 
   @OnTextChanged (R.id.et_temp_name)
   public void onEtTempNameClicked(CharSequence cs) {
-    mIvTempName.setSelected(cs.length() > 0);
+    if (mEtTempName.isFocused()) {
+      mIvTempName.setSelected(cs.length() > 0);
+    }
   }
 
   @OnClick (R.id.iv_temp_name)
