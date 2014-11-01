@@ -23,17 +23,41 @@
             android:layout_toLeftOf="@+id/iv_heart"
             android:textSize="14sp"/>
 
-    <TextView
-            style="@style/TextView.SingleLine"
-            android:id="@+id/tv_info"
+    <LinearLayout
+            android:id="@+id/ll_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/tv_comment"
             android:layout_toLeftOf="@+id/iv_heart"
             android:layout_below="@+id/tv_comment"
             android:paddingBottom="12dp"
-            android:textSize="12sp"
-            android:textColor="#ffcccccc"/>
+            android:orientation="horizontal">
+
+        <TextView
+                style="@style/TextView.SingleLine"
+                android:id="@+id/tv_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textSize="12sp"
+                android:textColor="#ffcccccc"/>
+
+        <TextView
+                android:id="@+id/tv_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="#ffcccccc"
+                android:drawableLeft="@drawable/ic_comment_location"/>
+
+        <TextView
+                android:id="@+id/tv_praise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="#ffcccccc"
+                android:drawableLeft="@drawable/ic_comment_heart"/>
+    </LinearLayout>
 
     <ImageView
             android:id="@+id/iv_heart"

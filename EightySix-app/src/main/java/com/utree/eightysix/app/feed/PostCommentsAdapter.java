@@ -195,7 +195,10 @@ class PostCommentsAdapter extends BaseAdapter {
       floor = "板凳";
     }
 
-    holder.mTvInfo.setText(String.format("%s | %s | %s | 赞(%d)", floor, comment.time, comment.distance, comment.praise));
+    holder.mTvInfo.setText(String.format("%s | %s |", floor, comment.time));
+
+    holder.mTvDistance.setText(comment.distance);
+    holder.mTvPraise.setText(String.valueOf(comment.praise));
 
     if (comment.delete == 1) {
       holder.mTvComment.setText("该评论已被删除");
@@ -267,6 +270,12 @@ class PostCommentsAdapter extends BaseAdapter {
 
     @InjectView (R.id.iv_heart)
     public ImageView mIvHeart;
+
+    @InjectView(R.id.tv_distance)
+    public TextView mTvDistance;
+
+    @InjectView(R.id.tv_praise)
+    public TextView mTvPraise;
 
     public CommentViewHolder(View view) {
       ButterKnife.inject(this, view);
