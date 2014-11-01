@@ -66,6 +66,8 @@ public class FeedTopicView extends FrameLayout {
     topic.id = mTopic.id;
     topic.postCount = mTopic.postCount;
     topic.tags = mTopic.tags;
+    topic.bgColor = mTopic.bgColor;
+    topic.bgUrl = mTopic.bgUrl;
 
     TopicListActivity.start(getContext());
     TopicActivity.start(getContext(), topic);
