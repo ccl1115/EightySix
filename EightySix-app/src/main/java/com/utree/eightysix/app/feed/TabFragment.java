@@ -99,12 +99,21 @@ public class TabFragment extends BaseFragment {
       public void onPageSelected(int position) {
         switch (position) {
           case 0:
+            if (mTtTab.hasBudget(position)) {
+              mFeedFragment.setActive(false);
+            }
             mFeedFragment.setActive(true);
             break;
           case 1:
+            if (mTtTab.hasBudget(position)) {
+              mHotFragment.setActive(false);
+            }
             mHotFragment.setActive(true);
             break;
           case 2:
+            if (mTtTab.hasBudget(position)) {
+              mFriendsFragment.setActive(false);
+            }
             mFriendsFragment.setActive(true);
             break;
         }

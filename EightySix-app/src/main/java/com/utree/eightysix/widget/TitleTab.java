@@ -116,4 +116,9 @@ public class TitleTab extends FrameLayout {
     }
     roundedButton.setText(text);
   }
+
+  public boolean hasBudget(int position) {
+    RoundedButton roundedButton = (RoundedButton) mLlTabs.getChildAt(position).findViewById(R.id.rb_budget);
+    return roundedButton.getVisibility() == VISIBLE;
+  }
 }
