@@ -126,6 +126,10 @@ public class TopicListAdapter extends BaseAdapter {
     holder.mTvText.setText(topic.content);
     holder.mLlParent.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(4), ColorUtil.strToColor(topic.bgColor)));
 
+    holder.mTvTag1.setText("");
+    holder.mTvTag2.setText("");
+    holder.mTvTag3.setText("");
+
     List<Tag> tags = topic.tags;
     for (int i = 0; i < tags.size(); i++) {
       final Tag g = tags.get(i);
