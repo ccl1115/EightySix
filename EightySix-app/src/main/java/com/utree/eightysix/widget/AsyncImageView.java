@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import com.aliyun.android.util.MD5Util;
+import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.M;
@@ -43,13 +44,36 @@ public class AsyncImageView extends ImageView {
         switch (event.getFrom()) {
           case FROM_MEM:
             break;
-          case FROM_REMOTE:
           case FROM_DISK:
+            setBackgroundDrawable(null);
+            break;
+          case FROM_REMOTE:
             ValueAnimator valueAnimator = ValueAnimator.ofInt(0, 255);
             valueAnimator.setDuration(500).addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
               @Override
               public void onAnimationUpdate(ValueAnimator animation) {
                 setImageAlpha((Integer) animation.getAnimatedValue());
+              }
+            });
+            valueAnimator.addListener(new Animator.AnimatorListener() {
+              @Override
+              public void onAnimationStart(Animator animation) {
+
+              }
+
+              @Override
+              public void onAnimationEnd(Animator animation) {
+                setBackgroundDrawable(null);
+              }
+
+              @Override
+              public void onAnimationCancel(Animator animation) {
+
+              }
+
+              @Override
+              public void onAnimationRepeat(Animator animation) {
+
               }
             });
             valueAnimator.start();
@@ -69,7 +93,10 @@ public class AsyncImageView extends ImageView {
     mUrlHash = MD5Util.getMD5String(url.getBytes()).toLowerCase();
 
     setImageBitmap(null);
-    setBackgroundDrawable(mGearsDrawable);
+
+    if (ImageUtils.getFromMemByUrl(url) == null) {
+      setBackgroundDrawable(mGearsDrawable);
+    }
 
     clearAnimation();
 
