@@ -40,6 +40,7 @@ import com.utree.eightysix.app.publish.FeedbackActivity;
 import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.app.settings.HelpActivity;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
+import com.utree.eightysix.app.topic.TopicListActivity;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Sync;
@@ -247,7 +248,7 @@ public class FeedActivity extends BaseActivity {
 
     if (mPopupMenu == null) {
       LinearLayout menu = (LinearLayout) View.inflate(FeedActivity.this, R.layout.widget_feed_menu, null);
-      mPopupMenu = new PopupWindow(menu, dp2px(190), dp2px(270) + 5);
+      mPopupMenu = new PopupWindow(menu, dp2px(190), dp2px(315) + 6);
       mMenuViewHolder = new MenuViewHolder(menu);
       mPopupMenu.setFocusable(true);
       mPopupMenu.setIgnoreCheekPress();
@@ -680,6 +681,12 @@ public class FeedActivity extends BaseActivity {
     @OnClick(R.id.ll_help)
     void onLlHelpClicked() {
       startActivity(new Intent(FeedActivity.this, HelpActivity.class));
+      mPopupMenu.dismiss();
+    }
+
+    @OnClick(R.id.ll_topic_list)
+    void onLlTopicListClicked() {
+      TopicListActivity.start(FeedActivity.this);
       mPopupMenu.dismiss();
     }
   }
