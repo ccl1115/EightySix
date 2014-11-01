@@ -114,6 +114,39 @@
             android:background="#fff0f0f0"/>
 
     <LinearLayout
+            android:id="@+id/ll_topic_list"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/apptheme_primary_list_selector"
+            android:orientation="horizontal">
+
+        <TextView
+                style="@style/TextView.SingleLine"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="15dp"
+                android:gravity="center_vertical"
+                android:text="全部话题"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingRight="15dp"
+                android:textSize="14sp"
+                android:textColor="#ffef5724"/>
+
+    </LinearLayout>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#fff0f0f0"/>
+
+    <LinearLayout
             android:id="@+id/ll_feedback"
             android:layout_width="match_parent"
             android:layout_height="45dp"

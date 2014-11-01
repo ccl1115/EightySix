@@ -1,7 +1,9 @@
 package com.utree.eightysix.push;
 
+import android.text.TextUtils;
 import com.tencent.android.tpush.XGPushConfig;
 import com.tencent.android.tpush.XGPushManager;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.U;
 
 /**
@@ -16,7 +18,11 @@ public class XGPushHelper implements PushHelper {
     // 如果需要绑定账号，请使用registerPush(getApplicationContext(),"account")版本
     // 具体可参考详细的开发指南
     // 传递的参数为ApplicationContext
-    XGPushManager.registerPush(U.getContext());
+    if (!TextUtils.isEmpty(Account.inst().getUserId())) {
+      XGPushManager.registerPush(U.getContext(), Account.inst().getUserId());
+    } else {
+      XGPushManager.registerPush(U.getContext());
+    }
   }
 
   @Override
