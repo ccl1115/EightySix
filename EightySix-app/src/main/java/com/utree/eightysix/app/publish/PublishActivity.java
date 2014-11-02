@@ -208,13 +208,13 @@ public class PublishActivity extends BaseActivity {
   @OnTextChanged (R.id.et_temp_name)
   public void onEtTempNameClicked(CharSequence cs) {
     if (mEtTempName.isFocused()) {
-      mIvTempName.setSelected(cs.length() > 0);
+      mIvTempName.setSelected(cs.length() > 1);
     }
   }
 
   @OnClick (R.id.iv_temp_name)
   public void onIvTempNameClicked() {
-    if (mEtTempName.getText().length() > 0) {
+    if (mEtTempName.getText().length() > 1) {
       mIvTempName.setSelected(!mIvTempName.isSelected());
     }
   }
@@ -787,7 +787,7 @@ public class PublishActivity extends BaseActivity {
         builder.tags(tags);
       }
 
-      if (mIvTempName.isSelected() && mEtTempName.getText().length() > 0) {
+      if (mIvTempName.isSelected() && mEtTempName.getText().length() > 1) {
         builder.tempName(mEtTempName.getText().toString());
         builder.sourceType(2);
       }

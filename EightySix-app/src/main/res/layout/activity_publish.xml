@@ -114,6 +114,7 @@
                 android:layout_toRightOf="@id/iv_temp_name"
                 android:layout_marginRight="8dp"
                 android:paddingBottom="12dp"
+                android:maxLength="6"
                 android:hint="填个临时名字"/>
 
 
