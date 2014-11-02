@@ -142,6 +142,7 @@ public abstract class AbsTagFragment extends BaseFragment {
     if (mTag != null && mTag.id != id) {
       if (mLvFeed != null) mLvFeed.setAdapter(null);
       mTag.id = id;
+      refresh();
     } else {
       mTag = new Tag();
       mTag.id = id;
@@ -149,11 +150,12 @@ public abstract class AbsTagFragment extends BaseFragment {
   }
 
   public void setTag(Tag tag) {
-    if (tag == null || !tag.equals(mTag)) {
+    if (tag != null && !tag.equals(mTag)) {
       if (mLvFeed != null) mLvFeed.setAdapter(null);
+      mTag = tag;
+      refresh();
     }
 
-    mTag = tag;
   }
 
   @Override
@@ -172,14 +174,9 @@ public abstract class AbsTagFragment extends BaseFragment {
   }
 
   public void refresh() {
-    getBaseActivity().showProgressBar();
     if (mTag != null) {
       if (isAdded()) {
         requestFeeds(mTag.id, 1);
-      }
-    } else {
-      if (isAdded()) {
-        requestFeeds(0, 1);
       }
     }
   }

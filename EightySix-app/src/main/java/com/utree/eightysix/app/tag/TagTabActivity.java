@@ -69,14 +69,8 @@ public class TagTabActivity extends BaseActivity {
     mHotTagFragment = new HotTagFragment();
     mMoreTagFragment = new MoreTagFragment();
 
-    mTag = getIntent().getParcelableExtra("tag");
-
-    setTopTitle("#" + mTag.content);
-
     showRefreshIndicator();
 
-    mFactoryTagFragment.setTag(mTag);
-    mHotTagFragment.setTag(mTag);
 
     mVpTab.setOffscreenPageLimit(2);
 
@@ -175,12 +169,24 @@ public class TagTabActivity extends BaseActivity {
       }
     });
 
+    onNewIntent(getIntent());
+
     getHandler().postDelayed(new Runnable() {
       @Override
       public void run() {
         mHotTagFragment.setActive(true);
       }
     }, 500);
+  }
+
+  @Override
+  protected void onNewIntent(Intent intent) {
+    mTag = intent.getParcelableExtra("tag");
+    setTopTitle("#" + mTag.content);
+    mFactoryTagFragment.setTag(mTag);
+    mHotTagFragment.setTag(mTag);
+
+    mVpTab.setCurrentItem(0);
   }
 
   @Override

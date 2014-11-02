@@ -155,7 +155,7 @@
 
         <activity android:exported="@bool/exported" android:name=".app.chat.StartChatActivity" android:screenOrientation="portrait"/>
 
-        <activity android:exported="@bool/exported" android:label="标签详情" android:name=".app.tag.TagTabActivity" android:screenOrientation="portrait"/>
+        <activity android:exported="@bool/exported" android:label="标签详情" android:launchMode="singleTask" android:name=".app.tag.TagTabActivity" android:screenOrientation="portrait"/>
 
         <activity android:exported="@bool/exported" android:label="全部话题" android:name=".app.topic.TopicListActivity" android:screenOrientation="portrait"/>
 
