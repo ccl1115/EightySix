@@ -224,12 +224,20 @@ public class PublishActivity extends BaseActivity {
     if (mEtTempName.isFocused()) {
       mIvTempName.setSelected(cs.length() > 1);
     }
+
+    if (cs.length() > 1) {
+      mEtTempName.setTextColor(0xff000000);
+    } else {
+      mEtTempName.setTextColor(0xffcccccc);
+    }
   }
 
   @OnClick (R.id.iv_temp_name)
   public void onIvTempNameClicked() {
     if (mEtTempName.getText().length() > 1) {
       mIvTempName.setSelected(!mIvTempName.isSelected());
+    } else {
+      showToast("临时名要两个字以上哦");
     }
   }
 
