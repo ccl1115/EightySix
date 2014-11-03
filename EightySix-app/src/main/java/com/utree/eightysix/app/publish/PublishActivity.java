@@ -834,6 +834,7 @@ public class PublishActivity extends BaseActivity {
             post.source = (mIvTempName.isSelected() && mEtTempName.getText().length() > 0) ?
                 mEtTempName.getText().toString() : "认识的人";
             post.type = BaseItem.TYPE_POST;
+            post.tags = mTagsLayout.getSelectedTags();
             U.getBus().post(new PostPublishedEvent(post, mFactoryId));
 
             finish();
