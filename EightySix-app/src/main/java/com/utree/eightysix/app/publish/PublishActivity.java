@@ -189,10 +189,18 @@ public class PublishActivity extends BaseActivity {
     if (mIsOpened) {
       hideSoftKeyboard(mPostEditText);
       mPublishLayout.switchToPanel(PublishLayout.PANEL_TAGS);
+
+      if (!mTagsLayout.hasTags()) {
+        requestTags();
+      }
     } else if (mPublishLayout.getCurrentPanel() == PublishLayout.PANEL_TAGS) {
       mPublishLayout.switchToPanel(PublishLayout.PANEL_INFO);
     } else {
       mPublishLayout.switchToPanel(PublishLayout.PANEL_TAGS);
+
+      if (!mTagsLayout.hasTags()) {
+        requestTags();
+      }
     }
   }
 
@@ -243,6 +251,7 @@ public class PublishActivity extends BaseActivity {
     List<Tag> tags = getIntent().getParcelableArrayListExtra("tags");
     if (tags != null) {
       setSelectedTags(tags);
+      mPublishLayout.switchToPanel(PublishLayout.PANEL_TAGS);
     }
 
     mTvPostTip.setText(getHintText());

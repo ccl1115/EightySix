@@ -42,6 +42,10 @@ public class TagsLayout extends FloatingLayout {
     }
   }
 
+  public boolean hasTags() {
+    return getChildCount() > 0;
+  }
+
   public List<TextView> buildSpannable(List<Tag> tags) {
     List<TextView> views = new ArrayList<TextView>();
     for (Tag g : tags) {
