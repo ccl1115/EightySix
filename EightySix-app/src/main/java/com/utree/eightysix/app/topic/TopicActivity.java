@@ -30,6 +30,7 @@ import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
+import java.util.List;
 
 /**
  */
@@ -144,6 +145,25 @@ public class TopicActivity extends BaseActivity {
   @Override
   public void onLogout(Account.LogoutEvent event) {
     finish();
+  }
+
+  @Subscribe
+  public void onPostEvent(Post post) {
+    List<Post> posts;
+    if (mTopicFeedAdapter.getCurrentTab() == TAB_NEW) {
+      posts = mTopicFeedAdapter.getNewPosts();
+    } else {
+      posts = mTopicFeedAdapter.getFeaturePosts();
+    }
+    for (Post p : posts) {
+      if (p.equals(post)) {
+        p.praise = post.praise;
+        p.praised = post.praised;
+        p.comments = post.comments;
+        mTopicFeedAdapter.notifyDataSetChanged();
+        break;
+      }
+    }
   }
 
   @Subscribe
