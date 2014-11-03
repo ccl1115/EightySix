@@ -54,6 +54,9 @@ public class TagsLayout extends FloatingLayout {
       params.setMargins(margin, margin, margin, margin);
       view.setLayoutParams(params);
 
+      if (mSelectedTags.contains(g)) {
+        view.setSelected(true);
+      }
 
       view.setOnClickListener(new OnClickListener() {
         @Override
@@ -86,6 +89,10 @@ public class TagsLayout extends FloatingLayout {
       views.add(view);
     }
     return views;
+  }
+
+  public void setSelectedTags(List<Tag> tags) {
+    mSelectedTags = tags;
   }
 
   public List<Tag> getSelectedTags() {

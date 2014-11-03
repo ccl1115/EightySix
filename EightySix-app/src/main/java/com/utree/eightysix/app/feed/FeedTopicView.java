@@ -71,7 +71,7 @@ public class FeedTopicView extends FrameLayout {
     U.getAnalyser().trackEvent(getContext(), "feed_topic_publish", "feed_topic_publish");
 
     TopicActivity.start(getContext(), getTopic());
-    PublishActivity.startWithTopicId(getContext(), mTopic.id);
+    PublishActivity.startWithTopicId(getContext(), mTopic.id, mTopic.tags);
   }
 
   @OnClick (R.id.tv_more)

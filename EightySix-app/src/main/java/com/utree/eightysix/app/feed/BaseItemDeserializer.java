@@ -101,7 +101,7 @@ public class BaseItemDeserializer implements JsonDeserializer<BaseItem> {
     post.tags = new ArrayList<Tag>();
 
     JsonElement e = jObj.get("tags");
-    if (!e.isJsonNull()) {
+    if (e != null && e.isJsonArray()) {
       JsonArray array = jObj.getAsJsonArray("tags");
 
       for (JsonElement tag : array) {

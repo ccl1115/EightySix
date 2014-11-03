@@ -128,7 +128,7 @@ public class TopicActivity extends BaseActivity {
 
       @Override
       public void onSendClicked() {
-        PublishActivity.startWithTopicId(TopicActivity.this, mTopic.id);
+        PublishActivity.startWithTopicId(TopicActivity.this, mTopic.id, mTopic.tags);
       }
     });
 

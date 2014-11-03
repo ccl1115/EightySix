@@ -177,7 +177,7 @@ public class FeedActivity extends BaseActivity {
     if (!mTabFragment.canPublish()) {
       showNoPermDialog();
     } else {
-      PublishActivity.start(this, mTabFragment.getCircleId());
+      PublishActivity.start(this, mTabFragment.getCircleId(), null);
     }
   }
 
@@ -457,7 +457,7 @@ public class FeedActivity extends BaseActivity {
     if (!mTabFragment.canPublish()) {
       showNoPermDialog();
     } else {
-      PublishActivity.start(this, mTabFragment.getCircleId());
+      PublishActivity.start(this, mTabFragment.getCircleId(), null);
     }
   }
 

@@ -156,6 +156,7 @@ public class TagTabActivity extends BaseActivity {
 
       @Override
       public void onClick(View view, int position) {
+        U.getShareManager().shareTagDialog(TagTabActivity.this, null, mTag.id);
       }
 
       @Override

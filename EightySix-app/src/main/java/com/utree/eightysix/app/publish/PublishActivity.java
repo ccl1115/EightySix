@@ -139,9 +139,12 @@ public class PublishActivity extends BaseActivity {
   private String mLastTempName;
   private List<Tag> mTags;
 
-  public static void start(Context context, int factoryId) {
+  public static void start(Context context, int factoryId, List<Tag> tags) {
     Intent intent = new Intent(context, PublishActivity.class);
     intent.putExtra("factoryId", factoryId);
+    if (tags != null) {
+      intent.putParcelableArrayListExtra("tags", (java.util.ArrayList<? extends android.os.Parcelable>) tags);
+    }
 
     if (!(context instanceof Activity)) {
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -150,9 +153,12 @@ public class PublishActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
-  public static void startWithTopicId(Context context, int topicId) {
+  public static void startWithTopicId(Context context, int topicId, List<Tag> tags) {
     Intent intent = new Intent(context, PublishActivity.class);
     intent.putExtra("topicId", topicId);
+    if (tags != null) {
+      intent.putParcelableArrayListExtra("tags", (java.util.ArrayList<? extends android.os.Parcelable>) tags);
+    }
 
     if (!(context instanceof Activity)) {
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -233,6 +239,11 @@ public class PublishActivity extends BaseActivity {
 
     mPublishLayout = new PublishLayout(this);
     setContentView(mPublishLayout);
+
+    List<Tag> tags = getIntent().getParcelableArrayListExtra("tags");
+    if (tags != null) {
+      setSelectedTags(tags);
+    }
 
     mTvPostTip.setText(getHintText());
 
@@ -425,26 +436,32 @@ public class PublishActivity extends BaseActivity {
     mTagsLayout.setOnSelectedTagsChangedListener(new TagsLayout.OnSelectedTagsChangedListener() {
       @Override
       public void onSelectedTagsChanged(List<Tag> tags) {
-        mTvTag1.setText("");
-        mTvTag2.setText("");
-        mTvTag3.setText("");
-        for (int i = 0; i < tags.size(); i++) {
-          Tag g = tags.get(i);
-          switch(i) {
-            case 0:
-              mTvTag1.setText("#" + g.content);
-              break;
-            case 1:
-              mTvTag2.setText("#" + g.content);
-              break;
-            case 2:
-              mTvTag3.setText("#" + g.content);
-              break;
-          }
-        }
+        setSelectedTags(tags);
 
       }
     });
+  }
+
+  protected void setSelectedTags(List<Tag> tags) {
+    mTvTag1.setText("");
+    mTvTag2.setText("");
+    mTvTag3.setText("");
+    for (int i = 0; i < tags.size(); i++) {
+      Tag g = tags.get(i);
+      switch(i) {
+        case 0:
+          mTvTag1.setText("#" + g.content);
+          break;
+        case 1:
+          mTvTag2.setText("#" + g.content);
+          break;
+        case 2:
+          mTvTag3.setText("#" + g.content);
+          break;
+      }
+    }
+
+    mTagsLayout.setSelectedTags(tags);
   }
 
   @Override
