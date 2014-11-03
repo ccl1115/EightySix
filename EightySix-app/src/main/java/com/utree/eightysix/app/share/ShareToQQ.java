@@ -3,6 +3,7 @@ package com.utree.eightysix.app.share;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.Toast;
 import com.tencent.connect.share.QQShare;
 import com.tencent.tauth.IUiListener;
@@ -70,7 +71,11 @@ class ShareToQQ extends IShare {
         data.putString(QQShare.SHARE_TO_QQ_TITLE, String.format(shareTitleForPost(), post.shortName));
         data.putString(QQShare.SHARE_TO_QQ_SUMMARY, String.format(shareContentForPost(), post.shortName));
         data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, url);
-        data.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://utree-resource.oss-cn-beijing.aliyuncs.com/faceless.png");
+        if (!TextUtils.isEmpty(post.bgUrl) && post.bgUrl.contains(U.getImageBucket())) {
+          data.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, post.bgUrl);
+        } else {
+          data.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://utree-resource.oss-cn-beijing.aliyuncs.com/faceless.png");
+        }
         data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
         shareToQQ(activity, data, defaultListener());
         return null;
@@ -98,7 +103,11 @@ class ShareToQQ extends IShare {
         data.putString(QQShare.SHARE_TO_QQ_TITLE, shareTitleForComment());
         data.putString(QQShare.SHARE_TO_QQ_SUMMARY, comment);
         data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, url);
-        data.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://utree-resource.oss-cn-beijing.aliyuncs.com/faceless.png");
+        if (!TextUtils.isEmpty(post.bgUrl) && post.bgUrl.contains(U.getImageBucket())) {
+          data.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, post.bgUrl);
+        } else {
+          data.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://utree-resource.oss-cn-beijing.aliyuncs.com/faceless.png");
+        }
         data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
         shareToQQ(activity, data, defaultListener());
         return null;
