@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
  */
 public class TopicFeed {
 
-  @SerializedName ("topic")
+  @SerializedName ("topicView")
   public Topic topic;
 
   @SerializedName ("posts")
