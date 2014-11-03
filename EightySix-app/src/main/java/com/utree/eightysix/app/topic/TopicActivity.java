@@ -168,11 +168,7 @@ public class TopicActivity extends BaseActivity {
 
   @Subscribe
   public void onPostPublichedEvent(PostPublishedEvent event) {
-    if (mTopicFeedAdapter.getCurrentTab() == TAB_NEW) {
-      requestNewTopicFeed(1);
-    } else if (mTopicFeedAdapter.getCurrentTab() == TAB_FEATURE) {
-      requestFeatureTopicFeed(1);
-    }
+    requestNewTopicFeed(1);
   }
 
   private void requestNewTopicFeed(final int page) {
