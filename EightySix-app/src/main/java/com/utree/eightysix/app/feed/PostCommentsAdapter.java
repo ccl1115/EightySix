@@ -197,7 +197,7 @@ class PostCommentsAdapter extends BaseAdapter {
 
     holder.mTvInfo.setText(String.format("%s | %s |", floor, comment.time));
 
-    holder.mTvDistance.setText(comment.distance);
+    holder.mTvDistance.setText(comment.distance + " | ");
     holder.mTvPraise.setText(String.valueOf(comment.praise));
 
     if (comment.delete == 1) {
