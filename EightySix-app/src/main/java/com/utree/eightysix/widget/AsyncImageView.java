@@ -24,6 +24,13 @@ public class AsyncImageView extends ImageView {
 
   private GearsDrawable mGearsDrawable = new GearsDrawable();
 
+  private Runnable mAction = new Runnable() {
+    @Override
+    public void run() {
+      setBackgroundDrawable(mGearsDrawable);
+    }
+  };
+
   public AsyncImageView(Context context) {
     this(context, null, 0);
   }
@@ -45,6 +52,7 @@ public class AsyncImageView extends ImageView {
           case FROM_MEM:
             break;
           case FROM_DISK:
+            removeCallbacks(mAction);
             setBackgroundDrawable(null);
             break;
           case FROM_REMOTE:
@@ -63,6 +71,7 @@ public class AsyncImageView extends ImageView {
 
               @Override
               public void onAnimationEnd(Animator animation) {
+                removeCallbacks(mAction);
                 setBackgroundDrawable(null);
               }
 
@@ -94,9 +103,9 @@ public class AsyncImageView extends ImageView {
 
     setImageBitmap(null);
 
-    if (ImageUtils.getFromMemByUrl(url) == null) {
-      setBackgroundDrawable(mGearsDrawable);
-    }
+    setBackgroundDrawable(null);
+
+    postDelayed(mAction, 1000);
 
     clearAnimation();
 
