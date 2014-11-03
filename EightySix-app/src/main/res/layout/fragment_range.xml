@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
+              android:layout_width="190dp"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:background="#ff363940"
+              android:padding="8dp"
+        >
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:text="请点击选择范围"
+            />
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:textColor="@color/apptheme_primary_grey_color"
+            android:text="自己厂里的秘密"
+            />
+
+    <com.utree.eightysix.widget.RoundedButton
+            android:id="@+id/rb_current"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:textColor="@color/apptheme_primary_text_dark"
+            app:background="@color/apptheme_primary_white_btn"
+            />
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:textColor="@color/apptheme_primary_grey_color"
+            android:text="附近厂里的秘密"
+            />
+
+
+    <com.utree.eightysix.widget.RoundedButton
+            android:id="@+id/rb_range_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="1公里内"
+            android:textColor="@color/apptheme_primary_text_dark"
+            app:background="@color/apptheme_primary_white_btn"
+            />
+
+    <com.utree.eightysix.widget.RoundedButton
+            android:id="@+id/rb_range_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="5公里以内"
+            android:textColor="@color/apptheme_primary_text_dark"
+            app:background="@color/apptheme_primary_white_btn"
+            />
+
+    <com.utree.eightysix.widget.RoundedButton
+            android:id="@+id/rb_range_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="同城"
+            android:textColor="@color/apptheme_primary_text_dark"
+            app:background="@color/apptheme_primary_white_btn"
+            />
+</LinearLayout>

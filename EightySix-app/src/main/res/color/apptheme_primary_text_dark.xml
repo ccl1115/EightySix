@@ -3,5 +3,6 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:color="#ff7c7c7c" android:state_enabled="false"/>
-    <item android:color="@android:color/black"/>
+    <item android:color="#ff363940"/>
+    <item android:color="@android:color/white" android:state_pressed="true"/>
 </selector>

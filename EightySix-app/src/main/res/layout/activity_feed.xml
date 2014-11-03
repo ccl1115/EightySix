@@ -36,14 +36,20 @@
             android:orientation="vertical"
             android:visibility="invisible">
 
-        <com.utree.eightysix.widget.AdvancedListView
-                android:id="@+id/lv_side_circles"
+        <fragment
+                android:id="@+id/fragment_range"
+                class="com.utree.eightysix.app.home.RangeFragment"
                 android:layout_width="190dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="@android:color/white"/>
+                android:layout_height="match_parent"/>
 
-        <include layout="@layout/item_side_more"/>
+        <!--<com.utree.eightysix.widget.AdvancedListView-->
+                <!--android:id="@+id/lv_side_circles"-->
+                <!--android:layout_width="190dp"-->
+                <!--android:layout_height="0dp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:background="@android:color/white"/>-->
+
+        <!--<include layout="@layout/item_side_more"/>-->
     </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>

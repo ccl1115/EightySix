@@ -33,6 +33,7 @@ import com.utree.eightysix.app.feed.event.InviteClickedEvent;
 import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
 import com.utree.eightysix.app.feed.event.UploadClickedEvent;
+import com.utree.eightysix.app.home.RangeFragment;
 import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.msg.PraiseActivity;
@@ -65,9 +66,6 @@ public class FeedActivity extends BaseActivity {
 
   private static final String FIRST_RUN_KEY = "feed";
 
-  @InjectView (R.id.lv_side_circles)
-  public AdvancedListView mLvSideCircles;
-
   @InjectView (R.id.ib_send)
   public ImageButton mSend;
 
@@ -77,15 +75,11 @@ public class FeedActivity extends BaseActivity {
   @InjectView (R.id.content)
   public DrawerLayout mDlContent;
 
-  private SideCirclesAdapter mSideCirclesAdapter;
-
   private PopupWindow mPopupMenu;
 
-  private boolean mSideShown;
-
-  private List<Circle> mSideCircles;
-
   private TabFragment mTabFragment;
+
+  private RangeFragment mRangeFragment;
 
   /**
    * 邀请好友对话框
@@ -181,29 +175,6 @@ public class FeedActivity extends BaseActivity {
     }
   }
 
-  @OnClick (R.id.tv_more)
-  public void onSideMoreClicked() {
-    U.getAnalyser().trackEvent(this, "side_more", "side_more");
-    startActivity(new Intent(this, BaseCirclesActivity.class));
-  }
-
-  @OnItemClick (R.id.lv_side_circles)
-  public void onLvSideItemClicked(int position) {
-    U.getAnalyser().trackEvent(this, "side_switch", "side_switch");
-    Circle circle = mSideCircles.get(position);
-    if (circle != null) {
-      mTabFragment.setCircle(circle);
-      setSideHighlight(circle);
-      mDlContent.closeDrawer(mLlSide);
-      getHandler().postDelayed(new Runnable() {
-        @Override
-        public void run() {
-          requestSideCircle();
-        }
-      }, 1000);
-    }
-  }
-
   @Override
   public void onActionLeftClicked() {
     U.getAnalyser().trackEvent(this, "feed_title", "feed_title");
@@ -211,10 +182,6 @@ public class FeedActivity extends BaseActivity {
       mDlContent.closeDrawer(mLlSide);
     } else {
       mDlContent.openDrawer(mLlSide);
-    }
-    if (mSideCirclesAdapter == null || mSideCirclesAdapter.getCount() == 0) {
-      requestSideCircle();
-      showProgressBar();
     }
   }
 
@@ -259,6 +226,8 @@ public class FeedActivity extends BaseActivity {
 
     mTabFragment = new TabFragment();
     getSupportFragmentManager().beginTransaction().add(R.id.fl_feed, mTabFragment, "tab").commit();
+
+    mRangeFragment = (RangeFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_range);
 
     onNewIntent(getIntent());
   }
@@ -328,14 +297,12 @@ public class FeedActivity extends BaseActivity {
   @Override
   protected void onPause() {
     super.onPause();
-    M.getRegisterHelper().unregister(mLvSideCircles);
     Env.setLastCircle(mTabFragment.getCircle());
   }
 
   @Override
   protected void onResume() {
     super.onResume();
-    M.getRegisterHelper().register(mLvSideCircles);
 
     Sync sync = U.getSyncClient().getSync();
     if (sync != null && sync.upgrade != null) {
@@ -415,20 +382,9 @@ public class FeedActivity extends BaseActivity {
       mTabFragment.setCircle(circle);
     } else if (id != -1) {
       mTabFragment.setCircle(id);
-    } else if (mTabFragment.getCircle() != null) {
-      setSideHighlight(mTabFragment.getCircle());
     }
 
     //endregion
-
-
-    //region 侧边栏数据处理
-    getHandler().postDelayed(new Runnable() {
-      @Override
-      public void run() {
-        requestSideCircle();
-      }
-    }, 500);
 
 
     setHasNewPraise();
@@ -552,20 +508,6 @@ public class FeedActivity extends BaseActivity {
     }
   }
 
-  private void setSideHighlight(Circle circle) {
-    if (mSideCircles == null || circle == null) return;
-
-    for (Circle c : mSideCircles) {
-      c.selected = false;
-    }
-
-    for (Circle c : mSideCircles) {
-      c.selected = circle.equals(c);
-    }
-    setTitle(circle);
-    if (mSideCirclesAdapter != null) mSideCirclesAdapter.notifyDataSetChanged();
-  }
-
   private void setHasNewPraise() {
     mMenuViewHolder.mRbNewPraiseDot.setVisibility(Account.inst().getHasNewPraise() ? View.VISIBLE : View.INVISIBLE);
     getTopBar().getActionOverflow().setHasNew(Account.inst().getHasNewPraise());
@@ -573,33 +515,6 @@ public class FeedActivity extends BaseActivity {
 
   private void setNewCommentCount() {
     getTopBar().getActionView(0).setCount(Account.inst().getNewCommentCount());
-  }
-
-  void requestSideCircle() {
-    request(new CircleSideRequest("", 1), new OnResponse2<CirclesResponse>() {
-
-      @Override
-      public void onResponseError(Throwable e) {
-      }
-
-      @Override
-      public void onResponse(CirclesResponse response) {
-        if (response != null && response.code == 0 && response.object != null) {
-          mSideCircles = response.object.lists.size() > 10 ?
-              response.object.lists.subList(0, 10) : response.object.lists;
-
-          setSideHighlight(mTabFragment.getCircle());
-          selectSideCircle(mSideCircles);
-
-          mSideCirclesAdapter = new SideCirclesAdapter(mSideCircles);
-          mLvSideCircles.setAdapter(mSideCirclesAdapter);
-
-        }
-        hideProgressBar();
-      }
-
-
-    }, CirclesResponse.class);
   }
 
   void setTitle(Circle circle) {
