@@ -29,7 +29,7 @@ import java.util.List;
 
 /**
  */
-class FeedAdapter extends BaseAdapter {
+public class FeedAdapter extends BaseAdapter {
 
   private static final int TIP_NOT_SHOWN = -1;
 

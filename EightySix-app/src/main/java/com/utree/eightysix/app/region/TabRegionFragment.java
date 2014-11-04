@@ -1,4 +1,4 @@
-package com.utree.eightysix.app.feed;
+package com.utree.eightysix.app.region;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +14,9 @@ import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
+import com.utree.eightysix.app.feed.FeedFragment;
+import com.utree.eightysix.app.feed.FriendsFeedFragment;
+import com.utree.eightysix.app.feed.HotFeedFragment;
 import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
@@ -24,22 +27,21 @@ import com.utree.eightysix.widget.TitleTab;
 /**
  * @author simon
  */
-public class TabFragment extends BaseFragment {
+public class TabRegionFragment extends BaseFragment {
 
   @InjectView (R.id.vp_tab)
   public ViewPager mVpTab;
 
   @InjectView (R.id.tt_tab)
   public TitleTab mTtTab;
-  private FeedFragment mFeedFragment;
-  private HotFeedFragment mHotFeedFragment;
-  private FriendsFeedFragment mFriendsFeedFragment;
-  private Circle mCircle;
+  private FeedRegionFragment mFeedFragment;
+  private HotFeedRegionFragment mHotFeedFragment;
+  private FriendsFeedRegionFragment mFriendsFeedFragment;
 
-  public TabFragment() {
-    mFeedFragment = new FeedFragment();
-    mHotFeedFragment = new HotFeedFragment();
-    mFriendsFeedFragment = new FriendsFeedFragment();
+  public TabRegionFragment() {
+    mFeedFragment = new FeedRegionFragment();
+    mHotFeedFragment = new HotFeedRegionFragment();
+    mFriendsFeedFragment = new FriendsFeedRegionFragment();
   }
 
   @Override
@@ -139,65 +141,12 @@ public class TabFragment extends BaseFragment {
     return mFeedFragment != null && mFeedFragment.canPublish();
   }
 
-  public int getCircleId() {
-    if (mCircle != null) {
-      return mCircle.id;
-    }
-    if (mFeedFragment != null) {
-      return mFeedFragment.getCircleId();
-    }
-    return 0;
-  }
-
-  public void setCircle(Circle circle) {
+  public void setRegionType(int regionType) {
     clearActive();
 
-    mCircle = circle;
-
-    mFeedFragment.setCircle(circle);
-    mHotFeedFragment.setCircle(circle);
-    mFriendsFeedFragment.setCircle(circle);
-
-    if (mVpTab == null) return;
-
-    mVpTab.setCurrentItem(0);
-
-    switch (mVpTab.getCurrentItem()) {
-      case 0:
-        mFeedFragment.setActive(true);
-        break;
-      case 1:
-        mHotFeedFragment.setActive(true);
-        break;
-      case 2:
-        mFriendsFeedFragment.setActive(true);
-        break;
-    }
-  }
-
-  public Circle getCircle() {
-    if (mCircle != null) {
-      return mCircle;
-    }
-    if (mFeedFragment != null) {
-      return mFeedFragment.getCircle();
-    }
-    return null;
-  }
-
-  public void setCircle(int circleId) {
-    clearActive();
-
-    if (mCircle != null) {
-      mCircle.id = circleId;
-    } else {
-      mCircle = new Circle();
-      mCircle.id = circleId;
-    }
-
-    mFeedFragment.setCircle(circleId);
-    mHotFeedFragment.setCircle(circleId);
-    mFriendsFeedFragment.setCircle(circleId);
+    mFeedFragment.setRegionType(regionType);
+    mHotFeedFragment.setRegionType(regionType);
+    mFriendsFeedFragment.setRegionType(regionType);
 
     if (mVpTab == null) return;
 
@@ -218,11 +167,6 @@ public class TabFragment extends BaseFragment {
 
   public boolean onBackPressed() {
     return false;
-  }
-
-  @Subscribe
-  public void onCircleEvent(Circle circle) {
-    if (circle != null) mCircle = circle;
   }
 
   @Subscribe

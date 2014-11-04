@@ -1,4 +1,4 @@
-package com.utree.eightysix.app.feed;
+package com.utree.eightysix.app.region;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -14,7 +14,9 @@ import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
+import com.utree.eightysix.app.feed.FeedAdapter;
 import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
+import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
@@ -25,7 +27,7 @@ import com.utree.eightysix.data.Feeds;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
-import com.utree.eightysix.response.FeedsResponse;
+import com.utree.eightysix.response.FeedsByRegionResponse;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.view.SwipeRefreshLayout;
@@ -36,23 +38,27 @@ import com.utree.eightysix.widget.RandomSceneTextView;
 /**
  * @author simon
  */
-public abstract class AbsFeedFragment extends BaseFragment {
-  @InjectView(R.id.lv_feed)
+public abstract class AbsRegionFragment extends BaseFragment {
+  @InjectView (R.id.lv_feed)
   public AdvancedListView mLvFeed;
 
-  @InjectView(R.id.refresh_view)
+  @InjectView (R.id.refresh_view)
   public SwipeRefreshLayout mRefresherView;
 
-  @InjectView(R.id.tv_empty_text)
+  @InjectView (R.id.tv_empty_text)
   public RandomSceneTextView mRstvEmpty;
 
   protected FeedAdapter mFeedAdapter;
   protected Circle mCircle;
   protected Paginate.Page mPageInfo;
-
+  protected int mRegionType = -1;
   protected boolean mPostPraiseRequesting;
 
-  @OnItemClick(R.id.lv_feed)
+  public void setRegionType(int regionType) {
+    mRegionType = regionType;
+  }
+
+  @OnItemClick (R.id.lv_feed)
   public void onLvFeedItemClicked(int position, View view) {
     Object item = mLvFeed.getAdapter().getItem(position);
     if (item == null || !(item instanceof Post)) return;
@@ -64,6 +70,15 @@ public abstract class AbsFeedFragment extends BaseFragment {
     super.onAttach(activity);
 
     if (isActive()) requestFeeds(mCircle.id, 1);
+  }
+
+  @Override
+  protected void onActive() {
+    if (mLvFeed != null) mLvFeed.setAdapter(null);
+
+    if (isAdded()) {
+      requestFeeds(mRegionType, 1);
+    }
   }
 
   @Override
@@ -181,48 +196,11 @@ public abstract class AbsFeedFragment extends BaseFragment {
     return mCircle;
   }
 
-  public void setCircle(int id) {
-    if (mCircle != null && mCircle.id != id) {
-      if (mLvFeed != null) mLvFeed.setAdapter(null);
-      mCircle.id = id;
-    } else {
-      mCircle = new Circle();
-      mCircle.id = id;
-    }
-  }
-
   public int getFriendCount() {
     if (mCircle != null) {
       return mCircle.friendCount;
     } else {
       return 0;
-    }
-  }
-
-  public void setCircle(Circle circle) {
-    if (circle == null || !circle.equals(mCircle)) {
-      if (mLvFeed != null) mLvFeed.setAdapter(null);
-    }
-
-    mCircle = circle;
-
-    if (mCircle == null) {
-      mCircle = Env.getLastCircle();
-    }
-  }
-
-  @Override
-  protected void onActive() {
-    if (mCircle != null) {
-      if (mLvFeed != null) mLvFeed.setAdapter(null);
-
-      if (isAdded()) {
-        requestFeeds(mCircle.id, 1);
-      }
-    } else {
-      if (isActive()) {
-        requestFeeds(0, 1);
-      }
     }
   }
 
@@ -234,7 +212,7 @@ public abstract class AbsFeedFragment extends BaseFragment {
     getBaseActivity().showProgressBar();
     if (mCircle != null) {
       if (isAdded()) {
-        requestFeeds(mCircle.id, 1);
+        requestFeeds(mRegionType, 1);
       }
     } else {
       if (isAdded()) {
@@ -252,16 +230,12 @@ public abstract class AbsFeedFragment extends BaseFragment {
     }
   }
 
-  protected abstract void requestFeeds(final int id, final int page);
+  protected abstract void requestFeeds(final int regionType, final int page);
 
-  protected void responseForRequest(int circleId, FeedsResponse response, int page) {
+  protected void responseForRequest(FeedsByRegionResponse response, int regionType, int page) {
     if (RESTRequester.responseOk(response)) {
       if (page == 1) {
         mCircle = response.object.circle;
-
-        Env.setLastCircle(mCircle);
-
-        U.getBus().post(mCircle);
 
         mFeedAdapter = new FeedAdapter(response.object);
         M.getRegisterHelper().register(mFeedAdapter);
@@ -274,7 +248,7 @@ public abstract class AbsFeedFragment extends BaseFragment {
         }
 
 
-        ((FeedActivity) getBaseActivity()).setTitle(mCircle);
+        ((HomeActivity) getBaseActivity()).setTitle(mCircle);
         getBaseActivity().setTopSubTitle(String.format(getString(R.string.friends_info),
             mCircle.friendCount, response.object.workerCount));
       } else if (mFeedAdapter != null) {
@@ -282,31 +256,33 @@ public abstract class AbsFeedFragment extends BaseFragment {
       }
       mPageInfo = response.object.posts.page;
 
-      ((FeedActivity) getBaseActivity()).mSend.setImageResource(response.object.lock != 1 || response.object.current == 1 ?
+      ((HomeActivity) getBaseActivity()).mSend.setImageResource(response.object.lock != 1 || response.object.current == 1 ?
           R.drawable.ic_post_pen : R.drawable.ic_post_pen_disabled);
 
 
-      if (response.object.fetch.newComment != null) {
-        Account.inst().setNewCommentCount(response.object.fetch.newComment.unread);
-      }
+      if (response.object.fetch != null) {
+        if (response.object.fetch.newComment != null) {
+          Account.inst().setNewCommentCount(response.object.fetch.newComment.unread);
+        }
 
-      if (response.object.fetch.myPostComment != null) {
-        Account.inst().setNewCommentCount(response.object.fetch.myPostComment.unread);
-      }
+        if (response.object.fetch.myPostComment != null) {
+          Account.inst().setNewCommentCount(response.object.fetch.myPostComment.unread);
+        }
 
-      if (response.object.fetch.newPraise != null) {
-        Account.inst().setHasNewPraise(response.object.fetch.newPraise.praise == 1);
-        U.getBus().post(new UpdatePraiseCountEvent(response.object.fetch.newPraise.praiseCount,
-            response.object.fetch.newPraise.percent));
-      }
+        if (response.object.fetch.newPraise != null) {
+          Account.inst().setHasNewPraise(response.object.fetch.newPraise.praise == 1);
+          U.getBus().post(new UpdatePraiseCountEvent(response.object.fetch.newPraise.praiseCount,
+              response.object.fetch.newPraise.percent));
+        }
 
-      U.getBus().post(new NewAllPostCountEvent(mCircle.id, response.object.fetch.newPostAllCount));
-      U.getBus().post(new NewHotPostCountEvent(mCircle.id, response.object.fetch.newPostHotCount));
-      U.getBus().post(new NewFriendsPostCountEvent(mCircle.id, response.object.fetch.newPostFriendsCount));
+        U.getBus().post(new NewAllPostCountEvent(mCircle.id, response.object.fetch.newPostAllCount));
+        U.getBus().post(new NewHotPostCountEvent(mCircle.id, response.object.fetch.newPostHotCount));
+        U.getBus().post(new NewFriendsPostCountEvent(mCircle.id, response.object.fetch.newPostFriendsCount));
+      }
 
       FetchNotificationService.setCircleId(mCircle.id);
     } else {
-      cacheOutFeeds(circleId, page);
+      cacheOutFeeds(regionType, page);
     }
     mRefresherView.setRefreshing(false);
     mLvFeed.stopLoadMore();
@@ -314,9 +290,9 @@ public abstract class AbsFeedFragment extends BaseFragment {
     getBaseActivity().hideRefreshIndicator();
   }
 
-  protected abstract void cacheOutFeeds(final int id, final int page);
+  protected abstract void cacheOutFeeds(final int regionType, final int page);
 
-  protected void responseForCache(FeedsResponse response, int page, int id) {
+  protected void responseForCache(FeedsByRegionResponse response, int regionType, int page) {
     if (response != null && response.code == 0 && response.object != null) {
       if (page == 1) {
         mCircle = response.object.circle;
@@ -332,13 +308,13 @@ public abstract class AbsFeedFragment extends BaseFragment {
         M.getRegisterHelper().register(mFeedAdapter);
         mLvFeed.setAdapter(mFeedAdapter);
 
-        ((FeedActivity) getBaseActivity()).setTitle(mCircle);
+        ((HomeActivity) getBaseActivity()).setTitle(mCircle);
       } else if (mFeedAdapter != null) {
         mFeedAdapter.add(response.object.posts.lists);
       }
       mPageInfo = response.object.posts.page;
 
-      ((FeedActivity) getBaseActivity()).mSend.setImageResource(response.object.lock != 1 || response.object.current == 1 ?
+      ((HomeActivity) getBaseActivity()).mSend.setImageResource(response.object.lock != 1 || response.object.current == 1 ?
           R.drawable.ic_post_pen : R.drawable.ic_post_pen_disabled);
 
       FetchNotificationService.setCircleId(mCircle.id);
@@ -363,7 +339,7 @@ public abstract class AbsFeedFragment extends BaseFragment {
 
   protected abstract void onLoadMore(int page);
 
-  public boolean canPublish() {
+  boolean canPublish() {
     if (mFeedAdapter != null) {
       Feeds feeds = mFeedAdapter.getFeeds();
       if (feeds != null) return feeds.current == 1 || feeds.lock == 0;

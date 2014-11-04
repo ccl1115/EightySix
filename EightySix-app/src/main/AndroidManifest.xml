@@ -105,7 +105,9 @@
 
         <activity android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.account.LoginActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden"/>
 
-        <activity android:alwaysRetainTaskState="true" android:clearTaskOnLaunch="true" android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.feed.FeedActivity" android:screenOrientation="portrait"/>
+        <activity android:exported="@bool/exported" android:name=".app.feed.FeedActivity" android:screenOrientation="portrait"/>
+
+        <activity android:alwaysRetainTaskState="true" android:clearTaskOnLaunch="true" android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.home.HomeActivity" android:screenOrientation="portrait"/>
 
         <activity android:exported="@bool/exported" android:name=".app.intro.GuideActivity" android:screenOrientation="portrait"/>
 

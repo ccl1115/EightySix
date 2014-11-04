@@ -26,6 +26,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.feed.FeedActivity;
+import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.drawable.RoundRectDrawable;
@@ -107,7 +108,7 @@ public class BaseCirclesActivity extends BaseActivity {
     if (circle != null) {
       if (mMode == MODE_MY) {
         circle.selected = true;
-        FeedActivity.start(this, circle, true);
+        HomeActivity.start(this, circle, true);
         U.getAnalyser().trackEvent(this, "circle_select", "my");
       } else if (mMode == MODE_SELECT) {
         showCircleSetDialog(circle);
@@ -321,7 +322,7 @@ public class BaseCirclesActivity extends BaseActivity {
         .setPositiveButton("停止", new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
-            FeedActivity.start(BaseCirclesActivity.this);
+            HomeActivity.start(BaseCirclesActivity.this);
             finish();
           }
         }).setNegativeButton("继续", new DialogInterface.OnClickListener() {
@@ -405,7 +406,7 @@ public class BaseCirclesActivity extends BaseActivity {
       @Override
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
-          FeedActivity.start(BaseCirclesActivity.this, circle, true);
+          HomeActivity.start(BaseCirclesActivity.this, circle, true);
           finish();
         }
       }

@@ -1,4 +1,4 @@
-package com.utree.eightysix.app.feed;
+package com.utree.eightysix.app.home;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,7 +21,10 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
-import com.utree.eightysix.*;
+import com.utree.eightysix.Account;
+import com.utree.eightysix.C;
+import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
@@ -31,12 +34,11 @@ import com.utree.eightysix.app.feed.event.InviteClickedEvent;
 import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
 import com.utree.eightysix.app.feed.event.UploadClickedEvent;
-import com.utree.eightysix.app.home.RegionFragment;
 import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.msg.PraiseActivity;
 import com.utree.eightysix.app.publish.FeedbackActivity;
-import com.utree.eightysix.app.publish.PublishActivity;
+import com.utree.eightysix.app.region.TabRegionFragment;
 import com.utree.eightysix.app.settings.HelpActivity;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
 import com.utree.eightysix.app.topic.TopicListActivity;
@@ -51,12 +53,10 @@ import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TopBar;
 import de.akquinet.android.androlog.Log;
 
-import java.util.List;
-
 /**
  */
-@Layout (R.layout.activity_feed)
-public class FeedActivity extends BaseActivity {
+@Layout (R.layout.activity_home)
+public class HomeActivity extends BaseActivity {
 
   private static final String FIRST_RUN_KEY = "feed";
 
@@ -71,7 +71,7 @@ public class FeedActivity extends BaseActivity {
 
   private PopupWindow mPopupMenu;
 
-  private TabFragment mTabFragment;
+  private TabRegionFragment mTabFragment;
 
   private RegionFragment mRegionFragment;
 
@@ -91,7 +91,7 @@ public class FeedActivity extends BaseActivity {
   private boolean mShouldExit;
 
   public static void start(Context context) {
-    Intent intent = new Intent(context, FeedActivity.class);
+    Intent intent = new Intent(context, HomeActivity.class);
 
     if (!(context instanceof Activity)) {
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -101,7 +101,7 @@ public class FeedActivity extends BaseActivity {
   }
 
   public static void start(Context context, Circle circle) {
-    Intent intent = new Intent(context, FeedActivity.class);
+    Intent intent = new Intent(context, HomeActivity.class);
     intent.putExtra("circle", circle);
 
     if (!(context instanceof Activity)) {
@@ -112,7 +112,7 @@ public class FeedActivity extends BaseActivity {
   }
 
   public static void start(Context context, Circle circle, boolean skipCache) {
-    Intent intent = new Intent(context, FeedActivity.class);
+    Intent intent = new Intent(context, HomeActivity.class);
     intent.putExtra("circle", circle);
     intent.putExtra("skipCache", skipCache);
 
@@ -124,7 +124,7 @@ public class FeedActivity extends BaseActivity {
   }
 
   public static void start(Context context, int id) {
-    Intent intent = new Intent(context, FeedActivity.class);
+    Intent intent = new Intent(context, HomeActivity.class);
     intent.putExtra("id", id);
 
     if (!(context instanceof Activity)) {
@@ -135,7 +135,7 @@ public class FeedActivity extends BaseActivity {
   }
 
   public static void start(Context context, int id, boolean skipCache) {
-    Intent intent = new Intent(context, FeedActivity.class);
+    Intent intent = new Intent(context, HomeActivity.class);
     intent.putExtra("id", id);
     intent.putExtra("skipCache", skipCache);
 
@@ -147,7 +147,7 @@ public class FeedActivity extends BaseActivity {
   }
 
   public static Intent getIntent(Context context, int id, boolean skipCache) {
-    Intent intent = new Intent(context, FeedActivity.class);
+    Intent intent = new Intent(context, HomeActivity.class);
     intent.putExtra("id", id);
     intent.putExtra("skipCache", skipCache);
 
@@ -165,7 +165,7 @@ public class FeedActivity extends BaseActivity {
     if (!mTabFragment.canPublish()) {
       showNoPermDialog();
     } else {
-      PublishActivity.start(this, mTabFragment.getCircleId(), null);
+      //PublishActivity.start(this, mTabFragment.getCircleId(), null);
     }
   }
 
@@ -184,16 +184,6 @@ public class FeedActivity extends BaseActivity {
     openMenu();
   }
 
-  private void openMenu() {
-    U.getAnalyser().trackEvent(this, "feed_more", "feed_more");
-    if (mPopupMenu.isShowing()) {
-      mPopupMenu.dismiss();
-    } else {
-      mPopupMenu.showAsDropDown(getTopBar().mActionOverFlow);
-      mDlContent.closeDrawer(mLlSide);
-    }
-  }
-
   @Override
   public boolean showActionOverflow() {
     return true;
@@ -208,7 +198,7 @@ public class FeedActivity extends BaseActivity {
     setActionLeftDrawable(getResources().getDrawable(R.drawable.ic_drawer));
 
     if (mPopupMenu == null) {
-      LinearLayout menu = (LinearLayout) View.inflate(FeedActivity.this, R.layout.widget_feed_menu, null);
+      LinearLayout menu = (LinearLayout) View.inflate(HomeActivity.this, R.layout.widget_feed_menu, null);
       mPopupMenu = new PopupWindow(menu, dp2px(190), dp2px(315) + 6);
       mMenuViewHolder = new MenuViewHolder(menu);
       mPopupMenu.setFocusable(true);
@@ -218,80 +208,28 @@ public class FeedActivity extends BaseActivity {
 
     setActionAdapter();
 
-    mTabFragment = new TabFragment();
+    mTabFragment = new TabRegionFragment();
     getSupportFragmentManager().beginTransaction().add(R.id.fl_feed, mTabFragment, "tab").commit();
 
     mRegionFragment = (RegionFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_range);
 
-    onNewIntent(getIntent());
-  }
-
-  private void setActionAdapter() {
-    getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
+    mRegionFragment.setCallback(new RegionFragment.Callback() {
       @Override
-      public String getTitle(int position) {
-        return null;
-      }
-
-      @Override
-      public Drawable getIcon(int position) {
-        if (position == 0) {
-          return getResources().getDrawable(R.drawable.ic_action_msg);
+      public void onItemClicked(int regionType, boolean selected) {
+        mDlContent.closeDrawer(mLlSide);
+        if (selected) {
+          mTabFragment.setRegionType(regionType);
         }
-        return null;
-      }
-
-      @Override
-      public Drawable getBackgroundDrawable(int position) {
-        return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
-      }
-
-      @Override
-      public void onClick(View view, int position) {
-        if (position == 0) {
-          U.getAnalyser().trackEvent(FeedActivity.this, "feed_msg", "feed_msg");
-          MsgActivity.start(FeedActivity.this, Account.inst().getNewCommentCount() > 0);
-        }
-      }
-
-      @Override
-      public int getCount() {
-        return 1;
-      }
-
-      @Override
-      public TopBar.LayoutParams getLayoutParams(int position) {
-        return new TopBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
       }
     });
+
+    onNewIntent(getIntent());
   }
 
   @Override
   protected void onDestroy() {
     Env.setFirstRun(FIRST_RUN_KEY, false);
     super.onDestroy();
-  }
-
-  @Override
-  protected void onStart() {
-    super.onStart();
-
-    startService(new Intent(this, FetchNotificationService.class));
-  }
-
-  @Override
-  protected void onStop() {
-    Log.d("FeedActivity", "onStop");
-    super.onStop();
-    mDlContent.closeDrawer(mLlSide);
-
-    stopService(new Intent(this, FetchNotificationService.class));
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    Env.setLastCircle(mTabFragment.getCircle());
   }
 
   @Override
@@ -364,25 +302,35 @@ public class FeedActivity extends BaseActivity {
   }
 
   @Override
-  protected void onNewIntent(Intent intent) {
-
-    //region 标题栏数据处理
-    Circle circle = intent.getParcelableExtra("circle");
-    int id = intent.getIntExtra("id", -1);
-
-    boolean skipCache = intent.getBooleanExtra("skipCache", false);
-
-    if (circle != null) {
-      mTabFragment.setCircle(circle);
-    } else if (id != -1) {
-      mTabFragment.setCircle(id);
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    if (keyCode == KeyEvent.KEYCODE_MENU) {
+      openMenu();
+      return true;
     }
+    return super.onKeyDown(keyCode, event);
+  }
 
-    //endregion
-
+  @Override
+  protected void onNewIntent(Intent intent) {
 
     setHasNewPraise();
     setNewCommentCount();
+  }
+
+  @Override
+  protected void onStart() {
+    super.onStart();
+
+    startService(new Intent(this, FetchNotificationService.class));
+  }
+
+  @Override
+  protected void onStop() {
+    Log.d("FeedActivity", "onStop");
+    super.onStop();
+    mDlContent.closeDrawer(mLlSide);
+
+    stopService(new Intent(this, FetchNotificationService.class));
   }
 
   @Subscribe
@@ -407,17 +355,71 @@ public class FeedActivity extends BaseActivity {
     if (!mTabFragment.canPublish()) {
       showNoPermDialog();
     } else {
-      PublishActivity.start(this, mTabFragment.getCircleId(), null);
+      //PublishActivity.start(this, mTabFragment.getCircleId(), null);
     }
   }
 
-  @Override
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (keyCode == KeyEvent.KEYCODE_MENU) {
-      openMenu();
-      return true;
+  public void setTitle(Circle circle) {
+    if (circle == null) return;
+
+    setTopTitle(circle.shortName);
+    if (circle.lock == 1) {
+      getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(
+          getResources().getDrawable(R.drawable.ic_lock_small), null, null, null);
+      getTopBar().mSubTitle.setCompoundDrawablePadding(U.dp2px(5));
+    } else {
+      getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
     }
-    return super.onKeyDown(keyCode, event);
+  }
+
+  private void openMenu() {
+    U.getAnalyser().trackEvent(this, "feed_more", "feed_more");
+    if (mPopupMenu.isShowing()) {
+      mPopupMenu.dismiss();
+    } else {
+      mPopupMenu.showAsDropDown(getTopBar().mActionOverFlow);
+      mDlContent.closeDrawer(mLlSide);
+    }
+  }
+
+  private void setActionAdapter() {
+    getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
+      @Override
+      public String getTitle(int position) {
+        return null;
+      }
+
+      @Override
+      public Drawable getIcon(int position) {
+        if (position == 0) {
+          return getResources().getDrawable(R.drawable.ic_action_msg);
+        }
+        return null;
+      }
+
+      @Override
+      public Drawable getBackgroundDrawable(int position) {
+        return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
+      }
+
+      @Override
+      public void onClick(View view, int position) {
+        if (position == 0) {
+          U.getAnalyser().trackEvent(HomeActivity.this, "feed_msg", "feed_msg");
+          MsgActivity.start(HomeActivity.this, Account.inst().getNewCommentCount() > 0);
+        }
+      }
+
+      @Override
+      public int getCount() {
+        return 1;
+      }
+
+      @Override
+      public TopBar.LayoutParams getLayoutParams(int position) {
+        return new TopBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+      }
+    });
   }
 
   private void showNoPermDialog() {
@@ -458,7 +460,7 @@ public class FeedActivity extends BaseActivity {
       ForegroundColorSpan span = new ForegroundColorSpan(
           getResources().getColor(R.color.apptheme_primary_light_color));
       SpannableString spannableString = new SpannableString(tip);
-      spannableString.setSpan(span, index, index +4, 0);
+      spannableString.setSpan(span, index, index + 4, 0);
       tipView.setText(spannableString);
       mUnlockDialog.setContent(view);
       mUnlockDialog.setPositive(R.string.invite_people, new View.OnClickListener() {
@@ -476,26 +478,9 @@ public class FeedActivity extends BaseActivity {
     }
   }
 
-  private void selectSideCircle(List<Circle> sideCircles) {
-    if (sideCircles != null) {
-      for (Circle c : sideCircles) {
-        c.selected = false;
-      }
-
-      if (mTabFragment.getCircle() == null) return;
-
-      for (Circle c : sideCircles) {
-        if (mTabFragment.getCircle().name.equals(c.name)) {
-          c.selected = true;
-          break;
-        }
-      }
-    }
-  }
-
   private void showInviteDialog() {
     if (mInviteDialog == null) {
-      mInviteDialog = U.getShareManager().shareAppDialog(this, mTabFragment.getCircle());
+      //mInviteDialog = U.getShareManager().shareAppDialog(this, mTabFragment.getCircle());
     }
     if (!mInviteDialog.isShowing()) {
       mInviteDialog.show();
@@ -509,19 +494,6 @@ public class FeedActivity extends BaseActivity {
 
   private void setNewCommentCount() {
     getTopBar().getActionView(0).setCount(Account.inst().getNewCommentCount());
-  }
-
-  void setTitle(Circle circle) {
-    if (circle == null) return;
-
-    setTopTitle(circle.shortName);
-    if (circle.lock == 1) {
-      getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(
-          getResources().getDrawable(R.drawable.ic_lock_small), null, null, null);
-      getTopBar().mSubTitle.setCompoundDrawablePadding(U.dp2px(5));
-    } else {
-      getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-    }
   }
 
   @Keep
@@ -544,22 +516,22 @@ public class FeedActivity extends BaseActivity {
     @InjectView (R.id.rb_new_praise_dot)
     RoundedButton mRbNewPraiseDot;
 
-    @InjectView(R.id.rb_settings_dot)
+    @InjectView (R.id.rb_settings_dot)
     RoundedButton mRbSettingsDot;
 
     MenuViewHolder(View view) {
       ButterKnife.inject(this, view);
     }
 
-    @OnClick(R.id.ll_my_friends)
+    @OnClick (R.id.ll_my_friends)
     void onLlMyFriendsClicked() {
-      startActivity(new Intent(FeedActivity.this, AccountActivity.class));
+      startActivity(new Intent(HomeActivity.this, AccountActivity.class));
       mPopupMenu.dismiss();
     }
 
-    @OnClick(R.id.rb_add)
+    @OnClick (R.id.rb_add)
     void onRbAddClicked() {
-      startActivity(new Intent(FeedActivity.this, AddFriendActivity.class));
+      startActivity(new Intent(HomeActivity.this, AddFriendActivity.class));
       mPopupMenu.dismiss();
     }
 
@@ -571,31 +543,31 @@ public class FeedActivity extends BaseActivity {
 
     @OnClick (R.id.ll_praise_count)
     void onLlPraiseCountClicked() {
-      PraiseActivity.start(FeedActivity.this, Account.inst().getHasNewPraise());
+      PraiseActivity.start(HomeActivity.this, Account.inst().getHasNewPraise());
       mPopupMenu.dismiss();
     }
 
     @OnClick (R.id.ll_feedback)
     void onLlFeedbackClicked() {
-      FeedbackActivity.start(FeedActivity.this);
+      FeedbackActivity.start(HomeActivity.this);
       mPopupMenu.dismiss();
     }
 
     @OnClick (R.id.ll_settings)
     void onLlSettingsClicked() {
-      startActivity(new Intent(FeedActivity.this, MainSettingsActivity.class));
+      startActivity(new Intent(HomeActivity.this, MainSettingsActivity.class));
       mPopupMenu.dismiss();
     }
 
-    @OnClick(R.id.ll_help)
+    @OnClick (R.id.ll_help)
     void onLlHelpClicked() {
-      startActivity(new Intent(FeedActivity.this, HelpActivity.class));
+      startActivity(new Intent(HomeActivity.this, HelpActivity.class));
       mPopupMenu.dismiss();
     }
 
-    @OnClick(R.id.ll_topic_list)
+    @OnClick (R.id.ll_topic_list)
     void onLlTopicListClicked() {
-      TopicListActivity.start(FeedActivity.this);
+      TopicListActivity.start(HomeActivity.this);
       mPopupMenu.dismiss();
     }
   }

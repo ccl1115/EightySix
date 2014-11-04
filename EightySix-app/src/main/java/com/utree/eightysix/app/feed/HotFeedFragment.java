@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.feed;
 
+import android.app.Activity;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
@@ -8,6 +9,7 @@ import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.FeedsFriendsRequest;
+import com.utree.eightysix.request.FeedsHotRequest;
 import com.utree.eightysix.request.PostPraiseRequest;
 import com.utree.eightysix.response.FeedsResponse;
 import com.utree.eightysix.rest.OnResponse;
@@ -20,9 +22,9 @@ import java.util.Iterator;
 /**
  * @author simon
  */
-public class FriendsFragment extends AbsFeedFragment {
+public class HotFeedFragment extends AbsFeedFragment {
 
-  public FriendsFragment() {}
+  public HotFeedFragment() {}
 
   @Override
   protected void requestFeeds(final int id, final int page) {
@@ -31,13 +33,12 @@ public class FriendsFragment extends AbsFeedFragment {
       mRefresherView.setRefreshing(true);
       getBaseActivity().setTopSubTitle("");
     }
-    getBaseActivity().request(new FeedsFriendsRequest(id, page), new OnResponse<FeedsResponse>() {
+    getBaseActivity().request(new FeedsHotRequest(id, page), new OnResponse<FeedsResponse>() {
       @Override
       public void onResponse(FeedsResponse response) {
         responseForRequest(id, response, page);
       }
     }, FeedsResponse.class);
-
   }
 
   @Override
@@ -52,12 +53,12 @@ public class FriendsFragment extends AbsFeedFragment {
 
   @Override
   protected void onPullRefresh() {
-    U.getAnalyser().trackEvent(getActivity(), "feed_pull_refresh", "feed_friends");
+    U.getAnalyser().trackEvent(getActivity(), "feed_pull_refresh", "feed_hot");
   }
 
   @Override
   protected void onLoadMore(int page) {
-    U.getAnalyser().trackEvent(getActivity(), "feed_load_more", String.valueOf(page), "feed_friends");
+    U.getAnalyser().trackEvent(getActivity(), "feed_load_more", String.valueOf(page), "feed_hot");
   }
 
   @Subscribe
@@ -120,5 +121,4 @@ public class FriendsFragment extends AbsFeedFragment {
     refresh();
     getBaseActivity().hideProgressBar();
   }
-
 }

@@ -20,6 +20,7 @@ import com.utree.eightysix.app.account.ForgetPwdActivity;
 import com.utree.eightysix.app.account.LoginActivity;
 import com.utree.eightysix.app.account.RegisterActivity;
 import com.utree.eightysix.app.feed.FeedActivity;
+import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.utils.Env;
 import de.akquinet.android.androlog.Log;
 
@@ -76,7 +77,7 @@ public class IntroActivity extends BaseActivity {
       @Override
       public void run() {
         if (Account.inst().isLogin()) {
-          startActivity(new Intent(IntroActivity.this, FeedActivity.class));
+          startActivity(new Intent(IntroActivity.this, HomeActivity.class));
           finish();
         } else if (Env.firstRun()) {
           startActivity(new Intent(IntroActivity.this, GuideActivity.class));
