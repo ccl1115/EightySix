@@ -35,6 +35,7 @@ import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RandomSceneTextView;
+import com.utree.eightysix.widget.TopBar;
 
 /**
  * @author simon
@@ -258,15 +259,19 @@ public abstract class AbsRegionFragment extends BaseFragment {
         switch (mRegionType) {
           case 0:
             getBaseActivity().setTopTitle(mCircle.shortName);
+            getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_ONE);
             break;
           case 1:
             getBaseActivity().setTopTitle("1公里内");
+            getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
             break;
           case 2:
             getBaseActivity().setTopTitle("5公里内");
+            getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
             break;
           case 3:
             getBaseActivity().setTopTitle("同城");
+            getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
             break;
         }
 
@@ -333,7 +338,27 @@ public abstract class AbsRegionFragment extends BaseFragment {
         M.getRegisterHelper().register(mFeedAdapter);
         mLvFeed.setAdapter(mFeedAdapter);
 
-        ((HomeActivity) getBaseActivity()).setTitle(mCircle);
+        mRegionType = response.object.regionType;
+
+        getBaseActivity().setTopSubTitle(response.object.subInfo);
+
+        switch (mRegionType) {
+          case 0:
+            getBaseActivity().setTopTitle(mCircle.shortName);
+            break;
+          case 1:
+            getBaseActivity().setTopTitle("1公里内");
+            break;
+          case 2:
+            getBaseActivity().setTopTitle("5公里内");
+            break;
+          case 3:
+            getBaseActivity().setTopTitle("同城");
+            break;
+        }
+
+        U.getBus().post(new RegionUpdateEvent(mRegionType, mCircle));
+
       } else if (mFeedAdapter != null) {
         mFeedAdapter.add(response.object.posts.lists);
       }

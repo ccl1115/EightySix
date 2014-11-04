@@ -191,6 +191,21 @@ public class HomeActivity extends BaseActivity {
   }
 
   @Override
+  public void onTitleClicked() {
+
+  }
+
+  @Override
+  public void onIconClicked() {
+    U.getAnalyser().trackEvent(this, "feed_title", "feed_icon");
+    if (mDlContent.isDrawerOpen(mLlSide)) {
+      mDlContent.closeDrawer(mLlSide);
+    } else {
+      mDlContent.openDrawer(mLlSide);
+    }
+  }
+
+  @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 

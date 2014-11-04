@@ -202,6 +202,10 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     mTvLoadingText.setText(text);
   }
 
+  public void setTopBarClickMode(int mode) {
+    getTopBar().setTitleClickMode(mode);
+  }
+
   public final <T extends Response> void request(Object request, OnResponse<T> onResponse, Class<T> clz) {
     RequestData data = U.getRESTRequester().convert(request);
 
