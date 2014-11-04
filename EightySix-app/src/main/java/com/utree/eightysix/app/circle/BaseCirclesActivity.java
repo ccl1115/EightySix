@@ -7,12 +7,13 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -25,13 +26,12 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.drawable.RoundRectDrawable;
-import com.utree.eightysix.location.Location;
 import com.utree.eightysix.request.CircleSetRequest;
+import com.utree.eightysix.request.FactoryRegionRequest;
 import com.utree.eightysix.request.MyCirclesRequest;
 import com.utree.eightysix.request.SelectCirclesRequest;
 import com.utree.eightysix.response.CirclesResponse;
@@ -41,10 +41,11 @@ import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.view.SwipeRefreshLayout;
-import com.utree.eightysix.widget.*;
-
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import com.utree.eightysix.widget.AdvancedListView;
+import com.utree.eightysix.widget.LoadMoreCallback;
+import com.utree.eightysix.widget.RandomSceneTextView;
+import com.utree.eightysix.widget.ThemedDialog;
+import com.utree.eightysix.widget.TopBar;
 
 /**
  */
@@ -53,9 +54,13 @@ public class BaseCirclesActivity extends BaseActivity {
 
   private static final int MODE_SELECT = 1;
   private static final int MODE_MY = 2;
+  private static final int MODE_REGION = 3;
 
   @InjectView (R.id.alv_refresh)
   public AdvancedListView mLvCircles;
+
+  @InjectView(R.id.fl_search)
+  public FrameLayout mFlSearch;
 
   @InjectView (R.id.refresh_view)
   public SwipeRefreshLayout mRefresherView;
@@ -70,14 +75,16 @@ public class BaseCirclesActivity extends BaseActivity {
 
   private int mMode;
 
+  private int mRegionType;
+
   private boolean mRefreshed;
 
   private Paginate.Page mPageInfo;
-  private boolean mLocatingFinished;
-  private boolean mRequestStarted;
-  private Location.OnResult mOnResult;
 
   private ThemedDialog mCircleSetDialog;
+
+  public BaseCirclesActivity() {
+  }
 
   public static void startSelect(Context context) {
     Intent intent = new Intent(context, BaseCirclesActivity.class);
@@ -91,9 +98,17 @@ public class BaseCirclesActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
+  public static void startRegion(Context context, int regionType) {
+    Intent intent = new Intent(context, BaseCirclesActivity.class);
+    intent.putExtra("mode", MODE_REGION);
+    intent.putExtra("regionType", regionType);
+
+    context.startActivity(intent);
+  }
+
   @OnClick ({R.id.fl_search, R.id.tv_search_hint})
   public void onFlSearchClicked() {
-    if (mMode == MODE_MY) {
+    if (mMode == MODE_MY || mMode == MODE_REGION) {
       U.getAnalyser().trackEvent(this, "circle_search", "my");
       CircleSearchActivity.start(this, false);
     } else if (mMode == MODE_SELECT) {
@@ -106,7 +121,7 @@ public class BaseCirclesActivity extends BaseActivity {
   public void onLvCirclesItemClicked(int position) {
     final Circle circle = mCircleListAdapter.getItem(position);
     if (circle != null) {
-      if (mMode == MODE_MY) {
+      if (mMode == MODE_MY || mMode == MODE_REGION) {
         circle.selected = true;
         HomeActivity.start(this, circle, true);
         U.getAnalyser().trackEvent(this, "circle_select", "my");
@@ -121,7 +136,7 @@ public class BaseCirclesActivity extends BaseActivity {
   public boolean onLvCirclesItemLongClicked(int position) {
     final Circle circle = mCircleListAdapter.getItem(position);
     if (circle != null) {
-      if (mMode == MODE_MY && !circle.viewGroupType.equals("我所在的圈子")) {
+      if ((mMode == MODE_MY || mMode == MODE_REGION)&& !circle.viewGroupType.equals("我所在的圈子")) {
         showCircleSetDialog(circle);
         return true;
       }
@@ -133,6 +148,9 @@ public class BaseCirclesActivity extends BaseActivity {
   public void onActionLeftClicked() {
     if (mMode == MODE_MY) {
       U.getAnalyser().trackEvent(this, "circle_title", "my");
+      finish();
+    } else if (mMode == MODE_REGION) {
+      U.getAnalyser().trackEvent(this, "circle_title", "region");
       finish();
     } else {
       U.getAnalyser().trackEvent(this, "circle_title", "select");
@@ -152,7 +170,30 @@ public class BaseCirclesActivity extends BaseActivity {
         R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed);
 
     mMode = getIntent().getIntExtra("mode", MODE_MY);
-    setTopTitle(mMode == MODE_MY ? getString(R.string.my_circles) : getString(R.string.select_circle));
+
+    mRegionType = getIntent().getIntExtra("regionType", 1);
+
+    switch (mMode) {
+      case MODE_MY:
+        setTopTitle(getString(R.string.my_circles));
+        break;
+      case MODE_SELECT:
+        setTopTitle(getString(R.string.select_circle));
+        break;
+      case MODE_REGION:
+        switch (mRegionType) {
+          case 1:
+            setTopTitle("1公里的工厂");
+            break;
+          case 2:
+            setTopTitle("5公里的工厂");
+            break;
+          case 3:
+            setTopTitle("同城的工厂");
+            break;
+        }
+        break;
+    }
 
     if (mMode == MODE_MY) {
       getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
@@ -188,83 +229,69 @@ public class BaseCirclesActivity extends BaseActivity {
       });
     }
 
-    if (U.useFixture()) {
-      mCircleListAdapter = new CircleListAdapter(U.getFixture(Circle.class, 20, "valid"));
-      mLvCircles.setAdapter(mCircleListAdapter);
-      mLvCircles.setLoadMoreCallback(new LoadMoreCallback() {
-        @Override
-        public View getLoadMoreView(ViewGroup parent) {
-          return LayoutInflater.from(BaseCirclesActivity.this).inflate(R.layout.footer_load_more, parent, false);
-        }
+    if (mMode == MODE_REGION) {
+      mFlSearch.setVisibility(View.GONE);
 
-        @Override
-        public boolean hasMore() {
-          return true;
-        }
-
-        @Override
-        public boolean onLoadMoreStart() {
-          getHandler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-              mCircleListAdapter.add(U.getFixture(Circle.class, 20, "valid"));
-              mLvCircles.stopLoadMore();
-            }
-          }, 2000);
-          return true;
-        }
-      });
+      requestRegionCircles(mRegionType, 1);
     } else {
       cacheOutCircles(1);
-      showProgressBar();
-
-      mLvCircles.setLoadMoreCallback(new LoadMoreCallback() {
-        @Override
-        public View getLoadMoreView(ViewGroup parent) {
-          return LayoutInflater.from(BaseCirclesActivity.this).inflate(R.layout.footer_load_more, parent, false);
-        }
-
-        @Override
-        public boolean hasMore() {
-          return (mPageInfo != null) && (mPageInfo.currPage < mPageInfo.countPage);
-        }
-
-        @Override
-        public boolean onLoadMoreStart() {
-          if (mPageInfo != null) {
-            U.getAnalyser().trackEvent(BaseCirclesActivity.this,
-                "circle_load_more", String.valueOf(mPageInfo.currPage + 1));
-          }
-          if (mRefreshed) {
-            requestCircles(mPageInfo == null ? 1 : mPageInfo.currPage + 1);
-          } else {
-            cacheOutCircles(mPageInfo == null ? 1 : mPageInfo.currPage + 1);
-          }
-          return true;
-        }
-      });
-
-      mRefresherView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-        @Override
-        public void onRefresh() {
-          showRefreshIndicator(true);
-          U.getAnalyser().trackEvent(BaseCirclesActivity.this, "circle_pull_refresh", "refresh");
-          mRefreshed = true;
-          requestCircles(1);
-          requestLocation();
-        }
-
-        @Override
-        public void onDrag() {
-          showRefreshIndicator(false);
-        }
-
-        @Override
-        public void onCancel() {
-          hideRefreshIndicator();
-        }
-      });
     }
+    showProgressBar();
+
+    mLvCircles.setLoadMoreCallback(new LoadMoreCallback() {
+      @Override
+      public View getLoadMoreView(ViewGroup parent) {
+        return LayoutInflater.from(BaseCirclesActivity.this).inflate(R.layout.footer_load_more, parent, false);
+      }
+
+      @Override
+      public boolean hasMore() {
+        return (mPageInfo != null) && (mPageInfo.currPage < mPageInfo.countPage);
+      }
+
+      @Override
+      public boolean onLoadMoreStart() {
+        if (mPageInfo != null) {
+          U.getAnalyser().trackEvent(BaseCirclesActivity.this,
+              "circle_load_more", String.valueOf(mPageInfo.currPage + 1));
+        }
+        if (mRefreshed) {
+          if (mMode == MODE_REGION) {
+            requestRegionCircles(mRegionType, mPageInfo == null ? 1 : mPageInfo.currPage + 1);
+          } else {
+            requestCircles(mPageInfo == null ? 1 : mPageInfo.currPage + 1);
+          }
+        } else {
+          cacheOutCircles(mPageInfo == null ? 1 : mPageInfo.currPage + 1);
+        }
+        return true;
+      }
+    });
+
+    mRefresherView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+      @Override
+      public void onRefresh() {
+        showRefreshIndicator(true);
+        U.getAnalyser().trackEvent(BaseCirclesActivity.this, "circle_pull_refresh", "refresh");
+        mRefreshed = true;
+        if (mMode == MODE_REGION) {
+          requestRegionCircles(mRegionType, 1);
+        } else {
+          requestCircles(1);
+        }
+        requestLocation();
+      }
+
+      @Override
+      public void onDrag() {
+        showRefreshIndicator(false);
+      }
+
+      @Override
+      public void onCancel() {
+        hideRefreshIndicator();
+      }
+    });
 
     if (mMode == MODE_SELECT) {
       setActionLeftDrawable(null);
@@ -275,15 +302,6 @@ public class BaseCirclesActivity extends BaseActivity {
   public void onBackPressed() {
     if (mMode != MODE_SELECT) {
       super.onBackPressed();
-    }
-  }
-
-  private void requestLocation() {
-    long last = Env.getTimestamp("last_location");
-    long now = System.currentTimeMillis();
-    if (now - last > 7200000) { // 两个小时之后请求新的定位
-      M.getLocation().requestLocation();
-      Env.setTimestamp("last_location");
     }
   }
 
@@ -315,6 +333,15 @@ public class BaseCirclesActivity extends BaseActivity {
     });
 
     mCircleSetDialog.show();
+  }
+
+  private void requestLocation() {
+    long last = Env.getTimestamp("last_location");
+    long now = System.currentTimeMillis();
+    if (now - last > 7200000) { // 两个小时之后请求新的定位
+      M.getLocation().requestLocation();
+      Env.setTimestamp("last_location");
+    }
   }
 
   private AlertDialog getQuitConfirmDialog() {
@@ -359,7 +386,6 @@ public class BaseCirclesActivity extends BaseActivity {
   }
 
   private void requestCircles(final int page) {
-    mRequestStarted = true;
     request(mMode == MODE_MY ? new MyCirclesRequest("", page) : new SelectCirclesRequest("", page), new OnResponse2<CirclesResponse>() {
       @Override
       public void onResponseError(Throwable e) {
@@ -411,5 +437,45 @@ public class BaseCirclesActivity extends BaseActivity {
         }
       }
     }, Response.class);
+  }
+
+  private void requestRegionCircles(final int regionType, final int page) {
+    request(new FactoryRegionRequest(regionType, page), new OnResponse2<CirclesResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        mLvCircles.stopLoadMore();
+        hideProgressBar();
+        hideRefreshIndicator();
+        mRefresherView.setRefreshing(false);
+        mRstvEmpty.setVisibility(View.VISIBLE);
+      }
+
+      @Override
+      public void onResponse(CirclesResponse response) {
+        if (RESTRequester.responseOk(response)) {
+          if (page == 1) {
+            mCircleListAdapter = new CircleListAdapter(response.object.lists);
+            mLvCircles.setAdapter(mCircleListAdapter);
+
+            if (response.object.lists.size() == 0) {
+              mRstvEmpty.setVisibility(View.VISIBLE);
+            } else {
+              mRstvEmpty.setVisibility(View.GONE);
+            }
+          } else if (mCircleListAdapter != null) {
+            mCircleListAdapter.add(response.object.lists);
+          }
+          mPageInfo = response.object.page;
+        } else {
+          if (mCircleListAdapter == null || mCircleListAdapter.getCount() == 0) {
+            mRstvEmpty.setVisibility(View.VISIBLE);
+          }
+        }
+        mLvCircles.stopLoadMore();
+        hideProgressBar();
+        hideRefreshIndicator();
+        mRefresherView.setRefreshing(false);
+      }
+    }, CirclesResponse.class);
   }
 }

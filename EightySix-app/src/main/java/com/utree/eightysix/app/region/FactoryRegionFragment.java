@@ -12,6 +12,7 @@ import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
+import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.request.FactoryRegionRequest;
 import com.utree.eightysix.response.FactoryRegionResponse;
 import com.utree.eightysix.rest.OnResponse2;
@@ -24,16 +25,19 @@ public class FactoryRegionFragment extends BaseFragment {
   @InjectView (R.id.alv_factories)
   public AdvancedListView mAlvFactories;
 
-  @InjectView (R.id.tv_more)
-  public TextView mTvMore;
+  private FactoryRegionAdapter mAdapter;
 
   private int mRegionType;
-  private FactoryRegionAdapter mAdapter;
 
   @OnClick (R.id.fl_parent)
   public void onFlParentClicked() {
     getFragmentManager().beginTransaction()
         .detach(this).commit();
+  }
+
+  @OnClick(R.id.tv_more)
+  public void onTvMoreClicked() {
+    BaseCirclesActivity.startRegion(getActivity(), mRegionType);
   }
 
   @Override
@@ -47,9 +51,9 @@ public class FactoryRegionFragment extends BaseFragment {
   }
 
   public void setRegionType(int regionType) {
-    if (mAlvFactories != null) mAlvFactories.setAdapter(null);
     mRegionType = regionType;
-    requestRegionFactories(mRegionType);
+    if (mAlvFactories != null) mAlvFactories.setAdapter(null);
+    requestRegionFactories(regionType);
   }
 
   public void requestRegionFactories(int regionType) {
