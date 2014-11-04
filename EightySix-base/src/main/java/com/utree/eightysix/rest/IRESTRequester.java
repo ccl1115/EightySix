@@ -12,11 +12,15 @@ import org.apache.http.Header;
 public interface IRESTRequester {
   String getHost();
 
+  void setHost(String host);
+
   AsyncHttpClient getClient();
 
   RequestHandle request(Object request, ResponseHandlerInterface handler);
 
   RequestHandle request(RequestData data, ResponseHandlerInterface handler);
+
+  <T extends Response> RequestHandle request(Object request, OnResponse<T> onResponse, Class<T> clz);
 
   RequestData convert(Object request);
 
@@ -25,6 +29,4 @@ public interface IRESTRequester {
   RequestHandle post(String api, Header[] headers, RequestParams params, String contentType, ResponseHandlerInterface handler);
 
   RequestParams addAuthParams(RequestParams params);
-
-  void setHost(String host);
 }

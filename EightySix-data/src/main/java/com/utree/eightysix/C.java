@@ -33,7 +33,7 @@ public class C {
   public static final String API_FACTORY_ADD = "/factory/add.do";
   public static final String API_FACTORY_SET = "/factory/set.do";
   public static final String API_FACTORY_SIDE = "/factory/side.do";
-  public static final String APU_FACTORY_REGION = "/factory/factoryRegionList.do";
+  public static final String API_FACTORY_REGION = "/factory/factoryRegionList.do";
 
   public static final String API_VALICODE_CREATE_FACTORY = "/factory/valiCode.do";
 

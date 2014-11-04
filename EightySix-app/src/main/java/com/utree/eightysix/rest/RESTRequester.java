@@ -123,6 +123,12 @@ public class RESTRequester implements IRESTRequester {
   }
 
   @Override
+  public <T extends Response> RequestHandle request(Object request, OnResponse<T> onResponse, Class<T> clz) {
+    RequestData data = convert(request);
+    return request(data, new HandlerWrapper<T>(data, onResponse, clz));
+  }
+
+  @Override
   public RequestData convert(Object request) {
     RequestData data = new RequestData();
     Class<?> clz = request.getClass();

@@ -1,4 +1,4 @@
-package com.utree.eightysix.app.feed;
+package com.utree.eightysix.app.region;
 
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -18,11 +18,11 @@ import java.util.List;
 /**
  * @author simon
  */
-class SideCirclesAdapter extends BaseAdapter {
+class FactoryRegionAdapter extends BaseAdapter {
 
   private List<Circle> mCircles;
 
-  public SideCirclesAdapter(List<Circle> circles) {
+  public FactoryRegionAdapter(List<Circle> circles) {
     mCircles = circles;
   }
 
@@ -35,9 +35,14 @@ class SideCirclesAdapter extends BaseAdapter {
     notifyDataSetChanged();
   }
 
+  public void set(List<Circle> circles) {
+    mCircles = circles;
+    notifyDataSetChanged();
+  }
+
   @Override
   public int getCount() {
-    return mCircles == null ? 0 : Math.min(20, mCircles.size());
+    return mCircles == null ? 0 : Math.min(10, mCircles.size());
   }
 
   @Override

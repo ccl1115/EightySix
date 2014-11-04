@@ -67,4 +67,9 @@ public final class AdvancedListView extends ListView {
       mAdapterWrapper.notifyDataSetChanged();
     }
   }
+
+  @Override
+  protected void onDetachedFromWindow() {
+    super.onDetachedFromWindow();
+  }
 }

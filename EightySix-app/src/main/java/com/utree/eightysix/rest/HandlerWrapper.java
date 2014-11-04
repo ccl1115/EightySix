@@ -28,16 +28,14 @@ public final class HandlerWrapper<T extends Response> extends BaseJsonHttpRespon
   private RequestData mRequestData;
   private Class<T> mClz;
 
-  /**
-   * No cache constructor
-   *
-   * @param data    the object represents the request
-   * @param onResponse the callback
-   */
   public HandlerWrapper(RequestData data, OnResponse<T> onResponse, Class<T> clz) {
     mOnResponse = onResponse;
     mRequestData = data;
     mClz = clz;
+  }
+
+  public HandlerWrapper(Object object, OnResponse<T> onResponse, Class<T> clz) {
+    this(U.getRESTRequester().convert(object), onResponse, clz);
   }
 
   @Override

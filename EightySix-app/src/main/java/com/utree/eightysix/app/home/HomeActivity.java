@@ -39,6 +39,7 @@ import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.msg.PraiseActivity;
 import com.utree.eightysix.app.publish.FeedbackActivity;
 import com.utree.eightysix.app.publish.PublishActivity;
+import com.utree.eightysix.app.region.FactoryRegionFragment;
 import com.utree.eightysix.app.region.TabRegionFragment;
 import com.utree.eightysix.app.settings.HelpActivity;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
@@ -75,6 +76,8 @@ public class HomeActivity extends BaseActivity {
   private TabRegionFragment mTabFragment;
 
   private RegionFragment mRegionFragment;
+
+  private FactoryRegionFragment mFactoryRegionFragment;
 
   /**
    * 邀请好友对话框
@@ -192,7 +195,8 @@ public class HomeActivity extends BaseActivity {
 
   @Override
   public void onTitleClicked() {
-
+    toggleFactoryRegion();
+    mDlContent.closeDrawer(mLlSide);
   }
 
   @Override
@@ -203,6 +207,7 @@ public class HomeActivity extends BaseActivity {
     } else {
       mDlContent.openDrawer(mLlSide);
     }
+    hideFactoryRegion();
   }
 
   @Override
@@ -385,6 +390,42 @@ public class HomeActivity extends BaseActivity {
       getTopBar().mSubTitle.setCompoundDrawablePadding(U.dp2px(5));
     } else {
       getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+    }
+  }
+
+  private void showFactoryRegion() {
+    if (mFactoryRegionFragment == null) {
+      mFactoryRegionFragment = new FactoryRegionFragment();
+
+      getSupportFragmentManager().beginTransaction()
+          .add(R.id.content, mFactoryRegionFragment).commit();
+    } else if (mFactoryRegionFragment.isDetached()) {
+      getSupportFragmentManager().beginTransaction()
+          .attach(mFactoryRegionFragment).commit();
+    }
+
+    mFactoryRegionFragment.setRegionType(mRegionFragment.getRegionType());
+  }
+
+  private void hideFactoryRegion() {
+    if (mFactoryRegionFragment != null) {
+      if (!mFactoryRegionFragment.isDetached()) {
+        getSupportFragmentManager().beginTransaction()
+            .detach(mFactoryRegionFragment).commit();
+      }
+    }
+  }
+
+  private void toggleFactoryRegion() {
+    if (mFactoryRegionFragment == null) {
+      showFactoryRegion();
+    } else if (mFactoryRegionFragment.isDetached()) {
+      getSupportFragmentManager().beginTransaction()
+          .attach(mFactoryRegionFragment).commit();
+      mFactoryRegionFragment.setRegionType(mRegionFragment.getRegionType());
+    } else {
+      getSupportFragmentManager().beginTransaction()
+          .detach(mFactoryRegionFragment).commit();
     }
   }
 
