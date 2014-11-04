@@ -325,7 +325,7 @@ public class FeedPostView extends BasePostView {
     super.onDetachedFromWindow();
   }
 
-  void showShareTipOverlay() {
+  public void showShareTipOverlay() {
 
     if (mTipOverlayShare == null) {
       mTipOverlayShare = LayoutInflater.from(getContext())
@@ -353,13 +353,13 @@ public class FeedPostView extends BasePostView {
 
   }
 
-  void hideShareTipOverlay() {
+  public void hideShareTipOverlay() {
     if (mTipOverlayShare != null) {
       mTipOverlayShare.setVisibility(GONE);
     }
   }
 
-  void showSourceTipOverlay() {
+  public void showSourceTipOverlay() {
 
     if (mTipOverlaySource == null) {
       mTipOverlaySource = LayoutInflater.from(getContext())
@@ -386,13 +386,13 @@ public class FeedPostView extends BasePostView {
     });
   }
 
-  void hideSourceTipOverlay() {
+  public void hideSourceTipOverlay() {
     if (mTipOverlaySource != null) {
       mTipOverlaySource.setVisibility(GONE);
     }
   }
 
-  void showPraiseTipOverlay() {
+  public void showPraiseTipOverlay() {
 
     if (mTipOverlayPraise == null) {
       mTipOverlayPraise = LayoutInflater.from(getContext())
@@ -420,13 +420,13 @@ public class FeedPostView extends BasePostView {
 
   }
 
-  void hidePraiseTipOverlay() {
+  public void hidePraiseTipOverlay() {
     if (mTipOverlayPraise != null) {
       mTipOverlayPraise.setVisibility(GONE);
     }
   }
 
-  void showRepostTipOverlay() {
+  public void showRepostTipOverlay() {
 
     if (mTipOverlayRepost == null) {
       mTipOverlayRepost = LayoutInflater.from(getContext())
@@ -453,7 +453,7 @@ public class FeedPostView extends BasePostView {
     }
   }
 
-  void hideRepostTipOverlay() {
+  public void hideRepostTipOverlay() {
     if (mTipOverlayRepost != null) {
       mTipOverlayRepost.setVisibility(GONE);
     }

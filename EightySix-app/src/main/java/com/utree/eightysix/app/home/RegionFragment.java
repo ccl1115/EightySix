@@ -8,10 +8,12 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
+import com.utree.eightysix.app.region.event.RegionUpdateEvent;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.widget.RoundedButton;
 
@@ -43,6 +45,7 @@ public class RegionFragment extends BaseFragment {
         mCallback.onItemClicked(0, false);
       }
     } else {
+      clearSelected();
       mRbCurrent.setSelected(true);
       if (mCallback != null) {
         mCallback.onItemClicked(0, true);
@@ -113,5 +116,26 @@ public class RegionFragment extends BaseFragment {
 
   public interface Callback {
     void onItemClicked(int regionType, boolean selected);
+  }
+
+  @Subscribe
+  public void onRegionUpdateEvent(RegionUpdateEvent event) {
+    setCurrentCircle(event.getCircle());
+
+    clearSelected();
+    switch (event.getRegion()) {
+      case 0:
+        mRbCurrent.setSelected(true);
+        break;
+      case 1:
+        mRbRange1.setSelected(true);
+        break;
+      case 2:
+        mRbRange2.setSelected(true);
+        break;
+      case 3:
+        mRbRange3.setSelected(true);
+        break;
+    }
   }
 }

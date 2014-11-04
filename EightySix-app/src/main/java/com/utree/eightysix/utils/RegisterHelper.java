@@ -15,6 +15,7 @@ public final class RegisterHelper {
   private List<WeakReference<Object>> mWeakReferences = new ArrayList<WeakReference<Object>>(24);
 
   public void register(Object object) {
+    if (object == null) return;
     for (WeakReference obj : mWeakReferences) {
       Object target = obj.get();
       if (target != null && target == object) {
@@ -27,6 +28,7 @@ public final class RegisterHelper {
   }
 
   public void unregister(Object object) {
+    if (object == null) return;
     for (Iterator<WeakReference<Object>> iterator = mWeakReferences.iterator(); iterator.hasNext(); ) {
       WeakReference obj = iterator.next();
       Object target = obj.get();

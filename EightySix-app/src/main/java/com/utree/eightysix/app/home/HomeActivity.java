@@ -38,6 +38,7 @@ import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.msg.PraiseActivity;
 import com.utree.eightysix.app.publish.FeedbackActivity;
+import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.app.region.TabRegionFragment;
 import com.utree.eightysix.app.settings.HelpActivity;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
@@ -165,7 +166,7 @@ public class HomeActivity extends BaseActivity {
     if (!mTabFragment.canPublish()) {
       showNoPermDialog();
     } else {
-      //PublishActivity.start(this, mTabFragment.getCircleId(), null);
+      PublishActivity.start(this, -1, null);
     }
   }
 
@@ -355,7 +356,7 @@ public class HomeActivity extends BaseActivity {
     if (!mTabFragment.canPublish()) {
       showNoPermDialog();
     } else {
-      //PublishActivity.start(this, mTabFragment.getCircleId(), null);
+      PublishActivity.start(this, -1, null);
     }
   }
 

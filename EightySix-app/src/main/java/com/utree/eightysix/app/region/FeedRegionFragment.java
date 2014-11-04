@@ -132,11 +132,7 @@ public class FeedRegionFragment extends AbsRegionFragment {
       }
     }
     if (isAdded()) {
-      if (mCircle != null) {
-        requestFeeds(mCircle.id, 1);
-      } else {
-        requestFeeds(0, 1);
-      }
+      requestFeeds(mRegionType, 1);
     }
   }
 

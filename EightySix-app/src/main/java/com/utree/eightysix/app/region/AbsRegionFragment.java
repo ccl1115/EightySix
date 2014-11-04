@@ -22,6 +22,7 @@ import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.app.post.PostActivity;
+import com.utree.eightysix.app.region.event.RegionUpdateEvent;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Feeds;
 import com.utree.eightysix.data.Paginate;
@@ -48,10 +49,12 @@ public abstract class AbsRegionFragment extends BaseFragment {
   @InjectView (R.id.tv_empty_text)
   public RandomSceneTextView mRstvEmpty;
 
-  protected FeedAdapter mFeedAdapter;
+  protected FeedRegionAdapter mFeedAdapter;
   protected Circle mCircle;
   protected Paginate.Page mPageInfo;
+
   protected int mRegionType = -1;
+
   protected boolean mPostPraiseRequesting;
 
   public void setRegionType(int regionType) {
@@ -69,7 +72,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
   public void onAttach(Activity activity) {
     super.onAttach(activity);
 
-    if (isActive()) requestFeeds(mCircle.id, 1);
+    if (isActive()) requestFeeds(mRegionType, 1);
   }
 
   @Override
@@ -107,7 +110,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
         if (mPageInfo != null) {
           onLoadMore(mPageInfo.currPage + 1);
         }
-        requestFeeds(mCircle.id, mPageInfo == null ? 1 : mPageInfo.currPage + 1);
+        requestFeeds(mRegionType, mPageInfo == null ? 1 : mPageInfo.currPage + 1);
         return true;
       }
     });
@@ -121,9 +124,9 @@ public abstract class AbsRegionFragment extends BaseFragment {
         onPullRefresh();
         if (isAdded()) {
           if (mCircle != null) {
-            requestFeeds(mCircle.id, 1);
+            requestFeeds(mRegionType, 1);
           } else {
-            requestFeeds(0, 1);
+            requestFeeds(-1, 1);
           }
         }
       }
@@ -216,7 +219,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
       }
     } else {
       if (isAdded()) {
-        requestFeeds(0, 1);
+        requestFeeds(-1, 1);
       }
     }
   }
@@ -237,7 +240,8 @@ public abstract class AbsRegionFragment extends BaseFragment {
       if (page == 1) {
         mCircle = response.object.circle;
 
-        mFeedAdapter = new FeedAdapter(response.object);
+        M.getRegisterHelper().unregister(mFeedAdapter);
+        mFeedAdapter = new FeedRegionAdapter(response.object);
         M.getRegisterHelper().register(mFeedAdapter);
         mLvFeed.setAdapter(mFeedAdapter);
 
@@ -247,13 +251,33 @@ public abstract class AbsRegionFragment extends BaseFragment {
           mRstvEmpty.setVisibility(View.GONE);
         }
 
+        mRegionType = response.object.regionType;
 
-        ((HomeActivity) getBaseActivity()).setTitle(mCircle);
+        getBaseActivity().setTopSubTitle(response.object.subInfo);
+
+        switch (mRegionType) {
+          case 0:
+            getBaseActivity().setTopTitle(mCircle.shortName);
+            break;
+          case 1:
+            getBaseActivity().setTopTitle("1公里内");
+            break;
+          case 2:
+            getBaseActivity().setTopTitle("5公里内");
+            break;
+          case 3:
+            getBaseActivity().setTopTitle("同城");
+            break;
+        }
+
+        U.getBus().post(new RegionUpdateEvent(mRegionType, mCircle));
+
         getBaseActivity().setTopSubTitle(String.format(getString(R.string.friends_info),
             mCircle.friendCount, response.object.workerCount));
       } else if (mFeedAdapter != null) {
         mFeedAdapter.add(response.object.posts.lists);
       }
+
       mPageInfo = response.object.posts.page;
 
       ((HomeActivity) getBaseActivity()).mSend.setImageResource(response.object.lock != 1 || response.object.current == 1 ?
@@ -304,7 +328,8 @@ public abstract class AbsRegionFragment extends BaseFragment {
           mRstvEmpty.setVisibility(View.INVISIBLE);
         }
 
-        mFeedAdapter = new FeedAdapter(response.object);
+        M.getRegisterHelper().unregister(mFeedAdapter);
+        mFeedAdapter = new FeedRegionAdapter(response.object);
         M.getRegisterHelper().register(mFeedAdapter);
         mLvFeed.setAdapter(mFeedAdapter);
 
@@ -312,7 +337,10 @@ public abstract class AbsRegionFragment extends BaseFragment {
       } else if (mFeedAdapter != null) {
         mFeedAdapter.add(response.object.posts.lists);
       }
+
       mPageInfo = response.object.posts.page;
+
+      mRegionType = response.object.regionType;
 
       ((HomeActivity) getBaseActivity()).mSend.setImageResource(response.object.lock != 1 || response.object.current == 1 ?
           R.drawable.ic_post_pen : R.drawable.ic_post_pen_disabled);
