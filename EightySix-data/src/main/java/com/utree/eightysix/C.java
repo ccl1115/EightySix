@@ -33,6 +33,8 @@ public class C {
   public static final String API_FACTORY_ADD = "/factory/add.do";
   public static final String API_FACTORY_SET = "/factory/set.do";
   public static final String API_FACTORY_SIDE = "/factory/side.do";
+  public static final String APU_FACTORY_REGION = "/factory/factoryRegionList.do";
+
   public static final String API_VALICODE_CREATE_FACTORY = "/factory/valiCode.do";
 
 
@@ -50,6 +52,7 @@ public class C {
   public static final String API_FEED_TAGS = "/feed/tags.do";
   public static final String API_FEED_TAGS_BY_TYPE = "/feed/tagsByType.do";
 
+  public static final String API_FEED_BY_REGION = "/feed/listByRegion.do";
   public static final String API_FEED_TAG_HOT = "/feed/listHotWithTag.do";
   public static final String API_FEED_TAG_FACTORY = "/feed/listWithTag.do";
 
