@@ -1,4 +1,4 @@
-package com.utree.eightysix.app.feed;
+package com.utree.eightysix.app.post;
 
 import android.app.Activity;
 import android.app.AlertDialog;

@@ -115,7 +115,7 @@
 
         <activity android:exported="@bool/exported" android:name=".app.circle.CircleCreateActivity" android:screenOrientation="portrait"/>
 
-        <activity android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.feed.PostActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden"/>
+        <activity android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.post.PostActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden"/>
 
         <activity android:exported="@bool/exported" android:name=".app.publish.FeedbackActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden|adjustResize"/>
 

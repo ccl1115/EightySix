@@ -5,7 +5,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <com.utree.eightysix.app.feed.PostPostView
+    <com.utree.eightysix.app.post.PostPostView
             android:id="@+id/post_post_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

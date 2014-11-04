@@ -19,6 +19,7 @@ import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
+import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Feeds;
 import com.utree.eightysix.data.Paginate;

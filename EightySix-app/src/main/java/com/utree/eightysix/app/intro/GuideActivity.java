@@ -24,7 +24,7 @@ import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.ForgetPwdActivity;
 import com.utree.eightysix.app.account.LoginActivity;
 import com.utree.eightysix.app.account.RegisterActivity;
-import com.utree.eightysix.app.feed.PostPostView;
+import com.utree.eightysix.app.post.PostPostView;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.widget.IndicatorView;
 

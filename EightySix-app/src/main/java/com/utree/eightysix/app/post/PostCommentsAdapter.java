@@ -1,4 +1,4 @@
-package com.utree.eightysix.app.feed;
+package com.utree.eightysix.app.post;
 
 import android.content.res.Resources;
 import android.view.LayoutInflater;

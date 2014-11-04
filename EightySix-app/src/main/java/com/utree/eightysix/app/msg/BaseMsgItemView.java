@@ -15,7 +15,7 @@ import butterknife.OnClick;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.app.feed.PostActivity;
+import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.widget.AsyncImageView;

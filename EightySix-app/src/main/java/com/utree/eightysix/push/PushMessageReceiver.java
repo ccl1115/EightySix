@@ -12,7 +12,7 @@ import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.FeedActivity;
-import com.utree.eightysix.app.feed.PostActivity;
+import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.msg.PraiseActivity;
 import com.utree.eightysix.app.msg.PullNotificationService;

@@ -1,7 +1,6 @@
 package com.utree.eightysix.app.msg;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +14,7 @@ import com.utree.eightysix.C;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.FeedActivity;
-import com.utree.eightysix.app.feed.PostActivity;
+import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.push.PushMessageReceiver;
 
 /**

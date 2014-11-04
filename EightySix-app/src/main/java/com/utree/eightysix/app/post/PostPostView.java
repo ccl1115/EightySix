@@ -1,4 +1,4 @@
-package com.utree.eightysix.app.feed;
+package com.utree.eightysix.app.post;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -20,6 +20,7 @@ import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.app.feed.BasePostView;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
 import com.utree.eightysix.app.tag.TagTabActivity;
 import com.utree.eightysix.data.Post;
@@ -34,7 +35,7 @@ import java.util.List;
  * This is the post view in PostActivity
  *
  * @author simon
- * @see com.utree.eightysix.app.feed.PostActivity
+ * @see PostActivity
  */
 public class PostPostView extends BasePostView {
 
