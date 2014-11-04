@@ -26,6 +26,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
@@ -123,7 +124,7 @@ public class BaseCirclesActivity extends BaseActivity {
     if (circle != null) {
       if (mMode == MODE_MY || mMode == MODE_REGION) {
         circle.selected = true;
-        HomeActivity.start(this, circle, true);
+        FeedActivity.start(this, circle, true);
         U.getAnalyser().trackEvent(this, "circle_select", "my");
       } else if (mMode == MODE_SELECT) {
         showCircleSetDialog(circle);

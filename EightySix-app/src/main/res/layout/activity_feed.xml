@@ -1,55 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v4.widget.DrawerLayout
+
+<FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fl_main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
     <FrameLayout
-            android:id="@+id/fl_main"
+            android:id="@+id/fl_feed"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        <FrameLayout
-                android:id="@+id/fl_feed"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
-
-        <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/ib_send"
-                android:layout_gravity="right|bottom"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="6dp"
-                android:src="@drawable/ic_post_pen"
-                android:background="@drawable/btn_post"/>
-
-    </FrameLayout>
-
-    <LinearLayout
-            android:id="@+id/ll_side"
-            android:layout_width="190dp"
             android:layout_height="match_parent"
-            android:layout_gravity="left"
-            android:orientation="vertical"
-            android:visibility="invisible">
+            />
 
-        <fragment
-                android:id="@+id/fragment_range"
-                class="com.utree.eightysix.app.home.RegionFragment"
-                android:layout_width="190dp"
-                android:layout_height="match_parent"/>
 
-        <!--<com.utree.eightysix.widget.AdvancedListView-->
-                <!--android:id="@+id/lv_side_circles"-->
-                <!--android:layout_width="190dp"-->
-                <!--android:layout_height="0dp"-->
-                <!--android:layout_weight="1"-->
-                <!--android:background="@android:color/white"/>-->
+    <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ib_send"
+            android:layout_gravity="right|bottom"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="6dp"
+            android:src="@drawable/ic_post_pen"
+            android:background="@drawable/btn_post"
+            />
 
-        <!--<include layout="@layout/item_side_more"/>-->
-    </LinearLayout>
+</FrameLayout>
 
-</android.support.v4.widget.DrawerLayout>
+

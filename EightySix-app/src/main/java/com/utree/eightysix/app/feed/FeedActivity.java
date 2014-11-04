@@ -63,17 +63,7 @@ public class FeedActivity extends BaseActivity {
   @InjectView (R.id.ib_send)
   public ImageButton mSend;
 
-  @InjectView (R.id.ll_side)
-  public LinearLayout mLlSide;
-
-  @InjectView (R.id.content)
-  public DrawerLayout mDlContent;
-
-  private PopupWindow mPopupMenu;
-
   private TabFragment mTabFragment;
-
-  private RegionFragment mRegionFragment;
 
   /**
    * 邀请好友对话框
@@ -85,7 +75,6 @@ public class FeedActivity extends BaseActivity {
    */
   private ThemedDialog mNoPermDialog;
 
-  private MenuViewHolder mMenuViewHolder;
   private ThemedDialog mUnlockDialog;
 
   private boolean mShouldExit;
@@ -172,31 +161,12 @@ public class FeedActivity extends BaseActivity {
   @Override
   public void onActionLeftClicked() {
     U.getAnalyser().trackEvent(this, "feed_title", "feed_title");
-    if (mDlContent.isDrawerOpen(mLlSide)) {
-      mDlContent.closeDrawer(mLlSide);
-    } else {
-      mDlContent.openDrawer(mLlSide);
-    }
-  }
-
-  @Override
-  public void onActionOverflowClicked() {
-    openMenu();
-  }
-
-  private void openMenu() {
-    U.getAnalyser().trackEvent(this, "feed_more", "feed_more");
-    if (mPopupMenu.isShowing()) {
-      mPopupMenu.dismiss();
-    } else {
-      mPopupMenu.showAsDropDown(getTopBar().mActionOverFlow);
-      mDlContent.closeDrawer(mLlSide);
-    }
+    finish();
   }
 
   @Override
   public boolean showActionOverflow() {
-    return true;
+    return false;
   }
 
   @Override
@@ -205,115 +175,10 @@ public class FeedActivity extends BaseActivity {
 
     ContactsSyncService.start(this, false);
 
-    setActionLeftDrawable(getResources().getDrawable(R.drawable.ic_drawer));
-
-    if (mPopupMenu == null) {
-      LinearLayout menu = (LinearLayout) View.inflate(FeedActivity.this, R.layout.widget_feed_menu, null);
-      mPopupMenu = new PopupWindow(menu, dp2px(190), dp2px(315) + 6);
-      mMenuViewHolder = new MenuViewHolder(menu);
-      mPopupMenu.setFocusable(true);
-      mPopupMenu.setIgnoreCheekPress();
-      mPopupMenu.setBackgroundDrawable(new BitmapDrawable(getResources()));
-    }
-
-    setActionAdapter();
-
     mTabFragment = new TabFragment();
     getSupportFragmentManager().beginTransaction().add(R.id.fl_feed, mTabFragment, "tab").commit();
 
-    mRegionFragment = (RegionFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_range);
-
     onNewIntent(getIntent());
-  }
-
-  private void setActionAdapter() {
-    getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
-      @Override
-      public String getTitle(int position) {
-        return null;
-      }
-
-      @Override
-      public Drawable getIcon(int position) {
-        if (position == 0) {
-          return getResources().getDrawable(R.drawable.ic_action_msg);
-        }
-        return null;
-      }
-
-      @Override
-      public Drawable getBackgroundDrawable(int position) {
-        return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
-      }
-
-      @Override
-      public void onClick(View view, int position) {
-        if (position == 0) {
-          U.getAnalyser().trackEvent(FeedActivity.this, "feed_msg", "feed_msg");
-          MsgActivity.start(FeedActivity.this, Account.inst().getNewCommentCount() > 0);
-        }
-      }
-
-      @Override
-      public int getCount() {
-        return 1;
-      }
-
-      @Override
-      public TopBar.LayoutParams getLayoutParams(int position) {
-        return new TopBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-      }
-    });
-  }
-
-  @Override
-  protected void onDestroy() {
-    Env.setFirstRun(FIRST_RUN_KEY, false);
-    super.onDestroy();
-  }
-
-  @Override
-  protected void onStart() {
-    super.onStart();
-
-    startService(new Intent(this, FetchNotificationService.class));
-  }
-
-  @Override
-  protected void onStop() {
-    Log.d("FeedActivity", "onStop");
-    super.onStop();
-    mDlContent.closeDrawer(mLlSide);
-
-    stopService(new Intent(this, FetchNotificationService.class));
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    Env.setLastCircle(mTabFragment.getCircle());
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-
-    Sync sync = U.getSyncClient().getSync();
-    if (sync != null && sync.upgrade != null) {
-      int v = 0;
-      try {
-        v = Integer.parseInt(sync.upgrade.version);
-      } catch (NumberFormatException ignored) {
-      }
-      if (v > C.VERSION) {
-        getTopBar().getActionOverflow().setHasNew(true);
-        mMenuViewHolder.mRbSettingsDot.setVisibility(View.VISIBLE);
-      } else {
-        getTopBar().getActionOverflow().setHasNew(false);
-        mMenuViewHolder.mRbSettingsDot.setVisibility(View.INVISIBLE);
-      }
-    }
-
   }
 
   @Override
@@ -322,45 +187,13 @@ public class FeedActivity extends BaseActivity {
     finish();
   }
 
-  @Subscribe
-  public void onNewCommentCountEvent(NewCommentCountEvent event) {
-    getTopBar().getActionView(0).setCount(event.getCount());
-  }
-
-  @Subscribe
-  public void onHasNewPraiseEvent(HasNewPraiseEvent event) {
-    getTopBar().getActionOverflow().setHasNew(event.has());
-    if (event.has()) {
-      mMenuViewHolder.mRbNewPraiseDot.setVisibility(View.VISIBLE);
-    } else {
-      mMenuViewHolder.mRbNewPraiseDot.setVisibility(View.INVISIBLE);
-    }
-  }
-
-  @Subscribe
-  public void onSyncEvent(Sync sync) {
-    setActionAdapter();
-  }
-
   @Override
   public void onBackPressed() {
     if (mTabFragment != null && mTabFragment.onBackPressed()) {
       return;
     }
 
-
-    if (mShouldExit) {
-      finish();
-    } else {
-      mShouldExit = true;
-      showToast("再按一次返回键退出");
-      getHandler().postDelayed(new Runnable() {
-        @Override
-        public void run() {
-          mShouldExit = false;
-        }
-      }, 1000);
-    }
+    finish();
   }
 
   @Override
@@ -409,15 +242,6 @@ public class FeedActivity extends BaseActivity {
     } else {
       PublishActivity.start(this, mTabFragment.getCircleId(), null);
     }
-  }
-
-  @Override
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (keyCode == KeyEvent.KEYCODE_MENU) {
-      openMenu();
-      return true;
-    }
-    return super.onKeyDown(keyCode, event);
   }
 
   private void showNoPermDialog() {
@@ -476,23 +300,6 @@ public class FeedActivity extends BaseActivity {
     }
   }
 
-  private void selectSideCircle(List<Circle> sideCircles) {
-    if (sideCircles != null) {
-      for (Circle c : sideCircles) {
-        c.selected = false;
-      }
-
-      if (mTabFragment.getCircle() == null) return;
-
-      for (Circle c : sideCircles) {
-        if (mTabFragment.getCircle().name.equals(c.name)) {
-          c.selected = true;
-          break;
-        }
-      }
-    }
-  }
-
   private void showInviteDialog() {
     if (mInviteDialog == null) {
       mInviteDialog = U.getShareManager().shareAppDialog(this, mTabFragment.getCircle());
@@ -503,12 +310,9 @@ public class FeedActivity extends BaseActivity {
   }
 
   private void setHasNewPraise() {
-    mMenuViewHolder.mRbNewPraiseDot.setVisibility(Account.inst().getHasNewPraise() ? View.VISIBLE : View.INVISIBLE);
-    getTopBar().getActionOverflow().setHasNew(Account.inst().getHasNewPraise());
   }
 
   private void setNewCommentCount() {
-    getTopBar().getActionView(0).setCount(Account.inst().getNewCommentCount());
   }
 
   void setTitle(Circle circle) {
@@ -532,71 +336,6 @@ public class FeedActivity extends BaseActivity {
 
     NoPermViewHolder(View view) {
       ButterKnife.inject(this, view);
-    }
-  }
-
-  @Keep
-  class MenuViewHolder {
-
-    @InjectView (R.id.tv_praise_count)
-    TextView mTvPraiseCount;
-
-    @InjectView (R.id.rb_new_praise_dot)
-    RoundedButton mRbNewPraiseDot;
-
-    @InjectView(R.id.rb_settings_dot)
-    RoundedButton mRbSettingsDot;
-
-    MenuViewHolder(View view) {
-      ButterKnife.inject(this, view);
-    }
-
-    @OnClick(R.id.ll_my_friends)
-    void onLlMyFriendsClicked() {
-      startActivity(new Intent(FeedActivity.this, AccountActivity.class));
-      mPopupMenu.dismiss();
-    }
-
-    @OnClick(R.id.rb_add)
-    void onRbAddClicked() {
-      startActivity(new Intent(FeedActivity.this, AddFriendActivity.class));
-      mPopupMenu.dismiss();
-    }
-
-    @OnClick (R.id.ll_invite)
-    void onLlInviteClicked() {
-      showInviteDialog();
-      mPopupMenu.dismiss();
-    }
-
-    @OnClick (R.id.ll_praise_count)
-    void onLlPraiseCountClicked() {
-      PraiseActivity.start(FeedActivity.this, Account.inst().getHasNewPraise());
-      mPopupMenu.dismiss();
-    }
-
-    @OnClick (R.id.ll_feedback)
-    void onLlFeedbackClicked() {
-      FeedbackActivity.start(FeedActivity.this);
-      mPopupMenu.dismiss();
-    }
-
-    @OnClick (R.id.ll_settings)
-    void onLlSettingsClicked() {
-      startActivity(new Intent(FeedActivity.this, MainSettingsActivity.class));
-      mPopupMenu.dismiss();
-    }
-
-    @OnClick(R.id.ll_help)
-    void onLlHelpClicked() {
-      startActivity(new Intent(FeedActivity.this, HelpActivity.class));
-      mPopupMenu.dismiss();
-    }
-
-    @OnClick(R.id.ll_topic_list)
-    void onLlTopicListClicked() {
-      TopicListActivity.start(FeedActivity.this);
-      mPopupMenu.dismiss();
     }
   }
 
