@@ -3,40 +3,56 @@
 <merge
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
-    <RelativeLayout
-            android:id="@+id/tb_rl_left"
+    <LinearLayout
+            android:id="@+id/tb_ll_left"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@drawable/apptheme_primary_btn_dark"
-            android:paddingRight="8dp">
-
-        <ImageView
-                android:id="@+id/tb_iv_action_left"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/top_bar_return"
-                android:contentDescription="@string/cd_action_left"
-                android:layout_centerVertical="true"/>
-
-        <ImageView
-                android:id="@+id/tb_iv_app_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="5dp"
-                android:layout_toRightOf="@+id/tb_iv_action_left"
-                android:src="@drawable/ic_app_icon"
-                android:layout_centerVertical="true"/>
-
+            android:paddingRight="8dp"
+            android:orientation="horizontal"
+            >
 
         <LinearLayout
-                android:orientation="vertical"
-                android:layout_toRightOf="@+id/tb_iv_app_icon"
+                android:id="@+id/tb_ll_icon"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true">
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/apptheme_primary_btn_dark"
+                >
+
+            <ImageView
+                    android:id="@+id/tb_iv_action_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/top_bar_return"
+                    android:contentDescription="@string/cd_action_left"
+                    />
+
+            <ImageView
+                    android:id="@+id/tb_iv_app_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/ic_app_icon"
+                    />
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/tb_ll_title"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:background="@drawable/apptheme_primary_btn_dark"
+                >
 
             <TextView
                     android:id="@+id/tb_tv_bar_title"
@@ -46,7 +62,8 @@
                     android:textColor="#fff7f7f7"
                     android:singleLine="true"
                     android:ellipsize="end"
-                    android:maxLines="1"/>
+                    android:maxLines="1"
+                    />
 
             <TextView
                     android:id="@+id/tb_tv_sub_title"
@@ -57,9 +74,10 @@
                     android:visibility="gone"
                     android:singleLine="true"
                     android:ellipsize="end"
-                    android:maxLines="1"/>
+                    android:maxLines="1"
+                    />
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 
     <com.utree.eightysix.widget.ImageActionButton
             android:id="@+id/tb_iab_action_overflow"
@@ -67,7 +85,8 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_action_overflow"
             android:scaleType="centerInside"
-            android:contentDescription="@string/cd_action_overflow"/>
+            android:contentDescription="@string/cd_action_overflow"
+            />
 
 
     <LinearLayout
@@ -75,14 +94,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            >
 
         <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_marginRight="8dp"
-                android:background="#ff363940">
+                android:background="#ff363940"
+                >
 
             <EditText
                     android:id="@+id/tb_et_search"
@@ -100,7 +121,8 @@
                     android:singleLine="true"
                     android:lines="1"
                     android:paddingBottom="10dp"
-                    android:imeOptions="actionGo|actionDone"/>
+                    android:imeOptions="actionGo|actionDone"
+                    />
 
 
             <ImageView
@@ -111,7 +133,8 @@
                     android:layout_marginBottom="2dp"
                     android:layout_gravity="right|center_vertical"
                     android:visibility="invisible"
-                    android:src="@drawable/ic_close"/>
+                    android:src="@drawable/ic_close"
+                    />
 
         </FrameLayout>
 
@@ -127,6 +150,7 @@
                 android:paddingTop="6dp"
                 android:paddingBottom="6dp"
                 android:text="@string/search"
-                android:textSize="14sp"/>
+                android:textSize="14sp"
+                />
     </LinearLayout>
 </merge>

@@ -244,6 +244,16 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
 
   }
 
+  @Override
+  public void onTitleClicked() {
+
+  }
+
+  @Override
+  public void onIconClicked() {
+
+  }
+
   protected void showProgressMask() {
 
     if (mVProgressMask.getVisibility() == View.VISIBLE) return;
