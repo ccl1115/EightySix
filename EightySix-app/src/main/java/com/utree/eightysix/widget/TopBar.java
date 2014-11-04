@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -70,6 +71,9 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
   @InjectView (R.id.tb_ll_icon)
   public LinearLayout mLlIcon;
+
+  @InjectView (R.id.tb_iv_indicator)
+  public ImageView mIvIndicator;
 
   private Callback mCallback;
   private ActionAdapter mActionAdapter;
@@ -255,10 +259,12 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
       mLlTitle.setClickable(false);
       mLlIcon.setClickable(false);
       mLlLeft.setClickable(true);
+      mIvIndicator.setVisibility(GONE);
     } else {
       mLlTitle.setClickable(true);
       mLlIcon.setClickable(true);
       mLlLeft.setClickable(false);
+      mIvIndicator.setVisibility(VISIBLE);
     }
   }
 
