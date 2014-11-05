@@ -11,4 +11,10 @@ public class TagFeeds {
 
   @SerializedName ("factoryView")
   public Circle circle;
+
+  @SerializedName ("tagId")
+  public int tagId;
+
+  @SerializedName ("tagName")
+  public String tagName;
 }

@@ -210,6 +210,8 @@ public abstract class AbsTagFragment extends BaseFragment {
         }
 
         U.getBus().post(new CurrentCircleResponseEvent(response.object.circle));
+
+        U.getBus().post(new TagResponseEvent(new Tag(response.object.tagId, response.object.tagName)));
       } else if (mFeedAdapter != null) {
         mFeedAdapter.add(response.object.posts.lists);
       }

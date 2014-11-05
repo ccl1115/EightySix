@@ -70,6 +70,11 @@ public class TagTabActivity extends BaseActivity {
     mCurrentCircle = event.getCircle();
   }
 
+  @Subscribe
+  public void onTagResponseEvent(TagResponseEvent event) {
+    mTag = event.getTag();
+  }
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -192,6 +197,15 @@ public class TagTabActivity extends BaseActivity {
   @Override
   protected void onNewIntent(Intent intent) {
     mTag = intent.getParcelableExtra("tag");
+    if (mTag == null) {
+      final int id = intent.getIntExtra("id", -1);
+      if (id == -1) {
+        finish();
+        return;
+      }
+      mTag = new Tag(id, "");
+    }
+
     setTopTitle("#" + mTag.content);
     mFactoryTagFragment.setTag(mTag);
     mHotTagFragment.setTag(mTag);

@@ -8,11 +8,34 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Tag implements Parcelable {
 
-  @SerializedName("id")
+  public static final Parcelable.Creator<Tag> CREATOR = new Parcelable.Creator<Tag>() {
+    public Tag createFromParcel(Parcel source) {
+      return new Tag(source);
+    }
+
+    public Tag[] newArray(int size) {
+      return new Tag[size];
+    }
+  };
+
+  @SerializedName ("id")
   public int id;
 
-  @SerializedName("content")
+  @SerializedName ("content")
   public String content;
+
+  public Tag(int id, String content) {
+    this.id = id;
+    this.content = content;
+  }
+
+  public Tag() {
+  }
+
+  private Tag(Parcel in) {
+    this.id = in.readInt();
+    this.content = in.readString();
+  }
 
   @Override
   public int describeContents() {
@@ -25,23 +48,12 @@ public class Tag implements Parcelable {
     dest.writeString(this.content);
   }
 
-  public Tag() {
+  @Override
+  public int hashCode() {
+    int result = id;
+    result = 31 * result + (content != null ? content.hashCode() : 0);
+    return result;
   }
-
-  private Tag(Parcel in) {
-    this.id = in.readInt();
-    this.content = in.readString();
-  }
-
-  public static final Parcelable.Creator<Tag> CREATOR = new Parcelable.Creator<Tag>() {
-    public Tag createFromParcel(Parcel source) {
-      return new Tag(source);
-    }
-
-    public Tag[] newArray(int size) {
-      return new Tag[size];
-    }
-  };
 
   @Override
   public boolean equals(Object o) {
@@ -54,12 +66,5 @@ public class Tag implements Parcelable {
     if (content != null ? !content.equals(tag.content) : tag.content != null) return false;
 
     return true;
-  }
-
-  @Override
-  public int hashCode() {
-    int result = id;
-    result = 31 * result + (content != null ? content.hashCode() : 0);
-    return result;
   }
 }
