@@ -53,7 +53,7 @@ public class TagTabActivity extends BaseActivity {
     context.startActivity(i);
   }
 
-  public static void start(Context context, String id) {
+  public static void start(Context context, int id) {
     Intent i = new Intent(context, TagTabActivity.class);
 
     i.putExtra("id", id);
@@ -73,6 +73,7 @@ public class TagTabActivity extends BaseActivity {
   @Subscribe
   public void onTagResponseEvent(TagResponseEvent event) {
     mTag = event.getTag();
+    setTopTitle("#" + mTag.content);
   }
 
   @Override
