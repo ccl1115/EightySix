@@ -304,9 +304,6 @@ public abstract class AbsRegionFragment extends BaseFragment {
               response.object.fetch.newPraise.percent));
         }
 
-        U.getBus().post(new NewAllPostCountEvent(mCircle.id, response.object.fetch.newPostAllCount));
-        U.getBus().post(new NewHotPostCountEvent(mCircle.id, response.object.fetch.newPostHotCount));
-        U.getBus().post(new NewFriendsPostCountEvent(mCircle.id, response.object.fetch.newPostFriendsCount));
       }
 
       FetchNotificationService.setCircleId(mCircle.id);

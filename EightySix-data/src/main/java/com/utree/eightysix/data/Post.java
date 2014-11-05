@@ -9,6 +9,9 @@ import java.util.List;
  */
 public class Post extends BaseItem implements Parcelable {
 
+  @SerializedName ("factoryId")
+  public int factoryId;
+
   @SerializedName("factoryName")
   public String circle;
 

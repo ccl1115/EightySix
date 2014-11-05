@@ -16,6 +16,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
+import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.app.feed.FeedOptionSetView;
 import com.utree.eightysix.app.feed.FeedPostView;
 import com.utree.eightysix.app.feed.FeedPromotionView;
@@ -280,7 +281,15 @@ public class FeedRegionAdapter extends BaseAdapter {
     }
 
     FeedPostView feedPostView = (FeedPostView) convertView;
-    feedPostView.setData((Post) getItem(position));
+    final Post item = (Post) getItem(position);
+
+    feedPostView.findViewById(R.id.tv_source).setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        FeedActivity.start(v.getContext(), item.factoryId);
+      }
+    });
+    feedPostView.setData(item);
 
     if (mTipOverlaySourcePosition == position) {
       feedPostView.showSourceTipOverlay();
