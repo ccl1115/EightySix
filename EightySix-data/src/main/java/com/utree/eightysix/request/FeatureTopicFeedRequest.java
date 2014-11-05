@@ -8,13 +8,22 @@ import com.utree.eightysix.rest.Token;
 
 /**
  */
-@Api(C.API_TOPIC_FEATURE)
+@Api (C.API_TOPIC_FEATURE)
 @Cache
 @Token
 public class FeatureTopicFeedRequest extends Paginate {
 
-  @Param("topicId")
+  @Param ("topicId")
   public int id;
+
+  @Param ("vId")
+  public String vId;
+
+  public FeatureTopicFeedRequest(int currPage, int id, String vId) {
+    super(currPage);
+    this.id = id;
+    this.vId = vId;
+  }
 
   public FeatureTopicFeedRequest(int id, int currPage) {
     super(currPage);

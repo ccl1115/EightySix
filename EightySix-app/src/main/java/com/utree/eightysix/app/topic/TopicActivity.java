@@ -172,7 +172,15 @@ public class TopicActivity extends BaseActivity {
     if (page == 1) {
       showProgressBar();
     }
-    request(new NewTopicFeedRequest(mTopic.id, page), new OnResponse2<TopicFeedResponse>() {
+
+    NewTopicFeedRequest request;
+    if (page == 1) {
+      request = new NewTopicFeedRequest(mTopic.id, page);
+    } else {
+      request = new NewTopicFeedRequest(mTopic.id, page,
+          mTopicFeedAdapter.getNewPosts().get(mTopicFeedAdapter.getNewPosts().size() - 1).id);
+    }
+    request(request, new OnResponse2<TopicFeedResponse>() {
 
       @Override
       public void onResponseError(Throwable e) {
@@ -199,7 +207,14 @@ public class TopicActivity extends BaseActivity {
     if (page == 1) {
       showProgressBar();
     }
-    request(new FeatureTopicFeedRequest(mTopic.id, page), new OnResponse2<TopicFeedResponse>() {
+    FeatureTopicFeedRequest request;
+    if (page == 1) {
+      request = new FeatureTopicFeedRequest(mTopic.id, page);
+    } else {
+      request = new FeatureTopicFeedRequest(mTopic.id, page,
+          mTopicFeedAdapter.getFeaturePosts().get(mTopicFeedAdapter.getFeaturePosts().size() - 1).id);
+    }
+    request(request, new OnResponse2<TopicFeedResponse>() {
       @Override
       public void onResponseError(Throwable e) {
         hideProgressBar();
