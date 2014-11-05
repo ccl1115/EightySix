@@ -25,6 +25,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.feed.FeedActivity;
+import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.request.LoginRequest;
 import com.utree.eightysix.response.UserResponse;
 import com.utree.eightysix.rest.OnResponse;
@@ -92,7 +93,7 @@ public class LoginActivity extends BaseActivity {
     requestCaptcha();
   }
 
-  @OnClick(R.id.tv_forget_pwd)
+  @OnClick (R.id.tv_forget_pwd)
   public void onTvForgetPwd() {
     startActivity(new Intent(this, ForgetPwdActivity.class));
   }
@@ -223,7 +224,7 @@ public class LoginActivity extends BaseActivity {
               Account.inst().login(response.object.userId, response.object.token);
               showToast(R.string.login_success, false);
               finish();
-              startActivity(new Intent(LoginActivity.this, FeedActivity.class));
+              startActivity(new Intent(LoginActivity.this, HomeActivity.class));
             }
           } else if (response.code == 2450 || response.code == 140371) {
             mLlCaptcha.setVisibility(View.VISIBLE);
