@@ -73,7 +73,7 @@ public class FactoryRegionFragment extends BaseFragment {
 
       @Override
       public void onResponse(FactoryRegionResponse response) {
-        mAdapter = new FactoryRegionAdapter(response.object.factoryList.lists);
+        mAdapter = new FactoryRegionAdapter(response.object.lists);
         mAlvFactories.setAdapter(mAdapter);
       }
     }, FactoryRegionResponse.class);

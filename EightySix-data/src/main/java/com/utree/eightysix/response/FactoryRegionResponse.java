@@ -10,11 +10,6 @@ import com.utree.eightysix.rest.Response;
 public class FactoryRegionResponse extends Response {
 
     @SerializedName("object")
-    public FactoryList object;
+    public Paginate<Circle> object;
 
-  public static class FactoryList {
-
-    @SerializedName("factoryList")
-    public Paginate<Circle> factoryList;
-  }
 }
