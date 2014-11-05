@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.circle;
 
+import android.content.Context;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.widget.RoundedButton;
+import com.utree.eightysix.widget.ThemedDialog;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -27,6 +29,8 @@ class CircleListAdapter extends BaseAdapter {
   private static final int TYPE_HEAD = 1;
   private List<Circle> mCircles;
   private SparseArray<String> mHeadMark;
+
+  private ThemedDialog mCircleChangeDialog;
 
   public CircleListAdapter(List<Circle> circles) {
     mCircles = circles;
@@ -164,8 +168,36 @@ class CircleListAdapter extends BaseAdapter {
     }
   }
 
+  protected void showCircleChangeDialog(Context context) {
+    if (mCircleChangeDialog == null) {
+      mCircleChangeDialog = new ThemedDialog(context);
+      mCircleChangeDialog.setTitle("确认更改在职圈子");
+      TextView textView = new TextView(context);
+      textView.setText("请注意：1天之内不能修改哦");
+      int p = U.dp2px(16);
+      textView.setPadding(p, p, p, p);
+      mCircleChangeDialog.setContent(textView);
+
+      mCircleChangeDialog.setPositive("继续", new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          BaseCirclesActivity.startSelect(v.getContext());
+        }
+      });
+      mCircleChangeDialog.setRbNegative("放弃", new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          mCircleChangeDialog.dismiss();
+        }
+      });
+    }
+
+    mCircleChangeDialog.show();
+  }
+
+
   @Keep
-  public static class CircleViewHolder {
+  public class CircleViewHolder {
     @InjectView (R.id.tv_circle_name)
     public TextView mTvCircleName;
 
@@ -186,7 +218,7 @@ class CircleListAdapter extends BaseAdapter {
 
     @OnClick(R.id.rb_change)
     public void onRbChangeClicked(View v) {
-      BaseCirclesActivity.startSelect(v.getContext());
+      showCircleChangeDialog(v.getContext());
     }
 
     public CircleViewHolder(View view) {

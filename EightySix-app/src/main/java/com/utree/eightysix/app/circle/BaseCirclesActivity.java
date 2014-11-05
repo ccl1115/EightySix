@@ -84,6 +84,7 @@ public class BaseCirclesActivity extends BaseActivity {
 
   private ThemedDialog mCircleSetDialog;
 
+
   public BaseCirclesActivity() {
   }
 
