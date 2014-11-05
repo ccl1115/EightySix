@@ -124,7 +124,11 @@ public class BaseCirclesActivity extends BaseActivity {
     if (circle != null) {
       if (mMode == MODE_MY || mMode == MODE_REGION) {
         circle.selected = true;
-        FeedActivity.start(this, circle, true);
+        if (circle.currFactory == 1) {
+          finish();
+        } else {
+          FeedActivity.start(this, circle, true);
+        }
         U.getAnalyser().trackEvent(this, "circle_select", "my");
       } else if (mMode == MODE_SELECT) {
         showCircleSetDialog(circle);

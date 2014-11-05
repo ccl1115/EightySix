@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
@@ -92,8 +93,7 @@ class CircleListAdapter extends BaseAdapter {
     CircleViewHolder holder;
     if (convertView == null) {
       convertView = View.inflate(parent.getContext(), R.layout.item_circle, null);
-      holder = new CircleViewHolder();
-      ButterKnife.inject(holder, convertView);
+      holder = new CircleViewHolder(convertView);
       convertView.setTag(holder);
     } else {
       holder = (CircleViewHolder) convertView.getTag();
@@ -102,6 +102,13 @@ class CircleListAdapter extends BaseAdapter {
     Circle item = getItem(position);
 
     holder.mTvCircleInfo.setText(item.info);
+
+    if (item.currFactory == 1) {
+      holder.mRbChange.setVisibility(View.VISIBLE);
+    } else {
+      holder.mRbChange.setVisibility(View.GONE);
+    }
+
 
     if ("我所在的圈子".equals(item.viewGroupType)) {
       holder.mTvCircleName.setText(item.shortName + "(在职)");
@@ -173,6 +180,18 @@ class CircleListAdapter extends BaseAdapter {
 
     @InjectView (R.id.iv_arrow)
     public ImageView mIvArrow;
+
+    @InjectView(R.id.rb_change)
+    public RoundedButton mRbChange;
+
+    @OnClick(R.id.rb_change)
+    public void onRbChangeClicked(View v) {
+      BaseCirclesActivity.startSelect(v.getContext());
+    }
+
+    public CircleViewHolder(View view) {
+      ButterKnife.inject(this, view);
+    }
   }
 
 }
