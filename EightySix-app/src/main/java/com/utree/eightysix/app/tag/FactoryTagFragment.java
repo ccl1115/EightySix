@@ -28,7 +28,6 @@ public class FactoryTagFragment extends AbsTagFragment {
 
       @Override
       public void onResponseError(Throwable e) {
-
         mRefresherView.setRefreshing(false);
         mLvFeed.stopLoadMore();
         getBaseActivity().hideProgressBar();

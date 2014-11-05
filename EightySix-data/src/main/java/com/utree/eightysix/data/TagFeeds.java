@@ -9,4 +9,6 @@ public class TagFeeds {
   @SerializedName ("posts")
   public Paginate<BaseItem> posts;
 
+  @SerializedName ("factoryView")
+  public Circle circle;
 }

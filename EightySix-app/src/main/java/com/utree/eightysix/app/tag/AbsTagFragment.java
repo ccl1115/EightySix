@@ -10,6 +10,7 @@ import butterknife.InjectView;
 import butterknife.OnItemClick;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.data.Paginate;
@@ -192,7 +193,7 @@ public abstract class AbsTagFragment extends BaseFragment {
           mRstvEmpty.setVisibility(View.GONE);
         }
 
-
+        U.getBus().post(new CurrentCircleResponseEvent(response.object.circle));
       } else if (mFeedAdapter != null) {
         mFeedAdapter.add(response.object.posts.lists);
       }

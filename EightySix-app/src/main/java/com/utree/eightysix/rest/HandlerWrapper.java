@@ -69,7 +69,11 @@ public final class HandlerWrapper<T extends Response> extends BaseJsonHttpRespon
         t.printStackTrace();
       }
       if (mOnResponse instanceof OnResponse2) {
-        ((OnResponse2) mOnResponse).onResponseError(t);
+        try {
+          ((OnResponse2) mOnResponse).onResponseError(t);
+        } catch (Throwable ignored) {
+
+        }
       }
     }
 

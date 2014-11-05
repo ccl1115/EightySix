@@ -31,6 +31,20 @@ public class ShareManager {
 
   private Shortener mShortener = new WeiboShortener();
 
+  static String shareLinkForApp(int circleId) {
+    return String.format("%s/shareapp.do?factoryId=%d&parentId=%s&channel=%s",
+        U.getConfig("api.host"), circleId, U.getConfig("app.parentId"), U.getConfig("app.channel"));
+  }
+
+  static String shareLinkForPost(String postId) {
+    return String.format("%s/sharecontent.do?postVirtualId=%s&parentId=%s&channel=%s",
+        U.getConfig("api.host"), postId, U.getConfig("app.parentId"), U.getConfig("app.channel"));
+  }
+
+  static String shareLinkForComment(String postId) {
+    return shareLinkForPost(postId);
+  }
+
   public ThemedDialog shareAppDialog(final BaseActivity activity, final Circle circle) {
     return new ShareDialog(activity, "邀请厂里的朋友") {
       @Override
@@ -93,35 +107,22 @@ public class ShareManager {
     };
   }
 
-  static String shareLinkForApp(int circleId) {
-    return String.format("%s/shareapp.do?factoryId=%d&parentId=%s&channel=%s",
-        U.getConfig("api.host"), circleId, U.getConfig("app.parentId"), U.getConfig("app.channel"));
-  }
-
-  static String shareLinkForPost(String postId) {
-    return String.format("%s/sharecontent.do?postVirtualId=%s&parentId=%s&channel=%s",
-        U.getConfig("api.host"), postId, U.getConfig("app.parentId"), U.getConfig("app.channel"));
-  }
-
-  static String shareLinkForComment(String postId) {
-    return shareLinkForPost(postId);
+  private String shareLinkForTag(int id, int tagId) {
+    return String.format("%s/shareTag.do?factoryId=%d&tagId=%d", U.getConfig("api.host"), id, tagId);
   }
 
   @Keep
   public class ShareCommentViewHolder {
+    @InjectView (R.id.aiv_qr_code)
+    ImageView mIvQrCode;
+    @InjectView (R.id.tv_qr_code)
+    TextView mTvQrCode;
+    @InjectView (R.id.rb_clipboard)
+    RoundedButton mRbClipboard;
     private BaseActivity mActivity;
     private ShareDialog mDialog;
     private Post mPost;
     private String mComment;
-
-    @InjectView(R.id.aiv_qr_code)
-    ImageView mIvQrCode;
-
-    @InjectView(R.id.tv_qr_code)
-    TextView mTvQrCode;
-
-    @InjectView(R.id.rb_clipboard)
-    RoundedButton mRbClipboard;
 
     ShareCommentViewHolder(BaseActivity activity, ShareDialog dialog, Post post, String comment) {
       mActivity = activity;
@@ -206,18 +207,15 @@ public class ShareManager {
 
   @Keep
   public class SharePostViewHolder {
+    @InjectView (R.id.aiv_qr_code)
+    ImageView mIvQrCode;
+    @InjectView (R.id.tv_qr_code)
+    TextView mTvQrCode;
+    @InjectView (R.id.rb_clipboard)
+    RoundedButton mRbClipboard;
     private BaseActivity mActivity;
     private ShareDialog mDialog;
     private Post mPost;
-
-    @InjectView(R.id.aiv_qr_code)
-    ImageView mIvQrCode;
-
-    @InjectView(R.id.tv_qr_code)
-    TextView mTvQrCode;
-
-    @InjectView(R.id.rb_clipboard)
-    RoundedButton mRbClipboard;
 
     SharePostViewHolder(BaseActivity activity, ShareDialog dialog, Post post) {
       mActivity = activity;
@@ -369,21 +367,31 @@ public class ShareManager {
 
   @Keep
   public class ShareTagViewHolder {
+    @InjectView (R.id.aiv_qr_code)
+    ImageView mIvQrCode;
+    @InjectView (R.id.tv_qr_code)
+    TextView mTvQrCode;
+    @InjectView (R.id.rb_clipboard)
+    RoundedButton mRbClipboard;
 
     private final BaseActivity mActivity;
-    private ShareDialog mDialog;
     private final Circle mCircle;
     private final int mTagId;
+    private ShareDialog mDialog;
 
-    public ShareTagViewHolder(BaseActivity activity, ShareDialog dialog, Circle circle, int tagId) {
+    ShareTagViewHolder(BaseActivity activity, ShareDialog dialog, Circle circle, int tagId) {
       mActivity = activity;
       mDialog = dialog;
       mCircle = circle;
       mTagId = tagId;
       ButterKnife.inject(this, dialog);
+
+      mIvQrCode.setVisibility(View.GONE);
+      mTvQrCode.setVisibility(View.GONE);
+      mRbClipboard.setVisibility(View.VISIBLE);
     }
 
-    @OnClick(R.id.tv_qzone)
+    @OnClick (R.id.tv_qzone)
     void onQzoneClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_qzone", "tag");
 
@@ -403,7 +411,7 @@ public class ShareManager {
       mDialog.dismiss();
     }
 
-    @OnClick(R.id.tv_qq_friends)
+    @OnClick (R.id.tv_qq_friends)
     void onQQClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_qq", "tag");
 
@@ -440,9 +448,5 @@ public class ShareManager {
       });
       mDialog.dismiss();
     }
-  }
-
-  private String shareLinkForTag(int id, int tagId) {
-    return String.format("%s/shareTag.do?factoryId=%d&tagId=%d", U.getConfig("api.host"), id, tagId);
   }
 }

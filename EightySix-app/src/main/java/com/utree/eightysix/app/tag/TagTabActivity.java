@@ -11,12 +11,14 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.InjectView;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.share.ShareManager;
+import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.widget.TitleTab;
 import com.utree.eightysix.widget.TopBar;
@@ -36,6 +38,8 @@ public class TagTabActivity extends BaseActivity {
   private HotTagFragment mHotTagFragment;
   private MoreTagFragment mMoreTagFragment;
   private Tag mTag;
+
+  private Circle mCurrentCircle;
 
   public static void start(Context context, Tag tag) {
     Intent i = new Intent(context, TagTabActivity.class);
@@ -59,6 +63,11 @@ public class TagTabActivity extends BaseActivity {
     }
 
     context.startActivity(i);
+  }
+
+  @Subscribe
+  public void onCurrentCircleResponseEvent(CurrentCircleResponseEvent event) {
+    mCurrentCircle = event.getCircle();
   }
 
   @Override
@@ -156,7 +165,7 @@ public class TagTabActivity extends BaseActivity {
 
       @Override
       public void onClick(View view, int position) {
-        U.getShareManager().shareTagDialog(TagTabActivity.this, null, mTag.id);
+        U.getShareManager().shareTagDialog(TagTabActivity.this, mCurrentCircle, mTag.id).show();
       }
 
       @Override
