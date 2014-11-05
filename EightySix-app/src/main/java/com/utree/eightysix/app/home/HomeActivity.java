@@ -150,16 +150,13 @@ public class HomeActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
-  public static Intent getIntent(Context context, int id, boolean skipCache) {
+  public static Intent getIntent(Context context) {
     Intent intent = new Intent(context, HomeActivity.class);
-    intent.putExtra("id", id);
-    intent.putExtra("skipCache", skipCache);
 
     if (!(context instanceof Activity)) {
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     }
 
-    intent.setAction(String.valueOf(id));
     return intent;
   }
 

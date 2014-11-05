@@ -14,6 +14,7 @@ import com.utree.eightysix.C;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.FeedActivity;
+import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.push.PushMessageReceiver;
 
@@ -66,7 +67,7 @@ public class NotifyUtil {
     return builder.build();
   }
 
-  Notification buildPosts(String shortName, int circleId, int count) {
+  Notification buildPosts(String shortName, boolean current, int circleId, int count) {
     NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext);
     builder.setTicker(mContext.getString(R.string.notification_friends_new_posts, count))
         .setAutoCancel(true)
@@ -75,14 +76,20 @@ public class NotifyUtil {
         .setSmallIcon(R.drawable.ic_launcher)
         .setContentTitle(shortName)
         .setContentText(mContext.getString(R.string.notification_friends_new_posts, count));
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-      builder.setContentIntent(PendingIntent.getActivities(mContext, 0,
-          wrapIntent(FeedActivity.getIntent(mContext, circleId, true)),
+    if (current) {
+      builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
+          HomeActivity.getIntent(mContext),
           PendingIntent.FLAG_UPDATE_CURRENT));
     } else {
-      builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
-          FeedActivity.getIntent(mContext, circleId, true),
-          PendingIntent.FLAG_UPDATE_CURRENT));
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        builder.setContentIntent(PendingIntent.getActivities(mContext, 0,
+            wrapIntent(FeedActivity.getIntent(mContext, circleId, true)),
+            PendingIntent.FLAG_UPDATE_CURRENT));
+      } else {
+        builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
+            FeedActivity.getIntent(mContext, circleId, true),
+            PendingIntent.FLAG_UPDATE_CURRENT));
+      }
     }
 
     return builder.build();
@@ -170,7 +177,7 @@ public class NotifyUtil {
 
   private Intent[] wrapIntent(Intent intent) {
     Intent[] intents = new Intent[2];
-    intents[0] = FeedActivity.getIntent(mContext, 0, false);
+    intents[0] = HomeActivity.getIntent(mContext);
     intents[1] = intent;
     return intents;
   }

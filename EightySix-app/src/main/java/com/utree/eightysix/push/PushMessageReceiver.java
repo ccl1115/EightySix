@@ -59,6 +59,11 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
    */
   public static final int TYPE_OWN_COMMENT = 7;
 
+  /**
+   * 合并的新帖子
+   */
+  public static final int TYPE_MERGED_NEW_POST = 8;
+
   public static final int TYPE_CMD = 1000;
 
   public CmdHandler mCmdHandler = new CmdHandler();

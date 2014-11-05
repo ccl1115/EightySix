@@ -95,14 +95,14 @@ public class PullNotificationService extends Service {
 
 
   private void handleResponse(PullNotificationResponse response) {
-    if (!Account.inst().isLogin()) return;
+    if (!Account.inst().isLogin() || response.object == null) return;
     final int type = response.object.type;
     handleType(response, type);
   }
 
   private void handleType(PullNotificationResponse response, int type) {
     switch (type) {
-      case PushMessageReceiver.TYPE_NEW_POST:
+      case PushMessageReceiver.TYPE_NEW_POST: {
         if (response.object.lists == null || response.object.lists.size() == 0) break;
         List<PullNotification.Item> lists = response.object.lists;
         for (int i = 0, listsSize = lists.size(); i < listsSize; i++) {
@@ -110,20 +110,23 @@ public class PullNotificationService extends Service {
           getNM().notify(item.value, NotifyUtil.ID_POST, mNotifyUtil.buildPost(i, item.value, item.shortName));
         }
         break;
-      case PushMessageReceiver.TYPE_UNLOCK_CIRCLE:
+      }
+      case PushMessageReceiver.TYPE_UNLOCK_CIRCLE: {
         if (response.object.lists == null || response.object.lists.size() == 0) break;
         for (PullNotification.Item item : response.object.lists) {
           getNM().notify(item.value, NotifyUtil.ID_UNLOCK_FACTORY, mNotifyUtil.buildUnlockCircle(item.value, item.shortName));
         }
         break;
-      case PushMessageReceiver.TYPE_FRIEND_L1_JOIN:
+      }
+      case PushMessageReceiver.TYPE_FRIEND_L1_JOIN: {
         if (response.object.lists == null || response.object.lists.size() == 0) break;
         for (PullNotification.Item item : response.object.lists) {
           getNM().notify(item.value, NotifyUtil.ID_FRIEND_L1_JOIN, mNotifyUtil.buildFriendJoin(item.value, item.shortName, item.friendCount));
         }
         break;
+      }
       case PushMessageReceiver.TYPE_OWN_COMMENT:
-      case PushMessageReceiver.TYPE_FOLLOW_COMMENT:
+      case PushMessageReceiver.TYPE_FOLLOW_COMMENT: {
         int count = 0;
         if (response.object.lists != null) {
           count = response.object.unread;
@@ -137,15 +140,26 @@ public class PullNotificationService extends Service {
         }
         Account.inst().setNewCommentCount(count);
         break;
-      case PushMessageReceiver.TYPE_PRAISE:
+      }
+      case PushMessageReceiver.TYPE_PRAISE: {
         Account.inst().setHasNewPraise(true);
         break;
-      case PushMessageReceiver.TYPE_CIRCLE_CREATION_APPROVE:
+      }
+      case PushMessageReceiver.TYPE_CIRCLE_CREATION_APPROVE: {
         if (response.object.lists == null || response.object.lists.size() == 0) break;
         for (PullNotification.Item item : response.object.lists) {
           getNM().notify(item.value, NotifyUtil.ID_APPROVE, mNotifyUtil.buildApprove(item.value, item.shortName));
         }
         break;
+      }
+      case PushMessageReceiver.TYPE_MERGED_NEW_POST: {
+        if (response.object.lists == null || response.object.lists.size() == 0) break;
+
+        for (PullNotification.Item item : response.object.lists) {
+          int count = Integer.parseInt(item.value);
+          getNM().notify(String.valueOf(item.factoryId), NotifyUtil.ID_POST, mNotifyUtil.buildPosts(item.shortName, item.currFactory == 1, item.factoryId, count));
+        }
+      }
     }
   }
 

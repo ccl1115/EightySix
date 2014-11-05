@@ -39,5 +39,11 @@ public class PullNotification {
 
     @SerializedName ("friendCount")
     public int friendCount;
+
+    @SerializedName ("factoryId")
+    public int factoryId;
+
+    @SerializedName ("currFactory")
+    public int currFactory;
   }
 }
