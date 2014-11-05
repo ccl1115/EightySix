@@ -90,6 +90,7 @@ public class TagsLayout extends FloatingLayout {
 
       view.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(4),
           getContext().getResources().getColorStateList(R.color.apptheme_primary_white_btn)));
+      view.setTextColor(getResources().getColorStateList(R.color.apptheme_primary_text_dark));
       views.add(view);
     }
     return views;
