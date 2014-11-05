@@ -47,4 +47,8 @@ public class BaseFragment extends Fragment {
   protected void onActive() {
 
   }
+
+  public boolean onBackPressed() {
+    return false;
+  }
 }

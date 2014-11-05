@@ -304,6 +304,10 @@ public class HomeActivity extends BaseActivity {
       return;
     }
 
+    if (mFactoryRegionFragment != null && mFactoryRegionFragment.onBackPressed()) {
+      return;
+    }
+
 
     if (mShouldExit) {
       finish();
@@ -433,6 +437,7 @@ public class HomeActivity extends BaseActivity {
     } else {
       mPopupMenu.showAsDropDown(getTopBar().mActionOverFlow);
       mDlContent.closeDrawer(mLlSide);
+      hideFactoryRegion();
     }
   }
 

@@ -5,14 +5,15 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
+import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.request.FactoryRegionRequest;
 import com.utree.eightysix.response.FactoryRegionResponse;
 import com.utree.eightysix.rest.OnResponse2;
@@ -31,13 +32,20 @@ public class FactoryRegionFragment extends BaseFragment {
 
   @OnClick (R.id.fl_parent)
   public void onFlParentClicked() {
-    getFragmentManager().beginTransaction()
-        .detach(this).commit();
+    detach();
   }
 
-  @OnClick(R.id.tv_more)
+  @OnClick (R.id.tv_more)
   public void onTvMoreClicked() {
     BaseCirclesActivity.startRegion(getActivity(), mRegionType);
+  }
+
+
+  @OnItemClick (R.id.alv_factories)
+  public void onAlvItemClicked(int position, View view) {
+    FeedActivity.start(view.getContext(), mAdapter.getItem(position));
+
+    detach();
   }
 
   @Override
@@ -69,5 +77,20 @@ public class FactoryRegionFragment extends BaseFragment {
         mAlvFactories.setAdapter(mAdapter);
       }
     }, FactoryRegionResponse.class);
+  }
+
+  protected void detach() {
+    getFragmentManager().beginTransaction()
+        .detach(this).commit();
+  }
+
+  @Override
+  public boolean onBackPressed() {
+    if (!isDetached()) {
+      detach();
+      return true;
+    } else {
+      return false;
+    }
   }
 }
