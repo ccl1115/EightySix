@@ -36,7 +36,7 @@ public class FeedRegionFragment extends AbsRegionFragment {
     if (getBaseActivity() == null) return;
     if (mRefresherView != null && page == 1) {
       mRefresherView.setRefreshing(true);
-      getBaseActivity().setTopSubTitle("");
+      getBaseActivity().showRefreshIndicator();
     }
     getBaseActivity().request(new FeedByRegionRequest(page, mRegionType, 0), new OnResponse<FeedsByRegionResponse>() {
       @Override

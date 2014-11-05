@@ -3,6 +3,7 @@ package com.utree.eightysix.request;
 import com.utree.eightysix.C;
 import com.utree.eightysix.rest.Api;
 import com.utree.eightysix.rest.Cache;
+import com.utree.eightysix.rest.Optional;
 import com.utree.eightysix.rest.Param;
 import com.utree.eightysix.rest.Token;
 
@@ -17,6 +18,7 @@ public class FeatureTopicFeedRequest extends Paginate {
   public int id;
 
   @Param ("vId")
+  @Optional
   public String vId;
 
   public FeatureTopicFeedRequest(int currPage, int id, String vId) {
