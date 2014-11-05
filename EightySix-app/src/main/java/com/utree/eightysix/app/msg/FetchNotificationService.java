@@ -21,7 +21,6 @@ import com.utree.eightysix.rest.HandlerWrapper;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.RequestData;
-import de.akquinet.android.androlog.Log;
 
 import java.util.List;
 
@@ -135,10 +134,10 @@ public class FetchNotificationService extends Service {
           if (mShowCommentNotify) {
             if (count == 1) {
               getNM().notify(type == PushMessageReceiver.TYPE_FOLLOW_COMMENT ? NotifyUtil.ID_FOLLOW_COMMENT : NotifyUtil.ID_OWN_COMMENT,
-                  mNotifyUtil.buildComment(count, comments.lists.get(0).value, type));
+                  mNotifyUtil.buildComment(count, comments.lists.get(0).value, type, false, 0));
             } else if (count > 1) {
               getNM().notify(type == PushMessageReceiver.TYPE_FOLLOW_COMMENT ? NotifyUtil.ID_FOLLOW_COMMENT : NotifyUtil.ID_OWN_COMMENT,
-                  mNotifyUtil.buildComment(count, null, type));
+                  mNotifyUtil.buildComment(count, null, type, false, 0));
             }
           }
 
@@ -161,7 +160,7 @@ public class FetchNotificationService extends Service {
             if (unlock.lists != null && unlock.lists.size() != 0) {
               for (PullNotification.Item item : unlock.lists) {
                 getNM().notify(item.value, NotifyUtil.ID_FRIEND_L1_JOIN,
-                    mNotifyUtil.buildFriendJoin(item.value, item.shortName, item.friendCount));
+                    mNotifyUtil.buildFriendJoin(item.value, item.shortName, false));
               }
             }
           }
@@ -171,7 +170,7 @@ public class FetchNotificationService extends Service {
             if (friendL1Join.lists != null && friendL1Join.lists.size() != 0) {
               for (PullNotification.Item item : friendL1Join.lists) {
                 getNM().notify(item.value, NotifyUtil.ID_FRIEND_L1_JOIN,
-                    mNotifyUtil.buildFriendJoin(item.value, item.shortName, item.friendCount));
+                    mNotifyUtil.buildFriendJoin(item.value, item.shortName, false));
               }
             }
           }

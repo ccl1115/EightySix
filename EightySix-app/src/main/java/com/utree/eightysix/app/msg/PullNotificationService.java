@@ -114,14 +114,16 @@ public class PullNotificationService extends Service {
       case PushMessageReceiver.TYPE_UNLOCK_CIRCLE: {
         if (response.object.lists == null || response.object.lists.size() == 0) break;
         for (PullNotification.Item item : response.object.lists) {
-          getNM().notify(item.value, NotifyUtil.ID_UNLOCK_FACTORY, mNotifyUtil.buildUnlockCircle(item.value, item.shortName));
+          getNM().notify(item.value, NotifyUtil.ID_UNLOCK_FACTORY,
+              mNotifyUtil.buildUnlockCircle(item.value, item.shortName, item.currFactory == 1));
         }
         break;
       }
       case PushMessageReceiver.TYPE_FRIEND_L1_JOIN: {
         if (response.object.lists == null || response.object.lists.size() == 0) break;
         for (PullNotification.Item item : response.object.lists) {
-          getNM().notify(item.value, NotifyUtil.ID_FRIEND_L1_JOIN, mNotifyUtil.buildFriendJoin(item.value, item.shortName, item.friendCount));
+          getNM().notify(item.value, NotifyUtil.ID_FRIEND_L1_JOIN,
+              mNotifyUtil.buildFriendJoin(item.value, item.shortName, item.currFactory == 1));
         }
         break;
       }
@@ -130,15 +132,16 @@ public class PullNotificationService extends Service {
         int count = 0;
         if (response.object.lists != null) {
           count = response.object.unread;
+          PullNotification.Item item = response.object.lists.get(0);
+          if (count == 1) {
+            getNM().notify(type == PushMessageReceiver.TYPE_FOLLOW_COMMENT ? NotifyUtil.ID_FOLLOW_COMMENT : NotifyUtil.ID_OWN_COMMENT,
+                mNotifyUtil.buildComment(count, item.value, type, item.currFactory == 1, item.factoryId));
+          } else if (count > 1) {
+            getNM().notify(type == PushMessageReceiver.TYPE_FOLLOW_COMMENT ? NotifyUtil.ID_FOLLOW_COMMENT : NotifyUtil.ID_OWN_COMMENT,
+                mNotifyUtil.buildComment(count, null, type, item.currFactory == 1, item.factoryId));
+          }
+          Account.inst().setNewCommentCount(count);
         }
-        if (count == 1) {
-          getNM().notify(type == PushMessageReceiver.TYPE_FOLLOW_COMMENT ? NotifyUtil.ID_FOLLOW_COMMENT : NotifyUtil.ID_OWN_COMMENT,
-              mNotifyUtil.buildComment(count, response.object.lists.get(0).value, type));
-        } else if (count > 1) {
-          getNM().notify(type == PushMessageReceiver.TYPE_FOLLOW_COMMENT ? NotifyUtil.ID_FOLLOW_COMMENT : NotifyUtil.ID_OWN_COMMENT,
-              mNotifyUtil.buildComment(count, null, type));
-        }
-        Account.inst().setNewCommentCount(count);
         break;
       }
       case PushMessageReceiver.TYPE_PRAISE: {
@@ -157,7 +160,8 @@ public class PullNotificationService extends Service {
 
         for (PullNotification.Item item : response.object.lists) {
           int count = Integer.parseInt(item.value);
-          getNM().notify(String.valueOf(item.factoryId), NotifyUtil.ID_POST, mNotifyUtil.buildPosts(item.shortName, item.currFactory == 1, item.factoryId, count));
+          getNM().notify(String.valueOf(item.factoryId), NotifyUtil.ID_POST,
+              mNotifyUtil.buildPosts(item.shortName, item.currFactory == 1, item.factoryId, count));
         }
       }
     }

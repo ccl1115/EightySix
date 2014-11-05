@@ -30,17 +30,24 @@ public class NotifyUtil {
   static final int ID_PRAISE = 0x5000;
   static final int ID_APPROVE = 0x6000;
   static final int ID_OWN_COMMENT = 0x7000;
-
-  private final Context mContext;
-
   private static Bitmap sLargeIcon;
 
   static {
     sLargeIcon = BitmapFactory.decodeResource(U.getContext().getResources(), R.drawable.ic_launcher);
   }
 
+  private final Context mContext;
+
   NotifyUtil(Context context) {
     mContext = context;
+  }
+
+  private Intent[] wrapIntent(Intent... intents) {
+    Intent[] wrap = new Intent[intents.length + 1];
+    wrap[0] = HomeActivity.getIntent(mContext);
+
+    System.arraycopy(intents, 0, wrap, 1, intents.length);
+    return wrap;
   }
 
   Notification buildPost(int i, String postId, String shortName) {
@@ -95,21 +102,36 @@ public class NotifyUtil {
     return builder.build();
   }
 
-  Notification buildUnlockCircle(String circleId, String circleName) {
+  Notification buildUnlockCircle(String circleId, String circleName, boolean current) {
     Log.d(C.TAG.NT, "build unlock circle: " + circleId);
-    return new NotificationCompat.Builder(mContext).setTicker(mContext.getString(R.string.notification_circle_unlocked))
+    NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext);
+    builder.setTicker(mContext.getString(R.string.notification_circle_unlocked))
         .setLargeIcon(sLargeIcon)
         .setAutoCancel(true)
         .setDefaults(Account.inst().getSilentMode() ? Notification.DEFAULT_LIGHTS : Notification.DEFAULT_ALL)
         .setSmallIcon(R.drawable.ic_launcher)
         .setContentTitle(mContext.getString(R.string.notification_circle_unlocked))
-        .setContentText(mContext.getString(R.string.notification_circle_unlocked_tip, circleName))
-        .setContentIntent(PendingIntent.getActivity(mContext, 0,
-            FeedActivity.getIntent(mContext, Integer.parseInt(circleId), true), PendingIntent.FLAG_UPDATE_CURRENT))
-        .build();
+        .setContentText(mContext.getString(R.string.notification_circle_unlocked_tip, circleName));
+
+    if (current) {
+      builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
+          HomeActivity.getIntent(mContext), PendingIntent.FLAG_UPDATE_CURRENT));
+    } else {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        builder.setContentIntent(PendingIntent.getActivities(mContext, 0,
+            wrapIntent(FeedActivity.getIntent(mContext, Integer.parseInt(circleId), true)),
+            PendingIntent.FLAG_UPDATE_CURRENT));
+      } else {
+        builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
+            FeedActivity.getIntent(mContext, Integer.parseInt(circleId), true),
+            PendingIntent.FLAG_UPDATE_CURRENT));
+      }
+    }
+
+    return builder.build();
   }
 
-  Notification buildComment(int count, String id, int type) {
+  Notification buildComment(int count, String id, int type, boolean current, int factoryId) {
     Log.d(C.TAG.NT, String.format("build comment: count = %d id = %s", count, id));
     NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext);
     builder.setContentTitle(mContext.getString(R.string.notification_new))
@@ -122,9 +144,16 @@ public class NotifyUtil {
       builder.setContentText(mContext.getString(type == PushMessageReceiver.TYPE_FOLLOW_COMMENT ?
           R.string.notification_new_follow_comment : R.string.notification_new_own_comment));
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-        builder.setContentIntent(PendingIntent.getActivities(mContext, 0,
-            wrapIntent(PostActivity.getIntent(mContext, id, "comment_", true)),
-            PendingIntent.FLAG_UPDATE_CURRENT));
+        if (current) {
+          builder.setContentIntent(PendingIntent.getActivities(mContext, 0,
+              wrapIntent(PostActivity.getIntent(mContext, id, "comment_", true)),
+              PendingIntent.FLAG_UPDATE_CURRENT));
+        } else {
+          builder.setContentIntent(PendingIntent.getActivities(mContext, 0,
+              wrapIntent(FeedActivity.getIntent(mContext, factoryId, true),
+                  PostActivity.getIntent(mContext, id, "comment_", true)),
+              PendingIntent.FLAG_UPDATE_CURRENT));
+        }
       } else {
         builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
             PostActivity.getIntent(mContext, id, "comment_", true),
@@ -160,25 +189,33 @@ public class NotifyUtil {
         .build();
   }
 
-  Notification buildFriendJoin(String circleId, String circleName, int count) {
+  Notification buildFriendJoin(String circleId, String circleName, boolean current) {
     Log.d(C.TAG.NT, "build friend join: " + circleId);
-    return new NotificationCompat.Builder(mContext)
+    NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext);
+    builder
         .setLargeIcon(sLargeIcon)
         .setAutoCancel(true)
         .setDefaults(Account.inst().getSilentMode() ? Notification.DEFAULT_LIGHTS : Notification.DEFAULT_ALL)
         .setSmallIcon(R.drawable.ic_launcher)
         .setTicker(mContext.getString(R.string.notification_new_friend))
         .setContentTitle(mContext.getString(R.string.notification_new_friend))
-        .setContentText(mContext.getString(R.string.notification_new_friend_tip, circleName))
-        .setContentIntent(PendingIntent.getActivity(mContext, 0,
-            FeedActivity.getIntent(mContext, Integer.parseInt(circleId), true), PendingIntent.FLAG_UPDATE_CURRENT))
-        .build();
-  }
+        .setContentText(mContext.getString(R.string.notification_new_friend_tip, circleName));
 
-  private Intent[] wrapIntent(Intent intent) {
-    Intent[] intents = new Intent[2];
-    intents[0] = HomeActivity.getIntent(mContext);
-    intents[1] = intent;
-    return intents;
+    if (current) {
+      builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
+          HomeActivity.getIntent(mContext), PendingIntent.FLAG_UPDATE_CURRENT));
+    } else {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        builder.setContentIntent(PendingIntent.getActivities(mContext, 0,
+            wrapIntent(FeedActivity.getIntent(mContext, Integer.parseInt(circleId), true)),
+            PendingIntent.FLAG_UPDATE_CURRENT));
+      } else {
+        builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
+            FeedActivity.getIntent(mContext, Integer.parseInt(circleId), true),
+            PendingIntent.FLAG_UPDATE_CURRENT));
+      }
+    }
+
+    return builder.build();
   }
 }
