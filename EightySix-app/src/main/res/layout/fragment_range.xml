@@ -13,15 +13,6 @@
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:text="请点击选择范围"
-            />
-
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:padding="8dp"
             android:textColor="@color/apptheme_primary_grey_color_pressed"
             android:text="自己厂里的秘密"
