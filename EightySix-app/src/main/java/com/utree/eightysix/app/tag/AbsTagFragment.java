@@ -98,9 +98,11 @@ public abstract class AbsTagFragment extends BaseFragment {
       public boolean onLoadMoreStart() {
         if (mPageInfo != null) {
           onLoadMore(mPageInfo.currPage + 1);
+          requestFeeds(mTag.id, mPageInfo.currPage + 1);
+          return true;
+        } else {
+          return false;
         }
-        requestFeeds(mTag.id, mPageInfo == null ? 1 : mPageInfo.currPage + 1);
-        return true;
       }
     });
 

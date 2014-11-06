@@ -108,9 +108,11 @@ public abstract class AbsRegionFragment extends BaseFragment {
       public boolean onLoadMoreStart() {
         if (mPageInfo != null) {
           onLoadMore(mPageInfo.currPage + 1);
+          requestFeeds(mRegionType, mPageInfo.currPage + 1);
+          return true;
+        } else {
+          return false;
         }
-        requestFeeds(mRegionType, mPageInfo == null ? 1 : mPageInfo.currPage + 1);
-        return true;
       }
     });
 
