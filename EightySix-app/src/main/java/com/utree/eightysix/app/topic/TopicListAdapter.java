@@ -136,30 +136,12 @@ public class TopicListAdapter extends BaseAdapter {
       switch (i) {
         case 0:
           holder.mTvTag1.setText("#" + g.content);
-          holder.mTvTag1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-              TagTabActivity.start(v.getContext(), g);
-            }
-          });
           break;
         case 1:
           holder.mTvTag2.setText("#" + g.content);
-          holder.mTvTag2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-              TagTabActivity.start(v.getContext(), g);
-            }
-          });
           break;
         case 2:
           holder.mTvTag3.setText("#" + g.content);
-          holder.mTvTag3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-              TagTabActivity.start(v.getContext(), g);
-            }
-          });
           break;
       }
     }

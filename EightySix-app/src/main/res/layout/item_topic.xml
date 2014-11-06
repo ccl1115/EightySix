@@ -19,21 +19,21 @@
                 android:paddingRight="8dp"
                 android:paddingTop="8dp">
 
-            <com.utree.eightysix.widget.TagView
+            <TextView
                     android:id="@+id/tv_tag_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="4dp"
                     android:textColor="@color/apptheme_primary_white_btn"/>
 
-            <com.utree.eightysix.widget.TagView
+            <TextView
                     android:id="@+id/tv_tag_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="4dp"
                     android:textColor="@color/apptheme_primary_white_btn"/>
 
-            <com.utree.eightysix.widget.TagView
+            <TextView
                     android:id="@+id/tv_tag_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
