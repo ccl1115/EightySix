@@ -7,6 +7,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.publish.PublishActivity;
@@ -70,8 +71,12 @@ public class FeedTopicView extends FrameLayout {
   public void onRbPublishClicked() {
     U.getAnalyser().trackEvent(getContext(), "feed_topic_publish", "feed_topic_publish");
 
-    TopicActivity.start(getContext(), getTopic());
-    PublishActivity.startWithTopicId(getContext(), mTopic.id, mTopic.tags);
+    if (Account.inst().getCurrentCircle() != null) {
+      TopicActivity.start(getContext(), getTopic());
+      PublishActivity.startWithTopicId(getContext(), mTopic.id, mTopic.tags);
+    } else {
+      U.showToast("还没有在职工厂，不能发话题帖哦");
+    }
   }
 
   @OnClick (R.id.tv_more)

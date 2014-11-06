@@ -6,8 +6,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.app.intro.IntroActivity;
+import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.User;
+import com.utree.eightysix.event.CurrentCircleResponseEvent;
 import com.utree.eightysix.event.HasNewPraiseEvent;
 import com.utree.eightysix.event.NewCommentCountEvent;
 import com.utree.eightysix.push.FetchAlarmReceiver;
@@ -32,14 +35,27 @@ public class Account {
 
   private boolean mIsLogin;
 
+  private Circle mCurrent;
+
   private Account() {
     mUserId = getSharedPreferences().getString("user_id", "");
     mToken = getSharedPreferences().getString("token", "");
     mIsLogin = !TextUtils.isEmpty(mUserId) && !TextUtils.isEmpty(mToken);
+
+    M.getRegisterHelper().register(this);
   }
 
   public static Account inst() {
     return sAccount;
+  }
+
+  @Subscribe
+  public void onCurrentCircleResponseEvent(CurrentCircleResponseEvent event) {
+    mCurrent = event.getCircle();
+  }
+
+  public Circle getCurrentCircle() {
+    return mCurrent;
   }
 
   public String getToken() {

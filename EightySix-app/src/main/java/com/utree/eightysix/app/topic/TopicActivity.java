@@ -12,6 +12,7 @@ import butterknife.OnItemClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.post.PostActivity;
@@ -126,7 +127,11 @@ public class TopicActivity extends BaseActivity {
 
       @Override
       public void onSendClicked() {
-        PublishActivity.startWithTopicId(TopicActivity.this, mTopic.id, mTopic.tags);
+        if (Account.inst().getCurrentCircle() != null) {
+          PublishActivity.startWithTopicId(TopicActivity.this, mTopic.id, mTopic.tags);
+        } else {
+          U.showToast("还没有在职工厂，不能发话题帖哦");
+        }
       }
     });
 
