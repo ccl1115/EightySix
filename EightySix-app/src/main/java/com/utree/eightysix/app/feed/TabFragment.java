@@ -31,6 +31,7 @@ public class TabFragment extends BaseFragment {
 
   @InjectView (R.id.tt_tab)
   public TitleTab mTtTab;
+
   private FeedFragment mFeedFragment;
   private HotFeedFragment mHotFeedFragment;
   private FriendsFeedFragment mFriendsFeedFragment;
@@ -81,7 +82,7 @@ public class TabFragment extends BaseFragment {
           case 1:
             return "热门";
           case 2:
-            return "与我相关";
+            return "";
         }
         return "";
       }
@@ -130,6 +131,12 @@ public class TabFragment extends BaseFragment {
     getBaseActivity().getHandler().postDelayed(new Runnable() {
       @Override
       public void run() {
+        if (mCircle.friendCount == 0) {
+          mTtTab.setTabText(2, "更多");
+        } else {
+          mTtTab.setTabText(2, "与我相关");
+        }
+
         mFeedFragment.setActive(true);
       }
     }, 500);

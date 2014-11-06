@@ -37,13 +37,13 @@ import com.utree.eightysix.widget.RandomSceneTextView;
  * @author simon
  */
 public abstract class AbsFeedFragment extends BaseFragment {
-  @InjectView(R.id.lv_feed)
+  @InjectView (R.id.lv_feed)
   public AdvancedListView mLvFeed;
 
-  @InjectView(R.id.refresh_view)
+  @InjectView (R.id.refresh_view)
   public SwipeRefreshLayout mRefresherView;
 
-  @InjectView(R.id.tv_empty_text)
+  @InjectView (R.id.tv_empty_text)
   public RandomSceneTextView mRstvEmpty;
 
   protected FeedAdapter mFeedAdapter;
@@ -52,7 +52,7 @@ public abstract class AbsFeedFragment extends BaseFragment {
 
   protected boolean mPostPraiseRequesting;
 
-  @OnItemClick(R.id.lv_feed)
+  @OnItemClick (R.id.lv_feed)
   public void onLvFeedItemClicked(int position, View view) {
     Object item = mLvFeed.getAdapter().getItem(position);
     if (item == null || !(item instanceof Post)) return;
@@ -205,10 +205,6 @@ public abstract class AbsFeedFragment extends BaseFragment {
     }
 
     mCircle = circle;
-
-    if (mCircle == null) {
-      mCircle = Env.getLastCircle();
-    }
   }
 
   @Override
@@ -258,8 +254,6 @@ public abstract class AbsFeedFragment extends BaseFragment {
     if (RESTRequester.responseOk(response)) {
       if (page == 1) {
         mCircle = response.object.circle;
-
-        Env.setLastCircle(mCircle);
 
         U.getBus().post(mCircle);
 

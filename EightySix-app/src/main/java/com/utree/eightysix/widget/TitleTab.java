@@ -121,4 +121,8 @@ public class TitleTab extends FrameLayout {
     RoundedButton roundedButton = (RoundedButton) mLlTabs.getChildAt(position).findViewById(R.id.rb_budget);
     return roundedButton.getVisibility() == VISIBLE;
   }
+
+  public void setTabText(int position, String text) {
+    ((TextView) mLlTabs.getChildAt(position).findViewById(R.id.tv_title)).setText(text);
+  }
 }

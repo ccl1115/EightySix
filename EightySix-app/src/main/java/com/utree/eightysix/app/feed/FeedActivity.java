@@ -77,8 +77,6 @@ public class FeedActivity extends BaseActivity {
 
   private ThemedDialog mUnlockDialog;
 
-  private boolean mShouldExit;
-
   public static void start(Context context) {
     Intent intent = new Intent(context, FeedActivity.class);
 
@@ -203,8 +201,6 @@ public class FeedActivity extends BaseActivity {
     Circle circle = intent.getParcelableExtra("circle");
     int id = intent.getIntExtra("id", -1);
 
-    boolean skipCache = intent.getBooleanExtra("skipCache", false);
-
     if (circle != null) {
       mTabFragment.setCircle(circle);
     } else if (id != -1) {
@@ -282,7 +278,7 @@ public class FeedActivity extends BaseActivity {
       ForegroundColorSpan span = new ForegroundColorSpan(
           getResources().getColor(R.color.apptheme_primary_light_color));
       SpannableString spannableString = new SpannableString(tip);
-      spannableString.setSpan(span, index, index +4, 0);
+      spannableString.setSpan(span, index, index + 4, 0);
       tipView.setText(spannableString);
       mUnlockDialog.setContent(view);
       mUnlockDialog.setPositive(R.string.invite_people, new View.OnClickListener() {
