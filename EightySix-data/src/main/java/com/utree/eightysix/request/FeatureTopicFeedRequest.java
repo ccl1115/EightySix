@@ -21,7 +21,7 @@ public class FeatureTopicFeedRequest extends Paginate {
   @Optional
   public String vId;
 
-  public FeatureTopicFeedRequest(int currPage, int id, String vId) {
+  public FeatureTopicFeedRequest(int id, int currPage, String vId) {
     super(currPage);
     this.id = id;
     this.vId = vId;

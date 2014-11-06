@@ -203,6 +203,7 @@ public class TopicActivity extends BaseActivity {
           mNewPageInfo = response.object.posts.page;
         }
 
+        mAlvTopic.stopLoadMore();
         hideProgressBar();
       }
     }, TopicFeedResponse.class);
@@ -237,6 +238,7 @@ public class TopicActivity extends BaseActivity {
         }
 
         hideProgressBar();
+        mAlvTopic.stopLoadMore();
       }
     }, TopicFeedResponse.class);
   }

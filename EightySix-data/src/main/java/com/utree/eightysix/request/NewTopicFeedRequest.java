@@ -21,7 +21,7 @@ public class NewTopicFeedRequest extends Paginate {
   @Optional
   public String vId;
 
-  public NewTopicFeedRequest(int currPage, int id, String vId) {
+  public NewTopicFeedRequest(int id, int currPage, String vId) {
     super(currPage);
     this.id = id;
     this.vId = vId;
