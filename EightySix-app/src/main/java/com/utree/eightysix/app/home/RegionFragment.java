@@ -34,16 +34,13 @@ public class RegionFragment extends BaseFragment {
   @InjectView (R.id.rb_range_3)
   public RoundedButton mRbRange3;
 
-  @InjectView (R.id.tv_more)
-  public TextView mTvMore;
-
   private Circle mCurrent;
   private Callback mCallback;
 
   private int mRegionType;
 
-  @OnClick(R.id.tv_more)
-  public void onTvMoreClicked() {
+  @OnClick (R.id.rb_more)
+  public void onRbMoreClicked() {
     BaseCirclesActivity.startMyCircles(getBaseActivity());
   }
 
@@ -103,7 +100,6 @@ public class RegionFragment extends BaseFragment {
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
 
-    mTvMore.setText(R.string.my_circles);
   }
 
   @Subscribe
