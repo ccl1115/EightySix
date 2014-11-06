@@ -98,6 +98,7 @@ public class TagsLayout extends FloatingLayout {
 
   public void setSelectedTags(List<Tag> tags) {
     mSelectedTags = tags;
+    mCount = mSelectedTags.size();
   }
 
   public List<Tag> getSelectedTags() {
