@@ -262,11 +262,11 @@ public abstract class AbsRegionFragment extends BaseFragment {
             getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_ONE);
             break;
           case 1:
-            getBaseActivity().setTopTitle("1公里的工厂");
+            getBaseActivity().setTopTitle("1公里内");
             getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
             break;
           case 2:
-            getBaseActivity().setTopTitle("5公里的工厂");
+            getBaseActivity().setTopTitle("5公里内");
             getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
             break;
           case 3:

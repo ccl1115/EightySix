@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="5公里以内"
+            android:text="5公里内"
             android:textColor="@color/apptheme_primary_text_dark"
             app:background="@color/apptheme_primary_white_btn"
             />
