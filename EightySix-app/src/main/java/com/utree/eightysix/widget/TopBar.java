@@ -75,6 +75,9 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
   @InjectView (R.id.tb_iv_indicator)
   public ImageView mIvIndicator;
 
+  @InjectView (R.id.tb_v_divider)
+  public View mVDivider;
+
   private Callback mCallback;
   private ActionAdapter mActionAdapter;
   private int mCurCount;
@@ -260,11 +263,13 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
       mLlIcon.setClickable(false);
       mLlLeft.setClickable(true);
       mIvIndicator.setVisibility(GONE);
+      mVDivider.setVisibility(GONE);
     } else {
       mLlTitle.setClickable(true);
       mLlIcon.setClickable(true);
       mLlLeft.setClickable(false);
       mIvIndicator.setVisibility(VISIBLE);
+      mVDivider.setVisibility(VISIBLE);
     }
   }
 

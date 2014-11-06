@@ -43,6 +43,16 @@
 
         </LinearLayout>
 
+        <View
+                android:id="@+id/tb_v_divider"
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="1px"
+                android:background="#ff898989"
+                />
+
+
         <LinearLayout
                 android:id="@+id/tb_ll_title"
                 android:orientation="horizontal"
@@ -53,7 +63,8 @@
                 android:background="@drawable/apptheme_primary_btn_dark"
                 >
 
-            <LinearLayout
+
+        <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
