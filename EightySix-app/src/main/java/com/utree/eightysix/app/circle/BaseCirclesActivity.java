@@ -127,6 +127,7 @@ public class BaseCirclesActivity extends BaseActivity {
         circle.selected = true;
         if (circle.currFactory == 1) {
           finish();
+          HomeActivity.start(this, 0);
         } else {
           FeedActivity.start(this, circle, true);
         }
@@ -438,7 +439,7 @@ public class BaseCirclesActivity extends BaseActivity {
       @Override
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
-          HomeActivity.start(BaseCirclesActivity.this, circle, true);
+          HomeActivity.start(BaseCirclesActivity.this);
           finish();
         }
       }

@@ -104,32 +104,9 @@ public class HomeActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
-  public static void start(Context context, Circle circle) {
+  public static void start(Context context, int regionType) {
     Intent intent = new Intent(context, HomeActivity.class);
-    intent.putExtra("circle", circle);
-
-    if (!(context instanceof Activity)) {
-      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    }
-
-    context.startActivity(intent);
-  }
-
-  public static void start(Context context, Circle circle, boolean skipCache) {
-    Intent intent = new Intent(context, HomeActivity.class);
-    intent.putExtra("circle", circle);
-    intent.putExtra("skipCache", skipCache);
-
-    if (!(context instanceof Activity)) {
-      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    }
-
-    context.startActivity(intent);
-  }
-
-  public static void start(Context context, int id) {
-    Intent intent = new Intent(context, HomeActivity.class);
-    intent.putExtra("id", id);
+    intent.putExtra("regionType", regionType);
 
     if (!(context instanceof Activity)) {
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -334,6 +311,12 @@ public class HomeActivity extends BaseActivity {
 
   @Override
   protected void onNewIntent(Intent intent) {
+
+    final int regionType = intent.getIntExtra("regionType", -1);
+
+    if (regionType != -1) {
+      mTabFragment.setRegionType(regionType);
+    }
 
     setHasNewPraise();
     setNewCommentCount();

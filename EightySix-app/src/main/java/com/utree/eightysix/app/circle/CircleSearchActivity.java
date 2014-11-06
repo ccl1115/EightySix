@@ -323,7 +323,7 @@ public class CircleSearchActivity extends BaseActivity {
       @Override
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
-          HomeActivity.start(CircleSearchActivity.this, circle, true);
+          HomeActivity.start(CircleSearchActivity.this);
           finish();
         }
       }
