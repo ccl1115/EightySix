@@ -9,7 +9,10 @@ import com.utree.eightysix.rest.Response;
  */
 public class FactoryRegionResponse extends Response {
 
-    @SerializedName("object")
-    public Paginate<Circle> object;
+  @SerializedName ("object")
+  public Paginate<Circle> object;
 
+
+  @SerializedName ("subinfo")
+  public String subinfo;
 }

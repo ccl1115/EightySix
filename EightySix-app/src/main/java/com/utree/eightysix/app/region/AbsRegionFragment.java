@@ -277,10 +277,9 @@ public abstract class AbsRegionFragment extends BaseFragment {
             break;
         }
 
-        U.getBus().post(new RegionResponseEvent(mRegionType, mCircle));
+        getBaseActivity().setTopSubTitle(response.object.subInfo);
 
-        getBaseActivity().setTopSubTitle(String.format(getString(R.string.friends_info),
-            mCircle.friendCount, response.object.workerCount));
+        U.getBus().post(new RegionResponseEvent(mRegionType, mCircle));
       } else if (mFeedAdapter != null) {
         mFeedAdapter.add(response.object.posts.lists);
       }
