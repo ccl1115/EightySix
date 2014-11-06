@@ -86,6 +86,8 @@
                 android:paddingRight="6dp"
                 android:paddingTop="2dp"
                 android:paddingBottom="2dp"
+                android:textColor="@android:color/white"
+                android:clickable="false"
                 app:radius="1dp"
                 />
 
