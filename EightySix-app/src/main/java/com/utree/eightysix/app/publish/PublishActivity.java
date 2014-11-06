@@ -236,6 +236,7 @@ public class PublishActivity extends BaseActivity {
   public void onIvTempNameClicked() {
     if (mEtTempName.getText().length() > 1) {
       mIvTempName.setSelected(!mIvTempName.isSelected());
+      mEtTempName.setTextColor(mIvTempName.isSelected() ? 0xff000000 : 0xffcccccc);
     } else {
       showToast("临时名要两个字以上哦");
     }
