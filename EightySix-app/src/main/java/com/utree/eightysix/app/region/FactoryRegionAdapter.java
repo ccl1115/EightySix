@@ -83,59 +83,31 @@ class FactoryRegionAdapter extends BaseAdapter {
         viewHolder.mIvFire.setVisibility(View.GONE);
         break;
       case 1:
-        if (circle.selected) {
-          viewHolder.mIvFire.setImageResource(R.drawable.fire_white_1);
-        } else {
-          viewHolder.mIvFire.setImageResource(R.drawable.fire_1);
-        }
+        viewHolder.mIvFire.setImageResource(R.drawable.fire_1);
         viewHolder.mIvFire.setVisibility(View.VISIBLE);
         break;
       case 2:
-        if (circle.selected) {
-          viewHolder.mIvFire.setImageResource(R.drawable.fire_white_2);
-        } else {
-          viewHolder.mIvFire.setImageResource(R.drawable.fire_2);
-        }
+        viewHolder.mIvFire.setImageResource(R.drawable.fire_2);
         viewHolder.mIvFire.setVisibility(View.VISIBLE);
         break;
       case 3:
-        if (circle.selected) {
-          viewHolder.mIvFire.setImageResource(R.drawable.fire_white_3);
-        } else {
-          viewHolder.mIvFire.setImageResource(R.drawable.fire_3);
-        }
+        viewHolder.mIvFire.setImageResource(R.drawable.fire_3);
         viewHolder.mIvFire.setVisibility(View.VISIBLE);
         break;
       case 4:
-        if (circle.selected) {
-          viewHolder.mIvFire.setImageResource(R.drawable.fire_white_4);
-        } else {
-          viewHolder.mIvFire.setImageResource(R.drawable.fire_4);
-        }
+        viewHolder.mIvFire.setImageResource(R.drawable.fire_4);
         viewHolder.mIvFire.setVisibility(View.VISIBLE);
         break;
       case 5:
-        if (circle.selected) {
-          viewHolder.mIvFire.setImageResource(R.drawable.fire_white_5);
-        } else {
-          viewHolder.mIvFire.setImageResource(R.drawable.fire_5);
-        }
+        viewHolder.mIvFire.setImageResource(R.drawable.fire_5);
         viewHolder.mIvFire.setVisibility(View.VISIBLE);
         break;
     }
 
-    if (circle.selected) {
-      viewHolder.mLlItem.setBackgroundColor(res.getColor(R.color.apptheme_primary_light_color));
-      viewHolder.mTvName.setTextColor(Color.WHITE);
-      viewHolder.mTvFriends.setTextColor(Color.WHITE);
-      viewHolder.mIvHouse.setImageResource(R.drawable.house_white);
-
-    } else {
       viewHolder.mLlItem.setBackgroundDrawable(res.getDrawable(R.drawable.apptheme_primary_list_selector));
-      viewHolder.mTvName.setTextColor(res.getColor(R.color.apptheme_primary_text_dark));
+    viewHolder.mTvName.setTextColor(res.getColorStateList(R.color.apptheme_primary_text_dark));
       viewHolder.mTvFriends.setTextColor(0xffb3b3b3);
       viewHolder.mIvHouse.setImageResource(R.drawable.house);
-    }
 
     if (circle.lock == 1) {
       viewHolder.mTvFriends.setCompoundDrawablesWithIntrinsicBounds(
