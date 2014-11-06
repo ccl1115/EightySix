@@ -17,9 +17,9 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.share.ShareManager;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Tag;
+import com.utree.eightysix.event.CurrentCircleResponseEvent;
 import com.utree.eightysix.widget.TitleTab;
 import com.utree.eightysix.widget.TopBar;
 

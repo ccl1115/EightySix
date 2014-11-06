@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -14,7 +13,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
-import com.utree.eightysix.app.region.event.RegionUpdateEvent;
+import com.utree.eightysix.app.region.event.RegionResponseEvent;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.widget.RoundedButton;
 
@@ -103,7 +102,7 @@ public class RegionFragment extends BaseFragment {
   }
 
   @Subscribe
-  public void onRegionUpdateEvent(RegionUpdateEvent event) {
+  public void onRegionUpdateEvent(RegionResponseEvent event) {
     setCurrentCircle(event.getCircle());
 
     clearSelected();

@@ -18,15 +18,13 @@ import com.utree.eightysix.app.feed.FeedAdapter;
 import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
 import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.app.msg.FetchNotificationService;
-import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
-import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
-import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.app.post.PostActivity;
-import com.utree.eightysix.app.region.event.RegionUpdateEvent;
+import com.utree.eightysix.app.region.event.RegionResponseEvent;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Feeds;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.data.Post;
+import com.utree.eightysix.event.CurrentCircleResponseEvent;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
 import com.utree.eightysix.response.FeedsByRegionResponse;
 import com.utree.eightysix.rest.RESTRequester;
@@ -241,6 +239,8 @@ public abstract class AbsRegionFragment extends BaseFragment {
       if (page == 1) {
         mCircle = response.object.circle;
 
+        U.getBus().post(new CurrentCircleResponseEvent(mCircle));
+
         M.getRegisterHelper().unregister(mFeedAdapter);
         mFeedAdapter = new FeedRegionAdapter(response.object);
         M.getRegisterHelper().register(mFeedAdapter);
@@ -275,7 +275,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
             break;
         }
 
-        U.getBus().post(new RegionUpdateEvent(mRegionType, mCircle));
+        U.getBus().post(new RegionResponseEvent(mRegionType, mCircle));
 
         getBaseActivity().setTopSubTitle(String.format(getString(R.string.friends_info),
             mCircle.friendCount, response.object.workerCount));
@@ -322,7 +322,8 @@ public abstract class AbsRegionFragment extends BaseFragment {
     if (response != null && response.code == 0 && response.object != null) {
       if (page == 1) {
         mCircle = response.object.circle;
-        U.getBus().post(mCircle);
+
+        U.getBus().post(new CurrentCircleResponseEvent(mCircle));
 
         if (response.object.posts.lists.size() == 0) {
           mRstvEmpty.setVisibility(View.VISIBLE);
@@ -354,7 +355,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
             break;
         }
 
-        U.getBus().post(new RegionUpdateEvent(mRegionType, mCircle));
+        U.getBus().post(new RegionResponseEvent(mRegionType, mCircle));
 
       } else if (mFeedAdapter != null) {
         mFeedAdapter.add(response.object.posts.lists);

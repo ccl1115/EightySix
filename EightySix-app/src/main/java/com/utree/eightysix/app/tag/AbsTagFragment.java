@@ -17,6 +17,7 @@ import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.data.Tag;
+import com.utree.eightysix.event.CurrentCircleResponseEvent;
 import com.utree.eightysix.response.TagFeedsResponse;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.view.SwipeRefreshLayout;

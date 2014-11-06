@@ -1,4 +1,4 @@
-package com.utree.eightysix.app.tag;
+package com.utree.eightysix.event;
 
 import com.utree.eightysix.data.Circle;
 

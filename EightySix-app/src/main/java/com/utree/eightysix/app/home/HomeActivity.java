@@ -47,6 +47,7 @@ import com.utree.eightysix.app.topic.TopicListActivity;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Sync;
+import com.utree.eightysix.event.CurrentCircleResponseEvent;
 import com.utree.eightysix.event.HasNewPraiseEvent;
 import com.utree.eightysix.event.NewCommentCountEvent;
 import com.utree.eightysix.utils.Env;
@@ -93,6 +94,7 @@ public class HomeActivity extends BaseActivity {
   private ThemedDialog mUnlockDialog;
 
   private boolean mShouldExit;
+  private Circle mCurrentCircle;
 
   public static void start(Context context) {
     Intent intent = new Intent(context, HomeActivity.class);
@@ -364,17 +366,9 @@ public class HomeActivity extends BaseActivity {
     }
   }
 
-  public void setTitle(Circle circle) {
-    if (circle == null) return;
-
-    setTopTitle(circle.shortName);
-    if (circle.lock == 1) {
-      getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(
-          getResources().getDrawable(R.drawable.ic_lock_small), null, null, null);
-      getTopBar().mSubTitle.setCompoundDrawablePadding(U.dp2px(5));
-    } else {
-      getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-    }
+  @Subscribe
+  public void onCurrentCircleResponseEvent(CurrentCircleResponseEvent event) {
+    mCurrentCircle = event.getCircle();
   }
 
   private void showFactoryRegion() {
@@ -522,7 +516,7 @@ public class HomeActivity extends BaseActivity {
 
   private void showInviteDialog() {
     if (mInviteDialog == null) {
-      //mInviteDialog = U.getShareManager().shareAppDialog(this, mTabFragment.getCircle());
+      mInviteDialog = U.getShareManager().shareAppDialog(this, mCurrentCircle);
     }
     if (!mInviteDialog.isShowing()) {
       mInviteDialog.show();
