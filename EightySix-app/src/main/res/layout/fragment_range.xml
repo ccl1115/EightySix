@@ -22,8 +22,8 @@
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="4dp"
-            android:textColor="@color/apptheme_primary_grey_color"
+            android:padding="8dp"
+            android:textColor="@color/apptheme_primary_grey_color_pressed"
             android:text="自己厂里的秘密"
             />
 
@@ -39,8 +39,8 @@
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="4dp"
-            android:textColor="@color/apptheme_primary_grey_color"
+            android:padding="8dp"
+            android:textColor="@color/apptheme_primary_grey_color_pressed"
             android:text="附近厂里的秘密"
             />
 
