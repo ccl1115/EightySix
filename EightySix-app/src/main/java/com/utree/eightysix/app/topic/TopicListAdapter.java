@@ -149,7 +149,7 @@ public class TopicListAdapter extends BaseAdapter {
     return convertView;
   }
 
-  class TopicViewHolder {
+  public static class TopicViewHolder {
 
     @InjectView (R.id.tv_tag_1)
     public TextView mTvTag1;
@@ -171,8 +171,6 @@ public class TopicListAdapter extends BaseAdapter {
 
     public TopicViewHolder(View view) {
       ButterKnife.inject(this, view);
-      mLlParent.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(4),
-          U.getContext().getResources().getColorStateList(R.color.apptheme_primary_list_selector)));
     }
   }
 }

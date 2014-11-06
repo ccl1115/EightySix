@@ -9,10 +9,10 @@
             android:id="@+id/tv_head"
             android:layout_width="match_parent"
             android:layout_height="36dp"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="20dp"
             android:paddingTop="6dp"
             android:gravity="center_vertical"
-            android:textSize="13sp"
+            android:textSize="12sp"
             android:textColor="@color/apptheme_primary_dark_color"/>
 
     <com.utree.eightysix.app.publish.MoreTagsItemLayout

@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ListView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.utree.eightysix.R;
@@ -14,13 +14,13 @@ import com.utree.eightysix.request.TagsByTypeRequest;
 import com.utree.eightysix.response.TagsByTypeResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.widget.AdvancedListView;
 
 /**
  */
 public class MoreTagFragment extends BaseFragment {
-  @InjectView(R.id.alv_tags)
-  public AdvancedListView mAlvTags;
+
+  @InjectView (R.id.lv_tags)
+  public ListView mLvTags;
 
   private MoreTagAdapter mMoreTagAdapter;
 
@@ -53,7 +53,7 @@ public class MoreTagFragment extends BaseFragment {
       public void onResponse(TagsByTypeResponse response) {
         if (RESTRequester.responseOk(response)) {
           mMoreTagAdapter = new MoreTagAdapter(response.object);
-          mAlvTags.setAdapter(mMoreTagAdapter);
+          mLvTags.setAdapter(mMoreTagAdapter);
         }
         getBaseActivity().hideProgressBar();
       }

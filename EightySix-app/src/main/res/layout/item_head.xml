@@ -2,17 +2,32 @@
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="match_parent"
-             android:layout_height="wrap_content">
+             android:layout_height="wrap_content"
+        >
 
     <TextView
             android:id="@+id/tv_head"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_marginLeft="16dp"
             android:paddingTop="6dp"
             android:gravity="center_vertical"
             android:textSize="13sp"
-            android:textColor="@color/apptheme_primary_dark_color"/>
+            android:textColor="@color/apptheme_primary_dark_color"
+            />
+
+    <TextView
+            android:id="@+id/tv_right"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginRight="16dp"
+            android:layout_gravity="right"
+            android:paddingTop="6dp"
+            android:gravity="center_vertical"
+            android:textSize="13sp"
+            android:textColor="@color/apptheme_primary_dark_color"
+            android:visibility="gone"
+            />
 
     <View
             android:layout_width="match_parent"
@@ -20,5 +35,6 @@
             android:layout_gravity="bottom"
             android:background="#ffd9d9d9"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginRight="10dp"
+            />
 </FrameLayout>

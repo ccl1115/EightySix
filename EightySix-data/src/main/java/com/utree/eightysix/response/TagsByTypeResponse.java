@@ -18,7 +18,7 @@ public class TagsByTypeResponse extends Response {
     public List<TypedTags> lists;
 
     @SerializedName("topicView")
-    public Topic mTopic;
+    public Topic topic;
   }
 
   public static class TypedTags {
