@@ -72,6 +72,7 @@ public class FeedTopicView extends FrameLayout {
     U.getAnalyser().trackEvent(getContext(), "feed_topic_publish", "feed_topic_publish");
 
     if (Account.inst().getCurrentCircle() != null) {
+      TopicListActivity.start(getContext());
       TopicActivity.start(getContext(), getTopic());
       PublishActivity.startWithTopicId(getContext(), mTopic.id, mTopic.tags);
     } else {
