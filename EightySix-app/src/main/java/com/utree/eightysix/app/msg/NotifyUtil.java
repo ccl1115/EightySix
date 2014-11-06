@@ -44,7 +44,7 @@ public class NotifyUtil {
 
   private Intent[] wrapIntent(Intent... intents) {
     Intent[] wrap = new Intent[intents.length + 1];
-    wrap[0] = HomeActivity.getIntent(mContext);
+    wrap[0] = HomeActivity.getIntent(mContext, 0, 0);
 
     System.arraycopy(intents, 0, wrap, 1, intents.length);
     return wrap;
@@ -85,16 +85,16 @@ public class NotifyUtil {
         .setContentText(mContext.getString(R.string.notification_friends_new_posts, count));
     if (current) {
       builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
-          HomeActivity.getIntent(mContext),
+          HomeActivity.getIntent(mContext, 2, 0),
           PendingIntent.FLAG_UPDATE_CURRENT));
     } else {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
         builder.setContentIntent(PendingIntent.getActivities(mContext, 0,
-            wrapIntent(FeedActivity.getIntent(mContext, circleId, true)),
+            wrapIntent(FeedActivity.getIntent(mContext, circleId, true, 2)),
             PendingIntent.FLAG_UPDATE_CURRENT));
       } else {
         builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
-            FeedActivity.getIntent(mContext, circleId, true),
+            FeedActivity.getIntent(mContext, circleId, true, 2),
             PendingIntent.FLAG_UPDATE_CURRENT));
       }
     }
@@ -115,15 +115,15 @@ public class NotifyUtil {
 
     if (current) {
       builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
-          HomeActivity.getIntent(mContext), PendingIntent.FLAG_UPDATE_CURRENT));
+          HomeActivity.getIntent(mContext, 0, 0), PendingIntent.FLAG_UPDATE_CURRENT));
     } else {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
         builder.setContentIntent(PendingIntent.getActivities(mContext, 0,
-            wrapIntent(FeedActivity.getIntent(mContext, Integer.parseInt(circleId), true)),
+            wrapIntent(FeedActivity.getIntent(mContext, Integer.parseInt(circleId), true, 0)),
             PendingIntent.FLAG_UPDATE_CURRENT));
       } else {
         builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
-            FeedActivity.getIntent(mContext, Integer.parseInt(circleId), true),
+            FeedActivity.getIntent(mContext, Integer.parseInt(circleId), true, 0),
             PendingIntent.FLAG_UPDATE_CURRENT));
       }
     }
@@ -150,7 +150,7 @@ public class NotifyUtil {
               PendingIntent.FLAG_UPDATE_CURRENT));
         } else {
           builder.setContentIntent(PendingIntent.getActivities(mContext, 0,
-              wrapIntent(FeedActivity.getIntent(mContext, factoryId, true),
+              wrapIntent(FeedActivity.getIntent(mContext, factoryId, true, 0),
                   PostActivity.getIntent(mContext, id, "comment_", true)),
               PendingIntent.FLAG_UPDATE_CURRENT));
         }
@@ -185,7 +185,7 @@ public class NotifyUtil {
         .setContentTitle(mContext.getString(R.string.notification_circle_create_approve))
         .setContentText(mContext.getString(R.string.notification_circle_create_approve_tip, circleName))
         .setContentIntent(PendingIntent.getActivity(mContext, 0,
-            FeedActivity.getIntent(mContext, Integer.parseInt(circleId), true), PendingIntent.FLAG_UPDATE_CURRENT))
+            FeedActivity.getIntent(mContext, Integer.parseInt(circleId), true, 0), PendingIntent.FLAG_UPDATE_CURRENT))
         .build();
   }
 
@@ -203,15 +203,15 @@ public class NotifyUtil {
 
     if (current) {
       builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
-          HomeActivity.getIntent(mContext), PendingIntent.FLAG_UPDATE_CURRENT));
+          HomeActivity.getIntent(mContext, 0, 0), PendingIntent.FLAG_UPDATE_CURRENT));
     } else {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
         builder.setContentIntent(PendingIntent.getActivities(mContext, 0,
-            wrapIntent(FeedActivity.getIntent(mContext, Integer.parseInt(circleId), true)),
+            wrapIntent(FeedActivity.getIntent(mContext, Integer.parseInt(circleId), true, 0)),
             PendingIntent.FLAG_UPDATE_CURRENT));
       } else {
         builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
-            FeedActivity.getIntent(mContext, Integer.parseInt(circleId), true),
+            FeedActivity.getIntent(mContext, Integer.parseInt(circleId), true, 0),
             PendingIntent.FLAG_UPDATE_CURRENT));
       }
     }

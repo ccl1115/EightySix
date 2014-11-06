@@ -129,8 +129,11 @@ public class HomeActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
-  public static Intent getIntent(Context context) {
+  public static Intent getIntent(Context context, int tabIndex, int regionType) {
     Intent intent = new Intent(context, HomeActivity.class);
+
+    intent.putExtra("tabIndex", tabIndex);
+    intent.putExtra("regionType", regionType);
 
     if (!(context instanceof Activity)) {
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -206,6 +209,9 @@ public class HomeActivity extends BaseActivity {
     setActionAdapter();
 
     mTabFragment = new TabRegionFragment();
+    Bundle args = new Bundle();
+    args.putInt("tabIndex", getIntent().getIntExtra("tabIndex", 0));
+    mTabFragment.setArguments(args);
     getSupportFragmentManager().beginTransaction().add(R.id.fl_feed, mTabFragment, "tab").commit();
 
     mRegionFragment = (RegionFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_range);
@@ -315,10 +321,13 @@ public class HomeActivity extends BaseActivity {
   protected void onNewIntent(Intent intent) {
 
     final int regionType = intent.getIntExtra("regionType", -1);
+    final int tabIndex = intent.getIntExtra("tabIndex", 0);
 
     if (regionType != -1) {
       mTabFragment.setRegionType(regionType);
     }
+
+    mTabFragment.setTabIndex(tabIndex);
 
     setHasNewPraise();
     setNewCommentCount();

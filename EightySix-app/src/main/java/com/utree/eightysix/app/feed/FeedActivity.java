@@ -133,9 +133,10 @@ public class FeedActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
-  public static Intent getIntent(Context context, int id, boolean skipCache) {
+  public static Intent getIntent(Context context, int id, boolean skipCache, int tabIndex) {
     Intent intent = new Intent(context, FeedActivity.class);
     intent.putExtra("id", id);
+    intent.putExtra("tabIndex", tabIndex);
     intent.putExtra("skipCache", skipCache);
 
     if (!(context instanceof Activity)) {
@@ -174,6 +175,9 @@ public class FeedActivity extends BaseActivity {
     ContactsSyncService.start(this, false);
 
     mTabFragment = new TabFragment();
+    Bundle args = new Bundle();
+    args.putInt("tabIndex", getIntent().getIntExtra("tabIndex", 0));
+    mTabFragment.setArguments(args);
     getSupportFragmentManager().beginTransaction().add(R.id.fl_feed, mTabFragment, "tab").commit();
 
     onNewIntent(getIntent());

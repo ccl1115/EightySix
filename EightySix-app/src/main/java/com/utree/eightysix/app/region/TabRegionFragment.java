@@ -129,10 +129,14 @@ public class TabRegionFragment extends BaseFragment {
       }
     });
 
+    mVpTab.setCurrentItem(getArguments().getInt("tabIndex"));
+
     getBaseActivity().getHandler().postDelayed(new Runnable() {
       @Override
       public void run() {
-        mFeedFragment.setActive(true);
+        if (getArguments().getInt("tabIndex") == 0) {
+          mFeedFragment.setActive(true);
+        }
       }
     }, 500);
   }
@@ -163,6 +167,12 @@ public class TabRegionFragment extends BaseFragment {
         mFriendsFeedFragment.setActive(true);
         break;
     }
+  }
+
+  public void setTabIndex(int index) {
+    if (mVpTab == null) return;
+
+    mVpTab.setCurrentItem(index);
   }
 
   public boolean onBackPressed() {

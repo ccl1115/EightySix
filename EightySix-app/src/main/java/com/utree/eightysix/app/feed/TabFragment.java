@@ -128,6 +128,8 @@ public class TabFragment extends BaseFragment {
       }
     });
 
+    mVpTab.setCurrentItem(getArguments().getInt("tabIndex"));
+
     getBaseActivity().getHandler().postDelayed(new Runnable() {
       @Override
       public void run() {
@@ -137,7 +139,9 @@ public class TabFragment extends BaseFragment {
           mTtTab.setTabText(2, "与我相关");
         }
 
-        mFeedFragment.setActive(true);
+        if (getArguments().getInt("tabIndex") == 0) {
+          mFeedFragment.setActive(true);
+        }
       }
     }, 500);
   }
@@ -253,8 +257,8 @@ public class TabFragment extends BaseFragment {
   }
 
   private void clearActive() {
-    if (mFeedFragment != null)  mFeedFragment.setActive(false);
+    if (mFeedFragment != null) mFeedFragment.setActive(false);
     if (mHotFeedFragment != null) mHotFeedFragment.setActive(false);
-    if (mFriendsFeedFragment != null)  mFriendsFeedFragment.setActive(false);
+    if (mFriendsFeedFragment != null) mFriendsFeedFragment.setActive(false);
   }
 }
