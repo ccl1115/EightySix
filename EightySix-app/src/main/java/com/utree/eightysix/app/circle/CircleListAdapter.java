@@ -110,7 +110,7 @@ class CircleListAdapter extends BaseAdapter {
     if (item.currFactory == 1) {
       holder.mRbChange.setVisibility(View.VISIBLE);
     } else {
-      holder.mRbChange.setVisibility(View.GONE);
+      holder.mRbChange.setVisibility(View.INVISIBLE);
     }
 
 

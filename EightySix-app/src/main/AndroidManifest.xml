@@ -163,25 +163,23 @@
 
         <activity android:exported="@bool/exported" android:label="话题详情" android:name=".app.topic.TopicActivity" android:screenOrientation="portrait"/>
 
-        <service android:enabled="true" android:name="com.baidu.location.f" android:process=":bdservice_v1"/>
+        <activity android:exported="@bool/exported" android:name=".app.region.FactoryRegionActivity" android:screenOrientation="portrait"/>
 
         <service android:enabled="true" android:name=".contact.ContactsSyncService"/>
-
         <service android:enabled="true" android:name=".app.msg.FetchNotificationService"/>
+        <service android:name=".app.SyncService"/>
+        <service android:name=".app.msg.PullNotificationService"/>
+        <service android:name=".app.settings.UpgradeService"/>
+
+        <service android:enabled="true" android:name="com.baidu.location.f" android:process=":bdservice_v1"/>
+
+        <service android:name="com.easemob.chat.EMChatService"/>
 
         <receiver android:name=".push.FetchAlarmReceiver">
             <intent-filter>
                 <action android:name="com.utree.eightysix.action.FETCH"/>
             </intent-filter>
         </receiver>
-
-        <service android:name=".app.SyncService"/>
-        <service android:name=".app.msg.PullNotificationService"/>
-        <service android:name=".app.settings.UpgradeService"/>
-
-
-
-        <service android:name="com.easemob.chat.EMChatService"/>
 
         <receiver android:enabled="true" android:exported="true" android:name="com.utree.eightysix.push.PushMessageReceiver">
             <intent-filter>

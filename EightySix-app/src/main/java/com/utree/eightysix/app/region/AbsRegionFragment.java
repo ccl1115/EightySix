@@ -257,6 +257,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
         mRegionType = response.object.regionType;
 
         getBaseActivity().setTopSubTitle(response.object.subInfo);
+        getBaseActivity().setTopSubTitle(response.object.subInfo);
 
         switch (mRegionType) {
           case 0:
@@ -276,8 +277,6 @@ public abstract class AbsRegionFragment extends BaseFragment {
             getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
             break;
         }
-
-        getBaseActivity().setTopSubTitle(response.object.subInfo);
 
         U.getBus().post(new RegionResponseEvent(mRegionType, mCircle));
       } else if (mFeedAdapter != null) {

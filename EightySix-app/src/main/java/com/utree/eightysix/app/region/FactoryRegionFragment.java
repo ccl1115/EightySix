@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.region;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -13,7 +12,6 @@ import butterknife.OnItemClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
-import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.data.Circle;
@@ -41,7 +39,7 @@ public class FactoryRegionFragment extends BaseFragment {
 
   @OnClick (R.id.tv_more)
   public void onTvMoreClicked() {
-    BaseCirclesActivity.startRegion(getActivity(), mRegionType);
+    FactoryRegionActivity.start(getActivity(), mRegionType);
     detach();
   }
 
