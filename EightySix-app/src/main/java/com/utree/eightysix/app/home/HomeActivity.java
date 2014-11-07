@@ -298,7 +298,7 @@ public class HomeActivity extends BaseActivity {
       finish();
     } else {
       mShouldExit = true;
-      showToast("再按一次返回键退出");
+      showToast(getString(R.string.press_again_to_exit));
       getHandler().postDelayed(new Runnable() {
         @Override
         public void run() {
@@ -342,7 +342,6 @@ public class HomeActivity extends BaseActivity {
 
   @Override
   protected void onStop() {
-    Log.d("FeedActivity", "onStop");
     super.onStop();
     mDlContent.closeDrawer(mLlSide);
 
