@@ -92,6 +92,8 @@ public class MoreTagAdapter extends BaseAdapter {
     TopicListAdapter.TopicViewHolder holder;
     if (convertView == null) {
       convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_topic, parent, false);
+      final int p = U.dp2px(8);
+      convertView.setPadding(p, p, p, p);
       holder = new TopicListAdapter.TopicViewHolder(convertView);
       convertView.setTag(holder);
     } else {
@@ -135,7 +137,7 @@ public class MoreTagAdapter extends BaseAdapter {
       textView.setText("本期话题");
 
       TextView right = (TextView) convertView.findViewById(R.id.tv_right);
-      right.setText("全部话题 》");
+      right.setText("全部话题 >");
       right.setVisibility(View.VISIBLE);
       right.setOnClickListener(new View.OnClickListener() {
         @Override
