@@ -10,6 +10,7 @@ import butterknife.InjectView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.publish.MoreTagsItemLayout;
+import com.utree.eightysix.app.topic.TopicActivity;
 import com.utree.eightysix.app.topic.TopicListActivity;
 import com.utree.eightysix.app.topic.TopicListAdapter;
 import com.utree.eightysix.data.Tag;
@@ -123,6 +124,13 @@ public class MoreTagAdapter extends BaseAdapter {
           break;
       }
     }
+
+    convertView.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        TopicActivity.start(view.getContext(), mTags.topic);
+      }
+    });
 
     return convertView;
   }
