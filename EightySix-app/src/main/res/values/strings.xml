@@ -236,7 +236,7 @@
 
     <!-- Notifications -->
     <string name="notification_friend_new_post">你的朋友发了一条新帖子</string>
-    <string name="notification_friends_new_posts">你认识的人发了%d条帖子，去看看吧</string>
+    <string name="notification_friends_new_posts">你的朋友发了%d条帖子</string>
     <string name="notification_circle_unlocked">新的朋友圈解锁了！</string>
     <string name="notification_circle_unlocked_tip">看看［%1$s］里的朋友发的秘密吧</string>
     <string name="notification_new">新提醒</string>
