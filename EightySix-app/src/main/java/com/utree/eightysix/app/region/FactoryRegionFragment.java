@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.region;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -31,6 +32,7 @@ public class FactoryRegionFragment extends BaseFragment {
   private FactoryRegionAdapter mAdapter;
 
   private int mRegionType;
+  private boolean mAttached;
 
   @OnClick (R.id.fl_parent)
   public void onFlParentClicked() {
@@ -64,25 +66,29 @@ public class FactoryRegionFragment extends BaseFragment {
   @Override
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
+
+    if (mAlvFactories != null) mAlvFactories.setAdapter(null);
+    requestRegionFactories(mRegionType);
   }
 
   public void setRegionType(int regionType) {
     mRegionType = regionType;
-    if (mAlvFactories != null) mAlvFactories.setAdapter(null);
-    requestRegionFactories(regionType);
   }
 
   public void requestRegionFactories(int regionType) {
+    getBaseActivity().showProgressBar();
     U.getRESTRequester().request(new FactoryRegionRequest(regionType, 1), new OnResponse2<FactoryRegionResponse>() {
       @Override
       public void onResponseError(Throwable e) {
-
+        getBaseActivity().hideProgressBar();
       }
 
       @Override
       public void onResponse(FactoryRegionResponse response) {
         mAdapter = new FactoryRegionAdapter(response.object.lists);
         mAlvFactories.setAdapter(mAdapter);
+
+        getBaseActivity().hideProgressBar();
       }
     }, FactoryRegionResponse.class);
   }
