@@ -45,7 +45,7 @@ class ShareToQQ extends IShare {
         data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, url);
         data.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://utree-resource.oss-cn-beijing.aliyuncs.com/faceless.png");
         data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
-        shareToQQ(activity, data, defaultListener());
+        shareToQQ(activity, data, new BaseUiListener());
         return null;
       }
 
@@ -70,15 +70,14 @@ class ShareToQQ extends IShare {
         Bundle data = new Bundle();
         data.putString(QQShare.SHARE_TO_QQ_TITLE, String.format(shareTitleForPost(), post.shortName));
         data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, url);
+        data.putString(QQShare.SHARE_TO_QQ_SUMMARY, post.content);
         if (!TextUtils.isEmpty(post.bgUrl) && post.bgUrl.contains(U.getImageBucket())) {
           data.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, post.bgUrl);
-          data.putString(QQShare.SHARE_TO_QQ_SUMMARY, post.content);
         } else {
           data.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://utree-resource.oss-cn-beijing.aliyuncs.com/faceless.png");
-          data.putString(QQShare.SHARE_TO_QQ_SUMMARY, String.format(shareContentForPost(), post.shortName));
         }
         data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
-        shareToQQ(activity, data, defaultListener());
+        shareToQQ(activity, data, postUiCallback(post));
         return null;
       }
 
@@ -110,7 +109,7 @@ class ShareToQQ extends IShare {
           data.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://utree-resource.oss-cn-beijing.aliyuncs.com/faceless.png");
         }
         data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
-        shareToQQ(activity, data, defaultListener());
+        shareToQQ(activity, data, new BaseUiListener());
         return null;
       }
 
@@ -125,27 +124,4 @@ class ShareToQQ extends IShare {
   public void shareTag(BaseActivity activity, Circle circle, int tagId, String url) {
     shareApp(activity, circle, url);
   }
-
-  private IUiListener defaultListener() {
-    return new IUiListener() {
-      @Override
-      public void onComplete(Object o) {
-        if (BuildConfig.DEBUG) Toast.makeText(U.getContext(), "onComplete", Toast.LENGTH_LONG).show();
-      }
-
-      @Override
-      public void onError(UiError uiError) {
-        if (BuildConfig.DEBUG)
-          Toast.makeText(U.getContext(),
-              String.format("%d: %s - %s", uiError.errorCode, uiError.errorMessage, uiError.errorDetail),
-              Toast.LENGTH_LONG).show();
-      }
-
-      @Override
-      public void onCancel() {
-        if (BuildConfig.DEBUG) Toast.makeText(U.getContext(), "onCancel", Toast.LENGTH_LONG).show();
-      }
-    };
-  }
-
 }

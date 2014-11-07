@@ -96,10 +96,13 @@ public class ThemedDialog extends Dialog {
       ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) mRbNegative.getLayoutParams();
       lp.leftMargin = U.dp2px(10);
       lp.rightMargin = U.dp2px(20);
+      mRbNegative.setLayoutParams(lp);
     } else {
-      layoutParams.leftMargin = U.dp2px(50);
-      layoutParams.rightMargin = U.dp2px(50);
+      layoutParams.leftMargin = U.dp2px(0);
+      layoutParams.rightMargin = U.dp2px(0);
     }
+
+    mRbPositive.setLayoutParams(layoutParams);
     mRbPositive.setText(cs);
     mRbPositive.setOnClickListener(listener);
   }
@@ -121,11 +124,13 @@ public class ThemedDialog extends Dialog {
       ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) mRbPositive.getLayoutParams();
       lp.leftMargin = U.dp2px(20);
       lp.rightMargin = U.dp2px(10);
+      mRbPositive.setLayoutParams(lp);
     } else {
-      layoutParams.leftMargin = U.dp2px(50);
-      layoutParams.rightMargin = U.dp2px(50);
+      layoutParams.leftMargin = U.dp2px(0);
+      layoutParams.rightMargin = U.dp2px(0);
     }
 
+    mRbNegative.setLayoutParams(layoutParams);
     mRbNegative.setText(cs);
     mRbNegative.setOnClickListener(listener);
   }

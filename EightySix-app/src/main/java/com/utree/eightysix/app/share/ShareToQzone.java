@@ -50,7 +50,7 @@ class ShareToQzone extends IShare {
         urls.add("http://utree-resource.oss-cn-beijing.aliyuncs.com/faceless.png");
         data.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL, urls);
         data.putInt(QzoneShare.SHARE_TO_QZONE_KEY_TYPE, QzoneShare.SHARE_TO_QZONE_TYPE_IMAGE_TEXT);
-        shareToQzone(activity, data, defaultListener());
+        shareToQzone(activity, data, new BaseUiListener());
         return null;
       }
 
@@ -75,15 +75,14 @@ class ShareToQzone extends IShare {
         Bundle data = new Bundle();
         data.putString(QzoneShare.SHARE_TO_QQ_TITLE, String.format(shareTitleForPost(), post.shortName));
         data.putString(QzoneShare.SHARE_TO_QQ_TARGET_URL, url);
+        data.putString(QzoneShare.SHARE_TO_QQ_SUMMARY, post.content);
         if (!TextUtils.isEmpty(post.bgUrl) && post.bgUrl.contains(U.getImageBucket())) {
           data.putString(QzoneShare.SHARE_TO_QQ_IMAGE_URL, post.bgUrl);
-          data.putString(QzoneShare.SHARE_TO_QQ_SUMMARY, post.content);
         } else {
           data.putString(QzoneShare.SHARE_TO_QQ_IMAGE_URL, "http://utree-resource.oss-cn-beijing.aliyuncs.com/faceless.png");
-          data.putString(QzoneShare.SHARE_TO_QQ_SUMMARY, String.format(shareContentForPost(), post.shortName));
         }
         data.putInt(QzoneShare.SHARE_TO_QZONE_KEY_TYPE, QzoneShare.SHARE_TO_QZONE_TYPE_IMAGE_TEXT);
-        shareToQzone(activity, data, defaultListener());
+        shareToQzone(activity, data, postUiCallback(post));
         return null;
       }
 
@@ -115,7 +114,7 @@ class ShareToQzone extends IShare {
           data.putString(QzoneShare.SHARE_TO_QQ_IMAGE_URL, "http://utree-resource.oss-cn-beijing.aliyuncs.com/faceless.png");
         }
         data.putInt(QzoneShare.SHARE_TO_QZONE_KEY_TYPE, QzoneShare.SHARE_TO_QZONE_TYPE_IMAGE_TEXT);
-        shareToQzone(activity, data, defaultListener());
+        shareToQzone(activity, data, new BaseUiListener());
         return null;
       }
 
@@ -131,25 +130,4 @@ class ShareToQzone extends IShare {
     shareApp(activity, circle, url);
   }
 
-  private IUiListener defaultListener() {
-    return new IUiListener() {
-      @Override
-      public void onComplete(Object o) {
-        if (BuildConfig.DEBUG) Toast.makeText(U.getContext(), "onComplete", Toast.LENGTH_LONG).show();
-      }
-
-      @Override
-      public void onError(UiError uiError) {
-        if (BuildConfig.DEBUG)
-          Toast.makeText(U.getContext(),
-              String.format("%d: %s - %s", uiError.errorCode, uiError.errorMessage, uiError.errorDetail),
-              Toast.LENGTH_LONG).show();
-      }
-
-      @Override
-      public void onCancel() {
-        if (BuildConfig.DEBUG) Toast.makeText(U.getContext(), "onCancel", Toast.LENGTH_LONG).show();
-      }
-    };
-  }
 }

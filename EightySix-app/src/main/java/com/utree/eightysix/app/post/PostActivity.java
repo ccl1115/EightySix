@@ -22,6 +22,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.OverlayTipUtil;
+import com.utree.eightysix.app.bs.BlueStarFragment;
 import com.utree.eightysix.app.feed.event.*;
 import com.utree.eightysix.app.msg.ReadMsgStore;
 import com.utree.eightysix.data.Comment;
@@ -62,7 +63,6 @@ public class PostActivity extends BaseActivity {
   private String mPostId;
 
   private PostCommentsAdapter mPostCommentsAdapter;
-  private boolean mResumed;
   private Guide mPortraitTip;
   private ThemedDialog mQuitConfirmDialog;
   private AlertDialog mCommentContextDialog;
@@ -397,6 +397,26 @@ public class PostActivity extends BaseActivity {
     }
   }
 
+  private BlueStarFragment mBlueStarFragment;
+
+  private void showBlueStarFragment(int starType, String starToken) {
+    if (mBlueStarFragment == null) {
+      mBlueStarFragment = new BlueStarFragment();
+      Bundle bundle = new Bundle();
+      bundle.putInt("starType", starType);
+      bundle.putParcelable("post", mPost);
+      bundle.putString("starToken", starToken);
+      mBlueStarFragment.setArguments(bundle);
+      getSupportFragmentManager().beginTransaction()
+          .add(R.id.content, mBlueStarFragment)
+          .commit();
+    } else {
+      getSupportFragmentManager().beginTransaction()
+          .attach(mBlueStarFragment)
+          .commit();
+    }
+  }
+
   private void requestComment(final int page, final boolean bottom) {
     final String id = mPost == null ? mPostId : mPost.id;
     final int viewType = mPost == null ? 0 : mPost.viewType;
@@ -413,6 +433,12 @@ public class PostActivity extends BaseActivity {
           mLvComments.setAdapter(mPostCommentsAdapter);
           mPost = response.object.post;
           mPostCommentsAdapter.setNeedReload(false);
+
+
+          if (response.object.blueStar == 1) {
+            showBlueStarFragment(response.object.blueStarType, response.object.starToken);
+          }
+
           U.getBus().post(mPost);
         } else {
           if (mPostCommentsAdapter != null && mPostCommentsAdapter.getCount() == 1) {

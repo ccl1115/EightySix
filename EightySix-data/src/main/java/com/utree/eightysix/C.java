@@ -5,10 +5,6 @@ package com.utree.eightysix;
  * <p/>
  * All system-wide configuration are defined here.
  *
- * 命名规范
- *
- * API_模块_动作_修饰
- *
  * Naming conversion
  *
  * API_MODULE_ACTION_MODIFIER
@@ -66,6 +62,8 @@ public class C {
   public static final String API_COMMENT_LIST = "/comment/list.do";
   public static final String API_COMMENT_PRAISE = "/comment/praise.do";
   public static final String API_COMMENT_PRAISE_CANCEL = "/comment/cancelPraise.do";
+  public static final String API_COMMENT_RECEIVE_STAR = "/comment/receiveStar.do";
+  public static final String API_COMMENT_SHARE_CONTENT = "/comment/shareContent.do";
 
   public static final String API_NOTIFICATION = "/notice/notice.do";
   public static final String API_FETCH = "/notice/fetch.do";

@@ -14,6 +14,15 @@ public class PostComments {
   @SerializedName("comments")
   public Comments comments;
 
+  @SerializedName("blueStar")
+  public int blueStar;
+
+  @SerializedName("blueStarType")
+  public int blueStarType;
+
+  @SerializedName("starToken")
+  public String starToken;
+
   public static class Comments {
 
     @SerializedName("lists")
