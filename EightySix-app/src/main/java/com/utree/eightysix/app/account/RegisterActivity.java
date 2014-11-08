@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.EditText;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -219,7 +218,7 @@ public class RegisterActivity extends BaseActivity {
 
   @Subscribe
   public void onContactsSyncEvent(ContactsSyncEvent event) {
-    BaseCirclesActivity.startSelect(this);
+    BaseCirclesActivity.startSelect(this, false);
     finish();
   }
 

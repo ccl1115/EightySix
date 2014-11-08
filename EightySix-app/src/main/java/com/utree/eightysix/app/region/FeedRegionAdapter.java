@@ -456,7 +456,7 @@ public class FeedRegionAdapter extends BaseAdapter {
     @OnClick (R.id.rb_select)
     public void onRbSelectClicked(View view) {
       U.getAnalyser().trackEvent(U.getContext(), "feed_select", "feed_select");
-      BaseCirclesActivity.startSelect(view.getContext());
+      BaseCirclesActivity.startSelect(view.getContext(), false);
     }
   }
 

@@ -182,7 +182,8 @@ class CircleListAdapter extends BaseAdapter {
       mCircleChangeDialog.setPositive("继续", new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-          BaseCirclesActivity.startSelect(v.getContext());
+          BaseCirclesActivity.startSelect(v.getContext(), true);
+          mCircleChangeDialog.dismiss();
         }
       });
       mCircleChangeDialog.setRbNegative("放弃", new View.OnClickListener() {

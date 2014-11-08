@@ -55,7 +55,6 @@ public class BaseCirclesActivity extends BaseActivity {
 
   private static final int MODE_SELECT = 1;
   private static final int MODE_MY = 2;
-  private static final int MODE_REGION = 3;
 
   @InjectView (R.id.alv_refresh)
   public AdvancedListView mLvCircles;
@@ -76,7 +75,7 @@ public class BaseCirclesActivity extends BaseActivity {
 
   private int mMode;
 
-  private int mRegionType;
+  private boolean mCancelable;
 
   private boolean mRefreshed;
 
@@ -88,9 +87,10 @@ public class BaseCirclesActivity extends BaseActivity {
   public BaseCirclesActivity() {
   }
 
-  public static void startSelect(Context context) {
+  public static void startSelect(Context context, boolean cancelable) {
     Intent intent = new Intent(context, BaseCirclesActivity.class);
     intent.putExtra("mode", MODE_SELECT);
+    intent.putExtra("cancelable", cancelable);
     context.startActivity(intent);
   }
 
@@ -100,17 +100,9 @@ public class BaseCirclesActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
-  public static void startRegion(Context context, int regionType) {
-    Intent intent = new Intent(context, BaseCirclesActivity.class);
-    intent.putExtra("mode", MODE_REGION);
-    intent.putExtra("regionType", regionType);
-
-    context.startActivity(intent);
-  }
-
   @OnClick ({R.id.fl_search, R.id.tv_search_hint})
   public void onFlSearchClicked() {
-    if (mMode == MODE_MY || mMode == MODE_REGION) {
+    if (mMode == MODE_MY) {
       U.getAnalyser().trackEvent(this, "circle_search", "my");
       CircleSearchActivity.start(this, false);
     } else if (mMode == MODE_SELECT) {
@@ -123,7 +115,7 @@ public class BaseCirclesActivity extends BaseActivity {
   public void onLvCirclesItemClicked(int position) {
     final Circle circle = mCircleListAdapter.getItem(position);
     if (circle != null) {
-      if (mMode == MODE_MY || mMode == MODE_REGION) {
+      if (mMode == MODE_MY) {
         circle.selected = true;
         if (circle.currFactory == 1) {
           finish();
@@ -143,7 +135,7 @@ public class BaseCirclesActivity extends BaseActivity {
   public boolean onLvCirclesItemLongClicked(int position) {
     final Circle circle = mCircleListAdapter.getItem(position);
     if (circle != null) {
-      if ((mMode == MODE_MY || mMode == MODE_REGION)&& !circle.viewGroupType.equals("我所在的圈子")) {
+      if (mMode == MODE_MY && !circle.viewGroupType.equals("我所在的圈子")) {
         showCircleSetDialog(circle);
         return true;
       }
@@ -156,11 +148,11 @@ public class BaseCirclesActivity extends BaseActivity {
     if (mMode == MODE_MY) {
       U.getAnalyser().trackEvent(this, "circle_title", "my");
       finish();
-    } else if (mMode == MODE_REGION) {
-      U.getAnalyser().trackEvent(this, "circle_title", "region");
-      finish();
     } else {
       U.getAnalyser().trackEvent(this, "circle_title", "select");
+      if (mCancelable) {
+        finish();
+      }
     }
   }
 
@@ -177,8 +169,7 @@ public class BaseCirclesActivity extends BaseActivity {
         R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed);
 
     mMode = getIntent().getIntExtra("mode", MODE_MY);
-
-    mRegionType = getIntent().getIntExtra("regionType", 1);
+    mCancelable = getIntent().getBooleanExtra("cancelable", false);
 
     switch (mMode) {
       case MODE_MY:
@@ -186,19 +177,6 @@ public class BaseCirclesActivity extends BaseActivity {
         break;
       case MODE_SELECT:
         setTopTitle(getString(R.string.select_circle));
-        break;
-      case MODE_REGION:
-        switch (mRegionType) {
-          case 1:
-            setTopTitle("1公里的工厂");
-            break;
-          case 2:
-            setTopTitle("5公里的工厂");
-            break;
-          case 3:
-            setTopTitle("同城的工厂");
-            break;
-        }
         break;
     }
 
@@ -236,13 +214,7 @@ public class BaseCirclesActivity extends BaseActivity {
       });
     }
 
-    if (mMode == MODE_REGION) {
-      mFlSearch.setVisibility(View.GONE);
-
-      requestRegionCircles(mRegionType, 1);
-    } else {
-      cacheOutCircles(1);
-    }
+    cacheOutCircles(1);
     showProgressBar();
 
     mLvCircles.setLoadMoreCallback(new LoadMoreCallback() {
@@ -263,11 +235,7 @@ public class BaseCirclesActivity extends BaseActivity {
               "circle_load_more", String.valueOf(mPageInfo.currPage + 1));
         }
         if (mRefreshed) {
-          if (mMode == MODE_REGION) {
-            requestRegionCircles(mRegionType, mPageInfo == null ? 1 : mPageInfo.currPage + 1);
-          } else {
-            requestCircles(mPageInfo == null ? 1 : mPageInfo.currPage + 1);
-          }
+          requestCircles(mPageInfo == null ? 1 : mPageInfo.currPage + 1);
         } else {
           cacheOutCircles(mPageInfo == null ? 1 : mPageInfo.currPage + 1);
         }
@@ -281,11 +249,7 @@ public class BaseCirclesActivity extends BaseActivity {
         showRefreshIndicator(true);
         U.getAnalyser().trackEvent(BaseCirclesActivity.this, "circle_pull_refresh", "refresh");
         mRefreshed = true;
-        if (mMode == MODE_REGION) {
-          requestRegionCircles(mRegionType, 1);
-        } else {
-          requestCircles(1);
-        }
+        requestCircles(1);
         requestLocation();
       }
 
@@ -308,6 +272,8 @@ public class BaseCirclesActivity extends BaseActivity {
   @Override
   public void onBackPressed() {
     if (mMode != MODE_SELECT) {
+      super.onBackPressed();
+    } else if (mCancelable) {
       super.onBackPressed();
     }
   }

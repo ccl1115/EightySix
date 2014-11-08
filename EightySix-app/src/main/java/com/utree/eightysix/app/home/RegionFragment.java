@@ -47,7 +47,7 @@ public class RegionFragment extends BaseFragment {
   @OnClick (R.id.rb_current)
   public void onRbCurrentClicked(View v) {
     if (mCurrent == null) {
-      BaseCirclesActivity.startSelect(getBaseActivity());
+      BaseCirclesActivity.startSelect(getBaseActivity(), false);
     } else {
       mRegionType = 0;
       setRangeSelected(0, v);
