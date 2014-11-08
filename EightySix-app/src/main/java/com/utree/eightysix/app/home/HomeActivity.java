@@ -243,6 +243,7 @@ public class HomeActivity extends BaseActivity {
       }
     }
 
+    mDlContent.closeDrawer(mLlSide);
   }
 
   @Override
