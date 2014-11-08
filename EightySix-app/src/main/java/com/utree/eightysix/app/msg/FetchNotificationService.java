@@ -133,8 +133,9 @@ public class FetchNotificationService extends Service {
 
           if (mShowCommentNotify) {
             if (count == 1) {
+              PullNotification.Item item = comments.lists.get(0);
               getNM().notify(type == PushMessageReceiver.TYPE_FOLLOW_COMMENT ? NotifyUtil.ID_FOLLOW_COMMENT : NotifyUtil.ID_OWN_COMMENT,
-                  mNotifyUtil.buildComment(count, comments.lists.get(0).value, type, false, 0));
+                  mNotifyUtil.buildComment(count, item.value, type, circleId == item.factoryId, sCircleId));
             } else if (count > 1) {
               getNM().notify(type == PushMessageReceiver.TYPE_FOLLOW_COMMENT ? NotifyUtil.ID_FOLLOW_COMMENT : NotifyUtil.ID_OWN_COMMENT,
                   mNotifyUtil.buildComment(count, null, type, false, 0));

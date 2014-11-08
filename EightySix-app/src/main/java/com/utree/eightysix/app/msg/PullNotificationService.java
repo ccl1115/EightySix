@@ -132,13 +132,13 @@ public class PullNotificationService extends Service {
         int count = 0;
         if (response.object.lists != null) {
           count = response.object.unread;
-          PullNotification.Item item = response.object.lists.get(0);
           if (count == 1) {
+            PullNotification.Item item = response.object.lists.get(0);
             getNM().notify(type == PushMessageReceiver.TYPE_FOLLOW_COMMENT ? NotifyUtil.ID_FOLLOW_COMMENT : NotifyUtil.ID_OWN_COMMENT,
                 mNotifyUtil.buildComment(count, item.value, type, item.currFactory == 1, item.factoryId));
           } else if (count > 1) {
             getNM().notify(type == PushMessageReceiver.TYPE_FOLLOW_COMMENT ? NotifyUtil.ID_FOLLOW_COMMENT : NotifyUtil.ID_OWN_COMMENT,
-                mNotifyUtil.buildComment(count, null, type, item.currFactory == 1, item.factoryId));
+                mNotifyUtil.buildComment(count, null, type, false, 0));
           }
           Account.inst().setNewCommentCount(count);
         }

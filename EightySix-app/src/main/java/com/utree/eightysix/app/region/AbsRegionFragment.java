@@ -321,7 +321,11 @@ public abstract class AbsRegionFragment extends BaseFragment {
         }
       }
 
-      FetchNotificationService.setCircleId(mCircle == null ? 0 : mCircle.id);
+      if (mRegionType == 0) {
+        FetchNotificationService.setCircleId(mCircle == null ? 0 : mCircle.id);
+      } else {
+        FetchNotificationService.setCircleId(0);
+      }
     } else {
       cacheOutFeeds(regionType, page);
     }
