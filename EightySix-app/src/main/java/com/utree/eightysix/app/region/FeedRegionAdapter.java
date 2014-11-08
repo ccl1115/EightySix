@@ -69,9 +69,18 @@ public class FeedRegionAdapter extends BaseAdapter {
     } else if (mFeeds.upContact != 1) {
       // 上传通讯录
       mFeeds.posts.lists.add(0, new BaseItem(TYPE_UPLOAD));
-    }  else if (mFeeds.posts.lists.size() == 0) {
-      // 邀请厂里的人加入
-      mFeeds.posts.lists.add(0, new BaseItem(TYPE_INVITE_FACTORY));
+    }  else {
+      boolean hasPosts = false;
+      for (BaseItem item : mFeeds.posts.lists) {
+        if (item.type == BaseItem.TYPE_POST) {
+          hasPosts = true;
+          break;
+        }
+      }
+      if (!hasPosts) {
+        // 邀请厂里的人加入
+        mFeeds.posts.lists.add(0, new BaseItem(TYPE_INVITE_FACTORY));
+      }
     }
   }
 
