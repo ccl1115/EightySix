@@ -143,17 +143,29 @@ public class TabRegionFragment extends BaseFragment {
 
   @Subscribe
   public void onNewAllPostCountEvent(NewAllPostCountEvent event) {
-    mTtTab.setTabBudget(0, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
+    if (event.getCircleId() != 0) {
+      mTtTab.setTabBudget(0, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
+    } else {
+      mTtTab.setTabBudget(0, "0", true);
+    }
   }
 
   @Subscribe
   public void onNewHotPostCountEvent(NewHotPostCountEvent event) {
-    mTtTab.setTabBudget(1, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
+    if (event.getCircleId() != 0) {
+      mTtTab.setTabBudget(1, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
+    } else {
+      mTtTab.setTabBudget(1, "0", true);
+    }
   }
 
   @Subscribe
   public void onNewFriendsPostCountEvent(NewFriendsPostCountEvent event) {
-    mTtTab.setTabBudget(2, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
+    if (event.getCircleId() != 0) {
+      mTtTab.setTabBudget(2, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
+    } else {
+      mTtTab.setTabBudget(2, "0", true);
+    }
   }
 
   public boolean canPublish() {
