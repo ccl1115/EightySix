@@ -169,8 +169,9 @@ public class TopicActivity extends BaseActivity {
   }
 
   @Subscribe
-  public void onPostPublichedEvent(PostPublishedEvent event) {
+  public void onPostPublishedEvent(PostPublishedEvent event) {
     requestNewTopicFeed(1);
+    mTopicFeedAdapter.switchTab(TAB_NEW);
   }
 
   private void requestNewTopicFeed(final int page) {
