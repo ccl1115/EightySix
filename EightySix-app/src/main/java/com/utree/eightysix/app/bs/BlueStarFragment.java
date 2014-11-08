@@ -185,7 +185,7 @@ public class BlueStarFragment extends BaseFragment {
     dialog.setPositive("分享并领取", new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        U.getShareManager().sharePostDialog(getBaseActivity(), mPost).show();
+        U.getShareManager().sharePostToQzone(getBaseActivity(), mPost);
         dialog.dismiss();
       }
     });

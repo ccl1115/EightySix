@@ -85,6 +85,19 @@ public class ShareManager {
     });
   }
 
+  public void sharePostToQzone(final BaseActivity activity, final Post post) {
+    mShortener.shorten(shareLinkForPost(post.id), new Shortener.Callback() {
+      @Override
+      public void onShorten(String shorten) {
+        if (shorten != null) {
+          mShareToQzone.sharePost(activity, post, shorten);
+        } else {
+          mShareToQzone.sharePost(activity, post, shareLinkForPost(post.id));
+        }
+      }
+    });
+  }
+
   public void shareAppToQQ(final BaseActivity activity, final Circle circle) {
     mShortener.shorten(shareLinkForApp(circle.id), new Shortener.Callback() {
       @Override
