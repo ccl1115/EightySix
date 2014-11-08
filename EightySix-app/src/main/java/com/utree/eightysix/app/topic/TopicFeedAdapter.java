@@ -199,7 +199,7 @@ public class TopicFeedAdapter extends BaseAdapter {
       convertView.setPadding(0, 0, 0, 0);
     }
 
-    ((FeedPostView) convertView).setData((Post) getItem(position));
+    ((FeedPostView) convertView).setData((Post) getItem(position), 0);
 
     return convertView;
   }

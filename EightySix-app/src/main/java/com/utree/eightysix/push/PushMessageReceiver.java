@@ -197,7 +197,7 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
       String[] args = cmd.split(":");
 
       if ("feed".equals(args[0])) {
-        HomeActivity.start(context, Integer.parseInt(args[1]), true);
+        HomeActivity.start(context);
       } else if ("post".equals(args[0])) {
         HomeActivity.start(context);
         PostActivity.start(context, args[1]);

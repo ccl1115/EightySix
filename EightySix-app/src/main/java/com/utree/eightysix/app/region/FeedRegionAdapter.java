@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.region;
 
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
-import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.app.feed.FeedOptionSetView;
 import com.utree.eightysix.app.feed.FeedPostView;
 import com.utree.eightysix.app.feed.FeedPromotionView;
@@ -283,13 +281,7 @@ public class FeedRegionAdapter extends BaseAdapter {
     FeedPostView feedPostView = (FeedPostView) convertView;
     final Post item = (Post) getItem(position);
 
-    feedPostView.findViewById(R.id.tv_source).setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        FeedActivity.start(v.getContext(), item.factoryId);
-      }
-    });
-    feedPostView.setData(item);
+    feedPostView.setData(item, mFeeds.circle == null ? 0 : mFeeds.circle.id);
 
     if (mTipOverlaySourcePosition == position) {
       feedPostView.showSourceTipOverlay();
@@ -391,7 +383,7 @@ public class FeedRegionAdapter extends BaseAdapter {
     SelectViewHolder holder;
     if (convertView == null) {
       convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_select, parent, false);
-      holder = new SelectViewHolder(convertView, mFeeds.circle.id);
+      holder = new SelectViewHolder(convertView);
       convertView.setTag(holder);
     } else {
       holder = (SelectViewHolder) convertView.getTag();
@@ -448,10 +440,7 @@ public class FeedRegionAdapter extends BaseAdapter {
   @Keep
   static class SelectViewHolder {
 
-    private int mId;
-
-    public SelectViewHolder(View view, int id) {
-      mId = id;
+    public SelectViewHolder(View view) {
       ButterKnife.inject(this, view);
     }
 

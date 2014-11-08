@@ -16,11 +16,13 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.feed.BasePostView;
+import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
 import com.utree.eightysix.app.tag.TagTabActivity;
 import com.utree.eightysix.data.Post;
@@ -108,6 +110,13 @@ public class PostPostView extends BasePostView {
   @OnClick (R.id.tv_tag_3)
   public void onTvTag3Clicked() {
     TagTabActivity.start(getContext(), mPost.tags.get(2));
+  }
+
+  @OnClick(R.id.tv_source)
+  public void onTvSourceClicked() {
+    if (Account.inst().getCurrentCircle() == null || Account.inst().getCurrentCircle().id != mPost.factoryId) {
+      FeedActivity.start(getContext(), mPost.factoryId);
+    }
   }
 
   public void setData(Post post) {

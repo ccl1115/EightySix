@@ -1,41 +1,20 @@
 package com.utree.eightysix.app.tag;
 
 import android.util.SparseBooleanArray;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnClick;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.squareup.otto.Subscribe;
-import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.annotations.Keep;
-import com.utree.eightysix.app.circle.BaseCirclesActivity;
-import com.utree.eightysix.app.feed.FeedOptionSetView;
 import com.utree.eightysix.app.feed.FeedPostView;
-import com.utree.eightysix.app.feed.FeedPromotionView;
-import com.utree.eightysix.app.feed.FeedQuestionView;
-import com.utree.eightysix.app.feed.FeedTopicView;
-import com.utree.eightysix.app.feed.event.InviteClickedEvent;
-import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
-import com.utree.eightysix.app.feed.event.UploadClickedEvent;
 import com.utree.eightysix.data.BaseItem;
-import com.utree.eightysix.data.Feeds;
-import com.utree.eightysix.data.OptionSet;
 import com.utree.eightysix.data.Post;
-import com.utree.eightysix.data.PostTopic;
-import com.utree.eightysix.data.Promotion;
-import com.utree.eightysix.data.QuestionSet;
 import com.utree.eightysix.data.TagFeeds;
-import com.utree.eightysix.widget.RoundedButton;
+
 import java.util.List;
 
 /**
@@ -162,7 +141,7 @@ class TagFeedAdapter extends BaseAdapter {
     }
 
     FeedPostView feedPostView = (FeedPostView) convertView;
-    feedPostView.setData((Post) getItem(position));
+    feedPostView.setData((Post) getItem(position), 0);
 
     return convertView;
   }

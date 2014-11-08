@@ -313,7 +313,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
 
       }
 
-      FetchNotificationService.setCircleId(mCircle.id);
+      FetchNotificationService.setCircleId(mCircle == null ? 0 : mCircle.id);
     } else {
       cacheOutFeeds(regionType, page);
     }
@@ -375,7 +375,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
       ((HomeActivity) getBaseActivity()).mSend.setImageResource(response.object.lock != 1 || response.object.current == 1 ?
           R.drawable.ic_post_pen : R.drawable.ic_post_pen_disabled);
 
-      FetchNotificationService.setCircleId(mCircle.id);
+      FetchNotificationService.setCircleId(mCircle == null ? 0 : mCircle.id);
     } else {
       if (mFeedAdapter != null && mFeedAdapter.getCount() == 0) {
         mRstvEmpty.setVisibility(View.VISIBLE);

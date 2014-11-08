@@ -11,9 +11,6 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import com.nineoldandroids.animation.AnimatorSet;
-import com.nineoldandroids.animation.ObjectAnimator;
-import com.nineoldandroids.view.ViewHelper;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -287,7 +284,7 @@ public class FeedAdapter extends BaseAdapter {
     }
 
     FeedPostView feedPostView = (FeedPostView) convertView;
-    feedPostView.setData((Post) getItem(position));
+    feedPostView.setData((Post) getItem(position), mFeeds.circle.id);
 
     if (mTipOverlaySourcePosition == position) {
       feedPostView.showSourceTipOverlay();

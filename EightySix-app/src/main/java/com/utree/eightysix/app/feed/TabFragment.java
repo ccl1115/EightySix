@@ -18,6 +18,7 @@ import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
+import com.utree.eightysix.app.tag.MoreTagFragment;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.widget.TitleTab;
 

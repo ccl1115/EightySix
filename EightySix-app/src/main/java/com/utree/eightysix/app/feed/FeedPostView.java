@@ -18,11 +18,13 @@ import butterknife.OnClick;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
+import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.app.tag.TagTabActivity;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.data.Tag;
@@ -107,7 +109,22 @@ public class FeedPostView extends BasePostView {
     TagTabActivity.start(getContext(), mPost.tags.get(2));
   }
 
+  @OnClick(R.id.tv_source)
+  public void onTvSourceClicked() {
+    if (mCircleId == mPost.factoryId) {
+      return;
+    }
+
+    if (Account.inst().getCurrentCircle() != null && Account.inst().getCurrentCircle().id == mPost.factoryId) {
+      HomeActivity.start(getContext(), 0);
+    } else {
+      FeedActivity.start(getContext(), mPost.factoryId);
+    }
+  }
+
   private Runnable mShareAnimation;
+
+  private int mCircleId;
 
   private View mTipOverlayShare;
   private View mTipOverlaySource;
@@ -169,8 +186,10 @@ public class FeedPostView extends BasePostView {
     return mTvLastComment;
   }
 
-  public void setData(Post post) {
+  public void setData(Post post, int circleId) {
     mPost = post;
+
+    mCircleId = circleId;
 
     if (mPost == null) {
       return;
