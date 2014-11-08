@@ -18,6 +18,9 @@ import com.utree.eightysix.app.feed.FeedAdapter;
 import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
 import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.app.msg.FetchNotificationService;
+import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
+import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
+import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.app.region.event.RegionResponseEvent;
 import com.utree.eightysix.data.Circle;
@@ -311,6 +314,11 @@ public abstract class AbsRegionFragment extends BaseFragment {
               response.object.fetch.newPraise.percent));
         }
 
+        if (mCircle != null) {
+          U.getBus().post(new NewAllPostCountEvent(mCircle.id, response.object.fetch.newPostAllCount));
+          U.getBus().post(new NewHotPostCountEvent(mCircle.id, response.object.fetch.newPostHotCount));
+          U.getBus().post(new NewFriendsPostCountEvent(mCircle.id, response.object.fetch.newPostFriendsCount));
+        }
       }
 
       FetchNotificationService.setCircleId(mCircle == null ? 0 : mCircle.id);

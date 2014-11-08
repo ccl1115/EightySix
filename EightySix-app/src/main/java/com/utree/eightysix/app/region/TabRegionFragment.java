@@ -141,6 +141,21 @@ public class TabRegionFragment extends BaseFragment {
     }, 500);
   }
 
+  @Subscribe
+  public void onNewAllPostCountEvent(NewAllPostCountEvent event) {
+    mTtTab.setTabBudget(0, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
+  }
+
+  @Subscribe
+  public void onNewHotPostCountEvent(NewHotPostCountEvent event) {
+    mTtTab.setTabBudget(1, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
+  }
+
+  @Subscribe
+  public void onNewFriendsPostCountEvent(NewFriendsPostCountEvent event) {
+    mTtTab.setTabBudget(2, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
+  }
+
   public boolean canPublish() {
     return mFeedFragment != null && mFeedFragment.canPublish();
   }
