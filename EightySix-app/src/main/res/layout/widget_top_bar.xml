@@ -48,8 +48,9 @@
                 android:layout_width="1px"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:layout_marginBottom="1px"
-                android:background="#ff898989"
+                android:layout_marginTop="8px"
+                android:layout_marginBottom="8px"
+                android:background="#ff696969"
                 />
 
 

@@ -101,9 +101,9 @@ public class BlueStarFragment extends BaseFragment {
 
   private void showBlueStar() {
     final ImageView imageView = new ImageView(getActivity());
-    imageView.setImageResource(R.drawable.big_logo);
+    imageView.setImageResource(R.drawable.ic_blue_star);
     FrameLayout.LayoutParams params =
-        new FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
+        new FrameLayout.LayoutParams(U.dp2px(48), U.dp2px(48));
     Random random = new Random();
     params.setMargins(random.nextInt(U.dp2px(200)), random.nextInt(U.dp2px(400)), 0, 0);
 
@@ -112,11 +112,32 @@ public class BlueStarFragment extends BaseFragment {
     AnimatorSet set = new AnimatorSet();
 
     set.playTogether(
-        ObjectAnimator.ofFloat(imageView, "rotation" ,0f, 360f),
+        ObjectAnimator.ofFloat(imageView, "rotation" ,0f, 720f),
         ObjectAnimator.ofFloat(imageView, "scaleX", 0f, 0.2f, 1f),
         ObjectAnimator.ofFloat(imageView, "scaleY", 0f, 0.2f, 1f)
     );
-    set.setDuration(500);
+    set.setDuration(1000);
+    set.addListener(new Animator.AnimatorListener() {
+      @Override
+      public void onAnimationStart(Animator animation) {
+
+      }
+
+      @Override
+      public void onAnimationEnd(Animator animation) {
+        imageView.setImageResource(R.drawable.ic_blue_face);
+      }
+
+      @Override
+      public void onAnimationCancel(Animator animation) {
+
+      }
+
+      @Override
+      public void onAnimationRepeat(Animator animation) {
+
+      }
+    });
     set.start();
 
     imageView.setOnClickListener(new View.OnClickListener() {
