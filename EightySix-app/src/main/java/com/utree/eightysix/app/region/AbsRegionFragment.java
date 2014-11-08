@@ -256,6 +256,14 @@ public abstract class AbsRegionFragment extends BaseFragment {
 
         mRegionType = response.object.regionType;
 
+        TopBar topBar = getBaseActivity().getTopBar();
+        if (mRegionType == 0 && mCircle.lock == 1) {
+          topBar.mSubTitle.setCompoundDrawablesWithIntrinsicBounds(
+              getResources().getDrawable(R.drawable.ic_lock_small), null, null, null);
+          topBar.mSubTitle.setCompoundDrawablePadding(U.dp2px(5));
+        } else {
+          topBar.mSubTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+        }
         getBaseActivity().setTopSubTitle(response.object.subInfo);
 
         switch (mRegionType) {

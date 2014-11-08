@@ -513,7 +513,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     mTopBar.setSubTitle(title);
   }
 
-  protected final TopBar getTopBar() {
+  public final TopBar getTopBar() {
     return mTopBar;
   }
 
