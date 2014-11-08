@@ -60,13 +60,13 @@ public class FactoryRegionActivity extends BaseActivity {
 
     switch (regionType) {
       case 1:
-        setTopTitle("1公里内");
+        setTopTitle("1公里内的工厂");
         break;
       case 2:
-        setTopTitle("5公里内");
+        setTopTitle("5公里内的工厂");
         break;
       case 3:
-        setTopTitle("同城");
+        setTopTitle("同城的工厂");
         break;
     }
 
