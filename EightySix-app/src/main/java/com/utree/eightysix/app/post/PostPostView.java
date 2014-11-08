@@ -114,8 +114,10 @@ public class PostPostView extends BasePostView {
 
   @OnClick(R.id.tv_source)
   public void onTvSourceClicked() {
-    if (Account.inst().getCurrentCircle() == null || Account.inst().getCurrentCircle().id != mPost.factoryId) {
-      FeedActivity.start(getContext(), mPost.factoryId);
+    if (mPost.viewType == 3 || mPost.viewType == 5 || mPost.viewType == 8) {
+      if (Account.inst().getCurrentCircle() == null || Account.inst().getCurrentCircle().id != mPost.factoryId) {
+        FeedActivity.start(getContext(), mPost.factoryId);
+      }
     }
   }
 

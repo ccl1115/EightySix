@@ -111,14 +111,16 @@ public class FeedPostView extends BasePostView {
 
   @OnClick(R.id.tv_source)
   public void onTvSourceClicked() {
-    if (mCircleId == mPost.factoryId) {
-      return;
-    }
+    if (mPost.viewType == 3 || mPost.viewType == 5 || mPost.viewType == 8) {
+      if (mCircleId == mPost.factoryId) {
+        return;
+      }
 
-    if (Account.inst().getCurrentCircle() != null && Account.inst().getCurrentCircle().id == mPost.factoryId) {
-      HomeActivity.start(getContext(), 0);
-    } else {
-      FeedActivity.start(getContext(), mPost.factoryId);
+      if (Account.inst().getCurrentCircle() != null && Account.inst().getCurrentCircle().id == mPost.factoryId) {
+        HomeActivity.start(getContext(), 0);
+      } else {
+        FeedActivity.start(getContext(), mPost.factoryId);
+      }
     }
   }
 
