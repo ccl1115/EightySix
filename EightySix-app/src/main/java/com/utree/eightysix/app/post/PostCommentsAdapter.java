@@ -201,7 +201,7 @@ class PostCommentsAdapter extends BaseAdapter {
     holder.mTvPraise.setText(String.valueOf(comment.praise));
 
     if (comment.delete == 1) {
-      holder.mTvComment.setText("该评论已被删除");
+      holder.mTvComment.setText(comment.content);
       holder.mTvComment.setTextColor(resources.getColor(R.color.apptheme_primary_grey_color));
     } else {
       holder.mTvComment.setText(comment.content);
