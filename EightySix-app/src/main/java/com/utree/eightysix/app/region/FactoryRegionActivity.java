@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.InjectView;
@@ -33,6 +34,7 @@ public class FactoryRegionActivity extends BaseActivity {
   public Paginate.Page mPageInfo;
 
   private FactoryRegionAdapter2 mAdapter;
+  private int mRegionType;
 
   @OnItemClick(R.id.content)
   public void onAlvFactoriesItemClicked(int position) {
@@ -60,11 +62,11 @@ public class FactoryRegionActivity extends BaseActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    final int regionType = getIntent().getIntExtra("regionType", 1);
+    mRegionType = getIntent().getIntExtra("regionType", 1);
 
-    requestFactoryRegion(regionType);
+    requestFactoryRegion(mRegionType, 1);
 
-    switch (regionType) {
+    switch (mRegionType) {
       case 1:
         setTopTitle("1公里内的工厂");
         break;
@@ -79,7 +81,7 @@ public class FactoryRegionActivity extends BaseActivity {
     mAlvFactories.setLoadMoreCallback(new LoadMoreCallback() {
       @Override
       public View getLoadMoreView(ViewGroup parent) {
-        return View.inflate(FactoryRegionActivity.this, R.layout.footer_load_more, parent);
+        return LayoutInflater.from(parent.getContext()).inflate(R.layout.footer_load_more, parent, false);
       }
 
       @Override
@@ -89,7 +91,12 @@ public class FactoryRegionActivity extends BaseActivity {
 
       @Override
       public boolean onLoadMoreStart() {
-        return false;
+        if (mPageInfo != null) {
+          requestFactoryRegion(mRegionType, mPageInfo.currPage + 1);
+          return true;
+        } else {
+          return false;
+        }
       }
     });
 
@@ -105,9 +112,11 @@ public class FactoryRegionActivity extends BaseActivity {
     finish();
   }
 
-  private void requestFactoryRegion(int regionType) {
-    showProgressBar();
-    request(new FactoryRegionRequest(regionType, 1), new OnResponse2<FactoryRegionResponse>() {
+  private void requestFactoryRegion(int regionType, final int page) {
+    if (page == 1) {
+      showProgressBar();
+    }
+    request(new FactoryRegionRequest(regionType, page), new OnResponse2<FactoryRegionResponse>() {
       @Override
       public void onResponseError(Throwable e) {
         hideProgressBar();
@@ -115,8 +124,12 @@ public class FactoryRegionActivity extends BaseActivity {
 
       @Override
       public void onResponse(FactoryRegionResponse response) {
-        mAdapter = new FactoryRegionAdapter2(response.object.lists);
-        mAlvFactories.setAdapter(mAdapter);
+        if (page == 1) {
+          mAdapter = new FactoryRegionAdapter2(response.object.lists);
+          mAlvFactories.setAdapter(mAdapter);
+        } else {
+          mAdapter.add(response.object.lists);
+        }
 
         mPageInfo = response.object.page;
 
