@@ -2,6 +2,7 @@ package com.utree.eightysix.app.feed;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -39,8 +40,6 @@ public class TabFragment extends BaseFragment {
 
   private FeedFragment mFeedFragment;
   private HotFeedFragment mHotFeedFragment;
-  private FriendsFeedFragment mFriendsFeedFragment;
-  private MoreTagFragment mMoreTagFragment;
   private BaseFragment mThirdFragment;
   private Circle mCircle;
   private int mMode;
@@ -60,6 +59,15 @@ public class TabFragment extends BaseFragment {
     } else {
       mThirdFragment = new MoreTagFragment();
     }
+
+    Circle circle = getArguments().getParcelable("circle");
+    int id = getArguments().getInt("id");
+    if (circle != null) {
+      setCircle(circle);
+    } else if (id != -1) {
+      setCircle(id);
+    }
+
   }
 
   @Override

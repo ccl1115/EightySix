@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
@@ -343,17 +344,17 @@ public class FeedActivity extends BaseActivity {
         } else {
           args.putInt("mode", TabFragment.MODE_MORE);
         }
-        mTabFragment.setArguments(args);
-        getSupportFragmentManager().beginTransaction().add(R.id.fl_feed, mTabFragment, "tab").commit();
-
         Circle circle = getIntent().getParcelableExtra("circle");
         int id = getIntent().getIntExtra("id", -1);
 
         if (circle != null) {
-          mTabFragment.setCircle(circle);
+          args.putParcelable("circle", circle);
         } else if (id != -1) {
-          mTabFragment.setCircle(id);
+          args.putInt("id", id);
         }
+
+        mTabFragment.setArguments(args);
+        getSupportFragmentManager().beginTransaction().add(R.id.fl_feed, mTabFragment, "tab").commit();
 
         hideProgressBar();
       }
