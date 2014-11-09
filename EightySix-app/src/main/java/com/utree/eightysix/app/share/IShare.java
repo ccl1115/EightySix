@@ -52,7 +52,9 @@ public abstract class IShare {
     return new BaseUiListener() {
       @Override
       public void onComplete(Object o) {
-        super.onComplete(o);
+        if (!fromBs) {
+          super.onComplete(o);
+        }
         U.getBus().post(new SharePostEvent(post, true, fromBs));
       }
 

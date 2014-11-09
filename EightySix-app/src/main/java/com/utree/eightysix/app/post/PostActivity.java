@@ -28,6 +28,7 @@ import com.utree.eightysix.app.msg.ReadMsgStore;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.*;
+import com.utree.eightysix.response.CommentDeleteResponse;
 import com.utree.eightysix.response.PostCommentsResponse;
 import com.utree.eightysix.response.PublishCommentResponse;
 import com.utree.eightysix.rest.OnResponse;
@@ -331,14 +332,22 @@ public class PostActivity extends BaseActivity {
 
   @Subscribe
   public void onPostCommentDeleteRequest(final PostCommentDeleteRequest request) {
-    request(request, new OnResponse<Response>() {
+    request(request, new OnResponse<CommentDeleteResponse>() {
       @Override
-      public void onResponse(Response response) {
+      public void onResponse(CommentDeleteResponse response) {
         if (RESTRequester.responseOk(response)) {
-          mPostCommentsAdapter.remove(request.commentId);
+          for (Comment c : mPostCommentsAdapter.mComments) {
+            if (c == null) continue;
+            if (c.id.equals(request.commentId)) {
+              c.delete = 1;
+              c.content = response.object.reason;
+              mPostCommentsAdapter.notifyDataSetChanged();
+              break;
+            }
+          }
         }
       }
-    }, Response.class);
+    }, CommentDeleteResponse.class);
   }
 
   @Subscribe

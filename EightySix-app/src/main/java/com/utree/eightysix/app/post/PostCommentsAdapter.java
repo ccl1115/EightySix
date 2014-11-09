@@ -33,7 +33,7 @@ class PostCommentsAdapter extends BaseAdapter {
   private static final int TYPE_RELOAD = 3;
 
   private Post mPost;
-  private List<Comment> mComments;
+  List<Comment> mComments;
 
   private boolean mNeedReload;
 
@@ -133,17 +133,6 @@ class PostCommentsAdapter extends BaseAdapter {
   @Override
   public int getViewTypeCount() {
     return 4;
-  }
-
-  public void remove(String commentId) {
-    for (Comment c : mComments) {
-      if (c == null) continue;
-      if (c.id.equals(commentId)) {
-        c.delete = 1;
-        notifyDataSetChanged();
-        break;
-      }
-    }
   }
 
   private View getCommentView(int position, View convertView, final ViewGroup parent) {
