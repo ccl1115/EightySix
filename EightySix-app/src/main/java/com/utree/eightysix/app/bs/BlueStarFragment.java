@@ -15,7 +15,6 @@ import com.baidu.android.common.util.CommonParam;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
-import com.nineoldandroids.animation.ValueAnimator;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.C;
@@ -26,15 +25,11 @@ import com.utree.eightysix.app.share.SharePostEvent;
 import com.utree.eightysix.app.web.BaseWebActivity;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.ReceiveStarRequest;
-import com.utree.eightysix.request.ShareContentRequest;
 import com.utree.eightysix.rest.OnResponse2;
-import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.ThemedDialog;
 
 import java.util.Random;
-
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  */
@@ -193,7 +188,7 @@ public class BlueStarFragment extends BaseFragment {
       @Override
       public void onClick(View view) {
         getBaseActivity().showProgressBar();
-        U.getShareManager().sharePostToQzone(getBaseActivity(), mPost);
+        U.getShareManager().sharePostToQzone(getBaseActivity(), mPost, true);
         dialog.dismiss();
       }
     });
@@ -232,10 +227,8 @@ public class BlueStarFragment extends BaseFragment {
   @Subscribe
   public void onSharePostEvent(SharePostEvent event) {
     if (event.getPost().equals(mPost)) {
-      if (event.isSuccess()) {
+      if (event.isSuccess() && event.isFromBs()) {
         requestReceiveStart();
-      } else {
-        U.showToast("分享失败");
       }
     }
   }

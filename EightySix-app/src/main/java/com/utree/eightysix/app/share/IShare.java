@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.share;
 
-import android.app.Activity;
 import android.widget.Toast;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.UiError;
@@ -23,7 +22,7 @@ public abstract class IShare {
 
   public abstract void shareApp(BaseActivity activity, Circle circle, String url);
 
-  public abstract void sharePost(BaseActivity activity, Post post, String url);
+  public abstract void sharePost(BaseActivity activity, Post post, String url, boolean fromBs);
 
   public abstract void shareComment(BaseActivity activity, Post post, String comment, String url);
 
@@ -49,24 +48,24 @@ public abstract class IShare {
     return "转自【蓝莓】-工厂里的秘密社区";
   }
 
-  static IUiListener postUiCallback(final Post post) {
+  static IUiListener postUiCallback(final Post post, final boolean fromBs) {
     return new BaseUiListener() {
       @Override
       public void onComplete(Object o) {
         super.onComplete(o);
-        U.getBus().post(new SharePostEvent(post, true));
+        U.getBus().post(new SharePostEvent(post, true, fromBs));
       }
 
       @Override
       public void onError(UiError uiError) {
         super.onError(uiError);
-        U.getBus().post(new SharePostEvent(post, false));
+        U.getBus().post(new SharePostEvent(post, false, fromBs));
       }
 
       @Override
       public void onCancel() {
         super.onCancel();
-        U.getBus().post(new SharePostEvent(post, false));
+        U.getBus().post(new SharePostEvent(post, false, fromBs));
       }
     };
   }

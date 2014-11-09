@@ -8,9 +8,16 @@ public class SharePostEvent {
   private final Post mPost;
   private final boolean mSuccess;
 
-  public SharePostEvent(Post post, boolean suc) {
+  public boolean isFromBs() {
+    return mFromBs;
+  }
+
+  private final boolean mFromBs;
+
+  public SharePostEvent(Post post, boolean suc, boolean fromBs) {
     mPost = post;
     mSuccess = suc;
+    mFromBs = fromBs;
   }
 
   public Post getPost() {

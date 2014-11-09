@@ -85,14 +85,14 @@ public class ShareManager {
     });
   }
 
-  public void sharePostToQzone(final BaseActivity activity, final Post post) {
+  public void sharePostToQzone(final BaseActivity activity, final Post post, final boolean fromBs) {
     mShortener.shorten(shareLinkForPost(post.id), new Shortener.Callback() {
       @Override
       public void onShorten(String shorten) {
         if (shorten != null) {
-          mShareToQzone.sharePost(activity, post, shorten);
+          mShareToQzone.sharePost(activity, post, shorten, fromBs);
         } else {
-          mShareToQzone.sharePost(activity, post, shareLinkForPost(post.id));
+          mShareToQzone.sharePost(activity, post, shareLinkForPost(post.id), fromBs);
         }
       }
     });
@@ -249,9 +249,9 @@ public class ShareManager {
         @Override
         public void onShorten(String shorten) {
           if (shorten == null) {
-            mShareViaSMS.sharePost(mActivity, mPost, shareLinkForPost(mPost.id));
+            mShareViaSMS.sharePost(mActivity, mPost, shareLinkForPost(mPost.id), false);
           } else {
-            mShareViaSMS.sharePost(mActivity, mPost, shorten);
+            mShareViaSMS.sharePost(mActivity, mPost, shorten, false);
           }
         }
       });
@@ -266,9 +266,9 @@ public class ShareManager {
         @Override
         public void onShorten(String shorten) {
           if (shorten == null) {
-            mShareToQQ.sharePost(mActivity, mPost, shareLinkForPost(mPost.id));
+            mShareToQQ.sharePost(mActivity, mPost, shareLinkForPost(mPost.id), false);
           } else {
-            mShareToQQ.sharePost(mActivity, mPost, shorten);
+            mShareToQQ.sharePost(mActivity, mPost, shorten, false);
           }
         }
       });
@@ -283,9 +283,9 @@ public class ShareManager {
         @Override
         public void onShorten(String shorten) {
           if (shorten == null) {
-            mShareToQzone.sharePost(mActivity, mPost, shareLinkForPost(mPost.id));
+            mShareToQzone.sharePost(mActivity, mPost, shareLinkForPost(mPost.id), false);
           } else {
-            mShareToQzone.sharePost(mActivity, mPost, shorten);
+            mShareToQzone.sharePost(mActivity, mPost, shorten, false);
           }
         }
       });

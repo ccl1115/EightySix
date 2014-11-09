@@ -4,13 +4,9 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.widget.Toast;
-import com.tencent.connect.share.QQShare;
 import com.tencent.connect.share.QzoneShare;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
-import com.tencent.tauth.UiError;
-import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
@@ -62,7 +58,7 @@ class ShareToQzone extends IShare {
   }
 
   @Override
-  public void sharePost(final BaseActivity activity, final Post post, final String url) {
+  public void sharePost(final BaseActivity activity, final Post post, final String url, final boolean fromBs) {
     new AsyncTask<Void, Void, Void>() {
 
       @Override
@@ -85,7 +81,7 @@ class ShareToQzone extends IShare {
           data.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL, urls);
         }
         data.putInt(QzoneShare.SHARE_TO_QZONE_KEY_TYPE, QzoneShare.SHARE_TO_QZONE_TYPE_IMAGE_TEXT);
-        shareToQzone(activity, data, postUiCallback(post));
+        shareToQzone(activity, data, postUiCallback(post, fromBs));
         return null;
       }
 
