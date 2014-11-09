@@ -78,7 +78,7 @@ public class C {
   public static final String API_ADD_FRIEND = "/friend/addFriend.do";
   public static final String API_UNREG_CONTACTS = "/friend/unRegContact.do";
 
-  public static final String API_PROMOTION = "/activity.do";
+  public static final String API_PROMOTION = "/activity/blueStar.do";
 
   public static final String API_ACTIVE_ACCEPT = "/active/acceptPrize.do";
   public static final String API_ACTIVE_JOIN = "/active/join.do";
