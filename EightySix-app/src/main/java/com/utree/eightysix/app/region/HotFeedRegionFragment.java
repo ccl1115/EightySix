@@ -18,6 +18,8 @@ import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.widget.TopBar;
+
 import java.util.Iterator;
 
 /**
@@ -35,7 +37,26 @@ public class HotFeedRegionFragment extends AbsRegionFragment {
       mRefresherView.setRefreshing(true);
       getBaseActivity().showRefreshIndicator();
     }
-    getBaseActivity().request(new FeedByRegionRequest(page, mRegionType, 1), new OnResponse<FeedsByRegionResponse>() {
+    switch (regionType) {
+      case 0:
+        getBaseActivity().setTopTitle(mCircle == null ? "" : mCircle.shortName);
+        getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_ONE);
+        break;
+      case 1:
+        getBaseActivity().setTopTitle("1公里内");
+        getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
+        break;
+      case 2:
+        getBaseActivity().setTopTitle("5公里内");
+        getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
+        break;
+      case 3:
+        getBaseActivity().setTopTitle("同城");
+        getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
+        break;
+    }
+    getBaseActivity().setTopSubTitle("");
+    getBaseActivity().request(new FeedByRegionRequest(page, regionType, 1), new OnResponse<FeedsByRegionResponse>() {
       @Override
       public void onResponse(FeedsByRegionResponse response) {
         responseForRequest(response, regionType, page);
@@ -47,7 +68,7 @@ public class HotFeedRegionFragment extends AbsRegionFragment {
   @Override
   protected void cacheOutFeeds(final int regionType, final int page) {
     if (getBaseActivity() == null) return;
-    getBaseActivity().cacheOut(new FeedByRegionRequest(page, mRegionType, 1), new OnResponse<FeedsByRegionResponse>() {
+    getBaseActivity().cacheOut(new FeedByRegionRequest(page, regionType, 1), new OnResponse<FeedsByRegionResponse>() {
       @Override
       public void onResponse(FeedsByRegionResponse response) {
         responseForCache(response, regionType, page);
