@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.feed;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -27,6 +28,9 @@ import com.utree.eightysix.widget.TitleTab;
  */
 public class TabFragment extends BaseFragment {
 
+  static final int MODE_MORE = 1;
+  static final int MODE_HAS_FRIENDS = 2;
+
   @InjectView (R.id.vp_tab)
   public ViewPager mVpTab;
 
@@ -36,12 +40,26 @@ public class TabFragment extends BaseFragment {
   private FeedFragment mFeedFragment;
   private HotFeedFragment mHotFeedFragment;
   private FriendsFeedFragment mFriendsFeedFragment;
+  private MoreTagFragment mMoreTagFragment;
+  private BaseFragment mThirdFragment;
   private Circle mCircle;
+  private int mMode;
 
   public TabFragment() {
     mFeedFragment = new FeedFragment();
     mHotFeedFragment = new HotFeedFragment();
-    mFriendsFeedFragment = new FriendsFeedFragment();
+  }
+
+  @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
+
+    mMode = getArguments().getInt("mode");
+    if (mMode == MODE_HAS_FRIENDS) {
+      mThirdFragment = new FriendsFeedFragment();
+    } else {
+      mThirdFragment = new MoreTagFragment();
+    }
   }
 
   @Override
@@ -64,7 +82,7 @@ public class TabFragment extends BaseFragment {
           case 1:
             return mHotFeedFragment;
           case 2:
-            return mFriendsFeedFragment;
+            return mThirdFragment;
         }
         return null;
 
@@ -83,7 +101,11 @@ public class TabFragment extends BaseFragment {
           case 1:
             return "热门";
           case 2:
-            return "";
+            if (mMode == MODE_HAS_FRIENDS) {
+              return "与我相关";
+            } else if (mMode == MODE_MORE) {
+              return "更多";
+            }
         }
         return "";
       }
@@ -114,9 +136,9 @@ public class TabFragment extends BaseFragment {
             break;
           case 2:
             if (mTtTab.hasBudget(position)) {
-              mFriendsFeedFragment.setActive(false);
+              mThirdFragment.setActive(false);
             }
-            mFriendsFeedFragment.setActive(true);
+            mThirdFragment.setActive(true);
             break;
         }
 
@@ -134,12 +156,6 @@ public class TabFragment extends BaseFragment {
     getBaseActivity().getHandler().postDelayed(new Runnable() {
       @Override
       public void run() {
-        if (mCircle.friendCount == 0) {
-          mTtTab.setTabText(2, "更多");
-        } else {
-          mTtTab.setTabText(2, "与我相关");
-        }
-
         if (getArguments().getInt("tabIndex") == 0) {
           mFeedFragment.setActive(true);
         }
@@ -168,7 +184,9 @@ public class TabFragment extends BaseFragment {
 
     mFeedFragment.setCircle(circle);
     mHotFeedFragment.setCircle(circle);
-    mFriendsFeedFragment.setCircle(circle);
+    if (mThirdFragment instanceof FriendsFeedFragment) {
+      ((FriendsFeedFragment) mThirdFragment).setCircle(circle);
+    }
 
     if (mVpTab == null) return;
 
@@ -182,7 +200,7 @@ public class TabFragment extends BaseFragment {
         mHotFeedFragment.setActive(true);
         break;
       case 2:
-        mFriendsFeedFragment.setActive(true);
+        mThirdFragment.setActive(true);
         break;
     }
   }
@@ -209,7 +227,9 @@ public class TabFragment extends BaseFragment {
 
     mFeedFragment.setCircle(circleId);
     mHotFeedFragment.setCircle(circleId);
-    mFriendsFeedFragment.setCircle(circleId);
+    if (mThirdFragment instanceof FriendsFeedFragment) {
+      ((FriendsFeedFragment) mThirdFragment).setCircle(circleId);
+    }
 
     if (mVpTab == null) return;
 
@@ -223,7 +243,7 @@ public class TabFragment extends BaseFragment {
         mHotFeedFragment.setActive(true);
         break;
       case 2:
-        mFriendsFeedFragment.setActive(true);
+        mThirdFragment.setActive(true);
         break;
     }
   }
@@ -266,6 +286,6 @@ public class TabFragment extends BaseFragment {
   private void clearActive() {
     if (mFeedFragment != null) mFeedFragment.setActive(false);
     if (mHotFeedFragment != null) mHotFeedFragment.setActive(false);
-    if (mFriendsFeedFragment != null) mFriendsFeedFragment.setActive(false);
+    if (mThirdFragment != null) mThirdFragment.setActive(false);
   }
 }

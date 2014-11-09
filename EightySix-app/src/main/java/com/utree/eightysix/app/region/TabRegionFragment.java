@@ -146,7 +146,7 @@ public class TabRegionFragment extends BaseFragment {
     if (event.getCircleId() != 0) {
       mTtTab.setTabBudget(0, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
     } else {
-      mTtTab.setTabBudget(0, "0", true);
+      mTtTab.setTabBudget(0, "", true);
     }
   }
 
@@ -155,7 +155,7 @@ public class TabRegionFragment extends BaseFragment {
     if (event.getCircleId() != 0) {
       mTtTab.setTabBudget(1, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
     } else {
-      mTtTab.setTabBudget(1, "0", true);
+      mTtTab.setTabBudget(1, "", true);
     }
   }
 
@@ -164,7 +164,7 @@ public class TabRegionFragment extends BaseFragment {
     if (event.getCircleId() != 0) {
       mTtTab.setTabBudget(2, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
     } else {
-      mTtTab.setTabBudget(2, "0", true);
+      mTtTab.setTabBudget(2, "", true);
     }
   }
 

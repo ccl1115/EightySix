@@ -1,21 +1,15 @@
 package com.utree.eightysix.app.feed;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -25,33 +19,18 @@ import com.utree.eightysix.*;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.account.AccountActivity;
-import com.utree.eightysix.app.account.AddFriendActivity;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
 import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
 import com.utree.eightysix.app.feed.event.UploadClickedEvent;
-import com.utree.eightysix.app.home.RegionFragment;
-import com.utree.eightysix.app.msg.FetchNotificationService;
-import com.utree.eightysix.app.msg.MsgActivity;
-import com.utree.eightysix.app.msg.PraiseActivity;
-import com.utree.eightysix.app.publish.FeedbackActivity;
 import com.utree.eightysix.app.publish.PublishActivity;
-import com.utree.eightysix.app.settings.HelpActivity;
-import com.utree.eightysix.app.settings.MainSettingsActivity;
-import com.utree.eightysix.app.topic.TopicListActivity;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.Circle;
-import com.utree.eightysix.data.Sync;
-import com.utree.eightysix.event.HasNewPraiseEvent;
-import com.utree.eightysix.event.NewCommentCountEvent;
-import com.utree.eightysix.utils.Env;
-import com.utree.eightysix.widget.RoundedButton;
+import com.utree.eightysix.request.FriendsSizeRequest;
+import com.utree.eightysix.response.FriendsSizeResponse;
+import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.ThemedDialog;
-import com.utree.eightysix.widget.TopBar;
-import de.akquinet.android.androlog.Log;
-
-import java.util.List;
 
 /**
  */
@@ -174,11 +153,17 @@ public class FeedActivity extends BaseActivity {
 
     ContactsSyncService.start(this, false);
 
-    mTabFragment = new TabFragment();
-    Bundle args = new Bundle();
-    args.putInt("tabIndex", getIntent().getIntExtra("tabIndex", 0));
-    mTabFragment.setArguments(args);
-    getSupportFragmentManager().beginTransaction().add(R.id.fl_feed, mTabFragment, "tab").commit();
+    Circle circle = getIntent().getParcelableExtra("circle");
+    int id = getIntent().getIntExtra("id", -1);
+
+    if (circle != null) {
+      requestFriendSize(circle.id);
+    } else if (id != -1) {
+      requestFriendSize(id);
+    } else {
+      finish();
+      return;
+    }
 
     onNewIntent(getIntent());
   }
@@ -200,20 +185,6 @@ public class FeedActivity extends BaseActivity {
 
   @Override
   protected void onNewIntent(Intent intent) {
-
-    //region 标题栏数据处理
-    Circle circle = intent.getParcelableExtra("circle");
-    int id = intent.getIntExtra("id", -1);
-
-    if (circle != null) {
-      mTabFragment.setCircle(circle);
-    } else if (id != -1) {
-      mTabFragment.setCircle(id);
-    }
-
-    //endregion
-
-
     setHasNewPraise();
     setNewCommentCount();
   }
@@ -339,4 +310,53 @@ public class FeedActivity extends BaseActivity {
     }
   }
 
+  private void requestFriendSize(int factoryId) {
+    showProgressBar();
+    request(new FriendsSizeRequest(factoryId), new OnResponse2<FriendsSizeResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        mTabFragment = new TabFragment();
+        Bundle args = new Bundle();
+        args.putInt("tabIndex", getIntent().getIntExtra("tabIndex", 0));
+        args.putInt("mode", TabFragment.MODE_HAS_FRIENDS);
+        mTabFragment.setArguments(args);
+        getSupportFragmentManager().beginTransaction().add(R.id.fl_feed, mTabFragment, "tab").commit();
+
+        Circle circle = getIntent().getParcelableExtra("circle");
+        int id = getIntent().getIntExtra("id", -1);
+
+        if (circle != null) {
+          mTabFragment.setCircle(circle);
+        } else if (id != -1) {
+          mTabFragment.setCircle(id);
+        }
+        hideProgressBar();
+      }
+
+      @Override
+      public void onResponse(FriendsSizeResponse response) {
+        mTabFragment = new TabFragment();
+        Bundle args = new Bundle();
+        args.putInt("tabIndex", getIntent().getIntExtra("tabIndex", 0));
+        if (response.object.friendsSize > 0) {
+          args.putInt("mode", TabFragment.MODE_HAS_FRIENDS);
+        } else {
+          args.putInt("mode", TabFragment.MODE_MORE);
+        }
+        mTabFragment.setArguments(args);
+        getSupportFragmentManager().beginTransaction().add(R.id.fl_feed, mTabFragment, "tab").commit();
+
+        Circle circle = getIntent().getParcelableExtra("circle");
+        int id = getIntent().getIntExtra("id", -1);
+
+        if (circle != null) {
+          mTabFragment.setCircle(circle);
+        } else if (id != -1) {
+          mTabFragment.setCircle(id);
+        }
+
+        hideProgressBar();
+      }
+    }, FriendsSizeResponse.class);
+  }
 }
