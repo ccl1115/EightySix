@@ -43,7 +43,7 @@ class FactoryRegionAdapter2 extends BaseAdapter {
 
   @Override
   public int getCount() {
-    return mCircles == null ? 0 : Math.min(10, mCircles.size());
+    return mCircles == null ? 0 : mCircles.size();
   }
 
   @Override

@@ -85,20 +85,6 @@ public class BlueStarFragment extends BaseFragment {
     }, Response.class);
   }
 
-  private void requestShareContent() {
-    U.getRESTRequester().request(new ShareContentRequest(), new OnResponse2<Response>() {
-      @Override
-      public void onResponseError(Throwable e) {
-
-      }
-
-      @Override
-      public void onResponse(Response response) {
-
-      }
-    }, Response.class);
-  }
-
   private void showBlueStar() {
     final ImageView imageView = new ImageView(getActivity());
     imageView.setImageResource(R.drawable.ic_blue_star);

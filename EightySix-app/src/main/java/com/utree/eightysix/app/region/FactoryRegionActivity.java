@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
 import com.utree.eightysix.Account;
@@ -13,10 +15,12 @@ import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.data.Circle;
+import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.request.FactoryRegionRequest;
 import com.utree.eightysix.response.FactoryRegionResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.widget.AdvancedListView;
+import com.utree.eightysix.widget.LoadMoreCallback;
 
 /**
  */
@@ -25,6 +29,8 @@ public class FactoryRegionActivity extends BaseActivity {
 
   @InjectView(R.id.content)
   public AdvancedListView mAlvFactories;
+
+  public Paginate.Page mPageInfo;
 
   private FactoryRegionAdapter2 mAdapter;
 
@@ -70,6 +76,23 @@ public class FactoryRegionActivity extends BaseActivity {
         break;
     }
 
+    mAlvFactories.setLoadMoreCallback(new LoadMoreCallback() {
+      @Override
+      public View getLoadMoreView(ViewGroup parent) {
+        return View.inflate(FactoryRegionActivity.this, R.layout.footer_load_more, parent);
+      }
+
+      @Override
+      public boolean hasMore() {
+        return mPageInfo != null && mPageInfo.currPage < mPageInfo.countPage;
+      }
+
+      @Override
+      public boolean onLoadMoreStart() {
+        return false;
+      }
+    });
+
   }
 
   @Override
@@ -94,6 +117,8 @@ public class FactoryRegionActivity extends BaseActivity {
       public void onResponse(FactoryRegionResponse response) {
         mAdapter = new FactoryRegionAdapter2(response.object.lists);
         mAlvFactories.setAdapter(mAdapter);
+
+        mPageInfo = response.object.page;
 
         hideProgressBar();
       }
