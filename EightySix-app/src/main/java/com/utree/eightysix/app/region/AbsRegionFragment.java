@@ -323,6 +323,10 @@ public abstract class AbsRegionFragment extends BaseFragment {
           U.getBus().post(new NewHotPostCountEvent(0, 0));
           U.getBus().post(new NewFriendsPostCountEvent(0, 0));
         }
+      } else {
+        U.getBus().post(new NewAllPostCountEvent(0, 0));
+        U.getBus().post(new NewHotPostCountEvent(0, 0));
+        U.getBus().post(new NewFriendsPostCountEvent(0, 0));
       }
 
       if (mRegionType == 0) {
