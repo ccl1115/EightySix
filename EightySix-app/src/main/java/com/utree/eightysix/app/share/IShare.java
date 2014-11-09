@@ -98,4 +98,27 @@ public abstract class IShare {
       if (BuildConfig.DEBUG) Toast.makeText(U.getContext(), "onCancel", Toast.LENGTH_LONG).show();
     }
   }
+
+  IUiListener defaultListener() {
+    return new IUiListener() {
+
+      @Override
+      public void onComplete(Object o) {
+        if (BuildConfig.DEBUG) Toast.makeText(U.getContext(), "onComplete", Toast.LENGTH_LONG).show();
+      }
+
+      @Override
+      public void onError(UiError uiError) {
+        if (BuildConfig.DEBUG)
+          Toast.makeText(U.getContext(),
+              String.format("%d: %s - %s", uiError.errorCode, uiError.errorMessage, uiError.errorDetail),
+              Toast.LENGTH_LONG).show();
+      }
+
+      @Override
+      public void onCancel() {
+        if (BuildConfig.DEBUG) Toast.makeText(U.getContext(), "onCancel", Toast.LENGTH_LONG).show();
+      }
+    };
+  }
 }

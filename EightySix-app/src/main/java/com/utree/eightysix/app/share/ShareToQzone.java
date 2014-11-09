@@ -46,7 +46,7 @@ class ShareToQzone extends IShare {
         urls.add("http://utree-resource.oss-cn-beijing.aliyuncs.com/faceless.png");
         data.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL, urls);
         data.putInt(QzoneShare.SHARE_TO_QZONE_KEY_TYPE, QzoneShare.SHARE_TO_QZONE_TYPE_IMAGE_TEXT);
-        shareToQzone(activity, data, new BaseUiListener());
+        shareToQzone(activity, data, defaultListener());
         return null;
       }
 
@@ -116,7 +116,7 @@ class ShareToQzone extends IShare {
           data.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL, urls);
         }
         data.putInt(QzoneShare.SHARE_TO_QZONE_KEY_TYPE, QzoneShare.SHARE_TO_QZONE_TYPE_IMAGE_TEXT);
-        shareToQzone(activity, data, new BaseUiListener());
+        shareToQzone(activity, data, defaultListener());
         return null;
       }
 

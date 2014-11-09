@@ -43,7 +43,7 @@ class ShareToQQ extends IShare {
         data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, url);
         data.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://utree-resource.oss-cn-beijing.aliyuncs.com/faceless.png");
         data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
-        shareToQQ(activity, data, new BaseUiListener());
+        shareToQQ(activity, data, defaultListener());
         return null;
       }
 
@@ -75,7 +75,7 @@ class ShareToQQ extends IShare {
           data.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://utree-resource.oss-cn-beijing.aliyuncs.com/faceless.png");
         }
         data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
-        shareToQQ(activity, data, postUiCallback(post, fromBs));
+        shareToQQ(activity, data, defaultListener());
         return null;
       }
 
@@ -107,7 +107,7 @@ class ShareToQQ extends IShare {
           data.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://utree-resource.oss-cn-beijing.aliyuncs.com/faceless.png");
         }
         data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
-        shareToQQ(activity, data, new BaseUiListener());
+        shareToQQ(activity, data, defaultListener());
         return null;
       }
 
