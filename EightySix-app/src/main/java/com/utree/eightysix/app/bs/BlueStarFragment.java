@@ -81,6 +81,7 @@ public class BlueStarFragment extends BaseFragment {
   }
 
   private void showBlueStar() {
+    if (getActivity() != null) return;
     final ImageView imageView = new ImageView(getActivity());
     imageView.setImageResource(R.drawable.ic_blue_star);
     FrameLayout.LayoutParams params =
