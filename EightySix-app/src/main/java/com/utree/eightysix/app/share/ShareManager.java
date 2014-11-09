@@ -152,7 +152,6 @@ public class ShareManager {
     @OnClick (R.id.tv_sms)
     void onTvSmsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_msg", "comment");
-      mActivity.showProgressBar();
       mShortener.shorten(shareLinkForComment(mPost.id), new Shortener.Callback() {
         @Override
         public void onShorten(String shorten) {
@@ -244,7 +243,6 @@ public class ShareManager {
     @OnClick (R.id.tv_sms)
     void onTvSmsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_msg", "post");
-      mActivity.showProgressBar();
       mShortener.shorten(shareLinkForPost(mPost.id), new Shortener.Callback() {
         @Override
         public void onShorten(String shorten) {
@@ -327,7 +325,6 @@ public class ShareManager {
     void onTvSmsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_msg", "app");
       if (mCircle == null) return;
-      mActivity.showProgressBar();
       mShortener.shorten(shareLinkForApp(mCircle.id), new Shortener.Callback() {
         @Override
         public void onShorten(String shorten) {
@@ -448,7 +445,6 @@ public class ShareManager {
     void onTvSmsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_msg", "tag");
       if (mCircle == null) return;
-      mActivity.showProgressBar();
       mShortener.shorten(shareLinkForTag(mCircle.id, mTagId), new Shortener.Callback() {
         @Override
         public void onShorten(String shorten) {
