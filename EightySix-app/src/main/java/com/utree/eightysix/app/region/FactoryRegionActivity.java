@@ -120,6 +120,7 @@ public class FactoryRegionActivity extends BaseActivity {
       @Override
       public void onResponseError(Throwable e) {
         hideProgressBar();
+        mAlvFactories.stopLoadMore();
       }
 
       @Override
@@ -134,6 +135,7 @@ public class FactoryRegionActivity extends BaseActivity {
         mPageInfo = response.object.page;
 
         hideProgressBar();
+        mAlvFactories.stopLoadMore();
       }
     }, FactoryRegionResponse.class);
   }
