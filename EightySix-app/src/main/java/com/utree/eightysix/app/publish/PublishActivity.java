@@ -98,9 +98,6 @@ public class PublishActivity extends BaseActivity {
   @InjectView (R.id.in_panel)
   public IndicatorView mInPanel;
 
-  @InjectView (R.id.tv_tag)
-  public TextView mTvTag;
-
   @InjectView (R.id.tv_tag_1)
   public TagView mTvTag1;
 
@@ -186,6 +183,9 @@ public class PublishActivity extends BaseActivity {
 
   @OnClick (R.id.tv_tag)
   public void onTvTagClicked() {
+
+    U.getAnalyser().trackEvent(this, "publish_tag_panel", "publish_tag_panel");
+
     if (mIsOpened) {
       hideSoftKeyboard(mPostEditText);
       mPublishLayout.switchToPanel(PublishLayout.PANEL_TAGS);

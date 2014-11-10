@@ -11,6 +11,7 @@ import butterknife.InjectView;
 import butterknife.OnItemClick;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
@@ -94,6 +95,9 @@ public class TopicListActivity extends BaseActivity {
     if (page == 1) {
       showProgressBar();
     }
+
+    U.getAnalyser().trackEvent(this, "topic_list_load_more", page);
+
     request(new TopicListRequest(page), new OnResponse2<TopicListResponse>() {
       @Override
       public void onResponseError(Throwable e) {

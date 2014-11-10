@@ -46,12 +46,15 @@ public class AsyncImageView extends ImageView {
           case FROM_DISK:
             break;
           case FROM_REMOTE:
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
               ValueAnimator valueAnimator = ValueAnimator.ofInt(0, 255);
               valueAnimator.setDuration(500).addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
-                  setImageAlpha((Integer) animation.getAnimatedValue());
+                  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    setAlpha((Integer) animation.getAnimatedValue());
+                  } else {
+                    setImageAlpha((Integer) animation.getAnimatedValue());
+                  }
                 }
               });
               valueAnimator.addListener(new Animator.AnimatorListener() {
@@ -76,7 +79,6 @@ public class AsyncImageView extends ImageView {
               });
               valueAnimator.start();
               break;
-            }
         }
         setImageBitmap(event.getBitmap());
       }

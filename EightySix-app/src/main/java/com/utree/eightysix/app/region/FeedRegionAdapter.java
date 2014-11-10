@@ -327,7 +327,7 @@ public class FeedRegionAdapter extends BaseAdapter {
     } else if (mTipPraisePosition == TNS && mTipSharePosition == position) {
       feedPostView.showShareTip();
     } else if (mTipSharePosition == TNS && mTipRepostPosition == position) {
-      feedPostView.showTempNameTip();
+      feedPostView.showRepostTip();
     } else if (mTipRepostPosition == TNS && mTipTagsPosition == position) {
       feedPostView.showTagsTip();
     } else {

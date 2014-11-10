@@ -99,6 +99,8 @@ public class TabRegionFragment extends BaseFragment {
 
       @Override
       public void onPageSelected(int position) {
+        U.getAnalyser().trackEvent(getActivity(), "topic_detail_tab", position);
+
         switch (position) {
           case 0:
             if (mTtTab.hasBudget(position)) {

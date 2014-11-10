@@ -182,6 +182,8 @@ public class TopicActivity extends BaseActivity {
       showProgressBar();
     }
 
+    U.getAnalyser().trackEvent(this, "topic_detail_new_load_more", String.valueOf(page));
+
     NewTopicFeedRequest request;
     if (page == 1) {
       request = new NewTopicFeedRequest(mTopic.id, page);
@@ -218,6 +220,9 @@ public class TopicActivity extends BaseActivity {
     if (page == 1) {
       showProgressBar();
     }
+
+    U.getAnalyser().trackEvent(this, "topic_detail_feature_load_more", String.valueOf(page));
+
     FeatureTopicFeedRequest request;
     if (page == 1) {
       request = new FeatureTopicFeedRequest(mTopic.id, page);

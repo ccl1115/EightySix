@@ -35,7 +35,7 @@ public class FriendsFeedRegionFragment extends AbsRegionFragment {
     if (getBaseActivity() == null) return;
     if (mRefresherView != null && page == 1) {
       mRefresherView.setRefreshing(true);
-      getBaseActivity().showRefreshIndicator();
+      getBaseActivity().showRefreshIndicator(true);
     }
     switch (regionType) {
       case 0:

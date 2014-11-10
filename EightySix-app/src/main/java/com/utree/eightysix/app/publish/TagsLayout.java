@@ -66,6 +66,8 @@ public class TagsLayout extends FloatingLayout {
         @Override
         public void onClick(View v) {
           boolean selected = v.isSelected();
+          U.getAnalyser().trackEvent(getContext(), "publish_tag_select",
+              ((Tag) v.getTag()).content, selected ? "selected" : "unselected");
           if (!selected && mCount == 3) {
             U.showToast("最多只能选择三个标签哦");
           } else {
