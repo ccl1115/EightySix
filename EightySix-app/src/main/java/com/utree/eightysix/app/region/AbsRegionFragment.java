@@ -270,7 +270,6 @@ public abstract class AbsRegionFragment extends BaseFragment {
         } else {
           topBar.mSubTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         }
-        getBaseActivity().setTopSubTitle(response.object.subInfo);
 
         switch (mRegionType) {
           case 0:
@@ -297,6 +296,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
       }
 
       mPageInfo = response.object.posts.page;
+      getBaseActivity().setTopSubTitle(response.object.subInfo);
 
       ((HomeActivity) getBaseActivity()).mSend.setImageResource(response.object.lock != 1 || response.object.current == 1 ?
           R.drawable.ic_post_pen : R.drawable.ic_post_pen_disabled);

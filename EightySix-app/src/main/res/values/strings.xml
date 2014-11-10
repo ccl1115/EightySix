@@ -204,6 +204,7 @@
 
     <!-- PraiseStaticActivity -->
     <string name="praise_count">我收到的赞</string>
+    <string name="praise_count_rank">赞数全国排名%1$d，第一名收到的赞数是%2$d</string>
     <string name="praise_count_obtained">我收到的赞</string>
     <string name="praise_status">帖子获%1$d赞，评论获%2$d赞，超过全国%3$s的朋友</string>
     <string name="no_new_praise">没有新赞</string>

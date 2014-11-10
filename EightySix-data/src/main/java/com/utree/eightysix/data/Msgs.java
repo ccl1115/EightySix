@@ -21,6 +21,12 @@ public class Msgs {
   @SerializedName("factoryView")
   public Circle circle;
 
+  @SerializedName("topPraiseCount")
+  public int topPraiseCount;
+
+  @SerializedName("rank")
+  public int rank;
+
   /**
    * 是否被锁定
    *

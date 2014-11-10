@@ -26,6 +26,7 @@ import com.utree.eightysix.app.web.BaseWebActivity;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.ReceiveStarRequest;
 import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.ThemedDialog;
 
@@ -69,13 +70,18 @@ public class BlueStarFragment extends BaseFragment {
       @Override
       public void onResponseError(Throwable e) {
         getBaseActivity().hideProgressBar();
+        U.showToast("领取失败，请重试");
       }
 
       @Override
       public void onResponse(Response response) {
-        getBaseActivity().hideProgressBar();
-        mFlParent.removeAllViews();
-        showResultDialog();
+        if (RESTRequester.responseOk(response)) {
+          getBaseActivity().hideProgressBar();
+          mFlParent.removeAllViews();
+          showResultDialog();
+        } else {
+          U.showToast("领取失败，请重试");
+        }
       }
     }, Response.class);
   }
