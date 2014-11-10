@@ -84,6 +84,7 @@ public class FloatingLayout extends ViewGroup {
 
     }
 
+    mMeasuredWidth += getPaddingLeft() + getPaddingRight();
     mMeasuredHeight = mMeasuredHeight + mUsedHeight + getPaddingTop() + getPaddingBottom();
   }
 
@@ -123,7 +124,8 @@ public class FloatingLayout extends ViewGroup {
             left + lp.leftMargin + child.getMeasuredWidth(),
             top + lp.topMargin + child.getMeasuredHeight());
 
-        Log.d(TAG, String.format("%d %d %d %d", child.getLeft(), child.getTop(), child.getRight(), child.getBottom()));
+        Log.d(TAG, String.format("%d %d %d %d",
+            child.getLeft(), child.getTop(), child.getRight(), child.getBottom()));
 
         left += cW;
         maxRowHeight = cH > maxRowHeight ? cH : maxRowHeight;
