@@ -85,7 +85,7 @@ public class BlueStarFragment extends BaseFragment {
     final ImageView imageView = new ImageView(getActivity());
     imageView.setImageResource(R.drawable.ic_blue_star);
     FrameLayout.LayoutParams params =
-        new FrameLayout.LayoutParams(U.dp2px(48), U.dp2px(48));
+        new FrameLayout.LayoutParams(U.dp2px(68), U.dp2px(68));
     Random random = new Random();
     params.setMargins(random.nextInt(U.dp2px(200)), random.nextInt(U.dp2px(400)), 0, 0);
 
