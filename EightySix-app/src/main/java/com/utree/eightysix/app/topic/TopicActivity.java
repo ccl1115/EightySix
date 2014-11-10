@@ -63,7 +63,10 @@ public class TopicActivity extends BaseActivity {
   @OnItemClick(R.id.content)
   public void onAlvTopicItemClicked(int position) {
     if (position > 0) {
-      PostActivity.start(this, (Post) mTopicFeedAdapter.getItem(position));
+      Post item = (Post) mTopicFeedAdapter.getItem(position);
+      if (item != null) {
+        PostActivity.start(this, item);
+      }
     }
   }
 
@@ -199,9 +202,9 @@ public class TopicActivity extends BaseActivity {
           if (page == 1) {
             mTopicFeedAdapter.getNewPosts().clear();
             mTopicFeedAdapter.setTopic(response.object.topic);
+            mTopicFeedAdapter.showNewEmptyView(response.object.posts.lists.size() == 0);
           }
           mTopicFeedAdapter.add(TAB_NEW, response.object.posts.lists);
-          mTopicFeedAdapter.showEmptyView(response.object.posts.lists.size() == 0);
           mNewPageInfo = response.object.posts.page;
         }
 
@@ -234,9 +237,9 @@ public class TopicActivity extends BaseActivity {
           if (page == 1) {
             mTopicFeedAdapter.getFeaturePosts().clear();
             mTopicFeedAdapter.setTopic(response.object.topic);
+            mTopicFeedAdapter.showFeatureEmptyView(response.object.posts.lists.size() == 0);
           }
           mTopicFeedAdapter.add(TAB_FEATURE, response.object.posts.lists);
-          mTopicFeedAdapter.showEmptyView(response.object.posts.lists.size() == 0);
           mFeaturePageInfo = response.object.posts.page;
         }
 

@@ -46,7 +46,8 @@ public class TopicFeedAdapter extends BaseAdapter {
 
   private Callback mCallback;
 
-  private boolean mShowEmpty;
+  private boolean mShowFeatureEmptyView;
+  private boolean mShowNewEmptyView;
 
   public TopicFeedAdapter(Topic topic) {
     mTopic = topic;
@@ -56,8 +57,13 @@ public class TopicFeedAdapter extends BaseAdapter {
     switchTab(TAB_NEW);
   }
 
-  public void showEmptyView(boolean show) {
-    mShowEmpty = show;
+  public void showFeatureEmptyView(boolean show) {
+    mShowFeatureEmptyView = show;
+    notifyDataSetChanged();
+  }
+
+  public void showNewEmptyView(boolean show) {
+    mShowNewEmptyView = show;
     notifyDataSetChanged();
   }
 
@@ -132,9 +138,9 @@ public class TopicFeedAdapter extends BaseAdapter {
     } else {
       switch (mTab) {
         case TAB_NEW:
-          return mNewPosts.get(position - 1);
+          if (mNewPosts.size() > 0) return mNewPosts.get(position - 1);
         case TAB_FEATURE:
-          return mFeaturePosts.get(position - 1);
+          if (mFeaturePosts.size()> 0) return mFeaturePosts.get(position - 1);
       }
     }
     return null;
@@ -230,7 +236,8 @@ public class TopicFeedAdapter extends BaseAdapter {
       convertView = new RandomSceneTextView(parent.getContext());
     }
 
-    if (mShowEmpty) {
+    if (((mTab == TAB_FEATURE) && mShowFeatureEmptyView)
+        || ((mTab == TAB_NEW) && mShowNewEmptyView)) {
       convertView.setVisibility(View.VISIBLE);
     } else {
       convertView.setVisibility(View.INVISIBLE);
