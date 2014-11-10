@@ -228,7 +228,8 @@
             android:id="@+id/sl_tags"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:background="#fff0f0f0">
+            android:background="#fff0f0f0"
+            android:fillViewport="true">
 
         <com.utree.eightysix.app.publish.TagsLayout
                 android:id="@+id/tl_tags"

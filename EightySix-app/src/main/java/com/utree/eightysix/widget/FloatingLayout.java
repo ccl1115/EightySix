@@ -57,6 +57,8 @@ public class FloatingLayout extends ViewGroup {
   private void measureHorizontal(int widthMeasureSpec, int heightMeasureSpec) {
     int cW, cH;
     int maxChildHeight = 0;
+    mMeasuredWidth = 0;
+    mMeasuredHeight = 0;
     final int widthSize = widthMeasureSpec & ~(0x3 << 30) - getPaddingRight() - getPaddingLeft();
     final int count = getChildCount();
     for (int i = 0; i < count; i++) {
