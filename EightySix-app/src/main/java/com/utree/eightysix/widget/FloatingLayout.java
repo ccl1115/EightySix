@@ -75,7 +75,7 @@ public class FloatingLayout extends ViewGroup {
       mUsedWidth += cW;
 
       if (mUsedWidth > widthSize) {
-        mUsedWidth = 0;
+        mUsedWidth = cW;
         mMeasuredHeight += mUsedHeight;
         maxChildHeight = 0;
       } else {

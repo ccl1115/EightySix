@@ -18,8 +18,6 @@ import java.util.List;
 public class MoreTagsItemLayout extends FloatingLayout {
 
 
-  private List<Tag> mSelectedTags = new ArrayList<Tag>();
-
   public MoreTagsItemLayout(Context context, AttributeSet attrs) {
     super(context, attrs);
   }
@@ -29,7 +27,7 @@ public class MoreTagsItemLayout extends FloatingLayout {
     removeAllViews();
 
     final int padding = U.dp2px(16);
-    setPadding(padding, 0, padding, padding);
+    setPadding(padding, padding, padding, padding);
 
     List<TextView> tagViews = buildSpannable(tags);
 
