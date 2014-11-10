@@ -77,7 +77,7 @@
             android:id="@+id/rb_more"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="我的朋友圈"
+            android:text="我的打工圈"
             android:textColor="@color/apptheme_primary_text_dark"
             app:background="@color/apptheme_primary_white_btn"
             />

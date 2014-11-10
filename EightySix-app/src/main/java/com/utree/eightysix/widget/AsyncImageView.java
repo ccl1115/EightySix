@@ -23,15 +23,6 @@ public class AsyncImageView extends ImageView {
 
   private String mUrlHash;
 
-  private GearsDrawable mGearsDrawable = new GearsDrawable();
-
-  private Runnable mAction = new Runnable() {
-    @Override
-    public void run() {
-      setBackgroundDrawable(mGearsDrawable);
-    }
-  };
-
   public AsyncImageView(Context context) {
     this(context, null, 0);
   }
@@ -53,8 +44,6 @@ public class AsyncImageView extends ImageView {
           case FROM_MEM:
             break;
           case FROM_DISK:
-            removeCallbacks(mAction);
-            setBackgroundDrawable(null);
             break;
           case FROM_REMOTE:
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -73,8 +62,6 @@ public class AsyncImageView extends ImageView {
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                  removeCallbacks(mAction);
-                  setBackgroundDrawable(null);
                 }
 
                 @Override
@@ -105,12 +92,6 @@ public class AsyncImageView extends ImageView {
     mUrlHash = MD5Util.getMD5String(url.getBytes()).toLowerCase();
 
     setImageBitmap(null);
-
-    setBackgroundDrawable(null);
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-      postDelayed(mAction, 1000);
-    }
 
     clearAnimation();
 

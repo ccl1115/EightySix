@@ -67,6 +67,14 @@ public class FeedTopicView extends FrameLayout {
     TopicActivity.start(getContext(), getTopic());
   }
 
+  @OnClick(R.id.ll_parent)
+  public void onLlParentClicked() {
+    U.getAnalyser().trackEndEvent(getContext(), "feed_topic_view", "feed_topic_view");
+
+    TopicListActivity.start(getContext());
+    TopicActivity.start(getContext(), getTopic());
+  }
+
   @OnClick (R.id.rb_publish)
   public void onRbPublishClicked() {
     U.getAnalyser().trackEvent(getContext(), "feed_topic_publish", "feed_topic_publish");
@@ -108,8 +116,6 @@ public class FeedTopicView extends FrameLayout {
 
     mTvHead.setText(topic.headTitle);
     mTvContent.setText(topic.content);
-
-    mLlParent.setBackgroundColor(ColorUtil.strToColor(topic.bgColor));
 
     if (topic.postCount > 999) {
       mRbMoreFeeds.setText(getContext().getString(R.string.display_more_feeds, "999+"));

@@ -53,8 +53,7 @@
                 android:layout_gravity="center_horizontal"
                 android:textSize="28sp"
                 android:gravity="center_horizontal"
-                android:textColor="@android:color/white"
-                android:text="标题"/>
+                android:textColor="@android:color/white"/>
 
         <View
                 android:layout_width="match_parent"

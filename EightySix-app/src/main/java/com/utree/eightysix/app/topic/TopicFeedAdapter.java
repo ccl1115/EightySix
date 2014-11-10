@@ -18,6 +18,8 @@ import com.utree.eightysix.data.Post;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.data.Topic;
 import com.utree.eightysix.utils.ColorUtil;
+import com.utree.eightysix.widget.RandomSceneTextView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,18 +27,26 @@ import java.util.List;
  */
 public class TopicFeedAdapter extends BaseAdapter {
 
-  private static final int TYPE_COUNT = 2;
+  private static final int TYPE_COUNT = 3;
 
   private static final int TYPE_TOPIC = 0;
   private static final int TYPE_POST = 1;
+  private static final int TYPE_EMPTY = 2;
 
   private Topic mTopic;
+
   private List<Post> mNewPosts = new ArrayList<Post>();
   private List<Post> mFeaturePosts = new ArrayList<Post>();
+
   private int mTab;
+
   private View mTopicView;
+
   private TopicViewHolder mTopicViewHolder;
+
   private Callback mCallback;
+
+  private boolean mShowEmpty;
 
   public TopicFeedAdapter(Topic topic) {
     mTopic = topic;
@@ -44,6 +54,11 @@ public class TopicFeedAdapter extends BaseAdapter {
     mTopicViewHolder = new TopicViewHolder(mTopicView);
 
     switchTab(TAB_NEW);
+  }
+
+  public void showEmptyView(boolean show) {
+    mShowEmpty = show;
+    notifyDataSetChanged();
   }
 
   public List<Post> getNewPosts() {
@@ -103,9 +118,9 @@ public class TopicFeedAdapter extends BaseAdapter {
   public int getCount() {
     switch (mTab) {
       case TAB_NEW:
-        return 1 + mNewPosts.size();
+        return 1 + Math.max(1, mNewPosts.size());
       case TAB_FEATURE:
-        return 1 + mFeaturePosts.size();
+        return 1 + Math.max(1, mFeaturePosts.size());
     }
     return 0;
   }
@@ -137,6 +152,8 @@ public class TopicFeedAdapter extends BaseAdapter {
         return getTopicView(position, convertView, parent);
       case TYPE_POST:
         return getPostView(position, convertView, parent);
+      case TYPE_EMPTY:
+        return getEmptyView(convertView, parent);
     }
     return null;
   }
@@ -145,6 +162,10 @@ public class TopicFeedAdapter extends BaseAdapter {
   public int getItemViewType(int position) {
     if (position == 0) {
       return TYPE_TOPIC;
+    } else if (mTab == TAB_NEW && mNewPosts.size() == 0) {
+      return TYPE_EMPTY;
+    } else if (mTab == TAB_FEATURE && mFeaturePosts.size() == 0) {
+      return TYPE_EMPTY;
     } else {
       return TYPE_POST;
     }
@@ -200,6 +221,28 @@ public class TopicFeedAdapter extends BaseAdapter {
     }
 
     ((FeedPostView) convertView).setData((Post) getItem(position), 0);
+
+    return convertView;
+  }
+
+  private View getEmptyView(View convertView, ViewGroup parent) {
+    if (convertView == null) {
+      convertView = new RandomSceneTextView(parent.getContext());
+    }
+
+    if (mShowEmpty) {
+      convertView.setVisibility(View.VISIBLE);
+    } else {
+      convertView.setVisibility(View.INVISIBLE);
+    }
+
+    if (mTab == TAB_NEW) {
+      ((RandomSceneTextView) convertView).setText("这个话题下还没有帖子哟");
+      ((RandomSceneTextView) convertView).setSubText("抢先发帖，或去其他的话题看看吧");
+    } else if (mTab == TAB_FEATURE) {
+      ((RandomSceneTextView) convertView).setText("这个话题下还没有精选帖哟");
+      ((RandomSceneTextView) convertView).setSubText("快快顶帖，或去其他的话题看看吧");
+    }
 
     return convertView;
   }

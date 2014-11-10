@@ -201,6 +201,7 @@ public class TopicActivity extends BaseActivity {
             mTopicFeedAdapter.setTopic(response.object.topic);
           }
           mTopicFeedAdapter.add(TAB_NEW, response.object.posts.lists);
+          mTopicFeedAdapter.showEmptyView(response.object.posts.lists.size() == 0);
           mNewPageInfo = response.object.posts.page;
         }
 
@@ -235,6 +236,7 @@ public class TopicActivity extends BaseActivity {
             mTopicFeedAdapter.setTopic(response.object.topic);
           }
           mTopicFeedAdapter.add(TAB_FEATURE, response.object.posts.lists);
+          mTopicFeedAdapter.showEmptyView(response.object.posts.lists.size() == 0);
           mFeaturePageInfo = response.object.posts.page;
         }
 
