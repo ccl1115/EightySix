@@ -160,6 +160,7 @@ public class PullNotificationService extends Service {
 
         for (PullNotification.Item item : response.object.lists) {
           int count = Integer.parseInt(item.value);
+          if (count == 0) return;
           getNM().notify(String.valueOf(item.factoryId), NotifyUtil.ID_POST,
               mNotifyUtil.buildPosts(item.shortName, item.currFactory == 1, item.factoryId, count));
         }
