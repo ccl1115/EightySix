@@ -25,7 +25,6 @@ class TagFeedAdapter extends BaseAdapter {
   public static final int TYPE_COUNT = 3;
   static final int TYPE_PLACEHOLDER = 0;
   static final int TYPE_POST = 1;
-  static final int TYPE_EMPTY = 2;
 
   public static final int FEED_HOT = 1;
   public static final int FEED_FACTORY =2;
@@ -101,42 +100,22 @@ class TagFeedAdapter extends BaseAdapter {
       case TYPE_POST:
         convertView = getPostView(position, convertView, parent);
         break;
-      case TYPE_EMPTY:
-        convertView = getEmptyView(convertView, parent);
-        break;
     }
 
-    return convertView;
-  }
-
-  private View getEmptyView(View convertView, ViewGroup parent) {
-    if (convertView == null) {
-      convertView = new RandomSceneTextView(parent.getContext());
-    }
-    if (mFeedType == FEED_HOT) {
-      ((RandomSceneTextView) convertView).setText("这个标签下还没有热门的帖子哟");
-      ((RandomSceneTextView) convertView).setText("快快顶帖，或去其它的标签看看吧");
-    } else if (mFeedType == FEED_FACTORY) {
-      ((RandomSceneTextView) convertView).setText("这个标签下还没有同厂的帖子哟");
-      ((RandomSceneTextView) convertView).setText("抢先发帖，或去其它的标签看看吧");
-    }
     return convertView;
   }
 
   @Override
   public int getItemViewType(int position) {
-    if (mFeeds.posts.lists == null || mFeeds.posts.lists.size() == 0) {
-      return TYPE_EMPTY;
+    if (position == 0 || position == getCount() - 1) {
+      return TYPE_PLACEHOLDER;
     } else {
-      if (position == 0 || position == getCount() - 1) {
-        return TYPE_PLACEHOLDER;
-      } else {
-        final int type = getItem(position).type;
-        switch (type) {
-          case BaseItem.TYPE_POST:
-            return TYPE_POST;
-        }
+      final int type = getItem(position).type;
+      switch (type) {
+        case BaseItem.TYPE_POST:
+          return TYPE_POST;
       }
+
     }
     return TYPE_PLACEHOLDER;
   }
