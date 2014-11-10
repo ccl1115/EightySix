@@ -21,7 +21,7 @@ public class HotTagFragment extends AbsTagFragment {
     getBaseActivity().request(new HotTagRequest(page, id), new OnResponse2<TagFeedsResponse>() {
       @Override
       public void onResponse(TagFeedsResponse response) {
-        responseForRequest(id, response, page);
+        responseForRequest(id, response, page, TagFeedAdapter.FEED_HOT);
       }
 
       @Override
@@ -48,7 +48,7 @@ public class HotTagFragment extends AbsTagFragment {
     getBaseActivity().request(new HotTagRequest(page, id), new OnResponse2<TagFeedsResponse>() {
       @Override
       public void onResponse(TagFeedsResponse response) {
-        responseForRequest(id, response, page);
+        responseForRequest(id, response, page, TagFeedAdapter.FEED_HOT);
       }
 
       @Override

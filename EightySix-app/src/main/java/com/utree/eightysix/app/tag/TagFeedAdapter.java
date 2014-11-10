@@ -14,6 +14,7 @@ import com.utree.eightysix.app.feed.FeedPostView;
 import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.data.TagFeeds;
+import com.utree.eightysix.widget.RandomSceneTextView;
 
 import java.util.List;
 
@@ -21,18 +22,23 @@ import java.util.List;
  */
 class TagFeedAdapter extends BaseAdapter {
 
-  private static final int TIP_NOT_SHOWN = -1;
-
-  public static final int TYPE_COUNT = 2;
+  public static final int TYPE_COUNT = 3;
   static final int TYPE_PLACEHOLDER = 0;
   static final int TYPE_POST = 1;
+  static final int TYPE_EMPTY = 2;
+
+  public static final int FEED_HOT = 1;
+  public static final int FEED_FACTORY =2;
+
+  private int mFeedType;
 
   private SparseBooleanArray mAnimated = new SparseBooleanArray();
 
   private TagFeeds mFeeds;
 
-  public TagFeedAdapter(TagFeeds feeds) {
+  public TagFeedAdapter(TagFeeds feeds, int type) {
     mFeeds = feeds;
+    mFeedType = type;
   }
 
   public void add(List<BaseItem> posts) {
@@ -69,7 +75,8 @@ class TagFeedAdapter extends BaseAdapter {
 
   @Override
   public int getCount() {
-    return mFeeds.posts.lists == null ? 0 : mFeeds.posts.lists.size() + 2; // top/bot padding item
+    return mFeeds.posts.lists == null || mFeeds.posts.lists.size() == 0 ?
+        1 : mFeeds.posts.lists.size() + 2; // top/bot padding item
   }
 
   @Override
@@ -94,22 +101,41 @@ class TagFeedAdapter extends BaseAdapter {
       case TYPE_POST:
         convertView = getPostView(position, convertView, parent);
         break;
+      case TYPE_EMPTY:
+        convertView = getEmptyView(convertView, parent);
+        break;
     }
 
-    animateConvertView(position, convertView);
+    return convertView;
+  }
 
+  private View getEmptyView(View convertView, ViewGroup parent) {
+    if (convertView == null) {
+      convertView = new RandomSceneTextView(parent.getContext());
+    }
+    if (mFeedType == FEED_HOT) {
+      ((RandomSceneTextView) convertView).setText("这个标签下还没有热门的帖子哟");
+      ((RandomSceneTextView) convertView).setText("快快顶帖，或去其他的标签看看吧");
+    } else if (mFeedType == FEED_FACTORY) {
+      ((RandomSceneTextView) convertView).setText("这个标签下还没有同厂的帖子哟");
+      ((RandomSceneTextView) convertView).setText("抢先发帖，或去其他的标签看看吧");
+    }
     return convertView;
   }
 
   @Override
   public int getItemViewType(int position) {
-    if (position == 0 || position == getCount() - 1) {
-      return TYPE_PLACEHOLDER;
+    if (mFeeds.posts.lists == null || mFeeds.posts.lists.size() == 0) {
+      return TYPE_EMPTY;
     } else {
-      final int type = getItem(position).type;
-      switch (type) {
-        case BaseItem.TYPE_POST:
-          return TYPE_POST;
+      if (position == 0 || position == getCount() - 1) {
+        return TYPE_PLACEHOLDER;
+      } else {
+        final int type = getItem(position).type;
+        switch (type) {
+          case BaseItem.TYPE_POST:
+            return TYPE_POST;
+        }
       }
     }
     return TYPE_PLACEHOLDER;

@@ -199,10 +199,10 @@ public abstract class AbsTagFragment extends BaseFragment {
 
   protected abstract void requestFeeds(final int id, final int page);
 
-  protected void responseForRequest(int circleId, TagFeedsResponse response, int page) {
+  protected void responseForRequest(int circleId, TagFeedsResponse response, int page, int feedType) {
     if (RESTRequester.responseOk(response)) {
       if (page == 1) {
-        mFeedAdapter = new TagFeedAdapter(response.object);
+        mFeedAdapter = new TagFeedAdapter(response.object, feedType);
         M.getRegisterHelper().register(mFeedAdapter);
         mLvFeed.setAdapter(mFeedAdapter);
 
@@ -231,7 +231,7 @@ public abstract class AbsTagFragment extends BaseFragment {
 
   protected abstract void cacheOutFeeds(final int id, final int page);
 
-  protected void responseForCache(TagFeedsResponse response, int page, int id) {
+  protected void responseForCache(TagFeedsResponse response, int page, int id, int feedType) {
     if (response != null && response.code == 0 && response.object != null) {
       if (page == 1) {
         if (response.object.posts.lists.size() == 0) {
@@ -240,7 +240,7 @@ public abstract class AbsTagFragment extends BaseFragment {
           mRstvEmpty.setVisibility(View.INVISIBLE);
         }
 
-        mFeedAdapter = new TagFeedAdapter(response.object);
+        mFeedAdapter = new TagFeedAdapter(response.object, feedType);
         M.getRegisterHelper().register(mFeedAdapter);
         mLvFeed.setAdapter(mFeedAdapter);
 
