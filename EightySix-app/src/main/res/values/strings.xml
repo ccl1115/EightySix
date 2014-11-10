@@ -154,7 +154,7 @@
     <!-- BaseCirclesActivity -->
     <string name="select_circle">你在哪里工作？</string>
     <string name="search_circles">请输入你的企业名称查找</string>
-    <string name="my_circles">我的朋友圈</string>
+    <string name="my_circles">我的打工圈</string>
     <string name="no_circles">没有找到朋友圈</string>
     <string name="factory">工</string>
     <string name="business">商</string>
