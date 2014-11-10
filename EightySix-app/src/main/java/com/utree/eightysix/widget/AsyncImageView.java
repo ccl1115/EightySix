@@ -51,9 +51,9 @@ public class AsyncImageView extends ImageView {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    setAlpha((Integer) animation.getAnimatedValue());
-                  } else {
                     setImageAlpha((Integer) animation.getAnimatedValue());
+                  } else {
+                    setAlpha((Integer) animation.getAnimatedValue());
                   }
                 }
               });
