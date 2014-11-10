@@ -163,15 +163,18 @@ public abstract class AbsRegionFragment extends BaseFragment {
 
           Post post = (Post) mFeedAdapter.getItem(firstItem);
 
-
-          if ((post.viewType == 1 || post.viewType == 2 || post.viewType == 5)  && Env.firstRun("overlay_tip_source")) {
-            mFeedAdapter.showTipOverlaySource(firstItem);
+          if (post.sourceType == 2 && Env.firstRun("overlay_tip_temp_name")) {
+            mFeedAdapter.showTipTempName(firstItem);
+          } else if ((post.viewType == 1 || post.viewType == 2 || post.viewType == 5)  && Env.firstRun("overlay_tip_source")) {
+            mFeedAdapter.showTipSource(firstItem);
           } else if (Env.firstRun("overlay_tip_praise")) {
-            mFeedAdapter.showTipOverlayPraise(firstItem);
+            mFeedAdapter.showTipPraise(firstItem);
           } else if (Env.firstRun("overlay_tip_share")) {
-            mFeedAdapter.showTipOverlayShare(firstItem);
+            mFeedAdapter.showTipShare(firstItem);
           } else if (post.isRepost == 1 && Env.firstRun("overlay_tip_repost")) {
-            mFeedAdapter.showTipOverlayRepost(firstItem);
+            mFeedAdapter.showTipRepost(firstItem);
+          } else if (post.tags != null && post.tags.size() > 0) {
+            mFeedAdapter.showTipTags(firstItem);
           }
         }
       }

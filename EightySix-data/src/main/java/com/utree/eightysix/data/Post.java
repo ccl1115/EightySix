@@ -65,6 +65,9 @@ public class Post extends BaseItem implements Parcelable {
   @SerializedName("owner")
   public int owner;
 
+  @SerializedName("sourceType")
+  public int sourceType;
+
   @SerializedName("tags")
   public List<Tag> tags;
 

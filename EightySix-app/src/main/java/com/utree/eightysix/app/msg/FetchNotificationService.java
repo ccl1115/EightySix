@@ -78,7 +78,7 @@ public class FetchNotificationService extends Service {
 
       intent.putExtra("showCommentNotify", showCommentNotify);
 
-      context.startActivity(intent);
+      context.startService(intent);
     }
   }
 
@@ -93,7 +93,7 @@ public class FetchNotificationService extends Service {
       intent.putExtra("showCommentNotify", showCommentNotify);
       intent.putExtra("loop", loop);
 
-      context.startActivity(intent);
+      context.startService(intent);
     }
   }
 

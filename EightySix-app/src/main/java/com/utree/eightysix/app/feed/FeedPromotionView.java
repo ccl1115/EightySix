@@ -98,7 +98,7 @@ public class FeedPromotionView extends FrameLayout {
   public void onFlContentClicked(View view) {
     U.getAnalyser().trackEvent(U.getContext(), "feed_promote", "feed_promote");
     BaseWebActivity.start(view.getContext(), mPromotion.activeWebViewName,
-        String.format("%s%s?userid=%s&factoryid=%d&virtualImei=%s", U.getConfig("api.host"),
-            C.API_PROMOTION, Account.inst().getUserId(), mFactoryId, CommonParam.getCUID(U.getContext())));
+        String.format("%s%s?userid=%s&token=%s", U.getConfig("api.host"),
+            C.API_PROMOTION, Account.inst().getUserId(), Account.inst().getToken()));
   }
 }

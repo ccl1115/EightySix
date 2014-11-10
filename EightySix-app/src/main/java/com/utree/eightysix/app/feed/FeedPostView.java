@@ -17,7 +17,6 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
-import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
@@ -25,17 +24,18 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.app.home.HomeActivity;
+import com.utree.eightysix.app.region.FeedRegionAdapter;
 import com.utree.eightysix.app.tag.TagTabActivity;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.Env;
-import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.widget.AsyncImageView;
-import com.utree.eightysix.widget.GearsView;
 import com.utree.eightysix.widget.ViewHighlighter;
 import java.util.List;
+
+import static com.utree.eightysix.app.region.FeedRegionAdapter.DismissTipOverlayEvent.*;
 
 /**
  */
@@ -94,6 +94,9 @@ public class FeedPostView extends BasePostView {
   @InjectView (R.id.tv_tag_3)
   public TextView mTvTag3;
 
+  @InjectView(R.id.ll_tags)
+  public LinearLayout mLlTags;
+
   @OnClick(R.id.tv_tag_1)
   public void onTvTag1Clicked() {
     TagTabActivity.start(getContext(), mPost.tags.get(0));
@@ -128,10 +131,12 @@ public class FeedPostView extends BasePostView {
 
   private int mCircleId;
 
-  private View mTipOverlayShare;
-  private View mTipOverlaySource;
-  private View mTipOverlayPraise;
-  private View mTipOverlayRepost;
+  private View mTipShare;
+  private View mTipSource;
+  private View mTipPraise;
+  private View mTipRepost;
+  private View mTipTempName;
+  private View mTipTags;
 
   public FeedPostView(Context context) {
     this(context, null, 0);
@@ -327,11 +332,7 @@ public class FeedPostView extends BasePostView {
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
     int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-//    if (mLlComment.getVisibility() == VISIBLE) {
-//      widthSize += U.dp2px(44);
-//    }
     super.onMeasure(widthMeasureSpec, widthSize + MeasureSpec.EXACTLY);
-//    super.onMeasure(widthMeasureSpec, widthSize - U.dp2px(16) + MeasureSpec.EXACTLY);
   }
 
   @Override
@@ -346,137 +347,83 @@ public class FeedPostView extends BasePostView {
     super.onDetachedFromWindow();
   }
 
-  public void showShareTipOverlay() {
+  public void showShareTip() {
+    showTip(mTipShare, mIvShare, R.layout.overlay_tip_share, "overlay_tip_share", TYPE_SHARE);
+  }
 
-    if (mTipOverlayShare == null) {
-      mTipOverlayShare = LayoutInflater.from(getContext())
-          .inflate(R.layout.overlay_tip_share, this, false);
+  public void hideShareTip() {
+    hideTip(mTipShare);
+  }
 
-      mTipOverlayShare.setBackgroundDrawable(new BitmapDrawable(getResources(),
-          new ViewHighlighter(mIvShare, mFlContent).genMask()));
+  public void showSourceTip() {
+    showTip(mTipSource, mTvSource, R.layout.overlay_tip_source, "overlay_tip_source", TYPE_SOURCE);
+  }
 
-      mTipOverlayShare.findViewById(R.id.ll_tip).setBackgroundDrawable(
+  public void hideSourceTip() {
+    hideTip(mTipSource);
+  }
+
+  public void showPraiseTip() {
+    showTip(mTipPraise, mTvPraise, R.layout.overlay_tip_praise, "overlay_tip_praise", TYPE_PRAISE);
+  }
+
+  public void hidePraiseTip() {
+    hideTip(mTipPraise);
+  }
+
+  public void showRepostTip() {
+    showTip(mTipRepost, mTvSource, R.layout.overlay_tip_repost, "overlay_tip_repost", TYPE_REPOST);
+  }
+
+  public void hideRepostTip() {
+    hideTip(mTipRepost);
+  }
+
+  public void showTempNameTip() {
+    showTip(mTipTempName, mTvSource, R.layout.overlay_tip_temp_name, "overlay_tip_temp_name", TYPE_TEMP_NAME);
+  }
+
+  public void hideTempNameTip() {
+    hideTip(mTipTempName);
+  }
+
+  public void showTagsTip() {
+    showTip(mTipTags, mLlTags, R.layout.overlay_tip_tags, "overlay_tip_tags", TYPE_TAGS);
+  }
+
+  public void hideTagsTip() {
+    hideTip(mTipTags);
+  }
+
+  private void showTip(View view, View target, int layoutId, final String key, final int eventType) {
+    if (view == null) {
+      view = LayoutInflater.from(getContext())
+          .inflate(layoutId, this, false);
+
+      view.setBackgroundDrawable(new BitmapDrawable(getResources(),
+          new ViewHighlighter(target, mFlContent).genMask()));
+
+      view.findViewById(R.id.ll_tip).setBackgroundDrawable(
           new RoundRectDrawable(U.dp2px(8), Color.WHITE));
-      mFlContent.addView(mTipOverlayShare);
 
-      mTipOverlayShare.setOnClickListener(new OnClickListener() {
+      mFlContent.addView(view);
+
+      view.setOnClickListener(new OnClickListener() {
         @Override
-        public void onClick(View v) {
-          mTipOverlayShare.setVisibility(GONE);
-          U.getBus().post(new FeedAdapter.DismissTipOverlayEvent(
-              FeedAdapter.DismissTipOverlayEvent.TYPE_SHARE));
-          Env.setFirstRun("overlay_tip_share", false);
+        public void onClick(View view) {
+          view.setVisibility(GONE);
+          U.getBus().post(new FeedRegionAdapter.DismissTipOverlayEvent(eventType));
+          Env.setFirstRun(key, false);
         }
       });
     } else {
-      mTipOverlayShare.setVisibility(VISIBLE);
-    }
-
-  }
-
-  public void hideShareTipOverlay() {
-    if (mTipOverlayShare != null) {
-      mTipOverlayShare.setVisibility(GONE);
+      view.setVisibility(VISIBLE);
     }
   }
 
-  public void showSourceTipOverlay() {
-
-    if (mTipOverlaySource == null) {
-      mTipOverlaySource = LayoutInflater.from(getContext())
-          .inflate(R.layout.overlay_tip_source, this, false);
-
-      mTipOverlaySource.setBackgroundDrawable(new BitmapDrawable(getResources(),
-          new ViewHighlighter(mTvSource, mFlContent).genMask()));
-
-      mTipOverlaySource.findViewById(R.id.ll_tip).setBackgroundDrawable(
-          new RoundRectDrawable(U.dp2px(8), Color.WHITE));
-      mFlContent.addView(mTipOverlaySource);
-    } else {
-      mTipOverlaySource.setVisibility(VISIBLE);
-    }
-
-    mTipOverlaySource.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        v.setVisibility(GONE);
-        U.getBus().post(new FeedAdapter.DismissTipOverlayEvent(
-            FeedAdapter.DismissTipOverlayEvent.TYPE_SOURCE));
-        Env.setFirstRun("overlay_tip_source", false);
-      }
-    });
-  }
-
-  public void hideSourceTipOverlay() {
-    if (mTipOverlaySource != null) {
-      mTipOverlaySource.setVisibility(GONE);
-    }
-  }
-
-  public void showPraiseTipOverlay() {
-
-    if (mTipOverlayPraise == null) {
-      mTipOverlayPraise = LayoutInflater.from(getContext())
-          .inflate(R.layout.overlay_tip_praise, this, false);
-
-      mTipOverlayPraise.setBackgroundDrawable(new BitmapDrawable(getResources(),
-          new ViewHighlighter(mTvPraise, mFlContent).genMask()));
-
-      mTipOverlayPraise.findViewById(R.id.ll_tip).setBackgroundDrawable(
-          new RoundRectDrawable(U.dp2px(8), Color.WHITE));
-      mFlContent.addView(mTipOverlayPraise);
-
-      mTipOverlayPraise.setOnClickListener(new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          mTipOverlayPraise.setVisibility(GONE);
-          U.getBus().post(new FeedAdapter.DismissTipOverlayEvent(
-              FeedAdapter.DismissTipOverlayEvent.TYPE_PRAISE));
-          Env.setFirstRun("overlay_tip_praise", false);
-        }
-      });
-    } else {
-      mTipOverlayPraise.setVisibility(VISIBLE);
-    }
-
-  }
-
-  public void hidePraiseTipOverlay() {
-    if (mTipOverlayPraise != null) {
-      mTipOverlayPraise.setVisibility(GONE);
-    }
-  }
-
-  public void showRepostTipOverlay() {
-
-    if (mTipOverlayRepost == null) {
-      mTipOverlayRepost = LayoutInflater.from(getContext())
-          .inflate(R.layout.overlay_tip_repost, this, false);
-
-      mTipOverlayRepost.setBackgroundDrawable(new BitmapDrawable(getResources(),
-          new ViewHighlighter(mTvSource, mFlContent).genMask()));
-
-      mTipOverlayRepost.findViewById(R.id.ll_tip).setBackgroundDrawable(
-          new RoundRectDrawable(U.dp2px(8), Color.WHITE));
-      mFlContent.addView(mTipOverlayRepost);
-
-      mTipOverlayRepost.setOnClickListener(new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          mTipOverlayRepost.setVisibility(GONE);
-          U.getBus().post(new FeedAdapter.DismissTipOverlayEvent(
-              FeedAdapter.DismissTipOverlayEvent.TYPE_REPOST));
-          Env.setFirstRun("overlay_tip_repost", false);
-        }
-      });
-    } else {
-      mTipOverlayRepost.setVisibility(VISIBLE);
-    }
-  }
-
-  public void hideRepostTipOverlay() {
-    if (mTipOverlayRepost != null) {
-      mTipOverlayRepost.setVisibility(GONE);
+  private void hideTip(View view) {
+    if (view != null) {
+      view.setVisibility(GONE);
     }
   }
 }

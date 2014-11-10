@@ -216,8 +216,8 @@ public class BlueStarFragment extends BaseFragment {
       @Override
       public void onClick(View view) {
         BaseWebActivity.start(view.getContext(), "",
-            String.format("%s%s?userid=%s&factoryid=%d&virtualImei=%s", U.getConfig("api.host"),
-                C.API_PROMOTION, Account.inst().getUserId(), mPost.factoryId, CommonParam.getCUID(U.getContext())));
+            String.format("%s%s?userid=%s&token=%s", U.getConfig("api.host"),
+                C.API_PROMOTION, Account.inst().getUserId(), Account.inst().getToken()));
         dialog.dismiss();
       }
     });

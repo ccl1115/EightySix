@@ -99,6 +99,7 @@ public class BaseItemDeserializer implements JsonDeserializer<BaseItem> {
     post.shortName = safeGetAsString(jObj.get("factoryShortName"));
     post.factoryId = safeGetAsInt(jObj.get("factoryId"));
     post.owner = safeGetAsInt(jObj.get("owner"));
+    post.sourceType = safeGetAsInt(jObj.get("sourceType"));
 
     post.tags = new ArrayList<Tag>();
 

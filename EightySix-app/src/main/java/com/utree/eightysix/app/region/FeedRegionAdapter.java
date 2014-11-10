@@ -37,7 +37,10 @@ import java.util.List;
  */
 public class FeedRegionAdapter extends BaseAdapter {
 
-  private static final int TIP_NOT_SHOWN = -1;
+  /**
+   * TIP_NOT_SHOWN
+   */
+  private static final int TNS = -1;
 
   public static final int TYPE_COUNT = 12;
   static final int TYPE_PLACEHOLDER = 0;
@@ -55,10 +58,13 @@ public class FeedRegionAdapter extends BaseAdapter {
 
   private Feeds mFeeds;
 
-  private int mTipOverlaySourcePosition = TIP_NOT_SHOWN;
-  private int mTipOverlayPraisePosition = TIP_NOT_SHOWN;
-  private int mTipOverlaySharePosition = TIP_NOT_SHOWN;
-  private int mTipOverlayRepostPosition = TIP_NOT_SHOWN;
+  private int mTipSourcePosition = TNS;
+  private int mTipPraisePosition = TNS;
+  private int mTipSharePosition = TNS;
+  private int mTipRepostPosition = TNS;
+  private int mTipTempNamePosition = TNS;
+  private int mTipTagsPosition = TNS;
+
 
   public FeedRegionAdapter(Feeds feeds) {
     mFeeds = feeds;
@@ -239,23 +245,33 @@ public class FeedRegionAdapter extends BaseAdapter {
     }
   }
 
-  public void showTipOverlaySource(int position) {
-    mTipOverlaySourcePosition = position;
+  public void showTipSource(int position) {
+    mTipSourcePosition = position;
     notifyDataSetChanged();
   }
 
-  public void showTipOverlayPraise(int position) {
-    mTipOverlayPraisePosition = position;
+  public void showTipPraise(int position) {
+    mTipPraisePosition = position;
     notifyDataSetChanged();
   }
 
-  public void showTipOverlayShare(int position) {
-    mTipOverlaySharePosition = position;
+  public void showTipShare(int position) {
+    mTipSharePosition = position;
     notifyDataSetChanged();
   }
 
-  public void showTipOverlayRepost(int position) {
-    mTipOverlayRepostPosition = position;
+  public void showTipRepost(int position) {
+    mTipRepostPosition = position;
+    notifyDataSetChanged();
+  }
+
+  public void showTipTempName(int position) {
+    mTipTempNamePosition = position;
+    notifyDataSetChanged();
+  }
+
+  public void showTipTags(int position) {
+    mTipTagsPosition = position;
     notifyDataSetChanged();
   }
 
@@ -263,23 +279,33 @@ public class FeedRegionAdapter extends BaseAdapter {
   public void onDismissTipOverlay(DismissTipOverlayEvent event) {
     switch (event.getType()) {
       case DismissTipOverlayEvent.TYPE_PRAISE:
-        mTipOverlayPraisePosition = TIP_NOT_SHOWN;
+        mTipPraisePosition = TNS;
         break;
       case DismissTipOverlayEvent.TYPE_SHARE:
-        mTipOverlaySharePosition = TIP_NOT_SHOWN;
+        mTipSharePosition = TNS;
         break;
       case DismissTipOverlayEvent.TYPE_SOURCE:
-        mTipOverlaySourcePosition = TIP_NOT_SHOWN;
+        mTipSourcePosition = TNS;
         break;
       case DismissTipOverlayEvent.TYPE_REPOST:
-        mTipOverlayRepostPosition = TIP_NOT_SHOWN;
+        mTipRepostPosition = TNS;
+        break;
+      case DismissTipOverlayEvent.TYPE_TAGS:
+        mTipTagsPosition = TNS;
+        break;
+      case DismissTipOverlayEvent.TYPE_TEMP_NAME:
+        mTipTempNamePosition = TNS;
         break;
     }
   }
 
   public boolean tipsShowing() {
-    return mTipOverlayPraisePosition != -1 || mTipOverlaySharePosition != -1 || mTipOverlaySourcePosition != -1 ||
-        mTipOverlayRepostPosition != -1;
+    return mTipPraisePosition != TNS
+        || mTipSharePosition != TNS
+        || mTipSourcePosition != TNS
+        || mTipRepostPosition != TNS
+        || mTipTagsPosition != TNS
+        || mTipTempNamePosition != TNS;
   }
 
   private View getPostView(int position, View convertView, ViewGroup parent) {
@@ -292,19 +318,25 @@ public class FeedRegionAdapter extends BaseAdapter {
 
     feedPostView.setData(item, mFeeds.circle == null ? 0 : mFeeds.circle.id);
 
-    if (mTipOverlaySourcePosition == position) {
-      feedPostView.showSourceTipOverlay();
-    } else if (mTipOverlaySourcePosition == -1 && mTipOverlayPraisePosition == position) {
-      feedPostView.showPraiseTipOverlay();
-    } else if (mTipOverlayPraisePosition == -1 && mTipOverlaySharePosition == position) {
-      feedPostView.showShareTipOverlay();
-    } else if (mTipOverlaySharePosition == -1 && mTipOverlayRepostPosition == position) {
-      feedPostView.showRepostTipOverlay();
+    if (mTipSourcePosition == position) {
+      feedPostView.showSourceTip();
+    } else if (mTipSourcePosition == TNS && mTipPraisePosition == position) {
+      feedPostView.showPraiseTip();
+    } else if (mTipPraisePosition == TNS && mTipSharePosition == position) {
+      feedPostView.showShareTip();
+    } else if (mTipSharePosition == TNS && mTipRepostPosition == position) {
+      feedPostView.showRepostTip();
+    } else if (mTipRepostPosition == TNS && mTipTempNamePosition == position) {
+      feedPostView.showTempNameTip();
+    } else if (mTipTempNamePosition == TNS && mTipTagsPosition == position) {
+      feedPostView.showTagsTip();
     } else {
-      feedPostView.hidePraiseTipOverlay();
-      feedPostView.hideSourceTipOverlay();
-      feedPostView.hideShareTipOverlay();
-      feedPostView.hideRepostTipOverlay();
+      feedPostView.hidePraiseTip();
+      feedPostView.hideSourceTip();
+      feedPostView.hideShareTip();
+      feedPostView.hideRepostTip();
+      feedPostView.hideTempNameTip();
+      feedPostView.hideTagsTip();
     }
 
     return convertView;
@@ -517,15 +549,17 @@ public class FeedRegionAdapter extends BaseAdapter {
     }
   }
 
-  static class DismissTipOverlayEvent {
+  public static class DismissTipOverlayEvent {
     private int mType;
 
-    static final int TYPE_SOURCE = 1;
-    static final int TYPE_PRAISE = 2;
-    static final int TYPE_SHARE = 3;
-    static final int TYPE_REPOST = 4;
+    public static final int TYPE_SOURCE = 1;
+    public static final int TYPE_PRAISE = 2;
+    public static final int TYPE_SHARE = 3;
+    public static final int TYPE_REPOST = 4;
+    public static final int TYPE_TEMP_NAME = 5;
+    public static final int TYPE_TAGS = 6;
 
-    DismissTipOverlayEvent(int type) {
+    public DismissTipOverlayEvent(int type) {
       mType = type;
     }
 
