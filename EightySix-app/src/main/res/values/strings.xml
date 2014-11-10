@@ -289,7 +289,7 @@
 
     <!-- ImageCropActivity -->
     <string name="rotate">旋转</string>
-    <string name="publish_anonymous">匿名发帖</string>
+    <string name="publish_anonymous">匿名发表</string>
     <string name="all_topic">全部话题</string>
     <string name="change">更改</string>
 </resources>
