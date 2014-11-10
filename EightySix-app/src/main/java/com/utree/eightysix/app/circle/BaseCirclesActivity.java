@@ -405,7 +405,7 @@ public class BaseCirclesActivity extends BaseActivity {
       @Override
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
-          HomeActivity.start(BaseCirclesActivity.this);
+          HomeActivity.start(BaseCirclesActivity.this, 0);
           finish();
         }
       }
