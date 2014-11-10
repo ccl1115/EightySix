@@ -82,7 +82,7 @@ public class FetchNotificationService extends Service {
     }
   }
 
-  public static void start (Context context, boolean showCommentNotify, boolean loop) {
+  public static void start(Context context, boolean showCommentNotify, boolean loop) {
     if (Account.inst().isLogin()) {
       Intent intent = new Intent(context, FetchNotificationService.class);
 

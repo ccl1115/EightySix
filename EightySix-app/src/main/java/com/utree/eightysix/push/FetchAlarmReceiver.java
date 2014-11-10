@@ -53,10 +53,7 @@ public class FetchAlarmReceiver extends BroadcastReceiver {
   @Override
   public void onReceive(Context context, Intent intent) {
     if (ACTION.equals(intent.getAction())) {
-      Intent i = new Intent(context, FetchNotificationService.class);
-      i.putExtra("loop", false);
-      context.startService(i);
-
+      FetchNotificationService.start(context, true, false);
     }
   }
 }
