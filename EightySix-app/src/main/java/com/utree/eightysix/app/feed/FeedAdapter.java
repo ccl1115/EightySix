@@ -56,6 +56,14 @@ public class FeedAdapter extends BaseAdapter {
   public FeedAdapter(Feeds feeds) {
     mFeeds = feeds;
 
+    boolean hasPosts = false;
+    for (BaseItem item : mFeeds.posts.lists) {
+      if (item.type == BaseItem.TYPE_POST) {
+        hasPosts = true;
+        break;
+      }
+    }
+
     if (mFeeds.selectFactory != 1) {
       // 设置在职企业
       mFeeds.posts.lists.add(0, new BaseItem(TYPE_SELECT));
@@ -68,7 +76,7 @@ public class FeedAdapter extends BaseAdapter {
         // 有朋友但没达到解锁条件
         mFeeds.posts.lists.add(0, new BaseItem(TYPE_UNLOCK));
       }
-    } else if (mFeeds.posts.lists.size() == 0) {
+    } else if (!hasPosts) {
       // 邀请厂里的人加入
       mFeeds.posts.lists.add(0, new BaseItem(TYPE_INVITE_FACTORY));
     } else if (mFeeds.circle.friendCount == 0) {
