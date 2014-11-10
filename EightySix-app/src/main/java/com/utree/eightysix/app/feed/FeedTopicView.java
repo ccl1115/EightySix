@@ -117,6 +117,8 @@ public class FeedTopicView extends FrameLayout {
     mTvHead.setText(topic.headTitle);
     mTvContent.setText(topic.content);
 
+    mLlParent.setBackgroundColor(ColorUtil.strToColor(topic.bgColor));
+
     if (topic.postCount > 999) {
       mRbMoreFeeds.setText(getContext().getString(R.string.display_more_feeds, "999+"));
     } else {
