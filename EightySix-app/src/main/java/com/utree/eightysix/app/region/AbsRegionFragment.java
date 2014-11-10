@@ -173,7 +173,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
             mFeedAdapter.showTipShare(firstItem);
           } else if (post.isRepost == 1 && Env.firstRun("overlay_tip_repost")) {
             mFeedAdapter.showTipRepost(firstItem);
-          } else if (post.tags != null && post.tags.size() > 0) {
+          } else if (post.tags != null && post.tags.size() > 0 &&  Env.firstRun("overlay_tip_tags")) {
             mFeedAdapter.showTipTags(firstItem);
           }
         }
@@ -368,7 +368,6 @@ public abstract class AbsRegionFragment extends BaseFragment {
 
         mRegionType = response.object.regionType;
 
-        getBaseActivity().setTopSubTitle(response.object.subInfo);
 
         switch (mRegionType) {
           case 0:
@@ -392,8 +391,8 @@ public abstract class AbsRegionFragment extends BaseFragment {
       }
 
       mPageInfo = response.object.posts.page;
-
       mRegionType = response.object.regionType;
+      getBaseActivity().setTopSubTitle(response.object.subInfo);
 
       ((HomeActivity) getBaseActivity()).mSend.setImageResource(response.object.lock != 1 || response.object.current == 1 ?
           R.drawable.ic_post_pen : R.drawable.ic_post_pen_disabled);
