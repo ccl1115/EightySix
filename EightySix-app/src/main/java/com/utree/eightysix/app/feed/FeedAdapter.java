@@ -44,8 +44,6 @@ public class FeedAdapter extends BaseAdapter {
   static final int TYPE_OPTION_SET = 10;
   static final int TYPE_TOPIC = 11;
 
-  private SparseBooleanArray mAnimated = new SparseBooleanArray();
-
   private Feeds mFeeds;
 
   private int mTipOverlaySourcePosition = TIP_NOT_SHOWN;

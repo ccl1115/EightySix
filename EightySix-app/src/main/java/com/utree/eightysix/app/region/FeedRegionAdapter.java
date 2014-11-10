@@ -318,17 +318,17 @@ public class FeedRegionAdapter extends BaseAdapter {
 
     feedPostView.setData(item, mFeeds.circle == null ? 0 : mFeeds.circle.id);
 
-    if (mTipSourcePosition == position) {
+    if (mTipTempNamePosition == position) {
+      feedPostView.showTempNameTip();
+    } else if (mTipTempNamePosition == TNS && mTipSourcePosition == position) {
       feedPostView.showSourceTip();
     } else if (mTipSourcePosition == TNS && mTipPraisePosition == position) {
       feedPostView.showPraiseTip();
     } else if (mTipPraisePosition == TNS && mTipSharePosition == position) {
       feedPostView.showShareTip();
     } else if (mTipSharePosition == TNS && mTipRepostPosition == position) {
-      feedPostView.showRepostTip();
-    } else if (mTipRepostPosition == TNS && mTipTempNamePosition == position) {
       feedPostView.showTempNameTip();
-    } else if (mTipTempNamePosition == TNS && mTipTagsPosition == position) {
+    } else if (mTipRepostPosition == TNS && mTipTagsPosition == position) {
       feedPostView.showTagsTip();
     } else {
       feedPostView.hidePraiseTip();
