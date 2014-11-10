@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.app.intro.IntroActivity;
+import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.User;
 import com.utree.eightysix.event.CurrentCircleResponseEvent;
@@ -220,6 +221,12 @@ public class Account {
       U.getContext().startActivity(intent);
 
       ((NotificationManager) U.getContext().getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+
+      // 停止拉消息服务
+      U.getContext().stopService(new Intent(U.getContext(), FetchNotificationService.class));
+
+      // 停止后台定时拉消息服务
+      FetchAlarmReceiver.stopAlarm(U.getContext());
 
       if (!Account.inst().setUserId("") && !Account.inst().setToken("")) {
         Account.inst().mIsLogin = false;

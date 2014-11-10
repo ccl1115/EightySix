@@ -45,28 +45,18 @@ public class FetchAlarmReceiver extends BroadcastReceiver {
     }
   }
 
+  public static void stopAlarm(Context context) {
+    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+    alarmManager.cancel(PendingIntent.getBroadcast(context, 0, new Intent(ACTION), PendingIntent.FLAG_CANCEL_CURRENT));
+  }
+
   @Override
   public void onReceive(Context context, Intent intent) {
     if (ACTION.equals(intent.getAction())) {
-      context.startService(new Intent(context, FetchNotificationService.class));
+      Intent i = new Intent(context, FetchNotificationService.class);
+      i.putExtra("loop", false);
+      context.startService(i);
 
-      File f = IOUtils.createTmpFile("fetch_log");
-
-      FileWriter wf = null;
-      try {
-        wf = new FileWriter(f, true);
-        wf.write("start fetch service at " + new Date().toString());
-        wf.write('\n');
-        wf.flush();
-      } catch (IOException e) {
-        e.printStackTrace();
-        if (wf != null) {
-          try {
-            wf.close();
-          } catch (IOException ignored) {
-          }
-        }
-      }
     }
   }
 }

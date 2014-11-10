@@ -332,7 +332,6 @@ public class HomeActivity extends BaseActivity {
   @Override
   protected void onStop() {
     super.onStop();
-    mDlContent.closeDrawer(mLlSide);
 
     stopService(new Intent(this, FetchNotificationService.class));
   }

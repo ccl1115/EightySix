@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
@@ -21,7 +22,12 @@ import com.utree.eightysix.rest.HandlerWrapper;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.RequestData;
+import com.utree.eightysix.utils.IOUtils;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -103,6 +109,24 @@ public class FetchNotificationService extends Service {
   }
 
   private void requestFetch() {
+    if (BuildConfig.DEBUG) {
+      File f = IOUtils.createTmpFile("fetch_log");
+
+      FileWriter wf = null;
+      try {
+        wf = new FileWriter(f, true);
+        wf.write("start fetch request at " + new Date().toString());
+        wf.write('\n');
+        wf.flush();
+      } catch (IOException e) {
+        if (wf != null) {
+          try {
+            wf.close();
+          } catch (IOException ignored) {
+          }
+        }
+      }
+    }
 
     RequestData data = U.getRESTRequester().convert(new FetchNotificationRequest(sCircleId));
     U.getRESTRequester().request(data, new HandlerWrapper<FetchResponse>(data, new OnResponse2<FetchResponse>() {
