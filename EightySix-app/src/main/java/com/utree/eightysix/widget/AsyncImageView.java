@@ -1,6 +1,7 @@
 package com.utree.eightysix.widget;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import com.aliyun.android.util.MD5Util;
@@ -56,37 +57,39 @@ public class AsyncImageView extends ImageView {
             setBackgroundDrawable(null);
             break;
           case FROM_REMOTE:
-            ValueAnimator valueAnimator = ValueAnimator.ofInt(0, 255);
-            valueAnimator.setDuration(500).addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-              @Override
-              public void onAnimationUpdate(ValueAnimator animation) {
-                setImageAlpha((Integer) animation.getAnimatedValue());
-              }
-            });
-            valueAnimator.addListener(new Animator.AnimatorListener() {
-              @Override
-              public void onAnimationStart(Animator animation) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+              ValueAnimator valueAnimator = ValueAnimator.ofInt(0, 255);
+              valueAnimator.setDuration(500).addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                  setImageAlpha((Integer) animation.getAnimatedValue());
+                }
+              });
+              valueAnimator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
 
-              }
+                }
 
-              @Override
-              public void onAnimationEnd(Animator animation) {
-                removeCallbacks(mAction);
-                setBackgroundDrawable(null);
-              }
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                  removeCallbacks(mAction);
+                  setBackgroundDrawable(null);
+                }
 
-              @Override
-              public void onAnimationCancel(Animator animation) {
+                @Override
+                public void onAnimationCancel(Animator animation) {
 
-              }
+                }
 
-              @Override
-              public void onAnimationRepeat(Animator animation) {
+                @Override
+                public void onAnimationRepeat(Animator animation) {
 
-              }
-            });
-            valueAnimator.start();
-            break;
+                }
+              });
+              valueAnimator.start();
+              break;
+            }
         }
         setImageBitmap(event.getBitmap());
       }
@@ -105,7 +108,9 @@ public class AsyncImageView extends ImageView {
 
     setBackgroundDrawable(null);
 
-    postDelayed(mAction, 1000);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+      postDelayed(mAction, 1000);
+    }
 
     clearAnimation();
 
