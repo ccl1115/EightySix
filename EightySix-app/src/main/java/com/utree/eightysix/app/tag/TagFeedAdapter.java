@@ -115,10 +115,10 @@ class TagFeedAdapter extends BaseAdapter {
     }
     if (mFeedType == FEED_HOT) {
       ((RandomSceneTextView) convertView).setText("这个标签下还没有热门的帖子哟");
-      ((RandomSceneTextView) convertView).setText("快快顶帖，或去其他的标签看看吧");
+      ((RandomSceneTextView) convertView).setText("快快顶帖，或去其它的标签看看吧");
     } else if (mFeedType == FEED_FACTORY) {
       ((RandomSceneTextView) convertView).setText("这个标签下还没有同厂的帖子哟");
-      ((RandomSceneTextView) convertView).setText("抢先发帖，或去其他的标签看看吧");
+      ((RandomSceneTextView) convertView).setText("抢先发帖，或去其它的标签看看吧");
     }
     return convertView;
   }

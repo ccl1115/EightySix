@@ -245,10 +245,10 @@ public class TopicFeedAdapter extends BaseAdapter {
 
     if (mTab == TAB_NEW) {
       ((RandomSceneTextView) convertView).setText("这个话题下还没有帖子哟");
-      ((RandomSceneTextView) convertView).setSubText("抢先发帖，或去其他的话题看看吧");
+      ((RandomSceneTextView) convertView).setSubText("抢先发帖，或去其它的话题看看吧");
     } else if (mTab == TAB_FEATURE) {
       ((RandomSceneTextView) convertView).setText("这个话题下还没有精选帖哟");
-      ((RandomSceneTextView) convertView).setSubText("快快顶帖，或去其他的话题看看吧");
+      ((RandomSceneTextView) convertView).setSubText("快快顶帖，或去其它的话题看看吧");
     }
 
     return convertView;
