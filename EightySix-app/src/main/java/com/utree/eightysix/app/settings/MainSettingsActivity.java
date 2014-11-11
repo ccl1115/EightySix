@@ -2,20 +2,21 @@ package com.utree.eightysix.app.settings;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
-import com.utree.eightysix.Account;
-import com.utree.eightysix.C;
-import com.utree.eightysix.R;
-import com.utree.eightysix.U;
+import com.utree.eightysix.*;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.app.devmode.DevModeActivity;
 import com.utree.eightysix.data.Sync;
 import com.utree.eightysix.widget.RoundedButton;
 
@@ -31,6 +32,9 @@ public class MainSettingsActivity extends BaseActivity {
 
   @InjectView(R.id.cb_silent_mode)
   public CheckBox mCbSilentMode;
+
+  @InjectView(R.id.tv_dev)
+  public TextView mTvDev;
 
   @OnClick (R.id.tv_logout)
   public void onRbLogoutClicked() {
@@ -72,6 +76,11 @@ public class MainSettingsActivity extends BaseActivity {
     }
   }
 
+  @OnClick (R.id.tv_dev)
+  public void onTvDevClicked() {
+    startActivity(new Intent(this, DevModeActivity.class));
+  }
+
   @OnCheckedChanged(R.id.cb_silent_mode)
   public void onCbSilentModeChecked(boolean checked){
     Account.inst().setSilentMode(checked);
@@ -98,6 +107,10 @@ public class MainSettingsActivity extends BaseActivity {
       } else {
         mRbUpgradeDot.setVisibility(View.INVISIBLE);
       }
+    }
+
+    if (BuildConfig.DEBUG) {
+      mTvDev.setVisibility(View.VISIBLE);
     }
 
     mCbSilentMode.setChecked(Account.inst().getSilentMode());
