@@ -165,6 +165,14 @@ public class Account {
     }
   }
 
+  public void setLastRegionType(int regionType) {
+    getAccountSharedPreferences().edit().putInt("last_region_type", regionType).apply();
+  }
+
+  public int getLastRegionType() {
+    return getAccountSharedPreferences().getInt("last_region_type", -1);
+  }
+
   private SharedPreferences getSharedPreferences() {
     return U.getContext().getSharedPreferences("account", Context.MODE_PRIVATE);
   }

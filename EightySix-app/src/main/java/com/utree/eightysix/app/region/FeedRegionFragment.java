@@ -2,6 +2,7 @@ package com.utree.eightysix.app.region;
 
 import android.view.View;
 import com.squareup.otto.Subscribe;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.AbsFeedFragment;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
@@ -41,7 +42,7 @@ public class FeedRegionFragment extends AbsRegionFragment {
       getBaseActivity().showRefreshIndicator(true);
     }
 
-    switch (mRegionType) {
+    switch (regionType) {
       case 0:
         getBaseActivity().setTopTitle(mCircle == null ? "" : mCircle.shortName);
         getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_ONE);
