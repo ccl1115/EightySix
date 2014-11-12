@@ -2,9 +2,7 @@ package com.utree.eightysix.app.region;
 
 import android.view.View;
 import com.squareup.otto.Subscribe;
-import com.utree.eightysix.Account;
 import com.utree.eightysix.U;
-import com.utree.eightysix.app.feed.AbsFeedFragment;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.app.feed.event.RefreshFeedEvent;
@@ -13,11 +11,9 @@ import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.FeedByRegionRequest;
-import com.utree.eightysix.request.FeedsRequest;
 import com.utree.eightysix.request.PostPraiseCancelRequest;
 import com.utree.eightysix.request.PostPraiseRequest;
 import com.utree.eightysix.response.FeedsByRegionResponse;
-import com.utree.eightysix.response.FeedsResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
@@ -155,7 +151,7 @@ public class FeedRegionFragment extends AbsRegionFragment {
       }
     }
     if (isAdded()) {
-      requestFeeds(mRegionType, 1);
+      requestFeeds(getRegionType(), 1);
     }
   }
 

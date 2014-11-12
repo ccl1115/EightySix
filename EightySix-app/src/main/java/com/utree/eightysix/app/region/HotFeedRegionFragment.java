@@ -150,7 +150,7 @@ public class HotFeedRegionFragment extends AbsRegionFragment {
       }
     }
     if (isAdded()) {
-      requestFeeds(mRegionType, 1);
+      requestFeeds(getRegionType(), 1);
     }
   }
 

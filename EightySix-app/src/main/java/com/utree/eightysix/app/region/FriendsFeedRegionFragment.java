@@ -150,7 +150,7 @@ public class FriendsFeedRegionFragment extends AbsRegionFragment {
       }
     }
     if (isAdded()) {
-      requestFeeds(mRegionType, 1);
+      requestFeeds(getRegionType(), 1);
     }
   }
 

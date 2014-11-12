@@ -75,8 +75,9 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   private Toast mToast;
   private Toast mInActivityToast;
 
-  private boolean mResumed;
   private boolean mFillContent;
+
+  protected boolean mResumed;
 
   public static boolean isBackground() {
     return sBackground;
@@ -617,6 +618,29 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
 
   protected boolean shouldCheckUpgrade() {
     return true;
+  }
+
+  private long mLastCount;
+  /**
+   * 开始一个计时，清楚上次计时
+   */
+  protected void startCount() {
+    mLastCount = System.currentTimeMillis();
+  }
+
+  /**
+   * 获取当前计时
+   * @return 计时，单位毫秒
+   */
+  protected long getCount() {
+    return System.currentTimeMillis() - mLastCount;
+  }
+
+  @Override
+  protected void onStop() {
+    super.onStop();
+
+    startCount();
   }
 
   private void checkUpgrade() {

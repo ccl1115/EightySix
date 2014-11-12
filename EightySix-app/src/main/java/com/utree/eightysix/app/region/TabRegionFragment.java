@@ -14,14 +14,10 @@ import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
-import com.utree.eightysix.app.feed.FeedFragment;
-import com.utree.eightysix.app.feed.FriendsFeedFragment;
-import com.utree.eightysix.app.feed.HotFeedFragment;
 import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
-import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.widget.TitleTab;
 
 /**
@@ -196,6 +192,10 @@ public class TabRegionFragment extends BaseFragment {
         mFriendsFeedFragment.setActive(true);
         break;
     }
+  }
+
+  public int getRegionType() {
+    return mFeedFragment.getRegionType();
   }
 
   public void setTabIndex(int index) {

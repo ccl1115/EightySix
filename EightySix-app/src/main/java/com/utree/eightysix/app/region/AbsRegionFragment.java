@@ -55,7 +55,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
   protected Circle mCircle;
   protected Paginate.Page mPageInfo;
 
-  protected int mRegionType = -1;
+  private int mRegionType = -1;
 
   protected boolean mPostPraiseRequesting;
 
@@ -74,7 +74,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
   public void onAttach(Activity activity) {
     super.onAttach(activity);
 
-    if (isActive()) requestFeeds(mRegionType, 1);
+    if (isActive()) requestFeeds(getRegionType(), 1);
   }
 
   @Override
@@ -82,7 +82,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
     if (mLvFeed != null) mLvFeed.setAdapter(null);
 
     if (isAdded()) {
-      requestFeeds(mRegionType, 1);
+      requestFeeds(getRegionType(), 1);
     }
   }
 
@@ -111,7 +111,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
       public boolean onLoadMoreStart() {
         if (mPageInfo != null) {
           onLoadMore(mPageInfo.currPage + 1);
-          requestFeeds(mRegionType, mPageInfo.currPage + 1);
+          requestFeeds(getRegionType(), mPageInfo.currPage + 1);
           return true;
         } else {
           return false;
@@ -128,7 +128,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
         onPullRefresh();
         if (isAdded()) {
           if (mCircle != null) {
-            requestFeeds(mRegionType, 1);
+            requestFeeds(getRegionType(), 1);
           } else {
             requestFeeds(-1, 1);
           }
@@ -222,7 +222,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
     getBaseActivity().showProgressBar();
     if (mCircle != null) {
       if (isAdded()) {
-        requestFeeds(mRegionType, 1);
+        requestFeeds(getRegionType(), 1);
       }
     } else {
       if (isAdded()) {
@@ -262,10 +262,10 @@ public abstract class AbsRegionFragment extends BaseFragment {
 
         mRegionType = response.object.regionType;
 
-        Account.inst().setLastRegionType(mRegionType);
+        Account.inst().setLastRegionType(getRegionType());
 
         TopBar topBar = getBaseActivity().getTopBar();
-        if (mRegionType == 0 && mCircle.lock == 1) {
+        if (getRegionType() == 0 && mCircle.lock == 1) {
           topBar.mSubTitle.setCompoundDrawablesWithIntrinsicBounds(
               getResources().getDrawable(R.drawable.ic_lock_small), null, null, null);
           topBar.mSubTitle.setCompoundDrawablePadding(U.dp2px(5));
@@ -273,7 +273,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
           topBar.mSubTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         }
 
-        switch (mRegionType) {
+        switch (getRegionType()) {
           case 0:
             getBaseActivity().setTopTitle(mCircle.shortName);
             getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_ONE);
@@ -292,7 +292,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
             break;
         }
 
-        U.getBus().post(new RegionResponseEvent(mRegionType, mCircle));
+        U.getBus().post(new RegionResponseEvent(getRegionType(), mCircle));
       } else if (mFeedAdapter != null) {
         mFeedAdapter.add(response.object.posts.lists);
       }
@@ -319,7 +319,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
               response.object.fetch.newPraise.percent));
         }
 
-        if (mRegionType == 0 && mCircle != null) {
+        if (getRegionType() == 0 && mCircle != null) {
           U.getBus().post(new NewAllPostCountEvent(mCircle.id, response.object.fetch.newPostAllCount));
           U.getBus().post(new NewHotPostCountEvent(mCircle.id, response.object.fetch.newPostHotCount));
           U.getBus().post(new NewFriendsPostCountEvent(mCircle.id, response.object.fetch.newPostFriendsCount));
@@ -334,7 +334,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
         U.getBus().post(new NewFriendsPostCountEvent(0, 0));
       }
 
-      if (mRegionType == 0) {
+      if (getRegionType() == 0) {
         FetchNotificationService.setCircleId(mCircle == null ? 0 : mCircle.id);
       } else {
         FetchNotificationService.setCircleId(0);
@@ -371,7 +371,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
         mRegionType = response.object.regionType;
 
 
-        switch (mRegionType) {
+        switch (getRegionType()) {
           case 0:
             getBaseActivity().setTopTitle(mCircle.shortName);
             break;
@@ -386,7 +386,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
             break;
         }
 
-        U.getBus().post(new RegionResponseEvent(mRegionType, mCircle));
+        U.getBus().post(new RegionResponseEvent(getRegionType(), mCircle));
 
       } else if (mFeedAdapter != null) {
         mFeedAdapter.add(response.object.posts.lists);
@@ -429,4 +429,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
   }
 
 
+  public int getRegionType() {
+    return mRegionType;
+  }
 }
