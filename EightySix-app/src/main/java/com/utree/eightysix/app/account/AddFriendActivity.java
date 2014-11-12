@@ -10,6 +10,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.qrcode.QRCodeScanFragment;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.event.QRCodeScanEvent;
@@ -48,12 +49,22 @@ public class AddFriendActivity extends BaseActivity {
 
   @OnClick(R.id.ll_qq)
   public void onLlQqClicked() {
-    U.getShareManager().shareAppToQQ(this, Env.getLastCircle());
+    Circle currentCircle = Account.inst().getCurrentCircle();
+    if (currentCircle != null) {
+      U.getShareManager().shareAppToQQ(this, currentCircle);
+    } else {
+      U.showToast("请先设置在职工厂");
+    }
   }
 
   @OnClick(R.id.ll_qzone)
   public void onLlQzoneClicked() {
-    U.getShareManager().shareAppToQzone(this, Env.getLastCircle());
+    Circle currentCircle = Account.inst().getCurrentCircle();
+    if (currentCircle != null) {
+      U.getShareManager().shareAppToQzone(this, currentCircle);
+    } else {
+      U.showToast("请先设置在职工厂");
+    }
   }
 
   @Override
