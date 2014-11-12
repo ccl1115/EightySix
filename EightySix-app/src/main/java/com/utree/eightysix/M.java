@@ -2,6 +2,7 @@ package com.utree.eightysix;
 
 import android.os.Looper;
 import com.utree.eightysix.location.BdLocationImpl;
+import com.utree.eightysix.location.DumpLocationImpl;
 import com.utree.eightysix.location.Location;
 import com.utree.eightysix.utils.RegisterHelper;
 
@@ -17,7 +18,11 @@ public class M {
   public static Location getLocation() {
     checkThread();
     if (sLocation == null) {
-      sLocation = new BdLocationImpl(U.getContext());
+      if (BuildConfig.DEBUG) {
+        sLocation = new DumpLocationImpl();
+      } else {
+        sLocation = new BdLocationImpl(U.getContext());
+      }
     }
     return sLocation;
   }

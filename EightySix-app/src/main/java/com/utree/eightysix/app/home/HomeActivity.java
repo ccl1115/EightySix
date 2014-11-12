@@ -248,6 +248,10 @@ public class HomeActivity extends BaseActivity {
     }
 
     mDlContent.closeDrawer(mLlSide);
+
+    if (mResumed && getCount() > U.getConfigInt("activity.background.refresh.time")) {
+      mTabFragment.setRegionType(mTabFragment.getRegionType());
+    }
   }
 
   @Override

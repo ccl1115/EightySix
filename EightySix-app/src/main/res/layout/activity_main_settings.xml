@@ -80,6 +80,19 @@
     <include layout="@layout/widget_primary_divider"/>
 
     <TextView
+            android:id="@+id/tv_dev"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingLeft="10dp"
+            android:gravity="center_vertical"
+            android:textSize="16sp"
+            android:text="@string/dev_mode"
+            android:background="@drawable/apptheme_primary_list_selector"
+            android:visibility="gone"/>
+
+    <include layout="@layout/widget_primary_divider"/>
+
+    <TextView
             android:id="@+id/tv_logout"
             android:layout_width="match_parent"
             android:layout_height="50dp"
