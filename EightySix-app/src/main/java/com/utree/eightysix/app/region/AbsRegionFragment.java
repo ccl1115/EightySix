@@ -262,6 +262,8 @@ public abstract class AbsRegionFragment extends BaseFragment {
 
         mRegionType = response.object.regionType;
 
+        Account.inst().setLastRegionType(mRegionType);
+
         TopBar topBar = getBaseActivity().getTopBar();
         if (mRegionType == 0 && mCircle.lock == 1) {
           topBar.mSubTitle.setCompoundDrawablesWithIntrinsicBounds(

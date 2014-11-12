@@ -309,7 +309,7 @@ public class HomeActivity extends BaseActivity {
   @Override
   protected void onNewIntent(Intent intent) {
 
-    final int regionType = intent.getIntExtra("regionType", -1);
+    final int regionType = intent.getIntExtra("regionType", Account.inst().getLastRegionType());
     final int tabIndex = intent.getIntExtra("tabIndex", 0);
 
     if (regionType != -1) {
