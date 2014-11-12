@@ -114,7 +114,7 @@ public class FeedPostView extends BasePostView {
 
   @OnClick(R.id.tv_source)
   public void onTvSourceClicked() {
-    if (mPost.sourceType == 0 && (mPost.viewType == 3 || mPost.viewType == 4 || mPost.viewType == 8)) {
+    if (mPost.viewType == 8 || (mPost.sourceType == 0 && (mPost.viewType == 3 || mPost.viewType == 4))) {
       if (mPost.userCurrFactoryId == mPost.factoryId) {
         HomeActivity.start(getContext(), 0);
       } else {
