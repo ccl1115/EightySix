@@ -225,6 +225,10 @@ public class HomeActivity extends BaseActivity {
 
   @Override
   protected void onResume() {
+    if (mResumed && getCount() > U.getConfigInt("activity.background.refresh.time")
+        && mTabFragment != null) {
+      mTabFragment.setRegionType(mTabFragment.getRegionType());
+    }
     super.onResume();
 
     Sync sync = U.getSyncClient().getSync();
@@ -244,10 +248,6 @@ public class HomeActivity extends BaseActivity {
     }
 
     mDlContent.closeDrawer(mLlSide);
-
-    if (mResumed && getCount() > U.getConfigInt("activity.background.refresh.time")) {
-      mTabFragment.setRegionType(mTabFragment.getRegionType());
-    }
   }
 
   @Override
