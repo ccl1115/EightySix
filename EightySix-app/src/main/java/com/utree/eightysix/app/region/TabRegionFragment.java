@@ -79,7 +79,7 @@ public class TabRegionFragment extends BaseFragment {
       public CharSequence getPageTitle(int position) {
         switch (position) {
           case 0:
-            return "全部";
+            return "最新";
           case 1:
             return "热门";
           case 2:

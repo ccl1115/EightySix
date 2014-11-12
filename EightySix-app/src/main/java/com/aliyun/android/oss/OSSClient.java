@@ -332,6 +332,21 @@ public class OSSClient {
         }
     }
 
+    public String uploadObject(String bucketName, String objectKey, String localPath,
+                               HttpContentType type) {
+      try {
+        PutObjectTask tsk = new PutObjectTask(bucketName, objectKey,
+            type.toString(), localPath);
+        setAuthorization(tsk);
+        return tsk.getResult();
+      } catch (OSSException e) {
+        throw e;
+      } catch (Exception ee) {
+        throw new OSSException(ee);
+      }
+
+    }
+
     /**
      * 上传文件
      * 
