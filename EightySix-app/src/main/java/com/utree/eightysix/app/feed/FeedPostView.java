@@ -119,7 +119,7 @@ public class FeedPostView extends BasePostView {
         return;
       }
 
-      if (Account.inst().getCurrentCircle() != null && Account.inst().getCurrentCircle().id == mPost.factoryId) {
+      if (mPost.userCurrFactoryId == mPost.factoryId) {
         HomeActivity.start(getContext(), 0);
       } else {
         FeedActivity.start(getContext(), mPost.factoryId);

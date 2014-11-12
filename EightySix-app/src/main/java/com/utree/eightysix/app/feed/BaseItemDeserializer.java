@@ -100,6 +100,7 @@ public class BaseItemDeserializer implements JsonDeserializer<BaseItem> {
     post.factoryId = safeGetAsInt(jObj.get("factoryId"));
     post.owner = safeGetAsInt(jObj.get("owner"));
     post.sourceType = safeGetAsInt(jObj.get("sourceType"));
+    post.userCurrFactoryId = safeGetAsInt(jObj.get("userCurrFactoryId"));
 
     post.tags = new ArrayList<Tag>();
 
