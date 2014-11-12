@@ -63,6 +63,10 @@ public abstract class AbsRegionFragment extends BaseFragment {
     mRegionType = regionType;
   }
 
+  public FeedRegionAdapter getFeedAdapter() {
+    return mFeedAdapter;
+  }
+
   @OnItemClick (R.id.lv_feed)
   public void onLvFeedItemClicked(int position, View view) {
     Object item = mLvFeed.getAdapter().getItem(position);

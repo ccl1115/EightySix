@@ -146,4 +146,9 @@ public class RegionFragment extends BaseFragment {
   public interface Callback {
     void onItemClicked(int regionType, boolean selected);
   }
+
+  @Subscribe
+  public void onRegionResponseEvent(RegionResponseEvent event) {
+    mRegionType = event.getRegion();
+  }
 }

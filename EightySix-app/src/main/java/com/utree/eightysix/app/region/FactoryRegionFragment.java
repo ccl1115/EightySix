@@ -97,11 +97,6 @@ public class FactoryRegionFragment extends BaseFragment {
         .detach(this).commit();
   }
 
-  @Subscribe
-  public void onRegionResponseEvent(RegionResponseEvent event) {
-    mRegionType = event.getRegion();
-  }
-
   @Override
   public boolean onBackPressed() {
     if (!isDetached()) {
