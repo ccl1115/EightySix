@@ -72,11 +72,12 @@ class ShareToQzone extends IShare {
         data.putString(QzoneShare.SHARE_TO_QQ_TITLE, String.format(shareTitleForPost(), post.shortName));
         data.putString(QzoneShare.SHARE_TO_QQ_TARGET_URL, url);
         data.putString(QzoneShare.SHARE_TO_QQ_SUMMARY, post.content);
-        ArrayList<String> urls = new ArrayList<String>();
         if (!TextUtils.isEmpty(post.bgUrl) && post.bgUrl.contains(U.getImageBucket())) {
+          ArrayList<String> urls = new ArrayList<String>();
           urls.add(post.bgUrl);
           data.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL, urls);
         } else {
+          ArrayList<String> urls = new ArrayList<String>();
           urls.add("http://utree-resource.oss-cn-beijing.aliyuncs.com/faceless.png");
           data.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL, urls);
         }

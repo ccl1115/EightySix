@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.text.TextUtils;
 import com.aliyun.android.oss.OSSClient;
 import com.aliyun.android.oss.OSSException;
+import com.aliyun.android.oss.http.HttpContentType;
 import com.aliyun.android.oss.model.Bucket;
 import com.aliyun.android.oss.model.OSSObject;
 import com.aliyun.android.oss.task.Task;
@@ -55,7 +56,7 @@ public class OSSImpl implements Storage {
 
     private Result doPut(String bucket, String path, String key, File file, Result result) {
         try {
-            mOSSClient.uploadObject(bucket, path + key, file.getAbsolutePath());
+            mOSSClient.uploadObject(bucket, path + key, file.getAbsolutePath(), HttpContentType.PNG);
         } catch (OSSException e) {
             if (BuildConfig.DEBUG) {
                 e.printStackTrace();

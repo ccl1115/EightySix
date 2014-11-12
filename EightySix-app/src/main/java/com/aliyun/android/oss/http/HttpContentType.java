@@ -9,7 +9,7 @@ package com.aliyun.android.oss.http;
  * @author Harttle
  */
 public enum HttpContentType {
-    DIR("application/x-director"), TXT("text/plain");
+    DIR("application/x-director"), TXT("text/plain"), JPEG("image/jpeg"), PNG("image/png");
 
     /**
      * 请求方法的字符串表示
