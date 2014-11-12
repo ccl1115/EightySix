@@ -16,7 +16,7 @@
     <version>1.5.1</version>
 
     <properties>
-        <android.manifest.versionCode>25</android.manifest.versionCode>
+        <android.manifest.versionCode>26</android.manifest.versionCode>
         <android.manifest.versionName>${project.version}</android.manifest.versionName>
     </properties>
 
