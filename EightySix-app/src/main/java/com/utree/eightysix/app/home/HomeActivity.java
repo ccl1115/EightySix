@@ -412,7 +412,6 @@ public class HomeActivity extends BaseActivity {
     if (mPopupMenu.isShowing()) {
       mPopupMenu.dismiss();
     } else {
-      mPopupMenu.showAsDropDown(getTopBar().mActionOverFlow);
       mDlContent.closeDrawer(mLlSide);
       hideFactoryRegion();
     }

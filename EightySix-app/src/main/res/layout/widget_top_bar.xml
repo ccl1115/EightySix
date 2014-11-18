@@ -6,13 +6,11 @@
         android:layout_height="match_parent"
         >
 
-    <LinearLayout
-            android:id="@+id/tb_ll_left"
+    <FrameLayout
+            android:id="@+id/tb_fl_left"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@drawable/apptheme_primary_btn_dark"
-            android:paddingRight="8dp"
-            android:orientation="horizontal"
             >
 
         <ImageView
@@ -24,7 +22,15 @@
                 android:contentDescription="@string/cd_action_left"
                 />
 
-    </LinearLayout>
+        <TextView
+                android:id="@+id/tb_tv_action_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textColor="@android:color/white"
+                />
+
+    </FrameLayout>
 
     <LinearLayout
             android:id="@+id/tb_ll_title"
@@ -60,15 +66,27 @@
 
     </LinearLayout>
 
-    <com.utree.eightysix.widget.ImageActionButton
-            android:id="@+id/tb_iab_action_overflow"
-            android:layout_width="match_parent"
+    <FrameLayout
+            android:id="@+id/tb_fl_right"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_action_overflow"
-            android:scaleType="centerInside"
-            android:contentDescription="@string/cd_action_overflow"
-            />
+            android:background="@drawable/apptheme_primary_btn_dark"
+            >
 
+        <ImageView
+                android:id="@+id/tb_iv_action_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                />
+
+        <TextView
+                android:id="@+id/tb_tv_action_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                />
+    </FrameLayout>
 
     <LinearLayout
             android:id="@+id/tb_ll_search"
