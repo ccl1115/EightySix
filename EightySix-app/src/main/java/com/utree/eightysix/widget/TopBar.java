@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -22,6 +21,7 @@ import butterknife.OnTextChanged;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import de.akquinet.android.androlog.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,47 +36,35 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
   private final Paint mTopLinePaint = new Paint();
   private final Paint mBotLinePaint = new Paint();
 
-  @InjectView (R.id.tb_tv_bar_title)
+  @InjectView(R.id.tb_tv_bar_title)
   public TextView mTitle;
 
-  @InjectView (R.id.tb_tv_sub_title)
+  @InjectView(R.id.tb_tv_sub_title)
   public TextView mSubTitle;
 
-  @InjectView (R.id.tb_iab_action_overflow)
+  @InjectView(R.id.tb_iab_action_overflow)
   public ImageActionButton mActionOverFlow;
 
-  @InjectView (R.id.tb_iv_action_left)
+  @InjectView(R.id.tb_iv_action_left)
   public ImageView mActionLeft;
 
-  @InjectView (R.id.tb_iv_search_close)
+  @InjectView(R.id.tb_iv_search_close)
   public ImageView mIvSearchClose;
 
-  @InjectView (R.id.tb_et_search)
+  @InjectView(R.id.tb_et_search)
   public EditText mEtSearch;
 
-  @InjectView (R.id.tb_ll_left)
+  @InjectView(R.id.tb_ll_left)
   public LinearLayout mLlLeft;
 
-  @InjectView (R.id.tb_iv_app_icon)
-  public ImageView mIvAppIcon;
-
-  @InjectView (R.id.tb_rb_search)
+  @InjectView(R.id.tb_rb_search)
   public RoundedButton mRbSearch;
 
-  @InjectView (R.id.tb_ll_search)
+  @InjectView(R.id.tb_ll_search)
   public LinearLayout mLlSearch;
 
-  @InjectView (R.id.tb_ll_title)
+  @InjectView(R.id.tb_ll_title)
   public LinearLayout mLlTitle;
-
-  @InjectView (R.id.tb_ll_icon)
-  public LinearLayout mLlIcon;
-
-  @InjectView (R.id.tb_iv_indicator)
-  public ImageView mIvIndicator;
-
-  @InjectView (R.id.tb_v_divider)
-  public View mVDivider;
 
   private Callback mCallback;
   private ActionAdapter mActionAdapter;
@@ -198,44 +186,36 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     }
   }
 
-  @OnClick (R.id.tb_iv_search_close)
+  @OnClick(R.id.tb_iv_search_close)
   public void onIvSearchCloseClicked() {
     mEtSearch.setText("");
   }
 
-  @OnClick (R.id.tb_ll_left)
+  @OnClick(R.id.tb_ll_left)
   public void onActionLeftClicked() {
     if (mTitleClickMode == TITLE_CLICK_MODE_ONE) {
       if (mCallback != null) mCallback.onActionLeftClicked();
     }
   }
 
-  @OnClick (R.id.tb_ll_title)
+  @OnClick(R.id.tb_ll_title)
   public void onLlTitleClicked() {
     if (mTitleClickMode == TITLE_CLICK_MODE_DIVIDE) {
       if (mCallback != null) mCallback.onTitleClicked();
     }
   }
 
-  @OnClick (R.id.tb_ll_icon)
-  public void onLlIconClicked() {
-    if (mTitleClickMode == TITLE_CLICK_MODE_DIVIDE) {
-      if (mCallback != null) mCallback.onIconClicked();
-    }
-  }
-
-
-  @OnClick (R.id.tb_iab_action_overflow)
+  @OnClick(R.id.tb_iab_action_overflow)
   public void onActionOverflowClicked(View v) {
     if (mCallback != null) mCallback.onActionOverflowClicked();
   }
 
-  @OnClick (R.id.tb_rb_search)
+  @OnClick(R.id.tb_rb_search)
   public void onRbSearchClicked() {
     if (mCallback != null) mCallback.onActionSearchClicked(mEtSearch.getText());
   }
 
-  @OnTextChanged (R.id.tb_et_search)
+  @OnTextChanged(R.id.tb_et_search)
   public void onEtSearchTextChanged(CharSequence cs) {
     if (cs.length() == 0) {
       mIvSearchClose.setVisibility(INVISIBLE);
@@ -256,21 +236,6 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
   }
 
   public void setTitleClickMode(int mode) {
-    mTitleClickMode = mode;
-
-    if (mTitleClickMode == TITLE_CLICK_MODE_ONE) {
-      mLlTitle.setClickable(false);
-      mLlIcon.setClickable(false);
-      mLlLeft.setClickable(true);
-      mIvIndicator.setVisibility(GONE);
-      mVDivider.setVisibility(GONE);
-    } else {
-      mLlTitle.setClickable(true);
-      mLlIcon.setClickable(true);
-      mLlLeft.setClickable(false);
-      mIvIndicator.setVisibility(VISIBLE);
-      mVDivider.setVisibility(VISIBLE);
-    }
   }
 
   @Override
@@ -294,7 +259,10 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     mLlLeft.layout(0, 0, mLlLeft.getMeasuredWidth(), b);
 
-    mLlSearch.layout(mIvAppIcon.getRight(), 0, mIvAppIcon.getRight() + mLlSearch.getMeasuredWidth(), b);
+    mLlTitle.layout((getMeasuredWidth() - mLlTitle.getMeasuredWidth()) >> 1, (getMeasuredHeight() - mLlTitle.getMeasuredHeight()) >> 1,
+        (getMeasuredWidth() + mLlTitle.getMeasuredWidth()) >> 1, (getMeasuredHeight() + mLlTitle.getMeasuredHeight()) >> 1);
+
+    mLlSearch.layout(0, 0, mLlSearch.getMeasuredWidth(), b);
 
     mActionOverFlow.layout(r - mActionOverFlow.getMeasuredWidth(), 0, r, b);
 
@@ -337,7 +305,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     return false;
   }
 
-  @SuppressWarnings ("SuspiciousNameCombination")
+  @SuppressWarnings("SuspiciousNameCombination")
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
@@ -396,8 +364,9 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     measureChild(mLlLeft, widthLeft + MeasureSpec.AT_MOST, heightSize + MeasureSpec.EXACTLY);
 
-    measureChild(mLlSearch, widthSize - mIvAppIcon.getRight() + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
+    measureChild(mLlSearch, widthSize - getLeft() + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
 
+    measureChild(mLlTitle, widthSize + MeasureSpec.AT_MOST, heightSize + MeasureSpec.AT_MOST);
 
     setMeasuredDimension(widthSize, heightSize);
   }
