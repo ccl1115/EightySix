@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="25" android:versionName="1.5.1" package="com.utree.eightysix">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="26" android:versionName="2.0.0-SNAPSHOT" package="com.utree.eightysix">
 
     <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="21"/>
 
@@ -164,6 +164,8 @@
         <activity android:exported="@bool/exported" android:label="话题详情" android:name=".app.topic.TopicActivity" android:screenOrientation="portrait"/>
 
         <activity android:exported="@bool/exported" android:name=".app.region.FactoryRegionActivity" android:screenOrientation="portrait"/>
+
+        <activity android:exported="@bool/exported" android:label="首页" android:name=".app.home.HomeTabActivity" android:screenOrientation="portrait"/>
 
         <service android:enabled="true" android:name=".contact.ContactsSyncService"/>
         <service android:enabled="true" android:name=".app.msg.FetchNotificationService"/>

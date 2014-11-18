@@ -16,7 +16,6 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.feed.FeedAdapter;
 import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
-import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
@@ -304,10 +303,6 @@ public abstract class AbsRegionFragment extends BaseFragment {
       mPageInfo = response.object.posts.page;
       getBaseActivity().setTopSubTitle(response.object.subInfo);
 
-      ((HomeActivity) getBaseActivity()).mSend.setImageResource(response.object.lock != 1 || response.object.current == 1 ?
-          R.drawable.ic_post_pen : R.drawable.ic_post_pen_disabled);
-
-
       if (response.object.fetch != null) {
         if (response.object.fetch.newComment != null) {
           Account.inst().setNewCommentCount(response.object.fetch.newComment.unread);
@@ -399,9 +394,6 @@ public abstract class AbsRegionFragment extends BaseFragment {
       mPageInfo = response.object.posts.page;
       mRegionType = response.object.regionType;
       getBaseActivity().setTopSubTitle(response.object.subInfo);
-
-      ((HomeActivity) getBaseActivity()).mSend.setImageResource(response.object.lock != 1 || response.object.current == 1 ?
-          R.drawable.ic_post_pen : R.drawable.ic_post_pen_disabled);
 
       FetchNotificationService.setCircleId(mCircle == null ? 0 : mCircle.id);
     } else {

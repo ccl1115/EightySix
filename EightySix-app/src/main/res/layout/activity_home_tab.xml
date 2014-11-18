@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+        >
+
+    <FrameLayout
+            android:id="@+id/fl_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            >
+
+    </FrameLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/apptheme_primary_dark_grey"
+            >
+
+        <FrameLayout
+                android:id="@+id/fl_feed"
+                android:layout_width="0dp"
+                android:layout_height="64dp"
+                android:layout_weight="1"
+                android:background="@drawable/apptheme_transparent_bg"
+                >
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@android:color/white"
+                    android:text="打工圈"
+                    />
+
+        </FrameLayout>
+
+        <FrameLayout
+                android:id="@+id/fl_explore"
+                android:layout_width="0dp"
+                android:layout_height="64dp"
+                android:layout_weight="1"
+                android:background="@drawable/apptheme_transparent_bg"
+                >
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@android:color/white"
+                    android:text="探索"
+                    />
+
+        </FrameLayout>
+
+        <ImageView
+                android:id="@+id/iv_send"
+                android:layout_width="0dp"
+                android:layout_height="64dp"
+                android:layout_weight="1"
+                android:padding="16dp"
+                android:src="@drawable/ic_post_pen"
+                />
+
+        <FrameLayout
+                android:id="@+id/fl_nearby"
+                android:layout_width="0dp"
+                android:layout_height="64dp"
+                android:layout_weight="1"
+                android:background="@drawable/apptheme_transparent_bg"
+                >
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@android:color/white"
+                    android:text="消息"
+                    />
+
+        </FrameLayout>
+
+        <FrameLayout
+                android:id="@+id/fl_more"
+                android:layout_width="0dp"
+                android:layout_height="64dp"
+                android:layout_weight="1"
+                android:background="@drawable/apptheme_transparent_bg"
+                >
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@android:color/white"
+                    android:text="我"
+                    />
+        </FrameLayout>
+    </LinearLayout>
+</LinearLayout>

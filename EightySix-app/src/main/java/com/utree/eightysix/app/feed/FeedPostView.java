@@ -23,7 +23,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
-import com.utree.eightysix.app.home.HomeActivity;
+import com.utree.eightysix.app.home.HomeTabActivity;
 import com.utree.eightysix.app.region.FeedRegionAdapter;
 import com.utree.eightysix.app.tag.TagTabActivity;
 import com.utree.eightysix.data.Post;
@@ -116,7 +116,7 @@ public class FeedPostView extends BasePostView {
   public void onTvSourceClicked() {
     if (mPost.viewType == 8 || (mPost.sourceType == 0 && (mPost.viewType == 3 || mPost.viewType == 4))) {
       if (mPost.userCurrFactoryId == mPost.factoryId) {
-        HomeActivity.start(getContext(), 0);
+        HomeTabActivity.start(getContext());
       } else {
         FeedActivity.start(getContext(), mPost.factoryId);
       }
