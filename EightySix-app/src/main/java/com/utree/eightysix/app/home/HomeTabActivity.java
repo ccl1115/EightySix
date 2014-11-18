@@ -13,6 +13,9 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.feed.TabFragment;
+import com.utree.eightysix.app.publish.PublishActivity;
+import com.utree.eightysix.app.region.TabRegionFragment;
 
 /**
  */
@@ -34,10 +37,17 @@ public class HomeTabActivity extends BaseActivity {
   @InjectView(R.id.iv_send)
   public ImageView mIvSend;
 
+  private TabRegionFragment mTabRegionFragment;
+
   @OnClick({ R.id.fl_feed, R.id.fl_explore, R.id.fl_nearby, R.id.fl_more })
   public void onTabItemClicked(View v) {
     clearTabSelection();
     v.setSelected(true);
+  }
+
+  @OnClick(R.id.iv_send)
+  public void onIvSendClicked() {
+    PublishActivity.start(this, -1, null);
   }
 
   public static void start(Context context) {
@@ -67,7 +77,16 @@ public class HomeTabActivity extends BaseActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    mTabRegionFragment = new TabRegionFragment();
+    Bundle args = new Bundle();
+    args.putInt("tabIndex", 0);
+    mTabRegionFragment.setArguments(args);
+
     mFlFeed.setSelected(true);
+
+    getSupportFragmentManager().beginTransaction()
+        .add(R.id.fl_content, mTabRegionFragment)
+        .commit();
   }
 
   private void clearTabSelection() {

@@ -32,12 +32,10 @@ public class TabRegionFragment extends BaseFragment {
   public TitleTab mTtTab;
   private FeedRegionFragment mFeedFragment;
   private HotFeedRegionFragment mHotFeedFragment;
-  private FriendsFeedRegionFragment mFriendsFeedFragment;
 
   public TabRegionFragment() {
     mFeedFragment = new FeedRegionFragment();
     mHotFeedFragment = new HotFeedRegionFragment();
-    mFriendsFeedFragment = new FriendsFeedRegionFragment();
   }
 
   @Override
@@ -59,8 +57,6 @@ public class TabRegionFragment extends BaseFragment {
             return mFeedFragment;
           case 1:
             return mHotFeedFragment;
-          case 2:
-            return mFriendsFeedFragment;
         }
         return null;
 
@@ -68,7 +64,7 @@ public class TabRegionFragment extends BaseFragment {
 
       @Override
       public int getCount() {
-        return 3;
+        return 2;
       }
 
       @Override
@@ -78,8 +74,6 @@ public class TabRegionFragment extends BaseFragment {
             return "最新";
           case 1:
             return "热门";
-          case 2:
-            return "与我相关";
         }
         return "";
       }
@@ -109,12 +103,6 @@ public class TabRegionFragment extends BaseFragment {
               mHotFeedFragment.setActive(false);
             }
             mHotFeedFragment.setActive(true);
-            break;
-          case 2:
-            if (mTtTab.hasBudget(position)) {
-              mFriendsFeedFragment.setActive(false);
-            }
-            mFriendsFeedFragment.setActive(true);
             break;
         }
 
@@ -157,15 +145,6 @@ public class TabRegionFragment extends BaseFragment {
     }
   }
 
-  @Subscribe
-  public void onNewFriendsPostCountEvent(NewFriendsPostCountEvent event) {
-    if (event.getCircleId() == mFeedFragment.getFeedAdapter().getFeeds().circle.id) {
-      mTtTab.setTabBudget(2, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
-    } else {
-      mTtTab.setTabBudget(2, "", true);
-    }
-  }
-
   public boolean canPublish() {
     return mFeedFragment != null && mFeedFragment.canPublish();
   }
@@ -175,7 +154,6 @@ public class TabRegionFragment extends BaseFragment {
 
     mFeedFragment.setRegionType(regionType);
     mHotFeedFragment.setRegionType(regionType);
-    mFriendsFeedFragment.setRegionType(regionType);
 
     if (mVpTab == null) return;
 
@@ -187,9 +165,6 @@ public class TabRegionFragment extends BaseFragment {
         break;
       case 1:
         mHotFeedFragment.setActive(true);
-        break;
-      case 2:
-        mFriendsFeedFragment.setActive(true);
         break;
     }
   }
@@ -216,6 +191,5 @@ public class TabRegionFragment extends BaseFragment {
   private void clearActive() {
     if (mFeedFragment != null) mFeedFragment.setActive(false);
     if (mHotFeedFragment != null) mHotFeedFragment.setActive(false);
-    if (mFriendsFeedFragment != null) mFriendsFeedFragment.setActive(false);
   }
 }

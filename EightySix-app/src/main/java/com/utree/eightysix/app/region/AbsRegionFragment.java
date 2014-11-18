@@ -321,16 +321,13 @@ public abstract class AbsRegionFragment extends BaseFragment {
         if (getRegionType() == 0 && mCircle != null) {
           U.getBus().post(new NewAllPostCountEvent(mCircle.id, response.object.fetch.newPostAllCount));
           U.getBus().post(new NewHotPostCountEvent(mCircle.id, response.object.fetch.newPostHotCount));
-          U.getBus().post(new NewFriendsPostCountEvent(mCircle.id, response.object.fetch.newPostFriendsCount));
         } else {
           U.getBus().post(new NewAllPostCountEvent(0, 0));
           U.getBus().post(new NewHotPostCountEvent(0, 0));
-          U.getBus().post(new NewFriendsPostCountEvent(0, 0));
         }
       } else {
         U.getBus().post(new NewAllPostCountEvent(0, 0));
         U.getBus().post(new NewHotPostCountEvent(0, 0));
-        U.getBus().post(new NewFriendsPostCountEvent(0, 0));
       }
 
       if (getRegionType() == 0) {
