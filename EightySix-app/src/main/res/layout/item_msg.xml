@@ -60,6 +60,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#88ffffff"/>
+
+        <ImageView
+                android:id="@+id/iv_unfollow_left"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="bottom"
+                android:padding="8dp"
+                android:src="@drawable/ic_unfollow_normal"/>
     </FrameLayout>
 
     <FrameLayout
@@ -116,5 +124,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#88ffffff"/>
+
+        <ImageView
+                android:id="@+id/iv_unfollow_right"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="bottom"
+                android:padding="8dp"
+                android:src="@drawable/ic_unfollow_normal"/>
     </FrameLayout>
 </merge>
