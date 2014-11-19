@@ -10,8 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -36,6 +38,32 @@ public class TabRegionFragment extends BaseFragment {
 
   @InjectView(R.id.ll_filter)
   public LinearLayout mLlFilter;
+
+  @OnClick(R.id.v_mask)
+  public void onVMaskClicked() {
+    mLlFilter.setVisibility(View.GONE);
+  }
+
+  @InjectView(R.id.tv_gender_all)
+  public TextView mTvAll;
+
+  @InjectView(R.id.tv_gender_male)
+  public TextView mTvMale;
+
+  @InjectView(R.id.tv_gender_female)
+  public TextView mTvFemale;
+
+  @InjectView(R.id.tv_region_0)
+  public TextView mTvRegion0;
+
+  @InjectView(R.id.tv_region_1)
+  public TextView mTvRegion1;
+
+  @InjectView(R.id.tv_region_2)
+  public TextView mTvRegion2;
+
+  @InjectView(R.id.tv_region_3)
+  public TextView mTvRegion3;
 
   private FeedRegionFragment mFeedFragment;
   private HotFeedRegionFragment mHotFeedFragment;
