@@ -15,21 +15,15 @@ import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.U;
 import com.utree.eightysix.storage.Storage;
-import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.FROM_DISK;
-import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.FROM_MEM;
-import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.FROM_REMOTE;
 import de.akquinet.android.androlog.Log;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import org.apache.http.Header;
 import org.apache.http.HttpStatus;
+
+import java.io.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.*;
 
 /**
  */
@@ -342,10 +336,7 @@ public class ImageUtils {
         } else {
           sClient.get(U.getContext(), url, new ImageAsyncHttpResponseHandler(hash));
         }
-      } catch (IOException ignored) {
-        Log.e(TAG, "Get snapshot IOException: " + ignored.getMessage());
-        U.getBus().post(new ImageLoadedEvent(hash, null, FROM_MEM));
-      } catch (OutOfMemoryError e) {
+      } catch (Exception e) {
         U.getBus().post(new ImageLoadedEvent(hash, null, FROM_MEM));
       }
     } else {
