@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import com.utree.eightysix.M;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.widget.ITopBar2;
 
 /**
  * @author simon
@@ -50,5 +51,9 @@ public class BaseFragment extends Fragment {
 
   public boolean onBackPressed() {
     return false;
+  }
+
+  public com.utree.eightysix.widget.TopBar getTopBar() {
+    return getBaseActivity().getTopBar();
   }
 }

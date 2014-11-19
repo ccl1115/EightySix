@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -13,7 +14,7 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.feed.TabFragment;
+import com.utree.eightysix.app.explore.ExploreFragment;
 import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.app.region.TabRegionFragment;
 
@@ -37,12 +38,30 @@ public class HomeTabActivity extends BaseActivity {
   @InjectView(R.id.iv_send)
   public ImageView mIvSend;
 
+  private int mCurrentTab = -1;
+
   private TabRegionFragment mTabRegionFragment;
+  private ExploreFragment mExploreFragment;
 
   @OnClick({ R.id.fl_feed, R.id.fl_explore, R.id.fl_nearby, R.id.fl_more })
   public void onTabItemClicked(View v) {
     clearTabSelection();
     v.setSelected(true);
+
+    switch(v.getId()) {
+      case R.id.fl_feed:
+        switchTab(0);
+        break;
+      case R.id.fl_explore:
+        switchTab(1);
+        break;
+      case R.id.fl_nearby:
+        switchTab(2);
+        break;
+      case R.id.fl_more:
+        switchTab(3);
+        break;
+    }
   }
 
   @OnClick(R.id.iv_send)
@@ -82,11 +101,10 @@ public class HomeTabActivity extends BaseActivity {
     args.putInt("tabIndex", 0);
     mTabRegionFragment.setArguments(args);
 
-    mFlFeed.setSelected(true);
+    mExploreFragment = new ExploreFragment();
 
-    getSupportFragmentManager().beginTransaction()
-        .add(R.id.fl_content, mTabRegionFragment)
-        .commit();
+    switchTab(0);
+    mFlFeed.setSelected(true);
   }
 
   private void clearTabSelection() {
@@ -95,4 +113,47 @@ public class HomeTabActivity extends BaseActivity {
     mFlNearBy.setSelected(false);
     mFlMore.setSelected(false);
   }
+
+  private void switchTab(int position) {
+
+    if (mCurrentTab == position) {
+      return;
+    }
+
+    mCurrentTab = position;
+
+    FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+
+    switch (position) {
+      case 0: {
+        if (!mTabRegionFragment.isAdded()) {
+          t.add(R.id.fl_content, mTabRegionFragment);
+        } else if (mTabRegionFragment.isHidden()) {
+          t.show(mTabRegionFragment);
+        }
+        if (mExploreFragment.isAdded()) {
+          t.hide(mExploreFragment);
+        }
+        t.commit();
+        break;
+      }
+      case 1: {
+        if (!mExploreFragment.isAdded()) {
+          t.add(R.id.fl_content, mExploreFragment);
+        } else if (mExploreFragment.isHidden()) {
+          t.show(mExploreFragment);
+        }
+        if (mTabRegionFragment.isAdded()) {
+          t.hide(mTabRegionFragment);
+        }
+        t.commit();
+        break;
+      }
+      case 2:
+        break;
+      case 3:
+        break;
+    }
+  }
+
 }

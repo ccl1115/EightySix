@@ -18,7 +18,6 @@ import com.utree.eightysix.app.feed.FeedAdapter;
 import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
 import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
-import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.app.region.event.RegionResponseEvent;
@@ -41,6 +40,7 @@ import com.utree.eightysix.widget.TopBar;
  * @author simon
  */
 public abstract class AbsRegionFragment extends BaseFragment {
+
   @InjectView (R.id.lv_feed)
   public AdvancedListView mLvFeed;
 
@@ -57,6 +57,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
   private int mRegionType = -1;
 
   protected boolean mPostPraiseRequesting;
+  private String mSubInfo;
 
   public void setRegionType(int regionType) {
     mRegionType = regionType;
@@ -243,6 +244,27 @@ public abstract class AbsRegionFragment extends BaseFragment {
     }
   }
 
+  @Override
+  public void onHiddenChanged(boolean hidden) {
+    if (!hidden) {
+      switch (getRegionType()) {
+        case 0:
+          getBaseActivity().setTopTitle(mCircle == null ? "" : mCircle.shortName);
+          break;
+        case 1:
+          getBaseActivity().setTopTitle("1公里内");
+          break;
+        case 2:
+          getBaseActivity().setTopTitle("5公里内");
+          break;
+        case 3:
+          getBaseActivity().setTopTitle("同城");
+          break;
+      }
+      getTopBar().setSubTitle(mSubInfo == null ? "" : mSubInfo);
+    }
+  }
+
   protected abstract void requestFeeds(final int regionType, final int page);
 
   protected void responseForRequest(FeedsByRegionResponse response, int regionType, int page) {
@@ -267,7 +289,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
 
         Account.inst().setLastRegionType(getRegionType());
 
-        TopBar topBar = getBaseActivity().getTopBar();
+        TopBar topBar = getTopBar();
         if (getRegionType() == 0 && mCircle.lock == 1) {
           topBar.mSubTitle.setCompoundDrawablesWithIntrinsicBounds(
               getResources().getDrawable(R.drawable.ic_lock_small), null, null, null);
@@ -301,7 +323,8 @@ public abstract class AbsRegionFragment extends BaseFragment {
       }
 
       mPageInfo = response.object.posts.page;
-      getBaseActivity().setTopSubTitle(response.object.subInfo);
+      mSubInfo = response.object.subInfo;
+      getBaseActivity().setTopSubTitle(mSubInfo);
 
       if (response.object.fetch != null) {
         if (response.object.fetch.newComment != null) {

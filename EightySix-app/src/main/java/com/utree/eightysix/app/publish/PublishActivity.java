@@ -441,11 +441,7 @@ public class PublishActivity extends BaseActivity {
       }
     });
 
-    getTopBar().getActionView(0).setActionBackgroundDrawable(
-        new RoundRectDrawable(U.dp2px(2),
-            getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
-    ((TextActionButton) getTopBar().getActionView(0)).setTextColor(
-        getResources().getColor(R.color.apptheme_primary_grey_color_disabled));
+    // TODO add publish button
 
     showDescriptionDialogWhenFirstRun();
 

@@ -145,6 +145,11 @@ public class TabRegionFragment extends BaseFragment {
     }
   }
 
+  @Override
+  public void onHiddenChanged(boolean hidden) {
+    mFeedFragment.onHiddenChanged(hidden);
+  }
+
   public boolean canPublish() {
     return mFeedFragment != null && mFeedFragment.canPublish();
   }
