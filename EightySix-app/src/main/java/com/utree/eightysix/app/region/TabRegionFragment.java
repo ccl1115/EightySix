@@ -141,7 +141,9 @@ public class TabRegionFragment extends BaseFragment {
 
   @Subscribe
   public void onNewAllPostCountEvent(NewAllPostCountEvent event) {
-    if (event.getCircleId() == mFeedFragment.getFeedAdapter().getFeeds().circle.id) {
+    FeedRegionAdapter feedAdapter = mFeedFragment.getFeedAdapter();
+    if (feedAdapter != null && feedAdapter.getFeeds().circle != null
+        && event.getCircleId() == feedAdapter.getFeeds().circle.id) {
       mTtTab.setTabBudget(0, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
     } else {
       mTtTab.setTabBudget(0, "", true);
@@ -150,7 +152,9 @@ public class TabRegionFragment extends BaseFragment {
 
   @Subscribe
   public void onNewHotPostCountEvent(NewHotPostCountEvent event) {
-    if (event.getCircleId() == mFeedFragment.getFeedAdapter().getFeeds().circle.id) {
+    FeedRegionAdapter feedAdapter = mFeedFragment.getFeedAdapter();
+    if (feedAdapter != null && feedAdapter.getFeeds().circle != null
+        && event.getCircleId() == feedAdapter.getFeeds().circle.id) {
       mTtTab.setTabBudget(1, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
     } else {
       mTtTab.setTabBudget(1, "", true);
@@ -159,7 +163,9 @@ public class TabRegionFragment extends BaseFragment {
 
   @Subscribe
   public void onNewFriendsPostCountEvent(NewFriendsPostCountEvent event) {
-    if (event.getCircleId() == mFeedFragment.getFeedAdapter().getFeeds().circle.id) {
+    FeedRegionAdapter feedAdapter = mFeedFragment.getFeedAdapter();
+    if (feedAdapter != null && feedAdapter.getFeeds().circle != null
+        && event.getCircleId() == feedAdapter.getFeeds().circle.id) {
       mTtTab.setTabBudget(2, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
     } else {
       mTtTab.setTabBudget(2, "", true);
