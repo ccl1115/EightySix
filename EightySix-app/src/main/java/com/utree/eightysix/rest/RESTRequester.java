@@ -6,7 +6,6 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.ResponseHandlerInterface;
-import com.tencent.cloudsdk.http.TDefaultHttpClient;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.C;
@@ -15,25 +14,12 @@ import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.MD5Util;
 import de.akquinet.android.androlog.Log;
 import org.apache.http.Header;
-import org.apache.http.HttpVersion;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.conn.ConnectTimeoutException;
-import org.apache.http.conn.params.ConnManagerParams;
-import org.apache.http.conn.params.ConnPerRouteBean;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.message.BasicHeader;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpProtocolParams;
 
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -50,35 +36,7 @@ public class RESTRequester implements IRESTRequester {
   public RESTRequester(String host) {
     mHost = host;
     mAsyncHttpClient = new AsyncHttpClient();
-
-    SchemeRegistry schemeRegistry = new SchemeRegistry();
-    schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-    schemeRegistry.register(new Scheme("https", PlainSocketFactory.getSocketFactory(), 443));
-
-    BasicHttpParams httpParams = new BasicHttpParams();
-
-    int timeout = U.getConfigInt("api.timeout");
-    ConnManagerParams.setTimeout(httpParams, timeout);
-    ConnManagerParams.setMaxConnectionsPerRoute(httpParams, new ConnPerRouteBean(U.getConfigInt("api.connections")));
-    ConnManagerParams.setMaxTotalConnections(httpParams, AsyncHttpClient.DEFAULT_MAX_CONNECTIONS);
-
-    HttpConnectionParams.setSoTimeout(httpParams, timeout);
-    HttpConnectionParams.setConnectionTimeout(httpParams, timeout);
-    HttpConnectionParams.setTcpNoDelay(httpParams, true);
-    HttpConnectionParams.setSocketBufferSize(httpParams, AsyncHttpClient.DEFAULT_SOCKET_BUFFER_SIZE);
-
-    HttpProtocolParams.setVersion(httpParams, HttpVersion.HTTP_1_1);
-    try {
-      Field field = AsyncHttpClient.class.getDeclaredField("httpClient");
-      field.setAccessible(true);
-      field.set(mAsyncHttpClient,
-          new TDefaultHttpClient(new ThreadSafeClientConnManager(httpParams, schemeRegistry), httpParams)
-              .getDefaultHttpClient());
-    } catch (NoSuchFieldException e) {
-      if (BuildConfig.DEBUG) e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      if (BuildConfig.DEBUG) e.printStackTrace();
-    }
+    mAsyncHttpClient.setTimeout(U.getConfigInt("api.timeout"));
     mAsyncHttpClient.setMaxRetriesAndTimeout(U.getConfigInt("api.retry"), U.getConfigInt("api.retry.timeout"));
     compact();
   }
