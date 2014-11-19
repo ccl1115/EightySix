@@ -53,7 +53,7 @@ public class BaseFragment extends Fragment {
     return false;
   }
 
-  public com.utree.eightysix.widget.TopBar getTopBar() {
+  public ITopBar2 getTopBar() {
     return getBaseActivity().getTopBar();
   }
 }

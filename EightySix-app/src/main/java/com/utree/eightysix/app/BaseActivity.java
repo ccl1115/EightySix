@@ -28,6 +28,7 @@ import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.event.LogoutListener;
 import com.utree.eightysix.rest.*;
 import com.utree.eightysix.utils.Env;
+import com.utree.eightysix.widget.ITopBar2;
 import com.utree.eightysix.widget.RefreshIndicator;
 import com.utree.eightysix.widget.TopBar;
 
@@ -65,7 +66,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   private LinearLayout mLlLoadingWrapper;
   private TextView mTvLoadingText;
   private ViewGroup mBaseView;
-  private TopBar mTopBar;
+  protected TopBar mTopBar;
   private RefreshIndicator mRefreshIndicator;
   private ObjectAnimator mHideTopBarAnimator;
   private ObjectAnimator mShowTopBarAnimator;
@@ -204,7 +205,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   }
 
   public void setTopBarClickMode(int mode) {
-    getTopBar().setTitleClickMode(mode);
+    mTopBar.setTitleClickMode(mode);
   }
 
   public final <T extends Response> void request(Object request, OnResponse<T> onResponse, Class<T> clz) {
@@ -514,7 +515,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     mTopBar.setSubTitle(title);
   }
 
-  public final TopBar getTopBar() {
+  public final ITopBar2 getTopBar() {
     return mTopBar;
   }
 

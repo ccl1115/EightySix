@@ -107,6 +107,12 @@ public class HomeTabActivity extends BaseActivity {
     mFlFeed.setSelected(true);
   }
 
+  @Override
+  protected void onResume() {
+    super.onResume();
+
+  }
+
   private void clearTabSelection() {
     mFlFeed.setSelected(false);
     mFlExplorer.setSelected(false);

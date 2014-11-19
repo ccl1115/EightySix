@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.region;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.squareup.otto.Subscribe;
@@ -18,6 +20,7 @@ import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
+import com.utree.eightysix.widget.ITopBar2;
 import com.utree.eightysix.widget.TitleTab;
 
 /**
@@ -30,6 +33,10 @@ public class TabRegionFragment extends BaseFragment {
 
   @InjectView (R.id.tt_tab)
   public TitleTab mTtTab;
+
+  @InjectView(R.id.ll_filter)
+  public LinearLayout mLlFilter;
+
   private FeedRegionFragment mFeedFragment;
   private HotFeedRegionFragment mHotFeedFragment;
 
@@ -125,6 +132,14 @@ public class TabRegionFragment extends BaseFragment {
         }
       }
     }, 500);
+
+  }
+
+  @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
+
+    onHiddenChanged(false);
   }
 
   @Subscribe
@@ -147,7 +162,24 @@ public class TabRegionFragment extends BaseFragment {
 
   @Override
   public void onHiddenChanged(boolean hidden) {
-    mFeedFragment.onHiddenChanged(hidden);
+    if (mFeedFragment.isAdded()) {
+      mFeedFragment.onHiddenChanged(hidden);
+    }
+
+    if (!hidden) {
+      getTopBar().setLeftText("筛选");
+      getTopBar().setCallback(new ITopBar2.Callback() {
+        @Override
+        public void onLeftClicked(View v) {
+          mLlFilter.setVisibility(mLlFilter.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+        }
+
+        @Override
+        public void onRightClicked(View v) {
+
+        }
+      });
+    }
   }
 
   public boolean canPublish() {

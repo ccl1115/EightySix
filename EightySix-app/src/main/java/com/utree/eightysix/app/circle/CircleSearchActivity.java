@@ -96,7 +96,7 @@ public class CircleSearchActivity extends BaseActivity {
   public void onHistoryItemClicked(int position) {
     U.getAnalyser().trackEvent(this, "search_history", "search_history");
     String keyword = mSearchHistory.get(position);
-    getTopBar().getSearchEditText().setText(keyword);
+    mTopBar.getSearchEditText().setText(keyword);
     mLastKeyword = keyword;
     requestSearch(1, keyword);
 
@@ -174,7 +174,7 @@ public class CircleSearchActivity extends BaseActivity {
 
     mSelectMode = getIntent().getBooleanExtra("select", false);
 
-    getTopBar().enterSearch();
+    mTopBar.enterSearch();
 
     mSearchHistory = Account.inst().getSearchHistory();
 
@@ -311,7 +311,7 @@ public class CircleSearchActivity extends BaseActivity {
           mTvEmptyText.setText(String.format(getString(R.string.no_search_result), keyword));
         }
         hideProgressBar();
-        hideSoftKeyboard(getTopBar().getSearchEditText());
+        hideSoftKeyboard(mTopBar.getSearchEditText());
         updateHistoryData();
       }
     }, CirclesResponse.class);

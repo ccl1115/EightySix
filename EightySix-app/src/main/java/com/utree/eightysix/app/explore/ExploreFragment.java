@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.explore;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseFragment;
+import com.utree.eightysix.widget.ITopBar2;
 
 /**
  */
@@ -22,15 +24,21 @@ public class ExploreFragment extends BaseFragment {
   @Override
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
+  }
 
+  @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
     onHiddenChanged(false);
   }
 
   @Override
   public void onHiddenChanged(boolean hidden) {
     if (!hidden) {
-      getTopBar().setTitle(getBaseActivity().getString(R.string.explore));
-      getTopBar().setSubTitle("");
+      ITopBar2 topBar = getTopBar();
+      topBar.setTitle(getBaseActivity().getString(R.string.explore));
+      topBar.setSubTitle("");
+      topBar.hideLeft();
     }
   }
 }

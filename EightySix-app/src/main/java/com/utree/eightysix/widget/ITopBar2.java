@@ -1,5 +1,6 @@
 package com.utree.eightysix.widget;
 
+import android.graphics.drawable.Drawable;
 import android.view.View;
 
 /**
@@ -11,7 +12,9 @@ public interface ITopBar2 {
 
   public void setLeftText(String text);
 
-  public void setLeftStyle(int style);
+  public void setLeftDrawable(Drawable drawable);
+
+  public void hideLeft();
 
   public void setTitle(String text);
 
@@ -19,7 +22,9 @@ public interface ITopBar2 {
 
   public void setRightText(String text);
 
-  public void setRightStyle(int style);
+  public void hideRight();
+
+  public void setRightDrawable(Drawable drawable);
 
   public void setCallback(Callback callback);
 

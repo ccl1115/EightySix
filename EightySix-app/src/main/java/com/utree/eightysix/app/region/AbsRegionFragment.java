@@ -31,10 +31,7 @@ import com.utree.eightysix.response.FeedsByRegionResponse;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.view.SwipeRefreshLayout;
-import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.LoadMoreCallback;
-import com.utree.eightysix.widget.RandomSceneTextView;
-import com.utree.eightysix.widget.TopBar;
+import com.utree.eightysix.widget.*;
 
 /**
  * @author simon
@@ -249,16 +246,16 @@ public abstract class AbsRegionFragment extends BaseFragment {
     if (!hidden) {
       switch (getRegionType()) {
         case 0:
-          getBaseActivity().setTopTitle(mCircle == null ? "" : mCircle.shortName);
+          getTopBar().setTitle(mCircle == null ? "" : mCircle.shortName);
           break;
         case 1:
-          getBaseActivity().setTopTitle("1公里内");
+          getTopBar().setTitle("1公里内");
           break;
         case 2:
-          getBaseActivity().setTopTitle("5公里内");
+          getTopBar().setTitle("5公里内");
           break;
         case 3:
-          getBaseActivity().setTopTitle("同城");
+          getTopBar().setTitle("同城");
           break;
       }
       getTopBar().setSubTitle(mSubInfo == null ? "" : mSubInfo);
@@ -289,31 +286,18 @@ public abstract class AbsRegionFragment extends BaseFragment {
 
         Account.inst().setLastRegionType(getRegionType());
 
-        TopBar topBar = getTopBar();
-        if (getRegionType() == 0 && mCircle.lock == 1) {
-          topBar.mSubTitle.setCompoundDrawablesWithIntrinsicBounds(
-              getResources().getDrawable(R.drawable.ic_lock_small), null, null, null);
-          topBar.mSubTitle.setCompoundDrawablePadding(U.dp2px(5));
-        } else {
-          topBar.mSubTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-        }
-
         switch (getRegionType()) {
           case 0:
-            getBaseActivity().setTopTitle(mCircle.shortName);
-            getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_ONE);
+            getTopBar().setTitle(mCircle.shortName);
             break;
           case 1:
-            getBaseActivity().setTopTitle("1公里内");
-            getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
+            getTopBar().setTitle("1公里内");
             break;
           case 2:
-            getBaseActivity().setTopTitle("5公里内");
-            getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
+            getTopBar().setTitle("5公里内");
             break;
           case 3:
-            getBaseActivity().setTopTitle("同城");
-            getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
+            getTopBar().setTitle("同城");
             break;
         }
 
@@ -324,7 +308,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
 
       mPageInfo = response.object.posts.page;
       mSubInfo = response.object.subInfo;
-      getBaseActivity().setTopSubTitle(mSubInfo);
+      getTopBar().setSubTitle(mSubInfo);
 
       if (response.object.fetch != null) {
         if (response.object.fetch.newComment != null) {

@@ -382,7 +382,7 @@ public class PublishActivity extends BaseActivity {
       }
     });
 
-    getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
+    mTopBar.setActionAdapter(new TopBar.ActionAdapter() {
       @Override
       public String getTitle(int position) {
         return getString(R.string.publish_post);
@@ -607,11 +607,11 @@ public class PublishActivity extends BaseActivity {
     getHandler().postDelayed(new Runnable() {
       @Override
       public void run() {
-        getTopBar().getActionView(0).setEnabled(false);
-        getTopBar().getActionView(0).setActionBackgroundDrawable(
+        mTopBar.getActionView(0).setEnabled(false);
+        mTopBar.getActionView(0).setActionBackgroundDrawable(
             new RoundRectDrawable(U.dp2px(2),
                 getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
-        ((TextActionButton) getTopBar().getActionView(0)).setTextColor(
+        ((TextActionButton) mTopBar.getActionView(0)).setTextColor(
             getResources().getColor(R.color.apptheme_primary_grey_color_disabled));
       }
     }, 200);
@@ -621,11 +621,11 @@ public class PublishActivity extends BaseActivity {
     getHandler().postDelayed(new Runnable() {
       @Override
       public void run() {
-        getTopBar().getActionView(0).setEnabled(true);
-        getTopBar().getActionView(0).setActionBackgroundDrawable(
+        mTopBar.getActionView(0).setEnabled(true);
+        mTopBar.getActionView(0).setActionBackgroundDrawable(
             new RoundRectDrawable(U.dp2px(2),
                 getResources().getColorStateList(R.color.apptheme_primary_btn_light)));
-        ((TextActionButton) getTopBar().getActionView(0)).setTextColor(Color.WHITE);
+        ((TextActionButton) mTopBar.getActionView(0)).setTextColor(Color.WHITE);
       }
     }, 200);
   }

@@ -91,7 +91,7 @@ public class AccountActivity extends BaseActivity {
 
     mQRCodeGenerator = new QRCodeGenerator();
 
-    getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
+    mTopBar.setActionAdapter(new TopBar.ActionAdapter() {
       @Override
       public String getTitle(int position) {
         return "添加新朋友";

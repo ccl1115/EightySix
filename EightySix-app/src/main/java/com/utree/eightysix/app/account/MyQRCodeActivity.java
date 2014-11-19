@@ -81,7 +81,7 @@ public class MyQRCodeActivity extends BaseActivity {
       }
     });
 
-    getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
+    mTopBar.setActionAdapter(new TopBar.ActionAdapter() {
       @Override
       public String getTitle(int position){
         return "扫码";

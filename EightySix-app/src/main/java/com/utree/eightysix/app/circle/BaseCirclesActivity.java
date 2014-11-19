@@ -181,7 +181,7 @@ public class BaseCirclesActivity extends BaseActivity {
     }
 
     if (mMode == MODE_MY) {
-      getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
+      mTopBar.setActionAdapter(new TopBar.ActionAdapter() {
         @Override
         public String getTitle(int position) {
           return getString(R.string.create);
