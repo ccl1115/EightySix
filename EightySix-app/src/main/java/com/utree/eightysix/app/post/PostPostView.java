@@ -200,11 +200,15 @@ public class PostPostView extends BasePostView {
     U.getAnalyser().trackEvent(U.getContext(), "post_more", "post_more");
     String[] items;
     if (mPost.owner == 1) {
-      items = new String[]{U.gs(R.string.share), U.gs(R.string.report),
+      items = new String[]{U.gs(R.string.share),
+          U.gs(R.string.report),
           U.gs(R.string.like),
+          U.gs(R.string.unfollow),
           U.gs(R.string.delete)};
     } else {
-      items = new String[]{U.gs(R.string.share), U.gs(R.string.report),
+      items = new String[]{U.gs(R.string.share),
+          U.gs(R.string.report),
+          U.gs(R.string.unfollow),
           U.gs(R.string.like)};
     }
     new AlertDialog.Builder(getContext()).setTitle(U.gs(R.string.post_action))
@@ -230,6 +234,8 @@ public class PostPostView extends BasePostView {
                     ((BaseAdapter) ((AdapterView) getParent()).getAdapter()).notifyDataSetChanged();
                     break;
                   case 3:
+                    break;
+                  case 4:
                     U.getAnalyser().trackEvent(U.getContext(), "post_more_delete", "post_more_delete");
                     U.getBus().post(new PostDeleteRequest(mPost.id));
                     break;
