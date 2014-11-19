@@ -20,6 +20,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.nineoldandroids.view.ViewHelper;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.C;
@@ -54,7 +55,6 @@ import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TopBar;
-import de.akquinet.android.androlog.Log;
 
 /**
  */
@@ -211,6 +211,28 @@ public class HomeActivity extends BaseActivity {
         if (selected) {
           mTabFragment.setRegionType(regionType);
         }
+      }
+    });
+
+    mDlContent.setDrawerListener(new DrawerLayout.DrawerListener() {
+      @Override
+      public void onDrawerSlide(View drawerView, float slideOffset) {
+        ViewHelper.setTranslationX(mTabFragment.getView(), mRegionFragment.getView().getMeasuredWidth() * slideOffset);
+      }
+
+      @Override
+      public void onDrawerOpened(View drawerView) {
+
+      }
+
+      @Override
+      public void onDrawerClosed(View drawerView) {
+
+      }
+
+      @Override
+      public void onDrawerStateChanged(int newState) {
+
       }
     });
 
