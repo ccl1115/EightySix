@@ -3,7 +3,6 @@ package com.utree.eightysix.app.home;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -13,7 +12,9 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -66,10 +67,11 @@ public class HomeActivity extends BaseActivity {
   @InjectView (R.id.fl_side)
   public FrameLayout mFlSide;
 
+  @InjectView(R.id.fl_right)
+  public FrameLayout mFlRight;
+
   @InjectView (R.id.content)
   public DrawerLayout mDlContent;
-
-  private PopupWindow mPopupMenu;
 
   private TabRegionFragment mTabFragment;
 
@@ -184,14 +186,7 @@ public class HomeActivity extends BaseActivity {
 
     setActionLeftDrawable(getResources().getDrawable(R.drawable.ic_drawer));
 
-    if (mPopupMenu == null) {
-      LinearLayout menu = (LinearLayout) View.inflate(HomeActivity.this, R.layout.widget_feed_menu, null);
-      mPopupMenu = new PopupWindow(menu, dp2px(190), dp2px(315) + 6);
-      mMenuViewHolder = new MenuViewHolder(menu);
-      mPopupMenu.setFocusable(true);
-      mPopupMenu.setIgnoreCheekPress();
-      mPopupMenu.setBackgroundDrawable(new BitmapDrawable(getResources()));
-    }
+    mMenuViewHolder = new MenuViewHolder(mFlRight);
 
     setActionAdapter();
 
@@ -218,32 +213,53 @@ public class HomeActivity extends BaseActivity {
     mDlContent.setDrawerListener(new DrawerLayout.DrawerListener() {
       @Override
       public void onDrawerSlide(View drawerView, float slideOffset) {
-        int measuredWidth = mRegionFragment.getView().getMeasuredWidth();
+        int measuredWidth = mFlSide.getMeasuredWidth();
         View view = mTabFragment.getView();
         int topBarHeight = mTopBar.getMeasuredHeight();
-        ViewHelper.setPivotY(view, (mRegionFragment.getView().getMeasuredHeight() - topBarHeight) >> 1);
-        ViewHelper.setPivotX(view, 0f);
-        ViewHelper.setScaleX(view, 1 - slideOffset * 0.1f);
-        ViewHelper.setScaleY(view, 1 - slideOffset * 0.1f);
-        ViewHelper.setTranslationX(view, measuredWidth * slideOffset);
 
-        int pivotY = topBarHeight >> 2;
-        ViewHelper.setPivotX(mTopBar, 0f);
-        ViewHelper.setPivotY(mTopBar, topBarHeight);
-        ViewHelper.setScaleX(mTopBar, 1 - slideOffset * 0.1f);
-        ViewHelper.setScaleY(mTopBar, 1 - slideOffset * 0.1f);
-        ViewHelper.setTranslationX(mTopBar, measuredWidth * slideOffset);
-        ViewHelper.setTranslationY(mTopBar, pivotY * slideOffset);
+        int pivotY = (view.getMeasuredHeight() - topBarHeight) >> 1;
+        float scale = 1 - slideOffset * 0.1f;
+        if (drawerView.getId() == R.id.fl_side) {
+          ViewHelper.setTranslationX(view, measuredWidth * slideOffset);
+          ViewHelper.setPivotX(view, 0f);
+          ViewHelper.setPivotY(view, pivotY);
+          ViewHelper.setScaleX(view, scale);
+          ViewHelper.setScaleY(view, scale);
+
+          ViewHelper.setTranslationX(mTopBar, measuredWidth * slideOffset);
+          ViewHelper.setPivotX(mTopBar, 0f);
+          ViewHelper.setPivotY(mTopBar, pivotY + topBarHeight);
+          ViewHelper.setScaleX(mTopBar, scale);
+          ViewHelper.setScaleY(mTopBar, scale);
+        } else {
+          ViewHelper.setTranslationX(view, - mFlRight.getMeasuredWidth() * slideOffset);
+          ViewHelper.setPivotX(view, view.getMeasuredWidth());
+          ViewHelper.setPivotY(view, pivotY);
+          ViewHelper.setScaleX(view, scale);
+          ViewHelper.setScaleY(view, scale);
+
+          ViewHelper.setTranslationX(mTopBar, - mFlRight.getMeasuredWidth() * slideOffset);
+          ViewHelper.setPivotX(mTopBar, view.getMeasuredWidth());
+          ViewHelper.setPivotY(mTopBar, pivotY + topBarHeight);
+          ViewHelper.setScaleX(mTopBar, scale);
+          ViewHelper.setScaleY(mTopBar, scale);
+        }
+
       }
 
       @Override
       public void onDrawerOpened(View drawerView) {
-
+        if (drawerView.getId() == R.id.fl_side) {
+          mDlContent.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, mFlRight);
+        } else {
+          mDlContent.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, mFlSide);
+        }
       }
 
       @Override
       public void onDrawerClosed(View drawerView) {
-
+        mDlContent.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, mFlSide);
+        mDlContent.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, mFlRight);
       }
 
       @Override
@@ -447,13 +463,12 @@ public class HomeActivity extends BaseActivity {
 
   private void openMenu() {
     U.getAnalyser().trackEvent(this, "feed_more", "feed_more");
-    if (mPopupMenu.isShowing()) {
-      mPopupMenu.dismiss();
+    if (mDlContent.isDrawerOpen(mFlRight)) {
+      mDlContent.closeDrawer(mFlRight);
     } else {
-      mPopupMenu.showAsDropDown(getTopBar().mActionOverFlow);
-      mDlContent.closeDrawer(mFlSide);
-      hideFactoryRegion();
+      mDlContent.openDrawer(mFlRight);
     }
+    hideFactoryRegion();
   }
 
   private void setActionAdapter() {
@@ -597,52 +612,52 @@ public class HomeActivity extends BaseActivity {
       ButterKnife.inject(this, view);
     }
 
-    @OnClick (R.id.ll_my_friends)
+    @OnClick (R.id.rl_my_friends)
     void onLlMyFriendsClicked() {
       startActivity(new Intent(HomeActivity.this, AccountActivity.class));
-      mPopupMenu.dismiss();
+      mDlContent.closeDrawer(mFlRight);
     }
 
     @OnClick (R.id.rb_add)
     void onRbAddClicked() {
       startActivity(new Intent(HomeActivity.this, AddFriendActivity.class));
-      mPopupMenu.dismiss();
+      mDlContent.closeDrawer(mFlRight);
     }
 
     @OnClick (R.id.ll_invite)
     void onLlInviteClicked() {
       showInviteDialog();
-      mPopupMenu.dismiss();
+      mDlContent.closeDrawer(mFlRight);
     }
 
-    @OnClick (R.id.ll_praise_count)
+    @OnClick (R.id.rl_praise_count)
     void onLlPraiseCountClicked() {
       PraiseActivity.start(HomeActivity.this, Account.inst().getHasNewPraise());
-      mPopupMenu.dismiss();
+      mDlContent.closeDrawer(mFlRight);
     }
 
     @OnClick (R.id.ll_feedback)
     void onLlFeedbackClicked() {
       FeedbackActivity.start(HomeActivity.this);
-      mPopupMenu.dismiss();
+      mDlContent.closeDrawer(mFlRight);
     }
 
     @OnClick (R.id.ll_settings)
     void onLlSettingsClicked() {
       startActivity(new Intent(HomeActivity.this, MainSettingsActivity.class));
-      mPopupMenu.dismiss();
+      mDlContent.closeDrawer(mFlRight);
     }
 
     @OnClick (R.id.ll_help)
     void onLlHelpClicked() {
       startActivity(new Intent(HomeActivity.this, HelpActivity.class));
-      mPopupMenu.dismiss();
+      mDlContent.closeDrawer(mFlRight);
     }
 
-    @OnClick (R.id.ll_topic_list)
+    @OnClick (R.id.rl_topic_list)
     void onLlTopicListClicked() {
       TopicListActivity.start(HomeActivity.this);
-      mPopupMenu.dismiss();
+      mDlContent.closeDrawer(mFlRight);
     }
   }
 

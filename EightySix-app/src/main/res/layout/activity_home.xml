@@ -36,14 +36,28 @@
             android:layout_width="244dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:visibility="invisible">
+            android:gravity="center_vertical">
 
         <fragment
                 class="com.utree.eightysix.app.home.RegionFragment"
                 android:id="@+id/fragment_range"
                 android:layout_width="244dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+            android:id="@+id/fl_right"
+            android:layout_width="173dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:gravity="center_vertical"
+            >
+
+        <include
+                layout="@layout/widget_feed_menu"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"/>
 

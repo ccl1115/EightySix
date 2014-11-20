@@ -3,15 +3,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
               android:orientation="vertical"
-              android:layout_width="190dp"
+              android:layout_width="173dp"
               android:layout_height="wrap_content"
-              android:background="@android:color/white">
+              android:layout_gravity="center_vertical">
 
     <LinearLayout
             android:id="@+id/ll_invite"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@drawable/apptheme_primary_list_selector"
+            android:layout_height="70dp"
             android:orientation="horizontal">
 
         <TextView
@@ -19,43 +18,40 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:paddingLeft="15dp"
-                android:gravity="center_vertical"
+                android:gravity="center"
                 android:text="@string/introduce_to_friends"
                 android:textSize="16sp"
-                android:textColor="@android:color/black"/>
+                android:textColor="@android:color/white"/>
     </LinearLayout>
 
     <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#fff0f0f0"/>
+            android:background="#ff697289"/>
 
-    <LinearLayout
-            android:id="@+id/ll_praise_count"
+    <RelativeLayout
+            android:id="@+id/rl_praise_count"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@drawable/apptheme_primary_list_selector"
+            android:layout_height="70dp"
             android:orientation="horizontal">
 
         <TextView
                 style="@style/TextView.SingleLine"
                 android:id="@+id/tv_praise_count"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingLeft="15dp"
-                android:gravity="center_vertical"
+                android:gravity="center"
                 android:text="@string/praise_count_obtained"
                 android:textSize="16sp"
-                android:textColor="@android:color/black"/>
+                android:textColor="@android:color/white"/>
 
         <com.utree.eightysix.widget.RoundedButton
                 android:id="@+id/rb_new_praise_dot"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:layout_gravity="center_vertical"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/tv_praise_count"
+                android:layout_toEndOf="@+id/tv_praise_count"
                 android:text="新"
                 android:textSize="12sp"
                 android:minHeight="0dp"
@@ -64,93 +60,82 @@
                 app:radius="2dp"
                 app:background="@color/apptheme_secondary_light_color"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#fff0f0f0"/>
+            android:background="#ff697289"/>
 
-    <LinearLayout
-            android:id="@+id/ll_my_friends"
+    <RelativeLayout
+            android:id="@+id/rl_my_friends"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@drawable/apptheme_primary_list_selector"
+            android:layout_height="70dp"
             android:orientation="horizontal">
 
         <TextView
                 style="@style/TextView.SingleLine"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingLeft="15dp"
-                android:gravity="center_vertical"
+                android:id="@+id/tv_my_friends"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
                 android:text="@string/my_friends"
                 android:textSize="16sp"
-                android:textColor="@android:color/black"/>
+                android:textColor="@android:color/white"/>
 
         <com.utree.eightysix.widget.RoundedButton
                 android:id="@+id/rb_add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_toRightOf="@+id/tv_my_friends"
+                android:layout_toEndOf="@+id/tv_my_friends"
+                android:layout_centerVertical="true"
                 android:gravity="center_vertical"
                 android:minHeight="0dp"
-                android:paddingLeft="8dp"
-                android:paddingTop="4dp"
-                android:paddingRight="8dp"
-                android:paddingBottom="4dp"
+                android:paddingLeft="4dp"
+                android:paddingTop="2dp"
+                android:paddingRight="4dp"
+                android:paddingBottom="2dp"
                 android:text="添加"
                 android:textSize="14sp"
-                android:textColor="@android:color/black"
-                app:radius="14dp"
-                app:background="@color/apptheme_primary_grey_btn"/>
+                android:textColor="@android:color/white"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#fff0f0f0"/>
+            android:background="#ff697289"/>
 
-    <LinearLayout
-            android:id="@+id/ll_topic_list"
+    <RelativeLayout
+            android:id="@+id/rl_topic_list"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@drawable/apptheme_primary_list_selector"
+            android:layout_height="70dp"
             android:orientation="horizontal">
 
         <TextView
                 style="@style/TextView.SingleLine"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingLeft="15dp"
-                android:gravity="center_vertical"
+                android:gravity="center"
                 android:text="热门话题"
                 android:textSize="16sp"
-                android:textColor="@android:color/black"/>
+                android:textColor="@android:color/white"/>
 
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:paddingRight="15dp"
-                android:textSize="14sp"
-                android:textColor="#ffef5724"/>
-
-    </LinearLayout>
+    </RelativeLayout>
 
     <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#fff0f0f0"/>
+            android:background="#ff697289"/>
 
     <LinearLayout
             android:id="@+id/ll_feedback"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@drawable/apptheme_primary_list_selector"
+            android:layout_height="70dp"
             android:orientation="horizontal">
 
         <TextView
@@ -158,32 +143,22 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:paddingLeft="15dp"
-                android:gravity="center_vertical"
+                android:gravity="center"
                 android:text="@string/feedback"
                 android:textSize="16sp"
-                android:textColor="@android:color/black"/>
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:paddingRight="15dp"
-                android:textSize="14sp"
-                android:textColor="#ffef5724"/>
+                android:textColor="@android:color/white"/>
 
     </LinearLayout>
 
     <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#fff0f0f0"/>
+            android:background="#ff697289"/>
 
     <LinearLayout
             android:id="@+id/ll_help"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@drawable/apptheme_primary_list_selector"
+            android:layout_height="70dp"
             android:orientation="horizontal">
 
         <TextView
@@ -191,67 +166,45 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:paddingLeft="15dp"
-                android:gravity="center_vertical"
+                android:gravity="center"
                 android:text="@string/help"
                 android:textSize="16sp"
-                android:textColor="@android:color/black"/>
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:paddingRight="15dp"
-                android:textSize="14sp"
-                android:textColor="#ffef5724"/>
+                android:textColor="@android:color/white"/>
 
     </LinearLayout>
 
     <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#fff0f0f0"/>
+            android:background="#ff697289"/>
 
-    <LinearLayout
+    <RelativeLayout
             android:id="@+id/ll_settings"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@drawable/apptheme_primary_list_selector"
-            android:orientation="horizontal">
+            android:layout_height="70dp">
 
         <TextView
                 style="@style/TextView.SingleLine"
-                android:layout_width="0dp"
+                android:id="@+id/tv_settings"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingLeft="15dp"
-                android:gravity="center_vertical"
+                android:gravity="center"
                 android:text="@string/settings"
                 android:textSize="16sp"
-                android:textColor="@android:color/black"/>
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:paddingRight="15dp"
-                android:textSize="14sp"
-                android:textColor="#ffef5724"/>
+                android:textColor="@android:color/white"/>
 
         <com.utree.eightysix.widget.RoundedButton
                 android:id="@+id/rb_settings_dot"
                 android:layout_width="8dp"
                 android:layout_height="8dp"
                 android:layout_marginRight="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_gravity="center_vertical"
+                android:layout_toEndOf="@+id/tv_settings"
+                android:layout_toRightOf="@+id/tv_settings"
                 android:visibility="invisible"
                 app:radius="5dp"
                 app:background="@color/apptheme_secondary_light_color"/>
 
-    </LinearLayout>
-
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="#fff0f0f0"/>
+    </RelativeLayout>
 </LinearLayout>
