@@ -13,6 +13,9 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.data.Post;
+import com.utree.eightysix.request.CancelNoticeRequest;
+import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.ThemedDialog;
@@ -150,11 +153,22 @@ public class BaseMsgItemView extends LinearLayout {
   public void showUnfollowDialog(final String postId) {
     final ThemedDialog dialog = new ThemedDialog(getContext());
 
-    dialog.setTitle("是否取消关注");
+    dialog.setTitle("确认不再接收此帖回复消息？");
 
     dialog.setPositive("确认", new OnClickListener() {
       @Override
       public void onClick(View view) {
+        U.getRESTRequester().request(new CancelNoticeRequest(postId), new OnResponse2<Response>() {
+          @Override
+          public void onResponseError(Throwable e) {
+
+          }
+
+          @Override
+          public void onResponse(Response response) {
+
+          }
+        }, Response.class);
         dialog.dismiss();
       }
     });

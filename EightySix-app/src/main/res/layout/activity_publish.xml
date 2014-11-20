@@ -67,6 +67,7 @@
                 android:paddingLeft="48dp"
                 android:paddingRight="48dp"
                 android:maxLength="77"
+                android:maxLines="7"
                 android:textColor="@android:color/white"/>
 
     </FrameLayout>
