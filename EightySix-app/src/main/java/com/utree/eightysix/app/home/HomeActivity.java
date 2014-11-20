@@ -13,10 +13,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.TextView;
+import android.widget.*;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -66,8 +63,8 @@ public class HomeActivity extends BaseActivity {
   @InjectView (R.id.ib_send)
   public ImageButton mSend;
 
-  @InjectView (R.id.ll_side)
-  public LinearLayout mLlSide;
+  @InjectView (R.id.fl_side)
+  public FrameLayout mFlSide;
 
   @InjectView (R.id.content)
   public DrawerLayout mDlContent;
@@ -143,10 +140,10 @@ public class HomeActivity extends BaseActivity {
   @Override
   public void onActionLeftClicked() {
     U.getAnalyser().trackEvent(this, "feed_title", "feed_title");
-    if (mDlContent.isDrawerOpen(mLlSide)) {
-      mDlContent.closeDrawer(mLlSide);
+    if (mDlContent.isDrawerOpen(mFlSide)) {
+      mDlContent.closeDrawer(mFlSide);
     } else {
-      mDlContent.openDrawer(mLlSide);
+      mDlContent.openDrawer(mFlSide);
     }
   }
 
@@ -163,16 +160,16 @@ public class HomeActivity extends BaseActivity {
   @Override
   public void onTitleClicked() {
     toggleFactoryRegion();
-    mDlContent.closeDrawer(mLlSide);
+    mDlContent.closeDrawer(mFlSide);
   }
 
   @Override
   public void onIconClicked() {
     U.getAnalyser().trackEvent(this, "feed_title", "feed_icon");
-    if (mDlContent.isDrawerOpen(mLlSide)) {
-      mDlContent.closeDrawer(mLlSide);
+    if (mDlContent.isDrawerOpen(mFlSide)) {
+      mDlContent.closeDrawer(mFlSide);
     } else {
-      mDlContent.openDrawer(mLlSide);
+      mDlContent.openDrawer(mFlSide);
     }
     hideFactoryRegion();
   }
@@ -180,6 +177,8 @@ public class HomeActivity extends BaseActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    setFillContent(true);
 
     ContactsSyncService.start(this, false);
 
@@ -207,17 +206,34 @@ public class HomeActivity extends BaseActivity {
     mRegionFragment.setCallback(new RegionFragment.Callback() {
       @Override
       public void onItemClicked(int regionType, boolean selected) {
-        mDlContent.closeDrawer(mLlSide);
+        mDlContent.closeDrawer(mFlSide);
         if (selected) {
           mTabFragment.setRegionType(regionType);
         }
       }
     });
 
+    mDlContent.setScrimColor(0x00ffffff);
+
     mDlContent.setDrawerListener(new DrawerLayout.DrawerListener() {
       @Override
       public void onDrawerSlide(View drawerView, float slideOffset) {
-        ViewHelper.setTranslationX(mTabFragment.getView(), mRegionFragment.getView().getMeasuredWidth() * slideOffset);
+        int measuredWidth = mRegionFragment.getView().getMeasuredWidth();
+        View view = mTabFragment.getView();
+        int topBarHeight = mTopBar.getMeasuredHeight();
+        ViewHelper.setPivotY(view, (mRegionFragment.getView().getMeasuredHeight() - topBarHeight) >> 1);
+        ViewHelper.setPivotX(view, 0f);
+        ViewHelper.setScaleX(view, 1 - slideOffset * 0.1f);
+        ViewHelper.setScaleY(view, 1 - slideOffset * 0.1f);
+        ViewHelper.setTranslationX(view, measuredWidth * slideOffset);
+
+        int pivotY = topBarHeight >> 2;
+        ViewHelper.setPivotX(mTopBar, 0f);
+        ViewHelper.setPivotY(mTopBar, topBarHeight);
+        ViewHelper.setScaleX(mTopBar, 1 - slideOffset * 0.1f);
+        ViewHelper.setScaleY(mTopBar, 1 - slideOffset * 0.1f);
+        ViewHelper.setTranslationX(mTopBar, measuredWidth * slideOffset);
+        ViewHelper.setTranslationY(mTopBar, pivotY * slideOffset);
       }
 
       @Override
@@ -269,7 +285,7 @@ public class HomeActivity extends BaseActivity {
       }
     }
 
-    mDlContent.closeDrawer(mLlSide);
+    mDlContent.closeDrawer(mFlSide);
   }
 
   @Override
@@ -435,7 +451,7 @@ public class HomeActivity extends BaseActivity {
       mPopupMenu.dismiss();
     } else {
       mPopupMenu.showAsDropDown(getTopBar().mActionOverFlow);
-      mDlContent.closeDrawer(mLlSide);
+      mDlContent.closeDrawer(mFlSide);
       hideFactoryRegion();
     }
   }

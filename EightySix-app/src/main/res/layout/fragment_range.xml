@@ -1,84 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
-              android:layout_width="190dp"
-              android:layout_height="match_parent"
+              android:layout_width="244dp"
+              android:layout_height="wrap_content"
               android:orientation="vertical"
-              android:background="#ff363940"
-              android:padding="8dp"
               android:clickable="true"
         >
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:textColor="@color/apptheme_primary_grey_color_pressed"
-            android:text="自己厂里的秘密"
-            />
 
-    <com.utree.eightysix.widget.RoundedButton
-            android:id="@+id/rb_current"
+    <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:textColor="@color/apptheme_primary_text_dark"
-            app:background="@color/apptheme_primary_white_btn"
-            />
+            android:layout_marginBottom="50dp"
+            >
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:textColor="@color/apptheme_primary_grey_color_pressed"
-            android:text="附近厂里的秘密"
-            />
+        <ImageView
+                android:id="@+id/iv_current"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginEnd="20dp"
+                />
+
+        <TextView
+                android:id="@+id/rb_current"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/iv_current"
+                android:layout_toRightOf="@+id/iv_current"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/iv_current"
+                android:layout_toEndOf="@+id/iv_current"
+                android:layout_below="@+id/rb_current"
+                android:paddingTop="4dp"
+                android:textColor="@color/apptheme_primary_grey_color_pressed"
+                android:textSize="12sp"
+                android:text="自己厂里的秘密"
+                />
 
 
-    <com.utree.eightysix.widget.RoundedButton
-            android:id="@+id/rb_range_1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="1公里内"
-            android:textColor="@color/apptheme_primary_text_dark"
-            app:background="@color/apptheme_primary_white_btn"
-            />
-
-    <com.utree.eightysix.widget.RoundedButton
-            android:id="@+id/rb_range_2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="5公里内"
-            android:textColor="@color/apptheme_primary_text_dark"
-            app:background="@color/apptheme_primary_white_btn"
-            />
-
-    <com.utree.eightysix.widget.RoundedButton
-            android:id="@+id/rb_range_3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="同城"
-            android:textColor="@color/apptheme_primary_text_dark"
-            app:background="@color/apptheme_primary_white_btn"
-            />
+    </RelativeLayout>
 
     <View
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_margin="-8dp"
-            />
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#ff716a86"/>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <ImageView
+                android:id="@+id/iv_range"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_centerVertical="true"
+                />
+
+        <TextView
+                android:id="@+id/rb_range_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/iv_range"
+                android:layout_toEndOf="@+id/iv_range"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="14dp"
+                android:textSize="16sp"
+                android:text="1公里内"
+                android:textColor="@android:color/white"
+                />
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_toRightOf="@+id/iv_range"
+                android:layout_toEndOf="@+id/iv_range"
+                android:layout_below="@+id/rb_range_1"
+                android:background="#ff716a86"/>
+
+        <TextView
+                android:id="@+id/rb_range_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/iv_range"
+                android:layout_toEndOf="@+id/iv_range"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="14dp"
+                android:layout_below="@+id/rb_range_1"
+                android:textSize="16sp"
+                android:text="5公里内"
+                android:textColor="@android:color/white"
+                />
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_toRightOf="@+id/iv_range"
+                android:layout_toEndOf="@+id/iv_range"
+                android:layout_below="@+id/rb_range_2"
+                android:background="#ff716a86"/>
+
+        <TextView
+                android:id="@+id/rb_range_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/iv_range"
+                android:layout_toEndOf="@+id/iv_range"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="14dp"
+                android:layout_below="@+id/rb_range_2"
+                android:textSize="16sp"
+                android:text="同城"
+                android:textColor="@android:color/white"
+                />
+
+    </RelativeLayout>
 
 
-    <com.utree.eightysix.widget.RoundedButton
-            android:id="@+id/rb_more"
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#ff716a86"/>
+
+    <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="我的打工圈"
-            android:textColor="@color/apptheme_primary_text_dark"
-            app:background="@color/apptheme_primary_white_btn"
-            />
+            android:layout_marginTop="40dp">
+
+            <ImageView
+                    android:id="@+id/iv_circle"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_centerVertical="true"
+                    />
+
+        <TextView
+                android:id="@+id/rb_more"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/iv_circle"
+                android:layout_toEndOf="@+id/iv_circle"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="14dp"
+                android:textSize="16sp"
+                android:text="我的打工圈"
+                android:textColor="@android:color/white"
+                />
+
+    </RelativeLayout>
 </LinearLayout>

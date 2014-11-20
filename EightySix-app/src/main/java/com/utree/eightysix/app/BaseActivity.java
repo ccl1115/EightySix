@@ -60,12 +60,15 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
       BaseActivity.this.onHandleMessage(msg);
     }
   };
+
   public View mVProgressMask;
+
+  protected TopBar mTopBar;
+
   private FrameLayout mProgressBar;
   private LinearLayout mLlLoadingWrapper;
   private TextView mTvLoadingText;
   private ViewGroup mBaseView;
-  private TopBar mTopBar;
   private RefreshIndicator mRefreshIndicator;
   private ObjectAnimator mHideTopBarAnimator;
   private ObjectAnimator mShowTopBarAnimator;
@@ -314,11 +317,14 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
 
   }
 
-  protected boolean isFillContent() {
+  /**
+   * @return true if fill window content
+   */
+  protected final boolean isFillContent() {
     return mFillContent;
   }
 
-  public void setFillContent(boolean fillContent) {
+  protected final  void setFillContent(boolean fillContent) {
     if (mFillContent == fillContent) return;
     mFillContent = fillContent;
     ((RelativeLayout.LayoutParams) mBaseView.findViewById(R.id.content).getLayoutParams()).topMargin =
