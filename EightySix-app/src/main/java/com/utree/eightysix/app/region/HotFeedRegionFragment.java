@@ -98,7 +98,7 @@ public class HotFeedRegionFragment extends AbsRegionFragment {
         if (RESTRequester.responseOk(response)) {
           U.getBus().post(event.getPost());
         } else if ((response.code & 0xffff) == 0x2286) {
-          event.getPost().praised = 0;
+          event.getPost().praised = 1;
           mFeedAdapter.notifyDataSetChanged();
         } else {
           event.getPost().praised = 0;
