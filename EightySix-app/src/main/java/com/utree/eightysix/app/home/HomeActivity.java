@@ -245,6 +245,7 @@ public class HomeActivity extends BaseActivity {
           ViewHelper.setScaleY(mTopBar, scale);
         }
 
+        ViewHelper.setTranslationY(mSend, U.dp2px(100) * slideOffset);
       }
 
       @Override
