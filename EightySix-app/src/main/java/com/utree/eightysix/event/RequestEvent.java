@@ -1,33 +1,33 @@
 package com.utree.eightysix.event;
 
-import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.RequestData;
 
 /**
  * @author simon
  */
-public class RequestEvent<T> {
+public class RequestEvent {
 
-  private Object mRequest;
-  private OnResponse<T> mOnResponse;
+  private String mId;
 
-  private Class<T> mClz;
+  private RequestData mRequestData;
 
-  public RequestEvent(Object request, OnResponse<T> onResponse, Class<T> clz) {
-    mRequest = request;
-    mOnResponse = onResponse;
-    mClz = clz;
+  private Class mResClz;
+
+  public RequestEvent(String mId, RequestData mRequestData, Class mResClz) {
+    this.mId = mId;
+    this.mRequestData = mRequestData;
+    this.mResClz = mResClz;
   }
 
-  public Object getRequest() {
-    return mRequest;
+  public Class getResClz() {
+    return mResClz;
   }
 
-  public OnResponse<T> getOnResponse() {
-    return mOnResponse;
+  public RequestData getRequestData() {
+    return mRequestData;
   }
 
-
-  public Class<T> getClz() {
-    return mClz;
+  public String getId() {
+    return mId;
   }
 }
