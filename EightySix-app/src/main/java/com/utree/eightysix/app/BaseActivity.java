@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
+import android.util.*;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -442,6 +443,8 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     hideProgressBar();
 
     super.onDestroy();
+
+    android.util.Log.d("BaseActivity", "onDestroy");
   }
 
   @Override

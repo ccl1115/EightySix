@@ -178,7 +178,7 @@ public class HomeActivity extends BaseActivity {
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+    super.onCreate(null);
 
     setFillContent(true);
 
@@ -194,7 +194,7 @@ public class HomeActivity extends BaseActivity {
     Bundle args = new Bundle();
     args.putInt("tabIndex", getIntent().getIntExtra("tabIndex", 0));
     mTabFragment.setArguments(args);
-    getSupportFragmentManager().beginTransaction().add(R.id.fl_feed, mTabFragment, "tab").commit();
+    getSupportFragmentManager().beginTransaction().add(R.id.fl_feed, mTabFragment).commit();
 
     mRegionFragment = (RegionFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_range);
 
