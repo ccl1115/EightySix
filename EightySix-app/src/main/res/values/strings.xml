@@ -2,13 +2,6 @@
 <resources>
 
     <string name="app_name">蓝莓</string>
-    <string name="app_url"><a href="http://lanmeiquan.com">lanmeiquan.com</a></string>
-
-    <!-- AndroidLockPattern -->
-    <string name="alp_lockscreen_access_pattern_cell_added">Cell added</string>
-    <string name="alp_lockscreen_access_pattern_cleared">Pattern cleared</string>
-    <string name="alp_lockscreen_access_pattern_detected">Pattern completed</string>
-    <string name="alp_lockscreen_access_pattern_start">Pattern started</string>
 
     <!-- General -->
     <string name="send">发送</string>
