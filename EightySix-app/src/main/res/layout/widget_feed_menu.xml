@@ -3,7 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
               android:orientation="vertical"
-              android:layout_width="173dp"
+              android:layout_width="168dp"
               android:layout_height="wrap_content"
               android:layout_gravity="center_vertical">
 
@@ -18,10 +18,13 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"
+                android:paddingLeft="45dp"
+                android:paddingStart="45dp"
+                android:gravity="center_vertical"
                 android:text="@string/introduce_to_friends"
                 android:textSize="16sp"
-                android:textColor="@android:color/white"/>
+                android:textColor="@color/apptheme_side_drawer_selector"
+                />
     </LinearLayout>
 
     <View
@@ -38,12 +41,15 @@
         <TextView
                 style="@style/TextView.SingleLine"
                 android:id="@+id/tv_praise_count"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center"
+                android:paddingLeft="45dp"
+                android:paddingStart="45dp"
+                android:gravity="center_vertical"
                 android:text="@string/praise_count_obtained"
                 android:textSize="16sp"
-                android:textColor="@android:color/white"/>
+                android:textColor="@color/apptheme_side_drawer_selector"
+                />
 
         <com.utree.eightysix.widget.RoundedButton
                 android:id="@+id/rb_new_praise_dot"
@@ -52,6 +58,8 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/tv_praise_count"
                 android:layout_toEndOf="@+id/tv_praise_count"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
                 android:text="新"
                 android:textSize="12sp"
                 android:minHeight="0dp"
@@ -77,12 +85,14 @@
                 style="@style/TextView.SingleLine"
                 android:id="@+id/tv_my_friends"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:gravity="center"
+                android:layout_height="match_parent"
+                android:paddingLeft="45dp"
+                android:paddingStart="45dp"
+                android:gravity="center_vertical"
                 android:text="@string/my_friends"
                 android:textSize="16sp"
-                android:textColor="@android:color/white"/>
+                android:textColor="@color/apptheme_side_drawer_selector"
+                />
 
         <com.utree.eightysix.widget.RoundedButton
                 android:id="@+id/rb_add"
@@ -120,10 +130,13 @@
                 style="@style/TextView.SingleLine"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
+                android:gravity="center_vertical"
+                android:paddingLeft="45dp"
+                android:paddingStart="45dp"
                 android:text="热门话题"
                 android:textSize="16sp"
-                android:textColor="@android:color/white"/>
+                android:textColor="@color/apptheme_side_drawer_selector"
+                />
 
     </RelativeLayout>
 
@@ -143,10 +156,13 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"
+                android:paddingLeft="45dp"
+                android:paddingStart="45dp"
+                android:gravity="center_vertical"
                 android:text="@string/feedback"
                 android:textSize="16sp"
-                android:textColor="@android:color/white"/>
+                android:textColor="@color/apptheme_side_drawer_selector"
+                />
 
     </LinearLayout>
 
@@ -166,10 +182,13 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"
+                android:paddingLeft="45dp"
+                android:paddingStart="45dp"
+                android:gravity="center_vertical"
                 android:text="@string/help"
                 android:textSize="16sp"
-                android:textColor="@android:color/white"/>
+                android:textColor="@color/apptheme_side_drawer_selector"
+                />
 
     </LinearLayout>
 
@@ -186,23 +205,26 @@
         <TextView
                 style="@style/TextView.SingleLine"
                 android:id="@+id/tv_settings"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center"
+                android:gravity="center_vertical"
+                android:paddingLeft="45dp"
+                android:paddingStart="45dp"
                 android:text="@string/settings"
                 android:textSize="16sp"
-                android:textColor="@android:color/white"/>
+                android:textColor="@color/apptheme_side_drawer_selector"
+                />
 
         <com.utree.eightysix.widget.RoundedButton
                 android:id="@+id/rb_settings_dot"
                 android:layout_width="8dp"
                 android:layout_height="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginEnd="8dp"
                 android:layout_gravity="center_vertical"
                 android:layout_toEndOf="@+id/tv_settings"
                 android:layout_toRightOf="@+id/tv_settings"
-                android:visibility="invisible"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
                 app:radius="5dp"
                 app:background="@color/apptheme_secondary_light_color"/>
 

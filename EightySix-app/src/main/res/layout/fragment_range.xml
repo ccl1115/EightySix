@@ -32,7 +32,7 @@
                 android:layout_toEndOf="@+id/iv_current"
                 android:layout_toRightOf="@+id/iv_current"
                 android:textSize="16sp"
-                android:textColor="@android:color/white"
+                android:textColor="@color/apptheme_side_drawer_selector"
                 />
 
         <TextView
@@ -81,7 +81,7 @@
                 android:layout_marginBottom="14dp"
                 android:textSize="16sp"
                 android:text="1公里内"
-                android:textColor="@android:color/white"
+                android:textColor="@color/apptheme_side_drawer_selector"
                 />
 
         <View
@@ -103,7 +103,7 @@
                 android:layout_below="@+id/rb_range_1"
                 android:textSize="16sp"
                 android:text="5公里内"
-                android:textColor="@android:color/white"
+                android:textColor="@color/apptheme_side_drawer_selector"
                 />
 
         <View
@@ -125,7 +125,7 @@
                 android:layout_below="@+id/rb_range_2"
                 android:textSize="16sp"
                 android:text="同城"
-                android:textColor="@android:color/white"
+                android:textColor="@color/apptheme_side_drawer_selector"
                 />
 
     </RelativeLayout>
@@ -163,7 +163,7 @@
                 android:layout_marginBottom="14dp"
                 android:textSize="16sp"
                 android:text="我的打工圈"
-                android:textColor="@android:color/white"
+                android:textColor="@color/apptheme_side_drawer_selector"
                 />
 
     </RelativeLayout>
