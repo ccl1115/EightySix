@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="alp_pattern_path_light">@android:color/white</color>
-    <color name="alp_pattern_path_dark">#999999</color>
-
-
-    <color name="red">#FF0000</color>
-
     <color name="translucent">#AA000000</color>
     <color name="transparent">#00000000</color>
 </resources>

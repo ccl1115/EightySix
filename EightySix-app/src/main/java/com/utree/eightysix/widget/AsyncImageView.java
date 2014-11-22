@@ -4,16 +4,14 @@ import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.ImageView;
-import com.aliyun.android.util.MD5Util;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.M;
-import com.utree.eightysix.drawable.GearsDrawable;
 import com.utree.eightysix.utils.ImageUtils;
-import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.FROM_DISK;
-import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.FROM_MEM;
-import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.FROM_REMOTE;
+import com.utree.eightysix.utils.MD5Util;
+
+import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.*;
 
 /**
  */

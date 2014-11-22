@@ -7,17 +7,11 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
-import com.utree.eightysix.Account;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -33,6 +27,7 @@ import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.ViewHighlighter;
+
 import java.util.List;
 
 import static com.utree.eightysix.app.region.FeedRegionAdapter.DismissTipOverlayEvent.*;
@@ -114,12 +109,8 @@ public class FeedPostView extends BasePostView {
 
   @OnClick(R.id.tv_source)
   public void onTvSourceClicked() {
-    if (mPost.viewType == 3 || mPost.viewType == 4 || mPost.viewType == 8) {
-      if (mCircleId == mPost.factoryId) {
-        return;
-      }
-
-      if (Account.inst().getCurrentCircle() != null && Account.inst().getCurrentCircle().id == mPost.factoryId) {
+    if (mPost.viewType == 8 || (mPost.sourceType == 0 && (mPost.viewType == 3 || mPost.viewType == 4))) {
+      if (mPost.userCurrFactoryId == mPost.factoryId) {
         HomeActivity.start(getContext(), 0);
       } else {
         FeedActivity.start(getContext(), mPost.factoryId);
@@ -300,8 +291,8 @@ public class FeedPostView extends BasePostView {
       mPost.praised = 1;
       mPost.praise++;
       U.getBus().post(new FeedPostPraiseEvent(mPost, false));
+      ((BaseAdapter) ((AdapterView) getParent()).getAdapter()).notifyDataSetChanged();
     }
-    ((BaseAdapter) ((AdapterView) getParent()).getAdapter()).notifyDataSetChanged();
   }
 
   @Override

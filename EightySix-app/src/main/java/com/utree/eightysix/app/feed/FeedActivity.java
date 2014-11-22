@@ -171,11 +171,12 @@ public class FeedActivity extends BaseActivity {
 
   @Override
   protected void onResume() {
-    if (mResumed && getCount() > U.getConfigInt("activity.background.refresh.time")) {
-      mTabFragment.setCircle(mTabFragment.getCircle());
-    }
-
     super.onResume();
+    if (mResumed && getCount() > U.getConfigInt("activity.background.refresh.time")) {
+      if (mTabFragment != null) {
+        mTabFragment.setCircle(mTabFragment.getCircle());
+      }
+    }
   }
 
   @Override

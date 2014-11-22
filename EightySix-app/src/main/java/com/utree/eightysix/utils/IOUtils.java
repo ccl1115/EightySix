@@ -1,7 +1,6 @@
 package com.utree.eightysix.utils;
 
 import android.os.Environment;
-import com.aliyun.android.util.MD5Util;
 import com.utree.eightysix.U;
 import de.akquinet.android.androlog.Log;
 import java.io.File;

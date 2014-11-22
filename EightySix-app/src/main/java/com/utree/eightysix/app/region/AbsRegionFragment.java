@@ -63,6 +63,10 @@ public abstract class AbsRegionFragment extends BaseFragment {
     mRegionType = regionType;
   }
 
+  public FeedRegionAdapter getFeedAdapter() {
+    return mFeedAdapter;
+  }
+
   @OnItemClick (R.id.lv_feed)
   public void onLvFeedItemClicked(int position, View view) {
     Object item = mLvFeed.getAdapter().getItem(position);
@@ -305,13 +309,16 @@ public abstract class AbsRegionFragment extends BaseFragment {
 
 
       if (response.object.fetch != null) {
+        int count = 0;
         if (response.object.fetch.newComment != null) {
-          Account.inst().setNewCommentCount(response.object.fetch.newComment.unread);
+          count += response.object.fetch.newComment.unread;
         }
 
         if (response.object.fetch.myPostComment != null) {
-          Account.inst().setNewCommentCount(response.object.fetch.myPostComment.unread);
+          count += response.object.fetch.myPostComment.unread;
         }
+
+        Account.inst().setNewCommentCount(count);
 
         if (response.object.fetch.newPraise != null) {
           Account.inst().setHasNewPraise(response.object.fetch.newPraise.praise == 1);

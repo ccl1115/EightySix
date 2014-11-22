@@ -115,8 +115,8 @@ public class PostPostView extends BasePostView {
 
   @OnClick(R.id.tv_source)
   public void onTvSourceClicked() {
-    if (mPost.viewType == 3 || mPost.viewType == 4 || mPost.viewType == 8) {
-      if (Account.inst().getCurrentCircle() != null && Account.inst().getCurrentCircle().id == mPost.factoryId) {
+    if (mPost.viewType == 8 || (mPost.sourceType == 0 && (mPost.viewType == 3 || mPost.viewType == 4))) {
+      if (mPost.userCurrFactoryId == mPost.factoryId) {
         HomeActivity.start(getContext(), 0);
       } else {
         FeedActivity.start(getContext(), mPost.factoryId);
@@ -200,11 +200,15 @@ public class PostPostView extends BasePostView {
     U.getAnalyser().trackEvent(U.getContext(), "post_more", "post_more");
     String[] items;
     if (mPost.owner == 1) {
-      items = new String[]{U.gs(R.string.share), U.gs(R.string.report),
+      items = new String[]{U.gs(R.string.share),
+          U.gs(R.string.report),
           U.gs(R.string.like),
+          U.gs(R.string.unfollow),
           U.gs(R.string.delete)};
     } else {
-      items = new String[]{U.gs(R.string.share), U.gs(R.string.report),
+      items = new String[]{U.gs(R.string.share),
+          U.gs(R.string.report),
+          U.gs(R.string.unfollow),
           U.gs(R.string.like)};
     }
     new AlertDialog.Builder(getContext()).setTitle(U.gs(R.string.post_action))
@@ -230,6 +234,8 @@ public class PostPostView extends BasePostView {
                     ((BaseAdapter) ((AdapterView) getParent()).getAdapter()).notifyDataSetChanged();
                     break;
                   case 3:
+                    break;
+                  case 4:
                     U.getAnalyser().trackEvent(U.getContext(), "post_more_delete", "post_more_delete");
                     U.getBus().post(new PostDeleteRequest(mPost.id));
                     break;

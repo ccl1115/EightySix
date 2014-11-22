@@ -9,11 +9,13 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.app.home.HomeActivity;
+import com.utree.eightysix.app.region.event.RegionResponseEvent;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.request.FactoryRegionRequest;
 import com.utree.eightysix.response.FactoryRegionResponse;
@@ -30,7 +32,6 @@ public class FactoryRegionFragment extends BaseFragment {
   private FactoryRegionAdapter mAdapter;
 
   private int mRegionType;
-  private boolean mAttached;
 
   @OnClick (R.id.fl_parent)
   public void onFlParentClicked() {

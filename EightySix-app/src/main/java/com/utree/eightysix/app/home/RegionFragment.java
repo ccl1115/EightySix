@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -15,23 +16,22 @@ import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.region.event.RegionResponseEvent;
 import com.utree.eightysix.data.Circle;
-import com.utree.eightysix.widget.RoundedButton;
 
 /**
  */
 public class RegionFragment extends BaseFragment {
 
   @InjectView (R.id.rb_current)
-  public RoundedButton mRbCurrent;
+  public TextView mRbCurrent;
 
   @InjectView (R.id.rb_range_1)
-  public RoundedButton mRbRange1;
+  public TextView mRbRange1;
 
   @InjectView (R.id.rb_range_2)
-  public RoundedButton mRbRange2;
+  public TextView mRbRange2;
 
   @InjectView (R.id.rb_range_3)
-  public RoundedButton mRbRange3;
+  public TextView mRbRange3;
 
   private Circle mCurrent;
   private Callback mCallback;
@@ -145,5 +145,10 @@ public class RegionFragment extends BaseFragment {
 
   public interface Callback {
     void onItemClicked(int regionType, boolean selected);
+  }
+
+  @Subscribe
+  public void onRegionResponseEvent(RegionResponseEvent event) {
+    mRegionType = event.getRegion();
   }
 }

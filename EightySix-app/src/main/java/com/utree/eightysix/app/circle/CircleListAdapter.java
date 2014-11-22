@@ -171,7 +171,7 @@ class CircleListAdapter extends BaseAdapter {
   protected void showCircleChangeDialog(Context context) {
     if (mCircleChangeDialog == null) {
       mCircleChangeDialog = new ThemedDialog(context);
-      mCircleChangeDialog.setTitle("确认更改在职圈子");
+      mCircleChangeDialog.setTitle("是否更改在职圈子？");
       TextView textView = new TextView(context);
       textView.setText(String.format("请注意：%d天之内不能修改哦",
           U.getSyncClient().getSync() != null ? U.getSyncClient().getSync().selectFactoryDays : 15));
