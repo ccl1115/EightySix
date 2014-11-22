@@ -1,6 +1,5 @@
 package com.utree.eightysix.rest;
 
-import com.loopj.android.http.RequestParams;
 import org.apache.http.Header;
 
 /**
@@ -14,6 +13,9 @@ public class RequestData {
   int method;
   org.apache.http.Header[] headers;
   long requestTime;
+  String host;
+
+  boolean sign;
 
   public RequestData() {
     requestTime = System.currentTimeMillis();
@@ -78,5 +80,21 @@ public class RequestData {
 
   public void setHeaders(Header[] headers) {
     this.headers = headers;
+  }
+
+  public void setHost(String host) {
+    this.host = host;
+  }
+
+  public String getHost() {
+    return host;
+  }
+
+  public boolean needSign() {
+    return sign;
+  }
+
+  public void setSign(boolean need) {
+    this.sign = need;
   }
 }

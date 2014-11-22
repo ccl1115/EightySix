@@ -39,8 +39,7 @@ public class IOUtils {
   }
 
   public static String fileHash(File file) {
-    return MD5Util.getMD5String(
-        (String.format("%s-%d", file.getAbsolutePath(), file.length())).getBytes()).toLowerCase();
+    return MD5Util.getMD5(file);
   }
 
   public static File getAvailableAppDir() {

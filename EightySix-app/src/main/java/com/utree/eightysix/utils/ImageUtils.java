@@ -7,13 +7,15 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.util.LruCache;
-import android.text.TextUtils;
 import com.jakewharton.disklrucache.DiskLruCache;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.U;
-import com.utree.eightysix.storage.Storage;
+import com.utree.eightysix.request.UploadImageRequest;
+import com.utree.eightysix.response.UploadImageResponse;
+import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.RESTRequester;
 import de.akquinet.android.androlog.Log;
 import org.apache.http.Header;
 import org.apache.http.HttpStatus;
@@ -406,7 +408,7 @@ public class ImageUtils {
     @Override
     protected Void doInBackground(Void... params) {
       if (mFile != null) {
-        mBitmap = safeDecodeBitmap(mFile);
+        mBitmap = safeDecodeBitmap(mFile, 600, 600);
       }
 
       if (mBitmap == null) {
@@ -430,25 +432,35 @@ public class ImageUtils {
         }
       }
 
-      final String hash = IOUtils.fileHash(mFile);
-      final String path = hash.substring(0, 1) + File.separator + hash.substring(2, 4) + File.separator;
-      final String key = hash.substring(5);
-      Storage.Result result = U.getCloudStorage().put(U.getImageBucket(), path, key, file);
-      if (result.error == 0 && TextUtils.isEmpty(result.msg)) {
-        String url = U.getCloudStorage().getUrl(U.getImageBucket(), path, key);
-        cacheImage(getUrlHash(url), file);
-        mFileHash = hash;
-        mUrl = url;
-      } else {
-        U.getAnalyser().trackEvent(U.getContext(), "oss_put_error", result.msg);
-      }
+      final String hash = IOUtils.fileHash(file);
+      mFileHash = hash;
+      File newPath = new File(file.getParent() + "/" + hash + ".jpg");
+      file.renameTo(newPath);
+      mFile = newPath;
+
+      Log.d(TAG, "image file path: " + mFile.getAbsolutePath());
+      Log.d(TAG, "image file size: " + mFile.length());
 
       return null;
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
-      U.getBus().post(new ImageUploadedEvent(mFileHash, mUrl));
+      U.getRESTRequester().request(new UploadImageRequest(mFile), new OnResponse2<UploadImageResponse>() {
+        @Override
+        public void onResponseError(Throwable e) {
+          U.getBus().post(new ImageUploadedEvent(null, null));
+        }
+
+        @Override
+        public void onResponse(UploadImageResponse response) {
+          if (RESTRequester.responseOk(response)) {
+            U.getBus().post(new ImageUploadedEvent(mFileHash, response.imageUrl));
+          } else {
+            U.getBus().post(new ImageUploadedEvent(null, null));
+          }
+        }
+      }, UploadImageResponse.class);
     }
   }
 

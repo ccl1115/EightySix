@@ -4,7 +4,6 @@ import android.os.Build;
 import com.baidu.android.common.util.CommonParam;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestHandle;
-import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.ResponseHandlerInterface;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.BuildConfig;
@@ -72,10 +71,22 @@ public class RESTRequester implements IRESTRequester {
 
   @Override
   public RequestHandle request(RequestData data, ResponseHandlerInterface handler) {
+    putBaseParams(data.getParams());
+    if (data.needSign()) {
+      data.getParams().sign();
+    }
     if (data.getMethod() == Method.GET) {
-      return get(data.getApi(), data.getHeaders(), data.getParams(), handler);
+      if (data.getHost() != null) {
+        return get(data.getHost(), data.getApi(), data.getHeaders(), data.getParams(), handler);
+      } else {
+        return get(data.getApi(), data.getHeaders(), data.getParams(), handler);
+      }
     } else if (data.getMethod() == Method.POST) {
-      return post(data.getApi(), data.getHeaders(), data.getParams(), null, handler);
+      if (data.getHost() != null) {
+        return post(data.getHost(), data.getApi(), data.getHeaders(), data.getParams(), null, handler);
+      } else {
+        return post(data.getApi(), data.getHeaders(), data.getParams(), null, handler);
+      }
     }
     return null;
   }
@@ -114,6 +125,14 @@ public class RESTRequester implements IRESTRequester {
       } else {
         data.setMethod(Method.POST);
       }
+
+      Host host = clz.getAnnotation(Host.class);
+      if (host != null) {
+        data.setHost(host.value());
+      }
+
+      Sign sign = clz.getAnnotation(Sign.class);
+      data.setSign(sign != null);
 
       for (Field f : clz.getFields()) {
         Param p = f.getAnnotation(Param.class);
@@ -161,7 +180,6 @@ public class RESTRequester implements IRESTRequester {
   @Override
   public RequestHandle get(String api, Header[] headers, RequestParams params, ResponseHandlerInterface handler) {
     if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "   get: " + mHost + api);
-    putBaseParams(params);
     if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "params: " + params.toString());
     return mAsyncHttpClient.get(U.getContext(), mHost + api, headers, params, handler);
   }
@@ -169,9 +187,20 @@ public class RESTRequester implements IRESTRequester {
   @Override
   public RequestHandle post(String api, Header[] headers, RequestParams params, String contentType, ResponseHandlerInterface handler) {
     if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "  post: " + mHost + api);
-    putBaseParams(params);
     if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "params: " + params.toString());
     return mAsyncHttpClient.post(U.getContext(), mHost + api, headers, params, contentType, handler);
+  }
+
+  private RequestHandle post(String host, String path, Header[] headers, RequestParams params, String contentType, ResponseHandlerInterface handler) {
+    if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "  post: " + host + path);
+    if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "params: " + params.toString());
+    return mAsyncHttpClient.post(U.getContext(), host + path, headers, params, contentType, handler);
+  }
+
+  private RequestHandle get(String host, String path, Header[] headers, RequestParams params, ResponseHandlerInterface handler) {
+    if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "  post: " + host + path);
+    if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "params: " + params.toString());
+    return mAsyncHttpClient.get(U.getContext(), host + path, headers, params, handler);
   }
 
   @Override
@@ -182,7 +211,7 @@ public class RESTRequester implements IRESTRequester {
     return params;
   }
 
-  public void putBaseParams(RequestParams params) {
+  private void putBaseParams(RequestParams params) {
     if (params == null) {
       params = new RequestParams();
     }
@@ -210,6 +239,10 @@ public class RESTRequester implements IRESTRequester {
     if (pushUserId != null) {
       params.add("push_userid", pushUserId);
     }
+  }
+
+  private void addSign(RequestParams params) {
+    params.add("sign", MD5Util.getMD5String(params.toString().getBytes()));
   }
 
   private void compact() {
