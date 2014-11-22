@@ -16,8 +16,8 @@ import com.utree.eightysix.app.BaseApplication;
 import com.utree.eightysix.app.SyncClient;
 import com.utree.eightysix.app.feed.BaseItemDeserializer;
 import com.utree.eightysix.app.share.ShareManager;
+import com.utree.eightysix.applogger.EntryAdapter;
 import com.utree.eightysix.applogger.EntryLogger;
-import com.utree.eightysix.applogger.LoggerImpl;
 import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.push.PushHelper;
 import com.utree.eightysix.push.XGPushHelper;
@@ -422,7 +422,12 @@ public class U {
     M.checkThread();
 
     if (sEntryLogger == null) {
-      sEntryLogger = new LoggerImpl(U.getConfig("app.logger.host"));
+      sEntryLogger = new EntryLogger() {
+        @Override
+        public <T extends EntryAdapter> void log(T entryAdapter) {
+
+        }
+      };
     }
 
     return sEntryLogger;
