@@ -455,6 +455,7 @@ public class ImageUtils {
         @Override
         public void onResponse(UploadImageResponse response) {
           if (RESTRequester.responseOk(response)) {
+            cacheImage(mFileHash, mFile);
             U.getBus().post(new ImageUploadedEvent(mFileHash, response.imageUrl));
           } else {
             U.getBus().post(new ImageUploadedEvent(null, null));
