@@ -142,7 +142,9 @@ public class HomeActivity extends BaseActivity {
   @Override
   public void onActionLeftClicked() {
     U.getAnalyser().trackEvent(this, "feed_title", "feed_title");
-    if (mDlContent.isDrawerOpen(mFlSide)) {
+    if (mDlContent.isDrawerOpen(mFlRight)) {
+      mDlContent.closeDrawer(mFlRight);
+    } else if (mDlContent.isDrawerOpen(mFlSide)) {
       mDlContent.closeDrawer(mFlSide);
     } else {
       mDlContent.openDrawer(mFlSide);
@@ -151,7 +153,11 @@ public class HomeActivity extends BaseActivity {
 
   @Override
   public void onActionOverflowClicked() {
-    openMenu();
+    if (mDlContent.isDrawerOpen(mFlSide)) {
+      mDlContent.closeDrawer(mFlSide);
+    } else {
+      openMenu();
+    }
   }
 
   @Override
@@ -231,6 +237,12 @@ public class HomeActivity extends BaseActivity {
           ViewHelper.setPivotY(mTopBar, pivotY + topBarHeight);
           ViewHelper.setScaleX(mTopBar, scale);
           ViewHelper.setScaleY(mTopBar, scale);
+
+          float scale2 = 0.7f + slideOffset * 0.3f;
+          ViewHelper.setPivotX(mFlSide, mFlSide.getMeasuredWidth());
+          ViewHelper.setPivotY(mFlSide, mFlSide.getMeasuredHeight() >> 1);
+          ViewHelper.setScaleX(mFlSide, scale2);
+          ViewHelper.setScaleY(mFlSide, scale2);
         } else {
           ViewHelper.setTranslationX(view, - mFlRight.getMeasuredWidth() * slideOffset);
           ViewHelper.setPivotX(view, view.getMeasuredWidth());
@@ -243,6 +255,11 @@ public class HomeActivity extends BaseActivity {
           ViewHelper.setPivotY(mTopBar, pivotY + topBarHeight);
           ViewHelper.setScaleX(mTopBar, scale);
           ViewHelper.setScaleY(mTopBar, scale);
+
+          float scale2 = 0.7f + slideOffset * 0.3f;
+          ViewHelper.setPivotY(mFlRight, mFlRight.getMeasuredHeight() >> 1);
+          ViewHelper.setScaleX(mFlRight, scale2);
+          ViewHelper.setScaleY(mFlRight, scale2);
         }
 
         ViewHelper.setTranslationY(mSend, U.dp2px(100) * slideOffset);
