@@ -19,6 +19,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -340,13 +341,19 @@ public class PublishActivity extends BaseActivity {
         });
 
     mPostEditText.addTextChangedListener(new TextWatcher() {
+
+      private CharSequence mBefore;
       @Override
       public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+        mBefore = s;
       }
 
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count) {
+      }
+
+      @Override
+      public void afterTextChanged(Editable s) {
         if (s.length() == 0) {
           mTvPostTip.setVisibility(View.VISIBLE);
           disablePublishButton();
@@ -355,21 +362,31 @@ public class PublishActivity extends BaseActivity {
           enablePublishButton();
         }
 
-        if (s.length() > U.getConfigInt("post.length")) {
-          final int selection = mPostEditText.getSelectionStart();
-          s = s.subSequence(0, U.getConfigInt("post.length"));
-          mPostEditText.setText(s);
-          mPostEditText.setSelection(Math.min(selection, s.length()));
+        final int length = U.getConfigInt("post.length");
+        if (s.length() > length) {
+          mPostEditText.setText(mBefore);
+          mPostEditText.setSelection(mBefore.length());
+        } else if (mPostEditText.getLineCount() > 7) {
+          mPostEditText.setText(mBefore);
+          mPostEditText.setSelection(mBefore.length());
         }
 
-        if (!InputValidator.post(s) && count > 0) {
-          showToast(U.gfs(R.string.post_over_length, U.getConfigInt("post.length")));
+        if (!InputValidator.post(s)) {
+          showToast(U.gfs(R.string.post_over_length, length));
         }
       }
+    });
 
+    mPostEditText.setOnKeyListener(new View.OnKeyListener() {
       @Override
-      public void afterTextChanged(Editable s) {
-
+      public boolean onKey(View view, int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+          int editTextLineCount = ((EditText) view).getLineCount();
+          if (editTextLineCount >= 7) {
+            return true;
+          }
+        }
+        return false;
       }
     });
 
