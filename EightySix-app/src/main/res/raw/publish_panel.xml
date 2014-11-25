@@ -53,52 +53,52 @@
 
     <page>
         <item>
-            <local-image>bg_13</local-image>
+            <image>bg_13.jpg</image>
         </item>
 
         <item>
-            <local-image>bg_20</local-image>
+            <image>bg_20.jpg</image>
         </item>
         <item>
-            <local-image>bg_24</local-image>
+            <image>bg_24.jpg</image>
         </item>
         <item>
-            <local-image>bg_28</local-image>
+            <image>bg_28.jpg</image>
         </item>
         <item>
-            <local-image>bg_31</local-image>
-        </item>
-
-        <item>
-            <local-image>bg_40</local-image>
-        </item>
-        <item>
-            <local-image>bg_200</local-image>
-        </item>
-        <item>
-            <local-image>bg_49</local-image>
-        </item>
-        <item>
-            <local-image>bg_201</local-image>
-        </item>
-        <item>
-            <local-image>bg_63</local-image>
+            <image>bg_31.jpg</image>
         </item>
 
         <item>
-            <local-image>bg_94</local-image>
+            <image>bg_40.jpg</image>
         </item>
         <item>
-            <local-image>bg_96</local-image>
+            <image>bg_200.jpg</image>
         </item>
         <item>
-            <local-image>bg_202</local-image>
+            <image>bg_49.jpg</image>
         </item>
         <item>
-            <local-image>bg_101</local-image>
+            <image>bg_201.jpg</image>
         </item>
         <item>
-            <local-image>bg_105</local-image>
+            <image>bg_63.jpg</image>
+        </item>
+
+        <item>
+            <image>bg_94.jpg</image>
+        </item>
+        <item>
+            <image>bg_96.jpg</image>
+        </item>
+        <item>
+            <image>bg_202.jpg</image>
+        </item>
+        <item>
+            <image>bg_101.jpg</image>
+        </item>
+        <item>
+            <image>bg_105.jpg</image>
         </item>
     </page>
 
