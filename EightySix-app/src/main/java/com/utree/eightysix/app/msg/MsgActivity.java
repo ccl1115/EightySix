@@ -156,6 +156,13 @@ public class MsgActivity extends BaseActivity {
     }
   }
 
+  @Subscribe
+  public void onPostEvent(Post post) {
+    if (mMsgAdapter.contains(post)) {
+      mMsgAdapter.notifyDataSetChanged();
+    }
+  }
+
   private void requestMsgs(final int page) {
     if (page == 1) {
       mRvMsg.setRefreshing(true);

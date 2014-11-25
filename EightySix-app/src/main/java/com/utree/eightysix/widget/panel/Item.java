@@ -2,9 +2,10 @@ package com.utree.eightysix.widget.panel;
 
 import android.util.TypedValue;
 import com.utree.eightysix.U;
-import java.io.IOException;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 
 /**
  * @author simon
@@ -21,7 +22,7 @@ public class Item {
       if (eventType == XmlPullParser.START_TAG) {
         if ("color".equals(parser.getName())) {
           mValue = parseColor(parser);
-        } else if ("bg-image".equals(parser.getName())) {
+        } else if ("image".equals(parser.getName())) {
           mValue = parseBgImage(parser);
         } else if ("local-image".equals(parser.getName())) {
           mValue = parseLocalImage(parser);

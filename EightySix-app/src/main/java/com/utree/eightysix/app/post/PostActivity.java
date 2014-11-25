@@ -496,6 +496,7 @@ public class PostActivity extends BaseActivity {
             if (RESTRequester.responseOk(response)) {
               mPostCommentsAdapter.add(response.object);
               mPost.comments++;
+              mPost.relation = 1;
               U.getBus().post(mPost);
               mEtPostContent.setText("");
             }

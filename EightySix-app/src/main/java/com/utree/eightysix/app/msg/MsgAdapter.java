@@ -4,9 +4,8 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import com.utree.eightysix.U;
 import com.utree.eightysix.data.Post;
-import com.utree.eightysix.event.AdapterDataSetChangedEvent;
+
 import java.util.List;
 
 /**
@@ -33,6 +32,15 @@ abstract class MsgAdapter<T extends BaseMsgItemView> extends BaseAdapter {
     if (mPosts.remove(post)) {
       notifyDataSetChanged();
     }
+  }
+
+  public boolean contains(Post post) {
+    for (Post p : mPosts) {
+      if (p.equals(post)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @Override
