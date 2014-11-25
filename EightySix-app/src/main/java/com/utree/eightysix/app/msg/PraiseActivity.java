@@ -15,7 +15,6 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
 import com.utree.eightysix.data.Paginate;
@@ -28,6 +27,7 @@ import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RandomSceneTextView;
+
 import java.util.List;
 
 /**
@@ -164,6 +164,14 @@ public class PraiseActivity extends BaseActivity {
   @Override
   public void onActionLeftClicked() {
     finish();
+  }
+
+
+  @Subscribe
+  public void onPostEvent(Post post) {
+    if (mMsgAdapter.contains(post)) {
+      mMsgAdapter.notifyDataSetChanged();
+    }
   }
 
   private void requestPraises(final int page) {

@@ -74,6 +74,9 @@ public class Post extends BaseItem implements Parcelable {
   @SerializedName("tags")
   public List<Tag> tags;
 
+  @SerializedName("relation")
+  public int relation;
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
