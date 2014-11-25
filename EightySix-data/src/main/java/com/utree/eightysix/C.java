@@ -86,6 +86,8 @@ public class C {
 
   public static final String API_SYNC = "/system/sync.do";
 
+  public static final String COMMIT_UPLOADIMAGE = "/commit/uploadimage";
+
 
   public static String IMEI = "";
 

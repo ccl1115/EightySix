@@ -4,14 +4,15 @@
 
 package com.utree.eightysix.request;
 
+import com.utree.eightysix.C;
 import com.utree.eightysix.rest.*;
 
 import java.io.File;
 
 /**
  */
-@Api("/commit/uploadimage")
-@Host("http://203.195.213.36:8200")
+@Api(C.COMMIT_UPLOADIMAGE)
+@Host("http://production.gz.1251114078.cee.myqcloud.com")
 @Token
 @Sign
 public class UploadImageRequest {

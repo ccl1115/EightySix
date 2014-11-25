@@ -502,10 +502,9 @@ public class PublishActivity extends BaseActivity {
       randomItem();
       return;
     }
-    if (event.getHash().equals(mFileHash)) {
-      mImageUploadFinished = true;
-      mImageUploadUrl = event.getUrl();
-    }
+
+    mImageUploadFinished = true;
+    mImageUploadUrl = event.getUrl();
 
     if (mRequestStarted) {
       requestPublish();
