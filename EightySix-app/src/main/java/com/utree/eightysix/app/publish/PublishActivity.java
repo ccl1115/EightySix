@@ -863,6 +863,7 @@ public class PublishActivity extends BaseActivity {
 
           mTagsLayout.setTag(mTags);
           mEtTempName.setText(mLastTempName);
+          mEtTempName.setTextColor(0xffcccccc);
         }
         requestTags();
       }
@@ -884,6 +885,7 @@ public class PublishActivity extends BaseActivity {
 
           mTagsLayout.setTag(mTags);
           mEtTempName.setText(mLastTempName);
+          mEtTempName.setTextColor(0xffcccccc);
         }
       }
     }, TagsResponse.class);
