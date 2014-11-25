@@ -183,7 +183,7 @@ public class HomeActivity extends BaseActivity {
   }
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
+  public void onCreate(final Bundle savedInstanceState) {
     super.onCreate(null);
 
     setFillContent(true);
@@ -243,6 +243,7 @@ public class HomeActivity extends BaseActivity {
           ViewHelper.setPivotY(mFlSide, mFlSide.getMeasuredHeight() >> 1);
           ViewHelper.setScaleX(mFlSide, scale2);
           ViewHelper.setScaleY(mFlSide, scale2);
+          ViewHelper.setAlpha(mFlSide, slideOffset);
         } else {
           ViewHelper.setTranslationX(view, - mFlRight.getMeasuredWidth() * slideOffset);
           ViewHelper.setPivotX(view, view.getMeasuredWidth());
@@ -260,6 +261,7 @@ public class HomeActivity extends BaseActivity {
           ViewHelper.setPivotY(mFlRight, mFlRight.getMeasuredHeight() >> 1);
           ViewHelper.setScaleX(mFlRight, scale2);
           ViewHelper.setScaleY(mFlRight, scale2);
+          ViewHelper.setAlpha(mFlRight, slideOffset);
         }
 
         ViewHelper.setTranslationY(mSend, U.dp2px(100) * slideOffset);
@@ -325,14 +327,13 @@ public class HomeActivity extends BaseActivity {
       } catch (NumberFormatException ignored) {
       }
       if (v > C.VERSION) {
-        getTopBar().getActionOverflow().setHasNew(true);
+        getTopBar().getActionOverflow().setHasNew(0, true);
         mMenuViewHolder.mRbSettingsDot.setVisibility(View.VISIBLE);
       } else {
-        getTopBar().getActionOverflow().setHasNew(false);
+        getTopBar().getActionOverflow().setHasNew(0, false);
         mMenuViewHolder.mRbSettingsDot.setVisibility(View.INVISIBLE);
       }
     }
-
     mDlContent.closeDrawer(mFlSide);
   }
 
@@ -349,17 +350,12 @@ public class HomeActivity extends BaseActivity {
 
   @Subscribe
   public void onHasNewPraiseEvent(HasNewPraiseEvent event) {
-    getTopBar().getActionOverflow().setHasNew(event.has());
+    getTopBar().getActionOverflow().setHasNew(1, event.has());
     if (event.has()) {
       mMenuViewHolder.mRbNewPraiseDot.setVisibility(View.VISIBLE);
     } else {
       mMenuViewHolder.mRbNewPraiseDot.setVisibility(View.INVISIBLE);
     }
-  }
-
-  @Subscribe
-  public void onSyncEvent(Sync sync) {
-    setActionAdapter();
   }
 
   @Override
@@ -614,7 +610,7 @@ public class HomeActivity extends BaseActivity {
 
   private void setHasNewPraise() {
     mMenuViewHolder.mRbNewPraiseDot.setVisibility(Account.inst().getHasNewPraise() ? View.VISIBLE : View.INVISIBLE);
-    getTopBar().getActionOverflow().setHasNew(Account.inst().getHasNewPraise());
+    getTopBar().getActionOverflow().setHasNew(1, Account.inst().getHasNewPraise());
   }
 
   private void setNewCommentCount() {
