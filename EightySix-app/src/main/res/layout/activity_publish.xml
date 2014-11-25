@@ -58,17 +58,21 @@
                 android:textColor="@android:color/white"
                 android:text="@string/post_anonymously"/>
 
-        <com.utree.eightysix.widget.PostEditText
-                style="@style/TextView.PostStyle"
+        <EditText
                 android:id="@+id/et_post_content"
                 android:layout_gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/transparent"
                 android:paddingLeft="48dp"
                 android:paddingRight="48dp"
                 android:maxLength="77"
                 android:maxLines="7"
-                android:textColor="@android:color/white"/>
+                android:ellipsize="end"
+                android:inputType="textMultiLine"
+                android:textColor="@android:color/white"
+                android:textSize="23sp"
+                android:gravity="center"/>
 
     </FrameLayout>
 
@@ -79,7 +83,7 @@
             android:layout_height="45dp"
             android:background="@android:color/white"
             android:orientation="horizontal"
-            android:gravity="right"
+            android:gravity="end"
             android:paddingLeft="15dp"
             android:paddingRight="15dp">
 

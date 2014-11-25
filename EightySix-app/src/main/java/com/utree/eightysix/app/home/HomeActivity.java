@@ -70,6 +70,9 @@ public class HomeActivity extends BaseActivity {
   @InjectView(R.id.fl_right)
   public FrameLayout mFlRight;
 
+  @InjectView(R.id.fl_main)
+  public FrameLayout mFlMain;
+
   @InjectView (R.id.content)
   public DrawerLayout mDlContent;
 
@@ -146,8 +149,10 @@ public class HomeActivity extends BaseActivity {
       mDlContent.closeDrawer(mFlRight);
     } else if (mDlContent.isDrawerOpen(mFlSide)) {
       mDlContent.closeDrawer(mFlSide);
+      mTopBar.mLlLeft.setSelected(false);
     } else {
       mDlContent.openDrawer(mFlSide);
+      mTopBar.mLlLeft.setSelected(true);
     }
   }
 
@@ -155,8 +160,10 @@ public class HomeActivity extends BaseActivity {
   public void onActionOverflowClicked() {
     if (mDlContent.isDrawerOpen(mFlSide)) {
       mDlContent.closeDrawer(mFlSide);
+      mTopBar.mActionOverFlow.setSelected(false);
     } else {
       openMenu();
+      mTopBar.mActionOverFlow.setSelected(true);
     }
   }
 
@@ -219,41 +226,41 @@ public class HomeActivity extends BaseActivity {
     mDlContent.setDrawerListener(new DrawerLayout.DrawerListener() {
       @Override
       public void onDrawerSlide(View drawerView, float slideOffset) {
-        int measuredWidth = mFlSide.getMeasuredWidth();
-        View view = mTabFragment.getView();
-        int topBarHeight = mTopBar.getMeasuredHeight();
+        final int topBarHeight = mTopBar.getMeasuredHeight();
+        final int pivotY = mFlMain.getMeasuredHeight() >> 1;
+        final float scale = 1 - slideOffset * 0.1f;
 
-        int pivotY = (view.getMeasuredHeight() - topBarHeight) >> 1;
-        float scale = 1 - slideOffset * 0.1f;
         if (drawerView.getId() == R.id.fl_side) {
-          ViewHelper.setTranslationX(view, measuredWidth * slideOffset);
-          ViewHelper.setPivotX(view, 0f);
-          ViewHelper.setPivotY(view, pivotY);
-          ViewHelper.setScaleX(view, scale);
-          ViewHelper.setScaleY(view, scale);
+          final int measuredWidth = mFlSide.getMeasuredWidth();
+          ViewHelper.setTranslationX(mFlMain, measuredWidth * slideOffset);
+          ViewHelper.setPivotX(mFlMain, 0f);
+          ViewHelper.setPivotY(mFlMain, pivotY);
+          ViewHelper.setScaleX(mFlMain, scale);
+          ViewHelper.setScaleY(mFlMain, scale);
 
           ViewHelper.setTranslationX(mTopBar, measuredWidth * slideOffset);
           ViewHelper.setPivotX(mTopBar, 0f);
-          ViewHelper.setPivotY(mTopBar, pivotY + topBarHeight);
+          ViewHelper.setPivotY(mTopBar, pivotY);
           ViewHelper.setScaleX(mTopBar, scale);
           ViewHelper.setScaleY(mTopBar, scale);
 
           float scale2 = 0.7f + slideOffset * 0.3f;
-          ViewHelper.setPivotX(mFlSide, mFlSide.getMeasuredWidth());
+          ViewHelper.setPivotX(mFlSide, measuredWidth);
           ViewHelper.setPivotY(mFlSide, mFlSide.getMeasuredHeight() >> 1);
           ViewHelper.setScaleX(mFlSide, scale2);
           ViewHelper.setScaleY(mFlSide, scale2);
-          ViewHelper.setAlpha(mFlSide, slideOffset);
+          ViewHelper.setAlpha(mFlSide, slideOffset * slideOffset);
         } else {
-          ViewHelper.setTranslationX(view, - mFlRight.getMeasuredWidth() * slideOffset);
-          ViewHelper.setPivotX(view, view.getMeasuredWidth());
-          ViewHelper.setPivotY(view, pivotY);
-          ViewHelper.setScaleX(view, scale);
-          ViewHelper.setScaleY(view, scale);
+          int measuredWidth = mFlRight.getMeasuredWidth();
+          ViewHelper.setTranslationX(mFlMain, -measuredWidth * slideOffset);
+          ViewHelper.setPivotX(mFlMain, mFlMain.getMeasuredWidth());
+          ViewHelper.setPivotY(mFlMain, pivotY);
+          ViewHelper.setScaleX(mFlMain, scale);
+          ViewHelper.setScaleY(mFlMain, scale);
 
-          ViewHelper.setTranslationX(mTopBar, - mFlRight.getMeasuredWidth() * slideOffset);
-          ViewHelper.setPivotX(mTopBar, view.getMeasuredWidth());
-          ViewHelper.setPivotY(mTopBar, pivotY + topBarHeight);
+          ViewHelper.setTranslationX(mTopBar, -measuredWidth * slideOffset);
+          ViewHelper.setPivotX(mTopBar, mFlMain.getMeasuredWidth());
+          ViewHelper.setPivotY(mTopBar, pivotY);
           ViewHelper.setScaleX(mTopBar, scale);
           ViewHelper.setScaleY(mTopBar, scale);
 
@@ -261,7 +268,7 @@ public class HomeActivity extends BaseActivity {
           ViewHelper.setPivotY(mFlRight, mFlRight.getMeasuredHeight() >> 1);
           ViewHelper.setScaleX(mFlRight, scale2);
           ViewHelper.setScaleY(mFlRight, scale2);
-          ViewHelper.setAlpha(mFlRight, slideOffset);
+          ViewHelper.setAlpha(mFlRight, slideOffset * slideOffset);
         }
 
         ViewHelper.setTranslationY(mSend, U.dp2px(100) * slideOffset);
@@ -271,8 +278,10 @@ public class HomeActivity extends BaseActivity {
       public void onDrawerOpened(View drawerView) {
         if (drawerView.getId() == R.id.fl_side) {
           mDlContent.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, mFlRight);
+          mTopBar.mLlLeft.setSelected(true);
         } else {
           mDlContent.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, mFlSide);
+          mTopBar.mActionOverFlow.setSelected(true);
         }
       }
 
@@ -280,14 +289,14 @@ public class HomeActivity extends BaseActivity {
       public void onDrawerClosed(View drawerView) {
         mDlContent.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, mFlSide);
         mDlContent.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, mFlRight);
+        mTopBar.mActionOverFlow.setSelected(false);
+        mTopBar.mLlLeft.setSelected(false);
 
-        View view = mTabFragment.getView();
-
-        ViewHelper.setTranslationX(view, 0);
-        ViewHelper.setPivotX(view, 0);
-        ViewHelper.setPivotY(view, 0);
-        ViewHelper.setScaleX(view, 1);
-        ViewHelper.setScaleY(view, 1);
+        ViewHelper.setTranslationX(mFlMain, 0);
+        ViewHelper.setPivotX(mFlMain, 0);
+        ViewHelper.setPivotY(mFlMain, 0);
+        ViewHelper.setScaleX(mFlMain, 1);
+        ViewHelper.setScaleY(mFlMain, 1);
 
         ViewHelper.setTranslationX(mTopBar, 0);
         ViewHelper.setPivotX(mTopBar, 0);
@@ -335,6 +344,7 @@ public class HomeActivity extends BaseActivity {
       }
     }
     mDlContent.closeDrawer(mFlSide);
+    mDlContent.closeDrawer(mFlRight);
   }
 
   @Override
@@ -462,7 +472,7 @@ public class HomeActivity extends BaseActivity {
       mFactoryRegionFragment = new FactoryRegionFragment();
 
       getSupportFragmentManager().beginTransaction()
-          .add(R.id.content, mFactoryRegionFragment).commit();
+          .add(R.id.fl_main, mFactoryRegionFragment).commit();
     } else if (mFactoryRegionFragment.isDetached()) {
       getSupportFragmentManager().beginTransaction()
           .attach(mFactoryRegionFragment).commit();

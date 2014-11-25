@@ -51,20 +51,11 @@ import com.utree.eightysix.response.TagsResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.utils.ColorUtil;
-import com.utree.eightysix.utils.Env;
-import com.utree.eightysix.utils.IOUtils;
-import com.utree.eightysix.utils.ImageUtils;
-import com.utree.eightysix.utils.InputValidator;
-import com.utree.eightysix.widget.AsyncImageView;
-import com.utree.eightysix.widget.IndicatorView;
-import com.utree.eightysix.widget.PostEditText;
-import com.utree.eightysix.widget.TagView;
-import com.utree.eightysix.widget.TextActionButton;
-import com.utree.eightysix.widget.ThemedDialog;
-import com.utree.eightysix.widget.TopBar;
+import com.utree.eightysix.utils.*;
+import com.utree.eightysix.widget.*;
 import com.utree.eightysix.widget.panel.GridPanel;
 import com.utree.eightysix.widget.panel.Item;
+
 import java.io.File;
 import java.util.List;
 import java.util.Random;
@@ -81,7 +72,7 @@ public class PublishActivity extends BaseActivity {
   private static final int REQUEST_CODE_CROP = 0x4;
 
   @InjectView (R.id.et_post_content)
-  public PostEditText mPostEditText;
+  public EditText mPostEditText;
 
   @InjectView (R.id.tv_bottom)
   public TextView mTvBottom;
