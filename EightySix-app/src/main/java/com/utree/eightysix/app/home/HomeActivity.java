@@ -343,8 +343,6 @@ public class HomeActivity extends BaseActivity {
         mMenuViewHolder.mRbSettingsDot.setVisibility(View.INVISIBLE);
       }
     }
-    mDlContent.closeDrawer(mFlSide);
-    mDlContent.closeDrawer(mFlRight);
   }
 
   @Override
@@ -657,49 +655,41 @@ public class HomeActivity extends BaseActivity {
     @OnClick (R.id.rl_my_friends)
     void onLlMyFriendsClicked() {
       startActivity(new Intent(HomeActivity.this, AccountActivity.class));
-      mDlContent.closeDrawer(mFlRight);
     }
 
     @OnClick (R.id.rb_add)
     void onRbAddClicked() {
       startActivity(new Intent(HomeActivity.this, AddFriendActivity.class));
-      mDlContent.closeDrawer(mFlRight);
     }
 
     @OnClick (R.id.ll_invite)
     void onLlInviteClicked() {
       showInviteDialog();
-      mDlContent.closeDrawer(mFlRight);
     }
 
     @OnClick (R.id.rl_praise_count)
     void onLlPraiseCountClicked() {
       PraiseActivity.start(HomeActivity.this, Account.inst().getHasNewPraise());
-      mDlContent.closeDrawer(mFlRight);
     }
 
     @OnClick (R.id.ll_feedback)
     void onLlFeedbackClicked() {
       FeedbackActivity.start(HomeActivity.this);
-      mDlContent.closeDrawer(mFlRight);
     }
 
     @OnClick (R.id.ll_settings)
     void onLlSettingsClicked() {
       startActivity(new Intent(HomeActivity.this, MainSettingsActivity.class));
-      mDlContent.closeDrawer(mFlRight);
     }
 
     @OnClick (R.id.ll_help)
     void onLlHelpClicked() {
       startActivity(new Intent(HomeActivity.this, HelpActivity.class));
-      mDlContent.closeDrawer(mFlRight);
     }
 
     @OnClick (R.id.rl_topic_list)
     void onLlTopicListClicked() {
       TopicListActivity.start(HomeActivity.this);
-      mDlContent.closeDrawer(mFlRight);
     }
   }
 
