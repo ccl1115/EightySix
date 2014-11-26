@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -22,6 +21,7 @@ import butterknife.OnTextChanged;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import de.akquinet.android.androlog.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,6 +77,9 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
   @InjectView (R.id.tb_v_divider)
   public View mVDivider;
+
+  @InjectView(R.id.refresh_indicator)
+  public RefreshIndicator mRefreshIndicator;
 
   private Callback mCallback;
   private ActionAdapter mActionAdapter;
@@ -158,7 +161,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
       } else {
         view = buildActionItemView(mActionAdapter.getTitle(i), mActionAdapter.getBackgroundDrawable(i), layoutParams);
       }
-      addView(view);
+      addView(view, 0);
       mActionViews.add(view);
     }
     requestLayout();
@@ -296,6 +299,8 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     mLlSearch.layout(mIvAppIcon.getRight(), 0, mIvAppIcon.getRight() + mLlSearch.getMeasuredWidth(), b);
 
+    mRefreshIndicator.layout(l, t, r, b);
+
     mActionOverFlow.layout(r - mActionOverFlow.getMeasuredWidth(), 0, r, b);
 
     r -= mActionOverFlow.getMeasuredWidth();
@@ -397,6 +402,8 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     measureChild(mLlLeft, widthLeft + MeasureSpec.AT_MOST, heightSize + MeasureSpec.EXACTLY);
 
     measureChild(mLlSearch, widthSize - mIvAppIcon.getRight() + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
+
+    measureChild(mRefreshIndicator, widthSize + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
 
 
     setMeasuredDimension(widthSize, heightSize);

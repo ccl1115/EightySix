@@ -70,7 +70,6 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   private LinearLayout mLlLoadingWrapper;
   private TextView mTvLoadingText;
   private ViewGroup mBaseView;
-  private RefreshIndicator mRefreshIndicator;
   private ObjectAnimator mHideTopBarAnimator;
   private ObjectAnimator mShowTopBarAnimator;
   private AnimatorSet mShowProgressBarAnimator;
@@ -401,7 +400,6 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     mVProgressMask = mBaseView.findViewById(R.id.v_progress_mask);
     mLlLoadingWrapper = (LinearLayout) mBaseView.findViewById(R.id.fl_loading_wrapper);
     mTvLoadingText = (TextView) mBaseView.findViewById(R.id.tv_loading);
-    mRefreshIndicator = (RefreshIndicator) mBaseView.findViewById(R.id.refresh_indicator);
 
     mTopBar.setCallback(this);
 
@@ -496,15 +494,15 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   }
 
   public final void showRefreshIndicator() {
-    mRefreshIndicator.show();
+    mTopBar.mRefreshIndicator.show();
   }
 
   public final void showRefreshIndicator(boolean progressing) {
-    mRefreshIndicator.show(progressing);
+    mTopBar.mRefreshIndicator.show(progressing);
   }
 
   public final void hideRefreshIndicator() {
-    mRefreshIndicator.hide();
+    mTopBar.mRefreshIndicator.hide();
   }
 
   protected final String getTopTitle() {
