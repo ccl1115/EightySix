@@ -211,14 +211,12 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   }
 
   public final <T extends Response> void request(Object request, OnResponse<T> onResponse, Class<T> clz) {
-    RequestData data = U.getRESTRequester().convert(request);
-
+    RequestData data = new RequestData(request);
     U.getRESTRequester().request(request, new HandlerWrapper<T>(data, onResponse, clz));
   }
 
   public final <T extends Response> void cacheOut(Object request, OnResponse<T> onResponse, Class<T> clz) {
-    RequestData data = U.getRESTRequester().convert(request);
-
+    RequestData data = new RequestData(request);
     new CacheOutWorker<T>(RESTRequester.genCacheKey(data.getApi(), data.getParams()), onResponse, clz).execute();
   }
 
@@ -526,12 +524,12 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   }
 
   protected final void cacheIn(Object request, InputStream is) {
-    RequestData data = U.getRESTRequester().convert(request);
+    RequestData data = new RequestData(request);
     new CacheInWorker(RESTRequester.genCacheKey(data.getApi(), data.getParams()), is).execute();
   }
 
   protected final void cacheIn(Object request, String string) {
-    RequestData data = U.getRESTRequester().convert(request);
+    RequestData data = new RequestData(request);
     new CacheInWorker(RESTRequester.genCacheKey(data.getApi(), data.getParams()), string).execute();
   }
 

@@ -8,13 +8,13 @@ import com.utree.eightysix.applogger.EntryAdapter;
 import com.utree.eightysix.applogger.Payload;
 import com.utree.eightysix.utils.IOUtils;
 import de.akquinet.android.androlog.Log;
-import java.net.UnknownHostException;
-import java.text.SimpleDateFormat;
 import org.apache.http.HttpStatus;
 import org.apache.http.NoHttpResponseException;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -35,7 +35,7 @@ public final class HandlerWrapper<T extends Response> extends BaseJsonHttpRespon
   }
 
   public HandlerWrapper(Object object, OnResponse<T> onResponse, Class<T> clz) {
-    this(U.getRESTRequester().convert(object), onResponse, clz);
+    this(new RequestData(object), onResponse, clz);
   }
 
   @Override

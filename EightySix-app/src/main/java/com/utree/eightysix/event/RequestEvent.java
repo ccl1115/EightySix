@@ -1,26 +1,27 @@
 package com.utree.eightysix.event;
 
+import android.support.annotation.NonNull;
 import com.utree.eightysix.rest.RequestData;
 
 /**
  * @author simon
  */
-public class RequestEvent {
+public class RequestEvent implements Comparable<RequestEvent> {
 
   private String mId;
 
   private RequestData mRequestData;
 
-  private Class mResClz;
+  private int mPriority;
 
-  public RequestEvent(String mId, RequestData mRequestData, Class mResClz) {
-    this.mId = mId;
-    this.mRequestData = mRequestData;
-    this.mResClz = mResClz;
+  public RequestEvent(String id, RequestData requestData) {
+    this.mId = id;
+    this.mRequestData = requestData;
   }
 
-  public Class getResClz() {
-    return mResClz;
+  public RequestEvent(String id, RequestData requestData, int priority) {
+    this(id, requestData);
+    mPriority = priority;
   }
 
   public RequestData getRequestData() {
@@ -29,5 +30,33 @@ public class RequestEvent {
 
   public String getId() {
     return mId;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    RequestEvent that = (RequestEvent) o;
+
+    if (mId != null ? !mId.equals(that.mId) : that.mId != null) return false;
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return mId != null ? mId.hashCode() : 0;
+  }
+
+  @Override
+  public int compareTo(@NonNull RequestEvent another) {
+    if (mPriority > another.mPriority) {
+      return 1;
+    } else if (mPriority < another.mPriority) {
+      return -1;
+    } else {
+      return 0;
+    }
   }
 }

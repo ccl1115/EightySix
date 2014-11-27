@@ -128,7 +128,7 @@ public class FetchNotificationService extends Service {
       }
     }
 
-    RequestData data = U.getRESTRequester().convert(new FetchNotificationRequest(sCircleId));
+    RequestData data = new RequestData(new FetchNotificationRequest(sCircleId));
     U.getRESTRequester().request(data, new HandlerWrapper<FetchResponse>(data, new OnResponse2<FetchResponse>() {
 
       private final int circleId = sCircleId;

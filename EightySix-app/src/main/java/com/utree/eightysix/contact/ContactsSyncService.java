@@ -104,7 +104,7 @@ public class ContactsSyncService extends IntentService {
       @Override
       public void run() {
         final ImportContactsRequest request = new ImportContactsRequest();
-        RequestData data = U.getRESTRequester().convert(request);
+        RequestData data = new RequestData(request);
         StringBuilder builder = new StringBuilder();
         for (Contact contact : contacts) {
           contact.name = contact.name.replaceAll(";;;|___", "");

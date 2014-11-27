@@ -216,7 +216,7 @@ public class Account {
      * When fire this event, start the login activity.
      */
     public LogoutEvent() {
-      RequestData data = U.getRESTRequester().convert(new LogoutRequest());
+      RequestData data = new RequestData(new LogoutRequest());
       U.getRESTRequester().request(data, new HandlerWrapper<Response>(data, new OnResponse<Response>() {
         @Override
         public void onResponse(Response response) {

@@ -72,7 +72,7 @@ public class PullNotificationService extends Service {
   }
 
   private void requestPullNotification(final int type, final String seq) {
-    RequestData data = U.getRESTRequester().convert(new PullNotificationRequest(type, seq));
+    RequestData data = new RequestData(new PullNotificationRequest(type, seq));
     U.getRESTRequester().request(data, new HandlerWrapper<PullNotificationResponse>(data,
         new OnResponse2<PullNotificationResponse>() {
           @Override

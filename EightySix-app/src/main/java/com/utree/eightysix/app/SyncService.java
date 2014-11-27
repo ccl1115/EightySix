@@ -1,20 +1,17 @@
 package com.utree.eightysix.app;
 
-import android.app.IntentService;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.U;
-import com.utree.eightysix.data.Sync;
 import com.utree.eightysix.request.SyncRequest;
 import com.utree.eightysix.response.SyncResponse;
 import com.utree.eightysix.rest.HandlerWrapper;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.RequestData;
-import com.utree.eightysix.rest.Response;
 
 /**
  * @author simon
@@ -44,7 +41,7 @@ public class SyncService extends Service {
 
   private void requestSync() {
     sSyncing = true;
-    RequestData data = U.getRESTRequester().convert(new SyncRequest(U.getConfig("app.parentId")));
+    RequestData data = new RequestData(new SyncRequest(U.getConfig("app.parentId")));
     U.getRESTRequester().request(data, new HandlerWrapper<SyncResponse>(data, new OnResponse2<SyncResponse>() {
       @Override
       public void onResponseError(Throwable e) {

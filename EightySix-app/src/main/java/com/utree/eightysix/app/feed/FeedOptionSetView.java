@@ -261,8 +261,8 @@ public class FeedOptionSetView extends FrameLayout {
 
   private void requestSubmit(String text) {
     showProgress();
-    RequestData data = U.getRESTRequester().convert(
-        new SubmitAnswerRequest(mCircleId,
+    RequestData data =
+        new RequestData(new SubmitAnswerRequest(mCircleId,
             text,
             mData.options.get(mCurrent).quesId));
 
@@ -285,7 +285,7 @@ public class FeedOptionSetView extends FrameLayout {
 
   private void requestBack() {
     showProgress();
-    RequestData data = U.getRESTRequester().convert(new OptionBackRequest(mCircleId));
+    RequestData data = new RequestData(new OptionBackRequest(mCircleId));
 
     U.getRESTRequester().request(data, new HandlerWrapper<OptionSetResponse>(data, new OnResponse2<OptionSetResponse>() {
       @Override

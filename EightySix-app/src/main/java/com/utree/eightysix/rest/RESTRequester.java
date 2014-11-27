@@ -13,16 +13,7 @@ import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.MD5Util;
 import de.akquinet.android.androlog.Log;
 import org.apache.http.Header;
-import org.apache.http.message.BasicHeader;
 import org.apache.http.params.HttpProtocolParams;
-
-import java.io.File;
-import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  */
@@ -60,8 +51,13 @@ public class RESTRequester implements IRESTRequester {
 
   @Override
   public RequestHandle request(Object request, ResponseHandlerInterface handler) {
-    RequestData data = convert(request);
-    return request(data, handler);
+    return request(new RequestData(request), handler);
+  }
+
+  @Override
+  public <T extends Response> RequestHandle request(Object request, OnResponse<T> onResponse, Class<T> clz) {
+    RequestData data = new RequestData(request);
+    return request(data, new HandlerWrapper<T>(data, onResponse, clz));
   }
 
   @Override
@@ -92,89 +88,8 @@ public class RESTRequester implements IRESTRequester {
   }
 
   @Override
-  public <T extends Response> RequestHandle request(Object request, OnResponse<T> onResponse, Class<T> clz) {
-    RequestData data = convert(request);
-    return request(data, new HandlerWrapper<T>(data, onResponse, clz));
-  }
-
-  @Override
   public RequestData convert(Object request) {
-    RequestData data = new RequestData();
-    Class<?> clz = request.getClass();
-
-    List<Header> headers = new ArrayList<Header>();
-
-    try {
-      data.setApi(clz.getAnnotation(Api.class).value());
-      data.setParams(new RequestParams());
-
-      Cache cache = clz.getAnnotation(Cache.class);
-      data.setCache(cache != null);
-
-      com.utree.eightysix.rest.Log log = clz.getAnnotation(com.utree.eightysix.rest.Log.class);
-      data.setLog(log != null);
-
-      Token token = clz.getAnnotation(Token.class);
-      if (token != null && Account.inst().isLogin()) {
-        addAuthParams(data.getParams());
-      }
-
-      Method method = clz.getAnnotation(Method.class);
-      if (method != null) {
-        data.setMethod(method.value());
-      } else {
-        data.setMethod(Method.POST);
-      }
-
-      Host host = clz.getAnnotation(Host.class);
-      if (host != null) {
-        data.setHost(host.value());
-      }
-
-      Sign sign = clz.getAnnotation(Sign.class);
-      data.setSign(sign != null);
-
-      for (Field f : clz.getFields()) {
-        Param p = f.getAnnotation(Param.class);
-
-        if (p != null) {
-          Object value = f.get(request);
-          if (value == null) {
-            if (f.getAnnotation(Optional.class) == null) {
-              throw new IllegalArgumentException("value is null, add @Optional");
-            } else {
-              continue;
-            }
-          }
-          if (value instanceof List || value instanceof Set || value instanceof Map) {
-            data.getParams().put(p.value(), value);
-          } else if (value instanceof File) {
-            data.getParams().put(p.value(), (File) value);
-          } else if (value instanceof InputStream) {
-            data.getParams().put(p.value(), (InputStream) value);
-          } else {
-            data.getParams().put(p.value(), String.valueOf(value));
-          }
-        }
-
-        com.utree.eightysix.rest.Header h = f.getAnnotation(com.utree.eightysix.rest.Header.class);
-
-        if (h != null) {
-          headers.add(new BasicHeader(h.value(), (String) f.get(request)));
-        }
-      }
-
-      if (headers.size() > 0) {
-        data.setHeaders(new Header[headers.size()]);
-        headers.toArray(data.getHeaders());
-      }
-    } catch (Throwable t) {
-      if (BuildConfig.DEBUG) {
-        throw new IllegalArgumentException("Request object parse failed", t);
-      }
-    }
-
-    return data;
+    throw new RuntimeException("do not call this method");
   }
 
   @Override

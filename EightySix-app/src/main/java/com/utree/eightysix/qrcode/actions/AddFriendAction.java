@@ -44,7 +44,7 @@ public class AddFriendAction implements Action {
 
   @Override
   public void act(Uri uri) {
-    RequestData data = U.getRESTRequester().convert(new AddFriendRequest(mId, 1));
+    RequestData data = new RequestData(new AddFriendRequest(mId, 1));
     U.getRESTRequester().request(data, new HandlerWrapper<Response>(data, new OnResponse2<Response>() {
       @Override
       public void onResponseError(Throwable e) {
