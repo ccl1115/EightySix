@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="26" android:versionName="1.5.1" package="com.utree.eightysix">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="28" android:versionName="1.5.3" package="com.utree.eightysix">
 
     <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="21"/>
 
@@ -170,12 +170,8 @@
         <service android:enabled="true" android:name=".app.SyncService"/>
         <service android:enabled="true" android:name=".app.msg.PullNotificationService"/>
         <service android:enabled="true" android:name=".app.settings.UpgradeService"/>
-        <service
-                android:enabled="true"
-                android:name=".utils.PingService"/>
-        <service
-                android:enabled="true"
-                android:name=".app.publish.BgSyncService"/>
+        <service android:enabled="true" android:name=".utils.PingService"/>
+        <service android:enabled="true" android:name=".app.publish.BgSyncService"/>
 
 
         <service android:enabled="true" android:name="com.baidu.location.f" android:process=":bdservice_v1"/>

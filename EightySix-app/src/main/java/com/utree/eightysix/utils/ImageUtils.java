@@ -29,7 +29,7 @@ import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.*;
 /**
  */
 public class ImageUtils {
-  public static final int MAX_SIZE = (((ActivityManager) U.getContext().getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass() >> 4) * 1024 * 1024;
+  public static final int MAX_SIZE = (((ActivityManager) U.getContext().getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass() >> 2) * 1024 * 1024;
   private static final String TAG = "ImageUtils";
   private static LruCache<String, Bitmap> sLruCache = new LruCache<String, Bitmap>(
       MAX_SIZE) {
