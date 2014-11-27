@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
+import android.util.*;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,13 +61,15 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
       BaseActivity.this.onHandleMessage(msg);
     }
   };
+
   public View mVProgressMask;
+
+  protected TopBar mTopBar;
+
   private FrameLayout mProgressBar;
   private LinearLayout mLlLoadingWrapper;
   private TextView mTvLoadingText;
   private ViewGroup mBaseView;
-  private TopBar mTopBar;
-  private RefreshIndicator mRefreshIndicator;
   private ObjectAnimator mHideTopBarAnimator;
   private ObjectAnimator mShowTopBarAnimator;
   private AnimatorSet mShowProgressBarAnimator;
@@ -314,11 +317,14 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
 
   }
 
-  protected boolean isFillContent() {
+  /**
+   * @return true if fill window content
+   */
+  protected final boolean isFillContent() {
     return mFillContent;
   }
 
-  public void setFillContent(boolean fillContent) {
+  protected final  void setFillContent(boolean fillContent) {
     if (mFillContent == fillContent) return;
     mFillContent = fillContent;
     ((RelativeLayout.LayoutParams) mBaseView.findViewById(R.id.content).getLayoutParams()).topMargin =
@@ -394,7 +400,6 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     mVProgressMask = mBaseView.findViewById(R.id.v_progress_mask);
     mLlLoadingWrapper = (LinearLayout) mBaseView.findViewById(R.id.fl_loading_wrapper);
     mTvLoadingText = (TextView) mBaseView.findViewById(R.id.tv_loading);
-    mRefreshIndicator = (RefreshIndicator) mBaseView.findViewById(R.id.refresh_indicator);
 
     mTopBar.setCallback(this);
 
@@ -436,6 +441,8 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     hideProgressBar();
 
     super.onDestroy();
+
+    android.util.Log.d("BaseActivity", "onDestroy");
   }
 
   @Override
@@ -487,15 +494,15 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   }
 
   public final void showRefreshIndicator() {
-    mRefreshIndicator.show();
+    mTopBar.mRefreshIndicator.show();
   }
 
   public final void showRefreshIndicator(boolean progressing) {
-    mRefreshIndicator.show(progressing);
+    mTopBar.mRefreshIndicator.show(progressing);
   }
 
   public final void hideRefreshIndicator() {
-    mRefreshIndicator.hide();
+    mTopBar.mRefreshIndicator.hide();
   }
 
   protected final String getTopTitle() {

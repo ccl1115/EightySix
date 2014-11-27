@@ -58,16 +58,22 @@
                 android:textColor="@android:color/white"
                 android:text="@string/post_anonymously"/>
 
-        <com.utree.eightysix.widget.PostEditText
-                style="@style/TextView.PostStyle"
+        <EditText
                 android:id="@+id/et_post_content"
                 android:layout_gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/transparent"
                 android:paddingLeft="48dp"
                 android:paddingRight="48dp"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
                 android:maxLength="77"
-                android:textColor="@android:color/white"/>
+                android:maxLines="7"
+                android:inputType="textMultiLine"
+                android:textColor="@android:color/white"
+                android:textSize="23sp"
+                android:gravity="center"/>
 
     </FrameLayout>
 
@@ -78,7 +84,7 @@
             android:layout_height="45dp"
             android:background="@android:color/white"
             android:orientation="horizontal"
-            android:gravity="right"
+            android:gravity="end"
             android:paddingLeft="15dp"
             android:paddingRight="15dp">
 
@@ -115,6 +121,7 @@
                 android:layout_marginRight="8dp"
                 android:paddingBottom="12dp"
                 android:maxLength="6"
+                android:textColor="#ffcccccc"
                 android:hint="填个临时名字"/>
 
 
@@ -161,22 +168,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:clickable="false">
-
-            <!--<com.utree.eightysix.widget.RoundedButton-->
-            <!--app:radius="61dp"-->
-            <!--app:background="#fff3f3f3"-->
-            <!--android:layout_width="61dp"-->
-            <!--android:layout_height="61dp"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:clickable="false"/>-->
-
-            <!--<com.utree.eightysix.widget.RoundedButton-->
-            <!--app:radius="60dp"-->
-            <!--app:background="#ffffffff"-->
-            <!--android:layout_width="60dp"-->
-            <!--android:layout_height="60dp"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:clickable="false"/>-->
 
             <ImageView
                     android:layout_width="48dp"

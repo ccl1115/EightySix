@@ -1,15 +1,8 @@
 package com.utree.eightysix.app.msg;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.text.TextUtils;
 import android.util.AttributeSet;
-import com.squareup.otto.Subscribe;
-import com.utree.eightysix.R;
-import com.utree.eightysix.U;
 import com.utree.eightysix.data.Post;
-import com.utree.eightysix.utils.ColorUtil;
-import com.utree.eightysix.utils.ImageUtils;
 
 /**
  * @author simon
@@ -41,6 +34,8 @@ public class PraiseMsgItemView extends BaseMsgItemView {
     } else {
       mTvCountLeft.setText(String.valueOf(left.praise));
     }
+
+    mIvUnfollowLeft.setVisibility(GONE);
   }
 
   @Override
@@ -61,5 +56,7 @@ public class PraiseMsgItemView extends BaseMsgItemView {
     } else {
       mTvCountRight.setText(String.valueOf(right.praise));
     }
+
+    mIvUnfollowRight.setVisibility(GONE);
   }
 }

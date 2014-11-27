@@ -7,9 +7,9 @@ import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import com.aliyun.android.util.MD5Util;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.utils.ImageUtils;
+import com.utree.eightysix.utils.MD5Util;
 
 /**
  * @author simon

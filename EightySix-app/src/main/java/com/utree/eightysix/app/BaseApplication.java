@@ -8,6 +8,7 @@ import android.os.Handler;
 import com.tencent.cloudsdk.tsocket.GlobalContext;
 import com.utree.eightysix.C;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.publish.BgSyncService;
 import com.utree.eightysix.push.FetchAlarmReceiver;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.PingService;
@@ -67,6 +68,8 @@ public class BaseApplication extends Application {
       // 环信聊天初始化
       //EMChat.getInstance().init(this);
       //ChatAccount.inst();
+
+      startService(new Intent(this, BgSyncService.class));
     }
   }
 

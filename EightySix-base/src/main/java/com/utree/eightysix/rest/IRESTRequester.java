@@ -2,7 +2,6 @@ package com.utree.eightysix.rest;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestHandle;
-import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.ResponseHandlerInterface;
 import org.apache.http.Header;
 
