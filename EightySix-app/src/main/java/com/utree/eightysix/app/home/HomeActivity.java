@@ -149,10 +149,10 @@ public class HomeActivity extends BaseActivity {
       mDlContent.closeDrawer(mFlRight);
     } else if (mDlContent.isDrawerOpen(mFlSide)) {
       mDlContent.closeDrawer(mFlSide);
-      mTopBar.mLlLeft.setSelected(false);
+      mTopBar.mFlLeft.setSelected(false);
     } else {
       mDlContent.openDrawer(mFlSide);
-      mTopBar.mLlLeft.setSelected(true);
+      mTopBar.mFlLeft.setSelected(true);
     }
   }
 
@@ -160,10 +160,8 @@ public class HomeActivity extends BaseActivity {
   public void onActionOverflowClicked() {
     if (mDlContent.isDrawerOpen(mFlSide)) {
       mDlContent.closeDrawer(mFlSide);
-      mTopBar.mActionOverFlow.setSelected(false);
     } else {
       openMenu();
-      mTopBar.mActionOverFlow.setSelected(true);
     }
   }
 
@@ -278,10 +276,9 @@ public class HomeActivity extends BaseActivity {
       public void onDrawerOpened(View drawerView) {
         if (drawerView.getId() == R.id.fl_side) {
           mDlContent.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, mFlRight);
-          mTopBar.mLlLeft.setSelected(true);
+          mTopBar.mFlLeft.setSelected(true);
         } else {
           mDlContent.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, mFlSide);
-          mTopBar.mActionOverFlow.setSelected(true);
         }
       }
 
@@ -289,8 +286,6 @@ public class HomeActivity extends BaseActivity {
       public void onDrawerClosed(View drawerView) {
         mDlContent.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, mFlSide);
         mDlContent.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, mFlRight);
-        mTopBar.mActionOverFlow.setSelected(false);
-        mTopBar.mLlLeft.setSelected(false);
 
         ViewHelper.setTranslationX(mFlMain, 0);
         ViewHelper.setPivotX(mFlMain, 0);
