@@ -27,7 +27,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.feed.FeedActivity;
-import com.utree.eightysix.app.home.HomeActivity;
+import com.utree.eightysix.app.home.HomeTabActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.drawable.RoundRectDrawable;
@@ -119,7 +119,7 @@ public class BaseCirclesActivity extends BaseActivity {
         circle.selected = true;
         if (circle.currFactory == 1) {
           finish();
-          HomeActivity.start(this, 0);
+          HomeTabActivity.start(this);
         } else {
           FeedActivity.start(this, circle, true);
         }
@@ -322,7 +322,7 @@ public class BaseCirclesActivity extends BaseActivity {
         .setPositiveButton("停止", new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
-            HomeActivity.start(BaseCirclesActivity.this);
+            HomeTabActivity.start(BaseCirclesActivity.this);
             finish();
           }
         }).setNegativeButton("继续", new DialogInterface.OnClickListener() {
@@ -405,7 +405,7 @@ public class BaseCirclesActivity extends BaseActivity {
       @Override
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
-          HomeActivity.start(BaseCirclesActivity.this, 0);
+          HomeTabActivity.start(BaseCirclesActivity.this);
           finish();
         }
       }

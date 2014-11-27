@@ -23,7 +23,7 @@ public class MD5Util {
       algorithm.reset();
       algorithm.update(bytes);
 
-      return toHexString(algorithm.digest());
+      return toHexString(algorithm.digest()).toLowerCase();
     } catch (NoSuchAlgorithmException e) {
       return null;
     }
@@ -65,7 +65,7 @@ public class MD5Util {
       while ((n = inputStream.read(buffer)) != -1) {
         algorithm.update(buffer, 0, n);
       }
-      return toHexString(algorithm.digest());
+      return toHexString(algorithm.digest()).toLowerCase();
     } catch (FileNotFoundException e) {
       return null;
     } catch (NoSuchAlgorithmException e) {

@@ -15,6 +15,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.app.home.HomeActivity;
+import com.utree.eightysix.app.home.HomeTabActivity;
 import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.push.PushMessageReceiver;
 
@@ -115,7 +116,7 @@ public class NotifyUtil {
 
     if (current) {
       builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
-          HomeActivity.getIntent(mContext, 0, 0), PendingIntent.FLAG_UPDATE_CURRENT));
+          HomeTabActivity.getIntent(mContext), PendingIntent.FLAG_UPDATE_CURRENT));
     } else {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
         builder.setContentIntent(PendingIntent.getActivities(mContext, 0,
@@ -203,7 +204,7 @@ public class NotifyUtil {
 
     if (current) {
       builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
-          HomeActivity.getIntent(mContext, 0, 0), PendingIntent.FLAG_UPDATE_CURRENT));
+          HomeTabActivity.getIntent(mContext), PendingIntent.FLAG_UPDATE_CURRENT));
     } else {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
         builder.setContentIntent(PendingIntent.getActivities(mContext, 0,

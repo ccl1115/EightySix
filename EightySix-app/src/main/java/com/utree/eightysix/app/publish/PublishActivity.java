@@ -19,6 +19,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -51,20 +52,11 @@ import com.utree.eightysix.response.TagsResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.utils.ColorUtil;
-import com.utree.eightysix.utils.Env;
-import com.utree.eightysix.utils.IOUtils;
-import com.utree.eightysix.utils.ImageUtils;
-import com.utree.eightysix.utils.InputValidator;
-import com.utree.eightysix.widget.AsyncImageView;
-import com.utree.eightysix.widget.IndicatorView;
-import com.utree.eightysix.widget.PostEditText;
-import com.utree.eightysix.widget.TagView;
-import com.utree.eightysix.widget.TextActionButton;
-import com.utree.eightysix.widget.ThemedDialog;
-import com.utree.eightysix.widget.TopBar;
+import com.utree.eightysix.utils.*;
+import com.utree.eightysix.widget.*;
 import com.utree.eightysix.widget.panel.GridPanel;
 import com.utree.eightysix.widget.panel.Item;
+
 import java.io.File;
 import java.util.List;
 import java.util.Random;
@@ -81,7 +73,7 @@ public class PublishActivity extends BaseActivity {
   private static final int REQUEST_CODE_CROP = 0x4;
 
   @InjectView (R.id.et_post_content)
-  public PostEditText mPostEditText;
+  public EditText mPostEditText;
 
   @InjectView (R.id.tv_bottom)
   public TextView mTvBottom;
@@ -349,13 +341,19 @@ public class PublishActivity extends BaseActivity {
         });
 
     mPostEditText.addTextChangedListener(new TextWatcher() {
+
+      private CharSequence mBefore;
       @Override
       public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+        mBefore = s;
       }
 
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count) {
+      }
+
+      @Override
+      public void afterTextChanged(Editable s) {
         if (s.length() == 0) {
           mTvPostTip.setVisibility(View.VISIBLE);
           disablePublishButton();
@@ -364,21 +362,31 @@ public class PublishActivity extends BaseActivity {
           enablePublishButton();
         }
 
-        if (s.length() > U.getConfigInt("post.length")) {
-          final int selection = mPostEditText.getSelectionStart();
-          s = s.subSequence(0, U.getConfigInt("post.length"));
-          mPostEditText.setText(s);
-          mPostEditText.setSelection(Math.min(selection, s.length()));
+        final int length = U.getConfigInt("post.length");
+        if (s.length() > length) {
+          mPostEditText.setText(mBefore);
+          mPostEditText.setSelection(mBefore.length());
+        } else if (mPostEditText.getLineCount() > 7) {
+          mPostEditText.setText(mBefore);
+          mPostEditText.setSelection(mBefore.length());
         }
 
-        if (!InputValidator.post(s) && count > 0) {
-          showToast(U.gfs(R.string.post_over_length, U.getConfigInt("post.length")));
+        if (!InputValidator.post(s)) {
+          showToast(U.gfs(R.string.post_over_length, length));
         }
       }
+    });
 
+    mPostEditText.setOnKeyListener(new View.OnKeyListener() {
       @Override
-      public void afterTextChanged(Editable s) {
-
+      public boolean onKey(View view, int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+          int editTextLineCount = ((EditText) view).getLineCount();
+          if (editTextLineCount >= 7) {
+            return true;
+          }
+        }
+        return false;
       }
     });
 
@@ -502,10 +510,9 @@ public class PublishActivity extends BaseActivity {
       randomItem();
       return;
     }
-    if (event.getHash().equals(mFileHash)) {
-      mImageUploadFinished = true;
-      mImageUploadUrl = event.getUrl();
-    }
+
+    mImageUploadFinished = true;
+    mImageUploadUrl = event.getUrl();
 
     if (mRequestStarted) {
       requestPublish();
@@ -873,6 +880,7 @@ public class PublishActivity extends BaseActivity {
 
           mTagsLayout.setTag(mTags);
           mEtTempName.setText(mLastTempName);
+          mEtTempName.setTextColor(0xffcccccc);
         }
         requestTags();
       }
@@ -894,6 +902,7 @@ public class PublishActivity extends BaseActivity {
 
           mTagsLayout.setTag(mTags);
           mEtTempName.setText(mLastTempName);
+          mEtTempName.setTextColor(0xffcccccc);
         }
       }
     }, TagsResponse.class);

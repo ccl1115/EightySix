@@ -12,7 +12,7 @@ import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.FeedActivity;
-import com.utree.eightysix.app.home.HomeActivity;
+import com.utree.eightysix.app.home.HomeTabActivity;
 import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.msg.PraiseActivity;
@@ -199,24 +199,24 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
       if ("feed".equals(args[0])) {
         FeedActivity.start(context, Integer.parseInt(args[1]));
       } else if ("post".equals(args[0])) {
-        HomeActivity.start(context);
+        HomeTabActivity.start(context);
         PostActivity.start(context, args[1]);
       } else if ("msg".equals(args[0])) {
-        HomeActivity.start(context);
+        HomeTabActivity.start(context);
         MsgActivity.start(context, true);
       } else if ("praise".equals(args[0])) {
-        HomeActivity.start(context);
+        HomeTabActivity.start(context);
         PraiseActivity.start(context, true);
       } else if ("topic-list".equals(args[0])) {
-        HomeActivity.start(context);
+        HomeTabActivity.start(context);
         TopicListActivity.start(context);
       } else if ("topic".equals(args[0])) {
-        HomeActivity.start(context);
+        HomeTabActivity.start(context);
         Topic topic = new Topic();
         topic.id = Integer.parseInt(args[1]);
         TopicActivity.start(context, topic);
       } else if ("tag".equals(args[0])) {
-        HomeActivity.start(context);
+        HomeTabActivity.start(context);
         TagTabActivity.start(context, Integer.parseInt(args[1]));
       }
     }

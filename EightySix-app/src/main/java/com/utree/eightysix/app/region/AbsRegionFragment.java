@@ -16,7 +16,6 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.feed.FeedAdapter;
 import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
-import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
@@ -304,10 +303,6 @@ public abstract class AbsRegionFragment extends BaseFragment {
       mPageInfo = response.object.posts.page;
       getBaseActivity().setTopSubTitle(response.object.subInfo);
 
-      ((HomeActivity) getBaseActivity()).mSend.setImageResource(response.object.lock != 1 || response.object.current == 1 ?
-          R.drawable.ic_post_pen : R.drawable.ic_post_pen_disabled);
-
-
       if (response.object.fetch != null) {
         int count = 0;
         if (response.object.fetch.newComment != null) {
@@ -329,16 +324,13 @@ public abstract class AbsRegionFragment extends BaseFragment {
         if (getRegionType() == 0 && mCircle != null) {
           U.getBus().post(new NewAllPostCountEvent(mCircle.id, response.object.fetch.newPostAllCount));
           U.getBus().post(new NewHotPostCountEvent(mCircle.id, response.object.fetch.newPostHotCount));
-          U.getBus().post(new NewFriendsPostCountEvent(mCircle.id, response.object.fetch.newPostFriendsCount));
         } else {
           U.getBus().post(new NewAllPostCountEvent(0, 0));
           U.getBus().post(new NewHotPostCountEvent(0, 0));
-          U.getBus().post(new NewFriendsPostCountEvent(0, 0));
         }
       } else {
         U.getBus().post(new NewAllPostCountEvent(0, 0));
         U.getBus().post(new NewHotPostCountEvent(0, 0));
-        U.getBus().post(new NewFriendsPostCountEvent(0, 0));
       }
 
       if (getRegionType() == 0) {
@@ -402,9 +394,6 @@ public abstract class AbsRegionFragment extends BaseFragment {
       mPageInfo = response.object.posts.page;
       mRegionType = response.object.regionType;
       getBaseActivity().setTopSubTitle(response.object.subInfo);
-
-      ((HomeActivity) getBaseActivity()).mSend.setImageResource(response.object.lock != 1 || response.object.current == 1 ?
-          R.drawable.ic_post_pen : R.drawable.ic_post_pen_disabled);
 
       FetchNotificationService.setCircleId(mCircle == null ? 0 : mCircle.id);
     } else {

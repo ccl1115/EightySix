@@ -32,12 +32,10 @@ public class TabRegionFragment extends BaseFragment {
   public TitleTab mTtTab;
   private FeedRegionFragment mFeedFragment;
   private HotFeedRegionFragment mHotFeedFragment;
-  private FriendsFeedRegionFragment mFriendsFeedFragment;
 
   public TabRegionFragment() {
     mFeedFragment = new FeedRegionFragment();
     mHotFeedFragment = new HotFeedRegionFragment();
-    mFriendsFeedFragment = new FriendsFeedRegionFragment();
   }
 
   @Override
@@ -59,8 +57,6 @@ public class TabRegionFragment extends BaseFragment {
             return mFeedFragment;
           case 1:
             return mHotFeedFragment;
-          case 2:
-            return mFriendsFeedFragment;
         }
         return null;
 
@@ -68,7 +64,7 @@ public class TabRegionFragment extends BaseFragment {
 
       @Override
       public int getCount() {
-        return 3;
+        return 2;
       }
 
       @Override
@@ -78,8 +74,6 @@ public class TabRegionFragment extends BaseFragment {
             return "最新";
           case 1:
             return "热门";
-          case 2:
-            return "与我相关";
         }
         return "";
       }
@@ -110,12 +104,6 @@ public class TabRegionFragment extends BaseFragment {
             }
             mHotFeedFragment.setActive(true);
             break;
-          case 2:
-            if (mTtTab.hasBudget(position)) {
-              mFriendsFeedFragment.setActive(false);
-            }
-            mFriendsFeedFragment.setActive(true);
-            break;
         }
 
         U.getAnalyser().trackEvent(U.getContext(), "feed_tab_switch", String.valueOf(position));
@@ -141,9 +129,7 @@ public class TabRegionFragment extends BaseFragment {
 
   @Subscribe
   public void onNewAllPostCountEvent(NewAllPostCountEvent event) {
-    FeedRegionAdapter feedAdapter = mFeedFragment.getFeedAdapter();
-    if (feedAdapter != null && feedAdapter.getFeeds().circle != null
-        && event.getCircleId() == feedAdapter.getFeeds().circle.id) {
+    if (event.getCircleId() == mFeedFragment.getFeedAdapter().getFeeds().circle.id) {
       mTtTab.setTabBudget(0, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
     } else {
       mTtTab.setTabBudget(0, "", true);
@@ -152,23 +138,10 @@ public class TabRegionFragment extends BaseFragment {
 
   @Subscribe
   public void onNewHotPostCountEvent(NewHotPostCountEvent event) {
-    FeedRegionAdapter feedAdapter = mFeedFragment.getFeedAdapter();
-    if (feedAdapter != null && feedAdapter.getFeeds().circle != null
-        && event.getCircleId() == feedAdapter.getFeeds().circle.id) {
+    if (event.getCircleId() == mFeedFragment.getFeedAdapter().getFeeds().circle.id) {
       mTtTab.setTabBudget(1, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
     } else {
       mTtTab.setTabBudget(1, "", true);
-    }
-  }
-
-  @Subscribe
-  public void onNewFriendsPostCountEvent(NewFriendsPostCountEvent event) {
-    FeedRegionAdapter feedAdapter = mFeedFragment.getFeedAdapter();
-    if (feedAdapter != null && feedAdapter.getFeeds().circle != null
-        && event.getCircleId() == feedAdapter.getFeeds().circle.id) {
-      mTtTab.setTabBudget(2, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
-    } else {
-      mTtTab.setTabBudget(2, "", true);
     }
   }
 
@@ -181,7 +154,6 @@ public class TabRegionFragment extends BaseFragment {
 
     mFeedFragment.setRegionType(regionType);
     mHotFeedFragment.setRegionType(regionType);
-    mFriendsFeedFragment.setRegionType(regionType);
 
     if (mVpTab == null) return;
 
@@ -193,9 +165,6 @@ public class TabRegionFragment extends BaseFragment {
         break;
       case 1:
         mHotFeedFragment.setActive(true);
-        break;
-      case 2:
-        mFriendsFeedFragment.setActive(true);
         break;
     }
   }
@@ -222,6 +191,5 @@ public class TabRegionFragment extends BaseFragment {
   private void clearActive() {
     if (mFeedFragment != null) mFeedFragment.setActive(false);
     if (mHotFeedFragment != null) mHotFeedFragment.setActive(false);
-    if (mFriendsFeedFragment != null) mFriendsFeedFragment.setActive(false);
   }
 }

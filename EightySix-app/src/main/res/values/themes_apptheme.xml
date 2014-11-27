@@ -31,14 +31,6 @@
         <item name="android:checkboxStyle">@style/Widget.CheckBox.AppTheme</item>
         <item name="android:radioButtonStyle">@style/Widget.RadioButton.AppTheme</item>
 
-        <item name="alp_drawable_btn_code_lock_default_holo">@drawable/alp_btn_default_dot</item>
-        <item name="alp_drawable_btn_code_lock_touched_holo">@drawable/alp_btn_touch_dot</item>
-        <item name="alp_drawable_indicator_code_lock_point_area_default_holo">@drawable/alp_btn_default_dot</item>
-        <item name="alp_color_pattern_path">@color/alp_pattern_path_dark</item>
-        <item name="aosp_drawable_indicator_code_lock_point_area_normal">
-            @drawable/aosp_indicator_code_lock_point_area_green_holo
-        </item>
-
         <item name="android:listViewStyle">@style/Widget.ListView.Apptheme</item>
     </style>
 

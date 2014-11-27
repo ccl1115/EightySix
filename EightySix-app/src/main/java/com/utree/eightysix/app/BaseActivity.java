@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
+import android.util.*;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,7 +70,6 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   private LinearLayout mLlLoadingWrapper;
   private TextView mTvLoadingText;
   private ViewGroup mBaseView;
-  private RefreshIndicator mRefreshIndicator;
   private ObjectAnimator mHideTopBarAnimator;
   private ObjectAnimator mShowTopBarAnimator;
   private AnimatorSet mShowProgressBarAnimator;
@@ -400,7 +400,6 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     mVProgressMask = mBaseView.findViewById(R.id.v_progress_mask);
     mLlLoadingWrapper = (LinearLayout) mBaseView.findViewById(R.id.fl_loading_wrapper);
     mTvLoadingText = (TextView) mBaseView.findViewById(R.id.tv_loading);
-    mRefreshIndicator = (RefreshIndicator) mBaseView.findViewById(R.id.refresh_indicator);
 
     mTopBar.setCallback(this);
 
@@ -442,6 +441,8 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     hideProgressBar();
 
     super.onDestroy();
+
+    android.util.Log.d("BaseActivity", "onDestroy");
   }
 
   @Override
@@ -493,15 +494,15 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   }
 
   public final void showRefreshIndicator() {
-    mRefreshIndicator.show();
+    mTopBar.mRefreshIndicator.show();
   }
 
   public final void showRefreshIndicator(boolean progressing) {
-    mRefreshIndicator.show(progressing);
+    mTopBar.mRefreshIndicator.show(progressing);
   }
 
   public final void hideRefreshIndicator() {
-    mRefreshIndicator.hide();
+    mTopBar.mRefreshIndicator.hide();
   }
 
   protected final String getTopTitle() {
@@ -544,15 +545,15 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
 
   protected final void setActionLeftDrawable(Drawable drawable) {
     if (drawable == null) {
-      mTopBar.mActionLeft.setPadding(U.dp2px(10), 0, 0, 0);
+      mTopBar.mIvActionLeft.setPadding(U.dp2px(10), 0, 0, 0);
     } else {
-      mTopBar.mActionLeft.setPadding(0, 0, 0, 0);
+      mTopBar.mIvActionLeft.setPadding(0, 0, 0, 0);
     }
-    mTopBar.mActionLeft.setImageDrawable(drawable);
+    mTopBar.mIvActionLeft.setImageDrawable(drawable);
   }
 
   protected final void setActionLeftVisibility(int visibility) {
-    mTopBar.mActionLeft.setVisibility(visibility);
+    mTopBar.mIvActionLeft.setVisibility(visibility);
   }
 
 
