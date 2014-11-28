@@ -29,6 +29,7 @@ import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.event.LogoutListener;
 import com.utree.eightysix.rest.*;
 import com.utree.eightysix.utils.Env;
+import com.utree.eightysix.widget.ITopBar2;
 import com.utree.eightysix.widget.RefreshIndicator;
 import com.utree.eightysix.widget.TopBar;
 
