@@ -1,30 +1,31 @@
-package com.utree.eightysix.event;
+package com.utree.eightysix.rest.bus;
 
 import android.support.annotation.NonNull;
 import com.utree.eightysix.rest.RequestData;
+import com.utree.eightysix.rest.Response;
 
 /**
  * @author simon
  */
-public class RequestEvent implements Comparable<RequestEvent> {
+public class RequestEvent<RES extends Response> implements Comparable<RequestEvent> {
 
   private String mId;
 
-  private RequestData mRequestData;
+  private RequestData<RES> mRequestData;
 
-  private int mPriority;
+  private int mPriority = 100;
 
-  public RequestEvent(String id, RequestData requestData) {
+  public RequestEvent(String id, RequestData<RES> requestData) {
     this.mId = id;
     this.mRequestData = requestData;
   }
 
-  public RequestEvent(String id, RequestData requestData, int priority) {
+  public RequestEvent(String id, RequestData<RES> requestData, int priority) {
     this(id, requestData);
     mPriority = priority;
   }
 
-  public RequestData getRequestData() {
+  public RequestData<RES> getRequestData() {
     return mRequestData;
   }
 

@@ -27,6 +27,7 @@ import com.utree.eightysix.report.Reporter;
 import com.utree.eightysix.report.ReporterImpl;
 import com.utree.eightysix.rest.IRESTRequester;
 import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.bus.RequestBus;
 import com.utree.eightysix.statistics.Analyser;
 import com.utree.eightysix.statistics.MtaAnalyserImpl;
 import com.utree.eightysix.storage.Storage;
@@ -66,10 +67,13 @@ public class U {
   private static SyncClient sSyncClient;
   private static EntryLogger sEntryLogger;
 
+
   private static final Object lock = new Object();
 
   private static Bus sBus;
   private static Bus sChatBus;
+
+  private static RequestBus sRequestBus;
 
   public static ShareManager getShareManager() {
     if (sShareManager == null) {
@@ -94,6 +98,14 @@ public class U {
       }
     }
     return sReporter;
+  }
+
+  public static RequestBus getRequestBus() {
+    M.checkThread();
+    if (sRequestBus == null) {
+      sRequestBus = new RequestBus();
+    }
+    return sRequestBus;
   }
 
   public static Gson getGson() {

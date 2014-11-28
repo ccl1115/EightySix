@@ -8,15 +8,12 @@ import org.apache.http.message.BasicHeader;
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author simon
  */
-public class RequestData {
+public class RequestData<RES extends Response> {
   String api;
   boolean cache;
   boolean log;
@@ -25,6 +22,8 @@ public class RequestData {
   org.apache.http.Header[] headers;
   long requestTime;
   String host;
+
+  Class<RES> resClz;
 
   boolean sign;
 
@@ -181,5 +180,49 @@ public class RequestData {
 
   public void setSign(boolean need) {
     this.sign = need;
+  }
+
+  public Class<RES> getResClz() {
+    return resClz;
+  }
+
+  public void setResClz(Class<RES> resClz) {
+    this.resClz = resClz;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    RequestData that = (RequestData) o;
+
+    if (cache != that.cache) return false;
+    if (log != that.log) return false;
+    if (method != that.method) return false;
+    if (requestTime != that.requestTime) return false;
+    if (sign != that.sign) return false;
+    if (api != null ? !api.equals(that.api) : that.api != null) return false;
+    if (!Arrays.equals(headers, that.headers)) return false;
+    if (host != null ? !host.equals(that.host) : that.host != null) return false;
+    if (params != null ? !params.equals(that.params) : that.params != null) return false;
+    if (resClz != null ? !resClz.equals(that.resClz) : that.resClz != null) return false;
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = api != null ? api.hashCode() : 0;
+    result = 31 * result + (cache ? 1 : 0);
+    result = 31 * result + (log ? 1 : 0);
+    result = 31 * result + (params != null ? params.hashCode() : 0);
+    result = 31 * result + method;
+    result = 31 * result + (headers != null ? Arrays.hashCode(headers) : 0);
+    result = 31 * result + (int) (requestTime ^ (requestTime >>> 32));
+    result = 31 * result + (host != null ? host.hashCode() : 0);
+    result = 31 * result + (resClz != null ? resClz.hashCode() : 0);
+    result = 31 * result + (sign ? 1 : 0);
+    return result;
   }
 }
