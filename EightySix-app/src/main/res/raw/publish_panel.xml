@@ -3,57 +3,6 @@
 <panel row="4" column="5" itemWidth="58" itemHeight="58" spaceHorizontal="10" spaceVertical="10">
     <page>
         <item>
-            <local-image>bg_13</local-image>
-        </item>
-
-        <item>
-            <local-image>bg_20</local-image>
-        </item>
-        <item>
-            <local-image>bg_24</local-image>
-        </item>
-        <item>
-            <local-image>bg_28</local-image>
-        </item>
-        <item>
-            <local-image>bg_31</local-image>
-        </item>
-
-        <item>
-            <local-image>bg_40</local-image>
-        </item>
-        <item>
-            <local-image>bg_200</local-image>
-        </item>
-        <item>
-            <local-image>bg_49</local-image>
-        </item>
-        <item>
-            <local-image>bg_201</local-image>
-        </item>
-        <item>
-            <local-image>bg_63</local-image>
-        </item>
-
-        <item>
-            <local-image>bg_94</local-image>
-        </item>
-        <item>
-            <local-image>bg_96</local-image>
-        </item>
-        <item>
-            <local-image>bg_202</local-image>
-        </item>
-        <item>
-            <local-image>bg_101</local-image>
-        </item>
-        <item>
-            <local-image>bg_105</local-image>
-        </item>
-    </page>
-
-    <page>
-        <item>
             <color>#ffd6393d</color>
         </item>
         <item>
@@ -99,6 +48,57 @@
         </item>
         <item>
             <color>#ff3f8a9f</color>
+        </item>
+    </page>
+
+    <page>
+        <item>
+            <image>bg_13.jpg</image>
+        </item>
+
+        <item>
+            <image>bg_20.jpg</image>
+        </item>
+        <item>
+            <image>bg_24.jpg</image>
+        </item>
+        <item>
+            <image>bg_28.jpg</image>
+        </item>
+        <item>
+            <image>bg_31.jpg</image>
+        </item>
+
+        <item>
+            <image>bg_40.jpg</image>
+        </item>
+        <item>
+            <image>bg_200.jpg</image>
+        </item>
+        <item>
+            <image>bg_49.jpg</image>
+        </item>
+        <item>
+            <image>bg_201.jpg</image>
+        </item>
+        <item>
+            <image>bg_63.jpg</image>
+        </item>
+
+        <item>
+            <image>bg_94.jpg</image>
+        </item>
+        <item>
+            <image>bg_96.jpg</image>
+        </item>
+        <item>
+            <image>bg_202.jpg</image>
+        </item>
+        <item>
+            <image>bg_101.jpg</image>
+        </item>
+        <item>
+            <image>bg_105.jpg</image>
         </item>
     </page>
 

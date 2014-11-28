@@ -41,11 +41,6 @@
         </dependency>
 
         <dependency>
-            <groupId>cos_sdk</groupId>
-            <artifactId>cos_sdk</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>mna_sdk</groupId>
             <artifactId>mna_sdk</artifactId>
         </dependency>

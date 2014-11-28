@@ -17,8 +17,9 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.data.Sync;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.MD5Util;
-import java.io.File;
 import org.apache.http.Header;
+
+import java.io.File;
 
 /**
  * @author simon
@@ -53,7 +54,7 @@ public class UpgradeService extends Service {
         .setContentTitle("下载蓝莓客户端")
         .setProgress(100, 0, false)
         .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_app_icon))
-        .setSmallIcon(R.drawable.notif_icon);
+        .setSmallIcon(R.drawable.ic_launcher);
 
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
       mBuilder.setContentIntent(PendingIntent.getActivity(this, 0, null, 0));
@@ -90,6 +91,8 @@ public class UpgradeService extends Service {
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, File file) {
+          mBuilder.setContentText("下载完成");
+          mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
           Intent i = new Intent(Intent.ACTION_VIEW);
           i.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
           i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

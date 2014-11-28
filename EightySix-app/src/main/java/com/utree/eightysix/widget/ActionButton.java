@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.SparseBooleanArray;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -26,6 +27,8 @@ public class ActionButton extends FrameLayout {
 
   private final int kIndicatorMargin;
   private final int kIndicatorSize;
+
+  private SparseBooleanArray mHasNews = new SparseBooleanArray();
 
   public ActionButton(Context context) {
     this(context, null);
@@ -66,6 +69,21 @@ public class ActionButton extends FrameLayout {
 
   public void setHasNew(boolean n) {
     mHasNew = n;
+    requestLayout();
+    invalidate();
+  }
+
+  public void setHasNew(int index, boolean n) {
+    mHasNews.append(index, n);
+
+    mHasNew = false;
+
+    for (int i = 0, size = mHasNews.size(); i < size; i++) {
+      if (mHasNews.get(i, false)) {
+        mHasNew = true;
+      }
+    }
+
     requestLayout();
     invalidate();
   }

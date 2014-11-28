@@ -1,7 +1,6 @@
 package com.utree.eightysix.utils;
 
 import android.os.Environment;
-import com.aliyun.android.util.MD5Util;
 import com.utree.eightysix.U;
 import de.akquinet.android.androlog.Log;
 import java.io.File;
@@ -40,8 +39,7 @@ public class IOUtils {
   }
 
   public static String fileHash(File file) {
-    return MD5Util.getMD5String(
-        (String.format("%s-%d", file.getAbsolutePath(), file.length())).getBytes()).toLowerCase();
+    return MD5Util.getMD5(file);
   }
 
   public static File getAvailableAppDir() {

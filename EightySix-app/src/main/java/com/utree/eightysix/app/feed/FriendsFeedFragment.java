@@ -66,29 +66,28 @@ public class FriendsFeedFragment extends AbsFeedFragment {
       return;
     }
     mPostPraiseRequesting = true;
-    if (!event.isCancel()) {
-      getBaseActivity().request(new PostPraiseRequest(event.getPost().id), new OnResponse2<Response>() {
-        @Override
-        public void onResponse(Response response) {
-          if (RESTRequester.responseOk(response)) {
-            U.getBus().post(event.getPost());
-          } else if ((response.code & 0xffff) == 0x2286) {
-            event.getPost().praised = 1;
-          } else {
-            event.getPost().praised = 1;
-            event.getPost().praise = Math.max(0, event.getPost().praise - 1);
-          }
+    getBaseActivity().request(new PostPraiseRequest(event.getPost().id), new OnResponse2<Response>() {
+      @Override
+      public void onResponse(Response response) {
+        if (RESTRequester.responseOk(response)) {
+          U.getBus().post(event.getPost());
+        } else if ((response.code & 0xffff) == 0x2286) {
+          event.getPost().praised = 1;
           mFeedAdapter.notifyDataSetChanged();
-
-          mPostPraiseRequesting = false;
+        } else {
+          event.getPost().praised = 0;
+          event.getPost().praise = Math.max(0, event.getPost().praise - 1);
+          mFeedAdapter.notifyDataSetChanged();
         }
 
-        @Override
-        public void onResponseError(Throwable e) {
-          mPostPraiseRequesting = false;
-        }
-      }, Response.class);
-    }
+        mPostPraiseRequesting = false;
+      }
+
+      @Override
+      public void onResponseError(Throwable e) {
+                                               mPostPraiseRequesting = false;
+                                                                                                                  }
+    }, Response.class);
   }
 
   @Subscribe

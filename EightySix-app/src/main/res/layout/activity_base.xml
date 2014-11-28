@@ -10,12 +10,6 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/activity_top_bar_height"/>
 
-    <com.utree.eightysix.widget.RefreshIndicator
-            android:id="@+id/refresh_indicator"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/activity_top_bar_height"
-            android:visibility="invisible"/>
-
     <FrameLayout
             android:id="@+id/progress_bar"
             android:visibility="invisible"

@@ -163,4 +163,11 @@
                 android:textSize="14sp"
                 />
     </LinearLayout>
+
+        <com.utree.eightysix.widget.RefreshIndicator
+                android:id="@+id/refresh_indicator"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible"/>
+
 </merge>

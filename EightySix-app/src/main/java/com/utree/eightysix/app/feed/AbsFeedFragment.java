@@ -280,13 +280,16 @@ public abstract class AbsFeedFragment extends BaseFragment {
           R.drawable.ic_post_pen : R.drawable.ic_post_pen_disabled);
 
 
+      int count = 0;
       if (response.object.fetch.newComment != null) {
-        Account.inst().setNewCommentCount(response.object.fetch.newComment.unread);
+        count += response.object.fetch.newComment.unread;
       }
 
       if (response.object.fetch.myPostComment != null) {
-        Account.inst().setNewCommentCount(response.object.fetch.myPostComment.unread);
+        count += response.object.fetch.myPostComment.unread;
       }
+
+      Account.inst().setNewCommentCount(count);
 
       if (response.object.fetch.newPraise != null) {
         Account.inst().setHasNewPraise(response.object.fetch.newPraise.praise == 1);

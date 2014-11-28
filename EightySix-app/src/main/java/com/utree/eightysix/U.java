@@ -15,23 +15,23 @@ import com.squareup.otto.ThreadEnforcer;
 import com.utree.eightysix.app.BaseApplication;
 import com.utree.eightysix.app.SyncClient;
 import com.utree.eightysix.app.feed.BaseItemDeserializer;
+import com.utree.eightysix.app.share.ShareManager;
+import com.utree.eightysix.applogger.EntryAdapter;
 import com.utree.eightysix.applogger.EntryLogger;
 import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.push.PushHelper;
 import com.utree.eightysix.push.XGPushHelper;
 import com.utree.eightysix.qrcode.ActionDispatcher;
 import com.utree.eightysix.qrcode.actions.AddFriendAction;
-import com.utree.eightysix.applogger.LoggerImpl;
+import com.utree.eightysix.report.Reporter;
+import com.utree.eightysix.report.ReporterImpl;
 import com.utree.eightysix.rest.IRESTRequester;
 import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.app.share.ShareManager;
 import com.utree.eightysix.statistics.Analyser;
 import com.utree.eightysix.statistics.MtaAnalyserImpl;
 import com.utree.eightysix.storage.Storage;
-import com.utree.eightysix.storage.oss.OSSImpl;
 import com.utree.eightysix.utils.CacheUtils;
-import com.utree.eightysix.report.Reporter;
-import com.utree.eightysix.report.ReporterImpl;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -123,7 +123,62 @@ public class U {
 
   public static Storage getCloudStorage() {
     if (sCloudStorage == null) {
-      sCloudStorage = new OSSImpl();
+      sCloudStorage = new Storage() {
+        @Override
+        public Result put(String bucket, String path, String key, File file) {
+          return null;
+        }
+
+        @Override
+        public void aPut(String bucket, String path, String key, File file, OnResult onResult) {
+
+        }
+
+        @Override
+        public Result get(String bucket, String path, String key) {
+          return null;
+        }
+
+        @Override
+        public void aGet(String bucket, String path, String key, OnResult onResult) {
+
+        }
+
+        @Override
+        public Result delete(String bucket, String path, String key) {
+          return null;
+        }
+
+        @Override
+        public void aDelete(String bucket, String path, String key, OnResult onResult) {
+
+        }
+
+        @Override
+        public Result createBucket(String bucket) {
+          return null;
+        }
+
+        @Override
+        public void aCreateBucket(String bucket, OnResult onResult) {
+
+        }
+
+        @Override
+        public Result deleteBucket(String bucket) {
+          return null;
+        }
+
+        @Override
+        public void aDeleteBucket(String bucket, OnResult onResult) {
+
+        }
+
+        @Override
+        public String getUrl(String bucket, String path, String key) {
+          return null;
+        }
+      };
     }
     return sCloudStorage;
   }
@@ -367,7 +422,12 @@ public class U {
     M.checkThread();
 
     if (sEntryLogger == null) {
-      sEntryLogger = new LoggerImpl(U.getConfig("app.logger.host"));
+      sEntryLogger = new EntryLogger() {
+        @Override
+        public <T extends EntryAdapter> void log(T entryAdapter) {
+
+        }
+      };
     }
 
     return sEntryLogger;
