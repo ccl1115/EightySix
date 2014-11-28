@@ -5,11 +5,7 @@ import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.*;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.utree.eightysix.M;
@@ -17,8 +13,13 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.data.Post;
+import com.utree.eightysix.request.CancelNoticeRequest;
+import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.widget.AsyncImageView;
+import com.utree.eightysix.widget.ThemedDialog;
 
 /**
  * @author simon
@@ -54,6 +55,26 @@ public class BaseMsgItemView extends LinearLayout {
 
   @InjectView(R.id.tv_count_right)
   public TextView mTvCountRight;
+
+  @InjectView(R.id.iv_unfollow_left)
+  public ImageView mIvUnfollowLeft;
+
+  @InjectView(R.id.iv_unfollow_right)
+  public ImageView mIvUnfollowRight;
+
+  @OnClick(R.id.iv_unfollow_left)
+  public void onIvUnfollowLeftClicked() {
+    if (mPosts[0].relation == 1) {
+      showUnfollowDialog(mPosts[0]);
+    }
+  }
+
+  @OnClick(R.id.iv_unfollow_right)
+  public void onIvUnfollowRightClicked() {
+    if (mPosts[1].relation == 1) {
+      showUnfollowDialog(mPosts[1]);
+    }
+  }
 
   @OnClick (R.id.fl_left)
   public void onFlLeftClicked(View view) {
@@ -106,6 +127,12 @@ public class BaseMsgItemView extends LinearLayout {
         mAivBgRight.setUrl(null);
         mTvContentRight.setBackgroundColor(ColorUtil.strToColor(right.bgColor));
       }
+
+      if (right.relation == 0) {
+        mIvUnfollowRight.setImageResource(R.drawable.ic_unfollow_pressed);
+      } else {
+        mIvUnfollowRight.setImageResource(R.drawable.ic_unfollow_normal);
+      }
     } else {
       mFlRight.setVisibility(INVISIBLE);
     }
@@ -121,6 +148,12 @@ public class BaseMsgItemView extends LinearLayout {
       } else {
         mAivBgLeft.setUrl(null);
         mTvContentLeft.setBackgroundColor(ColorUtil.strToColor(left.bgColor));
+      }
+
+      if (left.relation == 0) {
+        mIvUnfollowLeft.setImageResource(R.drawable.ic_unfollow_pressed);
+      } else {
+        mIvUnfollowLeft.setImageResource(R.drawable.ic_unfollow_normal);
       }
     } else {
       mFlLeft.setVisibility(INVISIBLE);
@@ -138,5 +171,41 @@ public class BaseMsgItemView extends LinearLayout {
   protected void onDetachedFromWindow() {
     M.getRegisterHelper().unregister(this);
     super.onDetachedFromWindow();
+  }
+
+  public void showUnfollowDialog(final Post post) {
+    final ThemedDialog dialog = new ThemedDialog(getContext());
+
+    dialog.setTitle("确认不再接收此帖回复消息？");
+
+    dialog.setPositive("确认", new OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        U.getRESTRequester().request(new CancelNoticeRequest(post.id), new OnResponse2<Response>() {
+          @Override
+          public void onResponseError(Throwable e) {
+
+          }
+
+          @Override
+          public void onResponse(Response response) {
+            if (RESTRequester.responseOk(response)) {
+              post.relation = 0;
+              U.getBus().post(post);
+            }
+          }
+        }, Response.class);
+        dialog.dismiss();
+      }
+    });
+
+    dialog.setRbNegative("取消", new OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        dialog.dismiss();
+      }
+    });
+
+    dialog.show();
   }
 }

@@ -61,10 +61,14 @@ public class TitleTab extends FrameLayout {
           mListener.onPageSelected(position);
 
           for (int i = 0, size = mLlTabs.getChildCount(); i < size; i++) {
-            ((TextView) mLlTabs.getChildAt(i).findViewById(R.id.tv_title)).setTextColor(getResources().getColor(R.color.apptheme_primary_grey_color_pressed));
+            TextView textView = (TextView) mLlTabs.getChildAt(i).findViewById(R.id.tv_title);
+            textView.setTextColor(getResources().getColor(R.color.apptheme_primary_grey_color_pressed));
+            textView.setTextSize(14);
           }
 
-          ((TextView) mLlTabs.getChildAt(position).findViewById(R.id.tv_title)).setTextColor(getResources().getColor(R.color.apptheme_primary_light_color));
+          TextView textView = (TextView) mLlTabs.getChildAt(position).findViewById(R.id.tv_title);
+          textView.setTextColor(getResources().getColor(R.color.apptheme_primary_light_color));
+          textView.setTextSize(16);
         }
       }
 
@@ -92,10 +96,12 @@ public class TitleTab extends FrameLayout {
   private View buildTab(CharSequence name, final int i) {
     View view = LayoutInflater.from(getContext()).inflate(R.layout.widget_title_tab_item, mLlTabs, false);
 
-    ((TextView) view.findViewById(R.id.tv_title)).setText(name);
+    TextView textView = (TextView) view.findViewById(R.id.tv_title);
+    textView.setText(name);
 
     if (i == 0) {
-      ((TextView) view.findViewById(R.id.tv_title)).setTextColor(getResources().getColor(R.color.apptheme_primary_light_color));
+      textView.setTextColor(getResources().getColor(R.color.apptheme_primary_light_color));
+      textView.setTextSize(16);
     }
 
     view.setOnClickListener(new OnClickListener() {

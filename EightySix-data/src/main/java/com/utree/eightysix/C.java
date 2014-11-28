@@ -70,6 +70,7 @@ public class C {
   public static final String API_FETCH = "/notice/fetch.do";
   public static final String API_MSG_LIST = "/remind/list.do";
   public static final String API_PRAISE_LIST = "/remind/praiseList.do";
+  public static final String API_CANCEL_NOTICE = "/remind/cancelNotice.do";
 
   public static final String API_MY_FRIENDS = "/friend/myFriend.do";
   public static final String API_CONTACT_FRIENDS = "/friend/contactFriends.do";
@@ -84,6 +85,8 @@ public class C {
   public static final String API_ACTIVE_JOIN = "/active/join.do";
 
   public static final String API_SYNC = "/system/sync.do";
+
+  public static final String COMMIT_UPLOADIMAGE = "/commit/uploadimage";
 
 
   public static String IMEI = "";

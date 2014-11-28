@@ -71,6 +71,10 @@ public class TopBar extends ViewGroup implements ITopBar2 {
   public ITopBar2.Callback mCallback2;
 
   private Callback mCallback;
+  
+  @InjectView(R.id.refresh_indicator)
+  public RefreshIndicator mRefreshIndicator;
+
 
   @OnClick(R.id.tb_iv_action_left)
   public void onIvLeftClicked(View v) {
@@ -85,7 +89,7 @@ public class TopBar extends ViewGroup implements ITopBar2 {
       mCallback2.onLeftClicked(v);
     }
   }
-
+  
   @OnClick(R.id.tb_iv_action_right)
   public void onIvRightClicked(View v) {
     if (mCallback2 != null) {
@@ -303,6 +307,8 @@ public class TopBar extends ViewGroup implements ITopBar2 {
         (getMeasuredHeight() - mLlTitle.getMeasuredHeight()) >> 1,
         (getMeasuredWidth() + mLlTitle.getMeasuredWidth()) >> 1,
         (getMeasuredHeight() + mLlTitle.getMeasuredHeight()) >> 1);
+    
+    mRefreshIndicator.layout(l, t, r, b);
 
     mLlSearch.layout(0, 0, mLlSearch.getMeasuredWidth(), b);
   }
@@ -341,6 +347,8 @@ public class TopBar extends ViewGroup implements ITopBar2 {
 
     measureChild(mLlTitle, widthSize + MeasureSpec.AT_MOST, heightSize + MeasureSpec.AT_MOST);
 
+    measureChild(mRefreshIndicator, widthSize + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
+    
     setMeasuredDimension(widthSize, heightSize);
   }
 

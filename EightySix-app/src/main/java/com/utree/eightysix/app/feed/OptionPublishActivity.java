@@ -91,7 +91,7 @@ public class OptionPublishActivity extends BaseActivity {
     mCircleId = getIntent().getIntExtra("id", 0);
 
     if (mCircleId == 0) {
-      showToast("没有对应的朋友圈", false);
+      showToast("没有对应的打工圈", false);
       setResult(RESULT_CANCELED);
       finish();
       return;

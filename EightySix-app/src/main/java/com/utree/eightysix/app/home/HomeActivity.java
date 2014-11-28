@@ -3,7 +3,6 @@ package com.utree.eightysix.app.home;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -13,13 +12,13 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.nineoldandroids.view.ViewHelper;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.C;
@@ -54,7 +53,6 @@ import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TopBar;
-import de.akquinet.android.androlog.Log;
 
 /**
  */
@@ -66,13 +64,17 @@ public class HomeActivity extends BaseActivity {
   @InjectView (R.id.ib_send)
   public ImageButton mSend;
 
-  @InjectView (R.id.ll_side)
-  public LinearLayout mLlSide;
+  @InjectView (R.id.fl_side)
+  public FrameLayout mFlSide;
+
+  @InjectView(R.id.fl_right)
+  public FrameLayout mFlRight;
+
+  @InjectView(R.id.fl_main)
+  public FrameLayout mFlMain;
 
   @InjectView (R.id.content)
   public DrawerLayout mDlContent;
-
-  private PopupWindow mPopupMenu;
 
   private TabRegionFragment mTabFragment;
 
@@ -143,16 +145,24 @@ public class HomeActivity extends BaseActivity {
   @Override
   public void onActionLeftClicked() {
     U.getAnalyser().trackEvent(this, "feed_title", "feed_title");
-    if (mDlContent.isDrawerOpen(mLlSide)) {
-      mDlContent.closeDrawer(mLlSide);
+    if (mDlContent.isDrawerOpen(mFlRight)) {
+      mDlContent.closeDrawer(mFlRight);
+    } else if (mDlContent.isDrawerOpen(mFlSide)) {
+      mDlContent.closeDrawer(mFlSide);
+      mTopBar.mFlLeft.setSelected(false);
     } else {
-      mDlContent.openDrawer(mLlSide);
+      mDlContent.openDrawer(mFlSide);
+      mTopBar.mFlLeft.setSelected(true);
     }
   }
 
   @Override
   public void onActionOverflowClicked() {
-    openMenu();
+    if (mDlContent.isDrawerOpen(mFlSide)) {
+      mDlContent.closeDrawer(mFlSide);
+    } else {
+      openMenu();
+    }
   }
 
   @Override
@@ -163,36 +173,31 @@ public class HomeActivity extends BaseActivity {
   @Override
   public void onTitleClicked() {
     toggleFactoryRegion();
-    mDlContent.closeDrawer(mLlSide);
+    mDlContent.closeDrawer(mFlSide);
   }
 
   @Override
   public void onIconClicked() {
     U.getAnalyser().trackEvent(this, "feed_title", "feed_icon");
-    if (mDlContent.isDrawerOpen(mLlSide)) {
-      mDlContent.closeDrawer(mLlSide);
+    if (mDlContent.isDrawerOpen(mFlSide)) {
+      mDlContent.closeDrawer(mFlSide);
     } else {
-      mDlContent.openDrawer(mLlSide);
+      mDlContent.openDrawer(mFlSide);
     }
     hideFactoryRegion();
   }
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+  public void onCreate(final Bundle savedInstanceState) {
+    super.onCreate(null);
+
+    setFillContent(true);
 
     ContactsSyncService.start(this, false);
 
     setActionLeftDrawable(getResources().getDrawable(R.drawable.ic_drawer));
 
-    if (mPopupMenu == null) {
-      LinearLayout menu = (LinearLayout) View.inflate(HomeActivity.this, R.layout.widget_feed_menu, null);
-      mPopupMenu = new PopupWindow(menu, dp2px(190), dp2px(315) + 6);
-      mMenuViewHolder = new MenuViewHolder(menu);
-      mPopupMenu.setFocusable(true);
-      mPopupMenu.setIgnoreCheekPress();
-      mPopupMenu.setBackgroundDrawable(new BitmapDrawable(getResources()));
-    }
+    mMenuViewHolder = new MenuViewHolder(mFlRight);
 
     setActionAdapter();
 
@@ -200,17 +205,104 @@ public class HomeActivity extends BaseActivity {
     Bundle args = new Bundle();
     args.putInt("tabIndex", getIntent().getIntExtra("tabIndex", 0));
     mTabFragment.setArguments(args);
-    getSupportFragmentManager().beginTransaction().add(R.id.fl_feed, mTabFragment, "tab").commit();
+    getSupportFragmentManager().beginTransaction().add(R.id.fl_feed, mTabFragment).commit();
 
     mRegionFragment = (RegionFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_range);
 
     mRegionFragment.setCallback(new RegionFragment.Callback() {
       @Override
       public void onItemClicked(int regionType, boolean selected) {
-        mDlContent.closeDrawer(mLlSide);
+        mDlContent.closeDrawer(mFlSide);
         if (selected) {
           mTabFragment.setRegionType(regionType);
         }
+      }
+    });
+
+    mDlContent.setScrimColor(0x00ffffff);
+
+    mDlContent.setDrawerListener(new DrawerLayout.DrawerListener() {
+      @Override
+      public void onDrawerSlide(View drawerView, float slideOffset) {
+        final int topBarHeight = mTopBar.getMeasuredHeight();
+        final int pivotY = mFlMain.getMeasuredHeight() >> 1;
+        final float scale = 1 - slideOffset * 0.1f;
+
+        if (drawerView.getId() == R.id.fl_side) {
+          final int measuredWidth = mFlSide.getMeasuredWidth();
+          ViewHelper.setTranslationX(mFlMain, measuredWidth * slideOffset);
+          ViewHelper.setPivotX(mFlMain, 0f);
+          ViewHelper.setPivotY(mFlMain, pivotY);
+          ViewHelper.setScaleX(mFlMain, scale);
+          ViewHelper.setScaleY(mFlMain, scale);
+
+          ViewHelper.setTranslationX(mTopBar, measuredWidth * slideOffset);
+          ViewHelper.setPivotX(mTopBar, 0f);
+          ViewHelper.setPivotY(mTopBar, pivotY);
+          ViewHelper.setScaleX(mTopBar, scale);
+          ViewHelper.setScaleY(mTopBar, scale);
+
+          float scale2 = 0.7f + slideOffset * 0.3f;
+          ViewHelper.setPivotX(mFlSide, measuredWidth);
+          ViewHelper.setPivotY(mFlSide, mFlSide.getMeasuredHeight() >> 1);
+          ViewHelper.setScaleX(mFlSide, scale2);
+          ViewHelper.setScaleY(mFlSide, scale2);
+          ViewHelper.setAlpha(mFlSide, slideOffset * slideOffset);
+        } else {
+          int measuredWidth = mFlRight.getMeasuredWidth();
+          ViewHelper.setTranslationX(mFlMain, -measuredWidth * slideOffset);
+          ViewHelper.setPivotX(mFlMain, mFlMain.getMeasuredWidth());
+          ViewHelper.setPivotY(mFlMain, pivotY);
+          ViewHelper.setScaleX(mFlMain, scale);
+          ViewHelper.setScaleY(mFlMain, scale);
+
+          ViewHelper.setTranslationX(mTopBar, -measuredWidth * slideOffset);
+          ViewHelper.setPivotX(mTopBar, mFlMain.getMeasuredWidth());
+          ViewHelper.setPivotY(mTopBar, pivotY);
+          ViewHelper.setScaleX(mTopBar, scale);
+          ViewHelper.setScaleY(mTopBar, scale);
+
+          float scale2 = 0.7f + slideOffset * 0.3f;
+          ViewHelper.setPivotY(mFlRight, mFlRight.getMeasuredHeight() >> 1);
+          ViewHelper.setScaleX(mFlRight, scale2);
+          ViewHelper.setScaleY(mFlRight, scale2);
+          ViewHelper.setAlpha(mFlRight, slideOffset * slideOffset);
+        }
+
+        ViewHelper.setTranslationY(mSend, U.dp2px(100) * slideOffset);
+      }
+
+      @Override
+      public void onDrawerOpened(View drawerView) {
+        if (drawerView.getId() == R.id.fl_side) {
+          mDlContent.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, mFlRight);
+          mTopBar.mFlLeft.setSelected(true);
+        } else {
+          mDlContent.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, mFlSide);
+        }
+      }
+
+      @Override
+      public void onDrawerClosed(View drawerView) {
+        mDlContent.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, mFlSide);
+        mDlContent.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, mFlRight);
+
+        ViewHelper.setTranslationX(mFlMain, 0);
+        ViewHelper.setPivotX(mFlMain, 0);
+        ViewHelper.setPivotY(mFlMain, 0);
+        ViewHelper.setScaleX(mFlMain, 1);
+        ViewHelper.setScaleY(mFlMain, 1);
+
+        ViewHelper.setTranslationX(mTopBar, 0);
+        ViewHelper.setPivotX(mTopBar, 0);
+        ViewHelper.setPivotY(mTopBar, 0);
+        ViewHelper.setScaleX(mTopBar, 1);
+        ViewHelper.setScaleY(mTopBar, 1);
+      }
+
+      @Override
+      public void onDrawerStateChanged(int newState) {
+
       }
     });
 
@@ -239,15 +331,13 @@ public class HomeActivity extends BaseActivity {
       } catch (NumberFormatException ignored) {
       }
       if (v > C.VERSION) {
-        mTopBar.getActionOverflow().setHasNew(true);
+        getTopBar().getActionOverflow().setHasNew(0, true);
         mMenuViewHolder.mRbSettingsDot.setVisibility(View.VISIBLE);
       } else {
-        mTopBar.getActionOverflow().setHasNew(false);
+        getTopBar().getActionOverflow().setHasNew(0, false);
         mMenuViewHolder.mRbSettingsDot.setVisibility(View.INVISIBLE);
       }
     }
-
-    mDlContent.closeDrawer(mLlSide);
   }
 
   @Override
@@ -258,22 +348,17 @@ public class HomeActivity extends BaseActivity {
 
   @Subscribe
   public void onNewCommentCountEvent(NewCommentCountEvent event) {
-    mTopBar.getActionView(0).setCount(event.getCount());
+    getTopBar().getActionView(0).setCount(event.getCount());
   }
 
   @Subscribe
   public void onHasNewPraiseEvent(HasNewPraiseEvent event) {
-    mTopBar.getActionOverflow().setHasNew(event.has());
+    getTopBar().getActionOverflow().setHasNew(1, event.has());
     if (event.has()) {
       mMenuViewHolder.mRbNewPraiseDot.setVisibility(View.VISIBLE);
     } else {
       mMenuViewHolder.mRbNewPraiseDot.setVisibility(View.INVISIBLE);
     }
-  }
-
-  @Subscribe
-  public void onSyncEvent(Sync sync) {
-    setActionAdapter();
   }
 
   @Override
@@ -304,7 +389,11 @@ public class HomeActivity extends BaseActivity {
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     if (keyCode == KeyEvent.KEYCODE_MENU) {
-      openMenu();
+      if (!mDlContent.isDrawerOpen(mFlSide)) {
+        openMenu();
+      } else {
+        mDlContent.closeDrawer(mFlSide);
+      }
       return true;
     }
     return super.onKeyDown(keyCode, event);
@@ -376,7 +465,7 @@ public class HomeActivity extends BaseActivity {
       mFactoryRegionFragment = new FactoryRegionFragment();
 
       getSupportFragmentManager().beginTransaction()
-          .add(R.id.content, mFactoryRegionFragment).commit();
+          .add(R.id.fl_main, mFactoryRegionFragment).commit();
     } else if (mFactoryRegionFragment.isDetached()) {
       getSupportFragmentManager().beginTransaction()
           .attach(mFactoryRegionFragment).commit();
@@ -409,12 +498,12 @@ public class HomeActivity extends BaseActivity {
 
   private void openMenu() {
     U.getAnalyser().trackEvent(this, "feed_more", "feed_more");
-    if (mPopupMenu.isShowing()) {
-      mPopupMenu.dismiss();
+    if (mDlContent.isDrawerOpen(mFlRight)) {
+      mDlContent.closeDrawer(mFlRight);
     } else {
-      mDlContent.closeDrawer(mLlSide);
-      hideFactoryRegion();
+      mDlContent.openDrawer(mFlRight);
     }
+    hideFactoryRegion();
   }
 
   private void setActionAdapter() {
@@ -524,11 +613,11 @@ public class HomeActivity extends BaseActivity {
 
   private void setHasNewPraise() {
     mMenuViewHolder.mRbNewPraiseDot.setVisibility(Account.inst().getHasNewPraise() ? View.VISIBLE : View.INVISIBLE);
-    mTopBar.getActionOverflow().setHasNew(Account.inst().getHasNewPraise());
+    getTopBar().getActionOverflow().setHasNew(Account.inst().getHasNewPraise());
   }
 
   private void setNewCommentCount() {
-    mTopBar.getActionView(0).setCount(Account.inst().getNewCommentCount());
+    getTopBar().getActionView(0).setCount(Account.inst().getNewCommentCount());
   }
 
   @Keep
@@ -558,52 +647,44 @@ public class HomeActivity extends BaseActivity {
       ButterKnife.inject(this, view);
     }
 
-    @OnClick (R.id.ll_my_friends)
+    @OnClick (R.id.rl_my_friends)
     void onLlMyFriendsClicked() {
       startActivity(new Intent(HomeActivity.this, AccountActivity.class));
-      mPopupMenu.dismiss();
     }
 
     @OnClick (R.id.rb_add)
     void onRbAddClicked() {
       startActivity(new Intent(HomeActivity.this, AddFriendActivity.class));
-      mPopupMenu.dismiss();
     }
 
     @OnClick (R.id.ll_invite)
     void onLlInviteClicked() {
       showInviteDialog();
-      mPopupMenu.dismiss();
     }
 
-    @OnClick (R.id.ll_praise_count)
+    @OnClick (R.id.rl_praise_count)
     void onLlPraiseCountClicked() {
       PraiseActivity.start(HomeActivity.this, Account.inst().getHasNewPraise());
-      mPopupMenu.dismiss();
     }
 
     @OnClick (R.id.ll_feedback)
     void onLlFeedbackClicked() {
       FeedbackActivity.start(HomeActivity.this);
-      mPopupMenu.dismiss();
     }
 
     @OnClick (R.id.ll_settings)
     void onLlSettingsClicked() {
       startActivity(new Intent(HomeActivity.this, MainSettingsActivity.class));
-      mPopupMenu.dismiss();
     }
 
     @OnClick (R.id.ll_help)
     void onLlHelpClicked() {
       startActivity(new Intent(HomeActivity.this, HelpActivity.class));
-      mPopupMenu.dismiss();
     }
 
-    @OnClick (R.id.ll_topic_list)
+    @OnClick (R.id.rl_topic_list)
     void onLlTopicListClicked() {
       TopicListActivity.start(HomeActivity.this);
-      mPopupMenu.dismiss();
     }
   }
 

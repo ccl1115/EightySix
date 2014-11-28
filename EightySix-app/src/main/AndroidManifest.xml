@@ -172,6 +172,9 @@
         <service android:enabled="true" android:name=".app.SyncService"/>
         <service android:enabled="true" android:name=".app.msg.PullNotificationService"/>
         <service android:enabled="true" android:name=".app.settings.UpgradeService"/>
+        <service android:enabled="true" android:name=".utils.PingService"/>
+        <service android:enabled="true" android:name=".app.publish.BgSyncService"/>
+
 
         <service android:enabled="true" android:name="com.baidu.location.f" android:process=":bdservice_v1"/>
 
@@ -236,7 +239,6 @@
                 <action android:name="com.utree.eightysix.PUSH_ACTION"/>
             </intent-filter>
         </service>
-        <service android:name=".utils.PingService"/>
 
 
     </application>

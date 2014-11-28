@@ -34,8 +34,8 @@ public class FetchAlarmReceiver extends BroadcastReceiver {
       wf.write("setup alarm at " + new Date().toString());
       wf.write('\n');
       wf.flush();
-    } catch (IOException e) {
-      e.printStackTrace();
+    } catch (Exception ignored) {
+    } finally {
       if (wf != null) {
         try {
           wf.close();
