@@ -299,7 +299,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     mLlSearch.layout(mIvAppIcon.getRight(), 0, mIvAppIcon.getRight() + mLlSearch.getMeasuredWidth(), b);
 
-    mRefreshIndicator.layout(l, t, r, b);
+    mRefreshIndicator.layout(0, 0, r - l, b - t);
 
     mActionOverFlow.layout(r - mActionOverFlow.getMeasuredWidth(), 0, r, b);
 

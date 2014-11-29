@@ -207,7 +207,7 @@ public class HomeActivity extends BaseActivity {
     Bundle args = new Bundle();
     args.putInt("tabIndex", getIntent().getIntExtra("tabIndex", 0));
     mTabFragment.setArguments(args);
-    getSupportFragmentManager().beginTransaction().add(R.id.fl_feed, mTabFragment).commit();
+    getSupportFragmentManager().beginTransaction().add(R.id.fl_main, mTabFragment).commit();
 
     mRegionFragment = (RegionFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_range);
 
