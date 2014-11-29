@@ -226,8 +226,8 @@ public class HomeActivity extends BaseActivity {
     mDlContent.setDrawerListener(new DrawerLayout.DrawerListener() {
       @Override
       public void onDrawerSlide(View drawerView, float slideOffset) {
-        final int topBarHeight = mTopBar.getMeasuredHeight();
         final int pivotY = mFlMain.getMeasuredHeight() >> 1;
+        final int topBarPivotY = mTopBar.getMeasuredHeight() >> 1;
         final float scale = 1 - slideOffset * 0.1f;
 
         if (drawerView.getId() == R.id.fl_side) {
@@ -240,7 +240,7 @@ public class HomeActivity extends BaseActivity {
 
           ViewHelper.setTranslationX(mTopBar, measuredWidth * slideOffset);
           ViewHelper.setPivotX(mTopBar, 0f);
-          ViewHelper.setPivotY(mTopBar, pivotY);
+          ViewHelper.setPivotY(mTopBar, pivotY + mTopBar.getMeasuredHeight());
           ViewHelper.setScaleX(mTopBar, scale);
           ViewHelper.setScaleY(mTopBar, scale);
 
@@ -260,7 +260,7 @@ public class HomeActivity extends BaseActivity {
 
           ViewHelper.setTranslationX(mTopBar, -measuredWidth * slideOffset);
           ViewHelper.setPivotX(mTopBar, mFlMain.getMeasuredWidth());
-          ViewHelper.setPivotY(mTopBar, pivotY);
+          ViewHelper.setPivotY(mTopBar, pivotY + mTopBar.getMeasuredHeight());
           ViewHelper.setScaleX(mTopBar, scale);
           ViewHelper.setScaleY(mTopBar, scale);
 
