@@ -9,14 +9,13 @@
     <FrameLayout
             android:id="@+id/fl_main"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/activity_top_bar_height">
 
         <FrameLayout
                 android:id="@+id/fl_feed"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/activity_top_bar_height"/>
-
+                android:layout_height="match_parent"/>
 
         <ImageButton
                 android:layout_width="wrap_content"
