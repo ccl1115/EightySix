@@ -47,7 +47,7 @@ public class FeedbackActivity extends PublishActivity {
 
     onIvShuffleClicked();
 
-    ((TextActionButton) getTopBar().getActionView(0)).setText(R.string.publish_submit);
+    ((TextActionButton) mTopBar.getActionView(0)).setText(R.string.publish_submit);
   }
 
   @Override

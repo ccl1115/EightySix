@@ -11,6 +11,7 @@ import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.FeedByRegionRequest;
+import com.utree.eightysix.request.PostPraiseCancelRequest;
 import com.utree.eightysix.request.PostPraiseRequest;
 import com.utree.eightysix.response.FeedsByRegionResponse;
 import com.utree.eightysix.rest.OnResponse;
@@ -92,28 +93,51 @@ public class FriendsFeedRegionFragment extends AbsRegionFragment {
       return;
     }
     mPostPraiseRequesting = true;
-    getBaseActivity().request(new PostPraiseRequest(event.getPost().id), new OnResponse2<Response>() {
-      @Override
-      public void onResponse(Response response) {
-        if (RESTRequester.responseOk(response)) {
-          U.getBus().post(event.getPost());
-        } else if ((response.code & 0xffff) == 0x2286) {
-          event.getPost().praised = 1;
+    if (event.isCancel()) {
+      getBaseActivity().request(new PostPraiseCancelRequest(event.getPost().id), new OnResponse2<Response>() {
+        @Override
+        public void onResponse(Response response) {
+          if (RESTRequester.responseOk(response)) {
+            U.getBus().post(event.getPost());
+          } else if ((response.code & 0xffff) == 0x2286) {
+            event.getPost().praised = 0;
+          } else {
+            event.getPost().praised = 0;
+            event.getPost().praise++;
+          }
           mFeedAdapter.notifyDataSetChanged();
-        } else {
-          event.getPost().praised = 0;
-          event.getPost().praise = Math.max(0, event.getPost().praise - 1);
-          mFeedAdapter.notifyDataSetChanged();
+
+          mPostPraiseRequesting = false;
         }
 
-        mPostPraiseRequesting = false;
-      }
+        @Override
+        public void onResponseError(Throwable e) {
+          mPostPraiseRequesting = false;
+        }
+      }, Response.class);
+    } else {
+      getBaseActivity().request(new PostPraiseRequest(event.getPost().id), new OnResponse2<Response>() {
+        @Override
+        public void onResponse(Response response) {
+          if (RESTRequester.responseOk(response)) {
+            U.getBus().post(event.getPost());
+          } else if ((response.code & 0xffff) == 0x2286) {
+            event.getPost().praised = 1;
+          } else {
+            event.getPost().praised = 1;
+            event.getPost().praise = Math.max(0, event.getPost().praise - 1);
+          }
+          mFeedAdapter.notifyDataSetChanged();
 
-      @Override
-      public void onResponseError(Throwable e) {
-                                               mPostPraiseRequesting = false;
-                                                                                                                  }
-    }, Response.class);
+          mPostPraiseRequesting = false;
+        }
+
+        @Override
+        public void onResponseError(Throwable e) {
+          mPostPraiseRequesting = false;
+        }
+      }, Response.class);
+    }
   }
 
   @Subscribe

@@ -149,7 +149,18 @@ public class TopBar extends ViewGroup implements ITopBar2 {
   }
 
   @Override
-  public void setLeftStyle(int style) {
+  public void setLeftDrawable(Drawable drawable) {
+    setLeftStyle(ITopBar2.STYLE_IMAGE);
+    mIvActionLeft.setImageDrawable(drawable);
+  }
+
+  @Override
+  public void hideLeft() {
+    mIvActionLeft.setVisibility(GONE);
+    mTvActionLeft.setVisibility(GONE);
+  }
+
+  private void setLeftStyle(int style) {
     if (style == ITopBar2.STYLE_IMAGE) {
       mIvActionLeft.setVisibility(VISIBLE);
       mTvActionLeft.setVisibility(GONE);
@@ -180,7 +191,12 @@ public class TopBar extends ViewGroup implements ITopBar2 {
   }
 
   @Override
-  public void setRightStyle(int style) {
+  public void hideRight() {
+    mIvActionRight.setVisibility(GONE);
+    mTvActionRight.setVisibility(GONE);
+  }
+
+  private void setRightStyle(int style) {
     if (style == ITopBar2.STYLE_IMAGE) {
       mIvActionRight.setVisibility(VISIBLE);
       mTvActionRight.setVisibility(GONE);
@@ -188,6 +204,12 @@ public class TopBar extends ViewGroup implements ITopBar2 {
       mTvActionRight.setVisibility(VISIBLE);
       mIvActionRight.setVisibility(GONE);
     }
+  }
+
+  @Override
+  public void setRightDrawable(Drawable drawable) {
+    setRightStyle(ITopBar2.STYLE_IMAGE);
+    mIvActionRight.setImageDrawable(drawable);
   }
 
   @Override

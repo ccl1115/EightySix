@@ -14,7 +14,6 @@ import com.utree.eightysix.C;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.FeedActivity;
-import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.app.home.HomeTabActivity;
 import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.push.PushMessageReceiver;
@@ -45,7 +44,7 @@ public class NotifyUtil {
 
   private Intent[] wrapIntent(Intent... intents) {
     Intent[] wrap = new Intent[intents.length + 1];
-    wrap[0] = HomeActivity.getIntent(mContext, 0, 0);
+    wrap[0] = HomeTabActivity.getIntent(mContext);
 
     System.arraycopy(intents, 0, wrap, 1, intents.length);
     return wrap;
@@ -86,7 +85,7 @@ public class NotifyUtil {
         .setContentText(mContext.getString(R.string.notification_friends_new_posts, count));
     if (current) {
       builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
-          HomeActivity.getIntent(mContext, 2, 0),
+          HomeTabActivity.getIntent(mContext),
           PendingIntent.FLAG_UPDATE_CURRENT));
     } else {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {

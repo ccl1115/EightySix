@@ -208,7 +208,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   }
 
   public void setTopBarClickMode(int mode) {
-    getTopBar().setTitleClickMode(mode);
+    mTopBar.setTitleClickMode(mode);
   }
 
   public final <T extends Response> void request(Object request, OnResponse<T> onResponse, Class<T> clz) {
@@ -520,7 +520,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     mTopBar.setSubTitle(title);
   }
 
-  public final TopBar getTopBar() {
+  public final ITopBar2 getTopBar() {
     return mTopBar;
   }
 

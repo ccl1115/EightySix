@@ -11,6 +11,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@drawable/apptheme_primary_btn_dark"
+            android:padding="8dp"
             >
 
         <ImageView
@@ -28,6 +29,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:textColor="@android:color/white"
+                android:background="@drawable/round_border"
+                android:paddingLeft="4dp"
+                android:paddingTop="2dp"
+                android:paddingRight="4dp"
+                android:paddingBottom="2dp"
                 />
 
     </FrameLayout>
@@ -85,6 +91,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
+                android:background="@drawable/round_border"
+                android:paddingLeft="4dp"
+                android:paddingTop="2dp"
+                android:paddingRight="4dp"
+                android:paddingBottom="2dp"
                 />
     </FrameLayout>
 

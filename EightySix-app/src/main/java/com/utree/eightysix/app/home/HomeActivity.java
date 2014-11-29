@@ -331,10 +331,10 @@ public class HomeActivity extends BaseActivity {
       } catch (NumberFormatException ignored) {
       }
       if (v > C.VERSION) {
-        getTopBar().getActionOverflow().setHasNew(0, true);
+        mTopBar.getActionOverflow().setHasNew(0, true);
         mMenuViewHolder.mRbSettingsDot.setVisibility(View.VISIBLE);
       } else {
-        getTopBar().getActionOverflow().setHasNew(0, false);
+        mTopBar.getActionOverflow().setHasNew(0, false);
         mMenuViewHolder.mRbSettingsDot.setVisibility(View.INVISIBLE);
       }
     }
@@ -348,12 +348,12 @@ public class HomeActivity extends BaseActivity {
 
   @Subscribe
   public void onNewCommentCountEvent(NewCommentCountEvent event) {
-    getTopBar().getActionView(0).setCount(event.getCount());
+    mTopBar.getActionView(0).setCount(event.getCount());
   }
 
   @Subscribe
   public void onHasNewPraiseEvent(HasNewPraiseEvent event) {
-    getTopBar().getActionOverflow().setHasNew(1, event.has());
+    mTopBar.getActionOverflow().setHasNew(1, event.has());
     if (event.has()) {
       mMenuViewHolder.mRbNewPraiseDot.setVisibility(View.VISIBLE);
     } else {
@@ -507,7 +507,7 @@ public class HomeActivity extends BaseActivity {
   }
 
   private void setActionAdapter() {
-    getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
+    mTopBar.setActionAdapter(new TopBar.ActionAdapter() {
       @Override
       public String getTitle(int position) {
         return null;
@@ -613,11 +613,11 @@ public class HomeActivity extends BaseActivity {
 
   private void setHasNewPraise() {
     mMenuViewHolder.mRbNewPraiseDot.setVisibility(Account.inst().getHasNewPraise() ? View.VISIBLE : View.INVISIBLE);
-    getTopBar().getActionOverflow().setHasNew(1, Account.inst().getHasNewPraise());
+    mTopBar.getActionOverflow().setHasNew(1, Account.inst().getHasNewPraise());
   }
 
   private void setNewCommentCount() {
-    getTopBar().getActionView(0).setCount(Account.inst().getNewCommentCount());
+    mTopBar.getActionView(0).setCount(Account.inst().getNewCommentCount());
   }
 
   @Keep

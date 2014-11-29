@@ -302,11 +302,11 @@ public class FeedActivity extends BaseActivity {
 
     setTopTitle(circle.shortName);
     if (circle.lock == 1) {
-      getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(
+      mTopBar.mSubTitle.setCompoundDrawablesWithIntrinsicBounds(
           getResources().getDrawable(R.drawable.ic_lock_small), null, null, null);
-      getTopBar().mSubTitle.setCompoundDrawablePadding(U.dp2px(5));
+      mTopBar.mSubTitle.setCompoundDrawablePadding(U.dp2px(5));
     } else {
-      getTopBar().mSubTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+      mTopBar.mSubTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
     }
   }
 

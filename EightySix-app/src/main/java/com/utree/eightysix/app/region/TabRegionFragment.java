@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.region;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,8 +9,11 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -18,6 +22,7 @@ import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
+import com.utree.eightysix.widget.ITopBar2;
 import com.utree.eightysix.widget.TitleTab;
 
 /**
@@ -30,6 +35,36 @@ public class TabRegionFragment extends BaseFragment {
 
   @InjectView (R.id.tt_tab)
   public TitleTab mTtTab;
+
+  @InjectView(R.id.ll_filter)
+  public LinearLayout mLlFilter;
+
+  @OnClick(R.id.v_mask)
+  public void onVMaskClicked() {
+    mLlFilter.setVisibility(View.GONE);
+  }
+
+  @InjectView(R.id.tv_gender_all)
+  public TextView mTvAll;
+
+  @InjectView(R.id.tv_gender_male)
+  public TextView mTvMale;
+
+  @InjectView(R.id.tv_gender_female)
+  public TextView mTvFemale;
+
+  @InjectView(R.id.tv_region_0)
+  public TextView mTvRegion0;
+
+  @InjectView(R.id.tv_region_1)
+  public TextView mTvRegion1;
+
+  @InjectView(R.id.tv_region_2)
+  public TextView mTvRegion2;
+
+  @InjectView(R.id.tv_region_3)
+  public TextView mTvRegion3;
+
   private FeedRegionFragment mFeedFragment;
   private HotFeedRegionFragment mHotFeedFragment;
 
@@ -125,6 +160,14 @@ public class TabRegionFragment extends BaseFragment {
         }
       }
     }, 500);
+
+  }
+
+  @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
+
+    onHiddenChanged(false);
   }
 
   @Subscribe
@@ -142,6 +185,28 @@ public class TabRegionFragment extends BaseFragment {
       mTtTab.setTabBudget(1, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
     } else {
       mTtTab.setTabBudget(1, "", true);
+    }
+  }
+
+  @Override
+  public void onHiddenChanged(boolean hidden) {
+    if (mFeedFragment.isAdded()) {
+      mFeedFragment.onHiddenChanged(hidden);
+    }
+
+    if (!hidden) {
+      getTopBar().setLeftText("筛选");
+      getTopBar().setCallback(new ITopBar2.Callback() {
+        @Override
+        public void onLeftClicked(View v) {
+          mLlFilter.setVisibility(mLlFilter.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+        }
+
+        @Override
+        public void onRightClicked(View v) {
+
+        }
+      });
     }
   }
 

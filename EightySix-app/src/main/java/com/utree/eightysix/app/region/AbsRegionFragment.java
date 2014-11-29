@@ -18,7 +18,6 @@ import com.utree.eightysix.app.feed.FeedAdapter;
 import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
 import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
-import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.app.region.event.RegionResponseEvent;
@@ -32,15 +31,13 @@ import com.utree.eightysix.response.FeedsByRegionResponse;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.view.SwipeRefreshLayout;
-import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.LoadMoreCallback;
-import com.utree.eightysix.widget.RandomSceneTextView;
-import com.utree.eightysix.widget.TopBar;
+import com.utree.eightysix.widget.*;
 
 /**
  * @author simon
  */
 public abstract class AbsRegionFragment extends BaseFragment {
+
   @InjectView (R.id.lv_feed)
   public AdvancedListView mLvFeed;
 
@@ -57,6 +54,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
   private int mRegionType = -1;
 
   protected boolean mPostPraiseRequesting;
+  private String mSubInfo;
 
   public void setRegionType(int regionType) {
     mRegionType = regionType;
@@ -243,6 +241,27 @@ public abstract class AbsRegionFragment extends BaseFragment {
     }
   }
 
+  @Override
+  public void onHiddenChanged(boolean hidden) {
+    if (!hidden) {
+      switch (getRegionType()) {
+        case 0:
+          getTopBar().setTitle(mCircle == null ? "" : mCircle.shortName);
+          break;
+        case 1:
+          getTopBar().setTitle("1公里内");
+          break;
+        case 2:
+          getTopBar().setTitle("5公里内");
+          break;
+        case 3:
+          getTopBar().setTitle("同城");
+          break;
+      }
+      getTopBar().setSubTitle(mSubInfo == null ? "" : mSubInfo);
+    }
+  }
+
   protected abstract void requestFeeds(final int regionType, final int page);
 
   protected void responseForRequest(FeedsByRegionResponse response, int regionType, int page) {
@@ -267,31 +286,18 @@ public abstract class AbsRegionFragment extends BaseFragment {
 
         Account.inst().setLastRegionType(getRegionType());
 
-        TopBar topBar = getBaseActivity().getTopBar();
-        if (getRegionType() == 0 && mCircle.lock == 1) {
-          topBar.mSubTitle.setCompoundDrawablesWithIntrinsicBounds(
-              getResources().getDrawable(R.drawable.ic_lock_small), null, null, null);
-          topBar.mSubTitle.setCompoundDrawablePadding(U.dp2px(5));
-        } else {
-          topBar.mSubTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-        }
-
         switch (getRegionType()) {
           case 0:
-            getBaseActivity().setTopTitle(mCircle.shortName);
-            getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_ONE);
+            getTopBar().setTitle(mCircle.shortName);
             break;
           case 1:
-            getBaseActivity().setTopTitle("1公里内");
-            getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
+            getTopBar().setTitle("1公里内");
             break;
           case 2:
-            getBaseActivity().setTopTitle("5公里内");
-            getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
+            getTopBar().setTitle("5公里内");
             break;
           case 3:
-            getBaseActivity().setTopTitle("同城");
-            getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
+            getTopBar().setTitle("同城");
             break;
         }
 
@@ -301,7 +307,8 @@ public abstract class AbsRegionFragment extends BaseFragment {
       }
 
       mPageInfo = response.object.posts.page;
-      getBaseActivity().setTopSubTitle(response.object.subInfo);
+      mSubInfo = response.object.subInfo;
+      getTopBar().setSubTitle(mSubInfo);
 
       if (response.object.fetch != null) {
         int count = 0;
