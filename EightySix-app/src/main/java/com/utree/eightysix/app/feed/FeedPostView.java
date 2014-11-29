@@ -34,7 +34,7 @@ import static com.utree.eightysix.app.region.FeedRegionAdapter.DismissTipOverlay
 
 /**
  */
-public class FeedPostView extends BasePostView {
+public class FeedPostView extends LinearLayout {
 
   private static int sPostLength = U.getConfigInt("post.length");
 
@@ -68,12 +68,6 @@ public class FeedPostView extends BasePostView {
   @InjectView (R.id.ll_comment)
   public LinearLayout mLlComment;
 
-  @InjectView (R.id.fl_grid_panel)
-  public LinearLayout mLlPanel;
-
-  @InjectView (R.id.rl_item)
-  public LinearLayout mLlItem;
-
   @InjectView (R.id.fl_content)
   public FrameLayout mFlContent;
 
@@ -91,6 +85,8 @@ public class FeedPostView extends BasePostView {
 
   @InjectView(R.id.ll_tags)
   public LinearLayout mLlTags;
+
+  private Post mPost;
 
   @OnClick(R.id.tv_tag_1)
   public void onTvTag1Clicked() {
@@ -130,16 +126,16 @@ public class FeedPostView extends BasePostView {
   private View mTipTags;
 
   public FeedPostView(Context context) {
-    this(context, null, 0);
+    this(context, null);
   }
 
   public FeedPostView(Context context, AttributeSet attrs) {
-    this(context, attrs, 0);
-  }
-
-  public FeedPostView(Context context, AttributeSet attrs, int defStyle) {
-    super(context, attrs, defStyle);
+    super(context, attrs);
     inflate(context, R.layout.item_feed_post, this);
+
+    setOrientation(VERTICAL);
+    setPadding(U.dp2px(8), U.dp2px(8), U.dp2px(8), 0);
+
     U.viewBinding(this, this);
 
     mIvShare.setBackgroundDrawable(
@@ -156,8 +152,6 @@ public class FeedPostView extends BasePostView {
         alpha.start();
       }
     };
-
-    setPostTheme(Color.BLACK);
   }
 
   public ImageView getIvShare() {
@@ -231,13 +225,13 @@ public class FeedPostView extends BasePostView {
     if (mPost.praised == 1) {
       mTvPraise.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_red_pressed, 0, 0, 0);
     } else if (mPost.praise > 0) {
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartRes, 0, 0, 0);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_white_normal, 0, 0, 0);
     } else {
       mTvPraise.setText("");
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartOutlineRes, 0, 0, 0);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_outline_normal, 0, 0, 0);
     }
 
-    mTvComment.setCompoundDrawablesWithIntrinsicBounds(mCommentRes, 0, 0, 0);
+    mTvComment.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_reply, 0, 0, 0);
 
     if (TextUtils.isEmpty(post.comment)) {
       mLlComment.setVisibility(GONE);
@@ -296,46 +290,9 @@ public class FeedPostView extends BasePostView {
   }
 
   @Override
-  protected void setPostTheme(int color) {
-    super.setPostTheme(color);
-
-    mTvComment.setTextColor(mMonoColor);
-    mTvContent.setTextColor(mMonoColor);
-    mTvPraise.setTextColor(mMonoColor);
-    mTvSource.setTextColor(mMonoColor);
-
-    if (mPost == null) return;
-
-    if (mPost.praised == 1) {
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_red_pressed, 0, 0, 0);
-    } else if (mPost.praise > 0) {
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartRes, 0, 0, 0);
-    } else {
-      mTvPraise.setText("");
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartOutlineRes, 0, 0, 0);
-    }
-
-    mTvComment.setCompoundDrawablesWithIntrinsicBounds(mCommentRes, 0, 0, 0);
-
-    invalidate();
-  }
-
-  @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
     int widthSize = MeasureSpec.getSize(widthMeasureSpec);
     super.onMeasure(widthMeasureSpec, widthSize + MeasureSpec.EXACTLY);
-  }
-
-  @Override
-  protected void onAttachedToWindow() {
-    super.onAttachedToWindow();
-    M.getRegisterHelper().register(this);
-  }
-
-  @Override
-  protected void onDetachedFromWindow() {
-    M.getRegisterHelper().unregister(this);
-    super.onDetachedFromWindow();
   }
 
   public void showShareTip() {

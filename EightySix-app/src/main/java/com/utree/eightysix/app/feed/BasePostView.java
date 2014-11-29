@@ -3,7 +3,7 @@ package com.utree.eightysix.app.feed;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import com.utree.eightysix.R;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.utils.ColorUtil;
@@ -11,7 +11,7 @@ import com.utree.eightysix.utils.ColorUtil;
 /**
  * @author simon
  */
-public class BasePostView extends FrameLayout {
+public class BasePostView extends LinearLayout {
   protected Post mPost;
 
   protected int mHeartRes = R.drawable.ic_black_heart_white_normal;
@@ -19,8 +19,8 @@ public class BasePostView extends FrameLayout {
   protected int mCommentRes = R.drawable.ic_black_reply;
   protected int mMonoColor;
 
-  public BasePostView(Context context, AttributeSet attrs, int defStyle) {
-    super(context, attrs, defStyle);
+  public BasePostView(Context context, AttributeSet attrs) {
+    super(context, attrs);
   }
 
   protected void setPostTheme(int color) {

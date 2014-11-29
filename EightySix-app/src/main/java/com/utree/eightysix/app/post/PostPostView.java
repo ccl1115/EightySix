@@ -74,7 +74,7 @@ public class PostPostView extends BasePostView {
   }
 
   public PostPostView(Context context, AttributeSet attrs, int defStyle) {
-    super(context, attrs, defStyle);
+    super(context, attrs);
 
     LayoutInflater.from(context).inflate(R.layout.item_post_post, this);
     ButterKnife.inject(this, this);
