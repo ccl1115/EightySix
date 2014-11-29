@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
@@ -59,6 +60,9 @@ public class PostActivity extends BaseActivity {
   @InjectView (R.id.rb_post)
   public RoundedButton mRbPost;
 
+  @InjectView(R.id.fl_banner)
+  public FrameLayout mFlBanner;
+
   private Post mPost;
 
   private String mPostId;
@@ -69,9 +73,6 @@ public class PostActivity extends BaseActivity {
   private AlertDialog mCommentContextDialog;
 
   private boolean mGotoBottom;
-
-  public PostActivity() {
-  }
 
   public static void start(Context context, Post post) {
     Intent intent = new Intent(context, PostActivity.class);
@@ -121,6 +122,60 @@ public class PostActivity extends BaseActivity {
       mRbPost.setEnabled(true);
     }
   }
+
+  @OnClick(R.id.iv_close)
+  public void onIvCloseClicked() {
+    U.getAnalyser().trackEvent(U.getContext(), "post_close", "post_close");
+    finishOrShowQuitConfirmDialog();
+  }
+
+  @OnClick(R.id.iv_more)
+  public void onIvMoreClicked() {
+    if (mPost == null) return;
+
+    U.getAnalyser().trackEvent(U.getContext(), "post_more", "post_more");
+    String[] items;
+    if (mPost.owner == 1) {
+      items = new String[]{U.gs(R.string.share),
+          U.gs(R.string.report),
+          U.gs(R.string.like),
+          U.gs(R.string.delete)};
+    } else {
+      items = new String[]{U.gs(R.string.share),
+          U.gs(R.string.report),
+          U.gs(R.string.like)};
+    }
+    new AlertDialog.Builder(this).setTitle(U.gs(R.string.post_action))
+        .setItems(items,
+            new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                  case 0:
+                    U.getAnalyser().trackEvent(U.getContext(), "post_more_share", "post_more_share");
+                    U.getShareManager().sharePostDialog(PostActivity.this, mPost).show();
+                    break;
+                  case 1:
+                    U.getAnalyser().trackEvent(U.getContext(), "post_more_report", "post_more_report");
+                    new ReportDialog(PostActivity.this, mPost.id).show();
+                    break;
+                  case 2:
+                    if (mPost == null) return;
+                    if (mPost.praised != 1) {
+                      U.getAnalyser().trackEvent(U.getContext(), "post_more_praise", "praise");
+                      mPostCommentsAdapter.getPostPostView().doPraise();
+                    }
+                    mPostCommentsAdapter.notifyDataSetChanged();
+                    break;
+                  case 3:
+                    U.getAnalyser().trackEvent(U.getContext(), "post_more_delete", "post_more_delete");
+                    U.getBus().post(new PostDeleteRequest(mPost.id));
+                    break;
+                }
+              }
+            }).create().show();
+  }
+
 
   @OnItemClick (R.id.lv_comments)
   public void onLvCommentsItemClicked(final int position) {
@@ -214,11 +269,15 @@ public class PostActivity extends BaseActivity {
             Env.setFirstRun("overlay_tip_portrait", false);
           }
         }
+
       }
 
       @Override
       public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
+        if (mPostCommentsAdapter != null) {
+          PostPostView postPostView = mPostCommentsAdapter.getPostPostView();
+          mFlBanner.setBackgroundColor((int) (0x88 * ((-postPostView.getTop()) / (float) postPostView.getMeasuredHeight())) << 24);
+        }
       }
     });
 
@@ -229,7 +288,6 @@ public class PostActivity extends BaseActivity {
   protected void onResume() {
     super.onResume();
     M.getRegisterHelper().register(mLvComments);
-
   }
 
   @Override
@@ -261,7 +319,7 @@ public class PostActivity extends BaseActivity {
       showToast(getString(R.string.post_not_found), false);
       finish();
     } else {
-      mPostCommentsAdapter = new PostCommentsAdapter(mPost, null);
+      mPostCommentsAdapter = new PostCommentsAdapter(this, mPost, null);
       mLvComments.setAdapter(mPostCommentsAdapter);
     }
 
@@ -438,7 +496,7 @@ public class PostActivity extends BaseActivity {
       @Override
       public void onResponse(PostCommentsResponse response) {
         if (RESTRequester.responseOk(response)) {
-          mPostCommentsAdapter = new PostCommentsAdapter(response.object.post, response.object.comments.lists);
+          mPostCommentsAdapter = new PostCommentsAdapter(PostActivity.this, response.object.post, response.object.comments.lists);
           mLvComments.setAdapter(mPostCommentsAdapter);
           mPost = response.object.post;
           mPostCommentsAdapter.setNeedReload(false);
@@ -473,7 +531,7 @@ public class PostActivity extends BaseActivity {
       @Override
       public void onResponse(PostCommentsResponse response) {
         if (response != null && response.code == 0 && response.object != null) {
-          mPostCommentsAdapter = new PostCommentsAdapter(response.object.post, response.object.comments.lists);
+          mPostCommentsAdapter = new PostCommentsAdapter(PostActivity.this, response.object.post, response.object.comments.lists);
           mLvComments.setAdapter(mPostCommentsAdapter);
           mPost = response.object.post;
 

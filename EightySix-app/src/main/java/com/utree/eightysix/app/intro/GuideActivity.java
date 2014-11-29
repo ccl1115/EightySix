@@ -201,8 +201,6 @@ public class GuideActivity extends BaseActivity {
 
     public Page3ViewHolder(View view) {
       ButterKnife.inject(this, view);
-      mPostPostView.mIvClose.setVisibility(View.GONE);
-      mPostPostView.mIvMore.setVisibility(View.GONE);
     }
 
     @OnClick (R.id.tv_login)

@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.post;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.utree.eightysix.data.Post;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.widget.FontPortraitView;
 import com.utree.eightysix.widget.RandomSceneTextView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,10 +38,12 @@ class PostCommentsAdapter extends BaseAdapter {
   List<Comment> mComments;
 
   private boolean mNeedReload;
+  private PostPostView mPostView;
 
-  public PostCommentsAdapter(Post post, List<Comment> comments) {
+  public PostCommentsAdapter(Context context, Post post, List<Comment> comments) {
     mPost = post;
     mComments = comments;
+    mPostView = new PostPostView(context);
   }
 
   public void add(List<Comment> comments) {
@@ -49,6 +53,10 @@ class PostCommentsAdapter extends BaseAdapter {
       mComments.addAll(comments);
     }
     notifyDataSetChanged();
+  }
+
+  public PostPostView getPostPostView() {
+    return mPostView;
   }
 
   public void add(Comment comment) {
@@ -205,7 +213,7 @@ class PostCommentsAdapter extends BaseAdapter {
 
   private View getPostView(int position, View convertView, ViewGroup parent) {
     if (convertView == null) {
-      convertView = new PostPostView(parent.getContext());
+      convertView = mPostView;
     }
 
     Post post = (Post) getItem(position);
