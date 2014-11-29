@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.utree.eightysix</groupId>
     <artifactId>EightySix-parent</artifactId>
-    <version>1.5.3</version>
+    <version>1.5.4</version>
     <packaging>pom</packaging>
     <name>EightySix - Parent</name>
 
