@@ -22,7 +22,7 @@
             android:layout_height="match_parent"
             android:paddingLeft="48dp"
             android:paddingRight="48dp"
-            android:background="@android:color/transparent"/>
+            android:textColor="@android:color/white"/>
 
     <LinearLayout
             android:id="@+id/fl_panel"
