@@ -22,7 +22,7 @@ public class ImageActionButton extends ActionButton {
     super(context, attrs);
 
     mImageAction = new ImageView(context, attrs);
-    LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+    FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
     mImageAction.setLayoutParams(lp);
 
     addView(mImageAction, 0);

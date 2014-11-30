@@ -22,6 +22,10 @@ public class ReverseFrameLayout extends FrameLayout {
 
   @Override
   public void addView(View child) {
-    addView(child, 0);
+    if (getChildCount() == 1) {
+      addView(child, 0);
+    } else {
+      super.addView(child);
+    }
   }
 }
