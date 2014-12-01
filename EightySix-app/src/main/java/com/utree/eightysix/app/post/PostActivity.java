@@ -123,6 +123,11 @@ public class PostActivity extends BaseActivity {
     }
   }
 
+  @OnClick(R.id.fl_banner)
+  public void onFlBannerClicked() {
+    mLvComments.setSelection(0);
+  }
+
   @OnClick(R.id.iv_close)
   public void onIvCloseClicked() {
     U.getAnalyser().trackEvent(U.getContext(), "post_close", "post_close");
@@ -276,7 +281,11 @@ public class PostActivity extends BaseActivity {
       public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (mPostCommentsAdapter != null) {
           PostPostView postPostView = mPostCommentsAdapter.getPostPostView();
-          mFlBanner.setBackgroundColor((int) (0x88 * ((-postPostView.getTop()) / (float) postPostView.getMeasuredHeight())) << 24);
+          if (postPostView.getParent() != null) {
+            mFlBanner.setBackgroundColor((int) (0x88 * ((-postPostView.getTop()) / (float) postPostView.getMeasuredHeight())) << 24);
+          } else {
+            mFlBanner.setBackgroundColor(0x88000000);
+          }
         }
       }
     });

@@ -13,7 +13,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="47dp"
             android:layout_marginStart="47dp"
-            android:layout_marginTop="@dimen/activity_top_bar_height"
+            android:layout_gravity="top"
             android:orientation="vertical"
             android:background="@color/apptheme_primary_grey_color"
             >

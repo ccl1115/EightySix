@@ -102,6 +102,7 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
     try {
       m = U.getGson().fromJson(xgPushTextMessage.getContent(), Message.class);
     } catch (Exception e) {
+      U.getAnalyser().reportError(context, "xg push invalid msg: " + xgPushTextMessage.getContent());
       return;
     }
 

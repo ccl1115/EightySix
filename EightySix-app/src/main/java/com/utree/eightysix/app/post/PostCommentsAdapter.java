@@ -44,6 +44,7 @@ class PostCommentsAdapter extends BaseAdapter {
     mPost = post;
     mComments = comments;
     mPostView = new PostPostView(context);
+    mPostView.setData(mPost);
   }
 
   public void add(List<Comment> comments) {

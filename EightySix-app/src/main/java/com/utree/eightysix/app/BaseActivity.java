@@ -7,10 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.util.*;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
@@ -96,6 +93,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     inflate.setId(R.id.content);
     FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) inflate.getLayoutParams();
     params.topMargin = mFillContent ? 0 : getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
+    params.gravity = Gravity.TOP;
 
     mBaseView.addView(inflate, 0, params);
 
@@ -121,6 +119,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
           ViewGroup.LayoutParams.MATCH_PARENT);
     }
     params.topMargin = mFillContent ? 0 : getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
+    params.gravity = Gravity.TOP;
 
     mBaseView.addView(contentView, 0, params);
 
@@ -327,8 +326,9 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   protected final  void setFillContent(boolean fillContent) {
     if (mFillContent == fillContent) return;
     mFillContent = fillContent;
-    ((FrameLayout.LayoutParams) mBaseView.findViewById(R.id.content).getLayoutParams()).topMargin =
-        fillContent ? 0 : getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
+    FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mBaseView.findViewById(R.id.content).getLayoutParams();
+    layoutParams.topMargin = fillContent ? 0 : getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
+    layoutParams.gravity = Gravity.TOP;
     mBaseView.requestLayout();
   }
 
