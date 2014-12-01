@@ -54,16 +54,13 @@ public class PingService extends IntentService {
               U.getRESTRequester().setHost("http://" + U.getConfig("api.ip"));
             }
           });
-          U.getAnalyser().reportError(this, "PingService: failed to update host, not get ip from sync api");
         }
 
       }
     } catch (IOException e) {
       Log.d(TAG, "ping failed, io exception");
-      U.getAnalyser().reportError(this, "PingService: failed to ping host, IOException");
     } catch (InterruptedException e) {
       Log.d(TAG, "ping failed, interrupted exception");
-      U.getAnalyser().reportError(this, "PingService: failed to ping host, InterruptedException");
     }
   }
 
