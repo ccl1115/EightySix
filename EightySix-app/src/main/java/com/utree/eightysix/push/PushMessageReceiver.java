@@ -160,7 +160,7 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
       if (BuildConfig.DEBUG) {
         e.printStackTrace();
       } else {
-        U.getAnalyser().reportException(context, e);
+        U.getAnalyser().reportError(context, "xg push invalid msg: " + xgPushClickedResult.getCustomContent());
       }
     }
   }
