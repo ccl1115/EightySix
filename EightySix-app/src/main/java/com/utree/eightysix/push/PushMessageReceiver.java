@@ -167,7 +167,9 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
 
   @Override
   public void onNotifactionShowedResult(Context context, XGPushShowedResult xgPushShowedResult) {
-
+    if (!Account.inst().isLogin()) {
+      ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+    }
   }
 
 
