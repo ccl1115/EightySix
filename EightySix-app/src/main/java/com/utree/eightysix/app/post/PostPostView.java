@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -16,7 +17,6 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.app.feed.BasePostView;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
 import com.utree.eightysix.app.home.HomeActivity;
@@ -35,7 +35,7 @@ import java.util.List;
  * @author simon
  * @see PostActivity
  */
-public class PostPostView extends BasePostView {
+public class PostPostView extends LinearLayout {
 
   private static int sPostLength = U.getConfigInt("post.length");
 
@@ -66,22 +66,16 @@ public class PostPostView extends BasePostView {
   private Post mPost;
 
   public PostPostView(Context context) {
-    this(context, null, 0);
+    this(context, null);
   }
 
   public PostPostView(Context context, AttributeSet attrs) {
-    this(context, attrs, 0);
-  }
-
-  public PostPostView(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs);
 
     LayoutInflater.from(context).inflate(R.layout.item_post_post, this);
     ButterKnife.inject(this, this);
 
     M.getRegisterHelper().register(this);
-
-    setPostTheme(Color.BLACK);
   }
 
   @OnClick (R.id.tv_tag_1)
@@ -139,15 +133,15 @@ public class PostPostView extends BasePostView {
       mAivBg.setBackgroundColor(ColorUtil.strToColor(mPost.bgColor));
     }
 
-    mTvComment.setCompoundDrawablesWithIntrinsicBounds(mCommentRes, 0, 0, 0);
+    mTvComment.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_reply, 0, 0, 0);
 
     if (mPost.praised == 1) {
       mTvPraise.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_red_pressed, 0, 0, 0);
     } else if (mPost.praise > 0) {
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartRes, 0, 0, 0);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_white_normal, 0, 0, 0);
     } else {
       mTvPraise.setText("");
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartOutlineRes, 0, 0, 0);
+      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_outline_normal, 0, 0, 0);
     }
 
     mTvTag1.setText("");
@@ -194,29 +188,6 @@ public class PostPostView extends BasePostView {
     mPost.praised = 1;
     mPost.praise++;
     U.getBus().post(new PostPostPraiseEvent(mPost, false));
-  }
-
-  @Override
-  protected void setPostTheme(int color) {
-    super.setPostTheme(color);
-
-    mTvComment.setTextColor(mMonoColor);
-    mTvContent.setTextColor(mMonoColor);
-    mTvPraise.setTextColor(mMonoColor);
-    mTvSource.setTextColor(mMonoColor);
-
-    if (mPost == null) return;
-
-    if (mPost.praised == 1) {
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_red_pressed, 0, 0, 0);
-    } else if (mPost.praise > 0) {
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartRes, 0, 0, 0);
-    } else {
-      mTvPraise.setText("");
-      mTvPraise.setCompoundDrawablesWithIntrinsicBounds(mHeartOutlineRes, 0, 0, 0);
-    }
-
-    mTvComment.setCompoundDrawablesWithIntrinsicBounds(mCommentRes, 0, 0, 0);
   }
 
   @Override
