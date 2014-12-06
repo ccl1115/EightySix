@@ -18,7 +18,6 @@ import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import de.akquinet.android.androlog.Log;
 import org.apache.http.Header;
-import org.apache.http.HttpStatus;
 
 import java.io.*;
 import java.util.concurrent.Executor;
@@ -49,7 +48,7 @@ public class ImageUtils {
       }
     }
   };
-  private static AsyncHttpClient sClient = new AsyncHttpClient();
+  private static AsyncHttpClient sClient = U.getRESTRequester().getClient();
   private static Executor sThreadPoolExecutor = Executors.newSingleThreadExecutor();
 
   public static void clear() {
@@ -595,6 +594,7 @@ public class ImageUtils {
         U.getBus().post(new ImageLoadedEvent(mHash, bitmap, FROM_DISK));
       } else {
         Log.d(TAG, "onFailed from disk");
+        Log.d(TAG, "get from remote: " + mUrl);
         sClient.get(U.getContext(), mUrl, new ImageAsyncHttpResponseHandler(mHash));
       }
 
@@ -697,11 +697,7 @@ public class ImageUtils {
     @Override
     public void onSuccess(int i, Header[] headers, File file) {
       Log.d(TAG, "onSuccess");
-      if (i <= HttpStatus.SC_OK) {
-        executeTask(new ImageRemoteDecodeWorker(hash, file));
-      } else {
-        U.getBus().post(new ImageLoadedEvent(hash, null, FROM_REMOTE));
-      }
+      executeTask(new ImageRemoteDecodeWorker(hash, file));
     }
   }
 }
