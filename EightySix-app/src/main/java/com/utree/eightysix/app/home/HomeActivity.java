@@ -29,6 +29,7 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.AccountActivity;
 import com.utree.eightysix.app.account.AddFriendActivity;
+import com.utree.eightysix.app.chat.ConversationActivity;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
 import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
@@ -353,7 +354,7 @@ public class HomeActivity extends BaseActivity {
 
   @Subscribe
   public void onNewCommentCountEvent(NewCommentCountEvent event) {
-    getTopBar().getActionView(0).setCount(event.getCount());
+    getTopBar().getActionView(1).setCount(event.getCount());
   }
 
   @Subscribe
@@ -520,8 +521,10 @@ public class HomeActivity extends BaseActivity {
 
       @Override
       public Drawable getIcon(int position) {
-        if (position == 0) {
+        if (position == 1) {
           return getResources().getDrawable(R.drawable.ic_action_msg);
+        } else if (position == 0) {
+          return getResources().getDrawable(R.drawable.ic_app_icon);
         }
         return null;
       }
@@ -533,15 +536,18 @@ public class HomeActivity extends BaseActivity {
 
       @Override
       public void onClick(View view, int position) {
-        if (position == 0) {
+        if (position == 1) {
           U.getAnalyser().trackEvent(HomeActivity.this, "feed_msg", "feed_msg");
           MsgActivity.start(HomeActivity.this, Account.inst().getNewCommentCount() > 0);
+        } else if (position == 0) {
+          U.getAnalyser().trackEvent(HomeActivity.this, "feed_converstaion", "feed_conversation");
+          ConversationActivity.start(HomeActivity.this);
         }
       }
 
       @Override
       public int getCount() {
-        return 1;
+        return 2;
       }
 
       @Override
@@ -622,7 +628,7 @@ public class HomeActivity extends BaseActivity {
   }
 
   private void setNewCommentCount() {
-    getTopBar().getActionView(0).setCount(Account.inst().getNewCommentCount());
+    getTopBar().getActionView(1).setCount(Account.inst().getNewCommentCount());
   }
 
   @Keep
