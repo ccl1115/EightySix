@@ -114,6 +114,11 @@ public class FeedPostView extends LinearLayout {
     }
   }
 
+  @OnClick(R.id.iv_chat)
+  public void onIvChatClicked() {
+
+  }
+
   private Runnable mShareAnimation;
 
   private int mCircleId;

@@ -524,7 +524,7 @@ public class HomeActivity extends BaseActivity {
         if (position == 1) {
           return getResources().getDrawable(R.drawable.ic_action_msg);
         } else if (position == 0) {
-          return getResources().getDrawable(R.drawable.ic_app_icon);
+          return getResources().getDrawable(R.drawable.ic_chat_large);
         }
         return null;
       }

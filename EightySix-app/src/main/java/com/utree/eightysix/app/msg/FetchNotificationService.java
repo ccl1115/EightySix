@@ -61,7 +61,7 @@ public class FetchNotificationService extends Service {
   public int onStartCommand(Intent intent, int flags, int startId) {
     mShowCommentNotify = intent.getBooleanExtra("showCommentNotify", false);
     if (intent.getBooleanExtra("loop", true)) {
-      mHandler.sendEmptyMessageDelayed(MSG_FETCH, 1000);
+//      mHandler.sendEmptyMessageDelayed(MSG_FETCH, 1000);
     } else {
       requestFetch();
     }
