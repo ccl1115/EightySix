@@ -165,6 +165,12 @@
 
         <activity android:exported="@bool/exported" android:name=".app.region.FactoryRegionActivity" android:screenOrientation="portrait"/>
 
+        <activity
+                android:exported="@bool/exported"
+                android:name=".app.chat.ConversationActivity"
+                android:label="会话列表"
+                android:screenOrientation="portrait"/>
+
         <service android:enabled="true" android:name=".contact.ContactsSyncService"/>
         <service android:enabled="true" android:name=".app.msg.FetchNotificationService"/>
         <service android:enabled="true" android:name=".app.SyncService"/>
