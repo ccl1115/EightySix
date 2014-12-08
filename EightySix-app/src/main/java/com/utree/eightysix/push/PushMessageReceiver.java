@@ -13,10 +13,10 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.app.home.HomeActivity;
-import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.msg.PraiseActivity;
 import com.utree.eightysix.app.msg.PullNotificationService;
+import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.app.tag.TagTabActivity;
 import com.utree.eightysix.app.topic.TopicActivity;
 import com.utree.eightysix.app.topic.TopicListActivity;
@@ -160,14 +160,16 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
       if (BuildConfig.DEBUG) {
         e.printStackTrace();
       } else {
-        U.getAnalyser().reportException(context, e);
+        U.getAnalyser().reportError(context, "xg push invalid msg: " + xgPushClickedResult.getCustomContent());
       }
     }
   }
 
   @Override
   public void onNotifactionShowedResult(Context context, XGPushShowedResult xgPushShowedResult) {
-
+    if (!Account.inst().isLogin()) {
+      ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+    }
   }
 
 
@@ -198,6 +200,7 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
       String[] args = cmd.split(":");
 
       if ("feed".equals(args[0])) {
+        HomeActivity.start(context);
         FeedActivity.start(context, Integer.parseInt(args[1]));
       } else if ("post".equals(args[0])) {
         HomeActivity.start(context);

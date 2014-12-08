@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import com.tencent.cloudsdk.tsocket.GlobalContext;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.C;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.publish.BgSyncService;
@@ -70,6 +71,9 @@ public class BaseApplication extends Application {
       //ChatAccount.inst();
 
       startService(new Intent(this, BgSyncService.class));
+
+      // 初始化账号信息
+      Account.inst();
     }
   }
 
