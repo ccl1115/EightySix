@@ -278,4 +278,5 @@
     <string name="all_topic">全部话题</string>
     <string name="change">更改</string>
     <string name="unfollow">取消关注</string>
+    <string name="chat_anonymous">匿名聊天</string>
 </resources>
