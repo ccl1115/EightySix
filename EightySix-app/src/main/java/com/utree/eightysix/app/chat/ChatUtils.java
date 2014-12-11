@@ -61,7 +61,7 @@ public class ChatUtils {
         Conversation conversation = new Conversation();
         conversation.setBgUrl(post.bgUrl);
         conversation.setChatId(post.chatId);
-        conversation.setChatSource(post.source);
+        conversation.setChatSource(post.shortName);
         conversation.setPostId(post.id);
         conversation.setLastMsg("");
         conversation.setRelation(post.viewType == 3 ? "认识的人" : "陌生人");
@@ -78,7 +78,7 @@ public class ChatUtils {
         Conversation conversation = new Conversation();
         conversation.setBgUrl(post.bgUrl);
         conversation.setChatId(post.chatId);
-        conversation.setChatSource(post.source);
+        conversation.setChatSource(post.shortName);
         conversation.setPostId(post.id);
         conversation.setCommentId(comment.id);
         conversation.setLastMsg("");
@@ -89,6 +89,17 @@ public class ChatUtils {
         conversation.setPortrait(comment.avatar);
         DaoUtils.getConversationDao().insert(conversation);
       }
+    }
+
+    public static void deleteConversation(String chatId) {
+      DaoUtils.getMessageDao().queryBuilder()
+          .where(MessageDao.Properties.ChatId.eq(chatId))
+          .buildDelete()
+          .executeDeleteWithoutDetachingEntities();
+      DaoUtils.getConversationDao().queryBuilder()
+          .where(ConversationDao.Properties.ChatId.eq(chatId))
+          .buildDelete()
+          .executeDeleteWithoutDetachingEntities();
     }
   }
 

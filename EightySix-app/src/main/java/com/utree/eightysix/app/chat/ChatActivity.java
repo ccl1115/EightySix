@@ -1,7 +1,9 @@
 package com.utree.eightysix.app.chat;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
@@ -17,9 +19,15 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.chat.event.ChatEvent;
+import com.utree.eightysix.dao.Conversation;
+import com.utree.eightysix.dao.ConversationDao;
 import com.utree.eightysix.dao.Message;
 import com.utree.eightysix.dao.MessageConst;
 import com.utree.eightysix.data.Post;
+import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.utils.DaoUtils;
 import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.RoundedButton;
@@ -51,6 +59,7 @@ public class ChatActivity extends BaseActivity {
 
   private Post mPost;
   private String mCommentId;
+  private Conversation mConversation;
 
   public static void start(Context context, Post post, String commentId) {
     Intent intent = new Intent(context, ChatActivity.class);
@@ -121,6 +130,16 @@ public class ChatActivity extends BaseActivity {
   }
 
   @Override
+  public boolean showActionOverflow() {
+    return true;
+  }
+
+  @Override
+  public void onActionOverflowClicked() {
+    showMoreDialog();
+  }
+
+  @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
@@ -129,6 +148,11 @@ public class ChatActivity extends BaseActivity {
 
     mPost = getIntent().getParcelableExtra("post");
     mCommentId = getIntent().getStringExtra("commentId");
+
+    mConversation = DaoUtils.getConversationDao()
+        .queryBuilder()
+        .where(ConversationDao.Properties.ChatId.eq(mPost.chatId))
+        .unique();
 
     setTopTitle(mPost.viewType == 3 ? "认识的人" : "陌生人");
     setTopSubTitle("来自" + mPost.shortName);
@@ -147,6 +171,7 @@ public class ChatActivity extends BaseActivity {
     mRefreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       private int page = 0;
       private boolean has = true;
+
       @Override
       public void onRefresh() {
         if (has) {
@@ -187,4 +212,73 @@ public class ChatActivity extends BaseActivity {
     U.getChatBus().unregister(this);
   }
 
+  private void showMoreDialog() {
+    new AlertDialog.Builder(this).setTitle(getString(R.string.chat_actions))
+        .setItems(new String[]{getString(R.string.report), getString(R.string.delete)}, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialogInterface, int i) {
+            switch (i) {
+              case 0: {
+                showReportConfirmDialog();
+                break;
+              }
+              case 1: {
+                showDeleteConfirmDialog();
+                break;
+              }
+            }
+          }
+        }).show();
+  }
+
+  private void showReportConfirmDialog() {
+    new AlertDialog.Builder(this).setTitle("确认举报该对话？")
+        .setMessage("举报的同时，该对话会被系统删除")
+        .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(final DialogInterface dialogInterface, int i) {
+            U.request("chat_report", new OnResponse2<Response>() {
+
+              @Override
+              public void onResponse(Response response) {
+                if (RESTRequester.responseOk(response)) {
+                  showToast("举报成功");
+                  ChatUtils.ConversationUtil.deleteConversation(mPost.chatId);
+                  finish();
+                }
+                dialogInterface.dismiss();
+              }
+
+              @Override
+              public void onResponseError(Throwable e) {
+                dialogInterface.dismiss();
+              }
+            }, Response.class, mPost.chatId);
+          }
+        })
+        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialogInterface, int i) {
+            dialogInterface.dismiss();
+          }
+        }).show();
+  }
+
+  private void showDeleteConfirmDialog() {
+    new AlertDialog.Builder(this).setTitle("确认删除该对话？")
+        .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialogInterface, int i) {
+            dialogInterface.dismiss();
+            ChatUtils.ConversationUtil.deleteConversation(mPost.chatId);
+            finish();
+          }
+        })
+        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialogInterface, int i) {
+            dialogInterface.dismiss();
+          }
+        }).show();
+  }
 }

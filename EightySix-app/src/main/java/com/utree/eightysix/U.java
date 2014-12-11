@@ -25,8 +25,7 @@ import com.utree.eightysix.qrcode.ActionDispatcher;
 import com.utree.eightysix.qrcode.actions.AddFriendAction;
 import com.utree.eightysix.report.Reporter;
 import com.utree.eightysix.report.ReporterImpl;
-import com.utree.eightysix.rest.IRESTRequester;
-import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.*;
 import com.utree.eightysix.statistics.Analyser;
 import com.utree.eightysix.statistics.MtaAnalyserImpl;
 import com.utree.eightysix.storage.Storage;
@@ -350,6 +349,9 @@ public class U {
     return (int) (U.getContext().getResources().getDisplayMetrics().density * dp + 0.5f);
   }
 
+  public static <T extends Response> void request(String requestId, OnResponse<T> response, Class<T> clz, Object... params) {
+    U.getRESTRequester().request(requestId, response, clz, params);
+  }
 
   public static String timestamp(long timestamp) {
     final long now = new Date().getTime();

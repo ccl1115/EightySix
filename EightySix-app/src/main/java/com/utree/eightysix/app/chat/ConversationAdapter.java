@@ -77,6 +77,16 @@ public class ConversationAdapter extends BaseAdapter {
     return convertView;
   }
 
+  public void removeByChatId(String chatId) {
+    for (Conversation conversation : mConversations) {
+      if (conversation.getChatId().equals(chatId)) {
+        mConversations.remove(conversation);
+        break;
+      }
+    }
+    notifyDataSetChanged();
+  }
+
   public static class ViewHolder {
 
     @InjectView(R.id.tv_name)

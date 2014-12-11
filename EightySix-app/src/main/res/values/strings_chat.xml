@@ -8,4 +8,5 @@
     <string name="chat_anonymous">匿名聊天</string>
     <string name="resending">重新发送</string>
     <string name="chat">聊天</string>
+    <string name="chat_actions">聊天操作</string>
 </resources>
