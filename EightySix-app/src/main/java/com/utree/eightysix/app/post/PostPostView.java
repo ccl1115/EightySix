@@ -106,7 +106,7 @@ public class PostPostView extends LinearLayout {
     }
   }
 
-  @OnClick(R.id.iv_chat)
+  @OnClick(R.id.tv_chat)
   public void onIvChatClicked() {
     ChatUtils.ConversationUtil.createIfNotExist(mPost);
     ChatActivity.start(getContext(), mPost, null);

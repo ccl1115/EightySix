@@ -87,14 +87,11 @@ public class ChatActivity extends BaseActivity {
   }
 
   @Subscribe
-  public void onChatStatusEvent(ChatEvent event) {
+  public void onChatEvent(ChatEvent event) {
     switch (event.getStatus()) {
       case ChatEvent.EVENT_RECEIVE_MSG: {
-        Message obj = (Message) event.getObj();
-        if (obj.getChatId().equals(mPost.chatId)) {
-          mChatAdapter.add(obj);
-          mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
-        }
+        mChatAdapter.add((Message) event.getObj());
+        mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
         break;
       }
       case ChatEvent.EVENT_SENT_MSG_SUCCESS:
@@ -104,10 +101,7 @@ public class ChatActivity extends BaseActivity {
         break;
       }
       case ChatEvent.EVENT_SENDING_MSG: {
-        Message obj = (Message) event.getObj();
-        if (obj.getChatId().equals(mPost.chatId)) {
-          mChatAdapter.add(obj);
-        }
+        mChatAdapter.add((Message) event.getObj());
         break;
       }
       case ChatEvent.EVENT_MSG_REMOVE: {
@@ -135,6 +129,9 @@ public class ChatActivity extends BaseActivity {
 
     mPost = getIntent().getParcelableExtra("post");
     mCommentId = getIntent().getStringExtra("commentId");
+
+    setTopTitle(mPost.viewType == 3 ? "认识的人" : "陌生人");
+    setTopSubTitle("来自" + mPost.shortName);
 
     if (mPost.chatId == null) {
       finish();

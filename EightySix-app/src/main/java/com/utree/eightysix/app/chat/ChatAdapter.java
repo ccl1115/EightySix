@@ -69,7 +69,7 @@ public class ChatAdapter extends BaseAdapter {
 
   private boolean contains(Message message) {
     for (Message m : mMessages) {
-      if (m.getId().equals(message.getId())) {
+      if (m.getId() != null && m.getId().equals(message.getId())) {
         return true;
       }
     }
@@ -80,6 +80,7 @@ public class ChatAdapter extends BaseAdapter {
     if (contains(message)) {
       mMessages.remove(message);
     }
+    notifyDataSetChanged();
   }
 
   @Override

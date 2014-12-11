@@ -51,16 +51,20 @@
                 android:textColor="@android:color/white"
                 />
 
-            <ImageView
-                    android:id="@+id/iv_chat"
+            <TextView
+                    android:id="@+id/tv_chat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
                     android:layout_marginRight="5dp"
                     android:layout_marginEnd="5dp"
-                    android:src="@drawable/ic_chat"
-                    android:minWidth="45dp"
-                    android:scaleType="fitStart"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical|end"
+                    android:textSize="14sp"
+                    android:textColor="@color/apptheme_primary_text_light"
+                    android:text="@string/chat"
+                    android:drawablePadding="8dp"
+                    android:drawableLeft="@drawable/ic_chat_normal"
+                    android:drawableStart="@drawable/ic_chat_normal"
                     />
 
         <TextView
