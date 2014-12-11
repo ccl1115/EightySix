@@ -19,45 +19,45 @@ import com.utree.eightysix.dao.MessageDao;
 
 /**
  * {@inheritDoc}
- *
+ * 
  * @see de.greenrobot.dao.AbstractDaoSession
  */
 public class DaoSession extends AbstractDaoSession {
 
-  private final DaoConfig conversationDaoConfig;
-  private final DaoConfig messageDaoConfig;
+    private final DaoConfig conversationDaoConfig;
+    private final DaoConfig messageDaoConfig;
 
-  private final ConversationDao conversationDao;
-  private final MessageDao messageDao;
+    private final ConversationDao conversationDao;
+    private final MessageDao messageDao;
 
-  public DaoSession(SQLiteDatabase db, IdentityScopeType type, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig>
-      daoConfigMap) {
-    super(db);
+    public DaoSession(SQLiteDatabase db, IdentityScopeType type, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig>
+        daoConfigMap) {
+        super(db);
 
-    conversationDaoConfig = daoConfigMap.get(ConversationDao.class).clone();
-    conversationDaoConfig.initIdentityScope(type);
+        conversationDaoConfig = daoConfigMap.get(ConversationDao.class).clone();
+        conversationDaoConfig.initIdentityScope(type);
 
-    messageDaoConfig = daoConfigMap.get(MessageDao.class).clone();
-    messageDaoConfig.initIdentityScope(type);
+        messageDaoConfig = daoConfigMap.get(MessageDao.class).clone();
+        messageDaoConfig.initIdentityScope(type);
 
-    conversationDao = new ConversationDao(conversationDaoConfig, this);
-    messageDao = new MessageDao(messageDaoConfig, this);
+        conversationDao = new ConversationDao(conversationDaoConfig, this);
+        messageDao = new MessageDao(messageDaoConfig, this);
 
-    registerDao(Conversation.class, conversationDao);
-    registerDao(Message.class, messageDao);
-  }
+        registerDao(Conversation.class, conversationDao);
+        registerDao(Message.class, messageDao);
+    }
 
-  public void clear() {
-    conversationDaoConfig.getIdentityScope().clear();
-    messageDaoConfig.getIdentityScope().clear();
-  }
+    public void clear() {
+        conversationDaoConfig.getIdentityScope().clear();
+        messageDaoConfig.getIdentityScope().clear();
+    }
 
-  public ConversationDao getConversationDao() {
-    return conversationDao;
-  }
+    public ConversationDao getConversationDao() {
+        return conversationDao;
+    }
 
-  public MessageDao getMessageDao() {
-    return messageDao;
-  }
+    public MessageDao getMessageDao() {
+        return messageDao;
+    }
 
 }

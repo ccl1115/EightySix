@@ -12,6 +12,7 @@ import butterknife.InjectView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.dao.Message;
 import com.utree.eightysix.dao.MessageConst;
+import com.utree.eightysix.widget.RoundedButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,10 +25,11 @@ import java.util.List;
 public class ChatAdapter extends BaseAdapter {
 
 
-  private static final int TYPE_COUNT = 3;
+  private static final int TYPE_COUNT = 4;
   private static final int TYPE_INVALID = 0;
   private static final int TYPE_TEXT_FROM = 1;
   private static final int TYPE_TEXT_TO = 2;
+  private static final int TYPE_INFO = 3;
 
   private List<Message> mMessages;
   private Comparator<Message> mMessageComparator;
@@ -52,10 +54,9 @@ public class ChatAdapter extends BaseAdapter {
   }
 
   public void add(Message message) {
-    if (contains(message)) {
-      return;
+    if (!contains(message)) {
+      mMessages.add(message);
     }
-    mMessages.add(message);
     Collections.sort(mMessages, mMessageComparator);
     notifyDataSetChanged();
   }
@@ -68,11 +69,17 @@ public class ChatAdapter extends BaseAdapter {
 
   private boolean contains(Message message) {
     for (Message m : mMessages) {
-      if (m.getMsgId().equals(message.getMsgId())) {
+      if (m.getId().equals(message.getId())) {
         return true;
       }
     }
     return false;
+  }
+
+  public void remove(Message message) {
+    if (contains(message)) {
+      mMessages.remove(message);
+    }
   }
 
   @Override
@@ -97,6 +104,8 @@ public class ChatAdapter extends BaseAdapter {
         return getTextFromView(position, convertView, parent);
       case TYPE_TEXT_TO:
         return getTextToView(position, convertView, parent);
+      case TYPE_INFO:
+        return getInfoView(position, convertView, parent);
     }
     return null;
   }
@@ -118,6 +127,13 @@ public class ChatAdapter extends BaseAdapter {
         break;
       }
     }
+
+    switch (m.getType()) {
+      case MessageConst.TYPE_INFO: {
+        return TYPE_INFO;
+      }
+    }
+
     return TYPE_INVALID;
   }
 
@@ -160,6 +176,17 @@ public class ChatAdapter extends BaseAdapter {
     holder.mTvText.setText(message.getContent());
     holder.mPbLoading.setVisibility(message.getStatus() == MessageConst.STATUS_IN_PROGRESS ? View.VISIBLE : View.GONE);
     holder.mIvError.setVisibility(message.getStatus() == MessageConst.STATUS_FAILED ? View.VISIBLE : View.GONE);
+
+    return convertView;
+  }
+
+  private View getInfoView(int position, View convertView, ViewGroup parent) {
+    if (convertView == null) {
+      convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_info, parent, false);
+    }
+
+    Message message = getItem(position);
+    ((RoundedButton) convertView.findViewById(R.id.rb_info)).setText(message.getContent());
 
     return convertView;
   }

@@ -6,4 +6,5 @@
 <resources>
     <string name="start_chat">发起聊天</string>
     <string name="chat_anonymous">匿名聊天</string>
+    <string name="resending">重新发送</string>
 </resources>

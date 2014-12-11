@@ -15,6 +15,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseApplication;
 import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.dao.Message;
+import com.utree.eightysix.utils.DaoUtils;
 
 /**
  * @author simon
@@ -54,7 +55,13 @@ public class ChatAccount {
             @Override
             public void onSuccess() {
               mIsLogin = true;
-              U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_LOGIN_SUC, "登录成功"));
+
+              BaseApplication.getHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                  U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_LOGIN_SUC, "登录成功"));
+                }
+              });
 
               mNewMessageBroadcastReceiver = new NewMessageBroadcastReceiver();
               U.getContext().registerReceiver(mNewMessageBroadcastReceiver,
@@ -107,10 +114,12 @@ public class ChatAccount {
 
       Message textMessage = null;
       try {
-        textMessage = Utils.convert(message);
+        textMessage = ChatUtils.convert(message);
       } catch (EaseMobException e) {
         U.getAnalyser().reportException(U.getContext(), e);
       }
+
+      DaoUtils.getMessageDao().insert(textMessage);
 
       U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_RECEIVE_MSG, textMessage));
     }

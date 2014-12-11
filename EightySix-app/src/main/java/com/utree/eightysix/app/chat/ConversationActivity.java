@@ -16,6 +16,7 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.dao.Conversation;
+import com.utree.eightysix.data.Post;
 import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
 
@@ -45,7 +46,10 @@ public class ConversationActivity extends BaseActivity {
   @OnItemClick(R.id.alv_conversation)
   public void onAlvConversationItemClicked(int position) {
     Conversation conversation = mConversationAdapter.getItem(position);
-    ChatActivity.start(this, conversation.getChatId(), conversation.getPostId(), conversation.getCommentId());
+    Post post = new Post();
+    post.chatId = conversation.getChatId();
+    post.id = conversation.getPostId();
+    ChatActivity.start(this, post, conversation.getCommentId());
   }
 
   @Override

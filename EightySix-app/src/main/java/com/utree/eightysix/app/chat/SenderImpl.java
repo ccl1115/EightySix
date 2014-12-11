@@ -10,6 +10,7 @@ import com.utree.eightysix.dao.Message;
 import com.utree.eightysix.dao.MessageConst;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.utils.DaoUtils;
 
 import java.io.File;
 import java.io.InputStream;
@@ -39,7 +40,8 @@ public class SenderImpl implements Sender {
     U.getRESTRequester().request("chat_send", new OnResponse2<Response>() {
       @Override
       public void onResponseError(Throwable e) {
-        message.setStatus(MessageConst.STATUS_SUCCESS);
+        message.setStatus(MessageConst.STATUS_FAILED);
+        DaoUtils.getMessageDao().update(message);
         U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_SENT_MSG_ERROR, message));
       }
 
@@ -49,12 +51,16 @@ public class SenderImpl implements Sender {
           U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_MSG_REMOVE, message));
         } else {
           message.setStatus(MessageConst.STATUS_SUCCESS);
+          DaoUtils.getMessageDao().update(message);
           U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_SENT_MSG_SUCCESS, message));
         }
       }
     }, Response.class, message.getChatId(), type, message.getContent(), message.getPostId(), message.getCommentId());
 
     message.setStatus(MessageConst.STATUS_CREATE);
+
+    DaoUtils.getMessageDao().insertOrReplace(message);
+    U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_SENDING_MSG, message));
   }
 
   @Override

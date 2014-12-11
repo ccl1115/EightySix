@@ -15,7 +15,7 @@ import java.io.File;
 public class Generate {
 
   public Generate() {
-    Schema schema = new Schema(1, "com.utree.eightysix.dao");
+    Schema schema = new Schema(2, "com.utree.eightysix.dao");
 
     generateConversation(schema);
     generateMessage(schema);
@@ -49,6 +49,7 @@ public class Generate {
     conversation.addStringProperty("relation");
     conversation.addLongProperty("timestamp");
     conversation.addIntProperty("unreadCount");
+    conversation.addBooleanProperty("favorite");
   }
 
   private void generateMessage(Schema schema) {

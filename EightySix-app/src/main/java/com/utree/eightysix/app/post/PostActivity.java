@@ -24,6 +24,8 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.OverlayTipUtil;
 import com.utree.eightysix.app.bs.BlueStarFragment;
+import com.utree.eightysix.app.chat.ChatActivity;
+import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.app.feed.event.*;
 import com.utree.eightysix.app.msg.ReadMsgStore;
 import com.utree.eightysix.data.Comment;
@@ -142,13 +144,15 @@ public class PostActivity extends BaseActivity {
     String[] items;
     if (mPost.owner == 1) {
       items = new String[]{U.gs(R.string.share),
-          U.gs(R.string.report),
-          U.gs(R.string.like),
-          U.gs(R.string.delete)};
+          getString(R.string.start_chat),
+          getString(R.string.report),
+          getString(R.string.like),
+          getString(R.string.delete)};
     } else {
       items = new String[]{U.gs(R.string.share),
-          U.gs(R.string.report),
-          U.gs(R.string.like)};
+          getString(R.string.start_chat),
+          getString(R.string.report),
+          getString(R.string.like)};
     }
     new AlertDialog.Builder(this).setTitle(U.gs(R.string.post_action))
         .setItems(items,
@@ -161,10 +165,14 @@ public class PostActivity extends BaseActivity {
                     U.getShareManager().sharePostDialog(PostActivity.this, mPost).show();
                     break;
                   case 1:
+                    ChatUtils.ConversationUtil.createIfNotExist(mPost);
+                    ChatActivity.start(PostActivity.this, mPost, null);
+                    break;
+                  case 2:
                     U.getAnalyser().trackEvent(U.getContext(), "post_more_report", "post_more_report");
                     new ReportDialog(PostActivity.this, mPost.id).show();
                     break;
-                  case 2:
+                  case 3:
                     if (mPost == null) return;
                     if (mPost.praised != 1) {
                       U.getAnalyser().trackEvent(U.getContext(), "post_more_praise", "praise");
@@ -172,7 +180,7 @@ public class PostActivity extends BaseActivity {
                     }
                     mPostCommentsAdapter.notifyDataSetChanged();
                     break;
-                  case 3:
+                  case 4:
                     U.getAnalyser().trackEvent(U.getContext(), "post_more_delete", "post_more_delete");
                     U.getBus().post(new PostDeleteRequest(mPost.id));
                     break;
@@ -197,9 +205,9 @@ public class PostActivity extends BaseActivity {
 
     String[] items;
     if (comment.self == 1) {
-      items = new String[]{getString(R.string.like), getString(R.string.share), getString(R.string.report), getString(R.string.delete)};
+      items = new String[]{getString(R.string.start_chat), getString(R.string.like), getString(R.string.share), getString(R.string.report), getString(R.string.delete)};
     } else {
-      items = new String[]{getString(R.string.like), getString(R.string.share), getString(R.string.report)};
+      items = new String[]{getString(R.string.start_chat), getString(R.string.like), getString(R.string.share), getString(R.string.report)};
     }
 
     mCommentContextDialog = new AlertDialog.Builder(this).setTitle(getString(R.string.comment_action))
@@ -209,6 +217,9 @@ public class PostActivity extends BaseActivity {
               public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                   case 0:
+                    ChatUtils.ConversationUtil.createIfNotExist(mPost, comment);
+                    ChatActivity.start(PostActivity.this, mPost, comment.id);
+                  case 1:
                     if (comment.praised != 1) {
                       comment.praised = 1;
                       comment.praise++;
@@ -217,15 +228,15 @@ public class PostActivity extends BaseActivity {
                       mPostCommentsAdapter.notifyDataSetChanged();
                     }
                     break;
-                  case 1:
+                  case 2:
                     U.getAnalyser().trackEvent(PostActivity.this, "comment_more_share", "comment_more_share");
                     U.getShareManager().shareCommentDialog(PostActivity.this, mPost, comment.content).show();
                     break;
-                  case 2:
+                  case 3:
                     U.getAnalyser().trackEvent(PostActivity.this, "comment_more_report", "comment_more_report");
                     new ReportDialog(PostActivity.this, mPostId, comment.id).show();
                     break;
-                  case 3:
+                  case 4:
                     U.getBus().post(new PostCommentDeleteRequest(mPost.id, comment.id));
                     break;
                 }

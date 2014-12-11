@@ -20,7 +20,6 @@ public class DaoUtils {
   private static void init() {
     sDaoMaster = new DaoMaster(new DaoMaster.DevOpenHelper(U.getContext(), "com.utree.eightysix.db", null).getWritableDatabase());
     mDaoSession = sDaoMaster.newSession();
-
   }
 
   public static ConversationDao getConversationDao() {

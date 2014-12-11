@@ -19,9 +19,12 @@ import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.dao.Message;
 import com.utree.eightysix.dao.MessageConst;
+import com.utree.eightysix.data.Post;
 import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.RoundedButton;
+
+import java.util.List;
 
 /**
  * @author simon
@@ -46,14 +49,12 @@ public class ChatActivity extends BaseActivity {
 
   private ChatAdapter mChatAdapter;
 
-  private String mChatId;
-  private String mPostId;
+  private Post mPost;
   private String mCommentId;
 
-  public static void start(Context context, String chatId, String postId, String commentId) {
+  public static void start(Context context, Post post, String commentId) {
     Intent intent = new Intent(context, ChatActivity.class);
-    intent.putExtra("chatId", chatId);
-    intent.putExtra("postId", postId);
+    intent.putExtra("post", post);
     intent.putExtra("commentId", commentId);
 
     if (!(context instanceof Activity)) {
@@ -65,7 +66,7 @@ public class ChatActivity extends BaseActivity {
 
   @OnClick(R.id.rb_post)
   public void onRbPostClicked() {
-    ChatAccount.inst().getSender().txt(mChatId, mPostId, mCommentId, mEtPostContent.getText().toString());
+    ChatAccount.inst().getSender().txt(mPost.chatId, mPost.id, mCommentId, mEtPostContent.getText().toString());
     mEtPostContent.setText("");
   }
 
@@ -79,6 +80,8 @@ public class ChatActivity extends BaseActivity {
     Message m = mChatAdapter.getItem(position);
     if (m != null) {
       if (m.getStatus() == MessageConst.STATUS_FAILED) {
+        showToast(R.string.resending);
+        ChatAccount.inst().getSender().send(m);
       }
     }
   }
@@ -88,7 +91,7 @@ public class ChatActivity extends BaseActivity {
     switch (event.getStatus()) {
       case ChatEvent.EVENT_RECEIVE_MSG: {
         Message obj = (Message) event.getObj();
-        if (obj.getChatId().equals(mChatId)) {
+        if (obj.getChatId().equals(mPost.chatId)) {
           mChatAdapter.add(obj);
           mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
         }
@@ -102,10 +105,13 @@ public class ChatActivity extends BaseActivity {
       }
       case ChatEvent.EVENT_SENDING_MSG: {
         Message obj = (Message) event.getObj();
-        if (obj.getChatId().equals(mChatId)) {
+        if (obj.getChatId().equals(mPost.chatId)) {
           mChatAdapter.add(obj);
         }
         break;
+      }
+      case ChatEvent.EVENT_MSG_REMOVE: {
+        mChatAdapter.remove((Message) event.getObj());
       }
     }
   }
@@ -126,15 +132,16 @@ public class ChatActivity extends BaseActivity {
 
     mChatAdapter = new ChatAdapter();
 
-    mChatId = getIntent().getStringExtra("chatId");
-    mPostId = getIntent().getStringExtra("postId");
+
+    mPost = getIntent().getParcelableExtra("post");
     mCommentId = getIntent().getStringExtra("commentId");
 
-    if (mChatId == null) {
+    if (mPost.chatId == null) {
       finish();
     }
 
-//    mChatAdapter.add(Message.getConversation(mChatId, 0));
+    mChatAdapter.add(ChatUtils.MessageUtil.getConversation(mPost.chatId, 0));
+
     mAlvChats.setAdapter(mChatAdapter);
     mAlvChats.setSelection(Integer.MAX_VALUE);
 
@@ -142,10 +149,22 @@ public class ChatActivity extends BaseActivity {
 
     mRefreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       private int page = 0;
+      private boolean has = true;
       @Override
       public void onRefresh() {
-        page++;
-//        mChatAdapter.add(Message.getConversation(mChatId, page));
+        if (has) {
+          page++;
+          List<Message> conversation = ChatUtils.MessageUtil.getConversation(mPost.chatId, page);
+          if (conversation.size() == 0) {
+            has = false;
+            Message message = ChatUtils.infoMsg(mPost.chatId, "没有更多的消息了");
+            message.setTimestamp(mChatAdapter.getItem(0).getTimestamp() - 1);
+            mChatAdapter.add(message);
+          } else {
+            has = true;
+            mChatAdapter.add(conversation);
+          }
+        }
         mRefreshView.setRefreshing(false);
       }
 
