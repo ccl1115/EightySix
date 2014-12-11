@@ -168,6 +168,11 @@ public class ChatActivity extends BaseActivity {
 
     U.getChatBus().register(this);
 
+    mRefreshView.setColorSchemeResources(R.color.apptheme_primary_light_color,
+        R.color.apptheme_primary_light_color_pressed,
+        R.color.apptheme_primary_light_color,
+        R.color.apptheme_primary_light_color_pressed);
+
     mRefreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       private int page = 0;
       private boolean has = true;
@@ -201,8 +206,7 @@ public class ChatActivity extends BaseActivity {
       }
     });
 
-    mRefreshView.setColorSchemeResources(R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed,
-        R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed);
+    addPostSummaryInfo();
   }
 
   @Override
@@ -280,5 +284,18 @@ public class ChatActivity extends BaseActivity {
             dialogInterface.dismiss();
           }
         }).show();
+  }
+
+  private void addPostSummaryInfo() {
+    if (!ChatUtils.MessageUtil.hasPostSummaryMessage(mPost.chatId)) {
+      Message message =
+          ChatUtils.infoMsg(mPost.chatId,
+              "主题：" + (mPost.content.length() > 80 ? mPost.content.substring(0, 76) + "..." : mPost.content));
+
+      message.setType(MessageConst.TYPE_POST);
+
+      DaoUtils.getMessageDao().insertOrReplace(message);
+      mChatAdapter.add(message);
+    }
   }
 }

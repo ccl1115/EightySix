@@ -150,7 +150,7 @@ public class ConversationDao extends AbstractDao<Conversation, Long> {
     @Override
     public Long readKey(Cursor cursor, int offset) {
         return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
-    }
+    }    
 
     /** @inheritdoc */
     @Override
@@ -193,18 +193,14 @@ public class ConversationDao extends AbstractDao<Conversation, Long> {
         entity.setFavorite(cursor.isNull(offset + 12) ? null : cursor.getShort(offset + 12) != 0);
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     @Override
     protected Long updateKeyAfterInsert(Conversation entity, long rowId) {
         entity.setId(rowId);
         return rowId;
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     @Override
     public Long getKey(Conversation entity) {
         if (entity != null) {
@@ -217,7 +213,7 @@ public class ConversationDao extends AbstractDao<Conversation, Long> {
     /**
      * @inheritdoc
      */
-    @Override
+    @Override    
     protected boolean isEntityUpdateable() {
         return true;
     }

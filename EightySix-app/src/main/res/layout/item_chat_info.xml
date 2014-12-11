@@ -16,6 +16,8 @@
             android:id="@+id/rb_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
             android:layout_gravity="center_horizontal"
             android:minHeight="0dp"
             android:textColor="@color/apptheme_primary_dark_grey"

@@ -58,6 +58,7 @@ public class ConversationActivity extends BaseActivity {
     post.chatId = conversation.getChatId();
     post.id = conversation.getPostId();
     post.shortName = conversation.getChatSource();
+    post.content = conversation.getPostContent();
     ChatActivity.start(this, post, conversation.getCommentId());
   }
 

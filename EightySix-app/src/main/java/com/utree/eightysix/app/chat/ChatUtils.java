@@ -113,5 +113,9 @@ public class ChatUtils {
           .build()
           .list();
     }
+
+    public static boolean hasPostSummaryMessage(String chatId) {
+      return DaoUtils.getMessageDao().queryBuilder().where(MessageDao.Properties.Type.eq(MessageConst.TYPE_POST)).count() > 0;
+    }
   }
 }

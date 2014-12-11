@@ -25,11 +25,12 @@ import java.util.List;
 public class ChatAdapter extends BaseAdapter {
 
 
-  private static final int TYPE_COUNT = 4;
+  private static final int TYPE_COUNT = 5;
   private static final int TYPE_INVALID = 0;
   private static final int TYPE_TEXT_FROM = 1;
   private static final int TYPE_TEXT_TO = 2;
   private static final int TYPE_INFO = 3;
+  private static final int TYPE_POST = 4;
 
   private List<Message> mMessages;
   private Comparator<Message> mMessageComparator;
@@ -106,6 +107,7 @@ public class ChatAdapter extends BaseAdapter {
       case TYPE_TEXT_TO:
         return getTextToView(position, convertView, parent);
       case TYPE_INFO:
+      case TYPE_POST:
         return getInfoView(position, convertView, parent);
     }
     return null;
@@ -132,6 +134,9 @@ public class ChatAdapter extends BaseAdapter {
     switch (m.getType()) {
       case MessageConst.TYPE_INFO: {
         return TYPE_INFO;
+      }
+      case MessageConst.TYPE_POST: {
+        return TYPE_POST;
       }
     }
 
