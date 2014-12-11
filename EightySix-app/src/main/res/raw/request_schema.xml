@@ -1,0 +1,58 @@
+<api>
+    <request>
+        <id>chat_send</id>
+        <name>发私聊</name>
+        <path>/commit/im/send/privateChat</path>
+        <params>
+            <param>chatId</param>
+            <param>msgType</param>
+            <param>msg</param>
+            <param>postId</param>
+            <param>commentId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>chat_report</id>
+        <name>举报聊天会话</name>
+        <path>/commit/im/report/chat</path>
+        <params>
+            <param>chatId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>chat_fav_add</id>
+        <name>收藏聊天会话</name>
+        <path>/commit/im/favorite/addChat</path>
+        <params>
+            <param>chatId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>chat_fav_del</id>
+        <name>取消收藏聊天会话</name>
+        <path>/commit/im/favorite/delChat</path>
+        <params>
+            <param>chatId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>chat_fav_list</id>
+        <name>聊天会话收藏列表</name>
+        <path>/im/favorite/chat</path>
+        <responseClz>ChatFavListResponse</responseClz>
+    </request>
+
+    <request>
+        <id>chat_ol_list</id>
+        <name>聊天会话在线列表</name>
+        <path>/im/chat/onlineStatus</path>
+        <params>
+            <param>chatId</param>
+        </params>
+        <responseClz>ChatOnlineListResponse</responseClz>
+    </request>
+</api>

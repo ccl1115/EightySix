@@ -77,6 +77,9 @@ public class Post extends BaseItem implements Parcelable {
   @SerializedName("relation")
   public int relation;
 
+  @SerializedName("chatId")
+  public String chatId;
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;

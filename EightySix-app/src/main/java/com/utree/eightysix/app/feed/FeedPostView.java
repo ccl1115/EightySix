@@ -16,14 +16,18 @@ import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.app.chat.ChatActivity;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.app.region.FeedRegionAdapter;
 import com.utree.eightysix.app.tag.TagTabActivity;
+import com.utree.eightysix.dao.Conversation;
+import com.utree.eightysix.dao.ConversationDao;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.utils.ColorUtil;
+import com.utree.eightysix.utils.DaoUtils;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.ViewHighlighter;
@@ -116,12 +120,24 @@ public class FeedPostView extends LinearLayout {
 
   @OnClick(R.id.iv_chat)
   public void onIvChatClicked() {
-
+    if (DaoUtils.getConversationDao().queryBuilder().where(ConversationDao.Properties.ChatId.eq(mPost.chatId)).unique() == null) {
+      Conversation conversation = new Conversation();
+      conversation.setBgUrl(mPost.bgUrl);
+      conversation.setChatId(mPost.chatId);
+      conversation.setChatSource(mPost.source);
+      conversation.setPostId(mPost.id);
+      conversation.setLastMsg("");
+      conversation.setRelation(mPost.viewType == 3 ? "认识的人" : "陌生人");
+      conversation.setPostContent(mPost.content);
+      conversation.setTimestamp(System.currentTimeMillis());
+      conversation.setUnreadCount(0);
+      conversation.setPortrait("\ue800");
+      DaoUtils.getConversationDao().insert(conversation);
+    }
+    ChatActivity.start(getContext(), mPost.chatId, mPost.id, null);
   }
 
   private Runnable mShareAnimation;
-
-  private int mCircleId;
 
   private View mTipShare;
   private View mTipSource;
@@ -185,8 +201,6 @@ public class FeedPostView extends LinearLayout {
 
   public void setData(Post post, int circleId) {
     mPost = post;
-
-    mCircleId = circleId;
 
     if (mPost == null) {
       return;

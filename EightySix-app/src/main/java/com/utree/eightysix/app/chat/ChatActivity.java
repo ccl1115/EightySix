@@ -4,27 +4,24 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.OnTextChanged;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMConversation;
-import com.easemob.chat.EMMessage;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.chat.event.ChatStatusEvent;
+import com.utree.eightysix.app.chat.event.ChatEvent;
+import com.utree.eightysix.dao.Message;
+import com.utree.eightysix.dao.MessageConst;
 import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.RoundedButton;
-import com.utree.eightysix.widget.ThemedDialog;
 
 /**
  * @author simon
@@ -49,12 +46,15 @@ public class ChatActivity extends BaseActivity {
 
   private ChatAdapter mChatAdapter;
 
-  private String mUsername;
-  private EMConversation mConversation;
+  private String mChatId;
+  private String mPostId;
+  private String mCommentId;
 
-  public static void start(Context context, String username) {
+  public static void start(Context context, String chatId, String postId, String commentId) {
     Intent intent = new Intent(context, ChatActivity.class);
-    intent.putExtra("username", username);
+    intent.putExtra("chatId", chatId);
+    intent.putExtra("postId", postId);
+    intent.putExtra("commentId", commentId);
 
     if (!(context instanceof Activity)) {
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -65,7 +65,7 @@ public class ChatActivity extends BaseActivity {
 
   @OnClick(R.id.rb_post)
   public void onRbPostClicked() {
-    ChatAccount.inst().getSender().txt(mUsername, mEtPostContent.getText().toString());
+    ChatAccount.inst().getSender().txt(mChatId, mPostId, mCommentId, mEtPostContent.getText().toString());
     mEtPostContent.setText("");
   }
 
@@ -76,34 +76,33 @@ public class ChatActivity extends BaseActivity {
 
   @OnItemClick(R.id.alv_chats)
   public void onAlvChatsItemClicked(int position) {
-    EMMessage m = mChatAdapter.getItem(position);
+    Message m = mChatAdapter.getItem(position);
     if (m != null) {
-      if (m.status == EMMessage.Status.FAIL) {
-        showResendDialog(m);
+      if (m.getStatus() == MessageConst.STATUS_FAILED) {
       }
     }
   }
 
   @Subscribe
-  public void onChatStatusEvent(ChatStatusEvent event) {
+  public void onChatStatusEvent(ChatEvent event) {
     switch (event.getStatus()) {
-      case ChatStatusEvent.EVENT_RECEIVE_MSG: {
-        EMMessage obj = (EMMessage) event.getObj();
-        if (obj.getFrom().equals(mUsername)) {
+      case ChatEvent.EVENT_RECEIVE_MSG: {
+        Message obj = (Message) event.getObj();
+        if (obj.getChatId().equals(mChatId)) {
           mChatAdapter.add(obj);
           mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
         }
         break;
       }
-      case ChatStatusEvent.EVENT_SENT_MSG_SUCCESS:
-      case ChatStatusEvent.EVENT_SENT_MSG_ERROR: {
+      case ChatEvent.EVENT_SENT_MSG_SUCCESS:
+      case ChatEvent.EVENT_SENT_MSG_ERROR: {
         mChatAdapter.notifyDataSetChanged();
         mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
         break;
       }
-      case ChatStatusEvent.EVENT_SENDING_MSG: {
-        EMMessage obj = (EMMessage) event.getObj();
-        if (obj.getTo().equals(mUsername)) {
+      case ChatEvent.EVENT_SENDING_MSG: {
+        Message obj = (Message) event.getObj();
+        if (obj.getChatId().equals(mChatId)) {
           mChatAdapter.add(obj);
         }
         break;
@@ -127,27 +126,26 @@ public class ChatActivity extends BaseActivity {
 
     mChatAdapter = new ChatAdapter();
 
-    mUsername = getIntent().getStringExtra("username");
+    mChatId = getIntent().getStringExtra("chatId");
+    mPostId = getIntent().getStringExtra("postId");
+    mCommentId = getIntent().getStringExtra("commentId");
 
-    setTopTitle("正在和" + mUsername + "聊天");
-
-    if (mUsername == null) {
+    if (mChatId == null) {
       finish();
     }
 
-    mConversation = EMChatManager.getInstance().getConversation(mUsername);
-
-
-    mChatAdapter.add(mConversation.getAllMessages());
+//    mChatAdapter.add(Message.getConversation(mChatId, 0));
     mAlvChats.setAdapter(mChatAdapter);
     mAlvChats.setSelection(Integer.MAX_VALUE);
 
     U.getChatBus().register(this);
 
     mRefreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+      private int page = 0;
       @Override
       public void onRefresh() {
-        mChatAdapter.add(mConversation.loadMoreMsgFromDB(mChatAdapter.getItem(0).getMsgId(), 20));
+        page++;
+//        mChatAdapter.add(Message.getConversation(mChatId, page));
         mRefreshView.setRefreshing(false);
       }
 
@@ -173,26 +171,4 @@ public class ChatActivity extends BaseActivity {
     U.getChatBus().unregister(this);
   }
 
-
-  private void showResendDialog(final EMMessage message) {
-    final ThemedDialog dialog = new ThemedDialog(this);
-
-    dialog.setTitle("是否重新发送？");
-    dialog.setPositive(R.string.okay, new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        ChatAccount.inst().getSender().send(message);
-        dialog.dismiss();
-      }
-    });
-
-    dialog.setRbNegative(R.string.cancel, new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        dialog.dismiss();
-      }
-    });
-
-    dialog.show();
-  }
 }

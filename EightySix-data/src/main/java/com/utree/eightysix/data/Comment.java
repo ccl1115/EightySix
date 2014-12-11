@@ -46,6 +46,9 @@ public class Comment implements Serializable {
   @SerializedName("distance")
   public String distance;
 
+  @SerializedName("chatId")
+  public String chatId;
+
   /**
    * 1 deleted
    * 0 not deleted

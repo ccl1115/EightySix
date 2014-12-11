@@ -30,6 +30,8 @@ public class RESTRequester implements IRESTRequester {
 
   private AsyncHttpClient mAsyncHttpClient;
 
+  private RequestSchema mRequestSchema;
+
   private String mHost;
 
   public RESTRequester(String host) {
@@ -37,6 +39,9 @@ public class RESTRequester implements IRESTRequester {
     mAsyncHttpClient = new AsyncHttpClient();
     mAsyncHttpClient.setTimeout(U.getConfigInt("api.timeout"));
     mAsyncHttpClient.setMaxRetriesAndTimeout(U.getConfigInt("api.retry"), U.getConfigInt("api.retry.timeout"));
+
+    mRequestSchema = new RequestSchema(U.getContext());
+
     compact();
   }
 
@@ -95,6 +100,13 @@ public class RESTRequester implements IRESTRequester {
   public <T extends Response> RequestHandle request(Object request, OnResponse<T> onResponse, Class<T> clz) {
     RequestData data = convert(request);
     return request(data, new HandlerWrapper<T>(data, onResponse, clz));
+  }
+
+  @Override
+  public <T extends Response> RequestHandle request(String requestSchemaId, OnResponse<T> onResponse, Class<T> clz, Object... params) {
+    RequestData request = mRequestSchema.getRequest(requestSchemaId, params);
+    Log.d(C.TAG.RR, request.toString());
+    return request(request, new HandlerWrapper<T>(request, onResponse, clz));
   }
 
   @Override

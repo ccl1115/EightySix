@@ -5,10 +5,12 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import com.easemob.chat.EMChat;
 import com.tencent.cloudsdk.tsocket.GlobalContext;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.C;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.chat.ChatAccount;
 import com.utree.eightysix.app.publish.BgSyncService;
 import com.utree.eightysix.push.FetchAlarmReceiver;
 import com.utree.eightysix.utils.ImageUtils;
@@ -67,8 +69,8 @@ public class BaseApplication extends Application {
       startService(new Intent(this, PingService.class));
 
       // 环信聊天初始化
-      //EMChat.getInstance().init(this);
-      //ChatAccount.inst();
+      EMChat.getInstance().init(this);
+      ChatAccount.inst();
 
       startService(new Intent(this, BgSyncService.class));
 

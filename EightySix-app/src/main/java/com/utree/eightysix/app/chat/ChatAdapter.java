@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.chat;
 
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +9,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import com.easemob.chat.EMMessage;
-import com.easemob.chat.TextMessageBody;
 import com.utree.eightysix.R;
+import com.utree.eightysix.dao.Message;
+import com.utree.eightysix.dao.MessageConst;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * @author simon
@@ -27,16 +29,16 @@ public class ChatAdapter extends BaseAdapter {
   private static final int TYPE_TEXT_FROM = 1;
   private static final int TYPE_TEXT_TO = 2;
 
-  private List<EMMessage> mEMMessages;
-  private Comparator<EMMessage> mEMMessageComparator;
+  private List<Message> mMessages;
+  private Comparator<Message> mMessageComparator;
 
   {
-    mEMMessageComparator = new Comparator<EMMessage>() {
+    mMessageComparator = new Comparator<Message>() {
       @Override
-      public int compare(EMMessage lhs, EMMessage rhs) {
-        if (lhs.getMsgTime() > rhs.getMsgTime()) {
+      public int compare(Message lhs, Message rhs) {
+        if (lhs.getTimestamp() > rhs.getTimestamp()) {
           return 1;
-        } else if (lhs.getMsgTime() < rhs.getMsgTime()) {
+        } else if (lhs.getTimestamp() < rhs.getTimestamp()) {
           return -1;
         } else {
           return 0;
@@ -46,27 +48,27 @@ public class ChatAdapter extends BaseAdapter {
   }
 
   public ChatAdapter() {
-    mEMMessages = new ArrayList<EMMessage>();
+    mMessages = new ArrayList<Message>();
   }
 
-  public void add(EMMessage message) {
+  public void add(Message message) {
     if (contains(message)) {
       return;
     }
-    mEMMessages.add(message);
-    Collections.sort(mEMMessages, mEMMessageComparator);
+    mMessages.add(message);
+    Collections.sort(mMessages, mMessageComparator);
     notifyDataSetChanged();
   }
 
-  public void add(List<EMMessage> messages) {
-    mEMMessages.addAll(messages);
-    Collections.sort(mEMMessages, mEMMessageComparator);
+  public void add(List<Message> messages) {
+    mMessages.addAll(messages);
+    Collections.sort(mMessages, mMessageComparator);
     notifyDataSetChanged();
   }
 
-  private boolean contains(EMMessage message) {
-    for (EMMessage emMessage : mEMMessages) {
-      if (emMessage.getMsgId().equals(message.getMsgId())) {
+  private boolean contains(Message message) {
+    for (Message m : mMessages) {
+      if (m.getMsgId().equals(message.getMsgId())) {
         return true;
       }
     }
@@ -75,12 +77,12 @@ public class ChatAdapter extends BaseAdapter {
 
   @Override
   public int getCount() {
-    return mEMMessages.size();
+    return mMessages.size();
   }
 
   @Override
-  public EMMessage getItem(int position) {
-    return mEMMessages.get(position);
+  public Message getItem(int position) {
+    return mMessages.get(position);
   }
 
   @Override
@@ -101,16 +103,16 @@ public class ChatAdapter extends BaseAdapter {
 
   @Override
   public int getItemViewType(int position) {
-    EMMessage m = getItem(position);
-    switch (m.direct) {
-      case RECEIVE: {
-        if (m.getType() == EMMessage.Type.TXT) {
+    Message m = getItem(position);
+    switch (m.getDirection()) {
+      case MessageConst.DIRECTION_RECEIVE: {
+        if (m.getType() == MessageConst.TYPE_TXT) {
           return TYPE_TEXT_FROM;
         }
         break;
       }
-      case SEND: {
-        if (m.getType() == EMMessage.Type.TXT) {
+      case MessageConst.DIRECTION_SEND: {
+        if (m.getType() == MessageConst.TYPE_TXT) {
           return TYPE_TEXT_TO;
         }
         break;
@@ -134,13 +136,11 @@ public class ChatAdapter extends BaseAdapter {
       holder = (ChatItemViewHolder) convertView.getTag();
     }
 
-    EMMessage message = getItem(position);
+    Message message = getItem(position);
 
-    String text = ((TextMessageBody) message.getBody()).getMessage();
-
-    holder.mTvText.setText(text);
-    holder.mPbLoading.setVisibility(message.status == EMMessage.Status.INPROGRESS ? View.VISIBLE : View.GONE);
-    holder.mIvError.setVisibility(message.status == EMMessage.Status.FAIL ? View.VISIBLE : View.GONE);
+    holder.mTvText.setText(message.getContent());
+    holder.mPbLoading.setVisibility(message.getStatus() == MessageConst.STATUS_IN_PROGRESS ? View.VISIBLE : View.GONE);
+    holder.mIvError.setVisibility(message.getStatus() == MessageConst.STATUS_FAILED ? View.VISIBLE : View.GONE);
 
     return convertView;
   }
@@ -155,13 +155,11 @@ public class ChatAdapter extends BaseAdapter {
       holder = (ChatItemViewHolder) convertView.getTag();
     }
 
-    EMMessage message = getItem(position);
+    Message message = getItem(position);
 
-    String text = ((TextMessageBody) message.getBody()).getMessage();
-
-    holder.mTvText.setText(text);
-    holder.mPbLoading.setVisibility(message.status == EMMessage.Status.INPROGRESS ? View.VISIBLE : View.GONE);
-    holder.mIvError.setVisibility(message.status == EMMessage.Status.FAIL ? View.VISIBLE : View.GONE);
+    holder.mTvText.setText(message.getContent());
+    holder.mPbLoading.setVisibility(message.getStatus() == MessageConst.STATUS_IN_PROGRESS ? View.VISIBLE : View.GONE);
+    holder.mIvError.setVisibility(message.getStatus() == MessageConst.STATUS_FAILED ? View.VISIBLE : View.GONE);
 
     return convertView;
   }

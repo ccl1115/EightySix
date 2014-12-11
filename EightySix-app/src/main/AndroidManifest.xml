@@ -77,6 +77,20 @@
 
         <meta-data android:name="XG_V2_ACCESS_KEY" android:value="AA9PU5RY976B"/>
 
+        <!-- For sugar orm -->
+        <meta-data
+                android:name="DATABASE"
+                android:value="chat.db"/>
+        <meta-data
+                android:name="VERSION"
+                android:value="1"/>
+        <meta-data
+                android:name="QUERY_LOG"
+                android:value="true"/>
+        <meta-data
+                android:name="DOMAIN_PACKAGE_NAME"
+                android:value="com.utree.eightysix"/>
+
         <!-- Tencent open sdk -->
         <activity android:launchMode="singleInstance" android:name="com.tencent.tauth.AuthActivity" android:noHistory="true" android:screenOrientation="portrait">
             <intent-filter>
@@ -154,8 +168,6 @@
         <activity android:exported="@bool/exported" android:name=".app.feed.OptionPublishActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme.Dialog" android:windowSoftInputMode="adjustResize|stateVisible"/>
 
         <activity android:exported="@bool/exported" android:name=".app.chat.ChatActivity" android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize"/>
-
-        <activity android:exported="@bool/exported" android:name=".app.chat.StartChatActivity" android:screenOrientation="portrait"/>
 
         <activity android:exported="@bool/exported" android:label="标签详情" android:launchMode="singleTask" android:name=".app.tag.TagTabActivity" android:screenOrientation="portrait"/>
 

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2014. All rights reserved by utree.cn
+  -->
+
+<resources>
+    <string name="start_chat">发起聊天</string>
+    <string name="chat_anonymous">匿名聊天</string>
+</resources>

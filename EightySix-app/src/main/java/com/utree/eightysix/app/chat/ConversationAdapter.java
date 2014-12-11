@@ -14,27 +14,39 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.dao.Conversation;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.utils.ColorUtil;
+import com.utree.eightysix.utils.DaoUtils;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.FontPortraitView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  */
 public class ConversationAdapter extends BaseAdapter {
+
+  private List<Conversation> mConversations = new ArrayList<Conversation>();
+
+  public ConversationAdapter() {
+    mConversations = DaoUtils.getConversationDao().loadAll();
+  }
+
   @Override
   public int getCount() {
-    return 10;
+    return mConversations.size();
   }
 
   @Override
-  public Object getItem(int i) {
-    return null;
+  public Conversation getItem(int i) {
+    return mConversations.get(i);
   }
 
   @Override
-  public long getItemId(int i) {
-    return 0;
+  public long getItemId(int position) {
+    return position;
   }
 
   @Override
@@ -48,13 +60,14 @@ public class ConversationAdapter extends BaseAdapter {
       holder = (ViewHolder) convertView.getTag();
     }
 
-    holder.mTvName.setText("陌生人");
-    holder.mTvStatus.setText("在线");
-    holder.mTvCircle.setText("仁宝电脑");
-    holder.mTvLast.setText("哈哈哈哈哈哈");
+    Conversation conversation = getItem(position);
+
+    holder.mTvName.setText(conversation.getRelation());
+    holder.mTvCircle.setText(conversation.getChatSource());
+    holder.mTvLast.setText(conversation.getLastMsg());
     holder.mFpvPortrait.setText("\ue800");
-    holder.mTvContent.setText("我是个大鸡巴");
-    holder.mTvTime.setText("刚刚");
+    holder.mTvContent.setText(conversation.getPostContent());
+    holder.mAivPostBg.setUrl(conversation.getBgUrl());
 
     holder.mFpvPortrait.setTextColor(Color.BLUE);
     holder.mFpvPortrait.setBackgroundDrawable(new RoundRectDrawable(Integer.MAX_VALUE, ColorUtil.lighten(Color.BLUE)));

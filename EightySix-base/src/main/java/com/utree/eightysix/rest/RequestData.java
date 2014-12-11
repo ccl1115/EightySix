@@ -2,6 +2,8 @@ package com.utree.eightysix.rest;
 
 import org.apache.http.Header;
 
+import java.util.Arrays;
+
 /**
  * @author simon
  */
@@ -14,7 +16,6 @@ public class RequestData {
   org.apache.http.Header[] headers;
   long requestTime;
   String host;
-
   boolean sign;
 
   public RequestData() {
@@ -96,5 +97,20 @@ public class RequestData {
 
   public void setSign(boolean need) {
     this.sign = need;
+  }
+
+  @Override
+  public String toString() {
+    return "RequestData{" +
+        "api='" + api + '\'' +
+        ", cache=" + cache +
+        ", log=" + log +
+        ", params=" + params +
+        ", method=" + method +
+        ", headers=" + Arrays.toString(headers) +
+        ", requestTime=" + requestTime +
+        ", host='" + host + '\'' +
+        ", sign=" + sign +
+        '}';
   }
 }
