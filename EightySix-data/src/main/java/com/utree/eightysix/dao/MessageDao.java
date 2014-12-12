@@ -65,6 +65,11 @@ public class MessageDao extends AbstractDao<Message, Long> {
             "'STATUS' INTEGER," + // 9: status
             "'READ' INTEGER," + // 10: read
             "'DIRECTION' INTEGER);"); // 11: direction
+        // Add Indexes
+        db.execSQL("CREATE INDEX " + constraint + "IDX_MESSAGE_CHAT_ID ON MESSAGE" +
+            " (CHAT_ID);");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_MESSAGE_TIMESTAMP_DESC ON MESSAGE" +
+            " (TIMESTAMP);");
     }
 
     /** Drops the underlying database table. */

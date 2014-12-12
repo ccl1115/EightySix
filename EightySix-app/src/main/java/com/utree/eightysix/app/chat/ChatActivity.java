@@ -87,7 +87,11 @@ public class ChatActivity extends BaseActivity {
 
   @OnClick(R.id.rb_post)
   public void onRbPostClicked() {
-    ChatAccount.inst().getSender().txt(mPost.chatId, mPost.id, mComment.id, mEtPostContent.getText().toString());
+    if (mComment != null) {
+      ChatAccount.inst().getSender().txt(mPost.chatId, mPost.id, mComment.id, mEtPostContent.getText().toString());
+    } else {
+      ChatAccount.inst().getSender().txt(mPost.chatId, mPost.id, null, mEtPostContent.getText().toString());
+    }
     mEtPostContent.setText("");
   }
 
@@ -198,7 +202,7 @@ public class ChatActivity extends BaseActivity {
           List<Message> conversation = ChatUtils.MessageUtil.getConversation(mPost.chatId, page);
           if (conversation.size() == 0) {
             has = false;
-            Message message = ChatUtils.infoMsg(mPost.chatId, "没有更多的消息了");
+            Message message = ChatUtils.infoMsg(mPost.chatId, getString(R.string.no_more_history));
             message.setTimestamp(mChatAdapter.getItem(0).getTimestamp() - 1);
             mChatAdapter.add(message);
           } else {
@@ -331,8 +335,8 @@ public class ChatActivity extends BaseActivity {
   }
 
   private void showReportConfirmDialog() {
-    new AlertDialog.Builder(this).setTitle("确认举报该对话？")
-        .setMessage("举报的同时，该对话会被系统删除")
+    new AlertDialog.Builder(this).setTitle(getString(R.string.confirm_report_chat))
+        .setMessage(getString(R.string.report_chat_info))
         .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(final DialogInterface dialogInterface, int i) {
@@ -341,7 +345,7 @@ public class ChatActivity extends BaseActivity {
               @Override
               public void onResponse(Response response) {
                 if (RESTRequester.responseOk(response)) {
-                  showToast("举报成功");
+                  showToast(getString(R.string.report_success));
                   ChatUtils.ConversationUtil.deleteConversation(mPost.chatId);
                   finish();
                 }
@@ -364,7 +368,8 @@ public class ChatActivity extends BaseActivity {
   }
 
   private void showDeleteConfirmDialog() {
-    new AlertDialog.Builder(this).setTitle("确认删除该对话？")
+    new AlertDialog.Builder(this).setTitle(getString(R.string.confirm_delete_chat))
+        .setMessage(getString(R.string.delete_chat_info))
         .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialogInterface, int i) {

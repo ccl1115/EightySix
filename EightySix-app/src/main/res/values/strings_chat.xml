@@ -9,4 +9,10 @@
     <string name="resending">重新发送</string>
     <string name="chat">聊天</string>
     <string name="chat_actions">聊天操作</string>
+    <string name="confirm_report_chat">确认举报该对话？</string>
+    <string name="confirm_delete_chat">确认删除该对话？</string>
+    <string name="report_success">举报成功</string>
+    <string name="report_chat_info">举报的同时，该对话会被系统删除</string>
+    <string name="delete_chat_info">所有的消息记录都会被删除</string>
+    <string name="no_more_history">没有更多的消息了</string>
 </resources>

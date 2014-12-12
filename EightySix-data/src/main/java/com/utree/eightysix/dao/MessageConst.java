@@ -43,4 +43,9 @@ public class MessageConst {
    * 评论内容摘要
    */
   public static final int TYPE_COMMENT = 0x1004;
+
+  /**
+   * 时间戳
+   */
+  public static final int TYPE_TIMESTAMP = 0x1005;
 }

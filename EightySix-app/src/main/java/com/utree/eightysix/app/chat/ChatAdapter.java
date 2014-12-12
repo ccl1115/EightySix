@@ -10,14 +10,13 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.dao.Message;
 import com.utree.eightysix.dao.MessageConst;
+import com.utree.eightysix.utils.DaoUtils;
 import com.utree.eightysix.widget.RoundedButton;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author simon
@@ -25,13 +24,14 @@ import java.util.List;
 public class ChatAdapter extends BaseAdapter {
 
 
-  private static final int TYPE_COUNT = 6;
+  private static final int TYPE_COUNT = 7;
   private static final int TYPE_INVALID = 0;
   private static final int TYPE_TEXT_FROM = 1;
   private static final int TYPE_TEXT_TO = 2;
   private static final int TYPE_INFO = 3;
   private static final int TYPE_POST = 4;
   private static final int TYPE_COMMENT = 5;
+  private static final int TYPE_TIMESTAMP = 6;
 
   private List<Message> mMessages;
   private Comparator<Message> mMessageComparator;
@@ -59,12 +59,14 @@ public class ChatAdapter extends BaseAdapter {
     if (!contains(message)) {
       mMessages.add(message);
     }
+    addTimestampMessages();
     Collections.sort(mMessages, mMessageComparator);
     notifyDataSetChanged();
   }
 
   public void add(List<Message> messages) {
     mMessages.addAll(messages);
+    addTimestampMessages();
     Collections.sort(mMessages, mMessageComparator);
     notifyDataSetChanged();
   }
@@ -111,6 +113,8 @@ public class ChatAdapter extends BaseAdapter {
       case TYPE_POST:
       case TYPE_COMMENT:
         return getInfoView(position, convertView, parent);
+      case TYPE_TIMESTAMP:
+        return getTimestampView(position, convertView, parent);
     }
     return null;
   }
@@ -142,6 +146,9 @@ public class ChatAdapter extends BaseAdapter {
       }
       case MessageConst.TYPE_COMMENT: {
         return TYPE_COMMENT;
+      }
+      case MessageConst.TYPE_TIMESTAMP: {
+        return TYPE_TIMESTAMP;
       }
     }
 
@@ -201,6 +208,41 @@ public class ChatAdapter extends BaseAdapter {
 
     return convertView;
   }
+
+  private View getTimestampView(int position, View convertView, ViewGroup parent) {
+    if (convertView == null) {
+      convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_info, parent, false);
+    }
+
+    Message message = getItem(position);
+    ((RoundedButton) convertView.findViewById(R.id.rb_info)).setText(ChatUtils.timestamp(message.getTimestamp()));
+
+    return convertView;
+  }
+
+  private void addTimestampMessages() {
+
+    Message pre = null;
+
+    List<Message> toBeAdded = new ArrayList<Message>();
+
+    for (Message message : mMessages) {
+      if (pre != null && (pre.getType() == MessageConst.TYPE_TXT || pre.getType() == MessageConst.TYPE_IMAGE) &&
+          (message.getType() == MessageConst.TYPE_TXT || message.getType() == MessageConst.TYPE_IMAGE)) {
+        if (message.getTimestamp() - pre.getTimestamp() > 10000) { // 5 minutes
+          Message m = ChatUtils.infoMsg(message.getChatId(), U.timestamp(message.getTimestamp()));
+          m.setType(MessageConst.TYPE_TIMESTAMP);
+          m.setTimestamp(message.getTimestamp() - 1);
+          DaoUtils.getMessageDao().insert(m);
+          toBeAdded.add(m);
+        }
+      }
+      pre = message;
+    }
+
+    mMessages.addAll(toBeAdded);
+  }
+
 
   class ChatItemViewHolder {
 

@@ -12,7 +12,9 @@ import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.utils.DaoUtils;
 
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  */
@@ -42,6 +44,53 @@ public class ChatUtils {
     return m;
   }
 
+  static String timestamp(long timestamp) {
+    long now = System.currentTimeMillis();
+
+    Calendar cal = Calendar.getInstance(Locale.CHINA);
+    cal.setTimeInMillis(timestamp);
+
+    Calendar nowCal = Calendar.getInstance(Locale.CHINA);
+    nowCal.setTimeInMillis(now);
+
+    if (nowCal.get(Calendar.DAY_OF_YEAR) == cal.get(Calendar.DAY_OF_YEAR)) {
+      // 在同一天，显示 (时段 时间)
+      return String.format("%s%2d:%2d", cal.get(Calendar.AM_PM) == Calendar.AM ? "上午" : "下午", cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE));
+    } else if (nowCal.get(Calendar.WEEK_OF_YEAR) == cal.get(Calendar.WEEK_OF_YEAR)) {
+      // 在同一周，显示 (星期 时段 时间)
+      String week = "";
+      switch (cal.get(Calendar.DAY_OF_WEEK)) {
+        case Calendar.MONDAY:
+          week = "星期一";
+          break;
+        case Calendar.TUESDAY:
+          week = "星期二";
+          break;
+        case Calendar.WEDNESDAY:
+          week = "星期三";
+          break;
+        case Calendar.THURSDAY:
+          week = "星期四";
+          break;
+        case Calendar.FRIDAY:
+          week = "星期五";
+          break;
+        case Calendar.SATURDAY:
+          week = "星期六";
+          break;
+        case Calendar.SUNDAY:
+          week = "星期日";
+          break;
+      }
+      return String.format("%s %s%2d:%2d", week,
+          cal.get(Calendar.AM_PM) == Calendar.AM ? "上午" : "下午", cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE));
+    } else {
+      // 显示 (年-月-日 时段 时间)
+      return String.format("%s-%s-%s %s%2d:%2d", cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH),
+          cal.get(Calendar.AM_PM) == Calendar.AM ? "上午" : "下午", cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE));
+    }
+  }
+
   public static Message infoMsg(String chatId, String msg) {
     Message m = new Message();
 
@@ -50,6 +99,7 @@ public class ChatUtils {
     m.setContent(msg);
     m.setChatId(chatId);
     m.setDirection(MessageConst.DIRECTION_NON);
+    m.setStatus(MessageConst.STATUS_CREATE);
 
     return m;
   }
