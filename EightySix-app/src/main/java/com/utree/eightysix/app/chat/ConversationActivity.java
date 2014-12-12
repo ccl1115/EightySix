@@ -90,6 +90,14 @@ public class ConversationActivity extends BaseActivity {
 
     mAlvConversation.setEmptyView(mRstvEmpty);
 
+    U.getChatBus().register(mConversationAdapter);
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+
+    U.getChatBus().unregister(mConversationAdapter);
   }
 
   @Override

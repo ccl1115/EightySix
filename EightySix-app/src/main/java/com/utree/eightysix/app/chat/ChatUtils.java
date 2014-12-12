@@ -7,6 +7,8 @@ package com.utree.eightysix.app.chat;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
+import com.utree.eightysix.U;
+import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.dao.*;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
@@ -153,6 +155,43 @@ public class ChatUtils {
           .where(ConversationDao.Properties.ChatId.eq(chatId))
           .buildDelete()
           .executeDeleteWithoutDetachingEntities();
+    }
+
+    public static Message getLastMessage(String chatId) {
+      return DaoUtils.getMessageDao().queryBuilder().where(MessageDao.Properties.ChatId.eq(chatId)).limit(1).unique();
+    }
+
+    public static void setLastMessage(String chatId, Message message) {
+      Conversation conversation = DaoUtils.getConversationDao().queryBuilder()
+          .where(ConversationDao.Properties.ChatId.eq(chatId)).unique();
+
+      if (conversation != null) {
+        conversation.setLastMsg(message.getContent());
+        conversation.setTimestamp(message.getTimestamp());
+        DaoUtils.getConversationDao().update(conversation);
+        U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, conversation));
+      }
+    }
+
+    public static void updateLastMessage(String chatId) {
+      Conversation conversation = DaoUtils.getConversationDao().queryBuilder()
+          .where(ConversationDao.Properties.ChatId.eq(chatId)).unique();
+
+      if (conversation != null) {
+        Message message = DaoUtils.getMessageDao().queryBuilder()
+            .where(MessageDao.Properties.ChatId.eq(chatId))
+            .whereOr(MessageDao.Properties.Type.eq(MessageConst.TYPE_TXT), MessageDao.Properties.Type.eq(MessageConst.TYPE_IMAGE))
+            .unique();
+
+        if (message != null) {
+          conversation.setLastMsg(message.getContent());
+          conversation.setTimestamp(message.getTimestamp());
+        } else {
+          conversation.setLastMsg("");
+        }
+
+        DaoUtils.getConversationDao().update(conversation);
+      }
     }
   }
 

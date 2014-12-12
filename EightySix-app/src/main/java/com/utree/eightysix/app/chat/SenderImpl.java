@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.InputStream;
 
 /**
+ * Note this only use for send text, image and voice message.
  */
 public class SenderImpl implements Sender {
   @Override
@@ -60,6 +61,7 @@ public class SenderImpl implements Sender {
     message.setStatus(MessageConst.STATUS_CREATE);
 
     DaoUtils.getMessageDao().insertOrReplace(message);
+    ChatUtils.ConversationUtil.setLastMessage(message.getChatId(), message);
     U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_SENDING_MSG, message));
   }
 

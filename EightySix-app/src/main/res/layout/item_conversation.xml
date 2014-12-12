@@ -42,7 +42,7 @@
                         android:textSize="12sp"
                         android:padding="8dp"
                         android:ellipsize="end"
-                        android:maxLength="10"
+                        android:maxLines="2"
                         />
 
         </FrameLayout>

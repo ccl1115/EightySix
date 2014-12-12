@@ -48,7 +48,7 @@ public class Generate {
     conversation.addStringProperty("commentContent");
     conversation.addStringProperty("chatSource");
     conversation.addStringProperty("relation");
-    conversation.addLongProperty("timestamp");
+    conversation.addLongProperty("timestamp").indexDesc(null, false);
     conversation.addIntProperty("unreadCount");
     conversation.addBooleanProperty("favorite");
   }

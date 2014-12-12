@@ -16,7 +16,10 @@ import com.utree.eightysix.dao.MessageConst;
 import com.utree.eightysix.utils.DaoUtils;
 import com.utree.eightysix.widget.RoundedButton;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * @author simon
@@ -229,7 +232,7 @@ public class ChatAdapter extends BaseAdapter {
     for (Message message : mMessages) {
       if (pre != null && (pre.getType() == MessageConst.TYPE_TXT || pre.getType() == MessageConst.TYPE_IMAGE) &&
           (message.getType() == MessageConst.TYPE_TXT || message.getType() == MessageConst.TYPE_IMAGE)) {
-        if (message.getTimestamp() - pre.getTimestamp() > 10000) { // 5 minutes
+        if (message.getTimestamp() - pre.getTimestamp() > 300000) { // 5 minutes
           Message m = ChatUtils.infoMsg(message.getChatId(), U.timestamp(message.getTimestamp()));
           m.setType(MessageConst.TYPE_TIMESTAMP);
           m.setTimestamp(message.getTimestamp() - 1);

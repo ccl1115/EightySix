@@ -12,8 +12,10 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.dao.Conversation;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.utils.ColorUtil;
@@ -68,6 +70,8 @@ public class ConversationAdapter extends BaseAdapter {
     holder.mFpvPortrait.setText("\ue800");
     holder.mTvContent.setText(conversation.getPostContent());
     holder.mAivPostBg.setUrl(conversation.getBgUrl());
+    holder.mTvLast.setText(conversation.getLastMsg());
+    holder.mTvTime.setText(ChatUtils.timestamp(conversation.getTimestamp()));
 
     holder.mFpvPortrait.setTextColor(Color.BLUE);
     holder.mFpvPortrait.setBackgroundDrawable(new RoundRectDrawable(Integer.MAX_VALUE, ColorUtil.lighten(Color.BLUE)));
@@ -85,6 +89,21 @@ public class ConversationAdapter extends BaseAdapter {
       }
     }
     notifyDataSetChanged();
+  }
+
+  @Subscribe
+  public void onChatEvent(ChatEvent event) {
+    if (event.getStatus() == ChatEvent.EVENT_CONVERSATION_UPDATE) {
+      Conversation obj = (Conversation) event.getObj();
+      for (int i = 0; i < mConversations.size(); i++) {
+        Conversation conversation = mConversations.get(i);
+        if (conversation.getId().equals(obj.getId())) {
+          mConversations.set(i, obj);
+          notifyDataSetChanged();
+          break;
+        }
+      }
+    }
   }
 
   public static class ViewHolder {

@@ -30,6 +30,12 @@ public class ChatEvent {
    */
   public static final int EVENT_MSG_REMOVE = 21;
 
+
+  /**
+   * Event when conversation data update
+   */
+  public static final int EVENT_CONVERSATION_UPDATE = 31;
+
   private int mStatus;
 
   private Object mObj;
