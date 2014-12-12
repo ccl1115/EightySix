@@ -7,6 +7,9 @@ package com.utree.eightysix.dao;
 public class Conversation {
 
     private Long id;
+    /**
+     * Not-null value.
+     */
     private String chatId;
     private String postId;
     private String commentId;
@@ -18,7 +21,7 @@ public class Conversation {
     private String chatSource;
     private String relation;
     private Long timestamp;
-    private Integer unreadCount;
+    private Long unreadCount;
     private Boolean favorite;
 
     public Conversation() {
@@ -28,7 +31,7 @@ public class Conversation {
         this.id = id;
     }
 
-    public Conversation(Long id, String chatId, String postId, String commentId, String lastMsg, String portrait, String bgUrl, String postContent, String commentContent, String chatSource, String relation, Long timestamp, Integer unreadCount, Boolean favorite) {
+    public Conversation(Long id, String chatId, String postId, String commentId, String lastMsg, String portrait, String bgUrl, String postContent, String commentContent, String chatSource, String relation, Long timestamp, Long unreadCount, Boolean favorite) {
         this.id = id;
         this.chatId = chatId;
         this.postId = postId;
@@ -53,10 +56,12 @@ public class Conversation {
         this.id = id;
     }
 
+    /** Not-null value. */
     public String getChatId() {
         return chatId;
     }
 
+    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setChatId(String chatId) {
         this.chatId = chatId;
     }
@@ -141,11 +146,11 @@ public class Conversation {
         this.timestamp = timestamp;
     }
 
-    public Integer getUnreadCount() {
+    public Long getUnreadCount() {
         return unreadCount;
     }
 
-    public void setUnreadCount(Integer unreadCount) {
+    public void setUnreadCount(Long unreadCount) {
         this.unreadCount = unreadCount;
     }
 

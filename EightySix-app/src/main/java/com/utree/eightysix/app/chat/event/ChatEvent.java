@@ -32,9 +32,14 @@ public class ChatEvent {
 
 
   /**
-   * Event when conversation data update
+   * Event when conversation data update from db
    */
   public static final int EVENT_CONVERSATION_UPDATE = 31;
+
+  /**
+   * Event to reload all conversation from db
+   */
+  public static final int EVENT_CONVERSATIONS_RELOAD = 32;
 
   private int mStatus;
 

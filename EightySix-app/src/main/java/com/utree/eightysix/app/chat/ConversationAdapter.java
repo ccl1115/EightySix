@@ -103,6 +103,9 @@ public class ConversationAdapter extends BaseAdapter {
           break;
         }
       }
+    } else if (event.getStatus() == ChatEvent.EVENT_CONVERSATIONS_RELOAD) {
+      mConversations = DaoUtils.getConversationDao().loadAll();
+      notifyDataSetChanged();
     }
   }
 

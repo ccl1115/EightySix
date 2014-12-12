@@ -14,6 +14,7 @@ import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.utils.DaoUtils;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -119,7 +120,7 @@ public class ChatUtils {
         conversation.setRelation(post.viewType == 3 ? "认识的人" : "陌生人");
         conversation.setPostContent(post.content);
         conversation.setTimestamp(System.currentTimeMillis());
-        conversation.setUnreadCount(0);
+        conversation.setUnreadCount(0L);
         conversation.setPortrait("\ue800");
         conversation.setFavorite(false);
         DaoUtils.getConversationDao().insert(conversation);
@@ -139,7 +140,7 @@ public class ChatUtils {
         conversation.setPostContent(post.content);
         conversation.setCommentContent(comment.content);
         conversation.setTimestamp(System.currentTimeMillis());
-        conversation.setUnreadCount(0);
+        conversation.setUnreadCount(0L);
         conversation.setPortrait(comment.avatar);
         conversation.setFavorite(false);
         DaoUtils.getConversationDao().insert(conversation);
@@ -155,6 +156,27 @@ public class ChatUtils {
           .where(ConversationDao.Properties.ChatId.eq(chatId))
           .buildDelete()
           .executeDeleteWithoutDetachingEntities();
+    }
+
+    /**
+     *
+     */
+    public static void deleteAllConversation() {
+      List<Conversation> list = DaoUtils.getConversationDao().queryBuilder()
+          .where(ConversationDao.Properties.Favorite.eq(false))
+          .list();
+      List<String> chatIds = new ArrayList<String>();
+      for (Conversation conversation : list) {
+        chatIds.add(conversation.getChatId());
+      }
+
+      DaoUtils.getMessageDao().queryBuilder()
+          .where(MessageDao.Properties.ChatId.in(chatIds))
+          .buildDelete()
+          .executeDeleteWithoutDetachingEntities();
+
+      DaoUtils.getConversationDao().deleteInTx(list);
+      U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATIONS_RELOAD, null));
     }
 
     public static Message getLastMessage(String chatId) {
@@ -193,6 +215,41 @@ public class ChatUtils {
         DaoUtils.getConversationDao().update(conversation);
       }
     }
+
+    public static void updateUnreadCount(String chatId) {
+      Conversation conversation = getByChatId(chatId);
+
+      if (conversation != null) {
+        final long count = DaoUtils.getMessageDao().queryBuilder()
+            .where(MessageDao.Properties.ChatId.eq(chatId), MessageDao.Properties.Read.eq(false))
+            .count();
+        conversation.setUnreadCount(count);
+
+        DaoUtils.getConversationDao().updateInTx(conversation);
+      }
+    }
+
+    /**
+     * Callback received by event status {@link com.utree.eightysix.app.chat.event.ChatEvent#EVENT_CONVERSATION_UPDATE}
+     *
+     * @param chatId the chat id of a conversation
+     */
+    public static void increaseUnreadCount(String chatId) {
+      Conversation conversation = getByChatId(chatId);
+
+      if (conversation != null) {
+        conversation.setUnreadCount(conversation.getUnreadCount() + 1);
+      }
+
+      DaoUtils.getConversationDao().update(conversation);
+
+      U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, conversation));
+    }
+
+    public static Conversation getByChatId(String chatId) {
+      return DaoUtils.getConversationDao().queryBuilder()
+          .where(ConversationDao.Properties.ChatId.eq(chatId)).unique();
+    }
   }
 
   public static class MessageUtil {
@@ -212,11 +269,31 @@ public class ChatUtils {
           .count() > 0;
     }
 
-    public static boolean hasCommentSummrayMessage(String chatId, String commentId) {
+    public static boolean hasCommentSummaryMessage(String chatId, String commentId) {
       return DaoUtils.getMessageDao().queryBuilder()
           .where(MessageDao.Properties.ChatId.eq(chatId),
               MessageDao.Properties.Type.eq(MessageConst.TYPE_COMMENT),
               MessageDao.Properties.CommentId.eq(commentId)).count() > 0;
+    }
+
+    /**
+     * Set all message read and conversation unread count to 0
+     * Callback received by event status {@link com.utree.eightysix.app.chat.event.ChatEvent#EVENT_CONVERSATIONS_RELOAD}
+     */
+    public static void setAllRead() {
+      List<Message> list = DaoUtils.getMessageDao().queryBuilder().where(MessageDao.Properties.Read.eq(false)).list();
+      for (Message message : list) {
+        message.setRead(true);
+      }
+      DaoUtils.getMessageDao().updateInTx(list);
+
+      List<Conversation> list1 = DaoUtils.getConversationDao().queryBuilder().where(ConversationDao.Properties.UnreadCount.notEq(0)).list();
+      for (Conversation conversation : list1) {
+        conversation.setUnreadCount(0L);
+      }
+      DaoUtils.getConversationDao().updateInTx(list1);
+
+      U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATIONS_RELOAD, null));
     }
   }
 }

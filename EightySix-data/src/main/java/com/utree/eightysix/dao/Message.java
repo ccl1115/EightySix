@@ -7,6 +7,9 @@ package com.utree.eightysix.dao;
 public class Message {
 
     private Long id;
+    /**
+     * Not-null value.
+     */
     private String chatId;
     private String postId;
     private String commentId;
@@ -49,10 +52,12 @@ public class Message {
         this.id = id;
     }
 
+    /** Not-null value. */
     public String getChatId() {
         return chatId;
     }
 
+    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setChatId(String chatId) {
         this.chatId = chatId;
     }

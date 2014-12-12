@@ -91,6 +91,17 @@ public class ConversationActivity extends BaseActivity {
     mAlvConversation.setEmptyView(mRstvEmpty);
 
     U.getChatBus().register(mConversationAdapter);
+
+  }
+
+  @Override
+  public boolean showActionOverflow() {
+    return true;
+  }
+
+  @Override
+  public void onActionOverflowClicked() {
+    showActionDialog();
   }
 
   @Override
@@ -130,8 +141,8 @@ public class ConversationActivity extends BaseActivity {
   }
 
   private void showReportConfirmDialog(final String chatId) {
-    new AlertDialog.Builder(this).setTitle("确认举报该对话？")
-        .setMessage("举报的同时，该对话会被系统删除")
+    new AlertDialog.Builder(this).setTitle(R.string.confirm_report_chat)
+        .setMessage(R.string.report_chat_info)
         .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(final DialogInterface dialogInterface, int i) {
@@ -140,7 +151,7 @@ public class ConversationActivity extends BaseActivity {
               @Override
               public void onResponse(Response response) {
                 if (RESTRequester.responseOk(response)) {
-                  showToast("举报成功");
+                  showToast(R.string.report_success);
                   ChatUtils.ConversationUtil.deleteConversation(chatId);
                   mConversationAdapter.removeByChatId(chatId);
                 }
@@ -163,7 +174,7 @@ public class ConversationActivity extends BaseActivity {
   }
 
   private void showDeleteConfirmDialog(final String chatId) {
-    new AlertDialog.Builder(this).setTitle("确认删除该对话？")
+    new AlertDialog.Builder(this).setTitle(R.string.confirm_delete_chat)
         .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialogInterface, int i) {
@@ -176,6 +187,58 @@ public class ConversationActivity extends BaseActivity {
           @Override
           public void onClick(DialogInterface dialogInterface, int i) {
             dialogInterface.dismiss();
+          }
+        }).show();
+  }
+
+  private void showActionDialog() {
+    new AlertDialog.Builder(this).setItems(
+        new String[]{getString(R.string.clear_unread), getString(R.string.chat_delete_all)},
+        new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialogInterface, int i) {
+            switch (i) {
+              case 0:
+                showClearUnreadConfirmDialog();
+                break;
+              case 1:
+                showDeleteAllConfirmDialog();
+                break;
+            }
+          }
+        }
+    ).show();
+  }
+
+  private void showClearUnreadConfirmDialog() {
+    new AlertDialog.Builder(this).setTitle("确定清除所有未读消息")
+        .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialogInterface, int i) {
+            ChatUtils.MessageUtil.setAllRead();
+          }
+        })
+        .setPositiveButton(R.string.cancel, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialogInterface, int i) {
+
+          }
+        });
+  }
+
+
+  private void showDeleteAllConfirmDialog() {
+    new AlertDialog.Builder(this).setTitle("确定删除所有非收藏的会话")
+        .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialogInterface, int i) {
+            ChatUtils.ConversationUtil.deleteAllConversation();
+          }
+        })
+        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialogInterface, int i) {
+
           }
         }).show();
   }

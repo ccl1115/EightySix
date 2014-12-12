@@ -15,4 +15,6 @@
     <string name="report_chat_info">举报的同时，该对话会被系统删除</string>
     <string name="delete_chat_info">所有的消息记录都会被删除</string>
     <string name="no_more_history">没有更多的消息了</string>
+    <string name="clear_unread">忽略所有未读消息</string>
+    <string name="chat_delete_all">删除所有未收藏会话</string>
 </resources>

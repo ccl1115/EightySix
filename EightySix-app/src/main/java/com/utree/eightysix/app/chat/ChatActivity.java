@@ -400,7 +400,7 @@ public class ChatActivity extends BaseActivity {
   }
 
   private void addCommentSummaryInfo() {
-    if (!ChatUtils.MessageUtil.hasCommentSummrayMessage(mPost.chatId, mComment.id)) {
+    if (!ChatUtils.MessageUtil.hasCommentSummaryMessage(mPost.chatId, mComment.id)) {
       Message message =
           ChatUtils.infoMsg(mComment.chatId,
               "评论：" + (mComment.content.length() > 80 ? mComment.content.substring(0, 76) + "..." : mComment.content));

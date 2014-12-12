@@ -54,7 +54,7 @@ public class MessageDao extends AbstractDao<Message, Long> {
         String constraint = ifNotExists ? "IF NOT EXISTS " : "";
         db.execSQL("CREATE TABLE " + constraint + "'MESSAGE' (" + //
             "'_id' INTEGER PRIMARY KEY ," + // 0: id
-            "'CHAT_ID' TEXT," + // 1: chatId
+            "'CHAT_ID' TEXT NOT NULL ," + // 1: chatId
             "'POST_ID' TEXT," + // 2: postId
             "'COMMENT_ID' TEXT," + // 3: commentId
             "'MSG_ID' TEXT," + // 4: msgId
@@ -87,12 +87,8 @@ public class MessageDao extends AbstractDao<Message, Long> {
         if (id != null) {
             stmt.bindLong(1, id);
         }
-
-        String chatId = entity.getChatId();
-        if (chatId != null) {
-            stmt.bindString(2, chatId);
-        }
-
+        stmt.bindString(2, entity.getChatId());
+ 
         String postId = entity.getPostId();
         if (postId != null) {
             stmt.bindString(3, postId);
@@ -155,7 +151,7 @@ public class MessageDao extends AbstractDao<Message, Long> {
     public Message readEntity(Cursor cursor, int offset) {
         Message entity = new Message( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // chatId
+            cursor.getString(offset + 1), // chatId
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // postId
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // commentId
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // msgId
@@ -176,7 +172,7 @@ public class MessageDao extends AbstractDao<Message, Long> {
     @Override
     public void readEntity(Cursor cursor, Message entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setChatId(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setChatId(cursor.getString(offset + 1));
         entity.setPostId(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setCommentId(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setMsgId(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
