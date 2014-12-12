@@ -182,15 +182,15 @@ public class MessageDao extends AbstractDao<Message, Long> {
         entity.setStatus(cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9));
         entity.setRead(cursor.isNull(offset + 10) ? null : cursor.getShort(offset + 10) != 0);
         entity.setDirection(cursor.isNull(offset + 11) ? null : cursor.getInt(offset + 11));
-    }
-
+     }
+    
     /** @inheritdoc */
     @Override
     protected Long updateKeyAfterInsert(Message entity, long rowId) {
         entity.setId(rowId);
         return rowId;
     }
-
+    
     /** @inheritdoc */
     @Override
     public Long getKey(Message entity) {
@@ -201,9 +201,7 @@ public class MessageDao extends AbstractDao<Message, Long> {
         }
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     @Override    
     protected boolean isEntityUpdateable() {
         return true;

@@ -6,6 +6,7 @@ package com.utree.eightysix.dao;
 
 import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
+import de.greenrobot.daogenerator.Index;
 import de.greenrobot.daogenerator.Schema;
 
 import java.io.File;
@@ -15,7 +16,7 @@ import java.io.File;
 public class Generate {
 
   public Generate() {
-    Schema schema = new Schema(2, "com.utree.eightysix.dao");
+    Schema schema = new Schema(4, "com.utree.eightysix.dao");
 
     generateConversation(schema);
     generateMessage(schema);
@@ -45,6 +46,7 @@ public class Generate {
     conversation.addStringProperty("portrait");
     conversation.addStringProperty("bgUrl");
     conversation.addStringProperty("postContent");
+    conversation.addStringProperty("commentContent");
     conversation.addStringProperty("chatSource");
     conversation.addStringProperty("relation");
     conversation.addLongProperty("timestamp");
@@ -66,6 +68,14 @@ public class Generate {
     message.addIntProperty("status");
     message.addBooleanProperty("read");
     message.addIntProperty("direction");
+
+    Index chatIndex = new Index();
+    chatIndex.setName("chatId");
+    message.addIndex(chatIndex);
+
+    Index timestampIndex = new Index();
+    timestampIndex.setName("timestamp");
+    message.addIndex(timestampIndex);
   }
 
   public static void main(String[] args) {

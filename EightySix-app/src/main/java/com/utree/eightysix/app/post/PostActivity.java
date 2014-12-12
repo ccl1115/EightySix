@@ -218,7 +218,8 @@ public class PostActivity extends BaseActivity {
                 switch (which) {
                   case 0:
                     ChatUtils.ConversationUtil.createIfNotExist(mPost, comment);
-                    ChatActivity.start(PostActivity.this, mPost, comment.id);
+                    ChatActivity.start(PostActivity.this, mPost, comment);
+                    break;
                   case 1:
                     if (comment.praised != 1) {
                       comment.praised = 1;

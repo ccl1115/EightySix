@@ -5,9 +5,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
@@ -23,6 +26,7 @@ import com.utree.eightysix.dao.Conversation;
 import com.utree.eightysix.dao.ConversationDao;
 import com.utree.eightysix.dao.Message;
 import com.utree.eightysix.dao.MessageConst;
+import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
@@ -30,7 +34,9 @@ import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.DaoUtils;
 import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
+import com.utree.eightysix.widget.ImageActionButton;
 import com.utree.eightysix.widget.RoundedButton;
+import com.utree.eightysix.widget.TopBar;
 
 import java.util.List;
 
@@ -55,16 +61,22 @@ public class ChatActivity extends BaseActivity {
   @InjectView(R.id.alv_chats)
   public AdvancedListView mAlvChats;
 
+  @InjectView(R.id.iv_camera)
+  public ImageView mIvCamera;
+
+  @InjectView(R.id.iv_emotion)
+  public ImageView mIvEmotion;
+
   private ChatAdapter mChatAdapter;
 
   private Post mPost;
-  private String mCommentId;
+  private Comment mComment;
   private Conversation mConversation;
 
-  public static void start(Context context, Post post, String commentId) {
+  public static void start(Context context, Post post, Comment comment) {
     Intent intent = new Intent(context, ChatActivity.class);
     intent.putExtra("post", post);
-    intent.putExtra("commentId", commentId);
+    intent.putExtra("comment", comment);
 
     if (!(context instanceof Activity)) {
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -75,7 +87,7 @@ public class ChatActivity extends BaseActivity {
 
   @OnClick(R.id.rb_post)
   public void onRbPostClicked() {
-    ChatAccount.inst().getSender().txt(mPost.chatId, mPost.id, mCommentId, mEtPostContent.getText().toString());
+    ChatAccount.inst().getSender().txt(mPost.chatId, mPost.id, mComment.id, mEtPostContent.getText().toString());
     mEtPostContent.setText("");
   }
 
@@ -143,11 +155,13 @@ public class ChatActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    mIvCamera.setVisibility(View.VISIBLE);
+    mIvEmotion.setVisibility(View.VISIBLE);
+
     mChatAdapter = new ChatAdapter();
 
-
     mPost = getIntent().getParcelableExtra("post");
-    mCommentId = getIntent().getStringExtra("commentId");
+    mComment = getIntent().getParcelableExtra("comment");
 
     mConversation = DaoUtils.getConversationDao()
         .queryBuilder()
@@ -206,7 +220,88 @@ public class ChatActivity extends BaseActivity {
       }
     });
 
-    addPostSummaryInfo();
+    if (mComment == null) {
+      addPostSummaryInfo();
+    } else {
+      addCommentSummaryInfo();
+    }
+
+    getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
+      @Override
+      public String getTitle(int position) {
+        return null;
+      }
+
+      @Override
+      public Drawable getIcon(int position) {
+        return mConversation.getFavorite() ?
+            getResources().getDrawable(R.drawable.ic_favorite_selected) :
+            getResources().getDrawable(R.drawable.ic_favorite_outline);
+      }
+
+      @Override
+      public Drawable getBackgroundDrawable(int position) {
+        return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
+      }
+
+      @Override
+      public void onClick(View view, int position) {
+        ((ImageActionButton) getTopBar().getActionView(0))
+            .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_outline));
+        if (mConversation.getFavorite()) {
+          U.request("chat_fav_del", new OnResponse2<Response>() {
+            @Override
+            public void onResponseError(Throwable e) {
+              ((ImageActionButton) getTopBar().getActionView(0))
+                  .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
+            }
+
+            @Override
+            public void onResponse(Response response) {
+              if (RESTRequester.responseOk(response)) {
+                mConversation.setFavorite(false);
+                DaoUtils.getConversationDao().update(mConversation);
+              } else {
+                ((ImageActionButton) getTopBar().getActionView(0))
+                    .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
+              }
+            }
+          }, Response.class, mPost.chatId);
+        } else {
+          ((ImageActionButton) getTopBar().getActionView(0))
+              .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
+          U.request("chat_fav_add", new OnResponse2<Response>() {
+            @Override
+            public void onResponseError(Throwable e) {
+              ((ImageActionButton) getTopBar().getActionView(0))
+                  .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_outline));
+            }
+
+            @Override
+            public void onResponse(Response response) {
+              if (RESTRequester.responseOk(response)) {
+                mConversation.setFavorite(true);
+                DaoUtils.getConversationDao().update(mConversation);
+              } else {
+                ((ImageActionButton) getTopBar().getActionView(0))
+                    .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_outline));
+              }
+            }
+          }, Response.class, mPost.chatId);
+
+        }
+      }
+
+      @Override
+      public int getCount() {
+        return 1;
+      }
+
+      @Override
+      public TopBar.LayoutParams getLayoutParams(int position) {
+        return null;
+      }
+    });
   }
 
   @Override
@@ -293,6 +388,19 @@ public class ChatActivity extends BaseActivity {
               "主题：" + (mPost.content.length() > 80 ? mPost.content.substring(0, 76) + "..." : mPost.content));
 
       message.setType(MessageConst.TYPE_POST);
+
+      DaoUtils.getMessageDao().insertOrReplace(message);
+      mChatAdapter.add(message);
+    }
+  }
+
+  private void addCommentSummaryInfo() {
+    if (!ChatUtils.MessageUtil.hasCommentSummrayMessage(mPost.chatId, mComment.id)) {
+      Message message =
+          ChatUtils.infoMsg(mComment.chatId,
+              "评论：" + (mComment.content.length() > 80 ? mComment.content.substring(0, 76) + "..." : mComment.content));
+
+      message.setType(MessageConst.TYPE_COMMENT);
 
       DaoUtils.getMessageDao().insertOrReplace(message);
       mChatAdapter.add(message);

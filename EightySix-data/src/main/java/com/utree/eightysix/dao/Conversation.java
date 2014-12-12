@@ -14,6 +14,7 @@ public class Conversation {
     private String portrait;
     private String bgUrl;
     private String postContent;
+    private String commentContent;
     private String chatSource;
     private String relation;
     private Long timestamp;
@@ -27,7 +28,7 @@ public class Conversation {
         this.id = id;
     }
 
-    public Conversation(Long id, String chatId, String postId, String commentId, String lastMsg, String portrait, String bgUrl, String postContent, String chatSource, String relation, Long timestamp, Integer unreadCount, Boolean favorite) {
+    public Conversation(Long id, String chatId, String postId, String commentId, String lastMsg, String portrait, String bgUrl, String postContent, String commentContent, String chatSource, String relation, Long timestamp, Integer unreadCount, Boolean favorite) {
         this.id = id;
         this.chatId = chatId;
         this.postId = postId;
@@ -36,6 +37,7 @@ public class Conversation {
         this.portrait = portrait;
         this.bgUrl = bgUrl;
         this.postContent = postContent;
+        this.commentContent = commentContent;
         this.chatSource = chatSource;
         this.relation = relation;
         this.timestamp = timestamp;
@@ -105,6 +107,14 @@ public class Conversation {
 
     public void setPostContent(String postContent) {
         this.postContent = postContent;
+    }
+
+    public String getCommentContent() {
+        return commentContent;
+    }
+
+    public void setCommentContent(String commentContent) {
+        this.commentContent = commentContent;
     }
 
     public String getChatSource() {

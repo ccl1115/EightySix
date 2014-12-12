@@ -20,6 +20,7 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.dao.Conversation;
+import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
@@ -59,7 +60,14 @@ public class ConversationActivity extends BaseActivity {
     post.id = conversation.getPostId();
     post.shortName = conversation.getChatSource();
     post.content = conversation.getPostContent();
-    ChatActivity.start(this, post, conversation.getCommentId());
+    if (conversation.getCommentId() != null) {
+      Comment comment = new Comment();
+      comment.id = conversation.getCommentId();
+      comment.content = conversation.getCommentContent();
+      ChatActivity.start(this, post, comment);
+    } else {
+      ChatActivity.start(this, post, null);
+    }
   }
 
   @OnItemLongClick(R.id.alv_conversation)

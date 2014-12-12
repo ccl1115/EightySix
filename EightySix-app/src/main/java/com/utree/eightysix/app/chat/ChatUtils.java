@@ -69,6 +69,7 @@ public class ChatUtils {
         conversation.setTimestamp(System.currentTimeMillis());
         conversation.setUnreadCount(0);
         conversation.setPortrait("\ue800");
+        conversation.setFavorite(false);
         DaoUtils.getConversationDao().insert(conversation);
       }
     }
@@ -77,16 +78,18 @@ public class ChatUtils {
       if (DaoUtils.getConversationDao().queryBuilder().where(ConversationDao.Properties.ChatId.eq(post.chatId)).unique() == null) {
         Conversation conversation = new Conversation();
         conversation.setBgUrl(post.bgUrl);
-        conversation.setChatId(post.chatId);
+        conversation.setChatId(comment.chatId);
         conversation.setChatSource(post.shortName);
         conversation.setPostId(post.id);
         conversation.setCommentId(comment.id);
         conversation.setLastMsg("");
         conversation.setRelation(post.viewType == 3 ? "认识的人" : "陌生人");
         conversation.setPostContent(post.content);
+        conversation.setCommentContent(comment.content);
         conversation.setTimestamp(System.currentTimeMillis());
         conversation.setUnreadCount(0);
         conversation.setPortrait(comment.avatar);
+        conversation.setFavorite(false);
         DaoUtils.getConversationDao().insert(conversation);
       }
     }
@@ -115,7 +118,16 @@ public class ChatUtils {
     }
 
     public static boolean hasPostSummaryMessage(String chatId) {
-      return DaoUtils.getMessageDao().queryBuilder().where(MessageDao.Properties.Type.eq(MessageConst.TYPE_POST)).count() > 0;
+      return DaoUtils.getMessageDao().queryBuilder()
+          .where(MessageDao.Properties.ChatId.eq(chatId), MessageDao.Properties.Type.eq(MessageConst.TYPE_POST))
+          .count() > 0;
+    }
+
+    public static boolean hasCommentSummrayMessage(String chatId, String commentId) {
+      return DaoUtils.getMessageDao().queryBuilder()
+          .where(MessageDao.Properties.ChatId.eq(chatId),
+              MessageDao.Properties.Type.eq(MessageConst.TYPE_COMMENT),
+              MessageDao.Properties.CommentId.eq(commentId)).count() > 0;
     }
   }
 }
