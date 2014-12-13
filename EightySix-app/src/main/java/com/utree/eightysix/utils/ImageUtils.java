@@ -483,7 +483,7 @@ public class ImageUtils {
    */
   public static class ImageLoadedEvent {
     private Bitmap mBitmap;
-    private String mHash;
+    private String mUrlHash;
     private int mFrom;
 
     public static final int FROM_MEM = 1000;
@@ -491,9 +491,9 @@ public class ImageUtils {
     public static final int FROM_REMOTE = 1002;
 
 
-    public ImageLoadedEvent(String hash, Bitmap bitmap, int from) {
+    public ImageLoadedEvent(String urlHash, Bitmap bitmap, int from) {
       mBitmap = bitmap;
-      mHash = hash;
+      mUrlHash = urlHash;
       mFrom = from;
     }
 
@@ -502,7 +502,7 @@ public class ImageUtils {
     }
 
     public String getHash() {
-      return mHash;
+      return mUrlHash;
     }
 
     public int getFrom() {
