@@ -20,6 +20,7 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.app.CameraUtil;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.dao.Conversation;
@@ -38,6 +39,7 @@ import com.utree.eightysix.widget.ImageActionButton;
 import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.TopBar;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -73,6 +75,8 @@ public class ChatActivity extends BaseActivity {
   private Comment mComment;
   private Conversation mConversation;
 
+  private CameraUtil mCameraUtil;
+
   public static void start(Context context, Post post, Comment comment) {
     Intent intent = new Intent(context, ChatActivity.class);
     intent.putExtra("post", post);
@@ -87,12 +91,15 @@ public class ChatActivity extends BaseActivity {
 
   @OnClick(R.id.rb_post)
   public void onRbPostClicked() {
-    if (mComment != null) {
-      ChatAccount.inst().getSender().txt(mPost.chatId, mPost.id, mComment.id, mEtPostContent.getText().toString());
-    } else {
-      ChatAccount.inst().getSender().txt(mPost.chatId, mPost.id, null, mEtPostContent.getText().toString());
-    }
+    ChatAccount.inst().getSender()
+        .txt(mPost.chatId, mPost.id, mComment == null ? null : mComment.id, mEtPostContent.getText().toString());
     mEtPostContent.setText("");
+    mEtPostContent.setEnabled(false);
+  }
+
+  @OnClick(R.id.iv_camera)
+  public void onIvCameraClicked() {
+    mCameraUtil.showCameraDialog();
   }
 
   @OnTextChanged(R.id.et_post_content)
@@ -158,6 +165,14 @@ public class ChatActivity extends BaseActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    mCameraUtil = new CameraUtil(this, new CameraUtil.Callback() {
+      @Override
+      public void onImageReturn(String path) {
+        ChatAccount.inst().getSender()
+            .photo(mPost.chatId, mPost.id, mComment == null ? null : mComment.id, new File(path));
+      }
+    });
 
     mIvCamera.setVisibility(View.VISIBLE);
     mIvEmotion.setVisibility(View.VISIBLE);
@@ -313,6 +328,11 @@ public class ChatActivity extends BaseActivity {
     super.onDestroy();
 
     U.getChatBus().unregister(this);
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    mCameraUtil.onActivityResult(requestCode, resultCode, data);
   }
 
   private void showMoreDialog() {

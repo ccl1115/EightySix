@@ -276,6 +276,12 @@ public class ImageUtils {
     return syncLoadResourceBitmap(resId, hash, U.dp2px(48), U.dp2px(48));
   }
 
+  /**
+   * This method load image from local resources first.
+   *
+   * @param url  the url
+   * @param hash the hash of the url
+   */
   public static void asyncLoadWithRes(final String url, final String hash) {
 
     Bitmap bitmap = sLruCache.get(hash);
@@ -303,6 +309,14 @@ public class ImageUtils {
 
   public static void asyncLoadThumbnail(final String url, final String hash) {
     asyncLoad(url, hash, U.dp2px(48), U.dp2px(48));
+  }
+
+  public static void asyncLoad(File f, int width, int height) {
+    executeTask(new ImageFileAsyncWorker(f, width, height));
+  }
+
+  public static void asyncLoadThumbnail(File f) {
+    executeTask(new ImageFileAsyncWorker(f, U.dp2px(48), U.dp2px(48)));
   }
 
   public static void asyncLoad(final String url, final String hash, final int width, final int height) {
@@ -698,6 +712,32 @@ public class ImageUtils {
     public void onSuccess(int i, Header[] headers, File file) {
       Log.d(TAG, "onSuccess");
       executeTask(new ImageRemoteDecodeWorker(hash, file));
+    }
+  }
+
+  private static class ImageFileAsyncWorker extends AsyncTask<Void, Void, Void> {
+
+    private final File f;
+    private final int width;
+    private final int height;
+
+    public ImageFileAsyncWorker(File f, int width, int height) {
+
+      this.f = f;
+      this.width = width;
+      this.height = height;
+    }
+
+    @Override
+    protected Void doInBackground(Void... voids) {
+      cacheImage(getUrlHash(f.getAbsolutePath()), decodeBitmap(f, width, height));
+      return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+      String urlHash = getUrlHash(f.getAbsolutePath());
+      U.getBus().post(new ImageLoadedEvent(urlHash, getFromMemByUrl(f.getAbsolutePath()), FROM_DISK));
     }
   }
 }

@@ -11,9 +11,11 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.chat.content.ImageContent;
 import com.utree.eightysix.dao.Message;
 import com.utree.eightysix.dao.MessageConst;
 import com.utree.eightysix.utils.DaoUtils;
+import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.RoundedButton;
 
 import java.util.ArrayList;
@@ -27,7 +29,7 @@ import java.util.List;
 public class ChatAdapter extends BaseAdapter {
 
 
-  private static final int TYPE_COUNT = 7;
+  private static final int TYPE_COUNT = 9;
   private static final int TYPE_INVALID = 0;
   private static final int TYPE_TEXT_FROM = 1;
   private static final int TYPE_TEXT_TO = 2;
@@ -35,6 +37,8 @@ public class ChatAdapter extends BaseAdapter {
   private static final int TYPE_POST = 4;
   private static final int TYPE_COMMENT = 5;
   private static final int TYPE_TIMESTAMP = 6;
+  private static final int TYPE_IMAGE_FROM = 7;
+  private static final int TYPE_IMAGE_TO = 8;
 
   private List<Message> mMessages;
   private Comparator<Message> mMessageComparator;
@@ -112,6 +116,10 @@ public class ChatAdapter extends BaseAdapter {
         return getTextFromView(position, convertView, parent);
       case TYPE_TEXT_TO:
         return getTextToView(position, convertView, parent);
+      case TYPE_IMAGE_FROM:
+        return getImageFromView(position, convertView, parent);
+      case TYPE_IMAGE_TO:
+        return getImageToView(position, convertView, parent);
       case TYPE_INFO:
       case TYPE_POST:
       case TYPE_COMMENT:
@@ -125,22 +133,24 @@ public class ChatAdapter extends BaseAdapter {
   @Override
   public int getItemViewType(int position) {
     Message m = getItem(position);
-    switch (m.getDirection()) {
-      case MessageConst.DIRECTION_RECEIVE: {
-        if (m.getType() == MessageConst.TYPE_TXT) {
+
+    switch (m.getType()) {
+      case MessageConst.TYPE_TXT: {
+        if (m.getDirection() == MessageConst.DIRECTION_RECEIVE) {
           return TYPE_TEXT_FROM;
-        }
-        break;
-      }
-      case MessageConst.DIRECTION_SEND: {
-        if (m.getType() == MessageConst.TYPE_TXT) {
+        } else if (m.getDirection() == MessageConst.DIRECTION_SEND) {
           return TYPE_TEXT_TO;
         }
         break;
       }
-    }
-
-    switch (m.getType()) {
+      case MessageConst.TYPE_IMAGE: {
+        if (m.getDirection() == MessageConst.DIRECTION_RECEIVE) {
+          return TYPE_IMAGE_FROM;
+        } else if (m.getDirection() == MessageConst.DIRECTION_SEND) {
+          return TYPE_IMAGE_TO;
+        }
+        break;
+      }
       case MessageConst.TYPE_INFO: {
         return TYPE_INFO;
       }
@@ -164,13 +174,21 @@ public class ChatAdapter extends BaseAdapter {
   }
 
   private View getTextFromView(int position, View convertView, ViewGroup parent) {
-    ChatItemViewHolder holder;
+    return getTextView(R.layout.item_chat_text_from, position, convertView, parent);
+  }
+
+  private View getTextToView(int position, View convertView, ViewGroup parent) {
+    return getTextView(R.layout.item_chat_text_to, position, convertView, parent);
+  }
+
+  private View getTextView(int layout, int position, View convertView, ViewGroup parent) {
+    TextItemViewHolder holder;
     if (convertView == null) {
-      convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_from, parent, false);
-      holder = new ChatItemViewHolder(convertView);
+      convertView = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
+      holder = new TextItemViewHolder(convertView);
       convertView.setTag(holder);
     } else {
-      holder = (ChatItemViewHolder) convertView.getTag();
+      holder = (TextItemViewHolder) convertView.getTag();
     }
 
     Message message = getItem(position);
@@ -182,19 +200,32 @@ public class ChatAdapter extends BaseAdapter {
     return convertView;
   }
 
-  private View getTextToView(int position, View convertView, ViewGroup parent) {
-    ChatItemViewHolder holder;
+  private View getImageFromView(int position, View convertView, ViewGroup parent) {
+    return getImageView(R.layout.item_chat_image_from, position, convertView, parent);
+  }
+
+  private View getImageToView(int position, View convertView, ViewGroup parent) {
+    return getImageView(R.layout.item_chat_image_to, position, convertView, parent);
+  }
+
+  private View getImageView(int layout, int position, View convertView, ViewGroup parent) {
+    ImageItemViewHolder holder;
     if (convertView == null) {
-      convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_to, parent, false);
-      holder = new ChatItemViewHolder(convertView);
+      convertView = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
+      holder = new ImageItemViewHolder(convertView);
       convertView.setTag(holder);
     } else {
-      holder = (ChatItemViewHolder) convertView.getTag();
+      holder = (ImageItemViewHolder) convertView.getTag();
     }
 
     Message message = getItem(position);
 
-    holder.mTvText.setText(message.getContent());
+    ImageContent content = U.getGson().fromJson(message.getContent(), ImageContent.class);
+    if (content.local != null) {
+      holder.mIvImage.setUrl(content.local);
+    } else if (content.thumbnail != null) {
+      holder.mIvImage.setUrl(content.thumbnail);
+    }
     holder.mPbLoading.setVisibility(message.getStatus() == MessageConst.STATUS_IN_PROGRESS ? View.VISIBLE : View.GONE);
     holder.mIvError.setVisibility(message.getStatus() == MessageConst.STATUS_FAILED ? View.VISIBLE : View.GONE);
 
@@ -247,7 +278,7 @@ public class ChatAdapter extends BaseAdapter {
   }
 
 
-  class ChatItemViewHolder {
+  class TextItemViewHolder {
 
     @InjectView(R.id.pb_loading)
     ProgressBar mPbLoading;
@@ -258,7 +289,24 @@ public class ChatAdapter extends BaseAdapter {
     @InjectView(R.id.iv_error)
     ImageView mIvError;
 
-    ChatItemViewHolder(View view) {
+    TextItemViewHolder(View view) {
+      ButterKnife.inject(this, view);
+    }
+  }
+
+  class ImageItemViewHolder {
+
+
+    @InjectView(R.id.pb_loading)
+    ProgressBar mPbLoading;
+
+    @InjectView(R.id.iv_image)
+    AsyncImageView mIvImage;
+
+    @InjectView(R.id.iv_error)
+    ImageView mIvError;
+
+    ImageItemViewHolder(View view) {
       ButterKnife.inject(this, view);
     }
   }

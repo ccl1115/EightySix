@@ -10,6 +10,7 @@ import com.easemob.chat.EMMessage;
 import com.easemob.exceptions.EaseMobException;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.M;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseApplication;
@@ -66,6 +67,13 @@ public class ChatAccount {
               mNewMessageBroadcastReceiver = new NewMessageBroadcastReceiver();
               U.getContext().registerReceiver(mNewMessageBroadcastReceiver,
                   new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction()));
+
+              BaseApplication.getHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                  if (BuildConfig.DEBUG) U.showToast("聊天服务器登录成功");
+                }
+              });
             }
 
             @Override
@@ -74,6 +82,7 @@ public class ChatAccount {
               BaseApplication.getHandler().post(new Runnable() {
                 @Override
                 public void run() {
+                  if (BuildConfig.DEBUG) U.showToast("聊天服务器登录失败:" + s);
                   U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_LOGIN_ERR, String.format("登录失败：%s(%d)", s, i)));
                 }
               });

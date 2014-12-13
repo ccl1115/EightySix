@@ -6,14 +6,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -39,6 +36,7 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.app.CameraUtil;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
 import com.utree.eightysix.data.BaseItem;
@@ -52,7 +50,10 @@ import com.utree.eightysix.response.TagsResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.utils.*;
+import com.utree.eightysix.utils.ColorUtil;
+import com.utree.eightysix.utils.Env;
+import com.utree.eightysix.utils.ImageUtils;
+import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.widget.*;
 import com.utree.eightysix.widget.panel.GridPanel;
 import com.utree.eightysix.widget.panel.Item;
@@ -111,22 +112,19 @@ public class PublishActivity extends BaseActivity {
   protected PublishLayout mPublishLayout;
   protected int mFactoryId;
   protected int mTopicId;
-  private Dialog mCameraDialog;
   private Dialog mDescriptionDialog;
-  private File mOutputFile;
   private boolean mIsOpened;
   private boolean mRequestStarted;
   private boolean mImageUploadFinished;
   private boolean mUseColor = true;
-  private boolean mStartCamera = false;
-  private boolean mStartAlbum = false;
-  private String mFileHash;
   private String mImageUploadUrl;
   private int mBgColor = Color.WHITE;
   private ThemedDialog mQuitConfirmDialog;
 
   private String mLastTempName;
   private List<Tag> mTags;
+
+  private CameraUtil mCameraUtil;
 
   public static void start(Context context, int factoryId, List<Tag> tags) {
     Intent intent = new Intent(context, PublishActivity.class);
@@ -199,7 +197,7 @@ public class PublishActivity extends BaseActivity {
 
   @OnClick (R.id.iv_camera)
   public void onIvCameraClicked() {
-    mCameraDialog.show();
+    mCameraUtil.showCameraDialog();
   }
 
   @OnFocusChange (R.id.et_post_content)
@@ -243,6 +241,13 @@ public class PublishActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    mCameraUtil = new CameraUtil(this, new CameraUtil.Callback() {
+      @Override
+      public void onImageReturn(String path) {
+        setBgImage(path);
+      }
+    });
+
     mFactoryId = getIntent().getIntExtra("factoryId", -1);
     mTopicId = getIntent().getIntExtra("topicId", -1);
 
@@ -284,33 +289,6 @@ public class PublishActivity extends BaseActivity {
 
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-    builder.setTitle(R.string.add_photo).setItems(new String[]{
-        getString(R.string.use_camera),
-        getString(R.string.select_album)
-    }, new DialogInterface.OnClickListener() {
-      @Override
-      public void onClick(DialogInterface dialog, int which) {
-        switch (which) {
-          case 0:
-            if (!(mStartCamera = startCamera())) {
-              showToast(R.string.error_start_camera);
-            }
-            break;
-          case 1:
-            if (!(mStartAlbum = startAlbum())) {
-              showToast(R.string.error_start_album);
-            }
-            break;
-          case Dialog.BUTTON_NEGATIVE:
-            dialog.dismiss();
-            break;
-        }
-      }
-    });
-
-    mCameraDialog = builder.create();
-
-    builder = new AlertDialog.Builder(this);
 
     builder.setTitle(R.string.who_will_see_this_secret).setMessage(R.string.post_description)
         .setPositiveButton(getString(R.string.got_it), new DialogInterface.OnClickListener() {
@@ -537,56 +515,7 @@ public class PublishActivity extends BaseActivity {
 
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-    switch (requestCode) {
-      case REQUEST_CODE_ALBUM:
-        if (resultCode == RESULT_CANCELED) return;
-        if (data != null) {
-          Uri uri = data.getData();
-
-          Cursor cursor = getContentResolver()
-              .query(uri, new String[]{MediaStore.MediaColumns.DATA}, null, null, null);
-
-          if (cursor != null && cursor.moveToFirst()) {
-            String p = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
-            mOutputFile = new File(p);
-            if (!startCrop()) {
-              setBgImage(p);
-            }
-          }
-        }
-        break;
-      case REQUEST_CODE_CAMERA:
-        if (resultCode == RESULT_CANCELED) return;
-        if (mOutputFile != null) {
-          if (!startCrop()) {
-            setBgImage(mOutputFile.getAbsolutePath());
-          }
-        }
-        break;
-      case REQUEST_CODE_CROP:
-        if (resultCode != RESULT_CANCELED) {
-          if (data != null) {
-            Uri uri = data.getData();
-
-            setBgImage(uri.getPath());
-          }
-        } else {
-          if (mStartAlbum) {
-            mStartAlbum = startAlbum();
-            mStartCamera = false;
-          } else if (mStartCamera) {
-            mStartCamera = startCamera();
-            mStartAlbum = false;
-          } else {
-            mStartAlbum = false;
-            mStartCamera = false;
-          }
-        }
-        break;
-      default:
-        break;
-    }
+    mCameraUtil.onActivityResult(requestCode, resultCode, data);
   }
 
   @Override
@@ -747,7 +676,6 @@ public class PublishActivity extends BaseActivity {
 
   private void setBgImage(String p) {
     final File file = new File(p);
-    mFileHash = IOUtils.fileHash(file);
     Bitmap bitmap = ImageUtils.safeDecodeBitmap(file);
     ImageUtils.asyncUpload(file);
     mPostEditText.setTextColor(Color.WHITE);
@@ -759,46 +687,6 @@ public class PublishActivity extends BaseActivity {
     mImageUploadFinished = false;
   }
 
-  private boolean startCamera() {
-    try {
-      Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-      mOutputFile = IOUtils.createTmpFile("camera_output");
-      i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mOutputFile));
-      startActivityForResult(i, REQUEST_CODE_CAMERA);
-      return true;
-    } catch (Exception e) {
-      return false;
-    }
-  }
-
-  private boolean startAlbum() {
-    try {
-      Intent i = new Intent(Intent.ACTION_PICK);
-      i.setType("image/*");
-      startActivityForResult(i, REQUEST_CODE_ALBUM);
-      return true;
-    } catch (Exception e) {
-      return false;
-    }
-  }
-
-  private boolean startCrop() {
-    try {
-      Intent cropIntent = new Intent(this, ImageCropActivity.class);
-      // indicate image type and Uri
-      cropIntent.setDataAndType(Uri.fromFile(mOutputFile), "image/*");
-      // set crop properties
-      cropIntent.putExtra("crop", "true");
-      // indicate aspect of desired crop
-      cropIntent.putExtra("aspectX", 1);
-      cropIntent.putExtra("aspectY", 1);
-      // start the activity - we handle returning in onActivityResult
-      startActivityForResult(cropIntent, REQUEST_CODE_CROP);
-      return true;
-    } catch (Exception e) {
-      return false;
-    }
-  }
 
   private void requestPublish() {
     mRequestStarted = true;
