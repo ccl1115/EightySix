@@ -103,7 +103,6 @@
         <dependency>
             <groupId>com.edmodo</groupId>
             <artifactId>cropper</artifactId>
-            <version>1.0.1</version>
             <type>aar</type>
         </dependency>
 

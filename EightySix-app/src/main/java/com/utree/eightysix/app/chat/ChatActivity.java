@@ -6,15 +6,20 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.OnTextChanged;
+import com.rockerhieu.emojicon.EmojiconEditText;
+import com.rockerhieu.emojicon.EmojiconGridFragment;
+import com.rockerhieu.emojicon.EmojiconsFragment;
+import com.rockerhieu.emojicon.emoji.Emojicon;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
@@ -23,6 +28,7 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.CameraUtil;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.chat.event.ChatEvent;
+import com.utree.eightysix.app.publish.EmojiFragment;
 import com.utree.eightysix.dao.Conversation;
 import com.utree.eightysix.dao.ConversationDao;
 import com.utree.eightysix.dao.Message;
@@ -46,16 +52,21 @@ import java.util.List;
  * @author simon
  */
 @Layout(R.layout.activity_chat)
-public class ChatActivity extends BaseActivity {
+public class ChatActivity extends BaseActivity implements
+    EmojiconsFragment.OnEmojiconBackspaceClickedListener,
+    EmojiconGridFragment.OnEmojiconClickedListener {
 
   @InjectView(R.id.fl_send)
   public FrameLayout mFlSend;
+
+  @InjectView(R.id.fl_panel)
+  public FrameLayout mFlPanel;
 
   @InjectView(R.id.refresh_view)
   public SwipeRefreshLayout mRefreshView;
 
   @InjectView(R.id.et_post_content)
-  public EditText mEtPostContent;
+  public EmojiconEditText mEtPostContent;
 
   @InjectView(R.id.rb_post)
   public RoundedButton mRbPost;
@@ -76,6 +87,7 @@ public class ChatActivity extends BaseActivity {
   private Conversation mConversation;
 
   private CameraUtil mCameraUtil;
+  private boolean mIsOpened;
 
   public static void start(Context context, Post post, Comment comment) {
     Intent intent = new Intent(context, ChatActivity.class);
@@ -94,12 +106,22 @@ public class ChatActivity extends BaseActivity {
     ChatAccount.inst().getSender()
         .txt(mPost.chatId, mPost.id, mComment == null ? null : mComment.id, mEtPostContent.getText().toString());
     mEtPostContent.setText("");
-    mEtPostContent.setEnabled(false);
   }
 
   @OnClick(R.id.iv_camera)
   public void onIvCameraClicked() {
     mCameraUtil.showCameraDialog();
+  }
+
+  @OnClick(R.id.iv_emotion)
+  public void onIvEmationClicked() {
+    hideSoftKeyboard(mEtPostContent);
+    getHandler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        mFlPanel.setVisibility(View.VISIBLE);
+      }
+    }, 200);
   }
 
   @OnTextChanged(R.id.et_post_content)
@@ -176,6 +198,28 @@ public class ChatActivity extends BaseActivity {
 
     mIvCamera.setVisibility(View.VISIBLE);
     mIvEmotion.setVisibility(View.VISIBLE);
+
+    //region To detect soft keyboard visibility change
+    // works after ICM
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+      final View activityRootView = findViewById(android.R.id.content);
+      activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+          int heightDiff = activityRootView.getRootView().getHeight() - activityRootView.getHeight();
+          if (heightDiff > 100) { // 99% of the time the height diff will be due to a keyboard.
+
+            if (!mIsOpened) {
+              mFlPanel.setVisibility(View.GONE);
+            }
+            mIsOpened = true;
+          } else if (mIsOpened) {
+            mIsOpened = false;
+          }
+        }
+      });
+    }
+    //endregion
 
     mChatAdapter = new ChatAdapter();
 
@@ -321,6 +365,12 @@ public class ChatActivity extends BaseActivity {
         return null;
       }
     });
+
+
+    getSupportFragmentManager()
+        .beginTransaction()
+        .add(R.id.fl_panel, EmojiFragment.newInstance())
+        .commitAllowingStateLoss();
   }
 
   @Override
@@ -333,6 +383,15 @@ public class ChatActivity extends BaseActivity {
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     mCameraUtil.onActivityResult(requestCode, resultCode, data);
+  }
+
+  @Override
+  public void onBackPressed() {
+    if (mFlPanel.getVisibility() == View.VISIBLE) {
+      mFlPanel.setVisibility(View.GONE);
+    } else {
+      super.onBackPressed();
+    }
   }
 
   private void showMoreDialog() {
@@ -430,5 +489,20 @@ public class ChatActivity extends BaseActivity {
       DaoUtils.getMessageDao().insertOrReplace(message);
       mChatAdapter.add(message);
     }
+  }
+
+  @Override
+  public void onEmojiconBackspaceClicked(View view) {
+
+  }
+
+  @Override
+  public void onEmojiconClicked(Emojicon emojicon) {
+    String text = mEtPostContent.getText().toString();
+    String before = text.substring(0, mEtPostContent.getSelectionStart());
+    String after = text.substring(mEtPostContent.getSelectionEnd());
+
+    mEtPostContent.setText(before + emojicon.getEmoji() + after);
+    mEtPostContent.setSelection(before.length() + emojicon.getEmoji().length());
   }
 }

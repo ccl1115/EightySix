@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
              android:orientation="vertical"
              android:layout_width="match_parent"
              android:layout_height="50dp"
@@ -41,7 +42,7 @@
                     android:visibility="gone"
                     />
 
-            <EditText
+        <com.rockerhieu.emojicon.EmojiconEditText
                 android:id="@+id/et_post_content"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -53,6 +54,7 @@
                 android:maxHeight="100sp"
                 android:gravity="bottom"
                 android:hint="@string/anonymously_comment"
+                app:emojiconSize="24dp"
                     />
 
 

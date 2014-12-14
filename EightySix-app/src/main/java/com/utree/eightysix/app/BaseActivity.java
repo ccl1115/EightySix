@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.ResultReceiver;
 import android.support.v4.app.FragmentActivity;
 import android.util.*;
 import android.view.*;
@@ -563,6 +564,11 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   protected void hideSoftKeyboard(View view) {
     ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
         .hideSoftInputFromWindow(view.getWindowToken(), 0);
+  }
+
+  protected void hideSoftKeyboard(View view, ResultReceiver resultReceiver) {
+    ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
+        .hideSoftInputFromWindow(view.getWindowToken(), 0, resultReceiver);
   }
 
   protected void showSoftKeyboard(View view) {

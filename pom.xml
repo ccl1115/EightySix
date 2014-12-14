@@ -12,6 +12,7 @@
     <modules>
         <module>dao-generator</module>
         <module>oss-batch</module>
+        <module>emojicon/library</module>
         <module>EightySix-app</module>
         <module>EightySix-fixture</module>
         <module>EightySix-data</module>
@@ -23,7 +24,7 @@
     <properties>
         <platform.version>5.0_r1</platform.version>
         <platform.target>21</platform.target>
-        <android.plugin.version>4.0.0-rc.1</android.plugin.version>
+        <android.plugin.version>4.0.0-rc.2</android.plugin.version>
         <environment>development</environment>
     </properties>
 
@@ -306,7 +307,7 @@
             <dependency>
                 <groupId>com.rockerhieu.emojicon</groupId>
                 <artifactId>library</artifactId>
-                <version>1.0</version>
+                <version>1.1-SNAPSHOT</version>
                 <type>aar</type>
             </dependency>
         </dependencies>
