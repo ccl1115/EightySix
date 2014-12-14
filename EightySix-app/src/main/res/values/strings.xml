@@ -279,4 +279,6 @@
     <string name="all_topic">全部话题</string>
     <string name="change">更改</string>
     <string name="unfollow">取消关注</string>
+    <string name="clear_cache">清楚图片和数据缓存</string>
+    <string name="vibrate_mode_info">开启后无提示音及震动</string>
 </resources>
