@@ -7,9 +7,7 @@ package com.utree.eightysix.dao;
 public class Message {
 
     private Long id;
-    /**
-     * Not-null value.
-     */
+    /** Not-null value. */
     private String chatId;
     private String postId;
     private String commentId;

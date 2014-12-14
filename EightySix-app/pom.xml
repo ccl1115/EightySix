@@ -144,6 +144,11 @@
             <artifactId>wup</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.rockerhieu.emojicon</groupId>
+            <artifactId>library</artifactId>
+            <type>aar</type>
+        </dependency>
 
     </dependencies>
 

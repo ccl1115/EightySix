@@ -1,0 +1,3 @@
+[submodule "emojicon"]
+	path = emojicon
+	url = https://github.com/ccl1115/emojicon
