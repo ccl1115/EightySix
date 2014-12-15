@@ -1,13 +1,9 @@
 package com.utree.eightysix.app.circle;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +23,7 @@ import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.feed.FeedActivity;
-import com.utree.eightysix.app.home.HomeTabActivity;
+import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.request.CircleSetRequest;
@@ -323,7 +319,7 @@ public class CircleSearchActivity extends BaseActivity {
       @Override
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
-          HomeTabActivity.start(CircleSearchActivity.this);
+          HomeActivity.start(CircleSearchActivity.this);
           finish();
         }
       }

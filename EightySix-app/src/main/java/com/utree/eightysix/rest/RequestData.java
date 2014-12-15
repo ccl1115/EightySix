@@ -27,6 +27,10 @@ public class RequestData<RES extends Response> {
 
   boolean sign;
 
+  public RequestData() {
+    requestTime = System.currentTimeMillis();
+  }
+
   public RequestData(Object request) {
     requestTime = System.currentTimeMillis();
     Class<?> clz = request.getClass();

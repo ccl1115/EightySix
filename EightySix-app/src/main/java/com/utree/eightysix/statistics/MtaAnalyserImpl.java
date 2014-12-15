@@ -32,13 +32,13 @@ public class MtaAnalyserImpl implements Analyser {
 
   @Override
   public void reportError(Context context, String string) {
-    StatService.reportError(context, string);
+    if (!BuildConfig.DEBUG) StatService.reportError(context, string);
   }
 
   @Override
   public void reportException(Context context, Throwable t) {
     if (BuildConfig.DEBUG) t.printStackTrace();
-    StatService.reportException(context, t);
+    else StatService.reportException(context, t);
   }
 
   @Override

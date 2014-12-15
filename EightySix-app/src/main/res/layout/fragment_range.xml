@@ -47,19 +47,20 @@
                 android:text="自己厂里的秘密"
                 />
 
-
     </RelativeLayout>
 
     <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#ff716a86"/>
+            android:background="#ff716a86"
+            />
 
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="14dp"
-            android:paddingBottom="14dp">
+            android:paddingBottom="14dp"
+            >
 
         <ImageView
                 android:id="@+id/iv_range"
@@ -91,7 +92,8 @@
                 android:layout_toRightOf="@+id/iv_range"
                 android:layout_toEndOf="@+id/iv_range"
                 android:layout_below="@+id/rb_range_1"
-                android:background="#ff716a86"/>
+                android:background="#ff716a86"
+                />
 
         <TextView
                 android:id="@+id/rb_range_2"
@@ -113,7 +115,8 @@
                 android:layout_toRightOf="@+id/iv_range"
                 android:layout_toEndOf="@+id/iv_range"
                 android:layout_below="@+id/rb_range_2"
-                android:background="#ff716a86"/>
+                android:background="#ff716a86"
+                />
 
         <TextView
                 android:id="@+id/rb_range_3"
@@ -130,16 +133,57 @@
 
     </RelativeLayout>
 
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#ff716a86"
+                />
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                >
+
+                <ImageView
+                        android:id="@+id/iv_fellow"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_side_my_circle"
+                        />
+
+                <TextView
+                        android:id="@+id/rb_fellow"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/iv_fellow"
+                        android:layout_toEndOf="@+id/iv_fellow"
+                        android:layout_centerVertical="true"
+                        android:textSize="16sp"
+                        android:text="老乡动态"
+                        android:textColor="@color/apptheme_side_drawer_selector"
+                        />
+
+        </RelativeLayout>
+
 
     <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#ff716a86"/>
+            android:background="#ff716a86"
+            />
 
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp">
+            android:layout_marginTop="40dp"
+            >
 
             <ImageView
                     android:id="@+id/iv_circle"

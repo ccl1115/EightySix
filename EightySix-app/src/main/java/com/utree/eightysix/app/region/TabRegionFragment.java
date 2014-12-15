@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.region;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,11 +8,8 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -22,7 +18,6 @@ import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
-import com.utree.eightysix.widget.ITopBar2;
 import com.utree.eightysix.widget.TitleTab;
 
 /**
@@ -35,42 +30,14 @@ public class TabRegionFragment extends BaseFragment {
 
   @InjectView (R.id.tt_tab)
   public TitleTab mTtTab;
-
-  @InjectView(R.id.ll_filter)
-  public LinearLayout mLlFilter;
-
-  @OnClick(R.id.v_mask)
-  public void onVMaskClicked() {
-    mLlFilter.setVisibility(View.GONE);
-  }
-
-  @InjectView(R.id.tv_gender_all)
-  public TextView mTvAll;
-
-  @InjectView(R.id.tv_gender_male)
-  public TextView mTvMale;
-
-  @InjectView(R.id.tv_gender_female)
-  public TextView mTvFemale;
-
-  @InjectView(R.id.tv_region_0)
-  public TextView mTvRegion0;
-
-  @InjectView(R.id.tv_region_1)
-  public TextView mTvRegion1;
-
-  @InjectView(R.id.tv_region_2)
-  public TextView mTvRegion2;
-
-  @InjectView(R.id.tv_region_3)
-  public TextView mTvRegion3;
-
   private FeedRegionFragment mFeedFragment;
   private HotFeedRegionFragment mHotFeedFragment;
+  private FriendsFeedRegionFragment mFriendsFeedFragment;
 
   public TabRegionFragment() {
     mFeedFragment = new FeedRegionFragment();
     mHotFeedFragment = new HotFeedRegionFragment();
+    mFriendsFeedFragment = new FriendsFeedRegionFragment();
   }
 
   @Override
@@ -92,6 +59,8 @@ public class TabRegionFragment extends BaseFragment {
             return mFeedFragment;
           case 1:
             return mHotFeedFragment;
+          case 2:
+            return mFriendsFeedFragment;
         }
         return null;
 
@@ -99,7 +68,7 @@ public class TabRegionFragment extends BaseFragment {
 
       @Override
       public int getCount() {
-        return 2;
+        return 3;
       }
 
       @Override
@@ -109,6 +78,8 @@ public class TabRegionFragment extends BaseFragment {
             return "最新";
           case 1:
             return "热门";
+          case 2:
+            return "与我相关";
         }
         return "";
       }
@@ -139,6 +110,12 @@ public class TabRegionFragment extends BaseFragment {
             }
             mHotFeedFragment.setActive(true);
             break;
+          case 2:
+            if (mTtTab.hasBudget(position)) {
+              mFriendsFeedFragment.setActive(false);
+            }
+            mFriendsFeedFragment.setActive(true);
+            break;
         }
 
         U.getAnalyser().trackEvent(U.getContext(), "feed_tab_switch", String.valueOf(position));
@@ -154,25 +131,18 @@ public class TabRegionFragment extends BaseFragment {
 
     getBaseActivity().getHandler().postDelayed(new Runnable() {
       @Override
-      public void run() {
-        if (getArguments().getInt("tabIndex") == 0) {
+      public void run() { if (getArguments().getInt("tabIndex") == 0) {
           mFeedFragment.setActive(true);
         }
       }
     }, 500);
-
-  }
-
-  @Override
-  public void onAttach(Activity activity) {
-    super.onAttach(activity);
-
-    onHiddenChanged(false);
   }
 
   @Subscribe
   public void onNewAllPostCountEvent(NewAllPostCountEvent event) {
-    if (event.getCircleId() == mFeedFragment.getFeedAdapter().getFeeds().circle.id) {
+    FeedRegionAdapter feedAdapter = mFeedFragment.getFeedAdapter();
+    if (feedAdapter != null && feedAdapter.getFeeds().circle != null
+        && event.getCircleId() == feedAdapter.getFeeds().circle.id) {
       mTtTab.setTabBudget(0, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
     } else {
       mTtTab.setTabBudget(0, "", true);
@@ -181,32 +151,23 @@ public class TabRegionFragment extends BaseFragment {
 
   @Subscribe
   public void onNewHotPostCountEvent(NewHotPostCountEvent event) {
-    if (event.getCircleId() == mFeedFragment.getFeedAdapter().getFeeds().circle.id) {
+    FeedRegionAdapter feedAdapter = mFeedFragment.getFeedAdapter();
+    if (feedAdapter != null && feedAdapter.getFeeds().circle != null
+        && event.getCircleId() == feedAdapter.getFeeds().circle.id) {
       mTtTab.setTabBudget(1, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
     } else {
       mTtTab.setTabBudget(1, "", true);
     }
   }
 
-  @Override
-  public void onHiddenChanged(boolean hidden) {
-    if (mFeedFragment.isAdded()) {
-      mFeedFragment.onHiddenChanged(hidden);
-    }
-
-    if (!hidden) {
-      getTopBar().setLeftText("筛选");
-      getTopBar().setCallback(new ITopBar2.Callback() {
-        @Override
-        public void onLeftClicked(View v) {
-          mLlFilter.setVisibility(mLlFilter.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-        }
-
-        @Override
-        public void onRightClicked(View v) {
-
-        }
-      });
+  @Subscribe
+  public void onNewFriendsPostCountEvent(NewFriendsPostCountEvent event) {
+    FeedRegionAdapter feedAdapter = mFeedFragment.getFeedAdapter();
+    if (feedAdapter != null && feedAdapter.getFeeds().circle != null
+        && event.getCircleId() == feedAdapter.getFeeds().circle.id) {
+      mTtTab.setTabBudget(2, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
+    } else {
+      mTtTab.setTabBudget(2, "", true);
     }
   }
 
@@ -219,6 +180,7 @@ public class TabRegionFragment extends BaseFragment {
 
     mFeedFragment.setRegionType(regionType);
     mHotFeedFragment.setRegionType(regionType);
+    mFriendsFeedFragment.setRegionType(regionType);
 
     if (mVpTab == null) return;
 
@@ -230,6 +192,9 @@ public class TabRegionFragment extends BaseFragment {
         break;
       case 1:
         mHotFeedFragment.setActive(true);
+        break;
+      case 2:
+        mFriendsFeedFragment.setActive(true);
         break;
     }
   }
@@ -256,5 +221,6 @@ public class TabRegionFragment extends BaseFragment {
   private void clearActive() {
     if (mFeedFragment != null) mFeedFragment.setActive(false);
     if (mHotFeedFragment != null) mHotFeedFragment.setActive(false);
+    if (mFriendsFeedFragment != null) mFriendsFeedFragment.setActive(false);
   }
 }

@@ -5,39 +5,41 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.utree.eightysix</groupId>
     <artifactId>EightySix-parent</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>1.6.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>EightySix - Parent</name>
 
     <modules>
+        <module>dao-generator</module>
+        <module>oss-batch</module>
+        <module>emojicon/library</module>
         <module>EightySix-app</module>
         <module>EightySix-fixture</module>
         <module>EightySix-data</module>
         <module>EightySix-base</module>
         <module>EightySix-config-tool</module>
         <module>EightySix-demo</module>
-        <module>oss-batch</module>
     </modules>
 
     <properties>
         <platform.version>5.0_r1</platform.version>
         <platform.target>21</platform.target>
-        <android.plugin.version>4.0.0-rc.1</android.plugin.version>
+        <android.plugin.version>4.0.0-rc.2</android.plugin.version>
         <environment>development</environment>
     </properties>
 
     <repositories>
-        <repository>
-            <id>jcenter</id>
-            <name>JCenter</name>
-            <url>http://jcenter.bintray.com</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
+        <!--<repository>-->
+        <!--<id>jcenter</id>-->
+        <!--<name>JCenter</name>-->
+        <!--<url>http://jcenter.bintray.com</url>-->
+        <!--<releases>-->
+        <!--<enabled>true</enabled>-->
+        <!--</releases>-->
+        <!--<snapshots>-->
+        <!--<enabled>true</enabled>-->
+        <!--</snapshots>-->
+        <!--</repository>-->
 
         <repository>
             <id>utree 3rd party</id>
@@ -132,42 +134,9 @@
             </dependency>
 
             <dependency>
-                <groupId>android.support</groupId>
-                <artifactId>compatibility-v7</artifactId>
-                <version>19.0.0</version>
-                <type>apklib</type>
-            </dependency>
-
-            <dependency>
                 <groupId>com.aliyun.openservices</groupId>
                 <artifactId>aliyun-openservices</artifactId>
                 <version>1.2.2</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-api</artifactId>
-                <version>2.0</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-core</artifactId>
-                <version>2.0</version>
-            </dependency>
-
-            <dependency>
-                <groupId>android.support</groupId>
-                <artifactId>compatibility-v7-appcompat</artifactId>
-                <version>19.1.0</version>
-                <type>apklib</type>
-            </dependency>
-
-            <dependency>
-                <groupId>android.support</groupId>
-                <artifactId>compatibility-v7-appcompat</artifactId>
-                <version>19.1.0</version>
-                <type>jar</type>
             </dependency>
 
             <dependency>
@@ -321,6 +290,25 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>18.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>de.greenrobot</groupId>
+                <artifactId>greendao</artifactId>
+                <version>1.3.7</version>
+            </dependency>
+
+            <dependency>
+                <groupId>de.greenrobot</groupId>
+                <artifactId>greendao-generator</artifactId>
+                <version>1.3.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.rockerhieu.emojicon</groupId>
+                <artifactId>library</artifactId>
+                <version>1.1-SNAPSHOT</version>
+                <type>aar</type>
             </dependency>
         </dependencies>
     </dependencyManagement>

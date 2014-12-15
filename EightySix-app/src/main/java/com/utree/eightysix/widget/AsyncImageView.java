@@ -9,7 +9,8 @@ import com.nineoldandroids.animation.ValueAnimator;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.M;
 import com.utree.eightysix.utils.ImageUtils;
-import com.utree.eightysix.utils.MD5Util;
+
+import java.io.File;
 
 import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.*;
 
@@ -89,13 +90,16 @@ public class AsyncImageView extends ImageView {
       return;
     }
 
-    mUrlHash = MD5Util.getMD5String(url.getBytes()).toLowerCase();
-
+    mUrlHash = ImageUtils.getUrlHash(url);
     setImageBitmap(null);
-
     clearAnimation();
 
-    ImageUtils.asyncLoadWithRes(url, mUrlHash);
+    if (url.startsWith("/")) {
+      ImageUtils.asyncLoadThumbnail(new File(url));
+    } else {
+      ImageUtils.asyncLoadWithRes(url, mUrlHash);
+    }
+
   }
 
   @Override

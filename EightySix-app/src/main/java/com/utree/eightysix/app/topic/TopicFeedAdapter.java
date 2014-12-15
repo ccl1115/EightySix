@@ -12,8 +12,6 @@ import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.FeedPostView;
-import static com.utree.eightysix.app.topic.TopicActivity.TAB_FEATURE;
-import static com.utree.eightysix.app.topic.TopicActivity.TAB_NEW;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.data.Topic;
@@ -22,6 +20,9 @@ import com.utree.eightysix.widget.RandomSceneTextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.utree.eightysix.app.topic.TopicActivity.TAB_FEATURE;
+import static com.utree.eightysix.app.topic.TopicActivity.TAB_NEW;
 
 /**
  */
@@ -220,10 +221,11 @@ public class TopicFeedAdapter extends BaseAdapter {
       convertView = new FeedPostView(parent.getContext());
     }
 
+    final int p = U.dp2px(8);
     if (position == getCount() - 1) {
-      convertView.setPadding(0, 0, 0, U.dp2px(8));
+      convertView.setPadding(p, p, p, p);
     } else {
-      convertView.setPadding(0, 0, 0, 0);
+      convertView.setPadding(p, p, p, 0);
     }
 
     ((FeedPostView) convertView).setData((Post) getItem(position), 0);

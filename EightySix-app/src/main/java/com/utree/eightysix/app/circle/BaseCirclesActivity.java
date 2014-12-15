@@ -10,8 +10,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -27,7 +25,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.feed.FeedActivity;
-import com.utree.eightysix.app.home.HomeTabActivity;
+import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.drawable.RoundRectDrawable;
@@ -42,11 +40,10 @@ import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.view.SwipeRefreshLayout;
-import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.LoadMoreCallback;
-import com.utree.eightysix.widget.RandomSceneTextView;
-import com.utree.eightysix.widget.ThemedDialog;
-import com.utree.eightysix.widget.TopBar;
+import com.utree.eightysix.widget.*;
+
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  */
@@ -119,7 +116,7 @@ public class BaseCirclesActivity extends BaseActivity {
         circle.selected = true;
         if (circle.currFactory == 1) {
           finish();
-          HomeTabActivity.start(this);
+          HomeActivity.start(this);
         } else {
           FeedActivity.start(this, circle, true);
         }
@@ -322,7 +319,7 @@ public class BaseCirclesActivity extends BaseActivity {
         .setPositiveButton("停止", new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
-            HomeTabActivity.start(BaseCirclesActivity.this);
+            HomeActivity.start(BaseCirclesActivity.this);
             finish();
           }
         }).setNegativeButton("继续", new DialogInterface.OnClickListener() {
@@ -405,7 +402,7 @@ public class BaseCirclesActivity extends BaseActivity {
       @Override
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
-          HomeTabActivity.start(BaseCirclesActivity.this);
+          HomeActivity.start(BaseCirclesActivity.this);
           finish();
         }
       }

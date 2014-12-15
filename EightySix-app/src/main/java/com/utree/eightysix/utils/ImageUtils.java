@@ -18,7 +18,6 @@ import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import de.akquinet.android.androlog.Log;
 import org.apache.http.Header;
-import org.apache.http.HttpStatus;
 
 import java.io.*;
 import java.util.concurrent.Executor;
@@ -49,7 +48,7 @@ public class ImageUtils {
       }
     }
   };
-  private static AsyncHttpClient sClient = new AsyncHttpClient();
+  private static AsyncHttpClient sClient = U.getRESTRequester().getClient();
   private static Executor sThreadPoolExecutor = Executors.newSingleThreadExecutor();
 
   public static void clear() {
@@ -277,6 +276,12 @@ public class ImageUtils {
     return syncLoadResourceBitmap(resId, hash, U.dp2px(48), U.dp2px(48));
   }
 
+  /**
+   * This method load image from local resources first.
+   *
+   * @param url  the url
+   * @param hash the hash of the url
+   */
   public static void asyncLoadWithRes(final String url, final String hash) {
 
     Bitmap bitmap = sLruCache.get(hash);
@@ -304,6 +309,14 @@ public class ImageUtils {
 
   public static void asyncLoadThumbnail(final String url, final String hash) {
     asyncLoad(url, hash, U.dp2px(48), U.dp2px(48));
+  }
+
+  public static void asyncLoad(File f, int width, int height) {
+    executeTask(new ImageFileAsyncWorker(f, width, height));
+  }
+
+  public static void asyncLoadThumbnail(File f) {
+    executeTask(new ImageFileAsyncWorker(f, U.dp2px(48), U.dp2px(48)));
   }
 
   public static void asyncLoad(final String url, final String hash, final int width, final int height) {
@@ -470,7 +483,7 @@ public class ImageUtils {
    */
   public static class ImageLoadedEvent {
     private Bitmap mBitmap;
-    private String mHash;
+    private String mUrlHash;
     private int mFrom;
 
     public static final int FROM_MEM = 1000;
@@ -478,9 +491,9 @@ public class ImageUtils {
     public static final int FROM_REMOTE = 1002;
 
 
-    public ImageLoadedEvent(String hash, Bitmap bitmap, int from) {
+    public ImageLoadedEvent(String urlHash, Bitmap bitmap, int from) {
       mBitmap = bitmap;
-      mHash = hash;
+      mUrlHash = urlHash;
       mFrom = from;
     }
 
@@ -489,7 +502,7 @@ public class ImageUtils {
     }
 
     public String getHash() {
-      return mHash;
+      return mUrlHash;
     }
 
     public int getFrom() {
@@ -595,6 +608,7 @@ public class ImageUtils {
         U.getBus().post(new ImageLoadedEvent(mHash, bitmap, FROM_DISK));
       } else {
         Log.d(TAG, "onFailed from disk");
+        Log.d(TAG, "get from remote: " + mUrl);
         sClient.get(U.getContext(), mUrl, new ImageAsyncHttpResponseHandler(mHash));
       }
 
@@ -697,11 +711,33 @@ public class ImageUtils {
     @Override
     public void onSuccess(int i, Header[] headers, File file) {
       Log.d(TAG, "onSuccess");
-      if (i <= HttpStatus.SC_OK) {
-        executeTask(new ImageRemoteDecodeWorker(hash, file));
-      } else {
-        U.getBus().post(new ImageLoadedEvent(hash, null, FROM_REMOTE));
-      }
+      executeTask(new ImageRemoteDecodeWorker(hash, file));
+    }
+  }
+
+  private static class ImageFileAsyncWorker extends AsyncTask<Void, Void, Void> {
+
+    private final File f;
+    private final int width;
+    private final int height;
+
+    public ImageFileAsyncWorker(File f, int width, int height) {
+
+      this.f = f;
+      this.width = width;
+      this.height = height;
+    }
+
+    @Override
+    protected Void doInBackground(Void... voids) {
+      cacheImage(getUrlHash(f.getAbsolutePath()), decodeBitmap(f, width, height));
+      return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+      String urlHash = getUrlHash(f.getAbsolutePath());
+      U.getBus().post(new ImageLoadedEvent(urlHash, getFromMemByUrl(f.getAbsolutePath()), FROM_DISK));
     }
   }
 }

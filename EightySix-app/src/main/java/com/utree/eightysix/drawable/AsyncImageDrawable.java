@@ -9,7 +9,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.utils.ImageUtils;
-import com.utree.eightysix.utils.MD5Util;
 
 /**
  * @author simon
@@ -25,7 +24,7 @@ public class AsyncImageDrawable extends Drawable {
   public AsyncImageDrawable(Resources res, String url) {
     mResources = res;
     mUrl = url;
-    mHash = MD5Util.getMD5String(mUrl.getBytes()).toLowerCase();
+    mHash = ImageUtils.getUrlHash(mUrl);
   }
 
   @Subscribe

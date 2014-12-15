@@ -24,6 +24,8 @@ api.host = http://lanmei.gz.1251114078.clb.myqcloud.com
 #api.host = http://192.168.0.105:8088
 #api.host = http://203.195.220.187
 
+api.host.second = http://203.195.213.36:8200
+
 api.ip = 203.195.128.218
 
 api.timeout = 15000

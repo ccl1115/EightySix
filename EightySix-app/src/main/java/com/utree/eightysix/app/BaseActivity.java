@@ -5,12 +5,10 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.ResultReceiver;
 import android.support.v4.app.FragmentActivity;
 import android.util.*;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
@@ -95,8 +93,9 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     }
     View inflate = LayoutInflater.from(this).inflate(layoutResID, mBaseView, false);
     inflate.setId(R.id.content);
-    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) inflate.getLayoutParams();
+    FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) inflate.getLayoutParams();
     params.topMargin = mFillContent ? 0 : getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
+    params.gravity = Gravity.TOP;
 
     mBaseView.addView(inflate, 0, params);
 
@@ -116,12 +115,13 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
       mBaseView.removeView(content);
     }
     contentView.setId(R.id.content);
-    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) contentView.getLayoutParams();
+    FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) contentView.getLayoutParams();
     if (params == null) {
-      params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+      params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
           ViewGroup.LayoutParams.MATCH_PARENT);
     }
     params.topMargin = mFillContent ? 0 : getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
+    params.gravity = Gravity.TOP;
 
     mBaseView.addView(contentView, 0, params);
 
@@ -326,8 +326,9 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   protected final  void setFillContent(boolean fillContent) {
     if (mFillContent == fillContent) return;
     mFillContent = fillContent;
-    ((RelativeLayout.LayoutParams) mBaseView.findViewById(R.id.content).getLayoutParams()).topMargin =
-        fillContent ? 0 : getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
+    FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mBaseView.findViewById(R.id.content).getLayoutParams();
+    layoutParams.topMargin = fillContent ? 0 : getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
+    layoutParams.gravity = Gravity.TOP;
     mBaseView.requestLayout();
   }
 
@@ -389,9 +390,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     super.onCreate(savedInstanceState);
 
     mBaseView = (ViewGroup) LayoutInflater.from(this)
-        .inflate(R.layout.activity_base, (ViewGroup) findViewById(android.R.id.content), false);
-
-    super.setContentView(mBaseView);
+        .inflate(R.layout.activity_base, (ViewGroup) findViewById(android.R.id.content), true);
 
     mTopBar = (TopBar) mBaseView.findViewById(R.id.top_bar);
 
@@ -465,7 +464,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
 
   protected final void hideTopBar(boolean animate) {
     if (!topBarShown()) return;
-    ((RelativeLayout.LayoutParams) findViewById(R.id.content).getLayoutParams()).topMargin = 0;
+    ((FrameLayout.LayoutParams) findViewById(R.id.content).getLayoutParams()).topMargin = 0;
     mBaseView.requestLayout();
     if (animate) {
       if (mShowTopBarAnimator != null && mShowTopBarAnimator.isRunning()) {
@@ -479,7 +478,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
 
   protected final void showTopBar(boolean animate) {
     if (topBarShown()) return;
-    ((RelativeLayout.LayoutParams) findViewById(R.id.content).getLayoutParams()).topMargin
+    ((FrameLayout.LayoutParams) findViewById(R.id.content).getLayoutParams()).topMargin
         = mFillContent ? 0 : getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
     mBaseView.requestLayout();
     if (animate) {
@@ -520,7 +519,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     mTopBar.setSubTitle(title);
   }
 
-  public final ITopBar2 getTopBar() {
+  public final TopBar getTopBar() {
     return mTopBar;
   }
 
@@ -544,15 +543,15 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
 
   protected final void setActionLeftDrawable(Drawable drawable) {
     if (drawable == null) {
-      mTopBar.mIvActionLeft.setPadding(U.dp2px(10), 0, 0, 0);
+      mTopBar.mActionLeft.setPadding(U.dp2px(10), 0, 0, 0);
     } else {
-      mTopBar.mIvActionLeft.setPadding(0, 0, 0, 0);
+      mTopBar.mActionLeft.setPadding(0, 0, 0, 0);
     }
-    mTopBar.mIvActionLeft.setImageDrawable(drawable);
+    mTopBar.mActionLeft.setImageDrawable(drawable);
   }
 
   protected final void setActionLeftVisibility(int visibility) {
-    mTopBar.mIvActionLeft.setVisibility(visibility);
+    mTopBar.mActionLeft.setVisibility(visibility);
   }
 
 
@@ -564,6 +563,11 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   protected void hideSoftKeyboard(View view) {
     ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
         .hideSoftInputFromWindow(view.getWindowToken(), 0);
+  }
+
+  protected void hideSoftKeyboard(View view, ResultReceiver resultReceiver) {
+    ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
+        .hideSoftInputFromWindow(view.getWindowToken(), 0, resultReceiver);
   }
 
   protected void showSoftKeyboard(View view) {
