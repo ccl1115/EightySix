@@ -21,6 +21,8 @@ public interface IRESTRequester {
 
   <T extends Response> RequestHandle request(Object request, OnResponse<T> onResponse, Class<T> clz);
 
+  <T extends Response> RequestHandle request(String requestSchemaId, OnResponse<T> onResponse, Class<T> clz, Object... params);
+
   RequestData convert(Object request);
 
   RequestHandle get(String api, org.apache.http.Header[] headers, RequestParams params, ResponseHandlerInterface handler);

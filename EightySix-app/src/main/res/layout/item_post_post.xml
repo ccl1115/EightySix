@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="match_parent"
-             android:layout_height="match_parent">
+             android:layout_height="match_parent"
+        >
 
     <com.utree.eightysix.widget.AsyncImageView
             android:id="@+id/aiv_bg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop"
+            />
 
     <View
             android:id="@+id/v_mask"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#44000000"/>
+            android:background="#44000000"
+            />
 
     <TextView
             android:id="@+id/tv_content"
@@ -22,7 +25,8 @@
             android:layout_height="match_parent"
             android:paddingLeft="48dp"
             android:paddingRight="48dp"
-            android:background="@android:color/transparent"/>
+            android:textColor="@android:color/white"
+            />
 
     <LinearLayout
             android:id="@+id/fl_panel"
@@ -30,91 +34,102 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="5dp">
+            android:layout_marginBottom="5dp"
+            >
 
         <TextView
                 android:id="@+id/tv_source"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"
                 android:singleLine="true"
                 android:maxLines="1"
                 android:textSize="14sp"
                 android:textColor="@android:color/white"
-                android:layout_marginLeft="15dp"/>
+                />
+
+            <TextView
+                    android:id="@+id/tv_chat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical|end"
+                    android:textSize="14sp"
+                    android:textColor="@color/apptheme_primary_text_light"
+                    android:text="@string/chat"
+                    android:drawablePadding="8dp"
+                    android:drawableLeft="@drawable/ic_chat_normal"
+                    android:drawableStart="@drawable/ic_chat_normal"
+                    />
 
         <TextView
                 android:id="@+id/tv_praise"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical|right"
+                android:layout_marginLeft="2dp"
+                android:layout_marginStart="2dp"
+                android:gravity="center_vertical|end"
                 android:textSize="14sp"
                 android:textColor="@android:color/white"
                 android:minWidth="45dp"
-                android:layout_marginLeft="2dp"/>
+                />
 
         <TextView
                 android:id="@+id/tv_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_reply"
-                android:gravity="center_vertical|right"
+                android:drawableStart="@drawable/ic_reply"
+                android:gravity="center_vertical|end"
                 android:textSize="14sp"
                 android:textColor="@android:color/white"
                 android:minWidth="45dp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="15dp"/>
+                android:layout_marginRight="15dp"
+                />
 
     </LinearLayout>
-
-    <ImageView
-            android:id="@+id/iv_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left|top"
-            android:background="@drawable/apptheme_transparent_bg"
-            android:src="@drawable/ic_action_post_close"/>
 
     <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|top"
             android:layout_marginTop="16dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            >
 
         <com.utree.eightysix.widget.TagView
                 android:id="@+id/tv_tag_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="4dp"/>
+                android:layout_marginRight="4dp"
+                />
 
         <com.utree.eightysix.widget.TagView
                 android:id="@+id/tv_tag_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="4dp"/>
+                android:layout_marginRight="4dp"
+                />
 
         <com.utree.eightysix.widget.TagView
                 android:id="@+id/tv_tag_3"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                />
     </LinearLayout>
-
-
-    <ImageView
-            android:id="@+id/iv_more"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|top"
-            android:background="@drawable/apptheme_transparent_bg"
-            android:src="@drawable/ic_action_post_more"/>
 
     <View
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_gravity="bottom"
-            android:background="#ffcccccc"/>
+            android:background="#ffcccccc"
+            />
 
 
 </FrameLayout>

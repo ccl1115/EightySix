@@ -12,11 +12,11 @@ import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.FeedActivity;
-import com.utree.eightysix.app.home.HomeTabActivity;
-import com.utree.eightysix.app.post.PostActivity;
+import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.msg.PraiseActivity;
 import com.utree.eightysix.app.msg.PullNotificationService;
+import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.app.tag.TagTabActivity;
 import com.utree.eightysix.app.topic.TopicActivity;
 import com.utree.eightysix.app.topic.TopicListActivity;
@@ -102,6 +102,7 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
     try {
       m = U.getGson().fromJson(xgPushTextMessage.getContent(), Message.class);
     } catch (Exception e) {
+      U.getAnalyser().reportError(context, "xg push invalid msg: " + xgPushTextMessage.getContent());
       return;
     }
 
@@ -159,14 +160,16 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
       if (BuildConfig.DEBUG) {
         e.printStackTrace();
       } else {
-        U.getAnalyser().reportException(context, e);
+        U.getAnalyser().reportError(context, "xg push invalid msg: " + xgPushClickedResult.getCustomContent());
       }
     }
   }
 
   @Override
   public void onNotifactionShowedResult(Context context, XGPushShowedResult xgPushShowedResult) {
-
+    if (!Account.inst().isLogin()) {
+      ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+    }
   }
 
 
@@ -197,26 +200,27 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
       String[] args = cmd.split(":");
 
       if ("feed".equals(args[0])) {
+        HomeActivity.start(context);
         FeedActivity.start(context, Integer.parseInt(args[1]));
       } else if ("post".equals(args[0])) {
-        HomeTabActivity.start(context);
+        HomeActivity.start(context);
         PostActivity.start(context, args[1]);
       } else if ("msg".equals(args[0])) {
-        HomeTabActivity.start(context);
+        HomeActivity.start(context);
         MsgActivity.start(context, true);
       } else if ("praise".equals(args[0])) {
-        HomeTabActivity.start(context);
+        HomeActivity.start(context);
         PraiseActivity.start(context, true);
       } else if ("topic-list".equals(args[0])) {
-        HomeTabActivity.start(context);
+        HomeActivity.start(context);
         TopicListActivity.start(context);
       } else if ("topic".equals(args[0])) {
-        HomeTabActivity.start(context);
+        HomeActivity.start(context);
         Topic topic = new Topic();
         topic.id = Integer.parseInt(args[1]);
         TopicActivity.start(context, topic);
       } else if ("tag".equals(args[0])) {
-        HomeTabActivity.start(context);
+        HomeActivity.start(context);
         TagTabActivity.start(context, Integer.parseInt(args[1]));
       }
     }

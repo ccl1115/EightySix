@@ -2,7 +2,6 @@ package com.utree.eightysix.app.feed;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -172,7 +171,9 @@ public class TabFragment extends BaseFragment {
   }
 
   public boolean canPublish() {
-    return mFeedFragment != null && mFeedFragment.canPublish();
+    return (mFeedFragment != null && mFeedFragment.canPublish()) ||
+        (mHotFeedFragment != null && mHotFeedFragment.canPublish()) ||
+        (mThirdFragment != null && mThirdFragment instanceof AbsFeedFragment && ((AbsFeedFragment) mThirdFragment).canPublish());
   }
 
   public int getCircleId() {

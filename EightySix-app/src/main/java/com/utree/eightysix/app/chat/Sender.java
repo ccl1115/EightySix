@@ -1,6 +1,7 @@
 package com.utree.eightysix.app.chat;
 
-import com.easemob.chat.EMMessage;
+
+import com.utree.eightysix.dao.Message;
 
 import java.io.File;
 import java.io.InputStream;
@@ -10,15 +11,15 @@ import java.io.InputStream;
  */
 public interface Sender {
 
-  void send(EMMessage emMessage);
+  void send(Message Message);
 
-  void txt(String username, String txt);
+  Message txt(String chatId, String postId, String commentId, String txt);
 
-  void voice(String username, File f);
+  Message voice(String chatId, String postId, String commentId, File f);
 
-  void voice(String username, InputStream is);
+  Message voice(String chatId, String postId, String commentId, InputStream is);
 
-  void photo(String username, File f);
+  Message photo(String chatId, String postId, String commentId, File f);
 
-  void photo(String username, InputStream is);
+  Message photo(String chatId, String postId, String commentId, InputStream is);
 }

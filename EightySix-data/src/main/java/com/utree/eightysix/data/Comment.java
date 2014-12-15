@@ -1,11 +1,12 @@
 package com.utree.eightysix.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
-import java.io.Serializable;
 
 /**
  */
-public class Comment implements Serializable {
+public class Comment implements Parcelable {
 
   @SerializedName ("floor")
   public int floor;
@@ -46,6 +47,9 @@ public class Comment implements Serializable {
   @SerializedName("distance")
   public String distance;
 
+  @SerializedName("chatId")
+  public String chatId = "";
+
   /**
    * 1 deleted
    * 0 not deleted
@@ -69,4 +73,59 @@ public class Comment implements Serializable {
 
     return true;
   }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeInt(this.floor);
+    dest.writeString(this.content);
+    dest.writeInt(this.praise);
+    dest.writeInt(this.ownerPraise);
+    dest.writeLong(this.timestamp);
+    dest.writeString(this.id);
+    dest.writeString(this.avatar);
+    dest.writeString(this.avatarColor);
+    dest.writeInt(this.praised);
+    dest.writeInt(this.self);
+    dest.writeInt(this.owner);
+    dest.writeString(this.time);
+    dest.writeString(this.distance);
+    dest.writeString(this.chatId);
+    dest.writeInt(this.delete);
+  }
+
+  public Comment() {
+  }
+
+  private Comment(Parcel in) {
+    this.floor = in.readInt();
+    this.content = in.readString();
+    this.praise = in.readInt();
+    this.ownerPraise = in.readInt();
+    this.timestamp = in.readLong();
+    this.id = in.readString();
+    this.avatar = in.readString();
+    this.avatarColor = in.readString();
+    this.praised = in.readInt();
+    this.self = in.readInt();
+    this.owner = in.readInt();
+    this.time = in.readString();
+    this.distance = in.readString();
+    this.chatId = in.readString();
+    this.delete = in.readInt();
+  }
+
+  public static final Parcelable.Creator<Comment> CREATOR = new Parcelable.Creator<Comment>() {
+    public Comment createFromParcel(Parcel source) {
+      return new Comment(source);
+    }
+
+    public Comment[] newArray(int size) {
+      return new Comment[size];
+    }
+  };
 }

@@ -2,7 +2,9 @@ package com.utree.eightysix.utils;
 
 import com.jakewharton.disklrucache.DiskLruCache;
 import com.utree.eightysix.U;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +35,15 @@ public class CacheUtils {
       try {
         cache = DiskLruCache.open(getOrCreateCacheDir(dir), version, count, size);
         mDiskLruCache.put(dir, cache);
-      } catch (Exception ignored) {
+      } catch (Exception e) {
+        U.getAnalyser().reportError(U.getContext(), "open disk lru cache failed");
+      }
+    } else if (cache.isClosed()) {
+      try {
+        cache = DiskLruCache.open(getOrCreateCacheDir(dir), version, count, size);
+        mDiskLruCache.put(dir, cache);
+      } catch (IOException e) {
+        U.getAnalyser().reportError(U.getContext(), "open disk lru cache failed");
       }
     }
     return cache;

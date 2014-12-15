@@ -77,6 +77,9 @@ public class Post extends BaseItem implements Parcelable {
   @SerializedName("relation")
   public int relation;
 
+  @SerializedName("chatId")
+  public String chatId = "";
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -98,9 +101,16 @@ public class Post extends BaseItem implements Parcelable {
   }
 
   @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
   public String toString() {
     return "Post{" +
-        "circle=" + circle +
+        "factoryId=" + factoryId +
+        ", circle='" + circle + '\'' +
+        ", shortName='" + shortName + '\'' +
         ", comments=" + comments +
         ", praise=" + praise +
         ", id='" + id + '\'' +
@@ -112,12 +122,16 @@ public class Post extends BaseItem implements Parcelable {
         ", commentTail='" + commentTail + '\'' +
         ", whoAtMe='" + whoAtMe + '\'' +
         ", praised=" + praised +
+        ", viewType=" + viewType +
+        ", isRepost=" + isRepost +
+        ", isHot=" + isHot +
+        ", owner=" + owner +
+        ", sourceType=" + sourceType +
+        ", userCurrFactoryId=" + userCurrFactoryId +
+        ", tags=" + tags +
+        ", relation=" + relation +
+        ", chatId='" + chatId + '\'' +
         '}';
-  }
-
-  @Override
-  public int describeContents() {
-    return 0;
   }
 
   @Override
@@ -145,6 +159,7 @@ public class Post extends BaseItem implements Parcelable {
     dest.writeString(this.bgColor);
     dest.writeString(this.content);
     dest.writeInt(this.type);
+    dest.writeString(this.chatId);
   }
 
   private Post(Parcel in) {
@@ -172,6 +187,7 @@ public class Post extends BaseItem implements Parcelable {
     this.bgColor = in.readString();
     this.content = in.readString();
     this.type = in.readInt();
+    this.chatId = in.readString();
   }
 
   public static final Creator<Post> CREATOR = new Creator<Post>() {

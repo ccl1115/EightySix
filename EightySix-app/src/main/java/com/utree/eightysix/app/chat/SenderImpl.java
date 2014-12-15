@@ -1,124 +1,166 @@
+/*
+ * Copyright (c) 2014. All rights reserved by utree.cn
+ */
+
 package com.utree.eightysix.app.chat;
 
-import android.os.Handler;
-import android.os.Message;
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
-import com.easemob.chat.TextMessageBody;
+import com.easemob.chat.ImageMessageBody;
+import com.utree.eightysix.Account;
+import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.U;
-import com.utree.eightysix.app.chat.event.ChatStatusEvent;
+import com.utree.eightysix.app.BaseApplication;
+import com.utree.eightysix.app.chat.content.ImageContent;
+import com.utree.eightysix.app.chat.event.ChatEvent;
+import com.utree.eightysix.dao.Message;
+import com.utree.eightysix.dao.MessageConst;
+import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.utils.DaoUtils;
 
 import java.io.File;
 import java.io.InputStream;
 
 /**
- * @author simon
+ * Note this only use for send text, image and voice message.
  */
 public class SenderImpl implements Sender {
-
-  private static final int MSG_SENDING = 1;
-  private static final int MSG_SENT_SUCCESS = 2;
-  private static final int MSG_SENT_ERROR = 3;
-  private static SenderHandler sSenderHandler = new SenderHandler();
-
   @Override
-  public void send(final EMMessage emMessage) {
-    if (emMessage == null) return;
+  public void send(final Message message) {
 
-    Message message = sSenderHandler.obtainMessage(MSG_SENDING, emMessage);
-    message.sendToTarget();
+    message.setRead(true);
+    message.setTimestamp(System.currentTimeMillis());
+    message.setStatus(MessageConst.STATUS_CREATE);
 
-    EMChatManager.getInstance().sendMessage(emMessage, new EMCallBack() {
-      @Override
-      public void onSuccess() {
-        Message message = sSenderHandler.obtainMessage(MSG_SENT_SUCCESS, emMessage);
-        message.sendToTarget();
-      }
+    switch (message.getType()) {
+      case MessageConst.TYPE_TXT:
 
-      @Override
-      public void onError(int i, String s) {
-        Message message = sSenderHandler.obtainMessage(MSG_SENT_ERROR, emMessage);
-        message.sendToTarget();
-      }
+        U.getRESTRequester().request("chat_send", new OnResponse2<Response>() {
+          @Override
+          public void onResponseError(Throwable e) {
+            message.setStatus(MessageConst.STATUS_FAILED);
+            DaoUtils.getMessageDao().insertOrReplace(message);
+            U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_SENT_MSG_ERROR, message));
+          }
 
-      @Override
-      public void onProgress(int i, String s) {
+          @Override
+          public void onResponse(Response response) {
+            if (response.code != 0) {
+              U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_MSG_REMOVE, message));
+            } else {
+              message.setStatus(MessageConst.STATUS_SUCCESS);
+              DaoUtils.getMessageDao().insertOrReplace(message);
+              U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_SENT_MSG_SUCCESS, message));
+            }
+          }
+        }, Response.class, message.getChatId(), "txt", message.getContent(), message.getPostId(), message.getCommentId());
 
-      }
-    });
-  }
+        break;
+      case MessageConst.TYPE_IMAGE:
+        final EMMessage sendMessage = EMMessage.createSendMessage(EMMessage.Type.IMAGE);
+        sendMessage.setTo(Account.inst().getUserId());
+        sendMessage.addBody(new ImageMessageBody(
+            new File(U.getGson().fromJson(message.getContent(), ImageContent.class).local)));
+        sendMessage.setAttribute("chatId", message.getChatId());
+        sendMessage.setAttribute("postId", message.getPostId());
+        if (message.getCommentId() != null) {
+          sendMessage.setAttribute("commentId", message.getCommentId());
+        }
 
-  @Override
-  public void txt(String username, String txt) {
+        EMChatManager.getInstance().sendMessage(sendMessage, new EMCallBack() {
+          @Override
+          public void onSuccess() {
+            message.setStatus(MessageConst.STATUS_SUCCESS);
+            ImageMessageBody body = (ImageMessageBody) sendMessage.getBody();
+            message.setContent(U.getGson().toJson(
+                new ImageContent(body.getLocalUrl(), body.getRemoteUrl(), body.getThumbnailUrl())));
+            DaoUtils.getMessageDao().insertOrReplace(message);
+            BaseApplication.getHandler().post(new Runnable() {
+              @Override
+              public void run() {
+                U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_SENT_MSG_SUCCESS, message));
+              }
+            });
+          }
 
-    final EMMessage m = EMMessage.createSendMessage(EMMessage.Type.TXT);
+          @Override
+          public void onError(int i, final String s) {
+            message.setStatus(MessageConst.STATUS_FAILED);
+            DaoUtils.getMessageDao().insertOrReplace(message);
+            BaseApplication.getHandler().post(new Runnable() {
+              @Override
+              public void run() {
+                if (BuildConfig.DEBUG) U.showToast("发送错误：" + s);
+                U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_SENT_MSG_ERROR, message));
+              }
+            });
+          }
 
-    m.setReceipt(username);
+          @Override
+          public void onProgress(int i, String s) {
 
-    TextMessageBody body = new TextMessageBody(txt);
-    m.addBody(body);
-
-    EMConversation conversation = EMChatManager.getInstance().getConversation(username);
-    conversation.addMessage(m);
-
-    Message message = sSenderHandler.obtainMessage(MSG_SENDING, m);
-    message.sendToTarget();
-
-    EMChatManager.getInstance().sendMessage(m, new EMCallBack() {
-      @Override
-      public void onSuccess() {
-        Message message = sSenderHandler.obtainMessage(MSG_SENT_SUCCESS, m);
-        message.sendToTarget();
-      }
-
-      @Override
-      public void onError(int i, String s) {
-        Message message = sSenderHandler.obtainMessage(MSG_SENT_ERROR, m);
-        message.sendToTarget();
-      }
-
-      @Override
-      public void onProgress(int i, String s) {
-      }
-    });
-  }
-
-  @Override
-  public void voice(String username, File f) {
-
-  }
-
-  @Override
-  public void voice(String username, InputStream is) {
-
-  }
-
-  @Override
-  public void photo(String username, File f) {
-
-  }
-
-  @Override
-  public void photo(String username, InputStream is) {
-
-  }
-
-  private static class SenderHandler extends Handler {
-    @Override
-    public void handleMessage(Message msg) {
-      switch (msg.what) {
-        case MSG_SENDING:
-          U.getChatBus().post(new ChatStatusEvent(ChatStatusEvent.EVENT_SENDING_MSG, msg.obj));
-          break;
-        case MSG_SENT_ERROR:
-          U.getChatBus().post(new ChatStatusEvent(ChatStatusEvent.EVENT_SENT_MSG_ERROR, msg.obj));
-          break;
-        case MSG_SENT_SUCCESS:
-          U.getChatBus().post(new ChatStatusEvent(ChatStatusEvent.EVENT_SENT_MSG_SUCCESS, msg.obj));
-          break;
-      }
+          }
+        });
+        break;
     }
+
+
+    DaoUtils.getMessageDao().insertOrReplace(message);
+    ChatUtils.ConversationUtil.setLastMessage(message.getChatId(), message);
+    U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_SENDING_MSG, message));
+
+  }
+
+  @Override
+  public Message txt(String chatId, String postId, String commentId, String txt) {
+    Message m = new Message();
+
+    m.setChatId(chatId);
+    m.setPostId(postId);
+    m.setCommentId(commentId);
+    m.setContent(txt);
+    m.setType(MessageConst.TYPE_TXT);
+    m.setDirection(MessageConst.DIRECTION_SEND);
+    m.setTimestamp(System.currentTimeMillis());
+    m.setStatus(MessageConst.STATUS_CREATE);
+
+    send(m);
+
+    return m;
+  }
+
+  @Override
+  public Message voice(String chatId, String postId, String commentId, File f) {
+    return null;
+  }
+
+  @Override
+  public Message voice(String chatId, String postId, String commentId, InputStream is) {
+    return null;
+  }
+
+  @Override
+  public Message photo(String chatId, String postId, String commentId, File f) {
+    Message m = new Message();
+
+    m.setChatId(chatId);
+    m.setPostId(postId);
+    m.setCommentId(commentId);
+    m.setContent(U.getGson().toJson(new ImageContent(f.getAbsolutePath(), "", "")));
+    m.setType(MessageConst.TYPE_IMAGE);
+    m.setDirection(MessageConst.DIRECTION_SEND);
+    m.setTimestamp(System.currentTimeMillis());
+    m.setStatus(MessageConst.STATUS_CREATE);
+
+    send(m);
+
+    return m;
+  }
+
+  @Override
+  public Message photo(String chatId, String postId, String commentId, InputStream is) {
+    return null;
   }
 }

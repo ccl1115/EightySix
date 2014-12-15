@@ -1,39 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:paddingLeft="8dp"
              android:paddingRight="8dp"
-             android:paddingBottom="8dp">
+             android:paddingBottom="8dp"
+        >
 
-    <RelativeLayout
-            android:orientation="horizontal"
+    <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:background="@color/apptheme_secondary_light_color">
+            android:background="@drawable/bg_chat_card"
+            android:orientation="horizontal"
+            tools:ignore="UselessParent"
+            >
 
-        <TextView
+        <com.rockerhieu.emojicon.EmojiconTextView
                 android:id="@+id/tv_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
                 android:padding="8dp"
-                android:textColor="@android:color/white"/>
+                app:emojiconSize="24dp"
+                />
 
         <ProgressBar
                 android:id="@+id/pb_loading"
-                android:layout_toRightOf="@+id/tv_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                />
 
         <ImageView
                 android:id="@+id/iv_error"
-                android:layout_toRightOf="@+id/pb_loading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_close"/>
-    </RelativeLayout>
+                android:layout_gravity="center_vertical"
+                android:layout_margin="8dp"
+                android:src="@drawable/ic_warning"
+                />
+    </LinearLayout>
 </FrameLayout>

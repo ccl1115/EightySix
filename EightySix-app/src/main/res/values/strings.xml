@@ -32,6 +32,7 @@
     <string name="loading_more">正在加载更多</string>
     <string name="copy_to_clipborad">复制至剪贴板</string>
     <string name="app_crash">应用程序奔溃</string>
+    <string name="set_current_factory">设置在职工厂</string>
 
     <string name="server_error">服务器错误</string>
     <string name="server_object_error">服务器返回对象解析错误</string>
@@ -115,14 +116,6 @@
     <string name="import_contact_1">通讯录里的朋友，现在都在哪个厂上班？他们正在这些厂里匿名说什么？</string>
     <string name="import_contact_2">通过手机通讯录，找出和你一个厂的朋友</string>
     <string name="sync_contact_failed">同步通讯录失败，请尝试重新同步</string>
-
-
-    <!-- GetLockpatternActivity -->
-    <string name="get_lock_pattern">获取手势密码</string>
-    <string name="get_lockpattern_1">1886是一个私密的，需要邀请的劳动者匿名社区。如果你没有朋友的介绍，是不能进入的！</string>
-    <string name="get_lockpattern_2">向1886里的熟人索取手势密码</string>
-    <string name="start_find">邀请通讯录好友加入</string>
-    <string name="invite_people_to_unlock">邀请好友，即可解锁</string>
 
     <!-- PostActivity -->
     <string name="publish_content">发表内容</string>
@@ -287,4 +280,6 @@
     <string name="all_topic">全部话题</string>
     <string name="change">更改</string>
     <string name="unfollow">取消关注</string>
+    <string name="clear_cache">清楚图片和数据缓存</string>
+    <string name="vibrate_mode_info">开启后无提示音及震动</string>
 </resources>

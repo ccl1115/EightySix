@@ -2,22 +2,23 @@ package com.utree.eightysix.app.settings;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
-import com.utree.eightysix.Account;
-import com.utree.eightysix.C;
-import com.utree.eightysix.R;
-import com.utree.eightysix.U;
+import com.utree.eightysix.*;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.data.Sync;
 import com.utree.eightysix.widget.RoundedButton;
+
+import java.io.IOException;
 
 /**
  * @author simon
@@ -31,6 +32,9 @@ public class MainSettingsActivity extends BaseActivity {
 
   @InjectView(R.id.cb_silent_mode)
   public CheckBox mCbSilentMode;
+
+  @InjectView(R.id.tv_cache_size)
+  public TextView mTvCacheSize;
 
   @OnClick (R.id.tv_logout)
   public void onRbLogoutClicked() {
@@ -72,6 +76,12 @@ public class MainSettingsActivity extends BaseActivity {
     }
   }
 
+  @OnClick(R.id.ll_clear_cache)
+  public void onLlClearCacheClicked() {
+    showProgressBar(true);
+    new ClearCacheWorker().execute();
+  }
+
   @OnCheckedChanged(R.id.cb_silent_mode)
   public void onCbSilentModeChecked(boolean checked){
     Account.inst().setSilentMode(checked);
@@ -101,11 +111,64 @@ public class MainSettingsActivity extends BaseActivity {
     }
 
     mCbSilentMode.setChecked(Account.inst().getSilentMode());
+
+    new CacheSizeWorker().execute();
   }
 
   @Override
   @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();
+  }
+
+  public class CacheSizeWorker extends AsyncTask<Void, Void, Long> {
+
+    @Override
+    protected Long doInBackground(Void... voids) {
+      return U.getImageCache().size() + U.getApiCache().size() + U.getContactsCache().size();
+    }
+
+    @Override
+    protected void onPostExecute(Long aLong) {
+      String sizeInHuman;
+
+      int mb = 1024 * 1024;
+      if (aLong > mb) {
+
+        sizeInHuman = String.valueOf(aLong / mb);
+        sizeInHuman += ".";
+        sizeInHuman += String.valueOf(aLong % mb).substring(0, 2) + "MB";
+      } else {
+        sizeInHuman = (aLong / 1024) + "KB";
+      }
+
+      mTvCacheSize.setText("目前缓存大小：" + sizeInHuman);
+    }
+  }
+
+  public class ClearCacheWorker extends AsyncTask<Void, Void, Void> {
+
+    @Override
+    protected Void doInBackground(Void... voids) {
+      try {
+        U.getApiCache().delete();
+        U.getApiCache().flush();
+        U.getImageCache().delete();
+        U.getImageCache().flush();
+        U.getContactsCache().delete();
+        U.getContactsCache().flush();
+      } catch (IOException ignored) {
+        if (BuildConfig.DEBUG) {
+          ignored.printStackTrace();
+        }
+      }
+      return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+      mTvCacheSize.setText("目前缓存大小：0KB");
+      hideProgressBar();
+    }
   }
 }

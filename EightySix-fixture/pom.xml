@@ -5,7 +5,7 @@
     <parent>
         <artifactId>EightySix-parent</artifactId>
         <groupId>com.utree.eightysix</groupId>
-        <version>2.0.0-SNAPSHOT</version>
+        <version>1.6.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
@@ -24,13 +24,13 @@
         <dependency>
             <groupId>com.utree.eightysix</groupId>
             <artifactId>EightySix-data</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>1.6.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>com.utree.eightysix</groupId>
             <artifactId>EightySix-base</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>1.6.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>

@@ -3,7 +3,6 @@ package com.utree.eightysix;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Environment;
 import android.view.View;
 import android.widget.Toast;
 import butterknife.ButterKnife;
@@ -26,15 +25,16 @@ import com.utree.eightysix.qrcode.actions.AddFriendAction;
 import com.utree.eightysix.report.Reporter;
 import com.utree.eightysix.report.ReporterImpl;
 import com.utree.eightysix.rest.IRESTRequester;
+import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.bus.RequestBus;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.statistics.Analyser;
 import com.utree.eightysix.statistics.MtaAnalyserImpl;
 import com.utree.eightysix.storage.Storage;
 import com.utree.eightysix.utils.CacheUtils;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
@@ -202,7 +202,7 @@ public class U {
   public static IRESTRequester getRESTRequester() {
     M.checkThread();
     if (sRESTRequester == null) {
-      sRESTRequester = new RESTRequester(getConfig("api.host"));
+      sRESTRequester = new RESTRequester(getConfig("api.host"), getConfig("api.host.second"));
     }
     return sRESTRequester;
   }
@@ -269,39 +269,16 @@ public class U {
   @SuppressLint("SdCardPath")
   private static void loadConfig() {
     M.checkThread();
-    sConfiguration = new Properties();
-    if (!BuildConfig.DEBUG) {
-      // in release version we only load internal configuration file.
-      loadInternalConfig();
-      return;
-    }
-    File file = new File(Environment.getExternalStorageDirectory().getAbsoluteFile() + "/configuration.properties");
-    if (!file.exists()) {
-      file = new File("/sdcard/configuration.properties");
-    }
-    if (file.exists() && file.isFile()) {
-      FileReader in = null;
-      try {
-        in = new FileReader(file);
-        sConfiguration.load(in);
-      } catch (Exception e) {
-        loadInternalConfig();
-      } finally {
-        if (in != null) {
-          try {
-            in.close();
-          } catch (IOException ignored) {
-          }
-        }
-      }
-    } else {
-      loadInternalConfig();
-    }
+    loadInternalConfig();
   }
 
   private static void loadInternalConfig() {
     try {
+      sConfiguration = new Properties();
       sConfiguration.load(U.getContext().getResources().openRawResource(R.raw.configuration));
+      if (!BuildConfig.DEBUG) {
+        sConfiguration.load(U.getContext().getResources().openRawResource(R.raw.configuration_release));
+      }
     } catch (IOException ignored) {
     }
   }
@@ -362,6 +339,9 @@ public class U {
     return (int) (U.getContext().getResources().getDisplayMetrics().density * dp + 0.5f);
   }
 
+  public static <T extends Response> void request(String requestId, OnResponse<T> response, Class<T> clz, Object... params) {
+    U.getRESTRequester().request(requestId, response, clz, params);
+  }
 
   public static String timestamp(long timestamp) {
     final long now = new Date().getTime();

@@ -26,4 +26,6 @@
     <color name="apptheme_secondary_dark_color">#FF5e4680</color>
     <color name="apptheme_secondary_dark_color_pressed">#ff3f2f56</color>
     <color name="apptheme_secondary_dark_color_disabled">#fff7f7f7</color>
+
+    <color name="apptheme_top_bar_bg_color">#ff363940</color>
 </resources>

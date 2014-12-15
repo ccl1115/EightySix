@@ -29,6 +29,7 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.AccountActivity;
 import com.utree.eightysix.app.account.AddFriendActivity;
+import com.utree.eightysix.app.chat.ConversationActivity;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
 import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
@@ -149,10 +150,10 @@ public class HomeActivity extends BaseActivity {
       mDlContent.closeDrawer(mFlRight);
     } else if (mDlContent.isDrawerOpen(mFlSide)) {
       mDlContent.closeDrawer(mFlSide);
-      mTopBar.mFlLeft.setSelected(false);
+      mTopBar.mLlLeft.setSelected(false);
     } else {
       mDlContent.openDrawer(mFlSide);
-      mTopBar.mFlLeft.setSelected(true);
+      mTopBar.mLlLeft.setSelected(true);
     }
   }
 
@@ -160,8 +161,10 @@ public class HomeActivity extends BaseActivity {
   public void onActionOverflowClicked() {
     if (mDlContent.isDrawerOpen(mFlSide)) {
       mDlContent.closeDrawer(mFlSide);
+      mTopBar.mActionOverFlow.setSelected(false);
     } else {
       openMenu();
+      mTopBar.mActionOverFlow.setSelected(true);
     }
   }
 
@@ -205,7 +208,7 @@ public class HomeActivity extends BaseActivity {
     Bundle args = new Bundle();
     args.putInt("tabIndex", getIntent().getIntExtra("tabIndex", 0));
     mTabFragment.setArguments(args);
-    getSupportFragmentManager().beginTransaction().add(R.id.fl_feed, mTabFragment).commit();
+    getSupportFragmentManager().beginTransaction().add(R.id.fl_main, mTabFragment).commit();
 
     mRegionFragment = (RegionFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_range);
 
@@ -224,8 +227,8 @@ public class HomeActivity extends BaseActivity {
     mDlContent.setDrawerListener(new DrawerLayout.DrawerListener() {
       @Override
       public void onDrawerSlide(View drawerView, float slideOffset) {
-        final int topBarHeight = mTopBar.getMeasuredHeight();
         final int pivotY = mFlMain.getMeasuredHeight() >> 1;
+        final int topBarPivotY = mTopBar.getMeasuredHeight() >> 1;
         final float scale = 1 - slideOffset * 0.1f;
 
         if (drawerView.getId() == R.id.fl_side) {
@@ -238,7 +241,7 @@ public class HomeActivity extends BaseActivity {
 
           ViewHelper.setTranslationX(mTopBar, measuredWidth * slideOffset);
           ViewHelper.setPivotX(mTopBar, 0f);
-          ViewHelper.setPivotY(mTopBar, pivotY);
+          ViewHelper.setPivotY(mTopBar, pivotY + mTopBar.getMeasuredHeight());
           ViewHelper.setScaleX(mTopBar, scale);
           ViewHelper.setScaleY(mTopBar, scale);
 
@@ -258,7 +261,7 @@ public class HomeActivity extends BaseActivity {
 
           ViewHelper.setTranslationX(mTopBar, -measuredWidth * slideOffset);
           ViewHelper.setPivotX(mTopBar, mFlMain.getMeasuredWidth());
-          ViewHelper.setPivotY(mTopBar, pivotY);
+          ViewHelper.setPivotY(mTopBar, pivotY + mTopBar.getMeasuredHeight());
           ViewHelper.setScaleX(mTopBar, scale);
           ViewHelper.setScaleY(mTopBar, scale);
 
@@ -276,9 +279,10 @@ public class HomeActivity extends BaseActivity {
       public void onDrawerOpened(View drawerView) {
         if (drawerView.getId() == R.id.fl_side) {
           mDlContent.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, mFlRight);
-          mTopBar.mFlLeft.setSelected(true);
+          mTopBar.mLlLeft.setSelected(true);
         } else {
           mDlContent.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, mFlSide);
+          mTopBar.mActionOverFlow.setSelected(true);
         }
       }
 
@@ -286,6 +290,8 @@ public class HomeActivity extends BaseActivity {
       public void onDrawerClosed(View drawerView) {
         mDlContent.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, mFlSide);
         mDlContent.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, mFlRight);
+        mTopBar.mActionOverFlow.setSelected(false);
+        mTopBar.mLlLeft.setSelected(false);
 
         ViewHelper.setTranslationX(mFlMain, 0);
         ViewHelper.setPivotX(mFlMain, 0);
@@ -331,10 +337,10 @@ public class HomeActivity extends BaseActivity {
       } catch (NumberFormatException ignored) {
       }
       if (v > C.VERSION) {
-        mTopBar.getActionOverflow().setHasNew(0, true);
+        getTopBar().getActionOverflow().setHasNew(0, true);
         mMenuViewHolder.mRbSettingsDot.setVisibility(View.VISIBLE);
       } else {
-        mTopBar.getActionOverflow().setHasNew(0, false);
+        getTopBar().getActionOverflow().setHasNew(0, false);
         mMenuViewHolder.mRbSettingsDot.setVisibility(View.INVISIBLE);
       }
     }
@@ -348,12 +354,12 @@ public class HomeActivity extends BaseActivity {
 
   @Subscribe
   public void onNewCommentCountEvent(NewCommentCountEvent event) {
-    mTopBar.getActionView(0).setCount(event.getCount());
+    getTopBar().getActionView(1).setCount(event.getCount());
   }
 
   @Subscribe
   public void onHasNewPraiseEvent(HasNewPraiseEvent event) {
-    mTopBar.getActionOverflow().setHasNew(1, event.has());
+    getTopBar().getActionOverflow().setHasNew(1, event.has());
     if (event.has()) {
       mMenuViewHolder.mRbNewPraiseDot.setVisibility(View.VISIBLE);
     } else {
@@ -507,7 +513,7 @@ public class HomeActivity extends BaseActivity {
   }
 
   private void setActionAdapter() {
-    mTopBar.setActionAdapter(new TopBar.ActionAdapter() {
+    getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
       @Override
       public String getTitle(int position) {
         return null;
@@ -515,8 +521,10 @@ public class HomeActivity extends BaseActivity {
 
       @Override
       public Drawable getIcon(int position) {
-        if (position == 0) {
+        if (position == 1) {
           return getResources().getDrawable(R.drawable.ic_action_msg);
+        } else if (position == 0) {
+          return getResources().getDrawable(R.drawable.ic_chat_large);
         }
         return null;
       }
@@ -528,15 +536,18 @@ public class HomeActivity extends BaseActivity {
 
       @Override
       public void onClick(View view, int position) {
-        if (position == 0) {
+        if (position == 1) {
           U.getAnalyser().trackEvent(HomeActivity.this, "feed_msg", "feed_msg");
           MsgActivity.start(HomeActivity.this, Account.inst().getNewCommentCount() > 0);
+        } else if (position == 0) {
+          U.getAnalyser().trackEvent(HomeActivity.this, "feed_converstaion", "feed_conversation");
+          ConversationActivity.start(HomeActivity.this);
         }
       }
 
       @Override
       public int getCount() {
-        return 1;
+        return 2;
       }
 
       @Override
@@ -613,11 +624,11 @@ public class HomeActivity extends BaseActivity {
 
   private void setHasNewPraise() {
     mMenuViewHolder.mRbNewPraiseDot.setVisibility(Account.inst().getHasNewPraise() ? View.VISIBLE : View.INVISIBLE);
-    mTopBar.getActionOverflow().setHasNew(1, Account.inst().getHasNewPraise());
+    getTopBar().getActionOverflow().setHasNew(1, Account.inst().getHasNewPraise());
   }
 
   private void setNewCommentCount() {
-    mTopBar.getActionView(0).setCount(Account.inst().getNewCommentCount());
+    getTopBar().getActionView(1).setCount(Account.inst().getNewCommentCount());
   }
 
   @Keep
