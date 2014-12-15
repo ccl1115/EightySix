@@ -5,16 +5,13 @@
              xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             android:paddingLeft="8dp"
-             android:paddingRight="8dp"
-             android:paddingBottom="8dp"
+             android:padding="8dp"
         >
 
     <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:background="@drawable/bg_chat_card"
+            android:background="@drawable/bg_chat_item_from"
             android:orientation="horizontal"
             tools:ignore="UselessParent"
             >
@@ -24,7 +21,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:padding="8dp"
+                android:textColor="#ff3d3d3d"
+                android:textSize="16sp"
                 app:emojiconSize="24dp"
                 />
 
@@ -40,7 +38,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_margin="8dp"
                 android:src="@drawable/ic_warning"
                 />
     </LinearLayout>

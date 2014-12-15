@@ -30,6 +30,7 @@ public class RESTRequester implements IRESTRequester {
 
     mRequestSchema = new RequestSchema();
     mRequestSchema.load(U.getContext(), secondHost, R.raw.request_schema_chat);
+    mRequestSchema.load(U.getContext(), host, R.raw.request_schema_new);
 
     compact();
   }

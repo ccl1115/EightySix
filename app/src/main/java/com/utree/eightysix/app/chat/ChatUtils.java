@@ -58,7 +58,7 @@ public class ChatUtils {
 
     if (nowCal.get(Calendar.DAY_OF_YEAR) == cal.get(Calendar.DAY_OF_YEAR)) {
       // 在同一天，显示 (时段 时间)
-      return String.format("%s%02d:%02d", cal.get(Calendar.AM_PM) == Calendar.AM ? "上午" : "下午",
+      return String.format("%s %02d：%02d", cal.get(Calendar.AM_PM) == Calendar.AM ? "上午" : "下午",
           cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE));
     } else if (nowCal.get(Calendar.WEEK_OF_YEAR) == cal.get(Calendar.WEEK_OF_YEAR)) {
       // 在同一周，显示 (星期 时段 时间)
@@ -86,11 +86,11 @@ public class ChatUtils {
           week = "星期日";
           break;
       }
-      return String.format("%s %s%02d:%02d", week,
+      return String.format("%s %s%02d：%02d", week,
           cal.get(Calendar.AM_PM) == Calendar.AM ? "上午" : "下午", cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE));
     } else {
       // 显示 (年-月-日 时段 时间)
-      return String.format("%s-%s-%s %s%02d:%02d", cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH),
+      return String.format("%s-%s-%s %s%02d：%02d", cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH),
           cal.get(Calendar.AM_PM) == Calendar.AM ? "上午" : "下午", cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE));
     }
   }

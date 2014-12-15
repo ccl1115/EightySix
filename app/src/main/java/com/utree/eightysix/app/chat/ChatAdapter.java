@@ -245,7 +245,7 @@ public class ChatAdapter extends BaseAdapter {
 
   private View getTimestampView(int position, View convertView, ViewGroup parent) {
     if (convertView == null) {
-      convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_info, parent, false);
+      convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_timestamp, parent, false);
     }
 
     Message message = getItem(position);
