@@ -71,25 +71,13 @@
 
         <meta-data android:name="com.baidu.lbsapi.API_KEY" android:value="Z6S9LBSSdPUi96GkdLS6zO0L"/>
 
-        <meta-data android:name="EASEMOB_APPKEY" android:value="utree-test#eightysix"/>
+        <meta-data
+                android:name="EASEMOB_APPKEY"
+                android:value="utree-lanmei#lanmei"/>
 
         <meta-data android:name="XG_V2_ACCESS_ID" android:value="2100052395"/>
 
         <meta-data android:name="XG_V2_ACCESS_KEY" android:value="AA9PU5RY976B"/>
-
-        <!-- For sugar orm -->
-        <meta-data
-                android:name="DATABASE"
-                android:value="chat.db"/>
-        <meta-data
-                android:name="VERSION"
-                android:value="1"/>
-        <meta-data
-                android:name="QUERY_LOG"
-                android:value="true"/>
-        <meta-data
-                android:name="DOMAIN_PACKAGE_NAME"
-                android:value="com.utree.eightysix"/>
 
         <!-- Tencent open sdk -->
         <activity android:launchMode="singleInstance" android:name="com.tencent.tauth.AuthActivity" android:noHistory="true" android:screenOrientation="portrait">
