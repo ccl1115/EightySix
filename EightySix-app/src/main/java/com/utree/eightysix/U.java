@@ -190,7 +190,7 @@ public class U {
   public static IRESTRequester getRESTRequester() {
     M.checkThread();
     if (sRESTRequester == null) {
-      sRESTRequester = new RESTRequester(getConfig("api.host"));
+      sRESTRequester = new RESTRequester(getConfig("api.host"), getConfig("api.host.second"));
     }
     return sRESTRequester;
   }

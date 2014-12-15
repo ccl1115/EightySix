@@ -5,10 +5,7 @@ import com.baidu.android.common.util.CommonParam;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.ResponseHandlerInterface;
-import com.utree.eightysix.Account;
-import com.utree.eightysix.BuildConfig;
-import com.utree.eightysix.C;
-import com.utree.eightysix.U;
+import com.utree.eightysix.*;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.MD5Util;
 import de.akquinet.android.androlog.Log;
@@ -34,13 +31,14 @@ public class RESTRequester implements IRESTRequester {
 
   private String mHost;
 
-  public RESTRequester(String host) {
+  public RESTRequester(String host, String secondHost) {
     mHost = host;
     mAsyncHttpClient = new AsyncHttpClient();
     mAsyncHttpClient.setTimeout(U.getConfigInt("api.timeout"));
     mAsyncHttpClient.setMaxRetriesAndTimeout(U.getConfigInt("api.retry"), U.getConfigInt("api.retry.timeout"));
 
-    mRequestSchema = new RequestSchema(U.getContext());
+    mRequestSchema = new RequestSchema();
+    mRequestSchema.load(U.getContext(), secondHost, R.raw.request_schema_chat);
 
     compact();
   }

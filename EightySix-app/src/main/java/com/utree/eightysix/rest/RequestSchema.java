@@ -5,7 +5,6 @@
 package com.utree.eightysix.rest;
 
 import android.content.Context;
-import com.utree.eightysix.R;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -23,28 +22,29 @@ public class RequestSchema {
 
   private static final String RESPONSE_CLZ_PREFIX = "com.utree.eightysix.response.";
 
-  public String mParentHost;
-
   public HashMap<String, RequestWrapper> mRequestWrapper = new HashMap<String, RequestWrapper>();
 
-  public RequestSchema(Context context) {
-    InputStream inputStream = context.getResources().openRawResource(R.raw.request_schema);
+  public RequestSchema() {
+  }
+
+  public void load(Context context, String host, int xml) {
+    InputStream inputStream = context.getResources().openRawResource(xml);
+    this.load(host, inputStream);
+  }
+
+  public void load(String host, InputStream is) {
     XmlPullParser parser;
 
     try {
       parser = XmlPullParserFactory.newInstance().newPullParser();
-      parser.setInput(new InputStreamReader(inputStream));
+      parser.setInput(new InputStreamReader(is));
 
       int eventType;
 
       while ((eventType = parser.getEventType()) != XmlPullParser.END_DOCUMENT) {
         if (eventType == XmlPullParser.START_TAG) {
-          if ("host".equals(parser.getName())) {
-            parser.next();
-            mParentHost = parser.getText();
-            parser.next();
-          } else if ("request".equals(parser.getName())) {
-            parseRequest(parser);
+          if ("request".equals(parser.getName())) {
+            parseRequest(parser, host);
           }
         }
         parser.next();
@@ -54,9 +54,10 @@ public class RequestSchema {
     } catch (IOException e) {
       e.printStackTrace();
     }
+
   }
 
-  private void parseRequest(XmlPullParser parser) throws IOException, XmlPullParserException {
+  private void parseRequest(XmlPullParser parser, String host) throws IOException, XmlPullParserException {
     android.util.Log.d("RequestSchema", "start parsing request");
     int eventType;
     RequestWrapper wrapper = new RequestWrapper();
@@ -114,6 +115,9 @@ public class RequestSchema {
       }
 
       parser.next();
+    }
+    if (data.host == null) {
+      data.host = host;
     }
     wrapper.mRequestData = data;
     android.util.Log.d("RequestSchema", data.toString());

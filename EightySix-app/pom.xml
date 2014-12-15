@@ -166,6 +166,8 @@
                         <configuration>
                             <androidManifestFile>src/main/AndroidManifest.xml</androidManifestFile>
                             <updatedManifestFile>src/main/AndroidManifest.xml</updatedManifestFile>
+
+                            <aaptVerbose>true</aaptVerbose>
                         </configuration>
                     </execution>
                 </executions>
