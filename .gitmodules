@@ -1,3 +1,6 @@
 [submodule "emojicon"]
 	path = emojicon
 	url = https://github.com/ccl1115/emojicon
+[submodule "wiki"]
+	path = wiki
+	url = http://git.lanmeiquan.com/scm/eig/wiki.git
