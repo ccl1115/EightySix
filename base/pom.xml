@@ -7,7 +7,7 @@
         <version>1.6.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>EightySix-base</artifactId>
+    <artifactId>base</artifactId>
     <name>EightySix-base</name>
 
     <dependencies>

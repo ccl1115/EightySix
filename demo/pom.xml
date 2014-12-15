@@ -8,7 +8,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>EightySix-demo</artifactId>
+    <artifactId>demo</artifactId>
     <packaging>apk</packaging>
     <name>EightySix-demo</name>
 

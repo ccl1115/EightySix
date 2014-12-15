@@ -9,7 +9,7 @@
 		<version>1.6.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>EightySix-it</artifactId>
+	<artifactId>it</artifactId>
 	<packaging>apk</packaging>
 	<name>EightySix-it - Integration tests</name>
 
@@ -54,7 +54,7 @@
 
         <dependency>
             <groupId>com.utree.eightysix</groupId>
-            <artifactId>EightySix-data</artifactId>
+            <artifactId>data</artifactId>
             <version>1.6.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

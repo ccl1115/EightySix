@@ -8,7 +8,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>EightySix-config-tool</artifactId>
+    <artifactId>config-tool</artifactId>
     <packaging>apk</packaging>
     <name>EightySix-config-tool</name>
 

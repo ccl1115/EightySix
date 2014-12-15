@@ -21,7 +21,7 @@ public class Generate {
     generateMessage(schema);
 
     try {
-      String path = "EightySix-data/src/main/java";
+      String path = "data/src/main/java";
       File file = new File(path);
       if (!file.exists()) {
         file.mkdirs();

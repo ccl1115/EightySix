@@ -13,12 +13,12 @@
         <module>dao-generator</module>
         <module>oss-batch</module>
         <module>emojicon/library</module>
-        <module>EightySix-app</module>
-        <module>EightySix-fixture</module>
-        <module>EightySix-data</module>
-        <module>EightySix-base</module>
-        <module>EightySix-config-tool</module>
-        <module>EightySix-demo</module>
+        <module>app</module>
+        <module>fixture</module>
+        <module>data</module>
+        <module>base</module>
+        <module>config-tool</module>
+        <module>demo</module>
     </modules>
 
     <properties>
@@ -378,7 +378,7 @@
         <profile>
             <id>it</id>
             <modules>
-                <module>EightySix-it</module>
+                <module>it</module>
             </modules>
         </profile>
     </profiles>

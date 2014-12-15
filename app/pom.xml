@@ -10,7 +10,7 @@
         <version>1.6.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>EightySix-app</artifactId>
+    <artifactId>app</artifactId>
     <packaging>apk</packaging>
     <name>EightySix-app - Application</name>
     <version>1.6.0-SNAPSHOT</version>
