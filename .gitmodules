@@ -1,6 +1,6 @@
 [submodule "emojicon"]
 	path = emojicon
-	url = http://git.lanmeiquan.com/scm/eig/emojicon.git
+	url = http://git.lanmeiquan.com/scm/eig/emojicon
 [submodule "wiki"]
 	path = wiki
-	url = http://git.lanmeiquan.com/scm/eig/wiki.git
+	url = http://git.lanmeiquan.com/scm/eig/wiki
