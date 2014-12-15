@@ -113,7 +113,11 @@ public class ChatUtils {
     public static void createIfNotExist(Post post) {
       if (DaoUtils.getConversationDao().queryBuilder().where(ConversationDao.Properties.ChatId.eq(post.chatId)).unique() == null) {
         Conversation conversation = new Conversation();
-        conversation.setBgUrl(post.bgUrl);
+        if (post.bgUrl.startsWith("http")) {
+          conversation.setBgUrl(post.bgUrl);
+        } else {
+          conversation.setBgUrl(post.bgColor);
+        }
         conversation.setChatId(post.chatId);
         conversation.setChatSource(post.shortName);
         conversation.setPostId(post.id);
@@ -131,7 +135,11 @@ public class ChatUtils {
     public static void createIfNotExist(Post post, Comment comment) {
       if (DaoUtils.getConversationDao().queryBuilder().where(ConversationDao.Properties.ChatId.eq(post.chatId)).unique() == null) {
         Conversation conversation = new Conversation();
-        conversation.setBgUrl(post.bgUrl);
+        if (post.bgUrl.startsWith("http")) {
+          conversation.setBgUrl(post.bgUrl);
+        } else {
+          conversation.setBgUrl(post.bgColor);
+        }
         conversation.setChatId(comment.chatId);
         conversation.setChatSource(post.shortName);
         conversation.setPostId(post.id);

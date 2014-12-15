@@ -69,7 +69,12 @@ public class ConversationAdapter extends BaseAdapter {
     holder.mTvLast.setText(conversation.getLastMsg());
     holder.mFpvPortrait.setText("\ue800");
     holder.mTvContent.setText(conversation.getPostContent());
-    holder.mAivPostBg.setUrl(conversation.getBgUrl());
+    if (conversation.getBgUrl().startsWith("http")) {
+      holder.mAivPostBg.setUrl(conversation.getBgUrl());
+    } else {
+      holder.mAivPostBg.setUrl(null);
+      holder.mAivPostBg.setBackgroundColor(ColorUtil.strToColor(conversation.getBgUrl()));
+    }
     holder.mTvLast.setText(conversation.getLastMsg());
     holder.mTvTime.setText(ChatUtils.timestamp(conversation.getTimestamp()));
 
