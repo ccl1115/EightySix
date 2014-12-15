@@ -38,7 +38,7 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginStart="8dp"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_action_shuffle"
+                    android:src="@drawable/ic_emoji"
                     android:visibility="gone"
                     />
 
