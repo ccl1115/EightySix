@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
@@ -40,7 +41,6 @@ import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.guide.Guide;
 import de.akquinet.android.androlog.Log;
@@ -59,8 +59,8 @@ public class PostActivity extends BaseActivity {
   @InjectView (R.id.et_post_content)
   public EditText mEtPostContent;
 
-  @InjectView (R.id.rb_post)
-  public RoundedButton mRbPost;
+  @InjectView(R.id.iv_post)
+  public ImageView mIvPost;
 
   @InjectView(R.id.fl_banner)
   public FrameLayout mFlBanner;
@@ -119,9 +119,9 @@ public class PostActivity extends BaseActivity {
   @OnTextChanged (R.id.et_post_content)
   public void onEtPostContentTextChanged(CharSequence text) {
     if (TextUtils.isEmpty(text) || POST_CONTENT_PATTERN.matcher(text).matches()) {
-      mRbPost.setEnabled(false);
+      mIvPost.setEnabled(false);
     } else {
-      mRbPost.setEnabled(true);
+      mIvPost.setEnabled(true);
     }
   }
 
@@ -247,12 +247,12 @@ public class PostActivity extends BaseActivity {
     mCommentContextDialog.show();
   }
 
-  @OnClick (R.id.rb_post)
+  @OnClick(R.id.iv_post)
   public void onRbPostClicked() {
     U.getAnalyser().trackEvent(this, "post_comment", "post_comment");
     showProgressBar();
     mEtPostContent.setEnabled(false);
-    mRbPost.setEnabled(false);
+    mIvPost.setEnabled(false);
     requestPublishComment();
   }
 
@@ -582,7 +582,7 @@ public class PostActivity extends BaseActivity {
 
             hideProgressBar();
             mEtPostContent.setEnabled(true);
-            mRbPost.setEnabled(true);
+            mIvPost.setEnabled(true);
             mLvComments.setSelection(Integer.MAX_VALUE);
 
             requestComment(1, true);

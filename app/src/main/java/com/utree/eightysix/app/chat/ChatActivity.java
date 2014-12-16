@@ -12,9 +12,10 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import butterknife.OnItemClick;
+import butterknife.OnItemLongClick;
 import butterknife.OnTextChanged;
 import com.rockerhieu.emojicon.EmojiconEditText;
 import com.rockerhieu.emojicon.EmojiconGridFragment;
@@ -42,7 +43,6 @@ import com.utree.eightysix.utils.DaoUtils;
 import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.ImageActionButton;
-import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.TopBar;
 
 import java.io.File;
@@ -59,8 +59,11 @@ public class ChatActivity extends BaseActivity implements
   @InjectView(R.id.fl_send)
   public FrameLayout mFlSend;
 
-  @InjectView(R.id.fl_panel)
-  public FrameLayout mFlPanel;
+  @InjectView(R.id.fl_emotion)
+  public FrameLayout mFlEmotion;
+
+  @InjectView(R.id.rl_actions)
+  public RelativeLayout mRlActions;
 
   @InjectView(R.id.refresh_view)
   public SwipeRefreshLayout mRefreshView;
@@ -68,8 +71,8 @@ public class ChatActivity extends BaseActivity implements
   @InjectView(R.id.et_post_content)
   public EmojiconEditText mEtPostContent;
 
-  @InjectView(R.id.rb_post)
-  public RoundedButton mRbPost;
+  @InjectView(R.id.iv_post)
+  public ImageView mIvPost;
 
   @InjectView(R.id.alv_chats)
   public AdvancedListView mAlvChats;
@@ -101,7 +104,7 @@ public class ChatActivity extends BaseActivity implements
     context.startActivity(intent);
   }
 
-  @OnClick(R.id.rb_post)
+  @OnClick(R.id.iv_post)
   public void onRbPostClicked() {
     ChatAccount.inst().getSender()
         .txt(mPost.chatId, mPost.id, mComment == null ? null : mComment.id, mEtPostContent.getText().toString());
@@ -110,27 +113,52 @@ public class ChatActivity extends BaseActivity implements
 
   @OnClick(R.id.iv_camera)
   public void onIvCameraClicked() {
-    mCameraUtil.showCameraDialog();
+    hideSoftKeyboard(mEtPostContent);
+    mIvEmotion.setSelected(false);
+    mIvCamera.setSelected(true);
+
+    getHandler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        mRlActions.setVisibility(View.VISIBLE);
+        mFlEmotion.setVisibility(View.GONE);
+      }
+    }, 200);
   }
 
   @OnClick(R.id.iv_emotion)
   public void onIvEmationClicked() {
     hideSoftKeyboard(mEtPostContent);
+    mIvCamera.setSelected(false);
+    mIvEmotion.setSelected(true);
+
+
     getHandler().postDelayed(new Runnable() {
       @Override
       public void run() {
-        mFlPanel.setVisibility(View.VISIBLE);
+        mFlEmotion.setVisibility(View.VISIBLE);
+        mRlActions.setVisibility(View.GONE);
       }
     }, 200);
   }
 
-  @OnTextChanged(R.id.et_post_content)
-  public void onEtPostContentTextChanged(CharSequence cs) {
-    mRbPost.setEnabled(cs.length() > 0);
+  @OnClick(R.id.iv_open_camera)
+  public void onIvOpenCameraClicked() {
+    mCameraUtil.startCamera();
   }
 
-  @OnItemClick(R.id.alv_chats)
-  public void onAlvChatsItemClicked(int position) {
+  @OnClick(R.id.iv_album)
+  public void onIvAlbumClicked() {
+    mCameraUtil.startAlbum();
+  }
+
+  @OnTextChanged(R.id.et_post_content)
+  public void onEtPostContentTextChanged(CharSequence cs) {
+    mIvPost.setEnabled(cs.length() > 0);
+  }
+
+  @OnItemLongClick(R.id.alv_chats)
+  public boolean onAlvChatsItemLongClicked(int position) {
     Message m = mChatAdapter.getItem(position);
     if (m != null) {
       if (m.getStatus() == MessageConst.STATUS_FAILED) {
@@ -138,6 +166,7 @@ public class ChatActivity extends BaseActivity implements
         ChatAccount.inst().getSender().send(m);
       }
     }
+    return true;
   }
 
   @Subscribe
@@ -198,6 +227,7 @@ public class ChatActivity extends BaseActivity implements
 
     mIvCamera.setVisibility(View.VISIBLE);
     mIvEmotion.setVisibility(View.VISIBLE);
+    mIvPost.setEnabled(false);
 
     //region To detect soft keyboard visibility change
     // works after ICM
@@ -210,7 +240,10 @@ public class ChatActivity extends BaseActivity implements
           if (heightDiff > 100) { // 99% of the time the height diff will be due to a keyboard.
 
             if (!mIsOpened) {
-              mFlPanel.setVisibility(View.GONE);
+              mFlEmotion.setVisibility(View.GONE);
+              mRlActions.setVisibility(View.GONE);
+              mIvEmotion.setSelected(false);
+              mIvCamera.setSelected(false);
             }
             mIsOpened = true;
           } else if (mIsOpened) {
@@ -369,7 +402,7 @@ public class ChatActivity extends BaseActivity implements
 
     getSupportFragmentManager()
         .beginTransaction()
-        .add(R.id.fl_panel, EmojiFragment.newInstance())
+        .add(R.id.fl_emotion, EmojiFragment.newInstance())
         .commitAllowingStateLoss();
   }
 
@@ -387,8 +420,10 @@ public class ChatActivity extends BaseActivity implements
 
   @Override
   public void onBackPressed() {
-    if (mFlPanel.getVisibility() == View.VISIBLE) {
-      mFlPanel.setVisibility(View.GONE);
+    if (mFlEmotion.getVisibility() == View.VISIBLE) {
+      mFlEmotion.setVisibility(View.GONE);
+      mIvEmotion.setSelected(false);
+      mIvCamera.setSelected(false);
     } else {
       super.onBackPressed();
     }
