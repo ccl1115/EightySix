@@ -56,7 +56,6 @@ public class ConversationActivity extends BaseActivity {
   public void onAlvConversationItemClicked(int position) {
     Conversation conversation = mConversationAdapter.getItem(position);
     Post post = new Post();
-    post.chatId = conversation.getChatId();
     post.id = conversation.getPostId();
     post.shortName = conversation.getChatSource();
     post.content = conversation.getPostContent();
@@ -64,16 +63,16 @@ public class ConversationActivity extends BaseActivity {
       Comment comment = new Comment();
       comment.id = conversation.getCommentId();
       comment.content = conversation.getCommentContent();
-      ChatActivity.start(this, post, comment);
+      ChatActivity.start(this, conversation.getChatId(), post, comment);
     } else {
-      ChatActivity.start(this, post, null);
+      ChatActivity.start(this, conversation.getChatId(), post, null);
     }
   }
 
   @OnItemLongClick(R.id.alv_conversation)
   public boolean onAlvConversationItemLongClicked(int position) {
     Conversation conversation = mConversationAdapter.getItem(position);
-    showMoreDialog(conversation.getChatId());
+    showMoreDialog(conversation);
     return true;
   }
 
@@ -121,18 +120,18 @@ public class ConversationActivity extends BaseActivity {
     finish();
   }
 
-  private void showMoreDialog(final String chatId) {
+  private void showMoreDialog(final Conversation conversation) {
     new AlertDialog.Builder(this).setTitle(getString(R.string.chat_actions))
         .setItems(new String[]{getString(R.string.report), getString(R.string.delete)}, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialogInterface, int i) {
             switch (i) {
               case 0: {
-                showReportConfirmDialog(chatId);
+                showReportConfirmDialog(conversation);
                 break;
               }
               case 1: {
-                showDeleteConfirmDialog(chatId);
+                showDeleteConfirmDialog(conversation);
                 break;
               }
             }
@@ -140,7 +139,7 @@ public class ConversationActivity extends BaseActivity {
         }).show();
   }
 
-  private void showReportConfirmDialog(final String chatId) {
+  private void showReportConfirmDialog(final Conversation conversation) {
     new AlertDialog.Builder(this).setTitle(R.string.confirm_report_chat)
         .setMessage(R.string.report_chat_info)
         .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
@@ -152,8 +151,8 @@ public class ConversationActivity extends BaseActivity {
               public void onResponse(Response response) {
                 if (RESTRequester.responseOk(response)) {
                   showToast(R.string.report_success);
-                  ChatUtils.ConversationUtil.deleteConversation(chatId);
-                  mConversationAdapter.removeByChatId(chatId);
+                  ChatUtils.ConversationUtil.deleteConversation(conversation);
+                  mConversationAdapter.remove(conversation);
                 }
                 dialogInterface.dismiss();
               }
@@ -162,7 +161,7 @@ public class ConversationActivity extends BaseActivity {
               public void onResponseError(Throwable e) {
                 dialogInterface.dismiss();
               }
-            }, Response.class, chatId);
+            }, Response.class, conversation.getChatId());
           }
         })
         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -173,14 +172,14 @@ public class ConversationActivity extends BaseActivity {
         }).show();
   }
 
-  private void showDeleteConfirmDialog(final String chatId) {
+  private void showDeleteConfirmDialog(final Conversation conversation) {
     new AlertDialog.Builder(this).setTitle(R.string.confirm_delete_chat)
         .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialogInterface, int i) {
             dialogInterface.dismiss();
-            ChatUtils.ConversationUtil.deleteConversation(chatId);
-            mConversationAdapter.removeByChatId(chatId);
+            ChatUtils.ConversationUtil.deleteConversation(conversation);
+            mConversationAdapter.remove(conversation);
           }
         })
         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

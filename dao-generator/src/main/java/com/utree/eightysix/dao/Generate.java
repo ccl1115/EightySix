@@ -15,7 +15,7 @@ import java.io.File;
 public class Generate {
 
   public Generate() {
-    Schema schema = new Schema(8, "com.utree.eightysix.dao");
+    Schema schema = new Schema(10, "com.utree.eightysix.dao");
 
     generateConversation(schema);
     generateMessage(schema);
@@ -56,9 +56,9 @@ public class Generate {
   private void generateMessage(Schema schema) {
     Entity message = schema.addEntity("Message");
     message.addIdProperty();
-    message.addStringProperty("chatId").index().notNull();
-    message.addStringProperty("postId");
-    message.addStringProperty("commentId");
+    message.addStringProperty("chatId").notNull();
+    message.addStringProperty("postId").index();
+    message.addStringProperty("commentId").index();
     message.addStringProperty("msgId");
     message.addLongProperty("timestamp").indexDesc(null, false);
     message.addStringProperty("from");

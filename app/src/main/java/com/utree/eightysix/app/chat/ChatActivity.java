@@ -85,6 +85,7 @@ public class ChatActivity extends BaseActivity implements
 
   private ChatAdapter mChatAdapter;
 
+  private String mChatId;
   private Post mPost;
   private Comment mComment;
   private Conversation mConversation;
@@ -92,8 +93,9 @@ public class ChatActivity extends BaseActivity implements
   private CameraUtil mCameraUtil;
   private boolean mIsOpened;
 
-  public static void start(Context context, Post post, Comment comment) {
+  static void start(Context context, String chatId, Post post, Comment comment) {
     Intent intent = new Intent(context, ChatActivity.class);
+    intent.putExtra("chatId", chatId);
     intent.putExtra("post", post);
     intent.putExtra("comment", comment);
 
@@ -107,7 +109,7 @@ public class ChatActivity extends BaseActivity implements
   @OnClick(R.id.iv_post)
   public void onRbPostClicked() {
     ChatAccount.inst().getSender()
-        .txt(mPost.chatId, mPost.id, mComment == null ? null : mComment.id, mEtPostContent.getText().toString());
+        .txt(mChatId, mPost.id, mComment == null ? null : mComment.id, mEtPostContent.getText().toString());
     mEtPostContent.setText("");
   }
 
@@ -221,7 +223,7 @@ public class ChatActivity extends BaseActivity implements
       @Override
       public void onImageReturn(String path) {
         ChatAccount.inst().getSender()
-            .photo(mPost.chatId, mPost.id, mComment == null ? null : mComment.id, new File(path));
+            .photo(mChatId, mPost.id, mComment == null ? null : mComment.id, new File(path));
       }
     });
 
@@ -258,20 +260,21 @@ public class ChatActivity extends BaseActivity implements
 
     mPost = getIntent().getParcelableExtra("post");
     mComment = getIntent().getParcelableExtra("comment");
+    mChatId = getIntent().getStringExtra("chatId");
 
     mConversation = DaoUtils.getConversationDao()
         .queryBuilder()
-        .where(ConversationDao.Properties.ChatId.eq(mPost.chatId))
+        .where(ConversationDao.Properties.ChatId.eq(mChatId))
         .unique();
 
     setTopTitle(mPost.viewType == 3 ? "认识的人" : "陌生人");
     setTopSubTitle("来自" + mPost.shortName);
 
-    if (mPost.chatId == null) {
+    if (mChatId == null) {
       finish();
     }
 
-    mChatAdapter.add(ChatUtils.MessageUtil.getConversation(mPost.chatId, 0));
+    mChatAdapter.add(ChatUtils.MessageUtil.getConversation(mChatId, 0));
 
     mAlvChats.setAdapter(mChatAdapter);
     mAlvChats.setSelection(Integer.MAX_VALUE);
@@ -291,10 +294,10 @@ public class ChatActivity extends BaseActivity implements
       public void onRefresh() {
         if (has) {
           page++;
-          List<Message> conversation = ChatUtils.MessageUtil.getConversation(mPost.chatId, page);
+          List<Message> conversation = ChatUtils.MessageUtil.getConversation(mChatId, page);
           if (conversation.size() == 0) {
             has = false;
-            Message message = ChatUtils.infoMsg(mPost.chatId, getString(R.string.no_more_history));
+            Message message = ChatUtils.infoMsg(mChatId, getString(R.string.no_more_history));
             message.setTimestamp(mChatAdapter.getItem(0).getTimestamp() - 1);
             mChatAdapter.add(message);
           } else {
@@ -362,7 +365,7 @@ public class ChatActivity extends BaseActivity implements
                     .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
               }
             }
-          }, Response.class, mPost.chatId);
+          }, Response.class, mChatId);
         } else {
           ((ImageActionButton) getTopBar().getActionView(0))
               .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
@@ -383,7 +386,7 @@ public class ChatActivity extends BaseActivity implements
                     .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_outline));
               }
             }
-          }, Response.class, mPost.chatId);
+          }, Response.class, mChatId);
 
         }
       }
@@ -460,7 +463,7 @@ public class ChatActivity extends BaseActivity implements
               public void onResponse(Response response) {
                 if (RESTRequester.responseOk(response)) {
                   showToast(getString(R.string.report_success));
-                  ChatUtils.ConversationUtil.deleteConversation(mPost.chatId);
+                  ChatUtils.ConversationUtil.deleteConversation(mPost.id);
                   finish();
                 }
                 dialogInterface.dismiss();
@@ -470,7 +473,7 @@ public class ChatActivity extends BaseActivity implements
               public void onResponseError(Throwable e) {
                 dialogInterface.dismiss();
               }
-            }, Response.class, mPost.chatId);
+            }, Response.class, mChatId);
           }
         })
         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -488,7 +491,7 @@ public class ChatActivity extends BaseActivity implements
           @Override
           public void onClick(DialogInterface dialogInterface, int i) {
             dialogInterface.dismiss();
-            ChatUtils.ConversationUtil.deleteConversation(mPost.chatId);
+            ChatUtils.ConversationUtil.deleteConversation(mPost.id);
             finish();
           }
         })
@@ -501,9 +504,9 @@ public class ChatActivity extends BaseActivity implements
   }
 
   private void addPostSummaryInfo() {
-    if (!ChatUtils.MessageUtil.hasPostSummaryMessage(mPost.chatId)) {
+    if (!ChatUtils.MessageUtil.hasPostSummaryMessage(mChatId)) {
       Message message =
-          ChatUtils.infoMsg(mPost.chatId,
+          ChatUtils.infoMsg(mChatId,
               "主题：" + (mPost.content.length() > 80 ? mPost.content.substring(0, 76) + "..." : mPost.content));
 
       message.setType(MessageConst.TYPE_POST);
@@ -514,7 +517,7 @@ public class ChatActivity extends BaseActivity implements
   }
 
   private void addCommentSummaryInfo() {
-    if (!ChatUtils.MessageUtil.hasCommentSummaryMessage(mPost.chatId, mComment.id)) {
+    if (!ChatUtils.MessageUtil.hasCommentSummaryMessage(mChatId, mComment.id)) {
       Message message =
           ChatUtils.infoMsg(mComment.chatId,
               "评论：" + (mComment.content.length() > 80 ? mComment.content.substring(0, 76) + "..." : mComment.content));

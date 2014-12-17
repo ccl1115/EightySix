@@ -14,7 +14,6 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.chat.content.ImageContent;
 import com.utree.eightysix.dao.Message;
 import com.utree.eightysix.dao.MessageConst;
-import com.utree.eightysix.utils.DaoUtils;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.RoundedButton;
 
@@ -267,7 +266,6 @@ public class ChatAdapter extends BaseAdapter {
           Message m = ChatUtils.infoMsg(message.getChatId(), U.timestamp(message.getTimestamp()));
           m.setType(MessageConst.TYPE_TIMESTAMP);
           m.setTimestamp(message.getTimestamp() - 1);
-          DaoUtils.getMessageDao().insert(m);
           toBeAdded.add(m);
         }
       }

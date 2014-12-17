@@ -39,28 +39,28 @@ import java.io.File;
 
 /**
  */
-@Layout (R.layout.activity_login)
+@Layout(R.layout.activity_login)
 public class LoginActivity extends BaseActivity {
 
-  @InjectView (R.id.btn_login)
+  @InjectView(R.id.btn_login)
   public RoundedButton mBtnLogin;
 
-  @InjectView (R.id.et_pwd)
+  @InjectView(R.id.et_pwd)
   public EditText mEtPwd;
 
-  @InjectView (R.id.et_phone_number)
+  @InjectView(R.id.et_phone_number)
   public EditText mEtPhoneNumber;
 
-  @InjectView (R.id.btn_fixture)
+  @InjectView(R.id.btn_fixture)
   public RoundedButton mBtnFixture;
 
-  @InjectView (R.id.ll_captcha)
+  @InjectView(R.id.ll_captcha)
   public LinearLayout mLlCaptcha;
 
-  @InjectView (R.id.iv_captcha)
+  @InjectView(R.id.iv_captcha)
   public ImageView mIvCaptcha;
 
-  @InjectView (R.id.et_captcha)
+  @InjectView(R.id.et_captcha)
   public EditText mEtCaptcha;
 
   private boolean mCorrectPhoneNumber;
@@ -77,23 +77,23 @@ public class LoginActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
-  @OnClick (R.id.btn_login)
+  @OnClick(R.id.btn_login)
   public void onBtnLoginClicked() {
     requestLogin();
   }
 
-  @OnClick (R.id.btn_fixture)
+  @OnClick(R.id.btn_fixture)
   public void onBtnFixtureClicked() {
     FeedActivity.start(this, null);
     finish();
   }
 
-  @OnClick (R.id.iv_captcha)
+  @OnClick(R.id.iv_captcha)
   public void onIvCaptchaClicked() {
     requestCaptcha();
   }
 
-  @OnClick (R.id.tv_forget_pwd)
+  @OnClick(R.id.tv_forget_pwd)
   public void onTvForgetPwd() {
     startActivity(new Intent(this, ForgetPwdActivity.class));
   }
@@ -242,9 +242,15 @@ public class LoginActivity extends BaseActivity {
               mEtPwd.getText().toString(),
               mEtCaptcha.getText().toString()),
           onResponse, UserResponse.class);
+      U.request("login", onResponse, UserResponse.class,
+          mEtPhoneNumber.getText().toString(),
+          mEtPwd.getText().toString(),
+          mEtCaptcha.getText().toString());
     } else {
-      request(new LoginRequest(mEtPhoneNumber.getText().toString(), mEtPwd.getText().toString()),
-          onResponse, UserResponse.class);
+      U.request("login", onResponse, UserResponse.class,
+          mEtPhoneNumber.getText().toString(),
+          mEtPwd.getText().toString(),
+          null);
     }
 
     mBtnLogin.setEnabled(false);

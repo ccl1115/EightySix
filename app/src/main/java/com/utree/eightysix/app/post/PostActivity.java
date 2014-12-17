@@ -25,7 +25,6 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.OverlayTipUtil;
 import com.utree.eightysix.app.bs.BlueStarFragment;
-import com.utree.eightysix.app.chat.ChatActivity;
 import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.app.feed.event.*;
 import com.utree.eightysix.app.msg.ReadMsgStore;
@@ -165,8 +164,7 @@ public class PostActivity extends BaseActivity {
                     U.getShareManager().sharePostDialog(PostActivity.this, mPost).show();
                     break;
                   case 1:
-                    ChatUtils.ConversationUtil.createIfNotExist(mPost);
-                    ChatActivity.start(PostActivity.this, mPost, null);
+                    ChatUtils.startChat(PostActivity.this, mPost);
                     break;
                   case 2:
                     U.getAnalyser().trackEvent(U.getContext(), "post_more_report", "post_more_report");
@@ -217,8 +215,7 @@ public class PostActivity extends BaseActivity {
               public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                   case 0:
-                    ChatUtils.ConversationUtil.createIfNotExist(mPost, comment);
-                    ChatActivity.start(PostActivity.this, mPost, comment);
+                    ChatUtils.startChat(PostActivity.this, mPost, comment);
                     break;
                   case 1:
                     if (comment.praised != 1) {

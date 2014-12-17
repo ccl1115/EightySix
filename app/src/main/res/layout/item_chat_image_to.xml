@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:padding="8dp"
-            android:background="@drawable/bg_chat_card"
+            android:background="@drawable/bg_chat_item_to"
             tools:ignore="UselessParent"
             >
 

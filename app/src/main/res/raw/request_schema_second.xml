@@ -1,5 +1,16 @@
 <api>
     <request>
+        <id>get_chat_id</id>
+        <name>获取chatId</name>
+        <path>/commit/im/get/chatId</path>
+        <sign/>
+        <params>
+            <param>postId</param>
+            <param>commentId</param>
+        </params>
+    </request>
+
+    <request>
         <id>chat_send</id>
         <name>发私聊</name>
         <path>/commit/im/send/privateChat</path>
@@ -60,5 +71,17 @@
             <param>chatId</param>
         </params>
         <responseClz>ChatOnlineListResponse</responseClz>
+    </request>
+
+    <request>
+        <id>login</id>
+        <name>登录接口</name>
+        <path>/passport/login</path>
+        <sign/>
+        <params>
+            <param>phone</param>
+            <param>password</param>
+            <param>valiCode</param>
+        </params>
     </request>
 </api>

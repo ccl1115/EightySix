@@ -8,6 +8,7 @@ import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.dao.*;
 import com.utree.eightysix.data.Comment;
@@ -108,17 +109,67 @@ public class ChatUtils {
     return m;
   }
 
+  public static void startChat(final BaseActivity context, final Post post, final Comment comment) {
+    ConversationUtil.createIfNotExist("", post, comment);
+    ChatActivity.start(context, "", post, comment);
+//    context.showProgressBar();
+//    U.request("get_chat_id", new OnResponse2<ChatIdResponse>() {
+//      @Override
+//      public void onResponseError(Throwable throwable) {
+//        U.showToast("创建聊天失败");
+//        context.hideProgressBar();
+//      }
+//
+//      @Override
+//      public void onResponse(ChatIdResponse response) {
+//        if (RESTRequester.responseOk(response)) {
+//          ConversationUtil.createIfNotExist(response.object.chatId, post, comment);
+//          ChatActivity.start(context, response.object.chatId, post, comment);
+//        } else {
+//          U.showToast("创建聊天失败");
+//        }
+//        context.hideProgressBar();
+//      }
+//    }, ChatIdResponse.class, post == null ? null : post.id, comment == null ? null : comment.id);
+  }
+
+  public static void startChat(final BaseActivity context, final Post post) {
+    ConversationUtil.createIfNotExist("", post);
+    ChatActivity.start(context, "", post, null);
+//    context.showProgressBar();
+//    U.request("get_chat_id", new OnResponse2<ChatIdResponse>() {
+//      @Override
+//      public void onResponseError(Throwable throwable) {
+//        U.showToast("创建聊天失败");
+//        context.hideProgressBar();
+//      }
+//
+//      @Override
+//      public void onResponse(ChatIdResponse response) {
+//        if (RESTRequester.responseOk(response)) {
+//          ConversationUtil.createIfNotExist(response.object.chatId, post);
+//          ChatActivity.start(context, response.object.chatId, post, null);
+//        } else {
+//          U.showToast("创建聊天失败");
+//          context.hideProgressBar();
+//        }
+//      }
+//    }, ChatIdResponse.class, post == null ? null : post.id, null);
+
+  }
 
   public static class ConversationUtil {
-    public static void createIfNotExist(Post post) {
-      if (DaoUtils.getConversationDao().queryBuilder().where(ConversationDao.Properties.ChatId.eq(post.chatId)).unique() == null) {
+    public static void createIfNotExist(String chatId, Post post) {
+      if (DaoUtils.getConversationDao().queryBuilder()
+          .where(ConversationDao.Properties.ChatId.eq(chatId))
+          .unique() == null) {
         Conversation conversation = new Conversation();
         if (post.bgUrl.startsWith("http")) {
           conversation.setBgUrl(post.bgUrl);
         } else {
           conversation.setBgUrl(post.bgColor);
         }
-        conversation.setChatId(post.chatId);
+        conversation.setChatId(chatId);
         conversation.setChatSource(post.shortName);
         conversation.setPostId(post.id);
         conversation.setLastMsg("");
@@ -132,15 +183,17 @@ public class ChatUtils {
       }
     }
 
-    public static void createIfNotExist(Post post, Comment comment) {
-      if (DaoUtils.getConversationDao().queryBuilder().where(ConversationDao.Properties.ChatId.eq(post.chatId)).unique() == null) {
+    public static void createIfNotExist(String chatId, Post post, Comment comment) {
+      if (DaoUtils.getConversationDao().queryBuilder()
+          .where(ConversationDao.Properties.ChatId.eq(chatId))
+          .unique() == null) {
         Conversation conversation = new Conversation();
         if (post.bgUrl.startsWith("http")) {
           conversation.setBgUrl(post.bgUrl);
         } else {
           conversation.setBgUrl(post.bgColor);
         }
-        conversation.setChatId(comment.chatId);
+        conversation.setChatId(chatId);
         conversation.setChatSource(post.shortName);
         conversation.setPostId(post.id);
         conversation.setCommentId(comment.id);
@@ -165,6 +218,14 @@ public class ChatUtils {
           .where(ConversationDao.Properties.ChatId.eq(chatId))
           .buildDelete()
           .executeDeleteWithoutDetachingEntities();
+    }
+
+    public static void deleteConversation(Conversation conversation) {
+      DaoUtils.getMessageDao().queryBuilder()
+          .where(MessageDao.Properties.ChatId.eq(conversation.getChatId()))
+          .buildDelete()
+          .executeDeleteWithoutDetachingEntities();
+      DaoUtils.getConversationDao().delete(conversation);
     }
 
     /**

@@ -17,7 +17,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.app.chat.ChatActivity;
+import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
@@ -108,8 +108,7 @@ public class PostPostView extends LinearLayout {
 
   @OnClick(R.id.tv_chat)
   public void onIvChatClicked() {
-    ChatUtils.ConversationUtil.createIfNotExist(mPost);
-    ChatActivity.start(getContext(), mPost, null);
+    ChatUtils.startChat((BaseActivity) getContext(), mPost);
   }
 
   public void setData(Post post) {

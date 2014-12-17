@@ -114,6 +114,11 @@ public class ConversationAdapter extends BaseAdapter {
     }
   }
 
+  public void remove(Conversation conversation) {
+    mConversations.remove(conversation);
+    notifyDataSetChanged();
+  }
+
   public static class ViewHolder {
 
     @InjectView(R.id.tv_name)

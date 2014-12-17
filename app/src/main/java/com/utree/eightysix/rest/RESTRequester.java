@@ -29,7 +29,7 @@ public class RESTRequester implements IRESTRequester {
     mAsyncHttpClient.setMaxRetriesAndTimeout(U.getConfigInt("api.retry"), U.getConfigInt("api.retry.timeout"));
 
     mRequestSchema = new RequestSchema();
-    mRequestSchema.load(U.getContext(), secondHost, R.raw.request_schema_chat);
+    mRequestSchema.load(U.getContext(), secondHost, R.raw.request_schema_second);
     mRequestSchema.load(U.getContext(), host, R.raw.request_schema_new);
 
     compact();
