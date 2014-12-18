@@ -109,5 +109,6 @@ public class C {
 
     public static final String NT = "Notification";
     public static final String ACCOUNT = "Account";
+    public static final String CH = "Chat";
   }
 }

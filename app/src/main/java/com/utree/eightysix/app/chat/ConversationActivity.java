@@ -34,6 +34,8 @@ import com.utree.eightysix.widget.RandomSceneTextView;
 @TopTitle(R.string.chat_anonymous)
 public class ConversationActivity extends BaseActivity {
 
+  private static boolean sInConversation;
+
   @InjectView(R.id.alv_conversation)
   public AdvancedListView mAlvConversation;
 
@@ -50,6 +52,14 @@ public class ConversationActivity extends BaseActivity {
     }
 
     context.startActivity(intent);
+  }
+
+  public static boolean isInConversation() {
+    return sInConversation;
+  }
+
+  public static void setInConversation(boolean inConversation) {
+    ConversationActivity.sInConversation = inConversation;
   }
 
   @OnItemClick(R.id.alv_conversation)

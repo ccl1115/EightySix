@@ -56,6 +56,8 @@ public class ChatActivity extends BaseActivity implements
     EmojiconsFragment.OnEmojiconBackspaceClickedListener,
     EmojiconGridFragment.OnEmojiconClickedListener {
 
+  private static String sCurrentChatId;
+
   @InjectView(R.id.fl_send)
   public FrameLayout mFlSend;
 
@@ -104,6 +106,14 @@ public class ChatActivity extends BaseActivity implements
     }
 
     context.startActivity(intent);
+  }
+
+  public static String getCurrentChatId() {
+    return sCurrentChatId;
+  }
+
+  public static void setCurrentChatId(String currentChatId) {
+    ChatActivity.sCurrentChatId = currentChatId;
   }
 
   @OnClick(R.id.iv_post)
@@ -407,6 +417,18 @@ public class ChatActivity extends BaseActivity implements
         .beginTransaction()
         .add(R.id.fl_emotion, EmojiFragment.newInstance())
         .commitAllowingStateLoss();
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    sCurrentChatId = mChatId;
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    sCurrentChatId = null;
   }
 
   @Override

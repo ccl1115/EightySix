@@ -65,8 +65,6 @@ public class MessageDao extends AbstractDao<Message, Long> {
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_MESSAGE_POST_ID ON MESSAGE" +
             " (POST_ID);");
-        db.execSQL("CREATE INDEX " + constraint + "IDX_MESSAGE_COMMENT_ID ON MESSAGE" +
-            " (COMMENT_ID);");
         db.execSQL("CREATE INDEX " + constraint + "IDX_MESSAGE_TIMESTAMP_DESC ON MESSAGE" +
                 " (TIMESTAMP);");
     }

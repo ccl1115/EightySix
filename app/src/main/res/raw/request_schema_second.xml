@@ -2,7 +2,7 @@
     <request>
         <id>get_chat_id</id>
         <name>获取chatId</name>
-        <path>/commit/im/get/chatId</path>
+        <path>/im/get/chatId</path>
         <sign/>
         <params>
             <param>postId</param>

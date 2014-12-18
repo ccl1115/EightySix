@@ -7,16 +7,13 @@ import android.content.IntentFilter;
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
-import com.easemob.exceptions.EaseMobException;
 import com.squareup.otto.Subscribe;
-import com.utree.eightysix.Account;
-import com.utree.eightysix.BuildConfig;
-import com.utree.eightysix.M;
-import com.utree.eightysix.U;
+import com.utree.eightysix.*;
 import com.utree.eightysix.app.BaseApplication;
 import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.dao.Message;
 import com.utree.eightysix.utils.DaoUtils;
+import de.akquinet.android.androlog.Log;
 
 /**
  * @author simon
@@ -121,16 +118,23 @@ public class ChatAccount {
     public void onReceive(Context context, Intent intent) {
       EMMessage message = EMChatManager.getInstance().getMessage(intent.getStringExtra("msgid"));
 
-      Message textMessage = null;
-      try {
-        textMessage = ChatUtils.convert(message);
-      } catch (EaseMobException e) {
-        U.getAnalyser().reportException(U.getContext(), e);
+      Log.d(C.TAG.CH, "onReceiveMessage");
+      Log.d(C.TAG.CH, message.toString());
+
+      Message m = ChatUtils.convert(message);
+
+
+      if (m != null) {
+        if (m.getCommentId() == null) {
+          ChatUtils.ConversationUtil.createByPostIdIfNotExist(m.getChatId(), m.getPostId());
+        } else {
+          ChatUtils.ConversationUtil.createByPostCommentIdIfNotExist(m.getChatId(), m.getPostId(), m.getCommentId());
+        }
+
+        DaoUtils.getMessageDao().insert(m);
+        ChatUtils.NotifyUtil.notifyNewMessage(m);
+        U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_RECEIVE_MSG, m));
       }
-
-      DaoUtils.getMessageDao().insert(textMessage);
-
-      U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_RECEIVE_MSG, textMessage));
     }
   }
 }
