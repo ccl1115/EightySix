@@ -72,10 +72,15 @@ public class ConversationAdapter extends BaseAdapter {
     holder.mFpvPortrait.setText("\ue800");
     holder.mTvContent.setText(conversation.getPostContent());
     int unread = conversation.getUnreadCount().intValue();
-    if (unread > 99) {
-      holder.mRbUnread.setText("99+");
+    if (unread == 0) {
+      holder.mRbUnread.setVisibility(View.INVISIBLE);
     } else {
-      holder.mRbUnread.setText(String.valueOf(unread));
+      holder.mRbUnread.setVisibility(View.VISIBLE);
+      if (unread > 99) {
+        holder.mRbUnread.setText("99+");
+      } else {
+        holder.mRbUnread.setText(String.valueOf(unread));
+      }
     }
     if (TextUtils.isEmpty(conversation.getBgUrl())) {
       holder.mAivPostBg.setBackgroundColor(ColorUtil.strToColor(conversation.getBgColor()));
