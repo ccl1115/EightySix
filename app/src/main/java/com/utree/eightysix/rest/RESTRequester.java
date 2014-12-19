@@ -35,6 +35,18 @@ public class RESTRequester implements IRESTRequester {
     compact();
   }
 
+  public RESTRequester(String host, String secondHost, AsyncHttpClient client) {
+    mHost = host;
+    mAsyncHttpClient = client;
+    mAsyncHttpClient.setTimeout(U.getConfigInt("api.timeout"));
+    mAsyncHttpClient.setMaxRetriesAndTimeout(U.getConfigInt("api.retry"), U.getConfigInt("api.retry.timeout"));
+
+    mRequestSchema = new RequestSchema();
+    mRequestSchema.load(U.getContext(), secondHost, R.raw.request_schema_second);
+    mRequestSchema.load(U.getContext(), host, R.raw.request_schema_new);
+    compact();
+  }
+
   public static String genCacheKey(String api, RequestParams params) {
     return MD5Util.getMD5String((api + params.toString() + Account.inst().getUserId()).getBytes()).toLowerCase();
   }
@@ -98,7 +110,6 @@ public class RESTRequester implements IRESTRequester {
   @Override
   public <T extends Response> RequestHandle request(String requestSchemaId, OnResponse<T> onResponse, Class<T> clz, Object... params) {
     RequestData request = mRequestSchema.getRequest(requestSchemaId, params);
-    Log.d(C.TAG.RR, request.toString());
     return request(request, new HandlerWrapper<T>(request, onResponse, clz));
   }
 
@@ -128,7 +139,7 @@ public class RESTRequester implements IRESTRequester {
   }
 
   private RequestHandle get(String host, String path, Header[] headers, RequestParams params, ResponseHandlerInterface handler) {
-    if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "  post: " + host + path);
+    if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "   get: " + host + path);
     if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "params: " + params.toString());
     return mAsyncHttpClient.get(U.getContext(), host + path, headers, params, handler);
   }

@@ -62,6 +62,10 @@ public class ChatAdapter extends BaseAdapter {
   }
 
   public void add(Message message) {
+    if (message == null) {
+      return;
+    }
+
     if (!contains(message)) {
       mMessages.add(message);
     }
@@ -91,6 +95,14 @@ public class ChatAdapter extends BaseAdapter {
       mMessages.remove(message);
     }
     notifyDataSetChanged();
+  }
+
+  public Message get(int index) {
+    return mMessages.get(index);
+  }
+
+  public int size() {
+    return mMessages.size();
   }
 
   @Override

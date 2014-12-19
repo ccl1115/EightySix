@@ -168,7 +168,7 @@ public class ChatUtils {
         }
         context.hideProgressBar();
       }
-    }, ChatIdResponse.class, post == null ? null : post.id, comment == null ? null : comment.id);
+    }, ChatIdResponse.class, null, comment == null ? null : comment.id);
   }
 
   public static void startChat(final BaseActivity context, final Post post) {
@@ -219,6 +219,12 @@ public class ChatUtils {
           .unique();
 
       return conversation != null ? conversation.getChatId() : null;
+    }
+
+    public static List<Conversation> getConversations() {
+      return DaoUtils.getConversationDao().queryBuilder()
+          .where(ConversationDao.Properties.LastMsg.isNotNull())
+          .list();
     }
 
     public static void createIfNotExist(String chatId, Post post) {
@@ -380,7 +386,7 @@ public class ChatUtils {
         Post post = new Post();
         post.id = conversation.getPostId();
         post.content = conversation.getPostContent();
-        post.source = conversation.getPostSource();
+        post.shortName = conversation.getPostSource();
         runnable.run(post);
       }
     }
@@ -416,7 +422,7 @@ public class ChatUtils {
       } else {
         Post post = new Post();
         post.id = conversation.getPostId();
-        post.source = conversation.getPostSource();
+        post.shortName = conversation.getPostSource();
         post.content = conversation.getPostContent();
         post.bgUrl = conversation.getBgUrl();
         Comment comment = new Comment();
@@ -439,7 +445,7 @@ public class ChatUtils {
     public static List<Message> getConversation(String chatId, int page) {
       return DaoUtils.getMessageDao().queryBuilder()
           .where(MessageDao.Properties.ChatId.eq(chatId))
-          .orderDesc(MessageDao.Properties.Timestamp)
+          .orderAsc(MessageDao.Properties.Timestamp)
           .limit(20)
           .offset(20 * page)
           .build()
@@ -509,6 +515,41 @@ public class ChatUtils {
       return DaoUtils.getMessageDao().queryBuilder()
           .where(MessageDao.Properties.Read.eq(false)).count();
     }
+
+    public static Message addPostSummaryInfo(String chatId, Post post) {
+      if (!ChatUtils.MessageUtil.hasPostSummaryMessage(chatId)) {
+        Message message =
+            ChatUtils.infoMsg(chatId,
+                "主题：" + (post.content.length() > 80 ? post.content.substring(0, 76) + "..." : post.content));
+
+        message.setType(MessageConst.TYPE_POST);
+        message.setTimestamp(0l);
+
+        DaoUtils.getMessageDao().insertOrReplace(message);
+        return message;
+      } else {
+        return null;
+      }
+
+    }
+
+    public static Message addCommentSummaryInfo(String chatId, long timestamp, Comment comment) {
+      if (!ChatUtils.MessageUtil.hasCommentSummaryMessage(chatId, comment.id)) {
+        Message message =
+            ChatUtils.infoMsg(chatId,
+                "评论：" + (comment.content.length() > 80 ? comment.content.substring(0, 76) + "..." : comment.content));
+
+        message.setCommentId(comment.id);
+        message.setType(MessageConst.TYPE_COMMENT);
+        message.setTimestamp(timestamp);
+
+        DaoUtils.getMessageDao().insertOrReplace(message);
+        return message;
+      } else {
+        return null;
+      }
+    }
+
   }
 
   public static class NotifyUtil {
@@ -516,12 +557,6 @@ public class ChatUtils {
     private static final int ID_MESSAGE = 0x1000;
 
     public static void notifyNewMessage(Message message, Post post, Comment comment) {
-      if (message.getChatId().equals(ChatActivity.getCurrentChatId())) {
-        message.setRead(true);
-        DaoUtils.getMessageDao().update(message);
-        // 收到的消息，对应的聊天页面在前台，则不通知该条消息
-        return;
-      }
 
       long count = MessageUtil.getUnreadCount();
       Context context = U.getContext();

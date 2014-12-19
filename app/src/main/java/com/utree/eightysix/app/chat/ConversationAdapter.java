@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -17,15 +18,17 @@ import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.chat.event.ChatEvent;
+import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.dao.Conversation;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.utils.ColorUtil;
-import com.utree.eightysix.utils.DaoUtils;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.FontPortraitView;
 import com.utree.eightysix.widget.RoundedButton;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -34,8 +37,15 @@ public class ConversationAdapter extends BaseAdapter {
 
   private List<Conversation> mConversations = new ArrayList<Conversation>();
 
+  private static Comparator<Conversation> sComparator = new Comparator<Conversation>() {
+    @Override
+    public int compare(Conversation lhs, Conversation rhs) {
+      return lhs.getTimestamp().compareTo(rhs.getTimestamp());
+    }
+  };
+
   public ConversationAdapter() {
-    mConversations = DaoUtils.getConversationDao().loadAll();
+    mConversations = ChatUtils.ConversationUtil.getConversations();
   }
 
   @Override
@@ -64,7 +74,13 @@ public class ConversationAdapter extends BaseAdapter {
       holder = (ViewHolder) convertView.getTag();
     }
 
-    Conversation conversation = getItem(position);
+    final Conversation conversation = getItem(position);
+
+    if (conversation.getFavorite()) {
+      convertView.setBackgroundColor(parent.getResources().getColor(R.color.apptheme_primary_light_color_100));
+    } else {
+      convertView.setBackgroundColor(0x00000000);
+    }
 
     holder.mTvName.setText(conversation.getRelation());
     holder.mTvCircle.setText(conversation.getPostSource());
@@ -96,6 +112,13 @@ public class ConversationAdapter extends BaseAdapter {
 
     holder.mTvStatus.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(2), Color.GREEN));
 
+    holder.mFlPost.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        PostActivity.start(view.getContext(), conversation.getPostId());
+      }
+    });
+
     return convertView;
   }
 
@@ -117,12 +140,17 @@ public class ConversationAdapter extends BaseAdapter {
         Conversation conversation = mConversations.get(i);
         if (conversation.getId().equals(obj.getId())) {
           mConversations.set(i, obj);
+          Collections.sort(mConversations, sComparator);
           notifyDataSetChanged();
-          break;
+          return;
         }
       }
+
+      mConversations.add(obj);
+      Collections.sort(mConversations, sComparator);
+      notifyDataSetChanged();
     } else if (event.getStatus() == ChatEvent.EVENT_CONVERSATIONS_RELOAD) {
-      mConversations = DaoUtils.getConversationDao().loadAll();
+      mConversations = ChatUtils.ConversationUtil.getConversations();
       notifyDataSetChanged();
     }
   }
@@ -160,6 +188,9 @@ public class ConversationAdapter extends BaseAdapter {
 
     @InjectView(R.id.rb_unread)
     public RoundedButton mRbUnread;
+
+    @InjectView(R.id.fl_post)
+    public FrameLayout mFlPost;
 
 
     public ViewHolder(View view) {

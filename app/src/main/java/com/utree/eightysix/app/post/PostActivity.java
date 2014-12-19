@@ -12,10 +12,7 @@ import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import butterknife.InjectView;
-import butterknife.OnClick;
-import butterknife.OnItemClick;
-import butterknife.OnTextChanged;
+import butterknife.*;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.M;
@@ -63,6 +60,9 @@ public class PostActivity extends BaseActivity {
 
   @InjectView(R.id.fl_banner)
   public FrameLayout mFlBanner;
+
+  @InjectView(R.id.fl_post_comment)
+  public FrameLayout mFlPostComment;
 
   private Post mPost;
 

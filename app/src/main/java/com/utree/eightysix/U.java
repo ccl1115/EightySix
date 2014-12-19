@@ -10,6 +10,7 @@ import butterknife.ButterKnife;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.disklrucache.DiskLruCache;
+import com.loopj.android.http.SyncHttpClient;
 import com.squareup.otto.Bus;
 import com.squareup.otto.ThreadEnforcer;
 import com.utree.eightysix.app.BaseApplication;
@@ -209,7 +210,7 @@ public class U {
   public static IRESTRequester getRESTRequesterSync() {
     if (sRESTRequesterSync == null) {
       synchronized (lock) {
-        sRESTRequesterSync = new RESTRequesterSync(getConfig("api.host"), getConfig("api.host.second"));
+        sRESTRequesterSync = new RESTRequester(getConfig("api.host"), getConfig("api.host.second"), new SyncHttpClient());
       }
     }
     return sRESTRequesterSync;

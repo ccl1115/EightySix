@@ -7,6 +7,7 @@
     <color name="apptheme_primary_grey_color">#ffdddddd</color>
     <color name="apptheme_primary_grey_color_pressed">#ff898989</color>
     <color name="apptheme_primary_grey_color_disabled">#ffd8d8d8</color>
+    <color name="apptheme_primary_grey_color_200">#ff999999</color>
 
     <color name="apptheme_primary_transparent_color">#33000000</color>
     <color name="apptheme_primary_transparent_color_pressed">#88000000</color>
@@ -28,4 +29,6 @@
     <color name="apptheme_secondary_dark_color_disabled">#fff7f7f7</color>
 
     <color name="apptheme_top_bar_bg_color">#ff363940</color>
+
+    <color name="apptheme_primary_light_color_100">#12d60ff4</color>
 </resources>

@@ -105,7 +105,7 @@ public class C {
     /**
      * Tag for RESTRequest
      */
-    public static final String RR = "RESTRequest";
+    public static final String RR = "Request";
 
     public static final String NT = "Notification";
     public static final String ACCOUNT = "Account";

@@ -14,10 +14,7 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import butterknife.InjectView;
-import butterknife.OnClick;
-import butterknife.OnItemLongClick;
-import butterknife.OnTextChanged;
+import butterknife.*;
 import com.rockerhieu.emojicon.EmojiconEditText;
 import com.rockerhieu.emojicon.EmojiconGridFragment;
 import com.rockerhieu.emojicon.EmojiconsFragment;
@@ -203,6 +200,7 @@ public class ChatActivity extends BaseActivity implements
       }
       case ChatEvent.EVENT_SENDING_MSG: {
         mChatAdapter.add((Message) event.getObj());
+        mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
         break;
       }
       case ChatEvent.EVENT_MSG_REMOVE: {
@@ -290,9 +288,10 @@ public class ChatActivity extends BaseActivity implements
       finish();
     }
 
-    mChatAdapter.add(ChatUtils.MessageUtil.getConversation(mChatId, 0));
 
     mAlvChats.setAdapter(mChatAdapter);
+
+    mChatAdapter.add(ChatUtils.MessageUtil.getConversation(mChatId, 0));
     mAlvChats.setSelection(Integer.MAX_VALUE);
 
     U.getChatBus().register(this);
@@ -376,6 +375,7 @@ public class ChatActivity extends BaseActivity implements
               if (RESTRequester.responseOk(response)) {
                 mConversation.setFavorite(false);
                 DaoUtils.getConversationDao().update(mConversation);
+                U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, mConversation));
               } else {
                 ((ImageActionButton) getTopBar().getActionView(0))
                     .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
@@ -397,6 +397,7 @@ public class ChatActivity extends BaseActivity implements
               if (RESTRequester.responseOk(response)) {
                 mConversation.setFavorite(true);
                 DaoUtils.getConversationDao().update(mConversation);
+                U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, mConversation));
               } else {
                 ((ImageActionButton) getTopBar().getActionView(0))
                     .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_outline));
@@ -560,30 +561,14 @@ public class ChatActivity extends BaseActivity implements
   }
 
   private void addPostSummaryInfo() {
-    if (!ChatUtils.MessageUtil.hasPostSummaryMessage(mChatId)) {
-      Message message =
-          ChatUtils.infoMsg(mChatId,
-              "主题：" + (mPost.content.length() > 80 ? mPost.content.substring(0, 76) + "..." : mPost.content));
-
-      message.setType(MessageConst.TYPE_POST);
-      message.setTimestamp(0l);
-
-      DaoUtils.getMessageDao().insertOrReplace(message);
-      mChatAdapter.add(message);
-    }
+    Message message = ChatUtils.MessageUtil.addPostSummaryInfo(mChatId, mPost);
+    mChatAdapter.add(message);
   }
 
   private void addCommentSummaryInfo() {
-    if (!ChatUtils.MessageUtil.hasCommentSummaryMessage(mChatId, mComment.id)) {
-      Message message =
-          ChatUtils.infoMsg(mComment.chatId,
-              "评论：" + (mComment.content.length() > 80 ? mComment.content.substring(0, 76) + "..." : mComment.content));
-
-      message.setType(MessageConst.TYPE_COMMENT);
-
-      DaoUtils.getMessageDao().insertOrReplace(message);
-      mChatAdapter.add(message);
-    }
+    Message message = ChatUtils.MessageUtil.addCommentSummaryInfo(mChatId,
+        mChatAdapter.get(mChatAdapter.size() - 1).getTimestamp() - 1, mComment);
+    mChatAdapter.add(message);
   }
 
   @Override

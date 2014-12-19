@@ -47,9 +47,6 @@ public class Comment implements Parcelable {
   @SerializedName("distance")
   public String distance;
 
-  @SerializedName("chatId")
-  public String chatId = "";
-
   /**
    * 1 deleted
    * 0 not deleted

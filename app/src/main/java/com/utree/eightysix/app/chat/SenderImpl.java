@@ -14,6 +14,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseApplication;
 import com.utree.eightysix.app.chat.content.ImageContent;
 import com.utree.eightysix.app.chat.event.ChatEvent;
+import com.utree.eightysix.dao.Conversation;
 import com.utree.eightysix.dao.Message;
 import com.utree.eightysix.dao.MessageConst;
 import com.utree.eightysix.rest.OnResponse2;
@@ -108,7 +109,9 @@ public class SenderImpl implements Sender {
 
 
     DaoUtils.getMessageDao().insertOrReplace(message);
-    ChatUtils.ConversationUtil.setLastMessage(message);
+    Conversation conversation = ChatUtils.ConversationUtil.setLastMessage(message);
+    message.setStatus(MessageConst.STATUS_IN_PROGRESS);
+    U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, conversation));
     U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_SENDING_MSG, message));
 
   }

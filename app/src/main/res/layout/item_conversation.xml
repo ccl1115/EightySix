@@ -19,6 +19,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_gravity="center_vertical"
                 >
 
                 <com.utree.eightysix.widget.FontPortraitView
@@ -49,7 +50,7 @@
                         android:layout_toRightOf="@+id/fpv_portrait"
                         android:layout_toEndOf="@+id/fpv_portrait"
                         android:layout_below="@+id/tv_name"
-                        android:textColor="@color/apptheme_primary_grey_color"
+                        android:textColor="@color/apptheme_primary_grey_color_200"
                         android:textSize="12sp"
                         />
 
@@ -64,20 +65,22 @@
                 android:layout_alignTop="@+id/tv_time"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:textColor="@color/apptheme_primary_grey_color"
+                android:textColor="@color/apptheme_primary_grey_color_200"
                 android:textSize="12sp"
                         />
 
-                <TextView
+                <com.rockerhieu.emojicon.EmojiconTextView
                         android:id="@+id/tv_last"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/fpv_portrait"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginStart="16dp"
                         android:singleLine="true"
                         android:ellipsize="end"
+                        android:textSize="16sp"
+                        app:emojiconSize="24dp"
                         />
 
                 <TextView
@@ -97,6 +100,7 @@
         </RelativeLayout>
 
         <FrameLayout
+                android:id="@+id/fl_post"
                 android:layout_width="84dp"
                 android:layout_height="84dp"
                 android:padding="4dp"

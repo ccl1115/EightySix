@@ -41,8 +41,6 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
                 android:paddingTop="0dp"
                 android:paddingLeft="8dp"
                 android:paddingStart="8dp"
@@ -52,7 +50,6 @@
                 android:background="@drawable/bg_chat_edit_text"
                 android:maxLength="500"
                 android:maxHeight="100sp"
-                android:gravity="center_vertical"
                 android:hint="@string/anonymously_comment"
                 app:emojiconSize="24dp"
                 />

@@ -26,10 +26,6 @@ import de.akquinet.android.androlog.Log;
  */
 public class ChatAccount {
 
-  private static final int MSG_LOGIN_SUCCESS = 0x1;
-  private static final int MSG_LOGIN_ERROR = 0x2;
-  private static final int MSG_LOGIN_PROGRESS = 0x3;
-  private static final int MSG_RECEIVE_MSG = 0x4;
   private static ChatAccount sChatAccount;
   private NewMessageBroadcastReceiver mNewMessageBroadcastReceiver;
   private Sender mSender;
@@ -132,7 +128,6 @@ public class ChatAccount {
       final Message m = ChatUtils.convert(message);
 
       if (m != null) {
-        m.setStatus(MessageConst.STATUS_SUCCESS);
         new NewMessageWorker(m).execute();
       }
     }
@@ -154,6 +149,7 @@ public class ChatAccount {
 
     @Override
     protected Void doInBackground(Void... voids) {
+      mMessage.setStatus(MessageConst.STATUS_SUCCESS);
 
       if (mMessage.getCommentId() == null) {
         ChatUtils.ConversationUtil.createByPostIdIfNotExist(mMessage.getChatId(), mMessage.getPostId(),
@@ -162,6 +158,7 @@ public class ChatAccount {
               public void run(Object... params) {
                 DaoUtils.getMessageDao().insert(mMessage);
                 mPost = ((Post) params[0]);
+                ChatUtils.MessageUtil.addPostSummaryInfo(mMessage.getChatId(), mPost);
               }
             });
       } else {
@@ -172,11 +169,22 @@ public class ChatAccount {
                 DaoUtils.getMessageDao().insert(mMessage);
                 mPost = ((Post) params[0]);
                 mComment = ((Comment) params[1]);
+                ChatUtils.MessageUtil.addCommentSummaryInfo(mMessage.getChatId(), mMessage.getTimestamp() - 1, mComment);
               }
             });
       }
-      publishProgress(1);
 
+      if (mMessage.getChatId().equals(ChatActivity.getCurrentChatId())) {
+        // 收到的消息，对应的聊天页面在前台，则不通知该条消息
+        mMessage.setRead(true);
+      } else {
+        publishProgress(1);
+      }
+
+      DaoUtils.getMessageDao().insertOrReplace(mMessage);
+      publishProgress(5);
+
+      ChatUtils.ConversationUtil.updateUnreadCount(mMessage.getChatId());
       mUnreadConversationCount = ChatUtils.ConversationUtil.getUnreadConversationCount();
       publishProgress(2);
 
@@ -204,6 +212,8 @@ public class ChatAccount {
         case 4:
           U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, mConversation));
           break;
+        case 5:
+          U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_RECEIVE_MSG, mMessage));
       }
     }
   }
