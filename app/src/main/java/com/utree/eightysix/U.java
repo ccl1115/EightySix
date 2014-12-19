@@ -3,6 +3,7 @@ package com.utree.eightysix;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Toast;
 import butterknife.ButterKnife;
@@ -24,11 +25,8 @@ import com.utree.eightysix.qrcode.ActionDispatcher;
 import com.utree.eightysix.qrcode.actions.AddFriendAction;
 import com.utree.eightysix.report.Reporter;
 import com.utree.eightysix.report.ReporterImpl;
-import com.utree.eightysix.rest.IRESTRequester;
-import com.utree.eightysix.rest.OnResponse;
-import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.*;
 import com.utree.eightysix.rest.bus.RequestBus;
-import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.statistics.Analyser;
 import com.utree.eightysix.statistics.MtaAnalyserImpl;
 import com.utree.eightysix.storage.Storage;
@@ -56,6 +54,7 @@ public class U {
   private static Analyser sStatistics;
   private static Storage sCloudStorage;
   private static IRESTRequester sRESTRequester;
+  private static IRESTRequester sRESTRequesterSync;
   private static CacheUtils sCacheUtils;
   private static Reporter sReporter;
   private static ShareManager sShareManager;
@@ -205,6 +204,15 @@ public class U {
       sRESTRequester = new RESTRequester(getConfig("api.host"), getConfig("api.host.second"));
     }
     return sRESTRequester;
+  }
+
+  public static IRESTRequester getRESTRequesterSync() {
+    if (sRESTRequesterSync == null) {
+      synchronized (lock) {
+        sRESTRequesterSync = new RESTRequesterSync(getConfig("api.host"), getConfig("api.host.second"));
+      }
+    }
+    return sRESTRequesterSync;
   }
 
   private static CacheUtils getCacheUtils() {
@@ -391,14 +399,29 @@ public class U {
   /**
    * Easily show a un-managed toast
    *
+   * If call this method in other thread, it will post a runnable to the main thread.
+   *
    * @param string the string to show
    */
-  public static void showToast(String string) {
-    if (sToast != null) {
-      sToast.cancel();
+  public static void showToast(final String string) {
+    if (Looper.getMainLooper() != Looper.myLooper()) {
+      BaseApplication.getHandler().post(new Runnable() {
+        @Override
+        public void run() {
+          if (sToast != null) {
+            sToast.cancel();
+          }
+          sToast = Toast.makeText(getContext(), string, Toast.LENGTH_SHORT);
+          sToast.show();
+        }
+      });
+    } else {
+      if (sToast != null) {
+        sToast.cancel();
+      }
+      sToast = Toast.makeText(getContext(), string, Toast.LENGTH_SHORT);
+      sToast.show();
     }
-    sToast = Toast.makeText(getContext(), string, Toast.LENGTH_SHORT);
-    sToast.show();
   }
 
   private static ActionDispatcher sActionDispatcher;
@@ -415,15 +438,15 @@ public class U {
   }
 
   public static EntryLogger getAppLogger() {
-    M.checkThread();
-
     if (sEntryLogger == null) {
-      sEntryLogger = new EntryLogger() {
-        @Override
-        public <T extends EntryAdapter> void log(T entryAdapter) {
+      synchronized (lock) {
+        sEntryLogger = new EntryLogger() {
+          @Override
+          public <T extends EntryAdapter> void log(T entryAdapter) {
 
-        }
-      };
+          }
+        };
+      }
     }
 
     return sEntryLogger;

@@ -45,13 +45,19 @@ public class ConversationActivity extends BaseActivity {
   private ConversationAdapter mConversationAdapter;
 
   public static void start(Context context) {
+
+    context.startActivity(getIntent(context));
+  }
+
+  public static Intent getIntent(Context context) {
+
     Intent intent = new Intent(context, ConversationActivity.class);
 
     if (!(context instanceof Activity)) {
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     }
 
-    context.startActivity(intent);
+    return intent;
   }
 
   public static boolean isInConversation() {
@@ -67,7 +73,7 @@ public class ConversationActivity extends BaseActivity {
     Conversation conversation = mConversationAdapter.getItem(position);
     Post post = new Post();
     post.id = conversation.getPostId();
-    post.shortName = conversation.getChatSource();
+    post.shortName = conversation.getPostSource();
     post.content = conversation.getPostContent();
     if (conversation.getCommentId() != null) {
       Comment comment = new Comment();

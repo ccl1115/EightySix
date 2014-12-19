@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.text.SpannableString;
@@ -29,7 +30,9 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.AccountActivity;
 import com.utree.eightysix.app.account.AddFriendActivity;
+import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.app.chat.ConversationActivity;
+import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
 import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
@@ -312,6 +315,20 @@ public class HomeActivity extends BaseActivity {
       }
     });
 
+    U.getChatBus().register(this);
+
+    (new AsyncTask<Void, Void, Long>() {
+      @Override
+      protected Long doInBackground(Void... voids) {
+        return ChatUtils.ConversationUtil.getUnreadConversationCount();
+      }
+
+      @Override
+      protected void onPostExecute(Long aLong) {
+        mTopBar.getActionView(0).setCount(aLong.intValue());
+      }
+    }).execute();
+
     onNewIntent(getIntent());
   }
 
@@ -319,6 +336,8 @@ public class HomeActivity extends BaseActivity {
   protected void onDestroy() {
     Env.setFirstRun(FIRST_RUN_KEY, false);
     super.onDestroy();
+
+    U.getChatBus().unregister(this);
   }
 
   @Override
@@ -344,7 +363,16 @@ public class HomeActivity extends BaseActivity {
         mMenuViewHolder.mRbSettingsDot.setVisibility(View.INVISIBLE);
       }
     }
+
   }
+
+  @Subscribe
+  public void onChatEvent(ChatEvent event) {
+    if (event.getStatus() == ChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT) {
+      mTopBar.getActionView(0).setCount(((Long) event.getObj()).intValue());
+    }
+  }
+
 
   @Override
   @Subscribe

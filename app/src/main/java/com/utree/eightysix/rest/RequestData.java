@@ -22,6 +22,7 @@ public class RequestData<RES extends Response> {
   org.apache.http.Header[] headers;
   long requestTime;
   String host;
+  boolean token;
 
   Class<RES> resClz;
 
@@ -48,7 +49,7 @@ public class RequestData<RES extends Response> {
       this.log = log != null;
 
       Token token = clz.getAnnotation(Token.class);
-      if (token != null && Account.inst().isLogin()) {
+      if ((token != null || this.token) && Account.inst().isLogin()) {
         params.add("userId", Account.inst().getUserId());
         params.add("token", Account.inst().getToken());
       }

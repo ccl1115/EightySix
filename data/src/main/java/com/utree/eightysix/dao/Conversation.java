@@ -10,13 +10,14 @@ public class Conversation {
     /** Not-null value. */
     private String chatId;
     private String postId;
+    private String postSource;
+    private String postContent;
     private String commentId;
     private String lastMsg;
     private String portrait;
     private String bgUrl;
-    private String postContent;
+    private String bgColor;
     private String commentContent;
-    private String chatSource;
     private String relation;
     private Long timestamp;
     private Long unreadCount;
@@ -29,17 +30,18 @@ public class Conversation {
         this.id = id;
     }
 
-    public Conversation(Long id, String chatId, String postId, String commentId, String lastMsg, String portrait, String bgUrl, String postContent, String commentContent, String chatSource, String relation, Long timestamp, Long unreadCount, Boolean favorite) {
+    public Conversation(Long id, String chatId, String postId, String postSource, String postContent, String commentId, String lastMsg, String portrait, String bgUrl, String bgColor, String commentContent, String relation, Long timestamp, Long unreadCount, Boolean favorite) {
         this.id = id;
         this.chatId = chatId;
         this.postId = postId;
+        this.postSource = postSource;
+        this.postContent = postContent;
         this.commentId = commentId;
         this.lastMsg = lastMsg;
         this.portrait = portrait;
         this.bgUrl = bgUrl;
-        this.postContent = postContent;
+        this.bgColor = bgColor;
         this.commentContent = commentContent;
-        this.chatSource = chatSource;
         this.relation = relation;
         this.timestamp = timestamp;
         this.unreadCount = unreadCount;
@@ -70,6 +72,22 @@ public class Conversation {
 
     public void setPostId(String postId) {
         this.postId = postId;
+    }
+
+    public String getPostSource() {
+        return postSource;
+    }
+
+    public void setPostSource(String postSource) {
+        this.postSource = postSource;
+    }
+
+    public String getPostContent() {
+        return postContent;
+    }
+
+    public void setPostContent(String postContent) {
+        this.postContent = postContent;
     }
 
     public String getCommentId() {
@@ -104,12 +122,12 @@ public class Conversation {
         this.bgUrl = bgUrl;
     }
 
-    public String getPostContent() {
-        return postContent;
+    public String getBgColor() {
+        return bgColor;
     }
 
-    public void setPostContent(String postContent) {
-        this.postContent = postContent;
+    public void setBgColor(String bgColor) {
+        this.bgColor = bgColor;
     }
 
     public String getCommentContent() {
@@ -118,14 +136,6 @@ public class Conversation {
 
     public void setCommentContent(String commentContent) {
         this.commentContent = commentContent;
-    }
-
-    public String getChatSource() {
-        return chatSource;
-    }
-
-    public void setChatSource(String chatSource) {
-        this.chatSource = chatSource;
     }
 
     public String getRelation() {

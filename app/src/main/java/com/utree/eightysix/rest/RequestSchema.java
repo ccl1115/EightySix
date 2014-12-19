@@ -78,6 +78,9 @@ public class RequestSchema {
         } else if ("sign".equals(parser.getName())) {
           android.util.Log.d("RequestSchema", "sign");
           data.sign = true;
+        } else if ("token".equals(parser.getName())) {
+          android.util.Log.d("RequestSchema", "token");
+          data.token = true;
         } else if ("cache".equals(parser.getName())) {
           android.util.Log.d("RequestSchema", "cache");
           data.cache = true;

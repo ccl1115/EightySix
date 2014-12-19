@@ -5,6 +5,7 @@
 package com.utree.eightysix.app.chat;
 
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.DaoUtils;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.FontPortraitView;
+import com.utree.eightysix.widget.RoundedButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,15 +67,21 @@ public class ConversationAdapter extends BaseAdapter {
     Conversation conversation = getItem(position);
 
     holder.mTvName.setText(conversation.getRelation());
-    holder.mTvCircle.setText(conversation.getChatSource());
+    holder.mTvCircle.setText(conversation.getPostSource());
     holder.mTvLast.setText(conversation.getLastMsg());
     holder.mFpvPortrait.setText("\ue800");
     holder.mTvContent.setText(conversation.getPostContent());
-    if (conversation.getBgUrl().startsWith("http")) {
-      holder.mAivPostBg.setUrl(conversation.getBgUrl());
+    int unread = conversation.getUnreadCount().intValue();
+    if (unread > 99) {
+      holder.mRbUnread.setText("99+");
     } else {
+      holder.mRbUnread.setText(String.valueOf(unread));
+    }
+    if (TextUtils.isEmpty(conversation.getBgUrl())) {
+      holder.mAivPostBg.setBackgroundColor(ColorUtil.strToColor(conversation.getBgColor()));
       holder.mAivPostBg.setUrl(null);
-      holder.mAivPostBg.setBackgroundColor(ColorUtil.strToColor(conversation.getBgUrl()));
+    } else {
+      holder.mAivPostBg.setUrl(conversation.getBgUrl());
     }
     holder.mTvLast.setText(conversation.getLastMsg());
     holder.mTvTime.setText(ChatUtils.timestamp(conversation.getTimestamp()));
@@ -144,6 +152,9 @@ public class ConversationAdapter extends BaseAdapter {
 
     @InjectView(R.id.aiv_post_bg)
     public AsyncImageView mAivPostBg;
+
+    @InjectView(R.id.rb_unread)
+    public RoundedButton mRbUnread;
 
 
     public ViewHolder(View view) {

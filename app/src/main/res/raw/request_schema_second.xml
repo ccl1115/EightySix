@@ -4,6 +4,7 @@
         <name>获取chatId</name>
         <path>/im/get/chatId</path>
         <sign/>
+        <token/>
         <params>
             <param>postId</param>
             <param>commentId</param>
@@ -15,6 +16,7 @@
         <name>发私聊</name>
         <path>/commit/im/send/privateChat</path>
         <sign/>
+        <token/>
         <params>
             <param>chatId</param>
             <param>msgType</param>
@@ -29,6 +31,7 @@
         <name>举报聊天会话</name>
         <path>/commit/im/report/chat</path>
         <sign/>
+        <token/>
         <params>
             <param>chatId</param>
         </params>
@@ -39,6 +42,7 @@
         <name>收藏聊天会话</name>
         <path>/commit/im/favorite/addChat</path>
         <sign/>
+        <token/>
         <params>
             <param>chatId</param>
         </params>
@@ -49,6 +53,7 @@
         <name>取消收藏聊天会话</name>
         <path>/commit/im/favorite/delChat</path>
         <sign/>
+        <token/>
         <params>
             <param>chatId</param>
         </params>
@@ -59,6 +64,7 @@
         <name>聊天会话收藏列表</name>
         <path>/im/favorite/chat</path>
         <sign/>
+        <token/>
         <responseClz>ChatFavListResponse</responseClz>
     </request>
 
@@ -67,6 +73,7 @@
         <name>聊天会话在线列表</name>
         <path>/im/chat/onlineStatus</path>
         <sign/>
+        <token/>
         <params>
             <param>chatId</param>
         </params>

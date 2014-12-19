@@ -41,6 +41,11 @@ public class ChatEvent {
    */
   public static final int EVENT_CONVERSATIONS_RELOAD = 32;
 
+  /**
+   * Event fire when db return unread conversation count
+   */
+  public static final int EVENT_UPDATE_UNREAD_CONVERSATION_COUNT = 100;
+
   private int mStatus;
 
   private Object mObj;

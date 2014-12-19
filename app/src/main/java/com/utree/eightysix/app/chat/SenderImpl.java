@@ -108,7 +108,7 @@ public class SenderImpl implements Sender {
 
 
     DaoUtils.getMessageDao().insertOrReplace(message);
-    ChatUtils.ConversationUtil.setLastMessage(message.getChatId(), message);
+    ChatUtils.ConversationUtil.setLastMessage(message);
     U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_SENDING_MSG, message));
 
   }

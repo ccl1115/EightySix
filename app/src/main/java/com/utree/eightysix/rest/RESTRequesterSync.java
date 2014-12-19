@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2014. All rights reserved by utree.cn
+ */
+
 package com.utree.eightysix.rest;
 
 import android.os.Build;
@@ -5,6 +9,7 @@ import com.baidu.android.common.util.CommonParam;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.ResponseHandlerInterface;
+import com.loopj.android.http.SyncHttpClient;
 import com.utree.eightysix.*;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.MD5Util;
@@ -14,19 +19,19 @@ import org.apache.http.params.HttpProtocolParams;
 
 /**
  */
-public class RESTRequester implements IRESTRequester {
+public class RESTRequesterSync implements IRESTRequester {
 
-  private AsyncHttpClient mAsyncHttpClient;
+  private AsyncHttpClient mSyncHttpClient;
 
   private RequestSchema mRequestSchema;
 
   private String mHost;
 
-  public RESTRequester(String host, String secondHost) {
+  public RESTRequesterSync(String host, String secondHost) {
     mHost = host;
-    mAsyncHttpClient = new AsyncHttpClient();
-    mAsyncHttpClient.setTimeout(U.getConfigInt("api.timeout"));
-    mAsyncHttpClient.setMaxRetriesAndTimeout(U.getConfigInt("api.retry"), U.getConfigInt("api.retry.timeout"));
+    mSyncHttpClient = new SyncHttpClient();
+    mSyncHttpClient.setTimeout(U.getConfigInt("api.timeout"));
+    mSyncHttpClient.setMaxRetriesAndTimeout(U.getConfigInt("api.retry"), U.getConfigInt("api.retry.timeout"));
 
     mRequestSchema = new RequestSchema();
     mRequestSchema.load(U.getContext(), secondHost, R.raw.request_schema_second);
@@ -50,7 +55,7 @@ public class RESTRequester implements IRESTRequester {
 
   @Override
   public AsyncHttpClient getClient() {
-    return mAsyncHttpClient;
+    return mSyncHttpClient;
   }
 
   @Override
@@ -111,26 +116,26 @@ public class RESTRequester implements IRESTRequester {
   public RequestHandle get(String api, Header[] headers, RequestParams params, ResponseHandlerInterface handler) {
     if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "   get: " + mHost + api);
     if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "params: " + params.toString());
-    return mAsyncHttpClient.get(U.getContext(), mHost + api, headers, params, handler);
+    return mSyncHttpClient.get(U.getContext(), mHost + api, headers, params, handler);
   }
 
   @Override
   public RequestHandle post(String api, Header[] headers, RequestParams params, String contentType, ResponseHandlerInterface handler) {
     if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "  post: " + mHost + api);
     if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "params: " + params.toString());
-    return mAsyncHttpClient.post(U.getContext(), mHost + api, headers, params, contentType, handler);
+    return mSyncHttpClient.post(U.getContext(), mHost + api, headers, params, contentType, handler);
   }
 
   private RequestHandle post(String host, String path, Header[] headers, RequestParams params, String contentType, ResponseHandlerInterface handler) {
     if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "  post: " + host + path);
     if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "params: " + params.toString());
-    return mAsyncHttpClient.post(U.getContext(), host + path, headers, params, contentType, handler);
+    return mSyncHttpClient.post(U.getContext(), host + path, headers, params, contentType, handler);
   }
 
   private RequestHandle get(String host, String path, Header[] headers, RequestParams params, ResponseHandlerInterface handler) {
     if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "  post: " + host + path);
     if (BuildConfig.DEBUG) Log.d(C.TAG.RR, "params: " + params.toString());
-    return mAsyncHttpClient.get(U.getContext(), host + path, headers, params, handler);
+    return mSyncHttpClient.get(U.getContext(), host + path, headers, params, handler);
   }
 
   @Override
@@ -176,6 +181,6 @@ public class RESTRequester implements IRESTRequester {
   }
 
   private void compact() {
-    HttpProtocolParams.setUseExpectContinue(mAsyncHttpClient.getHttpClient().getParams(), false);
+    HttpProtocolParams.setUseExpectContinue(mSyncHttpClient.getHttpClient().getParams(), false);
   }
 }

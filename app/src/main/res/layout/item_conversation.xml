@@ -5,49 +5,15 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:padding="8dp"
               android:orientation="horizontal"
               android:baselineAligned="false"
               android:background="@drawable/apptheme_primary_list_selector"
         >
 
-        <FrameLayout
-                android:layout_width="84dp"
-                android:layout_height="84dp"
-                android:background="@color/apptheme_primary_grey_color"
-                >
-
-                <com.utree.eightysix.widget.AsyncImageView
-                        android:id="@+id/aiv_post_bg"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        />
-
-
-                <View
-                        android:id="@+id/v_mask"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="#44000000"
-                        />
-
-                <TextView
-                        android:id="@+id/tv_content"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:textColor="@android:color/white"
-                        android:textSize="10sp"
-                        android:padding="8dp"
-                        android:ellipsize="end"
-                        android:maxLines="4"
-                        tools:ignore="SmallSp"
-                        />
-
-        </FrameLayout>
 
         <RelativeLayout
                 android:layout_width="0dp"
@@ -73,7 +39,7 @@
                         android:layout_toLeftOf="@+id/tv_status"
                         android:layout_toStartOf="@+id/tv_status"
                         android:layout_marginTop="8dp"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         />
 
                 <TextView
@@ -90,16 +56,16 @@
                 <TextView
                         android:id="@+id/tv_circle"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@+id/tv_time"
-                        android:layout_toEndOf="@+id/tv_time"
-                        android:layout_toLeftOf="@+id/tv_status"
-                        android:layout_toStartOf="@+id/tv_status"
-                        android:layout_alignTop="@+id/tv_time"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:textColor="@color/apptheme_primary_grey_color"
-                        android:textSize="12sp"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tv_time"
+                android:layout_toEndOf="@+id/tv_time"
+                android:layout_toLeftOf="@+id/tv_status"
+                android:layout_toStartOf="@+id/tv_status"
+                android:layout_alignTop="@+id/tv_time"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:textColor="@color/apptheme_primary_grey_color"
+                android:textSize="12sp"
                         />
 
                 <TextView
@@ -129,4 +95,60 @@
                         android:paddingBottom="2dp"
                         />
         </RelativeLayout>
+
+        <FrameLayout
+                android:layout_width="84dp"
+                android:layout_height="84dp"
+                android:padding="4dp"
+                >
+
+                <com.utree.eightysix.widget.AsyncImageView
+                        android:id="@+id/aiv_post_bg"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="4dp"
+                        />
+
+
+                <View
+                        android:id="@+id/v_mask"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_margin="4dp"
+                        android:background="#44000000"
+                        />
+
+                <TextView
+                        android:id="@+id/tv_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="8dp"
+                        android:gravity="center"
+                        android:textColor="@android:color/white"
+                        android:textSize="10sp"
+                        android:padding="4dp"
+                        android:ellipsize="end"
+                        android:maxLines="4"
+                        tools:ignore="SmallSp"
+                        />
+
+                <com.utree.eightysix.widget.RoundedButton
+                        android:id="@+id/rb_unread"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:textSize="12sp"
+                        android:minHeight="0dp"
+                        android:paddingLeft="5dp"
+                        android:paddingStart="5dp"
+                        android:paddingRight="5dp"
+                        android:paddingEnd="5dp"
+                        android:textColor="@android:color/white"
+                        app:radius="10dp"
+                        app:background="@color/apptheme_secondary_light_color"
+                        />
+
+        </FrameLayout>
+
 </LinearLayout>

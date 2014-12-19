@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
@@ -11,8 +12,13 @@ import com.squareup.otto.Subscribe;
 import com.utree.eightysix.*;
 import com.utree.eightysix.app.BaseApplication;
 import com.utree.eightysix.app.chat.event.ChatEvent;
+import com.utree.eightysix.dao.Conversation;
 import com.utree.eightysix.dao.Message;
+import com.utree.eightysix.dao.MessageConst;
+import com.utree.eightysix.data.Comment;
+import com.utree.eightysix.data.Post;
 import com.utree.eightysix.utils.DaoUtils;
+import com.utree.eightysix.utils.ParamsRunnable;
 import de.akquinet.android.androlog.Log;
 
 /**
@@ -36,6 +42,8 @@ public class ChatAccount {
   public static ChatAccount inst() {
     if (sChatAccount == null) {
       sChatAccount = new ChatAccount();
+      // 不使用环信默认的通知提醒
+      EMChatManager.getInstance().getChatOptions().setNotificationEnable(false);
       sChatAccount.login();
     }
     return sChatAccount;
@@ -121,19 +129,81 @@ public class ChatAccount {
       Log.d(C.TAG.CH, "onReceiveMessage");
       Log.d(C.TAG.CH, message.toString());
 
-      Message m = ChatUtils.convert(message);
-
+      final Message m = ChatUtils.convert(message);
 
       if (m != null) {
-        if (m.getCommentId() == null) {
-          ChatUtils.ConversationUtil.createByPostIdIfNotExist(m.getChatId(), m.getPostId());
-        } else {
-          ChatUtils.ConversationUtil.createByPostCommentIdIfNotExist(m.getChatId(), m.getPostId(), m.getCommentId());
-        }
+        m.setStatus(MessageConst.STATUS_SUCCESS);
+        new NewMessageWorker(m).execute();
+      }
+    }
+  }
 
-        DaoUtils.getMessageDao().insert(m);
-        ChatUtils.NotifyUtil.notifyNewMessage(m);
-        U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_RECEIVE_MSG, m));
+  private class NewMessageWorker extends AsyncTask<Void, Integer, Void> {
+
+
+    private Message mMessage;
+
+    private long mUnreadConversationCount;
+    private Post mPost;
+    private Comment mComment;
+    private Conversation mConversation;
+
+    public NewMessageWorker(Message message) {
+      mMessage = message;
+    }
+
+    @Override
+    protected Void doInBackground(Void... voids) {
+
+      if (mMessage.getCommentId() == null) {
+        ChatUtils.ConversationUtil.createByPostIdIfNotExist(mMessage.getChatId(), mMessage.getPostId(),
+            new ParamsRunnable() {
+              @Override
+              public void run(Object... params) {
+                DaoUtils.getMessageDao().insert(mMessage);
+                mPost = ((Post) params[0]);
+              }
+            });
+      } else {
+        ChatUtils.ConversationUtil.createByPostCommentIdIfNotExist(mMessage.getChatId(), mMessage.getPostId(), mMessage.getCommentId(),
+            new ParamsRunnable() {
+              @Override
+              public void run(Object... params) {
+                DaoUtils.getMessageDao().insert(mMessage);
+                mPost = ((Post) params[0]);
+                mComment = ((Comment) params[1]);
+              }
+            });
+      }
+      publishProgress(1);
+
+      mUnreadConversationCount = ChatUtils.ConversationUtil.getUnreadConversationCount();
+      publishProgress(2);
+
+      mConversation = ChatUtils.ConversationUtil.setLastMessage(mMessage);
+      publishProgress(3);
+
+      mConversation = ChatUtils.ConversationUtil.updateUnreadCount(mMessage.getChatId());
+      publishProgress(4);
+
+      return null;
+    }
+
+    @Override
+    protected void onProgressUpdate(Integer... values) {
+      switch (values[0]) {
+        case 1:
+          ChatUtils.NotifyUtil.notifyNewMessage(mMessage, mPost, mComment);
+          break;
+        case 2:
+          U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT, mUnreadConversationCount));
+          break;
+        case 3:
+          U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, mConversation));
+          break;
+        case 4:
+          U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, mConversation));
+          break;
       }
     }
   }

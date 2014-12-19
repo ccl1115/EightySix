@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -96,6 +97,11 @@ public class ChatActivity extends BaseActivity implements
   private boolean mIsOpened;
 
   static void start(Context context, String chatId, Post post, Comment comment) {
+    context.startActivity(getIntent(context, chatId, post, comment));
+  }
+
+  static Intent getIntent(Context context, String chatId, Post post, Comment comment) {
+
     Intent intent = new Intent(context, ChatActivity.class);
     intent.putExtra("chatId", chatId);
     intent.putExtra("post", post);
@@ -105,7 +111,7 @@ public class ChatActivity extends BaseActivity implements
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     }
 
-    context.startActivity(intent);
+    return intent;
   }
 
   public static String getCurrentChatId() {
@@ -423,6 +429,34 @@ public class ChatActivity extends BaseActivity implements
   protected void onResume() {
     super.onResume();
     sCurrentChatId = mChatId;
+
+    (new AsyncTask<Void, Integer, Void>() {
+
+      private Long mUnreadConversationCount;
+      private Conversation mConversation;
+
+      @Override
+      protected Void doInBackground(Void... voids) {
+        mConversation = ChatUtils.MessageUtil.setRead(mChatId);
+        publishProgress(1);
+
+        mUnreadConversationCount = ChatUtils.ConversationUtil.getUnreadConversationCount();
+        publishProgress(2);
+        return null;
+      }
+
+      @Override
+      protected void onProgressUpdate(Integer... values) {
+        switch (values[0]) {
+          case 1:
+            U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, mConversation));
+            break;
+          case 2:
+            U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT, mUnreadConversationCount));
+            break;
+        }
+      }
+    }).execute();
   }
 
   @Override
@@ -485,7 +519,7 @@ public class ChatActivity extends BaseActivity implements
               public void onResponse(Response response) {
                 if (RESTRequester.responseOk(response)) {
                   showToast(getString(R.string.report_success));
-                  ChatUtils.ConversationUtil.deleteConversation(mPost.id);
+                  ChatUtils.ConversationUtil.deleteConversation(mChatId);
                   finish();
                 }
                 dialogInterface.dismiss();
@@ -513,7 +547,7 @@ public class ChatActivity extends BaseActivity implements
           @Override
           public void onClick(DialogInterface dialogInterface, int i) {
             dialogInterface.dismiss();
-            ChatUtils.ConversationUtil.deleteConversation(mPost.id);
+            ChatUtils.ConversationUtil.deleteConversation(mChatId);
             finish();
           }
         })
@@ -532,6 +566,7 @@ public class ChatActivity extends BaseActivity implements
               "主题：" + (mPost.content.length() > 80 ? mPost.content.substring(0, 76) + "..." : mPost.content));
 
       message.setType(MessageConst.TYPE_POST);
+      message.setTimestamp(0l);
 
       DaoUtils.getMessageDao().insertOrReplace(message);
       mChatAdapter.add(message);

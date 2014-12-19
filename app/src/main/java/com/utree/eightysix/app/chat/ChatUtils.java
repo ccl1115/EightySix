@@ -6,26 +6,33 @@ package com.utree.eightysix.app.chat;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.C;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.chat.event.ChatEvent;
+import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.dao.*;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
-import com.utree.eightysix.request.PostDeleteRequest;
+import com.utree.eightysix.request.PostCommentsRequest;
 import com.utree.eightysix.response.ChatIdResponse;
 import com.utree.eightysix.response.PostCommentsResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.utils.DaoUtils;
+import com.utree.eightysix.utils.ParamsRunnable;
+import de.akquinet.android.androlog.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,6 +50,7 @@ public class ChatUtils {
 
     try {
       m.setChatId(message.getStringAttribute("chatId"));
+      Log.d(C.TAG.CH, "receive chatId: " + m.getChatId());
     } catch (EaseMobException e) {
       return null;
     }
@@ -198,7 +206,7 @@ public class ChatUtils {
     public static String getChatIdByPost(Post post) {
       Conversation conversation = DaoUtils.getConversationDao().queryBuilder()
           .where(ConversationDao.Properties.PostId.eq(post.id),
-              ConversationDao.Properties.CommentId.isNotNull())
+              ConversationDao.Properties.CommentId.isNull())
           .unique();
 
       return conversation != null ? conversation.getChatId() : null;
@@ -218,14 +226,11 @@ public class ChatUtils {
           .where(ConversationDao.Properties.ChatId.eq(chatId))
           .unique() == null) {
         Conversation conversation = new Conversation();
-        if (post.bgUrl.startsWith("http")) {
-          conversation.setBgUrl(post.bgUrl);
-        } else {
-          conversation.setBgUrl(post.bgColor);
-        }
         conversation.setChatId(chatId);
-        conversation.setChatSource(post.shortName);
         conversation.setPostId(post.id);
+        conversation.setPostSource(post.shortName);
+        conversation.setBgUrl(post.bgUrl);
+        conversation.setBgColor(post.bgColor);
         conversation.setLastMsg("");
         conversation.setRelation(post.viewType == 3 ? "认识的人" : "陌生人");
         conversation.setPostContent(post.content);
@@ -242,13 +247,10 @@ public class ChatUtils {
           .where(ConversationDao.Properties.ChatId.eq(chatId))
           .unique() == null) {
         Conversation conversation = new Conversation();
-        if (post.bgUrl.startsWith("http")) {
-          conversation.setBgUrl(post.bgUrl);
-        } else {
-          conversation.setBgUrl(post.bgColor);
-        }
         conversation.setChatId(chatId);
-        conversation.setChatSource(post.shortName);
+        conversation.setPostSource(post.shortName);
+        conversation.setBgUrl(post.bgUrl);
+        conversation.setBgColor(post.bgColor);
         conversation.setPostId(post.id);
         conversation.setCommentId(comment.id);
         conversation.setLastMsg("");
@@ -303,44 +305,22 @@ public class ChatUtils {
       U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATIONS_RELOAD, null));
     }
 
-    public static Message getLastMessage(String chatId) {
-      return DaoUtils.getMessageDao().queryBuilder().where(MessageDao.Properties.ChatId.eq(chatId)).limit(1).unique();
-    }
-
-    public static void setLastMessage(String chatId, Message message) {
+    public static Conversation setLastMessage(Message message) {
       Conversation conversation = DaoUtils.getConversationDao().queryBuilder()
-          .where(ConversationDao.Properties.ChatId.eq(chatId)).unique();
+          .where(ConversationDao.Properties.ChatId.eq(message.getChatId()))
+          .limit(1).unique();
 
       if (conversation != null) {
         conversation.setLastMsg(message.getContent());
         conversation.setTimestamp(message.getTimestamp());
         DaoUtils.getConversationDao().update(conversation);
-        U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, conversation));
+        return conversation;
+      } else {
+        return null;
       }
     }
 
-    public static void updateLastMessage(String chatId) {
-      Conversation conversation = DaoUtils.getConversationDao().queryBuilder()
-          .where(ConversationDao.Properties.ChatId.eq(chatId)).unique();
-
-      if (conversation != null) {
-        Message message = DaoUtils.getMessageDao().queryBuilder()
-            .where(MessageDao.Properties.ChatId.eq(chatId))
-            .whereOr(MessageDao.Properties.Type.eq(MessageConst.TYPE_TXT), MessageDao.Properties.Type.eq(MessageConst.TYPE_IMAGE))
-            .unique();
-
-        if (message != null) {
-          conversation.setLastMsg(message.getContent());
-          conversation.setTimestamp(message.getTimestamp());
-        } else {
-          conversation.setLastMsg("");
-        }
-
-        DaoUtils.getConversationDao().update(conversation);
-      }
-    }
-
-    public static void updateUnreadCount(String chatId) {
+    public static Conversation updateUnreadCount(String chatId) {
       Conversation conversation = getByChatId(chatId);
 
       if (conversation != null) {
@@ -349,25 +329,17 @@ public class ChatUtils {
             .count();
         conversation.setUnreadCount(count);
 
-        DaoUtils.getConversationDao().updateInTx(conversation);
+        DaoUtils.getConversationDao().update(conversation);
+        return conversation;
+      } else {
+        return null;
       }
     }
 
-    /**
-     * Callback received by event status {@link com.utree.eightysix.app.chat.event.ChatEvent#EVENT_CONVERSATION_UPDATE}
-     *
-     * @param chatId the chat id of a conversation
-     */
-    public static void increaseUnreadCount(String chatId) {
-      Conversation conversation = getByChatId(chatId);
-
-      if (conversation != null) {
-        conversation.setUnreadCount(conversation.getUnreadCount() + 1);
-      }
-
-      DaoUtils.getConversationDao().update(conversation);
-
-      U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, conversation));
+    public static long getUnreadConversationCount() {
+      return DaoUtils.getConversationDao().queryBuilder()
+          .where(ConversationDao.Properties.UnreadCount.gt(0))
+          .count();
     }
 
     /**
@@ -387,9 +359,10 @@ public class ChatUtils {
      * @param chatId the id of the conversation
      * @param postId the id of the post
      */
-    public static void createByPostIdIfNotExist(final String chatId, String postId) {
-      if (getByChatId(chatId) == null) {
-        U.request(new PostDeleteRequest(postId), new OnResponse2<PostCommentsResponse>() {
+    public static void createByPostIdIfNotExist(final String chatId, String postId, final ParamsRunnable runnable) {
+      Conversation conversation = getByChatId(chatId);
+      if (conversation == null) {
+        U.getRESTRequesterSync().request(new PostCommentsRequest(postId, 0, 0, 0, 1), new OnResponse2<PostCommentsResponse>() {
           @Override
           public void onResponseError(Throwable e) {
 
@@ -399,9 +372,16 @@ public class ChatUtils {
           public void onResponse(PostCommentsResponse response) {
             if (RESTRequester.responseOk(response)) {
               createIfNotExist(chatId, response.object.post);
+              runnable.run(response.object.post);
             }
           }
         }, PostCommentsResponse.class);
+      } else {
+        Post post = new Post();
+        post.id = conversation.getPostId();
+        post.content = conversation.getPostContent();
+        post.source = conversation.getPostSource();
+        runnable.run(post);
       }
     }
 
@@ -412,9 +392,10 @@ public class ChatUtils {
      * @param postId    the id of the post
      * @param commentId the comment of the post
      */
-    public static void createByPostCommentIdIfNotExist(final String chatId, String postId, final String commentId) {
-      if (getByChatId(chatId) == null) {
-        U.request(new PostDeleteRequest(postId), new OnResponse2<PostCommentsResponse>() {
+    public static void createByPostCommentIdIfNotExist(final String chatId, String postId, final String commentId, final ParamsRunnable runnable) {
+      Conversation conversation = getByChatId(chatId);
+      if (conversation == null) {
+        U.getRESTRequesterSync().request(new PostCommentsRequest(postId, 0, 0, 0, 1), new OnResponse2<PostCommentsResponse>() {
           @Override
           public void onResponseError(Throwable e) {
 
@@ -426,11 +407,22 @@ public class ChatUtils {
               for (Comment comment : response.object.comments.lists) {
                 if (comment.id.equals(commentId)) {
                   createIfNotExist(chatId, response.object.post, comment);
+                  runnable.run(response.object.post, comment);
                 }
               }
             }
           }
         }, PostCommentsResponse.class);
+      } else {
+        Post post = new Post();
+        post.id = conversation.getPostId();
+        post.source = conversation.getPostSource();
+        post.content = conversation.getPostContent();
+        post.bgUrl = conversation.getBgUrl();
+        Comment comment = new Comment();
+        comment.id = conversation.getCommentId();
+        comment.content = conversation.getCommentContent();
+        runnable.run(post, comment);
       }
     }
   }
@@ -439,8 +431,9 @@ public class ChatUtils {
 
     /**
      * 分页获取一个对话的消息
+     *
      * @param chatId 会话Id
-     * @param page 页数
+     * @param page   页数
      * @return the messages in this page
      */
     public static List<Message> getConversation(String chatId, int page) {
@@ -486,6 +479,32 @@ public class ChatUtils {
       U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATIONS_RELOAD, null));
     }
 
+    public static Conversation setRead(String chatId) {
+      List<Message> list = DaoUtils.getMessageDao().queryBuilder()
+          .where(MessageDao.Properties.ChatId.eq(chatId))
+          .listLazy();
+
+      for (Message m : list) {
+        m.setRead(true);
+      }
+
+      DaoUtils.getMessageDao().updateInTx(list);
+
+      Conversation conversation = DaoUtils.getConversationDao()
+          .queryBuilder()
+          .where(ConversationDao.Properties.ChatId.eq(chatId))
+          .limit(1)
+          .unique();
+
+      if (conversation != null) {
+        conversation.setUnreadCount(0l);
+        DaoUtils.getConversationDao().update(conversation);
+        return conversation;
+      } else {
+        return null;
+      }
+    }
+
     public static long getUnreadCount() {
       return DaoUtils.getMessageDao().queryBuilder()
           .where(MessageDao.Properties.Read.eq(false)).count();
@@ -496,24 +515,49 @@ public class ChatUtils {
 
     private static final int ID_MESSAGE = 0x1000;
 
-    public static void notifyNewMessage(Message message) {
+    public static void notifyNewMessage(Message message, Post post, Comment comment) {
       if (message.getChatId().equals(ChatActivity.getCurrentChatId())) {
+        message.setRead(true);
+        DaoUtils.getMessageDao().update(message);
         // 收到的消息，对应的聊天页面在前台，则不通知该条消息
         return;
       }
 
       long count = MessageUtil.getUnreadCount();
-      NotificationManager manager = (NotificationManager) U.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+      Context context = U.getContext();
+      NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-      Notification not = new NotificationCompat.Builder(U.getContext())
+      Intent[] intents;
+      if (count == 1) {
+        intents = new Intent[]{
+            HomeActivity.getIntent(context, 0, 0),
+            ConversationActivity.getIntent(context),
+            ChatActivity.getIntent(context, message.getChatId(), post, comment)
+        };
+      } else {
+
+        intents = new Intent[]{
+            HomeActivity.getIntent(context, 0, 0),
+            ConversationActivity.getIntent(context)
+        };
+      }
+
+      NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
           .setContentTitle(String.format("你收到了%d条匿名聊天消息", count))
-          .setLargeIcon(BitmapFactory.decodeResource(U.getContext().getResources(), R.drawable.ic_launcher))
+          .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher))
           .setSmallIcon(R.drawable.ic_launcher)
           .setDefaults(Account.inst().getSilentMode() ? Notification.DEFAULT_LIGHTS : Notification.DEFAULT_ALL)
-          .setAutoCancel(true)
-          .build();
+          .setAutoCancel(true);
 
-      manager.notify(ID_MESSAGE, not);
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        builder.setContentIntent(PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT));
+      } else {
+        builder.setContentIntent(PendingIntent.getActivity(context, 0,
+            ChatActivity.getIntent(context, message.getChatId(), post, comment),
+            PendingIntent.FLAG_UPDATE_CURRENT));
+      }
+
+      manager.notify(ID_MESSAGE, builder.build());
 
     }
   }
