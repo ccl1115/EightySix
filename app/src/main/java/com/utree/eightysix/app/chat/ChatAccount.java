@@ -164,7 +164,6 @@ public class ChatAccount {
             new ParamsRunnable() {
               @Override
               public void run(Object... params) {
-                DaoUtils.getMessageDao().insert(mMessage);
                 mPost = ((Post) params[0]);
                 mInfoMessage = ChatUtils.MessageUtil.addPostSummaryInfo(mMessage.getChatId(), mMessage.getTimestamp() - 1, mPost);
                 if (mInfoMessage != null) {
@@ -177,7 +176,6 @@ public class ChatAccount {
             new ParamsRunnable() {
               @Override
               public void run(Object... params) {
-                DaoUtils.getMessageDao().insert(mMessage);
                 mPost = ((Post) params[0]);
                 mComment = ((Comment) params[1]);
                 mInfoMessage = ChatUtils.MessageUtil.addCommentSummaryInfo(mMessage.getChatId(), mMessage.getTimestamp() - 1, mComment);
@@ -188,7 +186,8 @@ public class ChatAccount {
             });
       }
 
-      if (mMessage.getChatId().equals(ChatActivity.getCurrentChatId())) {
+      boolean foreground = mMessage.getChatId().equals(ChatActivity.getCurrentChatId());
+      if (foreground) {
         // 收到的消息，对应的聊天页面在前台，则不通知该条消息
         mMessage.setRead(true);
       } else {
@@ -196,16 +195,21 @@ public class ChatAccount {
       }
 
       mMessage.setTimestamp(System.currentTimeMillis());
-      DaoUtils.getMessageDao().insertOrReplace(mMessage);
+      DaoUtils.getMessageDao().insert(mMessage);
       publishProgress(PROGRESS_INSERT_MESSAGE);
 
-      ChatUtils.ConversationUtil.updateUnreadCount(mMessage.getChatId());
-      mUnreadConversationCount = ChatUtils.ConversationUtil.getUnreadConversationCount();
-      publishProgress(PROGRESS_UNREAD_CONVERSTION_COUNT);
-
       mConversation = ChatUtils.ConversationUtil.setLastMessage(mMessage);
-      mConversation = ChatUtils.ConversationUtil.updateUnreadCount(mMessage.getChatId());
       publishProgress(PROGRESS_UPDATE_CONVERSATION);
+
+      if (!foreground) {
+        // 收到的消息，对应的聊天页面不在前台，则更新对话未读数
+
+        mUnreadConversationCount = ChatUtils.ConversationUtil.getUnreadConversationCount();
+        publishProgress(PROGRESS_UNREAD_CONVERSTION_COUNT);
+
+        mConversation = ChatUtils.ConversationUtil.updateUnreadCount(mMessage.getChatId());
+        publishProgress(PROGRESS_UPDATE_CONVERSATION);
+      }
 
       return null;
     }
