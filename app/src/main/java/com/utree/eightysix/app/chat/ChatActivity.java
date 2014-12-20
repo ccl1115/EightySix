@@ -381,7 +381,7 @@ public class ChatActivity extends BaseActivity implements
                     .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
               }
             }
-          }, Response.class, mChatId);
+          }, Response.class, mChatId, mPost.id, mComment == null ? null : mComment.id);
         } else {
           ((ImageActionButton) getTopBar().getActionView(0))
               .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
@@ -403,7 +403,7 @@ public class ChatActivity extends BaseActivity implements
                     .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_outline));
               }
             }
-          }, Response.class, mChatId);
+          }, Response.class, mChatId, mPost.id, mComment == null ? null : mComment.id);
 
         }
       }

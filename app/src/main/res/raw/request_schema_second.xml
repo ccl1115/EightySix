@@ -45,6 +45,8 @@
         <token/>
         <params>
             <param>chatId</param>
+            <param>postId</param>
+            <param>commentId</param>
         </params>
     </request>
 
@@ -56,6 +58,8 @@
         <token/>
         <params>
             <param>chatId</param>
+            <param>postId</param>
+            <param>commentId</param>
         </params>
     </request>
 
