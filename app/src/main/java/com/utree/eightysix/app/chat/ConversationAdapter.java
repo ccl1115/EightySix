@@ -40,12 +40,24 @@ public class ConversationAdapter extends BaseAdapter {
   private static Comparator<Conversation> sComparator = new Comparator<Conversation>() {
     @Override
     public int compare(Conversation lhs, Conversation rhs) {
+      if (lhs.getTimestamp() == null || rhs.getTimestamp() == null) {
+        return 0;
+      }
       return lhs.getTimestamp().compareTo(rhs.getTimestamp());
     }
   };
 
   public ConversationAdapter() {
     mConversations = ChatUtils.ConversationUtil.getConversations();
+  }
+
+  public Conversation getByChatId(String chatId) {
+    for (Conversation conversation : mConversations) {
+      if (conversation.getChatId().equals(chatId)) {
+        return conversation;
+      }
+    }
+    return null;
   }
 
   @Override
@@ -85,15 +97,20 @@ public class ConversationAdapter extends BaseAdapter {
     holder.mTvName.setText(conversation.getRelation());
     holder.mTvCircle.setText(conversation.getPostSource());
     holder.mTvLast.setText(conversation.getLastMsg());
-    if (conversation.getPortrait().equals("\ue800")) {
-      holder.mFpvPortrait.setEmotion(' ');
-      holder.mFpvPortrait.setBackgroundResource(R.drawable.host_portrait);
-    } else {
-      holder.mFpvPortrait.setEmotion(conversation.getPortrait().charAt(0));
-      holder.mFpvPortrait.setEmotionColor(ColorUtil.strToColor(conversation.getPortraitColor()));
+
+    String portrait = conversation.getPortrait();
+    if (portrait != null) {
+      if ("\ue800".equals(portrait)) {
+        holder.mFpvPortrait.setEmotion(' ');
+        holder.mFpvPortrait.setBackgroundResource(R.drawable.host_portrait);
+      } else {
+        holder.mFpvPortrait.setEmotion(portrait.charAt(0));
+        holder.mFpvPortrait.setEmotionColor(ColorUtil.strToColor(conversation.getPortraitColor()));
+      }
     }
+
     holder.mTvContent.setText(conversation.getPostContent());
-    int unread = conversation.getUnreadCount().intValue();
+    int unread = conversation.getUnreadCount() == null ? 0 : conversation.getUnreadCount().intValue();
     if (unread == 0) {
       holder.mRbUnread.setVisibility(View.INVISIBLE);
     } else {
@@ -111,7 +128,7 @@ public class ConversationAdapter extends BaseAdapter {
       holder.mAivPostBg.setUrl(conversation.getBgUrl());
     }
     holder.mTvLast.setText(conversation.getLastMsg());
-    holder.mTvTime.setText(ChatUtils.timestamp(conversation.getTimestamp()));
+    holder.mTvTime.setText(ChatUtils.timestamp(conversation.getTimestamp() == null ? 0 : conversation.getTimestamp()));
 
     holder.mTvStatus.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(2), Color.GREEN));
 

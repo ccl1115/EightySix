@@ -27,14 +27,15 @@ public class MessageDao extends AbstractDao<Message, Long> {
         public final static Property ChatId = new Property(1, String.class, "chatId", false, "CHAT_ID");
         public final static Property PostId = new Property(2, String.class, "postId", false, "POST_ID");
         public final static Property CommentId = new Property(3, String.class, "commentId", false, "COMMENT_ID");
-        public final static Property MsgId = new Property(4, String.class, "msgId", false, "MSG_ID");
-        public final static Property Timestamp = new Property(5, Long.class, "timestamp", false, "TIMESTAMP");
-        public final static Property From = new Property(6, String.class, "from", false, "FROM");
-        public final static Property Type = new Property(7, Integer.class, "type", false, "TYPE");
-        public final static Property Content = new Property(8, String.class, "content", false, "CONTENT");
-        public final static Property Status = new Property(9, Integer.class, "status", false, "STATUS");
-        public final static Property Read = new Property(10, Boolean.class, "read", false, "READ");
-        public final static Property Direction = new Property(11, Integer.class, "direction", false, "DIRECTION");
+        public final static Property CommentContent = new Property(4, String.class, "commentContent", false, "COMMENT_CONTENT");
+        public final static Property MsgId = new Property(5, String.class, "msgId", false, "MSG_ID");
+        public final static Property Timestamp = new Property(6, Long.class, "timestamp", false, "TIMESTAMP");
+        public final static Property From = new Property(7, String.class, "from", false, "FROM");
+        public final static Property Type = new Property(8, Integer.class, "type", false, "TYPE");
+        public final static Property Content = new Property(9, String.class, "content", false, "CONTENT");
+        public final static Property Status = new Property(10, Integer.class, "status", false, "STATUS");
+        public final static Property Read = new Property(11, Boolean.class, "read", false, "READ");
+        public final static Property Direction = new Property(12, Integer.class, "direction", false, "DIRECTION");
     };
 
 
@@ -54,14 +55,15 @@ public class MessageDao extends AbstractDao<Message, Long> {
                 "'CHAT_ID' TEXT NOT NULL ," + // 1: chatId
                 "'POST_ID' TEXT," + // 2: postId
                 "'COMMENT_ID' TEXT," + // 3: commentId
-                "'MSG_ID' TEXT," + // 4: msgId
-                "'TIMESTAMP' INTEGER," + // 5: timestamp
-                "'FROM' TEXT," + // 6: from
-                "'TYPE' INTEGER," + // 7: type
-                "'CONTENT' TEXT," + // 8: content
-                "'STATUS' INTEGER," + // 9: status
-                "'READ' INTEGER," + // 10: read
-                "'DIRECTION' INTEGER);"); // 11: direction
+            "'COMMENT_CONTENT' TEXT," + // 4: commentContent
+            "'MSG_ID' TEXT," + // 5: msgId
+            "'TIMESTAMP' INTEGER," + // 6: timestamp
+            "'FROM' TEXT," + // 7: from
+            "'TYPE' INTEGER," + // 8: type
+            "'CONTENT' TEXT," + // 9: content
+            "'STATUS' INTEGER," + // 10: status
+            "'READ' INTEGER," + // 11: read
+            "'DIRECTION' INTEGER);"); // 12: direction
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_MESSAGE_POST_ID ON MESSAGE" +
             " (POST_ID);");
@@ -95,45 +97,50 @@ public class MessageDao extends AbstractDao<Message, Long> {
         if (commentId != null) {
             stmt.bindString(4, commentId);
         }
+
+        String commentContent = entity.getCommentContent();
+        if (commentContent != null) {
+            stmt.bindString(5, commentContent);
+        }
  
         String msgId = entity.getMsgId();
         if (msgId != null) {
-            stmt.bindString(5, msgId);
+            stmt.bindString(6, msgId);
         }
  
         Long timestamp = entity.getTimestamp();
         if (timestamp != null) {
-            stmt.bindLong(6, timestamp);
+            stmt.bindLong(7, timestamp);
         }
  
         String from = entity.getFrom();
         if (from != null) {
-            stmt.bindString(7, from);
+            stmt.bindString(8, from);
         }
  
         Integer type = entity.getType();
         if (type != null) {
-            stmt.bindLong(8, type);
+            stmt.bindLong(9, type);
         }
  
         String content = entity.getContent();
         if (content != null) {
-            stmt.bindString(9, content);
+            stmt.bindString(10, content);
         }
  
         Integer status = entity.getStatus();
         if (status != null) {
-            stmt.bindLong(10, status);
+            stmt.bindLong(11, status);
         }
  
         Boolean read = entity.getRead();
         if (read != null) {
-            stmt.bindLong(11, read ? 1l: 0l);
+            stmt.bindLong(12, read ? 1l : 0l);
         }
  
         Integer direction = entity.getDirection();
         if (direction != null) {
-            stmt.bindLong(12, direction);
+            stmt.bindLong(13, direction);
         }
     }
 
@@ -151,14 +158,15 @@ public class MessageDao extends AbstractDao<Message, Long> {
             cursor.getString(offset + 1), // chatId
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // postId
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // commentId
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // msgId
-            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5), // timestamp
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // from
-            cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7), // type
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // content
-            cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9), // status
-            cursor.isNull(offset + 10) ? null : cursor.getShort(offset + 10) != 0, // read
-            cursor.isNull(offset + 11) ? null : cursor.getInt(offset + 11) // direction
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // commentContent
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // msgId
+            cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6), // timestamp
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // from
+            cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8), // type
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // content
+            cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10), // status
+            cursor.isNull(offset + 11) ? null : cursor.getShort(offset + 11) != 0, // read
+            cursor.isNull(offset + 12) ? null : cursor.getInt(offset + 12) // direction
         );
         return entity;
     }
@@ -170,14 +178,15 @@ public class MessageDao extends AbstractDao<Message, Long> {
         entity.setChatId(cursor.getString(offset + 1));
         entity.setPostId(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setCommentId(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setMsgId(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setTimestamp(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
-        entity.setFrom(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setType(cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7));
-        entity.setContent(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setStatus(cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9));
-        entity.setRead(cursor.isNull(offset + 10) ? null : cursor.getShort(offset + 10) != 0);
-        entity.setDirection(cursor.isNull(offset + 11) ? null : cursor.getInt(offset + 11));
+        entity.setCommentContent(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setMsgId(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setTimestamp(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
+        entity.setFrom(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setType(cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8));
+        entity.setContent(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setStatus(cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10));
+        entity.setRead(cursor.isNull(offset + 11) ? null : cursor.getShort(offset + 11) != 0);
+        entity.setDirection(cursor.isNull(offset + 12) ? null : cursor.getInt(offset + 12));
      }
     
     /** @inheritdoc */

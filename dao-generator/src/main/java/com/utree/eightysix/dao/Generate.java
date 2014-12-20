@@ -15,7 +15,7 @@ import java.io.File;
 public class Generate {
 
   public Generate() {
-    Schema schema = new Schema(15, "com.utree.eightysix.dao");
+    Schema schema = new Schema(22, "com.utree.eightysix.dao");
 
     generateConversation(schema);
     generateMessage(schema);
@@ -38,18 +38,20 @@ public class Generate {
   private void generateConversation(Schema schema) {
     Entity conversation = schema.addEntity("Conversation");
     conversation.addIdProperty();
-    conversation.addStringProperty("chatId").notNull();
+    conversation.addStringProperty("chatId").notNull().unique();
     conversation.addStringProperty("postId");
     conversation.addStringProperty("postSource");
     conversation.addStringProperty("postContent");
-    conversation.addStringProperty("commentId");
-    conversation.addStringProperty("lastMsg");
     conversation.addStringProperty("portrait");
     conversation.addStringProperty("portraitColor");
+    conversation.addStringProperty("myPortrait");
+    conversation.addStringProperty("myPortraitColor");
     conversation.addStringProperty("bgUrl");
     conversation.addStringProperty("bgColor");
+    conversation.addStringProperty("commentId");
     conversation.addStringProperty("commentContent");
     conversation.addStringProperty("relation");
+    conversation.addStringProperty("lastMsg");
     conversation.addLongProperty("timestamp").indexDesc(null, false);
     conversation.addLongProperty("unreadCount");
     conversation.addBooleanProperty("favorite");
@@ -61,6 +63,7 @@ public class Generate {
     message.addStringProperty("chatId").notNull();
     message.addStringProperty("postId").index();
     message.addStringProperty("commentId");
+    message.addStringProperty("commentContent");
     message.addStringProperty("msgId");
     message.addLongProperty("timestamp").indexDesc(null, false);
     message.addStringProperty("from");

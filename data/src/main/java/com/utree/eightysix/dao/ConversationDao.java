@@ -28,17 +28,19 @@ public class ConversationDao extends AbstractDao<Conversation, Long> {
         public final static Property PostId = new Property(2, String.class, "postId", false, "POST_ID");
         public final static Property PostSource = new Property(3, String.class, "postSource", false, "POST_SOURCE");
         public final static Property PostContent = new Property(4, String.class, "postContent", false, "POST_CONTENT");
-        public final static Property CommentId = new Property(5, String.class, "commentId", false, "COMMENT_ID");
-        public final static Property LastMsg = new Property(6, String.class, "lastMsg", false, "LAST_MSG");
-        public final static Property Portrait = new Property(7, String.class, "portrait", false, "PORTRAIT");
-        public final static Property PortraitColor = new Property(8, String.class, "portraitColor", false, "PORTRAIT_COLOR");
+        public final static Property Portrait = new Property(5, String.class, "portrait", false, "PORTRAIT");
+        public final static Property PortraitColor = new Property(6, String.class, "portraitColor", false, "PORTRAIT_COLOR");
+        public final static Property MyPortrait = new Property(7, String.class, "myPortrait", false, "MY_PORTRAIT");
+        public final static Property MyPortraitColor = new Property(8, String.class, "myPortraitColor", false, "MY_PORTRAIT_COLOR");
         public final static Property BgUrl = new Property(9, String.class, "bgUrl", false, "BG_URL");
         public final static Property BgColor = new Property(10, String.class, "bgColor", false, "BG_COLOR");
-        public final static Property CommentContent = new Property(11, String.class, "commentContent", false, "COMMENT_CONTENT");
-        public final static Property Relation = new Property(12, String.class, "relation", false, "RELATION");
-        public final static Property Timestamp = new Property(13, Long.class, "timestamp", false, "TIMESTAMP");
-        public final static Property UnreadCount = new Property(14, Long.class, "unreadCount", false, "UNREAD_COUNT");
-        public final static Property Favorite = new Property(15, Boolean.class, "favorite", false, "FAVORITE");
+        public final static Property CommentId = new Property(11, String.class, "commentId", false, "COMMENT_ID");
+        public final static Property CommentContent = new Property(12, String.class, "commentContent", false, "COMMENT_CONTENT");
+        public final static Property Relation = new Property(13, String.class, "relation", false, "RELATION");
+        public final static Property LastMsg = new Property(14, String.class, "lastMsg", false, "LAST_MSG");
+        public final static Property Timestamp = new Property(15, Long.class, "timestamp", false, "TIMESTAMP");
+        public final static Property UnreadCount = new Property(16, Long.class, "unreadCount", false, "UNREAD_COUNT");
+        public final static Property Favorite = new Property(17, Boolean.class, "favorite", false, "FAVORITE");
     };
 
 
@@ -55,21 +57,23 @@ public class ConversationDao extends AbstractDao<Conversation, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'CONVERSATION' (" + //
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
-                "'CHAT_ID' TEXT NOT NULL ," + // 1: chatId
+            "'CHAT_ID' TEXT NOT NULL UNIQUE ," + // 1: chatId
                 "'POST_ID' TEXT," + // 2: postId
             "'POST_SOURCE' TEXT," + // 3: postSource
             "'POST_CONTENT' TEXT," + // 4: postContent
-            "'COMMENT_ID' TEXT," + // 5: commentId
-            "'LAST_MSG' TEXT," + // 6: lastMsg
-            "'PORTRAIT' TEXT," + // 7: portrait
-            "'PORTRAIT_COLOR' TEXT," + // 8: portraitColor
+            "'PORTRAIT' TEXT," + // 5: portrait
+            "'PORTRAIT_COLOR' TEXT," + // 6: portraitColor
+            "'MY_PORTRAIT' TEXT," + // 7: myPortrait
+            "'MY_PORTRAIT_COLOR' TEXT," + // 8: myPortraitColor
             "'BG_URL' TEXT," + // 9: bgUrl
             "'BG_COLOR' TEXT," + // 10: bgColor
-            "'COMMENT_CONTENT' TEXT," + // 11: commentContent
-            "'RELATION' TEXT," + // 12: relation
-            "'TIMESTAMP' INTEGER," + // 13: timestamp
-            "'UNREAD_COUNT' INTEGER," + // 14: unreadCount
-            "'FAVORITE' INTEGER);"); // 15: favorite
+            "'COMMENT_ID' TEXT," + // 11: commentId
+            "'COMMENT_CONTENT' TEXT," + // 12: commentContent
+            "'RELATION' TEXT," + // 13: relation
+            "'LAST_MSG' TEXT," + // 14: lastMsg
+            "'TIMESTAMP' INTEGER," + // 15: timestamp
+            "'UNREAD_COUNT' INTEGER," + // 16: unreadCount
+            "'FAVORITE' INTEGER);"); // 17: favorite
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_CONVERSATION_TIMESTAMP_DESC ON CONVERSATION" +
                 " (TIMESTAMP);");
@@ -107,24 +111,24 @@ public class ConversationDao extends AbstractDao<Conversation, Long> {
             stmt.bindString(5, postContent);
         }
  
-        String commentId = entity.getCommentId();
-        if (commentId != null) {
-            stmt.bindString(6, commentId);
-        }
- 
-        String lastMsg = entity.getLastMsg();
-        if (lastMsg != null) {
-            stmt.bindString(7, lastMsg);
-        }
- 
         String portrait = entity.getPortrait();
         if (portrait != null) {
-            stmt.bindString(8, portrait);
+            stmt.bindString(6, portrait);
         }
 
         String portraitColor = entity.getPortraitColor();
         if (portraitColor != null) {
-            stmt.bindString(9, portraitColor);
+            stmt.bindString(7, portraitColor);
+        }
+
+        String myPortrait = entity.getMyPortrait();
+        if (myPortrait != null) {
+            stmt.bindString(8, myPortrait);
+        }
+
+        String myPortraitColor = entity.getMyPortraitColor();
+        if (myPortraitColor != null) {
+            stmt.bindString(9, myPortraitColor);
         }
  
         String bgUrl = entity.getBgUrl();
@@ -136,30 +140,40 @@ public class ConversationDao extends AbstractDao<Conversation, Long> {
         if (bgColor != null) {
             stmt.bindString(11, bgColor);
         }
+
+        String commentId = entity.getCommentId();
+        if (commentId != null) {
+            stmt.bindString(12, commentId);
+        }
  
         String commentContent = entity.getCommentContent();
         if (commentContent != null) {
-            stmt.bindString(12, commentContent);
+            stmt.bindString(13, commentContent);
         }
  
         String relation = entity.getRelation();
         if (relation != null) {
-            stmt.bindString(13, relation);
+            stmt.bindString(14, relation);
+        }
+
+        String lastMsg = entity.getLastMsg();
+        if (lastMsg != null) {
+            stmt.bindString(15, lastMsg);
         }
  
         Long timestamp = entity.getTimestamp();
         if (timestamp != null) {
-            stmt.bindLong(14, timestamp);
+            stmt.bindLong(16, timestamp);
         }
  
         Long unreadCount = entity.getUnreadCount();
         if (unreadCount != null) {
-            stmt.bindLong(15, unreadCount);
+            stmt.bindLong(17, unreadCount);
         }
  
         Boolean favorite = entity.getFavorite();
         if (favorite != null) {
-            stmt.bindLong(16, favorite ? 1l : 0l);
+            stmt.bindLong(18, favorite ? 1l : 0l);
         }
     }
 
@@ -178,17 +192,19 @@ public class ConversationDao extends AbstractDao<Conversation, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // postId
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // postSource
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // postContent
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // commentId
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // lastMsg
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // portrait
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // portraitColor
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // portrait
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // portraitColor
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // myPortrait
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // myPortraitColor
             cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // bgUrl
             cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // bgColor
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // commentContent
-            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // relation
-            cursor.isNull(offset + 13) ? null : cursor.getLong(offset + 13), // timestamp
-            cursor.isNull(offset + 14) ? null : cursor.getLong(offset + 14), // unreadCount
-            cursor.isNull(offset + 15) ? null : cursor.getShort(offset + 15) != 0 // favorite
+            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // commentId
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // commentContent
+            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // relation
+            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // lastMsg
+            cursor.isNull(offset + 15) ? null : cursor.getLong(offset + 15), // timestamp
+            cursor.isNull(offset + 16) ? null : cursor.getLong(offset + 16), // unreadCount
+            cursor.isNull(offset + 17) ? null : cursor.getShort(offset + 17) != 0 // favorite
         );
         return entity;
     }
@@ -201,17 +217,19 @@ public class ConversationDao extends AbstractDao<Conversation, Long> {
         entity.setPostId(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setPostSource(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setPostContent(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setCommentId(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setLastMsg(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setPortrait(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setPortraitColor(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setPortrait(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setPortraitColor(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setMyPortrait(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setMyPortraitColor(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
         entity.setBgUrl(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
         entity.setBgColor(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
-        entity.setCommentContent(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
-        entity.setRelation(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
-        entity.setTimestamp(cursor.isNull(offset + 13) ? null : cursor.getLong(offset + 13));
-        entity.setUnreadCount(cursor.isNull(offset + 14) ? null : cursor.getLong(offset + 14));
-        entity.setFavorite(cursor.isNull(offset + 15) ? null : cursor.getShort(offset + 15) != 0);
+        entity.setCommentId(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setCommentContent(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
+        entity.setRelation(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
+        entity.setLastMsg(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
+        entity.setTimestamp(cursor.isNull(offset + 15) ? null : cursor.getLong(offset + 15));
+        entity.setUnreadCount(cursor.isNull(offset + 16) ? null : cursor.getLong(offset + 16));
+        entity.setFavorite(cursor.isNull(offset + 17) ? null : cursor.getShort(offset + 17) != 0);
      }
     
     /** @inheritdoc */

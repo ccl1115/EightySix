@@ -561,13 +561,13 @@ public class ChatActivity extends BaseActivity implements
   }
 
   private void addPostSummaryInfo() {
-    Message message = ChatUtils.MessageUtil.addPostSummaryInfo(mChatId, mPost);
+    Message message = ChatUtils.MessageUtil.addPostSummaryInfo(mChatId, System.currentTimeMillis(), mPost);
     mChatAdapter.add(message);
   }
 
   private void addCommentSummaryInfo() {
     Message message = ChatUtils.MessageUtil.addCommentSummaryInfo(mChatId,
-        mChatAdapter.size() == 0 ? 0 : mChatAdapter.get(mChatAdapter.size() - 1).getTimestamp() - 1, mComment);
+        System.currentTimeMillis(), mComment);
     mChatAdapter.add(message);
   }
 

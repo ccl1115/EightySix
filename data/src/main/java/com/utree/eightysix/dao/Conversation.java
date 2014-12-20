@@ -12,14 +12,16 @@ public class Conversation {
     private String postId;
     private String postSource;
     private String postContent;
-    private String commentId;
-    private String lastMsg;
     private String portrait;
     private String portraitColor;
+    private String myPortrait;
+    private String myPortraitColor;
     private String bgUrl;
     private String bgColor;
+    private String commentId;
     private String commentContent;
     private String relation;
+    private String lastMsg;
     private Long timestamp;
     private Long unreadCount;
     private Boolean favorite;
@@ -31,20 +33,22 @@ public class Conversation {
         this.id = id;
     }
 
-    public Conversation(Long id, String chatId, String postId, String postSource, String postContent, String commentId, String lastMsg, String portrait, String portraitColor, String bgUrl, String bgColor, String commentContent, String relation, Long timestamp, Long unreadCount, Boolean favorite) {
+    public Conversation(Long id, String chatId, String postId, String postSource, String postContent, String portrait, String portraitColor, String myPortrait, String myPortraitColor, String bgUrl, String bgColor, String commentId, String commentContent, String relation, String lastMsg, Long timestamp, Long unreadCount, Boolean favorite) {
         this.id = id;
         this.chatId = chatId;
         this.postId = postId;
         this.postSource = postSource;
         this.postContent = postContent;
-        this.commentId = commentId;
-        this.lastMsg = lastMsg;
         this.portrait = portrait;
         this.portraitColor = portraitColor;
+        this.myPortrait = myPortrait;
+        this.myPortraitColor = myPortraitColor;
         this.bgUrl = bgUrl;
         this.bgColor = bgColor;
+        this.commentId = commentId;
         this.commentContent = commentContent;
         this.relation = relation;
+        this.lastMsg = lastMsg;
         this.timestamp = timestamp;
         this.unreadCount = unreadCount;
         this.favorite = favorite;
@@ -92,22 +96,6 @@ public class Conversation {
         this.postContent = postContent;
     }
 
-    public String getCommentId() {
-        return commentId;
-    }
-
-    public void setCommentId(String commentId) {
-        this.commentId = commentId;
-    }
-
-    public String getLastMsg() {
-        return lastMsg;
-    }
-
-    public void setLastMsg(String lastMsg) {
-        this.lastMsg = lastMsg;
-    }
-
     public String getPortrait() {
         return portrait;
     }
@@ -122,6 +110,22 @@ public class Conversation {
 
     public void setPortraitColor(String portraitColor) {
         this.portraitColor = portraitColor;
+    }
+
+    public String getMyPortrait() {
+        return myPortrait;
+    }
+
+    public void setMyPortrait(String myPortrait) {
+        this.myPortrait = myPortrait;
+    }
+
+    public String getMyPortraitColor() {
+        return myPortraitColor;
+    }
+
+    public void setMyPortraitColor(String myPortraitColor) {
+        this.myPortraitColor = myPortraitColor;
     }
 
     public String getBgUrl() {
@@ -140,6 +144,14 @@ public class Conversation {
         this.bgColor = bgColor;
     }
 
+    public String getCommentId() {
+        return commentId;
+    }
+
+    public void setCommentId(String commentId) {
+        this.commentId = commentId;
+    }
+
     public String getCommentContent() {
         return commentContent;
     }
@@ -154,6 +166,14 @@ public class Conversation {
 
     public void setRelation(String relation) {
         this.relation = relation;
+    }
+
+    public String getLastMsg() {
+        return lastMsg;
+    }
+
+    public void setLastMsg(String lastMsg) {
+        this.lastMsg = lastMsg;
     }
 
     public Long getTimestamp() {

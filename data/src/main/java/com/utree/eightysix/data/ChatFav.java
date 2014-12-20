@@ -10,14 +10,17 @@ import com.google.gson.annotations.SerializedName;
  */
 public class ChatFav {
 
-  @SerializedName("userAvatar")
-  public String userAvatar;
+  @SerializedName("chatId")
+  public String chatId;
 
   @SerializedName("bgUrl")
   public String bgUrl;
 
   @SerializedName("postId")
   public String postId;
+
+  @SerializedName("postContent")
+  public String postContent;
 
   @SerializedName("commentId")
   public String commentId;

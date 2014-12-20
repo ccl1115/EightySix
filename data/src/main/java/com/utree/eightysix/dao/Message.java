@@ -11,6 +11,7 @@ public class Message {
     private String chatId;
     private String postId;
     private String commentId;
+    private String commentContent;
     private String msgId;
     private Long timestamp;
     private String from;
@@ -27,11 +28,12 @@ public class Message {
         this.id = id;
     }
 
-    public Message(Long id, String chatId, String postId, String commentId, String msgId, Long timestamp, String from, Integer type, String content, Integer status, Boolean read, Integer direction) {
+    public Message(Long id, String chatId, String postId, String commentId, String commentContent, String msgId, Long timestamp, String from, Integer type, String content, Integer status, Boolean read, Integer direction) {
         this.id = id;
         this.chatId = chatId;
         this.postId = postId;
         this.commentId = commentId;
+        this.commentContent = commentContent;
         this.msgId = msgId;
         this.timestamp = timestamp;
         this.from = from;
@@ -74,6 +76,14 @@ public class Message {
 
     public void setCommentId(String commentId) {
         this.commentId = commentId;
+    }
+
+    public String getCommentContent() {
+        return commentContent;
+    }
+
+    public void setCommentContent(String commentContent) {
+        this.commentContent = commentContent;
     }
 
     public String getMsgId() {

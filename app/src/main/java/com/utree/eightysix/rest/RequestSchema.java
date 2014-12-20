@@ -128,6 +128,9 @@ public class RequestSchema {
   }
 
   public void fill(RequestParams params, List<String> keys, Object... objects) {
+    if (keys == null) {
+      return;
+    }
     if (keys.size() != objects.length)
       throw new RuntimeException("error fill request params, key size is not equal data");
     for (int i = 0; i < keys.size(); i++) {

@@ -65,6 +65,11 @@ public class ChatUtils {
     } catch (EaseMobException ignored) {
     }
 
+    try {
+      m.setCommentContent(message.getStringAttribute("commentContent"));
+    } catch (EaseMobException ignored) {
+    }
+
     m.setDirection(message.direct == EMMessage.Direct.RECEIVE ? MessageConst.DIRECTION_RECEIVE : MessageConst.DIRECTION_SEND);
     m.setFrom(message.getFrom());
     m.setMsgId(message.getMsgId());
@@ -168,7 +173,7 @@ public class ChatUtils {
         }
         context.hideProgressBar();
       }
-    }, ChatIdResponse.class, null, comment == null ? null : comment.id);
+    }, ChatIdResponse.class, post.id, comment == null ? null : comment.id);
   }
 
   public static void startChat(final BaseActivity context, final Post post) {
@@ -223,21 +228,22 @@ public class ChatUtils {
 
     public static List<Conversation> getConversations() {
       return DaoUtils.getConversationDao().queryBuilder()
-          .where(ConversationDao.Properties.LastMsg.isNotNull())
+          .whereOr(ConversationDao.Properties.LastMsg.isNotNull(),
+              ConversationDao.Properties.Favorite.eq(true))
           .list();
     }
 
     public static void createIfNotExist(String chatId, Post post) {
-      if (DaoUtils.getConversationDao().queryBuilder()
+      Conversation conversation = DaoUtils.getConversationDao().queryBuilder()
           .where(ConversationDao.Properties.ChatId.eq(chatId))
-          .unique() == null) {
-        Conversation conversation = new Conversation();
+          .unique();
+      if (conversation == null) {
+        conversation = new Conversation();
         conversation.setChatId(chatId);
         conversation.setPostId(post.id);
         conversation.setPostSource(post.shortName);
         conversation.setBgUrl(post.bgUrl);
         conversation.setBgColor(post.bgColor);
-        conversation.setLastMsg("");
         conversation.setRelation(post.viewType == 3 ? "认识的人" : "陌生人");
         conversation.setPostContent(post.content);
         conversation.setTimestamp(System.currentTimeMillis());
@@ -245,21 +251,25 @@ public class ChatUtils {
         conversation.setPortrait("\ue800");
         conversation.setFavorite(false);
         DaoUtils.getConversationDao().insert(conversation);
+      } else {
+        conversation.setCommentId(null);
+        conversation.setCommentContent(null);
+        DaoUtils.getConversationDao().update(conversation);
       }
     }
 
     public static void createIfNotExist(String chatId, Post post, Comment comment) {
-      if (DaoUtils.getConversationDao().queryBuilder()
+      Conversation conversation = DaoUtils.getConversationDao().queryBuilder()
           .where(ConversationDao.Properties.ChatId.eq(chatId))
-          .unique() == null) {
-        Conversation conversation = new Conversation();
+          .unique();
+      if (conversation == null) {
+        conversation = new Conversation();
         conversation.setChatId(chatId);
         conversation.setPostSource(post.shortName);
         conversation.setBgUrl(post.bgUrl);
         conversation.setBgColor(post.bgColor);
         conversation.setPostId(post.id);
         conversation.setCommentId(comment.id);
-        conversation.setLastMsg("");
         conversation.setRelation(post.viewType == 3 ? "认识的人" : "陌生人");
         conversation.setPostContent(post.content);
         conversation.setCommentContent(comment.content);
@@ -269,6 +279,10 @@ public class ChatUtils {
         conversation.setPortraitColor(comment.avatarColor);
         conversation.setFavorite(false);
         DaoUtils.getConversationDao().insert(conversation);
+      } else {
+        conversation.setCommentId(comment.id);
+        conversation.setCommentContent(comment.content);
+        DaoUtils.getConversationDao().update(conversation);
       }
     }
 
@@ -320,6 +334,8 @@ public class ChatUtils {
       if (conversation != null) {
         conversation.setLastMsg(message.getContent());
         conversation.setTimestamp(message.getTimestamp());
+        conversation.setCommentId(message.getCommentId());
+        conversation.setCommentContent(message.getCommentContent());
         DaoUtils.getConversationDao().update(conversation);
         return conversation;
       } else {
@@ -386,8 +402,13 @@ public class ChatUtils {
       } else {
         Post post = new Post();
         post.id = conversation.getPostId();
-        post.content = conversation.getPostContent();
         post.shortName = conversation.getPostSource();
+        post.content = conversation.getPostContent();
+        post.bgUrl = conversation.getBgUrl();
+        post.bgColor = conversation.getBgColor();
+        conversation.setCommentId(null);
+        conversation.setCommentContent(null);
+        DaoUtils.getConversationDao().update(conversation);
         runnable.run(post);
       }
     }
@@ -399,7 +420,7 @@ public class ChatUtils {
      * @param postId    the id of the post
      * @param commentId the comment of the post
      */
-    public static void createByPostCommentIdIfNotExist(final String chatId, String postId, final String commentId, final ParamsRunnable runnable) {
+    public static void createByPostCommentIdIfNotExist(final String chatId, String postId, final String commentId, final String commentContent, final ParamsRunnable runnable) {
       Conversation conversation = getByChatId(chatId);
       if (conversation == null) {
         U.getRESTRequesterSync().request(new PostCommentsRequest(postId, 0, 0, 0, 1), new OnResponse2<PostCommentsResponse>() {
@@ -426,9 +447,13 @@ public class ChatUtils {
         post.shortName = conversation.getPostSource();
         post.content = conversation.getPostContent();
         post.bgUrl = conversation.getBgUrl();
+        post.bgColor = conversation.getBgColor();
         Comment comment = new Comment();
-        comment.id = conversation.getCommentId();
-        comment.content = conversation.getCommentContent();
+        comment.id = commentId;
+        comment.content = commentContent;
+        conversation.setCommentId(commentId);
+        conversation.setCommentContent(commentContent);
+        DaoUtils.getConversationDao().update(conversation);
         runnable.run(post, comment);
       }
     }
@@ -517,16 +542,17 @@ public class ChatUtils {
           .where(MessageDao.Properties.Read.eq(false)).count();
     }
 
-    public static Message addPostSummaryInfo(String chatId, Post post) {
+    public static Message addPostSummaryInfo(String chatId, long timestamp, Post post) {
       if (!ChatUtils.MessageUtil.hasPostSummaryMessage(chatId)) {
         Message message =
             ChatUtils.infoMsg(chatId,
                 "主题：" + (post.content.length() > 80 ? post.content.substring(0, 76) + "..." : post.content));
 
+        message.setPostId(post.id);
         message.setType(MessageConst.TYPE_POST);
-        message.setTimestamp(0l);
+        message.setTimestamp(timestamp);
 
-        DaoUtils.getMessageDao().insertOrReplace(message);
+        DaoUtils.getMessageDao().insert(message);
         return message;
       } else {
         return null;
@@ -544,7 +570,7 @@ public class ChatUtils {
         message.setType(MessageConst.TYPE_COMMENT);
         message.setTimestamp(timestamp);
 
-        DaoUtils.getMessageDao().insertOrReplace(message);
+        DaoUtils.getMessageDao().insert(message);
         return message;
       } else {
         return null;

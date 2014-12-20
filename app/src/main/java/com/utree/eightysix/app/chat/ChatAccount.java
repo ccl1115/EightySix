@@ -136,7 +136,15 @@ public class ChatAccount {
   private class NewMessageWorker extends AsyncTask<Void, Integer, Void> {
 
 
+    public static final int PROGRESS_NOTIFY = 1;
+    public static final int PROGRESS_INSERT_MESSAGE = 5;
+    public static final int PROGRESS_UNREAD_CONVERSTION_COUNT = 2;
+    public static final int PROGRESS_UPDATE_CONVERSATION = 3;
+    public static final int PROGRESS_INFO_MESSAGE = 6;
+
     private Message mMessage;
+    private Message mInfoMessage;
+
 
     private long mUnreadConversationCount;
     private Post mPost;
@@ -158,18 +166,24 @@ public class ChatAccount {
               public void run(Object... params) {
                 DaoUtils.getMessageDao().insert(mMessage);
                 mPost = ((Post) params[0]);
-                ChatUtils.MessageUtil.addPostSummaryInfo(mMessage.getChatId(), mPost);
+                mInfoMessage = ChatUtils.MessageUtil.addPostSummaryInfo(mMessage.getChatId(), mMessage.getTimestamp() - 1, mPost);
+                if (mInfoMessage != null) {
+                  publishProgress(PROGRESS_INFO_MESSAGE);
+                }
               }
             });
       } else {
-        ChatUtils.ConversationUtil.createByPostCommentIdIfNotExist(mMessage.getChatId(), mMessage.getPostId(), mMessage.getCommentId(),
+        ChatUtils.ConversationUtil.createByPostCommentIdIfNotExist(mMessage.getChatId(), mMessage.getPostId(), mMessage.getCommentId(), mMessage.getCommentContent(),
             new ParamsRunnable() {
               @Override
               public void run(Object... params) {
                 DaoUtils.getMessageDao().insert(mMessage);
                 mPost = ((Post) params[0]);
                 mComment = ((Comment) params[1]);
-                ChatUtils.MessageUtil.addCommentSummaryInfo(mMessage.getChatId(), mMessage.getTimestamp() - 1, mComment);
+                mInfoMessage = ChatUtils.MessageUtil.addCommentSummaryInfo(mMessage.getChatId(), mMessage.getTimestamp() - 1, mComment);
+                if (mInfoMessage != null) {
+                  publishProgress(PROGRESS_INFO_MESSAGE);
+                }
               }
             });
       }
@@ -178,21 +192,20 @@ public class ChatAccount {
         // 收到的消息，对应的聊天页面在前台，则不通知该条消息
         mMessage.setRead(true);
       } else {
-        publishProgress(1);
+        publishProgress(PROGRESS_NOTIFY);
       }
 
+      mMessage.setTimestamp(System.currentTimeMillis());
       DaoUtils.getMessageDao().insertOrReplace(mMessage);
-      publishProgress(5);
+      publishProgress(PROGRESS_INSERT_MESSAGE);
 
       ChatUtils.ConversationUtil.updateUnreadCount(mMessage.getChatId());
       mUnreadConversationCount = ChatUtils.ConversationUtil.getUnreadConversationCount();
-      publishProgress(2);
+      publishProgress(PROGRESS_UNREAD_CONVERSTION_COUNT);
 
       mConversation = ChatUtils.ConversationUtil.setLastMessage(mMessage);
-      publishProgress(3);
-
       mConversation = ChatUtils.ConversationUtil.updateUnreadCount(mMessage.getChatId());
-      publishProgress(4);
+      publishProgress(PROGRESS_UPDATE_CONVERSATION);
 
       return null;
     }
@@ -200,20 +213,21 @@ public class ChatAccount {
     @Override
     protected void onProgressUpdate(Integer... values) {
       switch (values[0]) {
-        case 1:
+        case PROGRESS_NOTIFY:
           ChatUtils.NotifyUtil.notifyNewMessage(mMessage, mPost, mComment);
           break;
-        case 2:
+        case PROGRESS_UNREAD_CONVERSTION_COUNT:
           U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT, mUnreadConversationCount));
           break;
-        case 3:
+        case PROGRESS_UPDATE_CONVERSATION:
           U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, mConversation));
           break;
-        case 4:
-          U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, mConversation));
-          break;
-        case 5:
+        case PROGRESS_INSERT_MESSAGE:
           U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_RECEIVE_MSG, mMessage));
+          break;
+        case PROGRESS_INFO_MESSAGE:
+          U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_RECEIVE_MSG, mInfoMessage));
+          break;
       }
     }
   }
