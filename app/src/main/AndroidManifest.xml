@@ -164,7 +164,7 @@
                 android:exported="@bool/exported"
                 android:name=".app.chat.ChatActivity"
                 android:screenOrientation="portrait"
-                android:windowSoftInputMode="stateHidden|adjustPan"/>
+                android:windowSoftInputMode="stateHidden|adjustResize"/>
 
         <activity android:exported="@bool/exported" android:label="标签详情" android:launchMode="singleTask" android:name=".app.tag.TagTabActivity" android:screenOrientation="portrait"/>
 

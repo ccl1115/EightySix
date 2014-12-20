@@ -262,6 +262,7 @@ public class ChatActivity extends BaseActivity implements
               mIvCamera.setSelected(false);
             }
             mIsOpened = true;
+            mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
           } else if (mIsOpened) {
             mIsOpened = false;
           }
