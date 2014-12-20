@@ -40,17 +40,9 @@
                 >
 
             <TextView
-                    android:id="@+id/tv_hot"
+                    android:id="@+id/tv_hometown"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"
-                    android:layout_marginEnd="4dp"
-                    android:background="@drawable/round_border_pressed"
-                    android:text="热帖"
-                    android:textSize="14sp"
-                    android:textColor="#ffcccccc"
-                    android:padding="@dimen/feed_hot_padding"
-                    android:visibility="invisible"
                     />
 
             <LinearLayout

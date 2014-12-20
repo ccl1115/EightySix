@@ -72,9 +72,6 @@ public class FeedPostView extends LinearLayout {
   @InjectView (R.id.fl_content)
   public FrameLayout mFlContent;
 
-  @InjectView (R.id.tv_hot)
-  public TextView mTvHot;
-
   @InjectView (R.id.tv_tag_1)
   public TextView mTvTag1;
 
@@ -86,6 +83,9 @@ public class FeedPostView extends LinearLayout {
 
   @InjectView(R.id.ll_tags)
   public LinearLayout mLlTags;
+
+  @InjectView(R.id.tv_hometown)
+  public TextView mTvHometown;
 
   private Post mPost;
 
@@ -206,12 +206,6 @@ public class FeedPostView extends LinearLayout {
       mTvSource.setText("转自" + mPost.source);
     } else {
       mTvSource.setText(mPost.source);
-    }
-
-    if (mPost.isHot == 1) {
-      mTvHot.setVisibility(VISIBLE);
-    } else {
-      mTvHot.setVisibility(GONE);
     }
 
     if (!TextUtils.isEmpty(post.bgUrl)) {
