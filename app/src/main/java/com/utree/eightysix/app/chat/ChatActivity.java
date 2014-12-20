@@ -567,7 +567,7 @@ public class ChatActivity extends BaseActivity implements
 
   private void addCommentSummaryInfo() {
     Message message = ChatUtils.MessageUtil.addCommentSummaryInfo(mChatId,
-        mChatAdapter.get(mChatAdapter.size() - 1).getTimestamp() - 1, mComment);
+        mChatAdapter.size() == 0 ? 0 : mChatAdapter.get(mChatAdapter.size() - 1).getTimestamp() - 1, mComment);
     mChatAdapter.add(message);
   }
 

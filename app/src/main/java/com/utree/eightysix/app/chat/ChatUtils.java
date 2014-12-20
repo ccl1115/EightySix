@@ -266,6 +266,7 @@ public class ChatUtils {
         conversation.setTimestamp(System.currentTimeMillis());
         conversation.setUnreadCount(0L);
         conversation.setPortrait(comment.avatar);
+        conversation.setPortraitColor(comment.avatarColor);
         conversation.setFavorite(false);
         DaoUtils.getConversationDao().insert(conversation);
       }

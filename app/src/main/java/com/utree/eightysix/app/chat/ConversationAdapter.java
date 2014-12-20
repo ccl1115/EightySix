@@ -85,7 +85,13 @@ public class ConversationAdapter extends BaseAdapter {
     holder.mTvName.setText(conversation.getRelation());
     holder.mTvCircle.setText(conversation.getPostSource());
     holder.mTvLast.setText(conversation.getLastMsg());
-    holder.mFpvPortrait.setText("\ue800");
+    if (conversation.getPortrait().equals("\ue800")) {
+      holder.mFpvPortrait.setEmotion(' ');
+      holder.mFpvPortrait.setBackgroundResource(R.drawable.host_portrait);
+    } else {
+      holder.mFpvPortrait.setEmotion(conversation.getPortrait().charAt(0));
+      holder.mFpvPortrait.setEmotionColor(ColorUtil.strToColor(conversation.getPortraitColor()));
+    }
     holder.mTvContent.setText(conversation.getPostContent());
     int unread = conversation.getUnreadCount().intValue();
     if (unread == 0) {
@@ -106,9 +112,6 @@ public class ConversationAdapter extends BaseAdapter {
     }
     holder.mTvLast.setText(conversation.getLastMsg());
     holder.mTvTime.setText(ChatUtils.timestamp(conversation.getTimestamp()));
-
-    holder.mFpvPortrait.setTextColor(Color.BLUE);
-    holder.mFpvPortrait.setBackgroundDrawable(new RoundRectDrawable(Integer.MAX_VALUE, ColorUtil.lighten(Color.BLUE)));
 
     holder.mTvStatus.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(2), Color.GREEN));
 

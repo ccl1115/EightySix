@@ -91,7 +91,6 @@ public class Comment implements Parcelable {
     dest.writeInt(this.owner);
     dest.writeString(this.time);
     dest.writeString(this.distance);
-    dest.writeString(this.chatId);
     dest.writeInt(this.delete);
   }
 
@@ -112,7 +111,6 @@ public class Comment implements Parcelable {
     this.owner = in.readInt();
     this.time = in.readString();
     this.distance = in.readString();
-    this.chatId = in.readString();
     this.delete = in.readInt();
   }
 

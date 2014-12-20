@@ -15,6 +15,7 @@ public class Conversation {
     private String commentId;
     private String lastMsg;
     private String portrait;
+    private String portraitColor;
     private String bgUrl;
     private String bgColor;
     private String commentContent;
@@ -30,7 +31,7 @@ public class Conversation {
         this.id = id;
     }
 
-    public Conversation(Long id, String chatId, String postId, String postSource, String postContent, String commentId, String lastMsg, String portrait, String bgUrl, String bgColor, String commentContent, String relation, Long timestamp, Long unreadCount, Boolean favorite) {
+    public Conversation(Long id, String chatId, String postId, String postSource, String postContent, String commentId, String lastMsg, String portrait, String portraitColor, String bgUrl, String bgColor, String commentContent, String relation, Long timestamp, Long unreadCount, Boolean favorite) {
         this.id = id;
         this.chatId = chatId;
         this.postId = postId;
@@ -39,6 +40,7 @@ public class Conversation {
         this.commentId = commentId;
         this.lastMsg = lastMsg;
         this.portrait = portrait;
+        this.portraitColor = portraitColor;
         this.bgUrl = bgUrl;
         this.bgColor = bgColor;
         this.commentContent = commentContent;
@@ -112,6 +114,14 @@ public class Conversation {
 
     public void setPortrait(String portrait) {
         this.portrait = portrait;
+    }
+
+    public String getPortraitColor() {
+        return portraitColor;
+    }
+
+    public void setPortraitColor(String portraitColor) {
+        this.portraitColor = portraitColor;
     }
 
     public String getBgUrl() {
