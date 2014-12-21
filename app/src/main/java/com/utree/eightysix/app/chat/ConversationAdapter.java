@@ -60,6 +60,15 @@ public class ConversationAdapter extends BaseAdapter {
     return null;
   }
 
+  public List<String> getChatIds() {
+    List<String> chatIds = new ArrayList<String>();
+
+    for (Conversation conversation : mConversations) {
+      chatIds.add(conversation.getChatId());
+    }
+    return chatIds;
+  }
+
   @Override
   public int getCount() {
     return mConversations.size();
@@ -95,7 +104,6 @@ public class ConversationAdapter extends BaseAdapter {
     }
 
     holder.mTvName.setText(conversation.getRelation());
-    holder.mTvCircle.setText(conversation.getPostSource());
     holder.mTvLast.setText(conversation.getLastMsg());
 
     String portrait = conversation.getPortrait();
@@ -128,7 +136,9 @@ public class ConversationAdapter extends BaseAdapter {
       holder.mAivPostBg.setUrl(conversation.getBgUrl());
     }
     holder.mTvLast.setText(conversation.getLastMsg());
-    holder.mTvTime.setText(ChatUtils.timestamp(conversation.getTimestamp() == null ? 0 : conversation.getTimestamp()));
+    holder.mTvInfo.setText(String.format("%s %s",
+        ChatUtils.timestamp(conversation.getTimestamp() == null ? 0 : conversation.getTimestamp()),
+        conversation.getPostSource()));
 
     holder.mTvStatus.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(2), Color.GREEN));
 
@@ -185,11 +195,8 @@ public class ConversationAdapter extends BaseAdapter {
     @InjectView(R.id.tv_name)
     public TextView mTvName;
 
-    @InjectView(R.id.tv_time)
-    public TextView mTvTime;
-
-    @InjectView(R.id.tv_circle)
-    public TextView mTvCircle;
+    @InjectView(R.id.tv_info)
+    public TextView mTvInfo;
 
     @InjectView(R.id.tv_status)
     public TextView mTvStatus;

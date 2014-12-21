@@ -41,6 +41,7 @@ public class ConversationDao extends AbstractDao<Conversation, Long> {
         public final static Property Timestamp = new Property(15, Long.class, "timestamp", false, "TIMESTAMP");
         public final static Property UnreadCount = new Property(16, Long.class, "unreadCount", false, "UNREAD_COUNT");
         public final static Property Favorite = new Property(17, Boolean.class, "favorite", false, "FAVORITE");
+        public final static Property Online = new Property(18, Long.class, "online", false, "ONLINE");
     };
 
 
@@ -73,7 +74,8 @@ public class ConversationDao extends AbstractDao<Conversation, Long> {
             "'LAST_MSG' TEXT," + // 14: lastMsg
             "'TIMESTAMP' INTEGER," + // 15: timestamp
             "'UNREAD_COUNT' INTEGER," + // 16: unreadCount
-            "'FAVORITE' INTEGER);"); // 17: favorite
+            "'FAVORITE' INTEGER," + // 17: favorite
+            "'ONLINE' INTEGER);"); // 18: online
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_CONVERSATION_TIMESTAMP_DESC ON CONVERSATION" +
                 " (TIMESTAMP);");
@@ -175,6 +177,11 @@ public class ConversationDao extends AbstractDao<Conversation, Long> {
         if (favorite != null) {
             stmt.bindLong(18, favorite ? 1l : 0l);
         }
+
+        Long online = entity.getOnline();
+        if (online != null) {
+            stmt.bindLong(19, online);
+        }
     }
 
     /** @inheritdoc */
@@ -204,7 +211,8 @@ public class ConversationDao extends AbstractDao<Conversation, Long> {
             cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // lastMsg
             cursor.isNull(offset + 15) ? null : cursor.getLong(offset + 15), // timestamp
             cursor.isNull(offset + 16) ? null : cursor.getLong(offset + 16), // unreadCount
-            cursor.isNull(offset + 17) ? null : cursor.getShort(offset + 17) != 0 // favorite
+            cursor.isNull(offset + 17) ? null : cursor.getShort(offset + 17) != 0, // favorite
+            cursor.isNull(offset + 18) ? null : cursor.getLong(offset + 18) // online
         );
         return entity;
     }
@@ -230,6 +238,7 @@ public class ConversationDao extends AbstractDao<Conversation, Long> {
         entity.setTimestamp(cursor.isNull(offset + 15) ? null : cursor.getLong(offset + 15));
         entity.setUnreadCount(cursor.isNull(offset + 16) ? null : cursor.getLong(offset + 16));
         entity.setFavorite(cursor.isNull(offset + 17) ? null : cursor.getShort(offset + 17) != 0);
+        entity.setOnline(cursor.isNull(offset + 18) ? null : cursor.getLong(offset + 18));
      }
     
     /** @inheritdoc */

@@ -8,6 +8,7 @@
     <color name="apptheme_primary_grey_color_pressed">#ff898989</color>
     <color name="apptheme_primary_grey_color_disabled">#ffd8d8d8</color>
     <color name="apptheme_primary_grey_color_200">#ff999999</color>
+    <color name="apptheme_primary_grey_color_800">#ff232323</color>
 
     <color name="apptheme_primary_transparent_color">#33000000</color>
     <color name="apptheme_primary_transparent_color_pressed">#88000000</color>

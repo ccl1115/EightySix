@@ -15,8 +15,6 @@
                 android:id="@+id/alv_conversation"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:divider="@color/apptheme_primary_grey_color"
-                android:dividerHeight="1px"
                 />
 
         <com.utree.eightysix.widget.RandomSceneTextView

@@ -9,108 +9,117 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:orientation="horizontal"
+              android:orientation="vertical"
               android:baselineAligned="false"
               android:background="@drawable/apptheme_primary_list_selector"
         >
 
-
-        <RelativeLayout
-                android:layout_width="0dp"
+        <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_gravity="center_vertical"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_gravity="end"
+                android:textSize="12sp"
+                android:textColor="@android:color/white"
+                />
+
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false"
                 >
 
                 <com.utree.eightysix.widget.FontPortraitView
                         android:id="@+id/fpv_portrait"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_margin="8dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_margin="16dp"
+                        android:layout_gravity="center_vertical"
                         android:gravity="center"
+                        android:textSize="32sp"
                         />
 
+                <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:orientation="vertical"
+                >
 
-                <TextView
-                        android:id="@+id/tv_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@+id/fpv_portrait"
-                        android:layout_toEndOf="@+id/fpv_portrait"
-                        android:layout_toLeftOf="@+id/tv_status"
-                        android:layout_toStartOf="@+id/tv_status"
-                        android:layout_marginTop="8dp"
-                        android:textSize="14sp"
-                        />
 
-                <TextView
-                        android:id="@+id/tv_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@+id/fpv_portrait"
-                        android:layout_toEndOf="@+id/fpv_portrait"
-                        android:layout_below="@+id/tv_name"
-                        android:textColor="@color/apptheme_primary_grey_color_200"
-                        android:textSize="12sp"
-                        />
+                        <TextView
+                                android:id="@+id/tv_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="18sp"
+                                />
 
-                <TextView
-                        android:id="@+id/tv_circle"
+                        <com.rockerhieu.emojicon.EmojiconTextView
+                                android:id="@+id/tv_last"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:singleLine="true"
+                                android:ellipsize="end"
+                                android:textSize="16sp"
+                                android:textColor="@color/apptheme_primary_grey_color_800"
+                                app:emojiconSize="22dp"
+                                />
+
+                        <TextView
+                                android:id="@+id/tv_info"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:textColor="@color/apptheme_primary_grey_color_200"
+                                android:textSize="12sp"
+                                />
+
+
+                </LinearLayout>
+
+                <com.utree.eightysix.widget.RoundedButton
+                        android:id="@+id/rb_unread"
                         android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/tv_time"
-                android:layout_toEndOf="@+id/tv_time"
-                android:layout_toLeftOf="@+id/tv_status"
-                android:layout_toStartOf="@+id/tv_status"
-                android:layout_alignTop="@+id/tv_time"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:textColor="@color/apptheme_primary_grey_color_200"
+                android:layout_gravity="center_vertical"
                 android:textSize="12sp"
+                android:minHeight="0dp"
+                android:paddingLeft="10dp"
+                android:paddingStart="10dp"
+                android:paddingRight="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:textColor="@android:color/white"
+                app:radius="20dp"
+                app:background="@color/apptheme_primary_light_color"
                         />
-
-                <com.rockerhieu.emojicon.EmojiconTextView
-                        android:id="@+id/tv_last"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/fpv_portrait"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginStart="16dp"
-                        android:singleLine="true"
-                        android:ellipsize="end"
-                        android:textSize="16sp"
-                        app:emojiconSize="24dp"
-                        />
-
-                <TextView
-                        android:id="@+id/tv_status"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_margin="8dp"
-                        android:textSize="12sp"
-                        android:textColor="@android:color/white"
-                        android:paddingLeft="4dp"
-                        android:paddingTop="2dp"
-                        android:paddingRight="4dp"
-                        android:paddingBottom="2dp"
-                        />
-        </RelativeLayout>
 
         <FrameLayout
                 android:id="@+id/fl_post"
-                android:layout_width="84dp"
-                android:layout_height="84dp"
-                android:padding="4dp"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginEnd="12dp"
                 >
 
                 <com.utree.eightysix.widget.AsyncImageView
                         android:id="@+id/aiv_post_bg"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_margin="4dp"
                         />
 
 
@@ -119,7 +128,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:layout_margin="4dp"
                         android:background="#44000000"
                         />
 
@@ -131,28 +139,21 @@
                         android:gravity="center"
                         android:textColor="@android:color/white"
                         android:textSize="10sp"
-                        android:padding="4dp"
                         android:ellipsize="end"
                         android:maxLines="4"
                         tools:ignore="SmallSp"
                         />
 
-                <com.utree.eightysix.widget.RoundedButton
-                        android:id="@+id/rb_unread"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:textSize="12sp"
-                        android:minHeight="0dp"
-                        android:paddingLeft="5dp"
-                        android:paddingStart="5dp"
-                        android:paddingRight="5dp"
-                        android:paddingEnd="5dp"
-                        android:textColor="@android:color/white"
-                        app:radius="10dp"
-                        app:background="@color/apptheme_secondary_light_color"
-                        />
-
         </FrameLayout>
 
+        </LinearLayout>
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="102dp"
+                android:layout_marginStart="102dp"
+                android:layout_gravity="end"
+                android:background="@color/apptheme_primary_grey_color_200"
+                />
 </LinearLayout>

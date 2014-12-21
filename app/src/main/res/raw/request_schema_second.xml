@@ -79,7 +79,7 @@
         <sign/>
         <token/>
         <params>
-            <param>chatId</param>
+            <param>chatIds</param>
         </params>
         <responseClz>ChatOnlineListResponse</responseClz>
     </request>

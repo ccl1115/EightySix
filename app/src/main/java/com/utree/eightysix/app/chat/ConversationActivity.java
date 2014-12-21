@@ -25,6 +25,7 @@ import com.utree.eightysix.data.ChatFav;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.response.ChatFavListResponse;
+import com.utree.eightysix.response.ChatOnlineListResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
@@ -115,6 +116,7 @@ public class ConversationActivity extends BaseActivity {
     U.getChatBus().register(mConversationAdapter);
 
     requestFavorites();
+    requestOnline();
   }
 
   @Override
@@ -303,5 +305,19 @@ public class ConversationActivity extends BaseActivity {
         }
       }
     }, ChatFavListResponse.class, null, null);
+  }
+
+  private void requestOnline() {
+    U.request("chat_ol_list", new OnResponse2<ChatOnlineListResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
+      @Override
+      public void onResponse(ChatOnlineListResponse response) {
+
+      }
+    }, ChatOnlineListResponse.class, mConversationAdapter.getChatIds());
   }
 }

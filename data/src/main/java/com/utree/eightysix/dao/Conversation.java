@@ -25,6 +25,7 @@ public class Conversation {
     private Long timestamp;
     private Long unreadCount;
     private Boolean favorite;
+    private Long online;
 
     public Conversation() {
     }
@@ -33,7 +34,7 @@ public class Conversation {
         this.id = id;
     }
 
-    public Conversation(Long id, String chatId, String postId, String postSource, String postContent, String portrait, String portraitColor, String myPortrait, String myPortraitColor, String bgUrl, String bgColor, String commentId, String commentContent, String relation, String lastMsg, Long timestamp, Long unreadCount, Boolean favorite) {
+    public Conversation(Long id, String chatId, String postId, String postSource, String postContent, String portrait, String portraitColor, String myPortrait, String myPortraitColor, String bgUrl, String bgColor, String commentId, String commentContent, String relation, String lastMsg, Long timestamp, Long unreadCount, Boolean favorite, Long online) {
         this.id = id;
         this.chatId = chatId;
         this.postId = postId;
@@ -52,6 +53,7 @@ public class Conversation {
         this.timestamp = timestamp;
         this.unreadCount = unreadCount;
         this.favorite = favorite;
+        this.online = online;
     }
 
     public Long getId() {
@@ -198,6 +200,14 @@ public class Conversation {
 
     public void setFavorite(Boolean favorite) {
         this.favorite = favorite;
+    }
+
+    public Long getOnline() {
+        return online;
+    }
+
+    public void setOnline(Long online) {
+        this.online = online;
     }
 
 }
