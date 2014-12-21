@@ -12,6 +12,7 @@ import butterknife.InjectView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.chat.content.ImageContent;
+import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.dao.Message;
 import com.utree.eightysix.dao.MessageConst;
 import com.utree.eightysix.widget.AsyncImageView;
@@ -248,8 +249,15 @@ public class ChatAdapter extends BaseAdapter {
       convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_info, parent, false);
     }
 
-    Message message = getItem(position);
-    ((RoundedButton) convertView.findViewById(R.id.rb_info)).setText(message.getContent());
+    final Message message = getItem(position);
+    RoundedButton roundedButton = (RoundedButton) convertView.findViewById(R.id.rb_info);
+    roundedButton.setText(message.getContent());
+    roundedButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        PostActivity.start(view.getContext(), message.getPostId());
+      }
+    });
 
     return convertView;
   }

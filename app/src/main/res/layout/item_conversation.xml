@@ -31,15 +31,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:baselineAligned="false"
                 >
 
                 <com.utree.eightysix.widget.FontPortraitView
                         android:id="@+id/fpv_portrait"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:layout_margin="16dp"
-                        android:layout_gravity="center_vertical"
+                        android:layout_margin="12dp"
                         android:gravity="center"
                         android:textSize="32sp"
                         />
@@ -151,8 +149,8 @@
         <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:layout_marginLeft="102dp"
-                android:layout_marginStart="102dp"
+                android:layout_marginLeft="80dp"
+                android:layout_marginStart="80dp"
                 android:layout_gravity="end"
                 android:background="@color/apptheme_primary_grey_color_200"
                 />

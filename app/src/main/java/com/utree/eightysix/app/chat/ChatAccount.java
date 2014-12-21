@@ -178,7 +178,7 @@ public class ChatAccount {
               public void run(Object... params) {
                 mPost = ((Post) params[0]);
                 mComment = ((Comment) params[1]);
-                mInfoMessage = ChatUtils.MessageUtil.addCommentSummaryInfo(mMessage.getChatId(), mMessage.getTimestamp() - 1, mComment);
+                mInfoMessage = ChatUtils.MessageUtil.addCommentSummaryInfo(mMessage.getChatId(), mMessage.getTimestamp() - 1, mPost, mComment);
                 if (mInfoMessage != null) {
                   publishProgress(PROGRESS_INFO_MESSAGE);
                 }

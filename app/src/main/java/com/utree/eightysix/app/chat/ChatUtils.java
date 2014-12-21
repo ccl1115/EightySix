@@ -560,12 +560,13 @@ public class ChatUtils {
 
     }
 
-    public static Message addCommentSummaryInfo(String chatId, long timestamp, Comment comment) {
+    public static Message addCommentSummaryInfo(String chatId, long timestamp, Post post, Comment comment) {
       if (!ChatUtils.MessageUtil.hasCommentSummaryMessage(chatId, comment.id)) {
         Message message =
             ChatUtils.infoMsg(chatId,
                 "评论：" + (comment.content.length() > 80 ? comment.content.substring(0, 76) + "..." : comment.content));
 
+        message.setPostId(post.id);
         message.setCommentId(comment.id);
         message.setType(MessageConst.TYPE_COMMENT);
         message.setTimestamp(timestamp);

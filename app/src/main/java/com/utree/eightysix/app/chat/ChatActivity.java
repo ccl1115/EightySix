@@ -14,7 +14,10 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import butterknife.*;
+import butterknife.InjectView;
+import butterknife.OnClick;
+import butterknife.OnItemLongClick;
+import butterknife.OnTextChanged;
 import com.rockerhieu.emojicon.EmojiconEditText;
 import com.rockerhieu.emojicon.EmojiconGridFragment;
 import com.rockerhieu.emojicon.EmojiconsFragment;
@@ -176,9 +179,15 @@ public class ChatActivity extends BaseActivity implements
   public boolean onAlvChatsItemLongClicked(int position) {
     Message m = mChatAdapter.getItem(position);
     if (m != null) {
-      if (m.getStatus() == MessageConst.STATUS_FAILED) {
-        showToast(R.string.resending);
-        ChatAccount.inst().getSender().send(m);
+      switch (m.getType()) {
+        case MessageConst.TYPE_TXT: {
+          if (m.getStatus() == MessageConst.STATUS_FAILED) {
+            showToast(R.string.resending);
+            ChatAccount.inst().getSender().send(m);
+
+          }
+          break;
+        }
       }
     }
     return true;
@@ -568,7 +577,7 @@ public class ChatActivity extends BaseActivity implements
 
   private void addCommentSummaryInfo() {
     Message message = ChatUtils.MessageUtil.addCommentSummaryInfo(mChatId,
-        System.currentTimeMillis(), mComment);
+        System.currentTimeMillis(), mPost, mComment);
     mChatAdapter.add(message);
   }
 
