@@ -37,6 +37,7 @@ import com.utree.eightysix.app.feed.event.InviteClickedEvent;
 import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
 import com.utree.eightysix.app.feed.event.UploadClickedEvent;
+import com.utree.eightysix.app.hometown.HometownTabFragment;
 import com.utree.eightysix.app.hometown.SetHometownFragment;
 import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.MsgActivity;
@@ -88,6 +89,8 @@ public class HomeActivity extends BaseActivity {
   private FactoryRegionFragment mFactoryRegionFragment;
 
   private SetHometownFragment mSetHometownFragment;
+
+  private HometownTabFragment mHometownTabFragment;
 
   /**
    * 邀请好友对话框

@@ -11,11 +11,13 @@
         >
 
     <com.utree.eightysix.widget.TitleTab
+            android:id="@+id/tt_tab"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
 
     <ViewPager
+            android:id="@+id/vp_hometown"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
