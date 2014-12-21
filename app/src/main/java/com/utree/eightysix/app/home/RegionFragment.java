@@ -54,6 +54,13 @@ public class RegionFragment extends BaseFragment {
     }
   }
 
+  @OnClick(R.id.rb_fellow_setting)
+  public void onRbFellowSettingClicked() {
+    if (mCallback != null) {
+      mCallback.onFellowSettingClicked();
+    }
+  }
+
   @OnClick (R.id.rb_range_1)
   public void onRbRegion1Clicked(View v) {
     mRegionType = 1;
@@ -145,6 +152,8 @@ public class RegionFragment extends BaseFragment {
 
   public interface Callback {
     void onItemClicked(int regionType, boolean selected);
+
+    void onFellowSettingClicked();
   }
 
   @Subscribe

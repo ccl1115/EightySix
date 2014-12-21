@@ -37,6 +37,7 @@ import com.utree.eightysix.app.feed.event.InviteClickedEvent;
 import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
 import com.utree.eightysix.app.feed.event.UploadClickedEvent;
+import com.utree.eightysix.app.hometown.SetHometownFragment;
 import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.msg.PraiseActivity;
@@ -85,6 +86,8 @@ public class HomeActivity extends BaseActivity {
   private RegionFragment mRegionFragment;
 
   private FactoryRegionFragment mFactoryRegionFragment;
+
+  private SetHometownFragment mSetHometownFragment;
 
   /**
    * 邀请好友对话框
@@ -222,6 +225,11 @@ public class HomeActivity extends BaseActivity {
         if (selected) {
           mTabFragment.setRegionType(regionType);
         }
+      }
+
+      @Override
+      public void onFellowSettingClicked() {
+        showSetHometownFragment();
       }
     });
 
@@ -527,6 +535,18 @@ public class HomeActivity extends BaseActivity {
     } else {
       getSupportFragmentManager().beginTransaction()
           .detach(mFactoryRegionFragment).commit();
+    }
+  }
+
+  private void showSetHometownFragment() {
+    if (mSetHometownFragment == null) {
+      mSetHometownFragment = new SetHometownFragment();
+
+      getSupportFragmentManager().beginTransaction()
+          .add(android.R.id.content, mSetHometownFragment).commit();
+    } else if (mSetHometownFragment.isDetached()) {
+      getSupportFragmentManager().beginTransaction()
+          .attach(mSetHometownFragment).commit();
     }
   }
 
