@@ -531,6 +531,7 @@ public class ChatActivity extends BaseActivity implements
                 if (RESTRequester.responseOk(response)) {
                   showToast(getString(R.string.report_success));
                   ChatUtils.ConversationUtil.deleteConversation(mChatId);
+                  U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_REMOVE, mChatId));
                   finish();
                 }
                 dialogInterface.dismiss();
@@ -557,8 +558,8 @@ public class ChatActivity extends BaseActivity implements
         .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialogInterface, int i) {
-            dialogInterface.dismiss();
             ChatUtils.ConversationUtil.deleteConversation(mChatId);
+            U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_REMOVE, mChatId));
             finish();
           }
         })

@@ -42,9 +42,14 @@ public class ChatEvent {
   public static final int EVENT_CONVERSATIONS_RELOAD = 32;
 
   /**
+   * Event fire when conversation remove from db
+   */
+  public static final int EVENT_CONVERSATION_REMOVE = 33;
+
+  /**
    * Event fire when db return unread conversation count
    */
-  public static final int EVENT_UPDATE_UNREAD_CONVERSATION_COUNT = 100;
+  public static final int EVENT_UPDATE_UNREAD_CONVERSATION_COUNT = 34;
 
   private int mStatus;
 

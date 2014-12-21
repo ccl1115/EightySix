@@ -230,6 +230,7 @@ public class ChatUtils {
       return DaoUtils.getConversationDao().queryBuilder()
           .whereOr(ConversationDao.Properties.LastMsg.isNotNull(),
               ConversationDao.Properties.Favorite.eq(true))
+          .orderDesc(ConversationDao.Properties.Timestamp)
           .list();
     }
 

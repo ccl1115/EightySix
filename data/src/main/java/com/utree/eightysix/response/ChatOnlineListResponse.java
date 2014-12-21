@@ -5,6 +5,7 @@
 package com.utree.eightysix.response;
 
 import com.google.gson.annotations.SerializedName;
+import com.utree.eightysix.data.ChatOnline;
 import com.utree.eightysix.rest.Response;
 
 import java.util.List;
@@ -19,6 +20,6 @@ public class ChatOnlineListResponse extends Response {
   public static class ChatOnlineList {
 
     @SerializedName("list")
-    public List<String> list;
+    public List<ChatOnline> list;
   }
 }

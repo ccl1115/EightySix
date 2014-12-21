@@ -4,7 +4,6 @@
 
 package com.utree.eightysix.app.chat;
 
-import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +19,9 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.dao.Conversation;
-import com.utree.eightysix.drawable.RoundRectDrawable;
+import com.utree.eightysix.data.ChatOnline;
 import com.utree.eightysix.utils.ColorUtil;
+import com.utree.eightysix.utils.DaoUtils;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.FontPortraitView;
 import com.utree.eightysix.widget.RoundedButton;
@@ -43,7 +43,7 @@ public class ConversationAdapter extends BaseAdapter {
       if (lhs.getTimestamp() == null || rhs.getTimestamp() == null) {
         return 0;
       }
-      return lhs.getTimestamp().compareTo(rhs.getTimestamp());
+      return rhs.getTimestamp().compareTo(lhs.getTimestamp());
     }
   };
 
@@ -67,6 +67,19 @@ public class ConversationAdapter extends BaseAdapter {
       chatIds.add(conversation.getChatId());
     }
     return chatIds;
+  }
+
+  public void updateOnline(List<ChatOnline> onlines) {
+    for (ChatOnline online : onlines) {
+      for (Conversation conversation : mConversations) {
+        if (conversation.getChatId().equals(online.chatId)) {
+          conversation.setOnline(System.currentTimeMillis());
+          break;
+        }
+      }
+    }
+    DaoUtils.getConversationDao().updateInTx(mConversations);
+    notifyDataSetChanged();
   }
 
   @Override
@@ -117,6 +130,17 @@ public class ConversationAdapter extends BaseAdapter {
       }
     }
 
+    if (conversation.getOnline() != null) {
+      if (System.currentTimeMillis() - conversation.getOnline() > 300000) {
+        // 5 minutes
+        holder.mTvStatus.setText(U.timestamp(conversation.getOnline()) + "前在线");
+        holder.mTvStatus.setTextColor(parent.getResources().getColor(R.color.apptheme_primary_grey_color_200));
+      } else {
+        holder.mTvStatus.setText("在线");
+        holder.mTvStatus.setTextColor(parent.getResources().getColor(R.color.apptheme_primary_light_color));
+      }
+    }
+
     holder.mTvContent.setText(conversation.getPostContent());
     int unread = conversation.getUnreadCount() == null ? 0 : conversation.getUnreadCount().intValue();
     if (unread == 0) {
@@ -140,8 +164,6 @@ public class ConversationAdapter extends BaseAdapter {
         ChatUtils.timestamp(conversation.getTimestamp() == null ? 0 : conversation.getTimestamp()),
         conversation.getPostSource()));
 
-    holder.mTvStatus.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(2), Color.GREEN));
-
     holder.mFlPost.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
@@ -164,24 +186,30 @@ public class ConversationAdapter extends BaseAdapter {
 
   @Subscribe
   public void onChatEvent(ChatEvent event) {
-    if (event.getStatus() == ChatEvent.EVENT_CONVERSATION_UPDATE) {
-      Conversation obj = (Conversation) event.getObj();
-      for (int i = 0; i < mConversations.size(); i++) {
-        Conversation conversation = mConversations.get(i);
-        if (conversation.getId().equals(obj.getId())) {
-          mConversations.set(i, obj);
-          Collections.sort(mConversations, sComparator);
-          notifyDataSetChanged();
-          return;
+    switch (event.getStatus()) {
+      case ChatEvent.EVENT_CONVERSATION_UPDATE:
+        Conversation obj = (Conversation) event.getObj();
+        for (int i = 0; i < mConversations.size(); i++) {
+          Conversation conversation = mConversations.get(i);
+          if (conversation.getId().equals(obj.getId())) {
+            mConversations.set(i, obj);
+            Collections.sort(mConversations, sComparator);
+            notifyDataSetChanged();
+            return;
+          }
         }
-      }
 
-      mConversations.add(obj);
-      Collections.sort(mConversations, sComparator);
-      notifyDataSetChanged();
-    } else if (event.getStatus() == ChatEvent.EVENT_CONVERSATIONS_RELOAD) {
-      mConversations = ChatUtils.ConversationUtil.getConversations();
-      notifyDataSetChanged();
+        mConversations.add(obj);
+        Collections.sort(mConversations, sComparator);
+        notifyDataSetChanged();
+        break;
+      case ChatEvent.EVENT_CONVERSATIONS_RELOAD:
+        mConversations = ChatUtils.ConversationUtil.getConversations();
+        notifyDataSetChanged();
+        break;
+      case ChatEvent.EVENT_CONVERSATION_REMOVE:
+        removeByChatId(((String) event.getObj()));
+        break;
     }
   }
 

@@ -32,10 +32,10 @@ import com.utree.eightysix.statistics.Analyser;
 import com.utree.eightysix.statistics.MtaAnalyserImpl;
 import com.utree.eightysix.storage.Storage;
 import com.utree.eightysix.utils.CacheUtils;
+import com.utree.eightysix.utils.TimeUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
@@ -357,19 +357,7 @@ public class U {
   }
 
   public static String timestamp(long timestamp) {
-    final long now = new Date().getTime();
-    final long t = now - timestamp;
-    if (t < 0) {
-      return "刚刚";
-    } else if (t < MINUTE_IN_MS) {
-      return (t / SECOND_IN_MS) + "秒前";
-    } else if (t < HOUR_IN_MS) {
-      return (t / MINUTE_IN_MS) + "分钟前";
-    } else if (t < DAY_IN_MS) {
-      return (t / HOUR_IN_MS) + "小时前";
-    } else {
-      return (t / DAY_IN_MS) + "天前";
-    }
+    return TimeUtil.getElapsed(timestamp);
   }
 
   /**
