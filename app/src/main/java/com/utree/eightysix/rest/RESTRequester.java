@@ -79,11 +79,11 @@ public class RESTRequester implements IRESTRequester {
   @Override
   public RequestHandle request(RequestData data, ResponseHandlerInterface handler) {
     putBaseParams(data.getParams());
-    if (data.needSign()) {
-      data.getParams().sign();
-    }
     if (data.token) {
       addAuthParams(data.getParams());
+    }
+    if (data.needSign()) {
+      data.getParams().sign();
     }
     if (data.getMethod() == Method.GET) {
       if (data.getHost() != null) {
