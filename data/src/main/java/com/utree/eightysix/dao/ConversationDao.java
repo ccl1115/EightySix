@@ -58,24 +58,24 @@ public class ConversationDao extends AbstractDao<Conversation, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'CONVERSATION' (" + //
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
-            "'CHAT_ID' TEXT NOT NULL UNIQUE ," + // 1: chatId
+                "'CHAT_ID' TEXT NOT NULL UNIQUE ," + // 1: chatId
                 "'POST_ID' TEXT," + // 2: postId
-            "'POST_SOURCE' TEXT," + // 3: postSource
-            "'POST_CONTENT' TEXT," + // 4: postContent
-            "'PORTRAIT' TEXT," + // 5: portrait
-            "'PORTRAIT_COLOR' TEXT," + // 6: portraitColor
-            "'MY_PORTRAIT' TEXT," + // 7: myPortrait
-            "'MY_PORTRAIT_COLOR' TEXT," + // 8: myPortraitColor
-            "'BG_URL' TEXT," + // 9: bgUrl
-            "'BG_COLOR' TEXT," + // 10: bgColor
-            "'COMMENT_ID' TEXT," + // 11: commentId
-            "'COMMENT_CONTENT' TEXT," + // 12: commentContent
-            "'RELATION' TEXT," + // 13: relation
-            "'LAST_MSG' TEXT," + // 14: lastMsg
-            "'TIMESTAMP' INTEGER," + // 15: timestamp
-            "'UNREAD_COUNT' INTEGER," + // 16: unreadCount
-            "'FAVORITE' INTEGER," + // 17: favorite
-            "'ONLINE' INTEGER);"); // 18: online
+                "'POST_SOURCE' TEXT," + // 3: postSource
+                "'POST_CONTENT' TEXT," + // 4: postContent
+                "'PORTRAIT' TEXT," + // 5: portrait
+                "'PORTRAIT_COLOR' TEXT," + // 6: portraitColor
+                "'MY_PORTRAIT' TEXT," + // 7: myPortrait
+                "'MY_PORTRAIT_COLOR' TEXT," + // 8: myPortraitColor
+                "'BG_URL' TEXT," + // 9: bgUrl
+                "'BG_COLOR' TEXT," + // 10: bgColor
+                "'COMMENT_ID' TEXT," + // 11: commentId
+                "'COMMENT_CONTENT' TEXT," + // 12: commentContent
+                "'RELATION' TEXT," + // 13: relation
+                "'LAST_MSG' TEXT," + // 14: lastMsg
+                "'TIMESTAMP' INTEGER," + // 15: timestamp
+                "'UNREAD_COUNT' INTEGER," + // 16: unreadCount
+                "'FAVORITE' INTEGER," + // 17: favorite
+                "'ONLINE' INTEGER);"); // 18: online
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_CONVERSATION_TIMESTAMP_DESC ON CONVERSATION" +
                 " (TIMESTAMP);");
@@ -102,12 +102,12 @@ public class ConversationDao extends AbstractDao<Conversation, Long> {
         if (postId != null) {
             stmt.bindString(3, postId);
         }
-
+ 
         String postSource = entity.getPostSource();
         if (postSource != null) {
             stmt.bindString(4, postSource);
         }
-
+ 
         String postContent = entity.getPostContent();
         if (postContent != null) {
             stmt.bindString(5, postContent);
@@ -117,17 +117,17 @@ public class ConversationDao extends AbstractDao<Conversation, Long> {
         if (portrait != null) {
             stmt.bindString(6, portrait);
         }
-
+ 
         String portraitColor = entity.getPortraitColor();
         if (portraitColor != null) {
             stmt.bindString(7, portraitColor);
         }
-
+ 
         String myPortrait = entity.getMyPortrait();
         if (myPortrait != null) {
             stmt.bindString(8, myPortrait);
         }
-
+ 
         String myPortraitColor = entity.getMyPortraitColor();
         if (myPortraitColor != null) {
             stmt.bindString(9, myPortraitColor);
@@ -137,12 +137,12 @@ public class ConversationDao extends AbstractDao<Conversation, Long> {
         if (bgUrl != null) {
             stmt.bindString(10, bgUrl);
         }
-
+ 
         String bgColor = entity.getBgColor();
         if (bgColor != null) {
             stmt.bindString(11, bgColor);
         }
-
+ 
         String commentId = entity.getCommentId();
         if (commentId != null) {
             stmt.bindString(12, commentId);
@@ -157,7 +157,7 @@ public class ConversationDao extends AbstractDao<Conversation, Long> {
         if (relation != null) {
             stmt.bindString(14, relation);
         }
-
+ 
         String lastMsg = entity.getLastMsg();
         if (lastMsg != null) {
             stmt.bindString(15, lastMsg);
@@ -175,9 +175,9 @@ public class ConversationDao extends AbstractDao<Conversation, Long> {
  
         Boolean favorite = entity.getFavorite();
         if (favorite != null) {
-            stmt.bindLong(18, favorite ? 1l : 0l);
+            stmt.bindLong(18, favorite ? 1l: 0l);
         }
-
+ 
         Long online = entity.getOnline();
         if (online != null) {
             stmt.bindLong(19, online);

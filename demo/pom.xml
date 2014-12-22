@@ -37,7 +37,7 @@
 
         <dependency>
             <groupId>com.utree.eightysix</groupId>
-            <artifactId>EightySix-base</artifactId>
+            <artifactId>base</artifactId>
             <version>1.6.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

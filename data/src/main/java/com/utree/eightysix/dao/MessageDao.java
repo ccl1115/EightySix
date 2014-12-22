@@ -55,18 +55,18 @@ public class MessageDao extends AbstractDao<Message, Long> {
                 "'CHAT_ID' TEXT NOT NULL ," + // 1: chatId
                 "'POST_ID' TEXT," + // 2: postId
                 "'COMMENT_ID' TEXT," + // 3: commentId
-            "'COMMENT_CONTENT' TEXT," + // 4: commentContent
-            "'MSG_ID' TEXT," + // 5: msgId
-            "'TIMESTAMP' INTEGER," + // 6: timestamp
-            "'FROM' TEXT," + // 7: from
-            "'TYPE' INTEGER," + // 8: type
-            "'CONTENT' TEXT," + // 9: content
-            "'STATUS' INTEGER," + // 10: status
-            "'READ' INTEGER," + // 11: read
-            "'DIRECTION' INTEGER);"); // 12: direction
+                "'COMMENT_CONTENT' TEXT," + // 4: commentContent
+                "'MSG_ID' TEXT," + // 5: msgId
+                "'TIMESTAMP' INTEGER," + // 6: timestamp
+                "'FROM' TEXT," + // 7: from
+                "'TYPE' INTEGER," + // 8: type
+                "'CONTENT' TEXT," + // 9: content
+                "'STATUS' INTEGER," + // 10: status
+                "'READ' INTEGER," + // 11: read
+                "'DIRECTION' INTEGER);"); // 12: direction
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_MESSAGE_POST_ID ON MESSAGE" +
-            " (POST_ID);");
+                " (POST_ID);");
         db.execSQL("CREATE INDEX " + constraint + "IDX_MESSAGE_TIMESTAMP_DESC ON MESSAGE" +
                 " (TIMESTAMP);");
     }
@@ -97,7 +97,7 @@ public class MessageDao extends AbstractDao<Message, Long> {
         if (commentId != null) {
             stmt.bindString(4, commentId);
         }
-
+ 
         String commentContent = entity.getCommentContent();
         if (commentContent != null) {
             stmt.bindString(5, commentContent);
@@ -135,7 +135,7 @@ public class MessageDao extends AbstractDao<Message, Long> {
  
         Boolean read = entity.getRead();
         if (read != null) {
-            stmt.bindLong(12, read ? 1l : 0l);
+            stmt.bindLong(12, read ? 1l: 0l);
         }
  
         Integer direction = entity.getDirection();
