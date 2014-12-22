@@ -61,6 +61,21 @@ public class RegionFragment extends BaseFragment {
     }
   }
 
+  @OnClick(R.id.tv_fellow)
+  public void onTvFellowClicked(View v) {
+    clearSelected();
+    if (v.isSelected()) {
+      if (mCallback != null) {
+        mCallback.onFellowClicked(false);
+      }
+    } else {
+      v.setSelected(true);
+      if (mCallback != null) {
+        mCallback.onFellowClicked(true);
+      }
+    }
+  }
+
   @OnClick (R.id.rb_range_1)
   public void onRbRegion1Clicked(View v) {
     mRegionType = 1;
@@ -132,13 +147,13 @@ public class RegionFragment extends BaseFragment {
   protected void setRangeSelected(int i, View v) {
     if (v.isSelected()) {
       if (mCallback != null) {
-        mCallback.onItemClicked(i, false);
+        mCallback.onRegionClicked(i, false);
       }
     } else {
       clearSelected();
       v.setSelected(true);
       if (mCallback != null) {
-        mCallback.onItemClicked(i, true);
+        mCallback.onRegionClicked(i, true);
       }
     }
   }
@@ -151,9 +166,11 @@ public class RegionFragment extends BaseFragment {
   }
 
   public interface Callback {
-    void onItemClicked(int regionType, boolean selected);
+    void onRegionClicked(int regionType, boolean selected);
 
     void onFellowSettingClicked();
+
+    void onFellowClicked(boolean selected);
   }
 
   @Subscribe

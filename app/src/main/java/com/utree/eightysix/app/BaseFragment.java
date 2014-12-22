@@ -47,6 +47,16 @@ public class BaseFragment extends Fragment {
 
   }
 
+  public boolean detachSelf() {
+    if (!isDetached()) {
+      getFragmentManager().beginTransaction()
+          .detach(this).commit();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   public boolean onBackPressed() {
     return false;
   }

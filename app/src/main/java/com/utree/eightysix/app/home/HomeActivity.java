@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -37,6 +38,7 @@ import com.utree.eightysix.app.feed.event.InviteClickedEvent;
 import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
 import com.utree.eightysix.app.feed.event.UploadClickedEvent;
+import com.utree.eightysix.app.hometown.HometownInfoFragment;
 import com.utree.eightysix.app.hometown.HometownTabFragment;
 import com.utree.eightysix.app.hometown.SetHometownFragment;
 import com.utree.eightysix.app.msg.FetchNotificationService;
@@ -91,6 +93,8 @@ public class HomeActivity extends BaseActivity {
   private SetHometownFragment mSetHometownFragment;
 
   private HometownTabFragment mHometownTabFragment;
+
+  private HometownInfoFragment mHometownInfoFragment;
 
   /**
    * 邀请好友对话框
@@ -184,7 +188,11 @@ public class HomeActivity extends BaseActivity {
 
   @Override
   public void onTitleClicked() {
-    toggleFactoryRegion();
+    if (mTabFragment != null && !mTabFragment.isDetached()) {
+      toggleFactoryRegion();
+    } else if (mHometownTabFragment != null && !mHometownTabFragment.isDetached()) {
+      toggleHometownInfoFragment();
+    }
     mDlContent.closeDrawer(mFlSide);
   }
 
@@ -223,16 +231,25 @@ public class HomeActivity extends BaseActivity {
 
     mRegionFragment.setCallback(new RegionFragment.Callback() {
       @Override
-      public void onItemClicked(int regionType, boolean selected) {
+      public void onRegionClicked(int regionType, boolean selected) {
         mDlContent.closeDrawer(mFlSide);
         if (selected) {
           mTabFragment.setRegionType(regionType);
         }
+        showTabFragment();
       }
 
       @Override
       public void onFellowSettingClicked() {
         showSetHometownFragment();
+      }
+
+      @Override
+      public void onFellowClicked(boolean selected) {
+        mDlContent.closeDrawer(mFlSide);
+        if (selected) {
+          showHometownTabFragment();
+        }
       }
     });
 
@@ -505,7 +522,13 @@ public class HomeActivity extends BaseActivity {
     mCurrentCircle = event.getCircle();
   }
 
-  private void showFactoryRegion() {
+  private void hideFactoryRegion() {
+    if (mFactoryRegionFragment != null) {
+      mFactoryRegionFragment.detachSelf();
+    }
+  }
+
+  private void toggleFactoryRegion() {
     if (mFactoryRegionFragment == null) {
       mFactoryRegionFragment = new FactoryRegionFragment();
 
@@ -514,30 +537,30 @@ public class HomeActivity extends BaseActivity {
     } else if (mFactoryRegionFragment.isDetached()) {
       getSupportFragmentManager().beginTransaction()
           .attach(mFactoryRegionFragment).commit();
-    }
-
-    mFactoryRegionFragment.setRegionType(mRegionFragment.getRegionType());
-  }
-
-  private void hideFactoryRegion() {
-    if (mFactoryRegionFragment != null) {
-      if (!mFactoryRegionFragment.isDetached()) {
-        getSupportFragmentManager().beginTransaction()
-            .detach(mFactoryRegionFragment).commit();
-      }
-    }
-  }
-
-  private void toggleFactoryRegion() {
-    if (mFactoryRegionFragment == null) {
-      showFactoryRegion();
-    } else if (mFactoryRegionFragment.isDetached()) {
-      getSupportFragmentManager().beginTransaction()
-          .attach(mFactoryRegionFragment).commit();
       mFactoryRegionFragment.setRegionType(mRegionFragment.getRegionType());
     } else {
+      mFactoryRegionFragment.detachSelf();
+    }
+  }
+
+  private void hideHometownInfoFragment() {
+    if (mHometownInfoFragment != null) {
+      mHometownInfoFragment.detachSelf();
+    }
+  }
+
+  private void toggleHometownInfoFragment() {
+    if (mHometownInfoFragment == null) {
+      mHometownInfoFragment = new HometownInfoFragment();
+
       getSupportFragmentManager().beginTransaction()
-          .detach(mFactoryRegionFragment).commit();
+          .add(R.id.fl_main, mHometownInfoFragment)
+          .commit();
+    } else if (mHometownInfoFragment.isDetached()) {
+      getSupportFragmentManager().beginTransaction()
+          .attach(mHometownInfoFragment).commit();
+    } else {
+      mHometownInfoFragment.detachSelf();
     }
   }
 
@@ -551,6 +574,40 @@ public class HomeActivity extends BaseActivity {
       getSupportFragmentManager().beginTransaction()
           .attach(mSetHometownFragment).commit();
     }
+  }
+
+  private void showHometownTabFragment() {
+    FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+    if (mHometownTabFragment == null) {
+      mHometownTabFragment = new HometownTabFragment();
+
+      t.add(R.id.fl_main, mHometownTabFragment);
+    } else if (mHometownTabFragment.isDetached()) {
+      t.attach(mHometownTabFragment);
+    }
+    if (mTabFragment != null && !mTabFragment.isDetached()) {
+      t.detach(mTabFragment);
+    }
+    t.commit();
+  }
+
+  private void showTabFragment() {
+    FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+    if (mTabFragment == null) {
+      mTabFragment = new TabRegionFragment();
+      Bundle args = new Bundle();
+      args.putInt("tabIndex", getIntent().getIntExtra("tabIndex", 0));
+      mTabFragment.setArguments(args);
+
+      t.add(R.id.fl_main, mTabFragment);
+    } else if (mTabFragment.isDetached()) {
+      t.attach(mTabFragment);
+    }
+
+    if (mHometownTabFragment != null && !mHometownTabFragment.isDetached()) {
+      t.detach(mHometownTabFragment);
+    }
+    t.commit();
   }
 
   private void openMenu() {

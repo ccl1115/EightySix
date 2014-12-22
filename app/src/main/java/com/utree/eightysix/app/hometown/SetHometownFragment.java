@@ -199,4 +199,15 @@ public class SetHometownFragment extends BaseFragment {
 
     dialog.show();
   }
+
+  @Override
+  public boolean onBackPressed() {
+    if (!isDetached()) {
+      getFragmentManager().beginTransaction()
+          .detach(this).commit();
+      return true;
+    } else {
+      return super.onBackPressed();
+    }
+  }
 }
