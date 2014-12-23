@@ -33,6 +33,9 @@ public class RegionFragment extends BaseFragment {
   @InjectView (R.id.rb_range_3)
   public TextView mRbRange3;
 
+  @InjectView(R.id.tv_fellow)
+  public TextView mTvFellow;
+
   private Circle mCurrent;
   private Callback mCallback;
 
@@ -163,6 +166,7 @@ public class RegionFragment extends BaseFragment {
     mRbRange1.setSelected(false);
     mRbRange2.setSelected(false);
     mRbRange3.setSelected(false);
+    mTvFellow.setSelected(false);
   }
 
   public interface Callback {

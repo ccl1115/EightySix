@@ -38,6 +38,20 @@
     <request>
         <id>get_hometown</id>
         <name>获取用户家乡</name>
+        <path>/feed/hometownMenu.do</path>
         <token/>
+    </request>
+
+    <request>
+        <id>get_hometown_feeds</id>
+        <name>get feeds of hometown</name>
+        <path>/feed/listByHometown.do</path>
+        <token/>
+        <params>
+            <param>currPage</param>
+            <param>tabType</param>
+            <param>hometownId</param>
+            <param>hometownType</param>
+        </params>
     </request>
 </api>

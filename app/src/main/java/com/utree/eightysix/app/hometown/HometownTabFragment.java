@@ -32,6 +32,11 @@ public class HometownTabFragment extends BaseFragment {
 
   private NewHometownFeedsFragment mNewHometownFeedsFragment;
 
+  public HometownTabFragment() {
+    mNewHometownFeedsFragment = new NewHometownFeedsFragment();
+    mHotHometownFeedsFragment = new HotHometownFeedsFragment();
+  }
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     return inflater.inflate(R.layout.fragment_hometown, container, false);
@@ -50,15 +55,9 @@ public class HometownTabFragment extends BaseFragment {
       @Override
       public Fragment getItem(int position) {
         if (position == 0) {
-          if (mNewHometownFeedsFragment == null) {
-            mNewHometownFeedsFragment = new NewHometownFeedsFragment();
-            return mNewHometownFeedsFragment;
-          }
+          return mNewHometownFeedsFragment;
         } else if (position == 1) {
-          if (mHotHometownFeedsFragment == null) {
-            mHotHometownFeedsFragment = new HotHometownFeedsFragment();
-            return mHotHometownFeedsFragment;
-          }
+          return mHotHometownFeedsFragment;
         }
         return null;
       }
@@ -89,7 +88,11 @@ public class HometownTabFragment extends BaseFragment {
 
       @Override
       public void onPageSelected(int position) {
-
+        if (position == 0) {
+          mNewHometownFeedsFragment.setActive(true);
+        } else if (position == 1) {
+          mHotHometownFeedsFragment.setActive(true);
+        }
       }
 
       @Override
@@ -97,5 +100,12 @@ public class HometownTabFragment extends BaseFragment {
 
       }
     });
+
+    getBaseActivity().getHandler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        mNewHometownFeedsFragment.setActive(true);
+      }
+    }, 500);
   }
 }

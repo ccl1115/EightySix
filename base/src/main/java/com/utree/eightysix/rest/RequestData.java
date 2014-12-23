@@ -1,7 +1,6 @@
 package com.utree.eightysix.rest;
 
 import com.loopj.android.http.BuildConfig;
-import com.utree.eightysix.Account;
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
 
@@ -29,7 +28,8 @@ public class RequestData<RES extends Response> {
   boolean sign;
 
   public RequestData() {
-    requestTime = System.currentTimeMillis();
+    this.requestTime = System.currentTimeMillis();
+    this.method = Method.POST;
   }
 
   public RequestData(Object request) {
@@ -42,17 +42,11 @@ public class RequestData<RES extends Response> {
       api = clz.getAnnotation(Api.class).value();
       params = new RequestParams();
 
-      Cache cache = clz.getAnnotation(Cache.class);
-      this.cache = cache != null;
+      this.cache = clz.getAnnotation(Cache.class) != null;
 
-      com.utree.eightysix.rest.Log log = clz.getAnnotation(com.utree.eightysix.rest.Log.class);
-      this.log = log != null;
+      this.log = clz.getAnnotation(Log.class) != null;
 
-      Token token = clz.getAnnotation(Token.class);
-      if ((token != null || this.token) && Account.inst().isLogin()) {
-        params.add("userId", Account.inst().getUserId());
-        params.add("token", Account.inst().getToken());
-      }
+      this.token = clz.getAnnotation(Token.class) != null;
 
       Method method = clz.getAnnotation(Method.class);
       if (method != null) {
@@ -66,8 +60,7 @@ public class RequestData<RES extends Response> {
         this.host = host.value();
       }
 
-      Sign sign = clz.getAnnotation(Sign.class);
-      this.sign = sign != null;
+      this.sign = clz.getAnnotation(Sign.class) != null;
 
       for (Field f : clz.getFields()) {
         Param p = f.getAnnotation(Param.class);

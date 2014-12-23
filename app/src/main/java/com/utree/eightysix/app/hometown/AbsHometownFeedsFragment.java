@@ -1,0 +1,148 @@
+package com.utree.eightysix.app.hometown;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnItemClick;
+import com.utree.eightysix.R;
+import com.utree.eightysix.U;
+import com.utree.eightysix.app.BaseFragment;
+import com.utree.eightysix.app.feed.FeedAdapter;
+import com.utree.eightysix.app.post.PostActivity;
+import com.utree.eightysix.data.Paginate;
+import com.utree.eightysix.data.Post;
+import com.utree.eightysix.response.FeedsResponse;
+import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.view.SwipeRefreshLayout;
+import com.utree.eightysix.widget.AdvancedListView;
+import com.utree.eightysix.widget.LoadMoreCallback;
+import com.utree.eightysix.widget.RandomSceneTextView;
+
+/**
+ */
+public class AbsHometownFeedsFragment extends BaseFragment {
+
+  @InjectView(R.id.lv_feed)
+  public AdvancedListView mLvFeed;
+
+  @InjectView(R.id.refresh_view)
+  public SwipeRefreshLayout mRefresherView;
+
+  @InjectView (R.id.tv_empty_text)
+  public RandomSceneTextView mRstvEmpty;
+
+  private Paginate.Page mPageInfo;
+
+  private FeedAdapter mFeedAdapter;
+
+  protected int mTabType;
+
+  private Integer mHometownId;
+
+  private Integer mHometownType = -1;
+
+  @OnItemClick (R.id.lv_feed)
+  public void onLvFeedItemClicked(int position, View view) {
+    Object item = mLvFeed.getAdapter().getItem(position);
+    if (item == null || !(item instanceof Post)) return;
+    PostActivity.start(getActivity(), (Post) item);
+  }
+
+  @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
+
+    if (isActive()) requestFeeds(1);
+  }
+
+  @Override
+  protected void onActive() {
+    super.onActive();
+    requestFeeds(1);
+  }
+
+  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    return inflater.inflate(R.layout.fragment_feed, container, false);
+  }
+
+  @Override
+  public void onViewCreated(View view, Bundle savedInstanceState) {
+    ButterKnife.inject(this, view);
+
+    mRefresherView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+      @Override
+      public void onRefresh() {
+        getBaseActivity().showRefreshIndicator(true);
+        if (isAdded()) {
+          requestFeeds(1);
+        }
+      }
+
+      @Override
+      public void onDrag() {
+        getBaseActivity().showRefreshIndicator(false);
+      }
+
+      @Override
+      public void onCancel() {
+        getBaseActivity().hideRefreshIndicator();
+      }
+    });
+
+    mRefresherView.setColorSchemeResources(R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed,
+        R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed);
+
+    mLvFeed.setLoadMoreCallback(new LoadMoreCallback() {
+      @Override
+      public View getLoadMoreView(ViewGroup parent) {
+        return LayoutInflater.from(parent.getContext()).inflate(R.layout.footer_load_more, parent, false);
+      }
+
+      @Override
+      public boolean hasMore() {
+        return mPageInfo != null && mPageInfo.currPage < mPageInfo.countPage;
+      }
+
+      @Override
+      public boolean onLoadMoreStart() {
+        requestFeeds(mPageInfo.currPage + 1);
+        return true;
+      }
+    });
+  }
+
+  private void requestFeeds(final int page) {
+    if (getBaseActivity() == null) return;
+    mRefresherView.setRefreshing(true);
+    getBaseActivity().showRefreshIndicator(true);
+    U.request("get_hometown_feeds", new OnResponse2<FeedsResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        mRefresherView.setRefreshing(false);
+        getBaseActivity().hideRefreshIndicator();
+        mLvFeed.stopLoadMore();
+      }
+
+      @Override
+      public void onResponse(FeedsResponse response) {
+        if (RESTRequester.responseOk(response)) {
+          if (page == 1) {
+            mFeedAdapter = new FeedAdapter(response.object);
+            mLvFeed.setAdapter(mFeedAdapter);
+          } else {
+            mFeedAdapter.add(response.object.posts.lists);
+          }
+        }
+
+        mRefresherView.setRefreshing(false);
+        getBaseActivity().hideRefreshIndicator();
+        mLvFeed.stopLoadMore();
+      }
+    }, FeedsResponse.class, page, mTabType, mHometownId, mHometownType);
+  }
+}
