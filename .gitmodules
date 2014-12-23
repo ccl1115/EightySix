@@ -1,9 +1,9 @@
 [submodule "emojicon"]
 	path = emojicon
-	url = http://git.lanmeiquan.com/scm/eig/emojicon
+	url = http://git.lanmeiquan.cn/scm/eig/emojicon
 [submodule "wiki"]
 	path = wiki
-	url = http://git.lanmeiquan.com/scm/eig/wiki
+	url = http://git.lanmeiquan.cn/scm/eig/wiki
 [submodule "ImageViewZoom"]
 	path = ImageViewZoom
 	url = https://github.com/ccl1115/ImageViewZoom.git
