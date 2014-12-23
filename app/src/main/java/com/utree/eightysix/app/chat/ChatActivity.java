@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
 import butterknife.OnTextChanged;
 import com.rockerhieu.emojicon.EmojiconEditText;
@@ -24,11 +25,14 @@ import com.rockerhieu.emojicon.EmojiconsFragment;
 import com.rockerhieu.emojicon.emoji.Emojicon;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.CameraUtil;
+import com.utree.eightysix.app.ImageViewerActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.chat.content.ImageContent;
 import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.app.publish.EmojiFragment;
 import com.utree.eightysix.dao.Conversation;
@@ -41,6 +45,8 @@ import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.DaoUtils;
+import com.utree.eightysix.utils.IOUtils;
+import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.ImageActionButton;
@@ -193,6 +199,14 @@ public class ChatActivity extends BaseActivity implements
     return true;
   }
 
+  @OnItemClick (R.id.alv_chats)
+  public void onAlvChatsItemClicked(int position) {
+    Message m = mChatAdapter.getItem(position);
+    if (m != null && m.getType() == MessageConst.TYPE_IMAGE) {
+      ImageViewerActivity.start(this, U.getGson().fromJson(m.getContent(), ImageContent.class).local);
+    }
+  }
+
   @Subscribe
   public void onChatEvent(ChatEvent event) {
     switch (event.getStatus()) {
@@ -238,15 +252,37 @@ public class ChatActivity extends BaseActivity implements
     showMoreDialog();
   }
 
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     mCameraUtil = new CameraUtil(this, new CameraUtil.Callback() {
+      private File mFile;
+      private String mLastHash;
+
       @Override
       public void onImageReturn(String path) {
-        ChatAccount.inst().getSender()
-            .photo(mChatId, mPost.id, mComment == null ? null : mComment.id, new File(path));
+        M.getRegisterHelper().register(this);
+        mFile = new File(path);
+        ImageUtils.compress(mFile, 600, 600);
+      }
+
+      @Subscribe
+      public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
+        if (event.getHash().equals(mLastHash) && event.getWidth() == U.dp2px(48) && event.getHeight() == U.dp2px(48)) {
+          ChatAccount.inst().getSender()
+              .photo(mChatId, mPost.id, mComment == null ? null : mComment.id, event.getFile());
+          M.getRegisterHelper().unregister(this);
+        }
+      }
+
+      @Subscribe
+      public void onCompressEvent(ImageUtils.CompressEvent event) {
+        if (mFile == event.getFile()) {
+          mLastHash = IOUtils.fileHash(event.getFile());
+          ImageUtils.asyncLoadThumbnail(event.getFile(), mLastHash);
+        }
       }
     });
 

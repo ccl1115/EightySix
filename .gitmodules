@@ -4,3 +4,7 @@
 [submodule "wiki"]
 	path = wiki
 	url = http://git.lanmeiquan.com/scm/eig/wiki
+[submodule "ImageViewZoom"]
+	path = ImageViewZoom
+	url = https://github.com/ccl1115/ImageViewZoom.git
+	branch = master

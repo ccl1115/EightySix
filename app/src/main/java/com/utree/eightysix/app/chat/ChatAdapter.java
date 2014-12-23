@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.chat;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -234,6 +235,7 @@ public class ChatAdapter extends BaseAdapter {
 
     ImageContent content = U.getGson().fromJson(message.getContent(), ImageContent.class);
     if (content.local != null) {
+      Log.d("ChatAdapter", "local: " + content.local);
       holder.mIvImage.setUrl(content.local);
     } else if (content.thumbnail != null) {
       holder.mIvImage.setUrl(content.thumbnail);

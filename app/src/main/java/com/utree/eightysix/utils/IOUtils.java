@@ -1,5 +1,6 @@
 package com.utree.eightysix.utils;
 
+import android.os.AsyncTask;
 import android.os.Environment;
 import com.utree.eightysix.U;
 import de.akquinet.android.androlog.Log;
@@ -12,10 +13,18 @@ import java.io.OutputStream;
  */
 public class IOUtils {
 
+  /**
+   * copy from input stream to output stream
+   *
+   * <b>note: this method doesn't close any of these streams, you should close them manually</b>
+   * <b>note: when the copy is failed by any exception this method never through it.</b>
+   * @param in the file copy from
+   * @param os the file copy to
+   */
   public static void copyFile(InputStream in, OutputStream os) {
     final byte[] buffer;
     try {
-      buffer = new byte[1024 * 1024];
+      buffer = new byte[1024 * 128];
     } catch (OutOfMemoryError error) {
       return;
     }
@@ -26,6 +35,11 @@ public class IOUtils {
         os.write(buffer, 0, n);
       }
     } catch (IOException ignored) {
+    } finally {
+      try {
+        os.flush();
+      } catch (IOException ignored) {
+      }
     }
   }
 
@@ -40,6 +54,20 @@ public class IOUtils {
 
   public static String fileHash(File file) {
     return MD5Util.getMD5(file);
+  }
+
+  public static void asyncFileHash(final File file, final ParamsRunnable runnable) {
+    (new AsyncTask<Void, Void, String>() {
+      @Override
+      protected String doInBackground(Void... voids) {
+        return fileHash(file);
+      }
+
+      @Override
+      protected void onPostExecute(String s) {
+        runnable.run(s);
+      }
+    }).execute();
   }
 
   public static File getAvailableAppDir() {

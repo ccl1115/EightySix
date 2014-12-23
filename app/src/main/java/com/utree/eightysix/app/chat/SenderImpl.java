@@ -31,6 +31,10 @@ public class SenderImpl implements Sender {
   @Override
   public void send(final Message message) {
 
+    if (message == null) {
+      return;
+    }
+
     message.setRead(true);
     message.setTimestamp(System.currentTimeMillis());
     message.setStatus(MessageConst.STATUS_CREATE);
@@ -56,54 +60,39 @@ public class SenderImpl implements Sender {
               U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_SENT_MSG_SUCCESS, message));
             }
           }
-        }, Response.class, message.getChatId(), "txt", message.getContent(), message.getPostId(), message.getCommentId());
+        }, Response.class,
+            message.getChatId(),
+            "txt",
+            message.getContent(),
+            message.getPostId(),
+            message.getCommentId());
 
         break;
       case MessageConst.TYPE_IMAGE:
-        final EMMessage sendMessage = EMMessage.createSendMessage(EMMessage.Type.IMAGE);
-        sendMessage.setTo(Account.inst().getUserId());
-        sendMessage.addBody(new ImageMessageBody(
-            new File(U.getGson().fromJson(message.getContent(), ImageContent.class).local)));
-        sendMessage.setAttribute("chatId", message.getChatId());
-        sendMessage.setAttribute("postId", message.getPostId());
-        if (message.getCommentId() != null) {
-          sendMessage.setAttribute("commentId", message.getCommentId());
-        }
-
-        EMChatManager.getInstance().sendMessage(sendMessage, new EMCallBack() {
+        ImageContent content = U.getGson().fromJson(message.getContent(), ImageContent.class);
+        U.request("chat_send", new OnResponse2<Response>() {
           @Override
-          public void onSuccess() {
-            message.setStatus(MessageConst.STATUS_SUCCESS);
-            ImageMessageBody body = (ImageMessageBody) sendMessage.getBody();
-            message.setContent(U.getGson().toJson(
-                new ImageContent(body.getLocalUrl(), body.getRemoteUrl(), body.getThumbnailUrl())));
-            DaoUtils.getMessageDao().insertOrReplace(message);
-            BaseApplication.getHandler().post(new Runnable() {
-              @Override
-              public void run() {
-                U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_SENT_MSG_SUCCESS, message));
-              }
-            });
+          public void onResponseError(Throwable e) {
+
           }
 
           @Override
-          public void onError(int i, final String s) {
-            message.setStatus(MessageConst.STATUS_FAILED);
-            DaoUtils.getMessageDao().insertOrReplace(message);
-            BaseApplication.getHandler().post(new Runnable() {
-              @Override
-              public void run() {
-                if (BuildConfig.DEBUG) U.showToast("发送错误：" + s);
-                U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_SENT_MSG_ERROR, message));
-              }
-            });
+          public void onResponse(Response response) {
+            if (response.code != 0) {
+              U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_MSG_REMOVE, message));
+            } else {
+              message.setStatus(MessageConst.STATUS_SUCCESS);
+              DaoUtils.getMessageDao().insertOrReplace(message);
+              U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_SENT_MSG_SUCCESS, message));
+            }
           }
-
-          @Override
-          public void onProgress(int i, String s) {
-
-          }
-        });
+        }, Response.class,
+            message.getChatId(),
+            "img",
+            message.getContent(),
+            message.getPostId(),
+            message.getCommentId(),
+            new File(content.local));
         break;
     }
 
@@ -146,6 +135,7 @@ public class SenderImpl implements Sender {
 
   @Override
   public Message photo(String chatId, String postId, String commentId, File f) {
+    if (!f.exists()) return null;
     Message m = new Message();
 
     m.setChatId(chatId);

@@ -273,11 +273,18 @@
                 <version>1.0.0</version>
             </dependency>
 
+            <dependency>
+                <groupId>it.sephiroth.android.library.imagezoom</groupId>
+                <artifactId>imagezoom</artifactId>
+                <type>aar</type>
+                <version>1.0.5</version>
+            </dependency>
 
             <dependency>
-                <groupId>org.influxdb</groupId>
-                <artifactId>influxdb-java</artifactId>
-                <version>1.3</version>
+                <groupId>it.sephiroth.android.library.easing</groupId>
+                <artifactId>android-easing</artifactId>
+                <type>aar</type>
+                <version>1.0.3</version>
             </dependency>
 
             <dependency>

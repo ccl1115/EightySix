@@ -149,6 +149,18 @@
             <type>aar</type>
         </dependency>
 
+        <dependency>
+            <groupId>it.sephiroth.android.library.imagezoom</groupId>
+            <artifactId>imagezoom</artifactId>
+            <type>aar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>it.sephiroth.android.library.easing</groupId>
+            <artifactId>android-easing</artifactId>
+            <type>aar</type>
+        </dependency>
+
     </dependencies>
 
     <build>

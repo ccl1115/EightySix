@@ -23,6 +23,7 @@
             <param>msg</param>
             <param>postId</param>
             <param>commentId</param>
+            <param>file</param>
         </params>
     </request>
 

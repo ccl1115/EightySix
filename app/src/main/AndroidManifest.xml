@@ -242,6 +242,7 @@
                 <action android:name=""/>
             </intent-filter>
         </activity>
+        <activity android:name=".app.ImageViewerActivity"/>
 
         <!-- 【必须】 信鸽service -->
         <service android:exported="true" android:name="com.tencent.android.tpush.service.XGPushService" android:persistent="true" android:process=":xg_service_v2"/>

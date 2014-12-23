@@ -41,7 +41,7 @@ public class ImageUtils {
     protected int sizeOf(String key, Bitmap value) {
       if (value != null) {
         int sizeOf = value.getRowBytes() * value.getHeight();
-        Log.d(TAG, String.format("m: %d s: %d a: %d i: %f", maxSize() / 1024, size() / 1024, sizeOf / 1024, sizeOf / (float) maxSize()));
+        Log.d(TAG, String.format("max: %d size: %d alloc: %d increase: %f", maxSize() / 1024, size() / 1024, sizeOf / 1024, sizeOf / (float) maxSize()));
         return sizeOf;
       } else {
         return 0;
@@ -116,8 +116,6 @@ public class ImageUtils {
 
     //Calculate inSampleSize
     options.inSampleSize = calculateInSampleSize(options, width, height);
-    Log.d(TAG, "inSampleSize = " + options.inSampleSize);
-    //options.inSampleSize = 2;
     options.inJustDecodeBounds = false;
 
     try {
@@ -259,6 +257,10 @@ public class ImageUtils {
     }
   }
 
+  public static void compress(File file, int width, int height) {
+    executeTask(new CompressWorker(file, width, height));
+  }
+
 
   public static Bitmap syncLoadResourceBitmap(int resId, final String hash, int width, int height) {
     String format = String.format("%s_%d_%d", hash, width, height);
@@ -311,12 +313,18 @@ public class ImageUtils {
     asyncLoad(url, hash, U.dp2px(48), U.dp2px(48));
   }
 
-  public static void asyncLoad(File f, int width, int height) {
-    executeTask(new ImageFileAsyncWorker(f, width, height));
+  public static void asyncLoad(File f, String hash, int width, int height) {
+    if (hash == null) return;
+    Bitmap bitmap = sLruCache.get(String.format("%s_%d_%d", hash, width, height));
+    if (bitmap != null) {
+      U.getBus().post(new ImageLoadedEvent(hash, bitmap, FROM_MEM, width, height, getDiskCacheFile(hash)));
+    } else {
+      executeTask(new ImageFileAsyncWorker(f, hash, width, height));
+    }
   }
 
-  public static void asyncLoadThumbnail(File f) {
-    executeTask(new ImageFileAsyncWorker(f, U.dp2px(48), U.dp2px(48)));
+  public static void asyncLoadThumbnail(File f, String hash) {
+    asyncLoad(f, hash, U.dp2px(48), U.dp2px(48));
   }
 
   public static void asyncLoad(final String url, final String hash, final int width, final int height) {
@@ -407,6 +415,10 @@ public class ImageUtils {
     return 0;
   }
 
+  private static File getDiskCacheFile(String hash) {
+    return new File(U.getImageCache().getDirectory().getAbsolutePath() + "/" + hash + ".0");
+  }
+
   private static class UploadWorker extends AsyncTask<Void, Void, Void> {
 
     private Bitmap mBitmap;
@@ -482,9 +494,12 @@ public class ImageUtils {
    * Fired when a image has been downloaded from net or loaded from disk
    */
   public static class ImageLoadedEvent {
+    private int mHeight;
+    private int mWidth;
     private Bitmap mBitmap;
     private String mUrlHash;
     private int mFrom;
+    private File mFile;
 
     public static final int FROM_MEM = 1000;
     public static final int FROM_DISK = 1001;
@@ -497,6 +512,17 @@ public class ImageUtils {
       mFrom = from;
     }
 
+    public ImageLoadedEvent(String urlHash, Bitmap bitmap, int from, int width, int height) {
+      this(urlHash, bitmap, from);
+      mWidth = width;
+      mHeight = height;
+    }
+
+    public ImageLoadedEvent(String urlHash, Bitmap bitmap, int from, int width, int height, File file) {
+      this(urlHash, bitmap, from, width, height);
+      mFile = file;
+    }
+
     public Bitmap getBitmap() {
       return mBitmap;
     }
@@ -507,6 +533,22 @@ public class ImageUtils {
 
     public int getFrom() {
       return mFrom;
+    }
+
+    public File getFile() {
+      return mFile;
+    }
+
+    public void setFile(File file) {
+      mFile = file;
+    }
+
+    public int getWidth() {
+      return mWidth;
+    }
+
+    public int getHeight() {
+      return mHeight;
     }
   }
 
@@ -715,29 +757,112 @@ public class ImageUtils {
     }
   }
 
-  private static class ImageFileAsyncWorker extends AsyncTask<Void, Void, Void> {
+  private static class ImageFileAsyncWorker extends AsyncTask<Void, Void, Bitmap> {
 
     private final File f;
     private final int width;
     private final int height;
+    private String mHash;
 
-    public ImageFileAsyncWorker(File f, int width, int height) {
+    public ImageFileAsyncWorker(File f, String hash, int width, int height) {
 
       this.f = f;
       this.width = width;
       this.height = height;
+      mHash = hash;
+    }
+
+    @Override
+    protected Bitmap doInBackground(Void... voids) {
+
+      OutputStream outputStream = null;
+      DiskLruCache.Editor edit = null;
+      DiskLruCache.Snapshot snapshot = null;
+      FileInputStream in = null;
+      try {
+        snapshot = U.getImageCache().get(mHash);
+        if (snapshot == null) {
+          edit = U.getImageCache().edit(mHash);
+          outputStream = edit.newOutputStream(0);
+          in = new FileInputStream(f);
+          IOUtils.copyFile(in, outputStream);
+        }
+      } catch (IOException ignored) {
+      } finally {
+        if (outputStream != null) {
+          try {
+            outputStream.close();
+          } catch (IOException ignored) {
+          }
+        }
+        if (in != null) {
+          try {
+            in.close();
+          } catch (IOException ignored) {
+          }
+        }
+        if (edit != null) {
+          try {
+            edit.commit();
+          } catch (IOException ignored) {
+          }
+        }
+        if (snapshot != null) {
+          snapshot.close();
+        }
+      }
+
+      Bitmap bitmap = safeDecodeBitmap(mHash, width, height);
+      cacheImage(String.format("%s_%d_%d", mHash, width, height), bitmap);
+
+      return bitmap;
+    }
+
+    @Override
+    protected void onPostExecute(Bitmap bitmap) {
+      U.getBus().post(new ImageLoadedEvent(mHash, bitmap, FROM_DISK, width, height, getDiskCacheFile(mHash)));
+    }
+  }
+
+  public static class CompressWorker extends AsyncTask<Void, Void, Void> {
+
+    private File mFrom;
+    private final int mWidth;
+    private final int mHeight;
+
+    public CompressWorker(File from, int width, int height) {
+      mFrom = from;
+      mWidth = width;
+      mHeight = height;
     }
 
     @Override
     protected Void doInBackground(Void... voids) {
-      cacheImage(getUrlHash(f.getAbsolutePath()), decodeBitmap(f, width, height));
+      Bitmap from = safeDecodeBitmap(mFrom, mWidth, mHeight);
+
+      try {
+        from.compress(Bitmap.CompressFormat.JPEG, 50, new FileOutputStream(mFrom));
+      } catch (FileNotFoundException ignored) {
+      }
       return null;
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
-      String urlHash = getUrlHash(f.getAbsolutePath());
-      U.getBus().post(new ImageLoadedEvent(urlHash, getFromMemByUrl(f.getAbsolutePath()), FROM_DISK));
+      U.getBus().post(new CompressEvent(mFrom));
+    }
+  }
+
+  public static class CompressEvent {
+
+    private File mFile;
+
+    public CompressEvent(File file) {
+      mFile = file;
+    }
+
+    public File getFile() {
+      return mFile;
     }
   }
 }

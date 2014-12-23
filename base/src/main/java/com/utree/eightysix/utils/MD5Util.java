@@ -57,7 +57,7 @@ public class MD5Util {
     FileInputStream inputStream = null;
     try {
       int n;
-      byte[] buffer = new byte[1024 * 1024];
+      byte[] buffer = new byte[1024 * 128];
       MessageDigest algorithm = MessageDigest.getInstance("MD5");
       algorithm.reset();
       inputStream = new FileInputStream(file);
@@ -72,6 +72,13 @@ public class MD5Util {
       return null;
     } catch (IOException e) {
       return null;
+    } finally {
+      if (inputStream != null) {
+        try {
+          inputStream.close();
+        } catch (IOException ignored) {
+        }
+      }
     }
   }
 }

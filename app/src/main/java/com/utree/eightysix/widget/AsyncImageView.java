@@ -8,11 +8,13 @@ import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.M;
+import com.utree.eightysix.U;
+import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
-
+import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.FROM_DISK;
+import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.FROM_MEM;
+import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.FROM_REMOTE;
 import java.io.File;
-
-import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.*;
 
 /**
  */
@@ -21,6 +23,8 @@ public class AsyncImageView extends ImageView {
   public static final String TAG = "AsyncImageView";
 
   private String mUrlHash;
+
+  private boolean mLocal;
 
   public AsyncImageView(Context context) {
     this(context, null, 0);
@@ -37,50 +41,50 @@ public class AsyncImageView extends ImageView {
 
   @Subscribe
   public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
-    if (event.getHash().equals(mUrlHash)) {
-      if (event.getBitmap() != null) {
-        switch (event.getFrom()) {
-          case FROM_MEM:
-            break;
-          case FROM_DISK:
-            break;
-          case FROM_REMOTE:
-              ValueAnimator valueAnimator = ValueAnimator.ofInt(0, 255);
-              valueAnimator.setDuration(500).addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    setImageAlpha((Integer) animation.getAnimatedValue());
-                  } else {
-                    setAlpha((Integer) animation.getAnimatedValue());
-                  }
-                }
-              });
-              valueAnimator.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
+    if (event.getHash().equals(mUrlHash)
+        && ((mLocal && (event.getWidth() == U.dp2px(48)) && (event.getHeight() == U.dp2px(48))) || !mLocal)
+        && (event.getBitmap() != null)) {
+      switch (event.getFrom()) {
+        case FROM_MEM:
+          break;
+        case FROM_DISK:
+          break;
+        case FROM_REMOTE:
+          ValueAnimator valueAnimator = ValueAnimator.ofInt(0, 255);
+          valueAnimator.setDuration(500).addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+              if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                setImageAlpha((Integer) animation.getAnimatedValue());
+              } else {
+                setAlpha((Integer) animation.getAnimatedValue());
+              }
+            }
+          });
+          valueAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
 
-                }
+            }
 
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                }
+            @Override
+            public void onAnimationEnd(Animator animation) {
+            }
 
-                @Override
-                public void onAnimationCancel(Animator animation) {
+            @Override
+            public void onAnimationCancel(Animator animation) {
 
-                }
+            }
 
-                @Override
-                public void onAnimationRepeat(Animator animation) {
+            @Override
+            public void onAnimationRepeat(Animator animation) {
 
-                }
-              });
-              valueAnimator.start();
-              break;
-        }
-        setImageBitmap(event.getBitmap());
+            }
+          });
+          valueAnimator.start();
+          break;
       }
+      setImageBitmap(event.getBitmap());
     }
   }
 
@@ -90,14 +94,18 @@ public class AsyncImageView extends ImageView {
       return;
     }
 
-    mUrlHash = ImageUtils.getUrlHash(url);
     setImageBitmap(null);
     clearAnimation();
 
     if (url.startsWith("/")) {
-      ImageUtils.asyncLoadThumbnail(new File(url));
+      File file = new File(url);
+      mUrlHash = IOUtils.fileHash(file);
+      ImageUtils.asyncLoadThumbnail(file, mUrlHash);
+      mLocal = true;
     } else {
+      mUrlHash = ImageUtils.getUrlHash(url);
       ImageUtils.asyncLoadWithRes(url, mUrlHash);
+      mLocal = false;
     }
 
   }
