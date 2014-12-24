@@ -13,6 +13,7 @@ public class ChatEvent {
    */
   public static final int EVENT_RECEIVE_MSG = 11;
 
+
   /**
    * Event when send msg success
    */
@@ -20,10 +21,13 @@ public class ChatEvent {
 
   public static final int EVENT_SENDING_MSG = 13;
 
+
   /**
    * Event when send msg error
    */
   public static final int EVENT_SENT_MSG_ERROR = 14;
+
+  public static final int EVENT_UPDATE_MSG = 15;
 
   /**
    * Event to remove a message

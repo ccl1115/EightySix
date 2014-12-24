@@ -13,6 +13,7 @@
         <module>dao-generator</module>
         <module>oss-batch</module>
         <module>emojicon/library</module>
+        <module>ImageViewZoom/library</module>
         <module>app</module>
         <module>fixture</module>
         <module>data</module>
@@ -146,24 +147,6 @@
             </dependency>
 
             <dependency>
-                <groupId>aliyunsdk</groupId>
-                <artifactId>osssdk</artifactId>
-                <version>1</version>
-            </dependency>
-
-            <dependency>
-                <groupId>pushservice</groupId>
-                <artifactId>pushservice</artifactId>
-                <version>4.1.0</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.jayway.android.robotium</groupId>
-                <artifactId>robotium-solo</artifactId>
-                <version>5.1</version>
-            </dependency>
-
-            <dependency>
                 <groupId>com.nineoldandroids</groupId>
                 <artifactId>library</artifactId>
                 <version>2.4.0</version>
@@ -194,18 +177,6 @@
             </dependency>
 
             <dependency>
-                <groupId>com.squareup.dagger</groupId>
-                <artifactId>dagger</artifactId>
-                <version>1.2.2</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.squareup.dagger</groupId>
-                <artifactId>dagger-compiler</artifactId>
-                <version>1.2.2</version>
-            </dependency>
-
-            <dependency>
                 <groupId>galaxy-lite</groupId>
                 <artifactId>galaxy-lite</artifactId>
                 <version>1.0.0</version>
@@ -227,13 +198,6 @@
                 <groupId>tencent.opensdk</groupId>
                 <artifactId>opensdk</artifactId>
                 <version>2.3.1</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.michaelevans.colorart</groupId>
-                <artifactId>library</artifactId>
-                <version>0.0.2</version>
-                <type>aar</type>
             </dependency>
 
             <dependency>
@@ -277,14 +241,7 @@
                 <groupId>it.sephiroth.android.library.imagezoom</groupId>
                 <artifactId>imagezoom</artifactId>
                 <type>aar</type>
-                <version>1.0.5</version>
-            </dependency>
-
-            <dependency>
-                <groupId>it.sephiroth.android.library.easing</groupId>
-                <artifactId>android-easing</artifactId>
-                <type>aar</type>
-                <version>1.0.3</version>
+                <version>1.0.5-SNAPSHOT</version>
             </dependency>
 
             <dependency>

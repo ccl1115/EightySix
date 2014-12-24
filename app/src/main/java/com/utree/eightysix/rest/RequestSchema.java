@@ -5,6 +5,10 @@
 package com.utree.eightysix.rest;
 
 import android.content.Context;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Map;
+import java.util.Set;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -133,17 +137,30 @@ public class RequestSchema {
     }
     if (keys.size() != objects.length)
       throw new RuntimeException("error fill request params, key size is not equal data");
+
     for (int i = 0; i < keys.size(); i++) {
       if (objects[i] == null) continue;
       String key = keys.get(i);
-      params.put(key, objects[i]);
+      Object value = objects[i];
+      if (value instanceof List || value instanceof Set || value instanceof Map) {
+        params.put(key, value);
+      } else if (value instanceof File) {
+        try {
+          params.put(key, (File) value);
+        } catch (FileNotFoundException ignored) {
+        }
+      } else if (value instanceof InputStream) {
+        params.put(key, (InputStream) value);
+      } else {
+        params.put(key, String.valueOf(value));
+      }
     }
   }
 
   public RequestData getRequest(String id, Object... params) {
     RequestWrapper requestWrapper = mRequestWrapper.get(id);
     if (requestWrapper == null) return null;
-    if (requestWrapper.mRequestData.params == null) requestWrapper.mRequestData.params = new RequestParams();
+    requestWrapper.mRequestData.params = new RequestParams();
     fill(requestWrapper.mRequestData.params, requestWrapper.mParamKeys, params);
     return requestWrapper.mRequestData;
   }

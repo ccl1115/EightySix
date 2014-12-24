@@ -12,7 +12,10 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import com.easemob.EMCallBack;
+import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
+import com.easemob.chat.ImageMessageBody;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
 import com.utree.eightysix.Account;
@@ -20,6 +23,7 @@ import com.utree.eightysix.C;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.app.chat.content.ImageContent;
 import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.dao.*;
@@ -44,9 +48,7 @@ import java.util.Locale;
 public class ChatUtils {
 
   static Message convert(EMMessage message) {
-    Message m = new Message();
-
-    m.setContent(((TextMessageBody) message.getBody()).getMessage());
+    final Message m = new Message();
 
     try {
       m.setChatId(message.getStringAttribute("chatId"));
@@ -78,9 +80,24 @@ public class ChatUtils {
     switch (message.getType()) {
       case TXT:
         m.setType(MessageConst.TYPE_TXT);
+        m.setStatus(MessageConst.STATUS_SUCCESS);
+        m.setContent(((TextMessageBody) message.getBody()).getMessage());
         break;
       case IMAGE:
         m.setType(MessageConst.TYPE_IMAGE);
+        m.setStatus(MessageConst.STATUS_IN_PROGRESS);
+        ImageMessageBody body = (ImageMessageBody) message.getBody();
+
+
+        // notice
+        //环信在下载图片缩略图的时候，会在加载的文件名前加字符串"th"，会导致和EMMessage指定的本地目录不一致
+        String local = body.getLocalUrl().substring(0, body.getLocalUrl().lastIndexOf('/') + 1)
+            .concat("th")
+            .concat(body.getLocalUrl().substring(body.getLocalUrl().lastIndexOf('/') + 1));
+        // end
+
+        ImageContent content = new ImageContent(body.getLocalUrl(), body.getRemoteUrl(), local, body.getThumbnailUrl());
+        m.setContent(U.getGson().toJson(content));
         break;
     }
 

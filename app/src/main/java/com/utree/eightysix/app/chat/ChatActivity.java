@@ -30,7 +30,6 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.CameraUtil;
-import com.utree.eightysix.app.ImageViewerActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.chat.content.ImageContent;
 import com.utree.eightysix.app.chat.event.ChatEvent;
@@ -51,45 +50,44 @@ import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.ImageActionButton;
 import com.utree.eightysix.widget.TopBar;
-
 import java.io.File;
 import java.util.List;
 
 /**
  * @author simon
  */
-@Layout(R.layout.activity_chat)
+@Layout (R.layout.activity_chat)
 public class ChatActivity extends BaseActivity implements
     EmojiconsFragment.OnEmojiconBackspaceClickedListener,
     EmojiconGridFragment.OnEmojiconClickedListener {
 
   private static String sCurrentChatId;
 
-  @InjectView(R.id.fl_send)
+  @InjectView (R.id.fl_send)
   public FrameLayout mFlSend;
 
-  @InjectView(R.id.fl_emotion)
+  @InjectView (R.id.fl_emotion)
   public FrameLayout mFlEmotion;
 
-  @InjectView(R.id.rl_actions)
+  @InjectView (R.id.rl_actions)
   public RelativeLayout mRlActions;
 
-  @InjectView(R.id.refresh_view)
+  @InjectView (R.id.refresh_view)
   public SwipeRefreshLayout mRefreshView;
 
-  @InjectView(R.id.et_post_content)
+  @InjectView (R.id.et_post_content)
   public EmojiconEditText mEtPostContent;
 
-  @InjectView(R.id.iv_post)
+  @InjectView (R.id.iv_post)
   public ImageView mIvPost;
 
-  @InjectView(R.id.alv_chats)
+  @InjectView (R.id.alv_chats)
   public AdvancedListView mAlvChats;
 
-  @InjectView(R.id.iv_camera)
+  @InjectView (R.id.iv_camera)
   public ImageView mIvCamera;
 
-  @InjectView(R.id.iv_emotion)
+  @InjectView (R.id.iv_emotion)
   public ImageView mIvEmotion;
 
   private ChatAdapter mChatAdapter;
@@ -128,14 +126,14 @@ public class ChatActivity extends BaseActivity implements
     ChatActivity.sCurrentChatId = currentChatId;
   }
 
-  @OnClick(R.id.iv_post)
+  @OnClick (R.id.iv_post)
   public void onRbPostClicked() {
     ChatAccount.inst().getSender()
         .txt(mChatId, mPost.id, mComment == null ? null : mComment.id, mEtPostContent.getText().toString());
     mEtPostContent.setText("");
   }
 
-  @OnClick(R.id.iv_camera)
+  @OnClick (R.id.iv_camera)
   public void onIvCameraClicked() {
     hideSoftKeyboard(mEtPostContent);
     mIvEmotion.setSelected(false);
@@ -150,7 +148,7 @@ public class ChatActivity extends BaseActivity implements
     }, 200);
   }
 
-  @OnClick(R.id.iv_emotion)
+  @OnClick (R.id.iv_emotion)
   public void onIvEmationClicked() {
     hideSoftKeyboard(mEtPostContent);
     mIvCamera.setSelected(false);
@@ -166,34 +164,28 @@ public class ChatActivity extends BaseActivity implements
     }, 200);
   }
 
-  @OnClick(R.id.iv_open_camera)
+  @OnClick (R.id.iv_open_camera)
   public void onIvOpenCameraClicked() {
     mCameraUtil.startCamera();
   }
 
-  @OnClick(R.id.iv_album)
+  @OnClick (R.id.iv_album)
   public void onIvAlbumClicked() {
     mCameraUtil.startAlbum();
   }
 
-  @OnTextChanged(R.id.et_post_content)
+  @OnTextChanged (R.id.et_post_content)
   public void onEtPostContentTextChanged(CharSequence cs) {
     mIvPost.setEnabled(cs.length() > 0);
   }
 
-  @OnItemLongClick(R.id.alv_chats)
+  @OnItemLongClick (R.id.alv_chats)
   public boolean onAlvChatsItemLongClicked(int position) {
     Message m = mChatAdapter.getItem(position);
     if (m != null) {
-      switch (m.getType()) {
-        case MessageConst.TYPE_TXT: {
-          if (m.getStatus() == MessageConst.STATUS_FAILED) {
-            showToast(R.string.resending);
-            ChatAccount.inst().getSender().send(m);
-
-          }
-          break;
-        }
+      if (m.getStatus() == MessageConst.STATUS_FAILED) {
+        showToast(R.string.resending);
+        ChatAccount.inst().getSender().send(m);
       }
     }
     return true;
@@ -203,31 +195,41 @@ public class ChatActivity extends BaseActivity implements
   public void onAlvChatsItemClicked(int position) {
     Message m = mChatAdapter.getItem(position);
     if (m != null && m.getType() == MessageConst.TYPE_IMAGE) {
-      ImageViewerActivity.start(this, U.getGson().fromJson(m.getContent(), ImageContent.class).local);
+      ImageContent content = U.getGson().fromJson(m.getContent(), ImageContent.class);
+      ImageViewerActivity.start(this, content.local, content.remote);
     }
   }
 
   @Subscribe
   public void onChatEvent(ChatEvent event) {
-    switch (event.getStatus()) {
-      case ChatEvent.EVENT_RECEIVE_MSG: {
-        mChatAdapter.add((Message) event.getObj());
-        mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
-        break;
+    if (event.getObj() instanceof Message) {
+      if (!mChatId.equals(((Message) event.getObj()).getChatId())) {
+        return;
       }
-      case ChatEvent.EVENT_SENT_MSG_SUCCESS:
-      case ChatEvent.EVENT_SENT_MSG_ERROR: {
-        mChatAdapter.notifyDataSetChanged();
-        mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
-        break;
-      }
-      case ChatEvent.EVENT_SENDING_MSG: {
-        mChatAdapter.add((Message) event.getObj());
-        mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
-        break;
-      }
-      case ChatEvent.EVENT_MSG_REMOVE: {
-        mChatAdapter.remove((Message) event.getObj());
+      switch (event.getStatus()) {
+        case ChatEvent.EVENT_RECEIVE_MSG: {
+          mChatAdapter.add((Message) event.getObj());
+          mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
+          break;
+        }
+        case ChatEvent.EVENT_UPDATE_MSG: {
+          mChatAdapter.notifyDataSetChanged();
+          break;
+        }
+        case ChatEvent.EVENT_SENT_MSG_SUCCESS:
+        case ChatEvent.EVENT_SENT_MSG_ERROR: {
+          mChatAdapter.notifyDataSetChanged();
+          mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
+          break;
+        }
+        case ChatEvent.EVENT_SENDING_MSG: {
+          mChatAdapter.add((Message) event.getObj());
+          mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
+          break;
+        }
+        case ChatEvent.EVENT_MSG_REMOVE: {
+          mChatAdapter.remove((Message) event.getObj());
+        }
       }
     }
   }
@@ -271,8 +273,7 @@ public class ChatActivity extends BaseActivity implements
       @Subscribe
       public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
         if (event.getHash().equals(mLastHash) && event.getWidth() == U.dp2px(48) && event.getHeight() == U.dp2px(48)) {
-          ChatAccount.inst().getSender()
-              .photo(mChatId, mPost.id, mComment == null ? null : mComment.id, event.getFile());
+          ChatAccount.inst().getSender().photo(mChatId, mPost.id, mComment == null ? null : mComment.id, event.getFile());
           M.getRegisterHelper().unregister(this);
         }
       }

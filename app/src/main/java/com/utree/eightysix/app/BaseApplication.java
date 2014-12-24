@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import com.easemob.chat.EMChat;
+import com.easemob.chat.EMChatConfig;
 import com.tencent.cloudsdk.tsocket.GlobalContext;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.C;

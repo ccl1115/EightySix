@@ -6,8 +6,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import com.easemob.EMCallBack;
+import com.easemob.chat.ConnectionListener;
+import com.easemob.chat.EMChat;
+import com.easemob.chat.EMChatDB;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
+import com.easemob.chat.ImageMessageBody;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.*;
 import com.utree.eightysix.app.BaseApplication;
@@ -40,6 +44,7 @@ public class ChatAccount {
       sChatAccount = new ChatAccount();
       // 不使用环信默认的通知提醒
       EMChatManager.getInstance().getChatOptions().setNotificationEnable(false);
+      EMChatManager.getInstance().getChatOptions().setUseEncryption(false);
       sChatAccount.login();
     }
     return sChatAccount;
@@ -128,7 +133,7 @@ public class ChatAccount {
       final Message m = ChatUtils.convert(message);
 
       if (m != null) {
-        new NewMessageWorker(m).execute();
+        new NewMessageWorker(m, message).execute();
       }
     }
   }
@@ -136,13 +141,15 @@ public class ChatAccount {
   private class NewMessageWorker extends AsyncTask<Void, Integer, Void> {
 
 
-    public static final int PROGRESS_NOTIFY = 1;
-    public static final int PROGRESS_INSERT_MESSAGE = 5;
-    public static final int PROGRESS_UNREAD_CONVERSTION_COUNT = 2;
-    public static final int PROGRESS_UPDATE_CONVERSATION = 3;
-    public static final int PROGRESS_INFO_MESSAGE = 6;
+    private static final int PROGRESS_NOTIFY = 1;
+    private static final int PROGRESS_INSERT_MESSAGE = 5;
+    private static final int PROGRESS_UNREAD_CONVERSATION_COUNT = 2;
+    private static final int PROGRESS_UPDATE_CONVERSATION = 3;
+    private static final int PROGRESS_INFO_MESSAGE = 6;
+    private static final int PROGRESS_MESSAGE_DOWNLOADED = 7;
 
     private Message mMessage;
+    private EMMessage mEmMessage;
     private Message mInfoMessage;
 
 
@@ -151,13 +158,13 @@ public class ChatAccount {
     private Comment mComment;
     private Conversation mConversation;
 
-    public NewMessageWorker(Message message) {
+    public NewMessageWorker(Message message, EMMessage emMessage) {
       mMessage = message;
+      mEmMessage = emMessage;
     }
 
     @Override
     protected Void doInBackground(Void... voids) {
-      mMessage.setStatus(MessageConst.STATUS_SUCCESS);
 
       if (mMessage.getCommentId() == null) {
         ChatUtils.ConversationUtil.createByPostIdIfNotExist(mMessage.getChatId(), mMessage.getPostId(),
@@ -205,10 +212,31 @@ public class ChatAccount {
         // 收到的消息，对应的聊天页面不在前台，则更新对话未读数
 
         mUnreadConversationCount = ChatUtils.ConversationUtil.getUnreadConversationCount();
-        publishProgress(PROGRESS_UNREAD_CONVERSTION_COUNT);
+        publishProgress(PROGRESS_UNREAD_CONVERSATION_COUNT);
 
         mConversation = ChatUtils.ConversationUtil.updateUnreadCount(mMessage.getChatId());
         publishProgress(PROGRESS_UPDATE_CONVERSATION);
+      }
+
+      if (mMessage.getType() == MessageConst.TYPE_IMAGE) {
+        EMChatManager.getInstance().asyncFetchMessage(mEmMessage);
+        ((ImageMessageBody) mEmMessage.getBody()).setDownloadCallback(new EMCallBack() {
+          @Override
+          public void onSuccess() {
+            mMessage.setStatus(MessageConst.STATUS_SUCCESS);
+            publishProgress(PROGRESS_MESSAGE_DOWNLOADED);
+          }
+
+          @Override
+          public void onError(int i, String s) {
+
+          }
+
+          @Override
+          public void onProgress(int i, String s) {
+
+          }
+        });
       }
 
       return null;
@@ -220,7 +248,7 @@ public class ChatAccount {
         case PROGRESS_NOTIFY:
           ChatUtils.NotifyUtil.notifyNewMessage(mMessage, mPost, mComment);
           break;
-        case PROGRESS_UNREAD_CONVERSTION_COUNT:
+        case PROGRESS_UNREAD_CONVERSATION_COUNT:
           U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT, mUnreadConversationCount));
           break;
         case PROGRESS_UPDATE_CONVERSATION:
@@ -231,6 +259,9 @@ public class ChatAccount {
           break;
         case PROGRESS_INFO_MESSAGE:
           U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_RECEIVE_MSG, mInfoMessage));
+          break;
+        case PROGRESS_MESSAGE_DOWNLOADED:
+          U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_RECEIVE_MSG, mMessage));
           break;
       }
     }

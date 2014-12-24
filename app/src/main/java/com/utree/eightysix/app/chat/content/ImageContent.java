@@ -13,15 +13,19 @@ public class ImageContent {
   @SerializedName("local")
   public String local;
 
+  @SerializedName("localThumb")
+  public String localThumb;
+
   @SerializedName("remote")
   public String remote;
 
   @SerializedName("thumbnail")
   public String thumbnail;
 
-  public ImageContent(String local, String remote, String thumbnail) {
+  public ImageContent(String local, String remote, String localThumb, String thumbnail) {
     this.local = local;
     this.remote = remote;
     this.thumbnail = thumbnail;
+    this.localThumb = localThumb;
   }
 }
