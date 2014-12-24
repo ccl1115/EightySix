@@ -25,7 +25,7 @@ public class ImageContent {
   public ImageContent(String local, String remote, String localThumb, String thumbnail) {
     this.local = local;
     this.remote = remote;
-    this.thumbnail = thumbnail;
     this.localThumb = localThumb;
+    this.thumbnail = thumbnail;
   }
 }

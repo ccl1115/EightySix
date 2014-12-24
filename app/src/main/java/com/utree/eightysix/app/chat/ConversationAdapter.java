@@ -189,6 +189,7 @@ public class ConversationAdapter extends BaseAdapter {
     switch (event.getStatus()) {
       case ChatEvent.EVENT_CONVERSATION_UPDATE:
         Conversation obj = (Conversation) event.getObj();
+        if (obj == null) return;
         for (int i = 0; i < mConversations.size(); i++) {
           Conversation conversation = mConversations.get(i);
           if (conversation.getId().equals(obj.getId())) {

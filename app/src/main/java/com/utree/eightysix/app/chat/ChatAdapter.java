@@ -234,11 +234,10 @@ public class ChatAdapter extends BaseAdapter {
     Message message = getItem(position);
 
     ImageContent content = U.getGson().fromJson(message.getContent(), ImageContent.class);
-    if (content.local != null) {
-      Log.d("ChatAdapter", "local: " + content.local);
+    if (content.localThumb != null) {
+      holder.mIvImage.setUrl(content.localThumb);
+    } else if (content.local != null) {
       holder.mIvImage.setUrl(content.local);
-    } else if (content.thumbnail != null) {
-      holder.mIvImage.setUrl(content.thumbnail);
     }
     holder.mPbLoading.setVisibility(message.getStatus() == MessageConst.STATUS_IN_PROGRESS ? View.VISIBLE : View.GONE);
     holder.mIvError.setVisibility(message.getStatus() == MessageConst.STATUS_FAILED ? View.VISIBLE : View.GONE);

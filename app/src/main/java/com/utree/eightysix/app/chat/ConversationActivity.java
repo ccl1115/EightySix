@@ -316,7 +316,9 @@ public class ConversationActivity extends BaseActivity {
 
       @Override
       public void onResponse(ChatOnlineListResponse response) {
-        mConversationAdapter.updateOnline(response.object.list);
+        if (response.object.list != null) {
+          mConversationAdapter.updateOnline(response.object.list);
+        }
       }
     }, ChatOnlineListResponse.class, mConversationAdapter.getChatIds());
   }
