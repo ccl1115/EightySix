@@ -8,5 +8,5 @@
     branch = master
 [submodule "ImageViewZoom"]
 	path = ImageViewZoom
-	url = https://git.yu-lu.info/src/eig/ImageViewZoom.git
+	url = http://git.yu-lu.info/src/eig/ImageViewZoom.git
 	branch = master
