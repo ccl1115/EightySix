@@ -39,7 +39,7 @@ public class AbsHometownFeedsFragment extends BaseFragment {
 
   private Paginate.Page mPageInfo;
 
-  private FeedAdapter mFeedAdapter;
+  protected FeedAdapter mFeedAdapter;
 
   protected int mTabType;
 
@@ -128,7 +128,7 @@ public class AbsHometownFeedsFragment extends BaseFragment {
     requestFeeds(1);
   }
 
-  private void requestFeeds(final int page) {
+  protected void requestFeeds(final int page) {
     if (getBaseActivity() == null) return;
     mRefresherView.setRefreshing(true);
     getBaseActivity().showRefreshIndicator(true);
@@ -162,7 +162,10 @@ public class AbsHometownFeedsFragment extends BaseFragment {
 
           mHometownId = response.object.hometown;
           mHometownType = response.object.hometownType;
+
         }
+
+        mPageInfo = response.object.posts.page;
 
         mRefresherView.setRefreshing(false);
         getBaseActivity().hideRefreshIndicator();

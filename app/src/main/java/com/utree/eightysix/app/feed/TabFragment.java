@@ -299,8 +299,9 @@ public class TabFragment extends BaseFragment {
   }
 
   @Override
-  public void onDetach() {
-    super.onDetach();
+  public void onDestroyView() {
+    super.onDestroyView();
     clearActive();
   }
+
 }

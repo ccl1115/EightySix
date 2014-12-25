@@ -98,6 +98,8 @@ public class FeedFragment extends AbsFeedFragment {
 
   @Subscribe
   public void onPostPublishedEvent(PostPublishedEvent event) {
+    if (!isActive()) return;
+
     if (mFeedAdapter != null) {
       if (mCircle != null && mCircle.id == event.getCircleId()) {
         mFeedAdapter.add(event.getPost());

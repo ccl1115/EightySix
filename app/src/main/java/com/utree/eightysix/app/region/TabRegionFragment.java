@@ -138,6 +138,12 @@ public class TabRegionFragment extends BaseFragment {
     }, 500);
   }
 
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    clearActive();
+  }
+
   @Subscribe
   public void onNewAllPostCountEvent(NewAllPostCountEvent event) {
     FeedRegionAdapter feedAdapter = mFeedFragment.getFeedAdapter();
