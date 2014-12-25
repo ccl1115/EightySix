@@ -64,9 +64,11 @@ public class HometownInfoFragment extends BaseFragment {
   }
 
   private void requestHometownInfo() {
+    getBaseActivity().showProgressBar();
     U.request("get_hometown", new OnResponse2<HometownInfoResponse>() {
       @Override
       public void onResponse(HometownInfoResponse response) {
+        getBaseActivity().hideProgressBar();
         if (RESTRequester.responseOk(response)) {
           mAdapter = new HometownInfoAdapter(response.object.lists);
           mAlvHometowns.setAdapter(mAdapter);
@@ -77,6 +79,7 @@ public class HometownInfoFragment extends BaseFragment {
 
       @Override
       public void onResponseError(Throwable e) {
+        getBaseActivity().hideProgressBar();
         detachSelf();
       }
     }, HometownInfoResponse.class, null, null);
