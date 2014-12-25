@@ -43,6 +43,13 @@ public class PublishRequest {
   @Optional
   public String tempName;
 
+  /**
+   * 0 old type
+   * 1 hometown type
+   */
+  @Param("sendType")
+  public int sendType;
+
   private PublishRequest() {
 
   }
@@ -88,6 +95,11 @@ public class PublishRequest {
 
     public Builder tempName(String tempName) {
       mPublishRequest.tempName = tempName;
+      return this;
+    }
+
+    public Builder sendType(int type) {
+      mPublishRequest.sendType = type;
       return this;
     }
 

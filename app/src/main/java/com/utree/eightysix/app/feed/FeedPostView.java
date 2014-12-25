@@ -182,7 +182,7 @@ public class FeedPostView extends LinearLayout {
     return mTvLastComment;
   }
 
-  public void setData(Post post, int circleId) {
+  public void setData(Post post) {
     mPost = post;
 
     if (mPost == null) {
@@ -256,6 +256,8 @@ public class FeedPostView extends LinearLayout {
         }
       }
     }
+
+    mTvHometown.setText(post.hometownText);
 
     mIvShare.setVisibility(INVISIBLE);
     mIvShare.removeCallbacks(mShareAnimation);

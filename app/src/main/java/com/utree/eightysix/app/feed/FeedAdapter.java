@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.feed;
 
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,14 +69,14 @@ public class FeedAdapter extends BaseAdapter {
       mFeeds.posts.lists.add(0, new BaseItem(TYPE_UPLOAD));
     } else if (mFeeds.current != 1) {
       // 不在职
-      if (mFeeds.circle.friendCount != 0 && mFeeds.lock == 1) {
+      if (mFeeds.circle != null && mFeeds.circle.friendCount != 0 && mFeeds.lock == 1) {
         // 有朋友但没达到解锁条件
         mFeeds.posts.lists.add(0, new BaseItem(TYPE_UNLOCK));
       }
     } else if (!hasPosts) {
       // 邀请厂里的人加入
       mFeeds.posts.lists.add(0, new BaseItem(TYPE_INVITE_FACTORY));
-    } else if (mFeeds.circle.friendCount == 0) {
+    } else if (mFeeds.circle != null && mFeeds.circle.friendCount == 0) {
       // 邀请朋友加入
       mFeeds.posts.lists.add(0, new BaseItem(TYPE_INVITE_FRIEND));
     } else if (mFeeds.lock == 1) {
@@ -290,7 +289,7 @@ public class FeedAdapter extends BaseAdapter {
     }
 
     FeedPostView feedPostView = (FeedPostView) convertView;
-    feedPostView.setData((Post) getItem(position), mFeeds.circle.id);
+    feedPostView.setData((Post) getItem(position));
 
     if (mTipOverlaySourcePosition == position) {
       feedPostView.showSourceTip();
@@ -315,7 +314,7 @@ public class FeedAdapter extends BaseAdapter {
       convertView = new FeedPromotionView(parent.getContext());
     }
 
-    ((FeedPromotionView) convertView).setData(mFeeds.circle.id, (Promotion) getItem(position));
+    ((FeedPromotionView) convertView).setData((Promotion) getItem(position));
     return convertView;
   }
 
@@ -392,7 +391,7 @@ public class FeedAdapter extends BaseAdapter {
     SelectViewHolder holder;
     if (convertView == null) {
       convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_select, parent, false);
-      holder = new SelectViewHolder(convertView, mFeeds.circle.id);
+      holder = new SelectViewHolder(convertView);
       convertView.setTag(holder);
     } else {
       holder = (SelectViewHolder) convertView.getTag();
@@ -449,10 +448,7 @@ public class FeedAdapter extends BaseAdapter {
   @Keep
   static class SelectViewHolder {
 
-    private int mId;
-
-    public SelectViewHolder(View view, int id) {
-      mId = id;
+    public SelectViewHolder(View view) {
       ButterKnife.inject(this, view);
     }
 

@@ -123,6 +123,7 @@ public class PublishActivity extends BaseActivity {
 
   private String mLastTempName;
   private List<Tag> mTags;
+  private int mSendType;
 
   private CameraUtil mCameraUtil;
 
@@ -132,6 +133,17 @@ public class PublishActivity extends BaseActivity {
     if (tags != null) {
       intent.putParcelableArrayListExtra("tags", (java.util.ArrayList<? extends android.os.Parcelable>) tags);
     }
+
+    if (!(context instanceof Activity)) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    context.startActivity(intent);
+  }
+
+  public static void startHometown(Context context) {
+    Intent intent = new Intent(context, PublishActivity.class);
+    intent.putExtra("sendType", 1);
 
     if (!(context instanceof Activity)) {
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -250,6 +262,8 @@ public class PublishActivity extends BaseActivity {
 
     mFactoryId = getIntent().getIntExtra("factoryId", -1);
     mTopicId = getIntent().getIntExtra("topicId", -1);
+
+    mSendType = getIntent().getIntExtra("sendType", 0);
 
     mPublishLayout = new PublishLayout(this);
     setContentView(mPublishLayout);
@@ -702,6 +716,8 @@ public class PublishActivity extends BaseActivity {
       if (mFactoryId != -1) {
         builder.factoryId(mFactoryId);
       }
+
+      builder.sendType(mSendType);
 
       String tags = "";
       for (Tag t : mTagsLayout.getSelectedTags()) {

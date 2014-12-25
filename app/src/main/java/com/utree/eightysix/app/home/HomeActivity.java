@@ -149,10 +149,14 @@ public class HomeActivity extends BaseActivity {
   @OnClick (R.id.ib_send)
   public void onIbSendClicked() {
     U.getAnalyser().trackEvent(this, "feed_publish", "feed_publish");
-    if (!mTabFragment.canPublish()) {
-      showNoPermDialog();
-    } else {
-      PublishActivity.start(this, -1, null);
+    if (!mTabFragment.isDetached()) {
+      if (!mTabFragment.canPublish()) {
+        showNoPermDialog();
+      } else {
+        PublishActivity.start(this, -1, null);
+      }
+    } else if (!mHometownTabFragment.isDetached()) {
+      PublishActivity.startHometown(this);
     }
   }
 
@@ -463,7 +467,6 @@ public class HomeActivity extends BaseActivity {
 
   @Override
   protected void onNewIntent(Intent intent) {
-
     final int regionType = intent.getIntExtra("regionType", Account.inst().getLastRegionType());
     final int tabIndex = intent.getIntExtra("tabIndex", 0);
 
@@ -510,10 +513,14 @@ public class HomeActivity extends BaseActivity {
 
   @Subscribe
   public void onStartPublishActivity(StartPublishActivityEvent event) {
-    if (!mTabFragment.canPublish()) {
-      showNoPermDialog();
-    } else {
-      PublishActivity.start(this, -1, null);
+    if (!mTabFragment.isDetached()) {
+      if (!mTabFragment.canPublish()) {
+        showNoPermDialog();
+      } else {
+        PublishActivity.start(this, -1, null);
+      }
+    } else if (!mHometownTabFragment.isDetached()) {
+      PublishActivity.startHometown(this);
     }
   }
 
@@ -552,6 +559,15 @@ public class HomeActivity extends BaseActivity {
   private void toggleHometownInfoFragment() {
     if (mHometownInfoFragment == null) {
       mHometownInfoFragment = new HometownInfoFragment();
+
+      mHometownInfoFragment.setCallback(new HometownInfoFragment.Callback() {
+        @Override
+        public void onHometownClicked(int hometownId, int hometownType, String hometownName) {
+          if (mHometownTabFragment != null) {
+            mHometownTabFragment.setHometown(hometownId, hometownType, hometownName);
+          }
+        }
+      });
 
       getSupportFragmentManager().beginTransaction()
           .add(R.id.fl_main, mHometownInfoFragment)

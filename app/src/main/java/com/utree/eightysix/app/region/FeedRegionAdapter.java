@@ -313,7 +313,7 @@ public class FeedRegionAdapter extends BaseAdapter {
     FeedPostView feedPostView = (FeedPostView) convertView;
     final Post item = (Post) getItem(position);
 
-    feedPostView.setData(item, mFeeds.circle == null ? 0 : mFeeds.circle.id);
+    feedPostView.setData(item);
 
     if (mTipTempNamePosition == position) {
       feedPostView.showTempNameTip();
@@ -344,7 +344,7 @@ public class FeedRegionAdapter extends BaseAdapter {
       convertView = new FeedPromotionView(parent.getContext());
     }
 
-    ((FeedPromotionView) convertView).setData(mFeeds.circle.id, (Promotion) getItem(position));
+    ((FeedPromotionView) convertView).setData((Promotion) getItem(position));
     return convertView;
   }
 

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
@@ -30,6 +31,9 @@ public class HometownInfoFragment extends BaseFragment {
   @InjectView(R.id.alv_hometowns)
   public AdvancedListView mAlvHometowns;
 
+  private Callback mCallback;
+  private HometownInfoAdapter mAdapter;
+
   @OnClick(R.id.fl_parent)
   public void onFlParentClicked() {
     detachSelf();
@@ -39,6 +43,16 @@ public class HometownInfoFragment extends BaseFragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     return inflater.inflate(R.layout.fragment_hometown_info, container, false);
   }
+
+  @OnItemClick(R.id.alv_hometowns)
+  public void onAlvhometownItemClicked(int position) {
+    HometownInfoResponse.HometownInfo info = mAdapter.getItem(position);
+    if (mCallback != null && info != null) {
+      mCallback.onHometownClicked(info.id, info.hometownType, info.name);
+    }
+    detachSelf();
+  }
+
 
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -52,7 +66,8 @@ public class HometownInfoFragment extends BaseFragment {
       @Override
       public void onResponse(HometownInfoResponse response) {
         if (RESTRequester.responseOk(response)) {
-          mAlvHometowns.setAdapter(new HometownInfoAdapter(response.object.lists));
+          mAdapter = new HometownInfoAdapter(response.object.lists);
+          mAlvHometowns.setAdapter(mAdapter);
         } else {
           detachSelf();
         }
@@ -106,5 +121,14 @@ public class HometownInfoFragment extends BaseFragment {
   @Override
   public boolean onBackPressed() {
     return detachSelf();
+  }
+
+  public void setCallback(Callback callback) {
+    mCallback = callback;
+  }
+
+
+  public static interface Callback {
+    void onHometownClicked(int hometownId, int hometownType, String hometownName);
   }
 }

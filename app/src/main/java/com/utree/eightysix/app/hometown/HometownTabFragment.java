@@ -108,4 +108,41 @@ public class HometownTabFragment extends BaseFragment {
       }
     }, 500);
   }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    clearActive();
+  }
+
+  public void setHometown(int hometownId, int hometownType, String hometownName) {
+    clearActive();
+
+    mNewHometownFeedsFragment.setHometown(hometownId, hometownType);
+    mHotHometownFeedsFragment.setHometown(hometownId, hometownType);
+
+    if (getBaseActivity() != null) {
+      getBaseActivity().setTopTitle(hometownName);
+      getBaseActivity().setTopSubTitle("");
+    }
+
+    if (mVpHometown == null) return;
+
+    mVpHometown.setCurrentItem(0);
+
+    switch (mVpHometown.getCurrentItem()) {
+      case 0:
+        mNewHometownFeedsFragment.setActive(true);
+        break;
+      case 1:
+        mHotHometownFeedsFragment.setActive(true);
+        break;
+    }
+  }
+
+  private void clearActive() {
+    mNewHometownFeedsFragment.setActive(false);
+    mHotHometownFeedsFragment.setActive(false);
+
+  }
 }

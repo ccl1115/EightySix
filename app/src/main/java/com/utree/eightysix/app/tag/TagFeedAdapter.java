@@ -14,7 +14,6 @@ import com.utree.eightysix.app.feed.FeedPostView;
 import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.data.TagFeeds;
-import com.utree.eightysix.widget.RandomSceneTextView;
 
 import java.util.List;
 
@@ -146,7 +145,7 @@ class TagFeedAdapter extends BaseAdapter {
     }
 
     FeedPostView feedPostView = (FeedPostView) convertView;
-    feedPostView.setData((Post) getItem(position), 0);
+    feedPostView.setData((Post) getItem(position));
 
     return convertView;
   }

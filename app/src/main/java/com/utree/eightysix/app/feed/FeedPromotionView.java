@@ -47,8 +47,6 @@ public class FeedPromotionView extends FrameLayout {
   @InjectView (R.id.ll_bottom)
   public LinearLayout mLlBottom;
 
-  private int mFactoryId;
-
   private Promotion mPromotion;
 
   public FeedPromotionView(Context context) {
@@ -67,8 +65,7 @@ public class FeedPromotionView extends FrameLayout {
     ButterKnife.inject(this, this);
   }
 
-  public void setData(int factoryId, Promotion promotion) {
-    mFactoryId = factoryId;
+  public void setData(Promotion promotion) {
     mPromotion = promotion;
 
     if (mPromotion != null) {

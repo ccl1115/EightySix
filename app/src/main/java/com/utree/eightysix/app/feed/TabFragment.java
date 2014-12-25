@@ -297,4 +297,10 @@ public class TabFragment extends BaseFragment {
     if (mHotFeedFragment != null) mHotFeedFragment.setActive(false);
     if (mThirdFragment != null) mThirdFragment.setActive(false);
   }
+
+  @Override
+  public void onDetach() {
+    super.onDetach();
+    clearActive();
+  }
 }

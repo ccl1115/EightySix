@@ -57,6 +57,7 @@
                 android:layout_margin="4dp"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/house"
+                android:visibility="gone"
                 />
 
         <ImageView

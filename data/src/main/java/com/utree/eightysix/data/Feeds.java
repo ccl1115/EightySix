@@ -83,4 +83,15 @@ public class Feeds {
   @SerializedName ("workerCount")
   public int workerCount;
 
+  @SerializedName("subInfo")
+  public String subInfo;
+
+  @SerializedName("hometown")
+  public int hometown;
+
+  @SerializedName("hometownType")
+  public int hometownType;
+
+  @SerializedName("hometownName")
+  public String hometownName;
 }

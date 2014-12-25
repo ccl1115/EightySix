@@ -22,6 +22,7 @@ import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RandomSceneTextView;
+import com.utree.eightysix.widget.TopBar;
 
 /**
  */
@@ -63,6 +64,11 @@ public class AbsHometownFeedsFragment extends BaseFragment {
   @Override
   protected void onActive() {
     super.onActive();
+
+    if (mFeedAdapter != null) {
+      mLvFeed.setAdapter(null);
+    }
+
     requestFeeds(1);
   }
 
@@ -116,6 +122,12 @@ public class AbsHometownFeedsFragment extends BaseFragment {
     });
   }
 
+  public void setHometown(int hometownId, int hometownType) {
+    mHometownId = hometownId;
+    mHometownType = hometownType;
+    requestFeeds(1);
+  }
+
   private void requestFeeds(final int page) {
     if (getBaseActivity() == null) return;
     mRefresherView.setRefreshing(true);
@@ -137,6 +149,19 @@ public class AbsHometownFeedsFragment extends BaseFragment {
           } else {
             mFeedAdapter.add(response.object.posts.lists);
           }
+
+          if (response.object.posts.lists.size() == 0) {
+            mRstvEmpty.setVisibility(View.VISIBLE);
+          } else {
+            mRstvEmpty.setVisibility(View.GONE);
+          }
+
+          getBaseActivity().setTopTitle(response.object.hometownName);
+          getBaseActivity().setTopSubTitle(response.object.subInfo);
+          getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
+
+          mHometownId = response.object.hometown;
+          mHometownType = response.object.hometownType;
         }
 
         mRefresherView.setRefreshing(false);
