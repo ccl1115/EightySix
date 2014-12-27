@@ -161,7 +161,7 @@ public class AbsHometownFeedsFragment extends BaseFragment {
             mRstvEmpty.setVisibility(View.GONE);
           }
 
-          getBaseActivity().setTopTitle(response.object.hometownName);
+          getBaseActivity().setTopTitle(String.format("老乡动态(%s)", response.object.hometownName));
           getBaseActivity().setTopSubTitle(response.object.subInfo);
           getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
 

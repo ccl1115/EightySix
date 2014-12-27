@@ -16,6 +16,13 @@
     </request>
 
     <request>
+        <id>get_hometown</id>
+        <name>获取用户家乡</name>
+        <path>/user/getHomeTown.do</path>
+        <token/>
+    </request>
+
+    <request>
         <id>get_cities</id>
         <name>获取城市列表</name>
         <path>/system/getCities.do</path>

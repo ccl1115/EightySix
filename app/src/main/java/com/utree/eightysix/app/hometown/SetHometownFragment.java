@@ -23,11 +23,13 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.data.Hometown;
 import com.utree.eightysix.drawable.RoundRectDrawable;
+import com.utree.eightysix.response.HometownInfoResponse;
 import com.utree.eightysix.response.HometownResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.ThemedDialog;
+import java.util.List;
 
 /**
  */
@@ -60,6 +62,8 @@ public class SetHometownFragment extends BaseFragment {
   @InjectView (R.id.sp_county)
   public Spinner mSpCounty;
   private Callback mCallback;
+
+  private List<HometownInfoResponse.HometownInfo> mCurrentHometown;
 
   @OnClick (R.id.fl_parent)
   public void onFlParentClicked() {
@@ -107,6 +111,8 @@ public class SetHometownFragment extends BaseFragment {
     if (arguments != null) {
       mTvTitle.setText(arguments.getString("title"));
     }
+
+    requestGetHometown();
 
     mLlParent.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(8), Color.WHITE));
 
@@ -181,7 +187,7 @@ public class SetHometownFragment extends BaseFragment {
     U.request("set_hometown", new OnResponse2<Response>() {
           @Override
           public void onResponseError(Throwable e) {
-
+            detachSelf();
           }
 
           @Override
@@ -190,16 +196,35 @@ public class SetHometownFragment extends BaseFragment {
               if (mCallback != null) {
                 mCallback.onHometownSet(((Hometown) mSpCounty.getSelectedItem()).id);
               }
-              if (!isDetached()) {
-                getFragmentManager().beginTransaction()
-                    .detach(SetHometownFragment.this).commit();
-              }
+              detachSelf();
             }
           }
         }, Response.class,
         mSpProvince.getSelectedItem() == null ? null : mSpProvince.getSelectedItemPosition() + 1,
         mSpCity.getSelectedItem() == null ? null : ((Hometown) mSpCity.getSelectedItem()).id,
         mSpCounty.getSelectedItem() == null ? null : ((Hometown) mSpCounty.getSelectedItem()).id);
+  }
+
+  private void requestGetHometown() {
+    U.request("get_hometown", new OnResponse2<HometownInfoResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        detachSelf();
+      }
+
+      @Override
+      public void onResponse(HometownInfoResponse response) {
+        if (RESTRequester.responseOk(response)) {
+          mCurrentHometown = response.object.lists;
+
+          if (mCurrentHometown != null) {
+            mSpProvince.setSelection(mCurrentHometown.get(0).id - 1);
+          }
+        } else {
+          detachSelf();
+        }
+      }
+    }, HometownInfoResponse.class, null, null);
   }
 
   private void showConfirmDialog() {
