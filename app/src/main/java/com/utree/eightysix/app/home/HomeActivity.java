@@ -579,10 +579,10 @@ public class HomeActivity extends BaseActivity {
   }
 
   private void showSetHometownFragment(String title) {
-    Bundle args = new Bundle();
-    args.putString("title", title);
     if (mSetHometownFragment == null) {
       mSetHometownFragment = new SetHometownFragment();
+      Bundle args = new Bundle();
+      args.putString("title", title);
       mSetHometownFragment.setArguments(args);
 
       mSetHometownFragment.setCallback(new SetHometownFragment.Callback() {
@@ -597,7 +597,8 @@ public class HomeActivity extends BaseActivity {
       getSupportFragmentManager().beginTransaction()
           .add(android.R.id.content, mSetHometownFragment).commit();
     } else if (mSetHometownFragment.isDetached()) {
-      mSetHometownFragment.setArguments(args);
+      Bundle args = mSetHometownFragment.getArguments();
+      args.putString("title", title);
       getSupportFragmentManager().beginTransaction()
           .attach(mSetHometownFragment).commit();
     }
