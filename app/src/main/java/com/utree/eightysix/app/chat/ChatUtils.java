@@ -166,6 +166,11 @@ public class ChatUtils {
   }
 
   public static void startChat(final BaseActivity context, final Post post, final Comment comment) {
+    if (comment.self == 1) {
+      U.showToast("不能向自己发起聊天哦！");
+      return;
+    }
+
     String chatId = ConversationUtil.getChatIdByPostComment(post, comment);
     if (chatId != null) {
       ChatActivity.start(context, chatId, post, comment);
@@ -194,6 +199,10 @@ public class ChatUtils {
   }
 
   public static void startChat(final BaseActivity context, final Post post) {
+    if (post.owner == 1) {
+      U.showToast("不能向自己发起聊天哦！");
+      return;
+    }
 
     String chatId = ConversationUtil.getChatIdByPost(post);
     if (chatId != null) {
@@ -219,7 +228,7 @@ public class ChatUtils {
         }
         context.hideProgressBar();
       }
-    }, ChatIdResponse.class, post == null ? null : post.id, null);
+    }, ChatIdResponse.class, post.id, null);
 
   }
 
