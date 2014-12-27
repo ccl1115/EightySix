@@ -120,18 +120,6 @@ public class SetHometownFragment extends BaseFragment {
     arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     mSpProvince.setAdapter(arrayAdapter);
 
-    mSpProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-      @Override
-      public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//        if (mSpCity.getAdapter() != null) mSpCity.setAdapter(null);
-        requestCities(i + 1);
-      }
-
-      @Override
-      public void onNothingSelected(AdapterView<?> adapterView) {
-
-      }
-    });
   }
 
   private void requestCities(int provinceId) {
@@ -151,7 +139,11 @@ public class SetHometownFragment extends BaseFragment {
           mSpCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-              requestCounties(response.object.lists.get(i).id);
+              if (mCurrentHometown != null) {
+                requestCounties(mCurrentHometown.get(1).id);
+              } else {
+                requestCounties(response.object.lists.get(i).id);
+              }
             }
 
             @Override
@@ -178,6 +170,14 @@ public class SetHometownFragment extends BaseFragment {
               new ArrayAdapter<Hometown>(getActivity(), android.R.layout.simple_spinner_item, response.object.lists);
           adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
           mSpCounty.setAdapter(adapter);
+          if (mCurrentHometown != null) {
+            HometownInfoResponse.HometownInfo info = mCurrentHometown.get(2);
+            for (int i = 0, size = response.object.lists.size(); i < size; i++) {
+              if (info.id == response.object.lists.get(i).id) {
+                mSpCounty.setSelection(i);
+              }
+            }
+          }
         }
       }
     }, HometownResponse.class, cityId);
@@ -219,6 +219,7 @@ public class SetHometownFragment extends BaseFragment {
 
           if (mCurrentHometown != null) {
             mSpProvince.setSelection(mCurrentHometown.get(0).id - 1);
+            requestCities(mCurrentHometown.get(0).id);
           }
         } else {
           detachSelf();
