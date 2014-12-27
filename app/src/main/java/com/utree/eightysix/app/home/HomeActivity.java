@@ -62,6 +62,7 @@ import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TopBar;
+import de.akquinet.android.androlog.Log;
 
 /**
  */
@@ -249,7 +250,6 @@ public class HomeActivity extends BaseActivity {
       @Override
       public void onDrawerSlide(View drawerView, float slideOffset) {
         final int pivotY = mFlMain.getMeasuredHeight() >> 1;
-        final int topBarPivotY = mTopBar.getMeasuredHeight() >> 1;
         final float scale = 1 - slideOffset * 0.1f;
 
         if (drawerView.getId() == R.id.fl_side) {
@@ -423,32 +423,7 @@ public class HomeActivity extends BaseActivity {
   }
 
   @Override
-  public void onBackPressed() {
-    if (mTabFragment != null && mTabFragment.onBackPressed()) {
-      return;
-    }
-
-    if (mFactoryRegionFragment != null && mFactoryRegionFragment.onBackPressed()) {
-      return;
-    }
-
-
-    if (mShouldExit) {
-      finish();
-    } else {
-      mShouldExit = true;
-      showToast(getString(R.string.press_again_to_exit));
-      getHandler().postDelayed(new Runnable() {
-        @Override
-        public void run() {
-          mShouldExit = false;
-        }
-      }, 1000);
-    }
-  }
-
-  @Override
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
+  public boolean onKeyUp(int keyCode, KeyEvent event) {
     if (keyCode == KeyEvent.KEYCODE_MENU) {
       if (!mDlContent.isDrawerOpen(mFlSide)) {
         openMenu();
@@ -456,6 +431,23 @@ public class HomeActivity extends BaseActivity {
         mDlContent.closeDrawer(mFlSide);
       }
       return true;
+    } else if (keyCode == KeyEvent.KEYCODE_BACK) {
+      if (mFactoryRegionFragment != null && mFactoryRegionFragment.onBackPressed()) {
+        return true;
+      }
+
+      if (mShouldExit) {
+        finish();
+      } else {
+        mShouldExit = true;
+        showToast(getString(R.string.press_again_to_exit));
+        getHandler().postDelayed(new Runnable() {
+          @Override
+          public void run() {
+            mShouldExit = false;
+          }
+        }, 1000);
+      }
     }
     return super.onKeyDown(keyCode, event);
   }

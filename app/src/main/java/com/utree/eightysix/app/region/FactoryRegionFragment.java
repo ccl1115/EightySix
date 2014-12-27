@@ -2,6 +2,7 @@ package com.utree.eightysix.app.region;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,13 +34,13 @@ public class FactoryRegionFragment extends BaseFragment {
 
   @OnClick (R.id.fl_parent)
   public void onFlParentClicked() {
-    detach();
+    detachSelf();
   }
 
   @OnClick (R.id.tv_more)
   public void onTvMoreClicked() {
     FactoryRegionActivity.start(getActivity(), mRegionType);
-    detach();
+    detachSelf();
   }
 
 
@@ -52,7 +53,7 @@ public class FactoryRegionFragment extends BaseFragment {
       FeedActivity.start(view.getContext(), item);
     }
 
-    detach();
+    detachSelf();
   }
 
   @Override
@@ -63,6 +64,25 @@ public class FactoryRegionFragment extends BaseFragment {
   @Override
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
+
+    view.setFocusableInTouchMode(true);
+    view.setFocusable(true);
+
+    view.requestFocus();
+
+    view.setOnKeyListener(new View.OnKeyListener() {
+      @Override
+      public boolean onKey(View view, int i, KeyEvent keyEvent) {
+        if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+          if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
+            detachSelf();
+          }
+          return true;
+        } else {
+          return false;
+        }
+      }
+    });
 
     if (mAlvFactories != null) mAlvFactories.setAdapter(null);
     requestRegionFactories(mRegionType);
@@ -90,18 +110,8 @@ public class FactoryRegionFragment extends BaseFragment {
     }, FactoryRegionResponse.class);
   }
 
-  protected void detach() {
-    getFragmentManager().beginTransaction()
-        .detach(this).commit();
-  }
-
   @Override
   public boolean onBackPressed() {
-    if (!isDetached()) {
-      detach();
-      return true;
-    } else {
-      return false;
-    }
+    return detachSelf();
   }
 }

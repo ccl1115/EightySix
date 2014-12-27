@@ -6,10 +6,15 @@ package com.utree.eightysix.app.hometown;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -40,23 +45,23 @@ public class SetHometownFragment extends BaseFragment {
       "山东", "台湾"
   };
 
-  @InjectView(R.id.ll_parent)
+  @InjectView (R.id.ll_parent)
   public LinearLayout mLlParent;
 
-  @InjectView(R.id.sp_province)
+  @InjectView (R.id.sp_province)
   public Spinner mSpProvince;
 
-  @InjectView(R.id.sp_city)
+  @InjectView (R.id.sp_city)
   public Spinner mSpCity;
 
-  @InjectView(R.id.tv_title)
+  @InjectView (R.id.tv_title)
   public TextView mTvTitle;
 
-  @InjectView(R.id.sp_county)
+  @InjectView (R.id.sp_county)
   public Spinner mSpCounty;
   private Callback mCallback;
 
-  @OnClick(R.id.fl_parent)
+  @OnClick (R.id.fl_parent)
   public void onFlParentClicked() {
     if (!isDetached()) {
       getFragmentManager().beginTransaction()
@@ -64,7 +69,7 @@ public class SetHometownFragment extends BaseFragment {
     }
   }
 
-  @OnClick(R.id.rb_settings)
+  @OnClick (R.id.rb_settings)
   public void onRbSettingsClicked() {
     showConfirmDialog();
   }
@@ -78,6 +83,25 @@ public class SetHometownFragment extends BaseFragment {
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
+
+    view.setFocusableInTouchMode(true);
+    view.setFocusable(true);
+
+    view.requestFocus();
+
+    view.setOnKeyListener(new View.OnKeyListener() {
+      @Override
+      public boolean onKey(View view, int i, KeyEvent keyEvent) {
+        if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+          if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
+            detachSelf();
+          }
+          return true;
+        } else {
+          return false;
+        }
+      }
+    });
 
     Bundle arguments = getArguments();
     if (arguments != null) {
