@@ -13,8 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
+import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
 import com.utree.eightysix.widget.TitleTab;
 import com.utree.eightysix.widget.TopBar;
 
@@ -35,6 +38,11 @@ public class HometownTabFragment extends BaseFragment {
   public HometownTabFragment() {
     mNewHometownFeedsFragment = new NewHometownFeedsFragment();
     mHotHometownFeedsFragment = new HotHometownFeedsFragment();
+  }
+
+  @OnClick(R.id.ib_send)
+  public void onIbSendClicked() {
+    U.getBus().post(new StartPublishActivityEvent());
   }
 
   @Override

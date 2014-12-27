@@ -34,8 +34,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingLeft="10dp"
-                android:paddingStart="10dp"
+                android:paddingLeft="12dp"
+                android:paddingStart="12dp"
                 android:paddingTop="10dp"
                 >
 
@@ -43,8 +43,10 @@
                     android:id="@+id/tv_hometown"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginEnd="8dp"
                     android:textColor="@android:color/white"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     />
 
             <LinearLayout

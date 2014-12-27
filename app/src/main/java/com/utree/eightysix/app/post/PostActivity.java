@@ -291,7 +291,13 @@ public class PostActivity extends BaseActivity {
         if (mPostCommentsAdapter != null) {
           PostPostView postPostView = mPostCommentsAdapter.getPostPostView();
           if (postPostView.getParent() != null) {
-            mFlBanner.setBackgroundColor((int) (0x88 * ((-postPostView.getTop()) / (float) postPostView.getMeasuredHeight())) << 24);
+            int top = postPostView.getTop();
+            if (top <= 0 && top >= -40) {
+              mFlBanner.setClickable(false);
+            } else {
+              mFlBanner.setClickable(true);
+            }
+            mFlBanner.setBackgroundColor((int) (0x88 * ((-top) / (float) postPostView.getMeasuredHeight())) << 24);
           } else {
             mFlBanner.setBackgroundColor(0x88000000);
           }

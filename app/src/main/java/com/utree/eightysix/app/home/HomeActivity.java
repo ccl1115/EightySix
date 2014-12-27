@@ -70,9 +70,6 @@ public class HomeActivity extends BaseActivity {
 
   private static final String FIRST_RUN_KEY = "feed";
 
-  @InjectView (R.id.ib_send)
-  public ImageButton mSend;
-
   @InjectView (R.id.fl_side)
   public FrameLayout mFlSide;
 
@@ -147,20 +144,6 @@ public class HomeActivity extends BaseActivity {
     }
 
     return intent;
-  }
-
-  @OnClick (R.id.ib_send)
-  public void onIbSendClicked() {
-    U.getAnalyser().trackEvent(this, "feed_publish", "feed_publish");
-    if (!mTabFragment.isDetached()) {
-      if (!mTabFragment.canPublish()) {
-        showNoPermDialog();
-      } else {
-        PublishActivity.start(this, -1, null);
-      }
-    } else if (!mHometownTabFragment.isDetached()) {
-      PublishActivity.startHometown(this);
-    }
   }
 
   @Override
@@ -309,8 +292,6 @@ public class HomeActivity extends BaseActivity {
           ViewHelper.setScaleY(mFlRight, scale2);
           ViewHelper.setAlpha(mFlRight, slideOffset * slideOffset);
         }
-
-        ViewHelper.setTranslationY(mSend, U.dp2px(100) * slideOffset);
       }
 
       @Override

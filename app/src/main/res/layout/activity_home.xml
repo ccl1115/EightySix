@@ -7,26 +7,12 @@
         android:background="@drawable/bg_drawer"
         >
 
-    <com.utree.eightysix.app.home.HomeLayout
+    <FrameLayout
             android:id="@+id/fl_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/activity_top_bar_height"
-            >
-
-        <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/ib_send"
-                android:layout_gravity="end|bottom"
-                android:layout_marginRight="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginBottom="6dp"
-                android:src="@drawable/ic_post_pen"
-                android:background="@drawable/btn_post"
-                />
-
-    </com.utree.eightysix.app.home.HomeLayout>
+            />
 
     <FrameLayout
             android:id="@+id/fl_side"

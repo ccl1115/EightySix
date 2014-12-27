@@ -8,15 +8,19 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
+import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
 import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
+import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
 import com.utree.eightysix.widget.TitleTab;
 
@@ -30,6 +34,7 @@ public class TabRegionFragment extends BaseFragment {
 
   @InjectView (R.id.tt_tab)
   public TitleTab mTtTab;
+
   private FeedRegionFragment mFeedFragment;
   private HotFeedRegionFragment mHotFeedFragment;
   private FriendsFeedRegionFragment mFriendsFeedFragment;
@@ -38,6 +43,11 @@ public class TabRegionFragment extends BaseFragment {
     mFeedFragment = new FeedRegionFragment();
     mHotFeedFragment = new HotFeedRegionFragment();
     mFriendsFeedFragment = new FriendsFeedRegionFragment();
+  }
+
+  @OnClick(R.id.ib_send)
+  public void onIbSendClicked() {
+    U.getBus().post(new StartPublishActivityEvent());
   }
 
   @Override
