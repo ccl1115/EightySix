@@ -12,6 +12,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.feed.FeedAdapter;
+import com.utree.eightysix.app.hometown.event.HometownNotSetEvent;
 import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.data.Post;
@@ -143,6 +144,10 @@ public class AbsHometownFeedsFragment extends BaseFragment {
       @Override
       public void onResponse(FeedsResponse response) {
         if (RESTRequester.responseOk(response)) {
+          if (response.object.hometown == 0) {
+            U.getBus().post(new HometownNotSetEvent());
+          }
+
           if (page == 1) {
             mFeedAdapter = new FeedAdapter(response.object);
             mLvFeed.setAdapter(mFeedAdapter);
@@ -160,7 +165,7 @@ public class AbsHometownFeedsFragment extends BaseFragment {
           getBaseActivity().setTopSubTitle(response.object.subInfo);
           getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
 
-          mHometownId = response.object.hometown;
+          mHometownId = response.object.hometownId;
           mHometownType = response.object.hometownType;
 
         }

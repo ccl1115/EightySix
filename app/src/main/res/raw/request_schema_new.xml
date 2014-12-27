@@ -36,7 +36,7 @@
     </request>
 
     <request>
-        <id>get_hometown</id>
+        <id>get_hometown_menu</id>
         <name>获取用户家乡</name>
         <path>/feed/hometownMenu.do</path>
         <token/>
@@ -52,6 +52,18 @@
             <param>tabType</param>
             <param>hometownId</param>
             <param>hometownType</param>
+        </params>
+    </request>
+
+    <request>
+        <id>login</id>
+        <name>登录接口</name>
+        <path>/login/login.do</path>
+        <sign/>
+        <params>
+            <param>phone</param>
+            <param>password</param>
+            <param>valiCode</param>
         </params>
     </request>
 </api>

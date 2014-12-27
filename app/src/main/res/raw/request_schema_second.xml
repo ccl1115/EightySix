@@ -85,15 +85,4 @@
         <responseClz>ChatOnlineListResponse</responseClz>
     </request>
 
-    <request>
-        <id>login</id>
-        <name>登录接口</name>
-        <path>/passport/login</path>
-        <sign/>
-        <params>
-            <param>phone</param>
-            <param>password</param>
-            <param>valiCode</param>
-        </params>
-    </request>
 </api>

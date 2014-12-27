@@ -140,9 +140,25 @@ public class HometownTabFragment extends BaseFragment {
     }
   }
 
+  public void refresh() {
+    clearActive();
+
+    if (mVpHometown == null) return;
+
+    mVpHometown.setCurrentItem(0);
+
+    switch (mVpHometown.getCurrentItem()) {
+      case 0:
+        mNewHometownFeedsFragment.setActive(true);
+        break;
+      case 1:
+        mHotHometownFeedsFragment.setActive(true);
+        break;
+    }
+  }
+
   private void clearActive() {
     mNewHometownFeedsFragment.setActive(false);
     mHotHometownFeedsFragment.setActive(false);
-
   }
 }

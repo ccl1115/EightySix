@@ -100,15 +100,15 @@ public class C {
    * Tags for logging
    */
   public static class TAG {
-    public static final String AH = "AsyncHttp";
+
+    private static final String PREFIX = "[EIG]";
 
     /**
      * Tag for RESTRequest
      */
-    public static final String RR = "Request";
+    public static final String RR = PREFIX + "Request";
 
-    public static final String NT = "Notification";
-    public static final String ACCOUNT = "Account";
-    public static final String CH = "Chat";
+    public static final String NT = PREFIX + "Notification";
+    public static final String CH = PREFIX + "Chat";
   }
 }

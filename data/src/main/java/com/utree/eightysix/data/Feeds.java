@@ -86,8 +86,16 @@ public class Feeds {
   @SerializedName("subInfo")
   public String subInfo;
 
+  /**
+   * 是否有设置hometown
+   * 1 已设置
+   * 0 未设置
+   */
   @SerializedName("hometown")
   public int hometown;
+
+  @SerializedName("hometownId")
+  public int hometownId;
 
   @SerializedName("hometownType")
   public int hometownType;

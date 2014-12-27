@@ -41,6 +41,7 @@ import com.utree.eightysix.app.feed.event.UploadClickedEvent;
 import com.utree.eightysix.app.hometown.HometownInfoFragment;
 import com.utree.eightysix.app.hometown.HometownTabFragment;
 import com.utree.eightysix.app.hometown.SetHometownFragment;
+import com.utree.eightysix.app.hometown.event.HometownNotSetEvent;
 import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.msg.PraiseActivity;
@@ -111,6 +112,8 @@ public class HomeActivity extends BaseActivity {
 
   private boolean mShouldExit;
   private Circle mCurrentCircle;
+
+  private boolean mCreated;
 
   public static void start(Context context) {
     Intent intent = new Intent(context, HomeActivity.class);
@@ -361,6 +364,8 @@ public class HomeActivity extends BaseActivity {
       }
     }).execute();
 
+    mCreated = true;
+
     onNewIntent(getIntent());
   }
 
@@ -374,9 +379,12 @@ public class HomeActivity extends BaseActivity {
 
   @Override
   protected void onResume() {
-    if (mResumed && getCount() > U.getConfigInt("activity.background.refresh.time")
-        && mTabFragment != null) {
-      mTabFragment.setRegionType(mTabFragment.getRegionType());
+    if (mResumed && getCount() > U.getConfigInt("activity.background.refresh.time")) {
+      if (mTabFragment != null && !mTabFragment.isDetached()) {
+        mTabFragment.setRegionType(mTabFragment.getRegionType());
+      } else if (mHometownTabFragment != null && !mHometownTabFragment.isDetached()) {
+        mHometownTabFragment.refresh();
+      }
     }
     super.onResume();
 
@@ -403,6 +411,12 @@ public class HomeActivity extends BaseActivity {
     if (event.getStatus() == ChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT) {
       mTopBar.getActionView(0).setCount(((Long) event.getObj()).intValue());
     }
+  }
+
+  @Subscribe
+  public void onHometownNotSetEvent(HometownNotSetEvent event) {
+    mDlContent.openDrawer(mFlSide);
+    showSetHometownFragment();
   }
 
 
@@ -467,6 +481,9 @@ public class HomeActivity extends BaseActivity {
 
   @Override
   protected void onNewIntent(Intent intent) {
+    if (mCreated) {
+      showTabFragment();
+    }
     final int regionType = intent.getIntExtra("regionType", Account.inst().getLastRegionType());
     final int tabIndex = intent.getIntExtra("tabIndex", 0);
 
@@ -583,6 +600,15 @@ public class HomeActivity extends BaseActivity {
   private void showSetHometownFragment() {
     if (mSetHometownFragment == null) {
       mSetHometownFragment = new SetHometownFragment();
+
+      mSetHometownFragment.setCallback(new SetHometownFragment.Callback() {
+        @Override
+        public void onHometownSet(int hometownId) {
+          if (mHometownTabFragment != null) {
+            mHometownTabFragment.setHometown(hometownId, -1, "");
+          }
+        }
+      });
 
       getSupportFragmentManager().beginTransaction()
           .add(android.R.id.content, mSetHometownFragment).commit();

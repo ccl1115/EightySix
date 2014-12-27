@@ -4,13 +4,15 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_drawer">
+        android:background="@drawable/bg_drawer"
+        >
 
-        <com.utree.eightysix.widget.ReverseFrameLayout
+    <com.utree.eightysix.app.home.HomeLayout
             android:id="@+id/fl_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/activity_top_bar_height">
+            android:layout_marginTop="@dimen/activity_top_bar_height"
+            >
 
         <ImageButton
                 android:layout_width="wrap_content"
@@ -21,23 +23,26 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="6dp"
                 android:src="@drawable/ic_post_pen"
-                android:background="@drawable/btn_post"/>
+                android:background="@drawable/btn_post"
+                />
 
-        </com.utree.eightysix.widget.ReverseFrameLayout>
+    </com.utree.eightysix.app.home.HomeLayout>
 
     <FrameLayout
             android:id="@+id/fl_side"
             android:layout_width="244dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            >
 
         <fragment
                 class="com.utree.eightysix.app.home.RegionFragment"
                 android:id="@+id/fragment_range"
                 android:layout_width="244dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"/>
+                android:layout_gravity="center_vertical"
+                />
 
     </FrameLayout>
 
@@ -53,7 +58,8 @@
                 layout="@layout/widget_feed_menu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"/>
+                android:layout_gravity="center_vertical"
+                />
 
     </FrameLayout>
 

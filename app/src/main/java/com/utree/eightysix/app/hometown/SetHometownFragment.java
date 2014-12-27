@@ -51,6 +51,7 @@ public class SetHometownFragment extends BaseFragment {
 
   @InjectView(R.id.sp_county)
   public Spinner mSpCounty;
+  private Callback mCallback;
 
   @OnClick(R.id.fl_parent)
   public void onFlParentClicked() {
@@ -154,6 +155,9 @@ public class SetHometownFragment extends BaseFragment {
           @Override
           public void onResponse(Response response) {
             if (RESTRequester.responseOk(response)) {
+              if (mCallback != null) {
+                mCallback.onHometownSet(((Hometown) mSpCounty.getSelectedItem()).id);
+              }
               if (!isDetached()) {
                 getFragmentManager().beginTransaction()
                     .detach(SetHometownFragment.this).commit();
@@ -209,5 +213,13 @@ public class SetHometownFragment extends BaseFragment {
     } else {
       return super.onBackPressed();
     }
+  }
+
+  public void setCallback(Callback callback) {
+    mCallback = callback;
+  }
+
+  public interface Callback {
+    void onHometownSet(int hometownId);
   }
 }
