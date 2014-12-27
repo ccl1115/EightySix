@@ -257,7 +257,12 @@ public class FeedPostView extends LinearLayout {
       }
     }
 
-    mTvHometown.setText(post.hometownText);
+    if (TextUtils.isEmpty(post.hometownText)) {
+      mTvHometown.setVisibility(GONE);
+    } else {
+      mTvHometown.setVisibility(VISIBLE);
+      mTvHometown.setText(post.hometownText);
+    }
 
     mIvShare.setVisibility(INVISIBLE);
     mIvShare.removeCallbacks(mShareAnimation);

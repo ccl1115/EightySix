@@ -34,8 +34,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingLeft="12dp"
-                android:paddingStart="12dp"
                 android:paddingTop="10dp"
                 >
 
@@ -43,8 +41,8 @@
                     android:id="@+id/tv_hometown"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginEnd="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
                     android:textColor="@android:color/white"
                     android:textSize="14sp"
                     />
@@ -54,6 +52,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
                     android:orientation="horizontal"
                     >
 

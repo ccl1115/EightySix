@@ -305,6 +305,8 @@ public class PostActivity extends BaseActivity {
       }
     });
 
+    mIvPost.setEnabled(false);
+
     onNewIntent(getIntent());
   }
 
@@ -585,7 +587,7 @@ public class PostActivity extends BaseActivity {
 
             hideProgressBar();
             mEtPostContent.setEnabled(true);
-            mIvPost.setEnabled(true);
+            mIvPost.setEnabled(false);
             mLvComments.setSelection(Integer.MAX_VALUE);
 
             requestComment(1, true);
