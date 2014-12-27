@@ -231,7 +231,7 @@ public class HomeActivity extends BaseActivity {
 
       @Override
       public void onFellowSettingClicked() {
-        showSetHometownFragment();
+        showSetHometownFragment(getString(R.string.set_your_hometown));
       }
 
       @Override
@@ -397,7 +397,7 @@ public class HomeActivity extends BaseActivity {
   @Subscribe
   public void onHometownNotSetEvent(HometownNotSetEvent event) {
     mDlContent.openDrawer(mFlSide);
-    showSetHometownFragment();
+    showSetHometownFragment(getString(R.string.set_hometown_tip));
   }
 
 
@@ -578,9 +578,12 @@ public class HomeActivity extends BaseActivity {
     }
   }
 
-  private void showSetHometownFragment() {
+  private void showSetHometownFragment(String title) {
+    Bundle args = new Bundle();
+    args.putString("title", title);
     if (mSetHometownFragment == null) {
       mSetHometownFragment = new SetHometownFragment();
+      mSetHometownFragment.setArguments(args);
 
       mSetHometownFragment.setCallback(new SetHometownFragment.Callback() {
         @Override
@@ -594,6 +597,7 @@ public class HomeActivity extends BaseActivity {
       getSupportFragmentManager().beginTransaction()
           .add(android.R.id.content, mSetHometownFragment).commit();
     } else if (mSetHometownFragment.isDetached()) {
+      mSetHometownFragment.setArguments(args);
       getSupportFragmentManager().beginTransaction()
           .attach(mSetHometownFragment).commit();
     }

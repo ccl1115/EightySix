@@ -49,6 +49,9 @@ public class SetHometownFragment extends BaseFragment {
   @InjectView(R.id.sp_city)
   public Spinner mSpCity;
 
+  @InjectView(R.id.tv_title)
+  public TextView mTvTitle;
+
   @InjectView(R.id.sp_county)
   public Spinner mSpCounty;
   private Callback mCallback;
@@ -75,6 +78,11 @@ public class SetHometownFragment extends BaseFragment {
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
+
+    Bundle arguments = getArguments();
+    if (arguments != null) {
+      mTvTitle.setText(arguments.getString("title"));
+    }
 
     mLlParent.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(8), Color.WHITE));
 

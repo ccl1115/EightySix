@@ -18,18 +18,18 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="32dp"
+            android:layout_margin="16dp"
             android:orientation="vertical"
             tools:ignore="UselessParent"
             >
 
         <TextView
+                android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/set_hometown_tip"
                 android:textColor="@color/apptheme_primary_light_color"
                 android:textSize="16sp"
-                android:padding="8dp"
+                android:padding="16dp"
                 />
 
         <View

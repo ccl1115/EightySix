@@ -12,4 +12,5 @@
     <string name="choose_city">选择城市</string>
     <string name="choose_county">选择区/县</string>
     <string name="set_hometown_tip">设置完家乡，才可以看老乡动态哦！</string>
+    <string name="set_your_hometown">设置你的家乡</string>
 </resources>
