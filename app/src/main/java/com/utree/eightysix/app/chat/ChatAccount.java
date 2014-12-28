@@ -17,6 +17,8 @@ import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.dao.Conversation;
 import com.utree.eightysix.dao.Message;
 import com.utree.eightysix.dao.MessageConst;
+import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.DaoUtils;
 import de.akquinet.android.androlog.Log;
 
@@ -73,6 +75,18 @@ public class ChatAccount {
                 @Override
                 public void run() {
                   if (BuildConfig.DEBUG) U.showToast("聊天服务器登录成功");
+
+                  U.request("chat_online", new OnResponse2<Response>() {
+                    @Override
+                    public void onResponseError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Response response) {
+
+                    }
+                  }, Response.class, null, null);
                 }
               });
             }
@@ -160,7 +174,7 @@ public class ChatAccount {
     protected Void doInBackground(Void... voids) {
 
       try {
-        ChatUtils.ConversationUtil.createOrUpdateConversation(mEmMessage, null);
+        ChatUtils.ConversationUtil.createOrUpdateConversation(mEmMessage);
       } catch (EaseMobException e) {
         Log.d(C.TAG.CH, e.toString());
         return null;
@@ -217,7 +231,13 @@ public class ChatAccount {
           @Override
           public void onSuccess() {
             mMessage.setStatus(MessageConst.STATUS_SUCCESS);
-            publishProgress(PROGRESS_MESSAGE_DOWNLOADED);
+            DaoUtils.getMessageDao().update(mMessage);
+            BaseApplication.getHandler().post(new Runnable() {
+              @Override
+              public void run() {
+                U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_RECEIVE_MSG, mMessage));
+              }
+            });
           }
 
           @Override
@@ -254,7 +274,6 @@ public class ChatAccount {
           U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_RECEIVE_MSG, mInfoMessage));
           break;
         case PROGRESS_MESSAGE_DOWNLOADED:
-          U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_RECEIVE_MSG, mMessage));
           break;
       }
     }

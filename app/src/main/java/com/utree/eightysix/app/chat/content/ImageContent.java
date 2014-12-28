@@ -22,9 +22,13 @@ public class ImageContent {
   @SerializedName("thumbnail")
   public String thumbnail;
 
-  public ImageContent(String local, String remote, String localThumb, String thumbnail) {
+  @SerializedName("secret")
+  public String secret;
+
+  public ImageContent(String local, String remote, String secret, String localThumb, String thumbnail) {
     this.local = local;
     this.remote = remote;
+    this.secret = secret;
     this.localThumb = localThumb;
     this.thumbnail = thumbnail;
   }

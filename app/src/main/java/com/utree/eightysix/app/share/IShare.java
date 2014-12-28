@@ -10,6 +10,7 @@ import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.ShareContentRequest;
 import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.Response;
 
 /**
@@ -82,6 +83,18 @@ public abstract class IShare {
         }
       }, Response.class);
 
+      U.request("share_callback", new OnResponse2<Response>() {
+        @Override
+        public void onResponseError(Throwable e) {
+
+        }
+
+        @Override
+        public void onResponse(Response response) {
+
+        }
+      }, Response.class, null, null);
+
       if (BuildConfig.DEBUG) Toast.makeText(U.getContext(), "onComplete", Toast.LENGTH_LONG).show();
     }
 
@@ -105,6 +118,17 @@ public abstract class IShare {
       @Override
       public void onComplete(Object o) {
         if (BuildConfig.DEBUG) Toast.makeText(U.getContext(), "onComplete", Toast.LENGTH_LONG).show();
+        U.request("share_callback", new OnResponse2<Response>() {
+          @Override
+          public void onResponseError(Throwable e) {
+
+          }
+
+          @Override
+          public void onResponse(Response response) {
+
+          }
+        }, Response.class, null, null);
       }
 
       @Override

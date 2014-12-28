@@ -170,7 +170,7 @@ public class SenderImpl implements Sender {
     m.setChatId(chatId);
     m.setPostId(postId);
     m.setCommentId(commentId);
-    m.setContent(U.getGson().toJson(new ImageContent(f.getAbsolutePath(), null, null, null)));
+    m.setContent(U.getGson().toJson(new ImageContent(f.getAbsolutePath(), null, null, null, null)));
     m.setType(MessageConst.TYPE_IMAGE);
     m.setDirection(MessageConst.DIRECTION_SEND);
     m.setTimestamp(System.currentTimeMillis());

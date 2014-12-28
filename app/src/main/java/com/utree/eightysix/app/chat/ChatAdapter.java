@@ -251,7 +251,7 @@ public class ChatAdapter extends BaseAdapter {
 
   private View getImageFromView(int position, View convertView, ViewGroup parent) {
     View imageView = getImageView(R.layout.item_chat_image_from, position, convertView, parent);
-    TextItemViewHolder holder = (TextItemViewHolder) imageView.getTag();
+    ImageItemViewHolder holder = (ImageItemViewHolder) imageView.getTag();
     if (mTargetPortrait.equals("\ue800")) {
       holder.mFpvPortrait.setEmotion(' ');
       holder.mFpvPortrait.setBackgroundResource(R.drawable.host_portrait);
@@ -264,7 +264,7 @@ public class ChatAdapter extends BaseAdapter {
 
   private View getImageToView(int position, View convertView, ViewGroup parent) {
     View imageView = getImageView(R.layout.item_chat_image_to, position, convertView, parent);
-    TextItemViewHolder holder = (TextItemViewHolder) imageView.getTag();
+    ImageItemViewHolder holder = (ImageItemViewHolder) imageView.getTag();
     if (mMyPortrait.equals("\ue800")) {
       holder.mFpvPortrait.setEmotion(' ');
       holder.mFpvPortrait.setBackgroundResource(R.drawable.host_portrait);

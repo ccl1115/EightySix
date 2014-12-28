@@ -5,17 +5,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import butterknife.InjectView;
+import com.easemob.chat.EMChatConfig;
+import com.easemob.chat.EMChatManager;
+import com.easemob.cloud.CloudOperationCallback;
+import com.easemob.cloud.HttpFileManager;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.C;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
+import de.akquinet.android.androlog.Log;
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 import it.sephiroth.android.library.imagezoom.ImageViewTouchBase;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  */
@@ -23,15 +31,17 @@ import java.io.File;
 @TopTitle (R.string.image_viewer)
 public class ImageViewerActivity extends BaseActivity {
 
-  @InjectView(R.id.content)
+  @InjectView (R.id.content)
   public ImageViewTouch mImageViewTouch;
 
   private String mHash;
 
-  public static void start(Context context, String local, String remote) {
+  public static void start(Context context, String local, String remote, String secret) {
     Intent intent = new Intent(context, ImageViewerActivity.class);
 
     intent.putExtra("local", local);
+    intent.putExtra("remote", remote);
+    intent.putExtra("secret", secret);
 
     if (!(context instanceof Activity)) {
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -52,23 +62,50 @@ public class ImageViewerActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    String local = getIntent().getStringExtra("local");
-    String remote = getIntent().getStringExtra("remote");
+    final String local = getIntent().getStringExtra("local");
+    final String remote = getIntent().getStringExtra("remote");
+    final String secret = getIntent().getStringExtra("secret");
 
-    if (local == null || remote == null) {
-      return;
-    }
+    Log.d(C.TAG.CH, "ImageViewer local: " + local);
+    Log.d(C.TAG.CH, "ImageViewer remote: " + remote);
+    Log.d(C.TAG.CH, "ImageViewer secret: " + secret);
 
-    mImageViewTouch.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
 
-    File file = new File(local);
-    if (file.exists()) {
+    if (!new File(local).exists()) {
+      HttpFileManager manager = new HttpFileManager(this, EMChatConfig.getInstance().getStorageUrl());
+      String substring = remote.substring(remote.lastIndexOf('/') + 1);
+      Log.d(C.TAG.CH, "ImageViewer remote file: " + substring);
+
+      Map<String, String> headers = new HashMap<String, String>();
+      headers.put("Authorization", "Bearer " + EMChatManager.getInstance().getAccessToken());
+      headers.put("Accept", "application/octet-stream");
+      headers.put("share-secret", secret);
+
+      manager.downloadFile(substring, local, EMChatConfig.getInstance().APPKEY, headers, new CloudOperationCallback() {
+        @Override
+        public void onSuccess(String s) {
+          File file = new File(local);
+          mHash = IOUtils.fileHash(file);
+          ImageUtils.asyncLoad(file, mHash, 600, 600);
+        }
+
+        @Override
+        public void onError(String s) {
+          showToast(s);
+        }
+
+        @Override
+        public void onProgress(int i) {
+
+        }
+      });
+    } else {
+      mImageViewTouch.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
+      File file = new File(local);
       mHash = IOUtils.fileHash(file);
       ImageUtils.asyncLoad(file, mHash, 600, 600);
-    } else {
-      mHash = ImageUtils.getUrlHash(remote);
-      ImageUtils.asyncLoad(remote, mHash, 600, 600);
     }
+
 
     showProgressBar();
   }

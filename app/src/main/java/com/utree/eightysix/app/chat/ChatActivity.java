@@ -193,7 +193,7 @@ public class ChatActivity extends BaseActivity implements
     Message m = mChatAdapter.getItem(position);
     if (m != null && m.getType() == MessageConst.TYPE_IMAGE) {
       ImageContent content = U.getGson().fromJson(m.getContent(), ImageContent.class);
-      ImageViewerActivity.start(this, content.local, content.remote);
+      ImageViewerActivity.start(this, content.local, content.remote, content.secret);
     }
   }
 

@@ -608,7 +608,7 @@ public class HomeActivity extends BaseActivity {
     if (mTabFragment != null && !mTabFragment.isDetached()) {
       t.detach(mTabFragment);
     }
-    t.commit();
+    t.commitAllowingStateLoss();
   }
 
   private void showTabFragment() {
@@ -627,7 +627,7 @@ public class HomeActivity extends BaseActivity {
     if (mHometownTabFragment != null && !mHometownTabFragment.isDetached()) {
       t.detach(mHometownTabFragment);
     }
-    t.commit();
+    t.commitAllowingStateLoss();
   }
 
   private void openMenu() {

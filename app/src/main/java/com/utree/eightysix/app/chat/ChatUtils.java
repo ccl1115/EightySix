@@ -94,7 +94,7 @@ public class ChatUtils {
             .concat(body.getLocalUrl().substring(body.getLocalUrl().lastIndexOf('/') + 1));
         // end
 
-        ImageContent content = new ImageContent(body.getLocalUrl(), body.getRemoteUrl(), local, body.getThumbnailUrl());
+        ImageContent content = new ImageContent(body.getLocalUrl(), body.getRemoteUrl(), body.getSecret(), local, body.getThumbnailUrl());
         m.setContent(U.getGson().toJson(content));
         break;
     }
@@ -433,7 +433,7 @@ public class ChatUtils {
           .where(ConversationDao.Properties.ChatId.eq(chatId)).unique();
     }
 
-    public static void createOrUpdateConversation(EMMessage emMessage, final ParamsRunnable runnable) throws EaseMobException {
+    public static void createOrUpdateConversation(EMMessage emMessage) throws EaseMobException {
       final String chatId = emMessage.getStringAttribute("chatId", null);
       if (TextUtils.isEmpty(chatId) || "0".equals(chatId)) {
         throw new EaseMobException("chatId is empty or 0");
@@ -454,26 +454,33 @@ public class ChatUtils {
       conversation.setChatId(chatId);
       conversation.setPostId(postId);
       conversation.setPostContent(emMessage.getStringAttribute("postContent", ""));
-      conversation.setCommentId(emMessage.getStringAttribute("commentId", ""));
+      String commentId = emMessage.getStringAttribute("commentId", "");
+      if (!"0".equals(commentId)) {
+        conversation.setCommentId(commentId);
+      }
       conversation.setCommentContent(emMessage.getStringAttribute("commentContent", ""));
 
-      String bgUrl = emMessage.getStringAttribute("bgUrl", "");
+      String bgUrl = emMessage.getStringAttribute("bgUrl", null);
       Log.d(C.TAG.CH, "@createOrUpdateConversation bgUrl: " + bgUrl);
       conversation.setBgUrl(bgUrl);
 
-      String bgColor = emMessage.getStringAttribute("bgColor", "");
+      String bgColor = emMessage.getStringAttribute("bgColor", null);
       Log.d(C.TAG.CH, "@createOrUpdateConversation bgColor: " + bgColor);
       conversation.setBgColor(bgColor);
 
-      String my = emMessage.getStringAttribute("myAvatar", "");
+      String my = emMessage.getStringAttribute("myAvatar", null);
       Log.d(C.TAG.CH, "@createOrUpdateConversation myAvatar: " + my);
-      conversation.setMyPortrait(my.substring(0, 1));
-      conversation.setMyPortraitColor(my.substring(2));
+      if (my != null) {
+        conversation.setMyPortrait(my.substring(0, 1));
+        conversation.setMyPortraitColor(my.substring(2));
+      }
 
-      String target = emMessage.getStringAttribute("targetAvatar", "");
+      String target = emMessage.getStringAttribute("targetAvatar", null);
       Log.d(C.TAG.CH, "@createOrUpdateConversation targetAvatar: " + target);
-      conversation.setPortrait(target.substring(0, 1));
-      conversation.setPortraitColor(target.substring(2));
+      if (target != null) {
+        conversation.setPortrait(target.substring(0, 1));
+        conversation.setPortraitColor(target.substring(2));
+      }
 
       String factoryName = emMessage.getStringAttribute("factoryName", "");
       Log.d(C.TAG.CH, "@createOrUpdateConversation factoryName: " + factoryName);
