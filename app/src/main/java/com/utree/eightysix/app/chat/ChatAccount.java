@@ -6,12 +6,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import com.easemob.EMCallBack;
-import com.easemob.chat.ConnectionListener;
-import com.easemob.chat.EMChat;
-import com.easemob.chat.EMChatDB;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.ImageMessageBody;
+import com.easemob.exceptions.EaseMobException;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.*;
 import com.utree.eightysix.app.BaseApplication;
@@ -19,10 +17,7 @@ import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.dao.Conversation;
 import com.utree.eightysix.dao.Message;
 import com.utree.eightysix.dao.MessageConst;
-import com.utree.eightysix.data.Comment;
-import com.utree.eightysix.data.Post;
 import com.utree.eightysix.utils.DaoUtils;
-import com.utree.eightysix.utils.ParamsRunnable;
 import de.akquinet.android.androlog.Log;
 
 /**
@@ -154,8 +149,6 @@ public class ChatAccount {
 
 
     private long mUnreadConversationCount;
-    private Post mPost;
-    private Comment mComment;
     private Conversation mConversation;
 
     public NewMessageWorker(Message message, EMMessage emMessage) {
@@ -166,31 +159,31 @@ public class ChatAccount {
     @Override
     protected Void doInBackground(Void... voids) {
 
+      try {
+        ChatUtils.ConversationUtil.createOrUpdateConversation(mEmMessage, null);
+      } catch (EaseMobException e) {
+        Log.d(C.TAG.CH, e.toString());
+        return null;
+      }
+
       if (mMessage.getCommentId() == null) {
-        ChatUtils.ConversationUtil.createByPostIdIfNotExist(mMessage.getChatId(), mMessage.getPostId(),
-            new ParamsRunnable() {
-              @Override
-              public void run(Object... params) {
-                mPost = ((Post) params[0]);
-                mInfoMessage = ChatUtils.MessageUtil.addPostSummaryInfo(mMessage.getChatId(), mMessage.getTimestamp() - 1, mPost);
-                if (mInfoMessage != null) {
-                  publishProgress(PROGRESS_INFO_MESSAGE);
-                }
-              }
-            });
+        mInfoMessage = ChatUtils.MessageUtil.addPostSummaryInfo(mMessage.getChatId(),
+            mMessage.getTimestamp() - 1,
+            mEmMessage.getStringAttribute("postId", null),
+            mEmMessage.getStringAttribute("postContent", null));
+        if (mInfoMessage != null) {
+          publishProgress(PROGRESS_INFO_MESSAGE);
+        }
       } else {
-        ChatUtils.ConversationUtil.createByPostCommentIdIfNotExist(mMessage.getChatId(), mMessage.getPostId(), mMessage.getCommentId(), mMessage.getCommentContent(),
-            new ParamsRunnable() {
-              @Override
-              public void run(Object... params) {
-                mPost = ((Post) params[0]);
-                mComment = ((Comment) params[1]);
-                mInfoMessage = ChatUtils.MessageUtil.addCommentSummaryInfo(mMessage.getChatId(), mMessage.getTimestamp() - 1, mPost, mComment);
-                if (mInfoMessage != null) {
-                  publishProgress(PROGRESS_INFO_MESSAGE);
-                }
-              }
-            });
+        mInfoMessage = ChatUtils.MessageUtil.addCommentSummaryInfo(mMessage.getChatId(),
+            mMessage.getTimestamp() - 1,
+            mEmMessage.getStringAttribute("postId", null),
+            mEmMessage.getStringAttribute("postContent", null),
+            mEmMessage.getStringAttribute("commentId", null),
+            mEmMessage.getStringAttribute("commentContent", null));
+        if (mInfoMessage != null) {
+          publishProgress(PROGRESS_INFO_MESSAGE);
+        }
       }
 
       boolean foreground = mMessage.getChatId().equals(ChatActivity.getCurrentChatId());
@@ -246,7 +239,7 @@ public class ChatAccount {
     protected void onProgressUpdate(Integer... values) {
       switch (values[0]) {
         case PROGRESS_NOTIFY:
-          ChatUtils.NotifyUtil.notifyNewMessage(mMessage, mPost, mComment);
+          ChatUtils.NotifyUtil.notifyNewMessage(mMessage);
           break;
         case PROGRESS_UNREAD_CONVERSATION_COUNT:
           U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT, mUnreadConversationCount));

@@ -16,7 +16,9 @@ import com.utree.eightysix.app.chat.content.ImageContent;
 import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.dao.Message;
 import com.utree.eightysix.dao.MessageConst;
+import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.widget.AsyncImageView;
+import com.utree.eightysix.widget.FontPortraitView;
 import com.utree.eightysix.widget.RoundedButton;
 
 import java.util.ArrayList;
@@ -44,6 +46,11 @@ public class ChatAdapter extends BaseAdapter {
   private List<Message> mMessages;
   private Comparator<Message> mMessageComparator;
 
+  private String mMyPortrait;
+  private int mMyPortraitColor;
+  private String mTargetPortrait;
+  private int mTargetPortraitColor;
+
   {
     mMessageComparator = new Comparator<Message>() {
       @Override
@@ -61,6 +68,17 @@ public class ChatAdapter extends BaseAdapter {
 
   public ChatAdapter() {
     mMessages = new ArrayList<Message>();
+  }
+
+  public ChatAdapter(String myPortrait,
+                     int myPortraitColor,
+                     String targetPortrait,
+                     int targetPortraitColor) {
+    this();
+    mMyPortrait = myPortrait;
+    mMyPortraitColor = myPortraitColor;
+    mTargetPortrait = targetPortrait;
+    mTargetPortraitColor = targetPortraitColor;
   }
 
   public void add(Message message) {
@@ -187,11 +205,29 @@ public class ChatAdapter extends BaseAdapter {
   }
 
   private View getTextFromView(int position, View convertView, ViewGroup parent) {
-    return getTextView(R.layout.item_chat_text_from, position, convertView, parent);
+    View textView = getTextView(R.layout.item_chat_text_from, position, convertView, parent);
+    TextItemViewHolder holder = (TextItemViewHolder) textView.getTag();
+    if (mTargetPortrait.equals("\ue800")) {
+      holder.mFpvPortrait.setEmotion(' ');
+      holder.mFpvPortrait.setBackgroundResource(R.drawable.host_portrait);
+    } else {
+      holder.mFpvPortrait.setEmotion(mTargetPortrait.charAt(0));
+      holder.mFpvPortrait.setEmotionColor(mTargetPortraitColor);
+    }
+    return textView;
   }
 
   private View getTextToView(int position, View convertView, ViewGroup parent) {
-    return getTextView(R.layout.item_chat_text_to, position, convertView, parent);
+    View textView = getTextView(R.layout.item_chat_text_to, position, convertView, parent);
+    TextItemViewHolder holder = (TextItemViewHolder) textView.getTag();
+    if (mMyPortrait.equals("\ue800")) {
+      holder.mFpvPortrait.setEmotion(' ');
+      holder.mFpvPortrait.setBackgroundResource(R.drawable.host_portrait);
+    } else {
+      holder.mFpvPortrait.setEmotion(mMyPortrait.charAt(0));
+      holder.mFpvPortrait.setEmotionColor(mMyPortraitColor);
+    }
+    return textView;
   }
 
   private View getTextView(int layout, int position, View convertView, ViewGroup parent) {
@@ -214,11 +250,29 @@ public class ChatAdapter extends BaseAdapter {
   }
 
   private View getImageFromView(int position, View convertView, ViewGroup parent) {
-    return getImageView(R.layout.item_chat_image_from, position, convertView, parent);
+    View imageView = getImageView(R.layout.item_chat_image_from, position, convertView, parent);
+    TextItemViewHolder holder = (TextItemViewHolder) imageView.getTag();
+    if (mTargetPortrait.equals("\ue800")) {
+      holder.mFpvPortrait.setEmotion(' ');
+      holder.mFpvPortrait.setBackgroundResource(R.drawable.host_portrait);
+    } else {
+      holder.mFpvPortrait.setEmotion(mTargetPortrait.charAt(0));
+      holder.mFpvPortrait.setEmotionColor(mTargetPortraitColor);
+    }
+    return imageView;
   }
 
   private View getImageToView(int position, View convertView, ViewGroup parent) {
-    return getImageView(R.layout.item_chat_image_to, position, convertView, parent);
+    View imageView = getImageView(R.layout.item_chat_image_to, position, convertView, parent);
+    TextItemViewHolder holder = (TextItemViewHolder) imageView.getTag();
+    if (mMyPortrait.equals("\ue800")) {
+      holder.mFpvPortrait.setEmotion(' ');
+      holder.mFpvPortrait.setBackgroundResource(R.drawable.host_portrait);
+    } else {
+      holder.mFpvPortrait.setEmotion(mMyPortrait.charAt(0));
+      holder.mFpvPortrait.setEmotionColor(mMyPortraitColor);
+    }
+    return imageView;
   }
 
   private View getImageView(int layout, int position, View convertView, ViewGroup parent) {
@@ -299,6 +353,9 @@ public class ChatAdapter extends BaseAdapter {
 
   class TextItemViewHolder {
 
+    @InjectView(R.id.fpv_portrait)
+    FontPortraitView mFpvPortrait;
+
     @InjectView(R.id.pb_loading)
     ProgressBar mPbLoading;
 
@@ -315,6 +372,8 @@ public class ChatAdapter extends BaseAdapter {
 
   class ImageItemViewHolder {
 
+    @InjectView(R.id.fpv_portrait)
+    FontPortraitView mFpvPortrait;
 
     @InjectView(R.id.pb_loading)
     ProgressBar mPbLoading;

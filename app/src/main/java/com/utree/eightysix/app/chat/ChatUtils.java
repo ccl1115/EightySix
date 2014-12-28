@@ -12,8 +12,7 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
-import com.easemob.EMCallBack;
-import com.easemob.chat.EMChatManager;
+import android.text.TextUtils;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.ImageMessageBody;
 import com.easemob.chat.TextMessageBody;
@@ -30,7 +29,7 @@ import com.utree.eightysix.dao.*;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.PostCommentsRequest;
-import com.utree.eightysix.response.ChatIdResponse;
+import com.utree.eightysix.response.ChatInfoResponse;
 import com.utree.eightysix.response.PostCommentsResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
@@ -57,14 +56,13 @@ public class ChatUtils {
       return null;
     }
 
-    try {
-      m.setPostId(message.getStringAttribute("postId"));
-      Log.d(C.TAG.CH, "receive post id: " + m.getPostId());
+    m.setPostId(message.getStringAttribute("postId", null));
+    Log.d(C.TAG.CH, "receive post id: " + m.getPostId());
 
-      m.setCommentId(message.getStringAttribute("commentId"));
+    String commentId = message.getStringAttribute("commentId", null);
+    if (!"0".equals(commentId)) {
+      m.setCommentId(commentId);
       Log.d(C.TAG.CH, "receive comment id: " + m.getCommentId());
-
-    } catch (EaseMobException ignored) {
     }
 
     try {
@@ -173,12 +171,12 @@ public class ChatUtils {
 
     String chatId = ConversationUtil.getChatIdByPostComment(post, comment);
     if (chatId != null) {
-      ChatActivity.start(context, chatId, post, comment);
+      ChatActivity.start(context, chatId);
       return;
     }
 
     context.showProgressBar();
-    U.request("get_chat_id", new OnResponse2<ChatIdResponse>() {
+    U.request("get_chat_info", new OnResponse2<ChatInfoResponse>() {
       @Override
       public void onResponseError(Throwable throwable) {
         U.showToast(U.gs(R.string.create_conversation_failed));
@@ -186,16 +184,16 @@ public class ChatUtils {
       }
 
       @Override
-      public void onResponse(ChatIdResponse response) {
+      public void onResponse(ChatInfoResponse response) {
         if (RESTRequester.responseOk(response)) {
-          ConversationUtil.createIfNotExist(response.object.chatId, post, comment);
-          ChatActivity.start(context, response.object.chatId, post, comment);
+          ConversationUtil.createIfNotExist(response.object, post, comment);
+          ChatActivity.start(context, response.object.chatId);
         } else {
           U.showToast(U.gs(R.string.create_conversation_failed));
         }
         context.hideProgressBar();
       }
-    }, ChatIdResponse.class, post.id, comment == null ? null : comment.id);
+    }, ChatInfoResponse.class, post.id, comment == null ? null : comment.id);
   }
 
   public static void startChat(final BaseActivity context, final Post post) {
@@ -206,12 +204,12 @@ public class ChatUtils {
 
     String chatId = ConversationUtil.getChatIdByPost(post);
     if (chatId != null) {
-      ChatActivity.start(context, chatId, post, null);
+      ChatActivity.start(context, chatId);
       return;
     }
 
     context.showProgressBar();
-    U.request("get_chat_id", new OnResponse2<ChatIdResponse>() {
+    U.request("get_chat_info", new OnResponse2<ChatInfoResponse>() {
       @Override
       public void onResponseError(Throwable throwable) {
         U.showToast(U.gs(R.string.create_conversation_failed));
@@ -219,16 +217,16 @@ public class ChatUtils {
       }
 
       @Override
-      public void onResponse(ChatIdResponse response) {
+      public void onResponse(ChatInfoResponse response) {
         if (RESTRequester.responseOk(response)) {
-          ConversationUtil.createIfNotExist(response.object.chatId, post);
-          ChatActivity.start(context, response.object.chatId, post, null);
+          ConversationUtil.createIfNotExist(response.object, post);
+          ChatActivity.start(context, response.object.chatId);
         } else {
           U.showToast(U.gs(R.string.create_conversation_failed));
         }
         context.hideProgressBar();
       }
-    }, ChatIdResponse.class, post.id, null);
+    }, ChatInfoResponse.class, post.id, null);
 
   }
 
@@ -279,13 +277,13 @@ public class ChatUtils {
       }
     }
 
-    public static void createIfNotExist(String chatId, Post post) {
+    public static void createIfNotExist(ChatInfoResponse.ChatInfo chatInfo, Post post) {
       Conversation conversation = DaoUtils.getConversationDao().queryBuilder()
-          .where(ConversationDao.Properties.ChatId.eq(chatId))
+          .where(ConversationDao.Properties.ChatId.eq(chatInfo.chatId))
           .unique();
       if (conversation == null) {
         conversation = new Conversation();
-        conversation.setChatId(chatId);
+        conversation.setChatId(chatInfo.chatId);
         conversation.setPostId(post.id);
         conversation.setPostSource(post.shortName);
         conversation.setBgUrl(post.bgUrl);
@@ -294,8 +292,15 @@ public class ChatUtils {
         conversation.setPostContent(post.content);
         conversation.setTimestamp(System.currentTimeMillis());
         conversation.setUnreadCount(0L);
-        conversation.setPortrait("\ue800");
         conversation.setFavorite(false);
+
+        String myAvatar[] = chatInfo.myAvatar.split("_");
+        conversation.setMyPortrait(myAvatar[0]);
+        conversation.setMyPortraitColor(myAvatar[1]);
+        String targetAvatar[] = chatInfo.targetAvatar.split("_");
+        conversation.setPortrait(targetAvatar[0]);
+        conversation.setPortraitColor(targetAvatar[1]);
+
         DaoUtils.getConversationDao().insert(conversation);
       } else {
         conversation.setCommentId(null);
@@ -304,13 +309,13 @@ public class ChatUtils {
       }
     }
 
-    public static void createIfNotExist(String chatId, Post post, Comment comment) {
+    public static void createIfNotExist(ChatInfoResponse.ChatInfo chatInfo, Post post, Comment comment) {
       Conversation conversation = DaoUtils.getConversationDao().queryBuilder()
-          .where(ConversationDao.Properties.ChatId.eq(chatId))
+          .where(ConversationDao.Properties.ChatId.eq(chatInfo.chatId))
           .unique();
       if (conversation == null) {
         conversation = new Conversation();
-        conversation.setChatId(chatId);
+        conversation.setChatId(chatInfo.chatId);
         conversation.setPostSource(post.shortName);
         conversation.setBgUrl(post.bgUrl);
         conversation.setBgColor(post.bgColor);
@@ -321,9 +326,15 @@ public class ChatUtils {
         conversation.setCommentContent(comment.content);
         conversation.setTimestamp(System.currentTimeMillis());
         conversation.setUnreadCount(0L);
-        conversation.setPortrait(comment.avatar);
-        conversation.setPortraitColor(comment.avatarColor);
         conversation.setFavorite(false);
+
+        String myAvatar[] = chatInfo.myAvatar.split("_");
+        conversation.setMyPortrait(myAvatar[0]);
+        conversation.setMyPortraitColor(myAvatar[1]);
+        String targetAvatar[] = chatInfo.targetAvatar.split("_");
+        conversation.setPortrait(targetAvatar[0]);
+        conversation.setPortraitColor(targetAvatar[1]);
+
         DaoUtils.getConversationDao().insert(conversation);
       } else {
         conversation.setCommentId(comment.id);
@@ -422,87 +433,61 @@ public class ChatUtils {
           .where(ConversationDao.Properties.ChatId.eq(chatId)).unique();
     }
 
-    /**
-     * 当用户收取到一条消息，如果本地没有该对话，则通过接口获取该会话的消息
-     *
-     * @param chatId the id of the conversation
-     * @param postId the id of the post
-     */
-    public static void createByPostIdIfNotExist(final String chatId, String postId, final ParamsRunnable runnable) {
-      Conversation conversation = getByChatId(chatId);
-      if (conversation == null) {
-        U.getRESTRequesterSync().request(new PostCommentsRequest(postId, 0, 0, 0, 1), new OnResponse2<PostCommentsResponse>() {
-          @Override
-          public void onResponseError(Throwable e) {
-
-          }
-
-          @Override
-          public void onResponse(PostCommentsResponse response) {
-            if (RESTRequester.responseOk(response)) {
-              createIfNotExist(chatId, response.object.post);
-              runnable.run(response.object.post);
-            }
-          }
-        }, PostCommentsResponse.class);
-      } else {
-        Post post = new Post();
-        post.id = conversation.getPostId();
-        post.shortName = conversation.getPostSource();
-        post.content = conversation.getPostContent();
-        post.bgUrl = conversation.getBgUrl();
-        post.bgColor = conversation.getBgColor();
-        conversation.setCommentId(null);
-        conversation.setCommentContent(null);
-        DaoUtils.getConversationDao().update(conversation);
-        runnable.run(post);
+    public static void createOrUpdateConversation(EMMessage emMessage, final ParamsRunnable runnable) throws EaseMobException {
+      final String chatId = emMessage.getStringAttribute("chatId", null);
+      if (TextUtils.isEmpty(chatId) || "0".equals(chatId)) {
+        throw new EaseMobException("chatId is empty or 0");
       }
+      final String postId = emMessage.getStringAttribute("postId", null);
+      if (TextUtils.isEmpty(postId) || "0".equals(postId)) {
+        throw new EaseMobException("postId is empty or 0");
+      }
+
+      Conversation conversation = getByChatId(chatId);
+
+      if (conversation == null) {
+        conversation = new Conversation();
+        conversation.setUnreadCount(0l);
+        conversation.setLastMsg("");
+        conversation.setFavorite(false);
+      }
+      conversation.setChatId(chatId);
+      conversation.setPostId(postId);
+      conversation.setPostContent(emMessage.getStringAttribute("postContent", ""));
+      conversation.setCommentId(emMessage.getStringAttribute("commentId", ""));
+      conversation.setCommentContent(emMessage.getStringAttribute("commentContent", ""));
+
+      String bgUrl = emMessage.getStringAttribute("bgUrl", "");
+      Log.d(C.TAG.CH, "@createOrUpdateConversation bgUrl: " + bgUrl);
+      conversation.setBgUrl(bgUrl);
+
+      String bgColor = emMessage.getStringAttribute("bgColor", "");
+      Log.d(C.TAG.CH, "@createOrUpdateConversation bgColor: " + bgColor);
+      conversation.setBgColor(bgColor);
+
+      String my = emMessage.getStringAttribute("myAvatar", "");
+      Log.d(C.TAG.CH, "@createOrUpdateConversation myAvatar: " + my);
+      conversation.setMyPortrait(my.substring(0, 1));
+      conversation.setMyPortraitColor(my.substring(2));
+
+      String target = emMessage.getStringAttribute("targetAvatar", "");
+      Log.d(C.TAG.CH, "@createOrUpdateConversation targetAvatar: " + target);
+      conversation.setPortrait(target.substring(0, 1));
+      conversation.setPortraitColor(target.substring(2));
+
+      String factoryName = emMessage.getStringAttribute("factoryName", "");
+      Log.d(C.TAG.CH, "@createOrUpdateConversation factoryName: " + factoryName);
+      conversation.setPostSource(factoryName);
+
+      String relation = emMessage.getStringAttribute("relation", "");
+      conversation.setRelation(relation);
+      Log.d(C.TAG.CH, "@createOrUpdateConversation relation: " + relation);
+
+      conversation.setTimestamp(System.currentTimeMillis());
+
+      DaoUtils.getConversationDao().insertOrReplace(conversation);
     }
 
-    /**
-     * 当用户收取到一条消息，如果本地没有该对话，则通过接口获取该会话的消息
-     *
-     * @param chatId    the id of the conversation
-     * @param postId    the id of the post
-     * @param commentId the comment of the post
-     */
-    public static void createByPostCommentIdIfNotExist(final String chatId, String postId, final String commentId, final String commentContent, final ParamsRunnable runnable) {
-      Conversation conversation = getByChatId(chatId);
-      if (conversation == null) {
-        U.getRESTRequesterSync().request(new PostCommentsRequest(postId, 0, 0, 0, 1), new OnResponse2<PostCommentsResponse>() {
-          @Override
-          public void onResponseError(Throwable e) {
-
-          }
-
-          @Override
-          public void onResponse(PostCommentsResponse response) {
-            if (RESTRequester.responseOk(response)) {
-              for (Comment comment : response.object.comments.lists) {
-                if (comment.id.equals(commentId)) {
-                  createIfNotExist(chatId, response.object.post, comment);
-                  runnable.run(response.object.post, comment);
-                }
-              }
-            }
-          }
-        }, PostCommentsResponse.class);
-      } else {
-        Post post = new Post();
-        post.id = conversation.getPostId();
-        post.shortName = conversation.getPostSource();
-        post.content = conversation.getPostContent();
-        post.bgUrl = conversation.getBgUrl();
-        post.bgColor = conversation.getBgColor();
-        Comment comment = new Comment();
-        comment.id = commentId;
-        comment.content = commentContent;
-        conversation.setCommentId(commentId);
-        conversation.setCommentContent(commentContent);
-        DaoUtils.getConversationDao().update(conversation);
-        runnable.run(post, comment);
-      }
-    }
   }
 
   public static class MessageUtil {
@@ -606,6 +591,23 @@ public class ChatUtils {
 
     }
 
+    public static Message addPostSummaryInfo(String chatId, long timestamp, String postId, String postContent) {
+      if (!ChatUtils.MessageUtil.hasPostSummaryMessage(chatId)) {
+        Message message =
+            ChatUtils.infoMsg(chatId,
+                "主题：" + (postContent.length() > 80 ? postContent.substring(0, 76) + "..." : postContent));
+
+        message.setPostId(postId);
+        message.setType(MessageConst.TYPE_POST);
+        message.setTimestamp(timestamp);
+
+        DaoUtils.getMessageDao().insert(message);
+        return message;
+      } else {
+        return null;
+      }
+    }
+
     public static Message addCommentSummaryInfo(String chatId, long timestamp, Post post, Comment comment) {
       if (!ChatUtils.MessageUtil.hasCommentSummaryMessage(chatId, comment.id)) {
         Message message =
@@ -624,13 +626,36 @@ public class ChatUtils {
       }
     }
 
+    public static Message addCommentSummaryInfo(String chatId,
+                                                long timestamp,
+                                                String postId,
+                                                String postContent,
+                                                String commentId,
+                                                String commentContent) {
+      if (!ChatUtils.MessageUtil.hasCommentSummaryMessage(chatId, commentId)) {
+        Message message =
+            ChatUtils.infoMsg(chatId,
+                "评论：" + (commentContent.length() > 80 ? commentContent.substring(0, 76) + "..." : commentContent));
+
+        message.setPostId(postId);
+        message.setCommentId(commentId);
+        message.setType(MessageConst.TYPE_COMMENT);
+        message.setTimestamp(timestamp);
+
+        DaoUtils.getMessageDao().insert(message);
+        return message;
+      } else {
+        return null;
+      }
+    }
+
   }
 
   public static class NotifyUtil {
 
     private static final int ID_MESSAGE = 0x1000;
 
-    public static void notifyNewMessage(Message message, Post post, Comment comment) {
+    public static void notifyNewMessage(Message message) {
 
       long count = MessageUtil.getUnreadCount();
       Context context = U.getContext();
@@ -641,7 +666,7 @@ public class ChatUtils {
         intents = new Intent[]{
             HomeActivity.getIntent(context, 0, 0),
             ConversationActivity.getIntent(context),
-            ChatActivity.getIntent(context, message.getChatId(), post, comment)
+            ChatActivity.getIntent(context, message.getChatId())
         };
       } else {
 
@@ -662,7 +687,7 @@ public class ChatUtils {
         builder.setContentIntent(PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT));
       } else {
         builder.setContentIntent(PendingIntent.getActivity(context, 0,
-            ChatActivity.getIntent(context, message.getChatId(), post, comment),
+            ChatActivity.getIntent(context, message.getChatId()),
             PendingIntent.FLAG_UPDATE_CURRENT));
       }
 

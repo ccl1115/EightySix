@@ -43,6 +43,7 @@ import com.utree.eightysix.data.Post;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.DaoUtils;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
@@ -93,23 +94,19 @@ public class ChatActivity extends BaseActivity implements
   private ChatAdapter mChatAdapter;
 
   private String mChatId;
-  private Post mPost;
-  private Comment mComment;
   private Conversation mConversation;
 
   private CameraUtil mCameraUtil;
   private boolean mIsOpened;
 
-  static void start(Context context, String chatId, Post post, Comment comment) {
-    context.startActivity(getIntent(context, chatId, post, comment));
+  static void start(Context context, String chatId) {
+    context.startActivity(getIntent(context, chatId));
   }
 
-  static Intent getIntent(Context context, String chatId, Post post, Comment comment) {
+  static Intent getIntent(Context context, String chatId) {
 
     Intent intent = new Intent(context, ChatActivity.class);
     intent.putExtra("chatId", chatId);
-    intent.putExtra("post", post);
-    intent.putExtra("comment", comment);
 
     if (!(context instanceof Activity)) {
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -129,7 +126,7 @@ public class ChatActivity extends BaseActivity implements
   @OnClick (R.id.iv_post)
   public void onRbPostClicked() {
     ChatAccount.inst().getSender()
-        .txt(mChatId, mPost.id, mComment == null ? null : mComment.id, mEtPostContent.getText().toString());
+        .txt(mChatId, mConversation.getPostId(), mConversation.getCommentId(), mEtPostContent.getText().toString());
     mEtPostContent.setText("");
   }
 
@@ -273,7 +270,7 @@ public class ChatActivity extends BaseActivity implements
       @Subscribe
       public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
         if (event.getHash().equals(mLastHash) && event.getWidth() == U.dp2px(48) && event.getHeight() == U.dp2px(48)) {
-          ChatAccount.inst().getSender().photo(mChatId, mPost.id, mComment == null ? null : mComment.id, event.getFile());
+          ChatAccount.inst().getSender().photo(mChatId, mConversation.getPostId(), mConversation.getCommentId(), event.getFile());
           M.getRegisterHelper().unregister(this);
         }
       }
@@ -317,10 +314,7 @@ public class ChatActivity extends BaseActivity implements
     }
     //endregion
 
-    mChatAdapter = new ChatAdapter();
 
-    mPost = getIntent().getParcelableExtra("post");
-    mComment = getIntent().getParcelableExtra("comment");
     mChatId = getIntent().getStringExtra("chatId");
 
     mConversation = DaoUtils.getConversationDao()
@@ -328,13 +322,17 @@ public class ChatActivity extends BaseActivity implements
         .where(ConversationDao.Properties.ChatId.eq(mChatId))
         .unique();
 
-    setTopTitle(mPost.viewType == 3 ? "认识的人" : "陌生人");
-    setTopSubTitle("来自" + mPost.shortName);
+    setTopTitle(mConversation.getRelation());
+    setTopSubTitle("来自" + mConversation.getPostSource());
 
     if (mChatId == null) {
       finish();
     }
 
+    mChatAdapter = new ChatAdapter(mConversation.getMyPortrait(),
+        ColorUtil.strToColor(mConversation.getMyPortraitColor()),
+        mConversation.getPortrait(),
+        ColorUtil.strToColor(mConversation.getPortraitColor()));
 
     mAlvChats.setAdapter(mChatAdapter);
 
@@ -381,7 +379,7 @@ public class ChatActivity extends BaseActivity implements
       }
     });
 
-    if (mComment == null) {
+    if (mConversation.getCommentId() == null) {
       addPostSummaryInfo();
     } else {
       addCommentSummaryInfo();
@@ -428,7 +426,7 @@ public class ChatActivity extends BaseActivity implements
                     .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
               }
             }
-          }, Response.class, mChatId, mPost.id, mComment == null ? null : mComment.id);
+          }, Response.class, mChatId, mConversation.getPostId(), mConversation.getCommentId());
         } else {
           ((ImageActionButton) getTopBar().getActionView(0))
               .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
@@ -450,7 +448,7 @@ public class ChatActivity extends BaseActivity implements
                     .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_outline));
               }
             }
-          }, Response.class, mChatId, mPost.id, mComment == null ? null : mComment.id);
+          }, Response.class, mChatId, mConversation.getPostId(), mConversation.getCommentId());
 
         }
       }
@@ -609,13 +607,20 @@ public class ChatActivity extends BaseActivity implements
   }
 
   private void addPostSummaryInfo() {
-    Message message = ChatUtils.MessageUtil.addPostSummaryInfo(mChatId, System.currentTimeMillis(), mPost);
+    Message message = ChatUtils.MessageUtil.addPostSummaryInfo(mChatId,
+        System.currentTimeMillis(),
+        mConversation.getPostId(),
+        mConversation.getPostContent());
     mChatAdapter.add(message);
   }
 
   private void addCommentSummaryInfo() {
     Message message = ChatUtils.MessageUtil.addCommentSummaryInfo(mChatId,
-        System.currentTimeMillis(), mPost, mComment);
+        System.currentTimeMillis(),
+        mConversation.getPostId(),
+        mConversation.getPostContent(),
+        mConversation.getCommentId(),
+        mConversation.getCommentContent());
     mChatAdapter.add(message);
   }
 

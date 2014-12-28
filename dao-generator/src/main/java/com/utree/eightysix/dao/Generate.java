@@ -15,7 +15,7 @@ import java.io.File;
 public class Generate {
 
   public Generate() {
-    Schema schema = new Schema(23, "com.utree.eightysix.dao");
+    Schema schema = new Schema(24, "com.utree.eightysix.dao");
 
     generateConversation(schema);
     generateMessage(schema);

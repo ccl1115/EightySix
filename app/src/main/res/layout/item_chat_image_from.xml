@@ -4,18 +4,27 @@
   ~ Copyright (c) 2014. All rights reserved by utree.cn
   -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             android:paddingLeft="8dp"
-             android:paddingRight="8dp"
-             android:paddingBottom="8dp"
+             android:orientation="horizontal"
+             android:padding="8dp"
         >
+
+    <com.utree.eightysix.widget.FontPortraitView
+            android:id="@+id/fpv_portrait"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="6dp"
+            android:gravity="center"/>
 
     <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:padding="8dp"
             android:background="@drawable/bg_chat_item_from"
             android:orientation="horizontal"
@@ -47,4 +56,4 @@
                 />
     </LinearLayout>
 
-</FrameLayout>
+</LinearLayout>

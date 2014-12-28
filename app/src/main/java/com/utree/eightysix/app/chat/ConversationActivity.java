@@ -87,9 +87,9 @@ public class ConversationActivity extends BaseActivity {
       Comment comment = new Comment();
       comment.id = conversation.getCommentId();
       comment.content = conversation.getCommentContent();
-      ChatActivity.start(this, conversation.getChatId(), post, comment);
+      ChatActivity.start(this, conversation.getChatId());
     } else {
-      ChatActivity.start(this, conversation.getChatId(), post, null);
+      ChatActivity.start(this, conversation.getChatId());
     }
   }
 

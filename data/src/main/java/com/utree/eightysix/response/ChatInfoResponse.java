@@ -9,14 +9,20 @@ import com.utree.eightysix.rest.Response;
 
 /**
  */
-public class ChatIdResponse extends Response {
+public class ChatInfoResponse extends Response {
 
   @SerializedName("object")
-  public ChatId object;
+  public ChatInfo object;
 
-  public static class ChatId {
+  public static class ChatInfo {
 
     @SerializedName("chatId")
     public String chatId;
+
+    @SerializedName("targetAvatar")
+    public String targetAvatar;
+
+    @SerializedName("myAvatar")
+    public String myAvatar;
   }
 }
