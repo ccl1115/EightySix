@@ -139,11 +139,7 @@ public class SetHometownFragment extends BaseFragment {
           mSpCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-              if (mCurrentHometown != null) {
-                requestCounties(mCurrentHometown.get(1).id);
-              } else {
-                requestCounties(response.object.lists.get(i).id);
-              }
+              requestCounties(response.object.lists.get(i).id);
             }
 
             @Override
@@ -151,6 +147,15 @@ public class SetHometownFragment extends BaseFragment {
 
             }
           });
+
+          if (mCurrentHometown != null) {
+            HometownInfoResponse.HometownInfo info = mCurrentHometown.get(1);
+            for (int i = 0, size = response.object.lists.size(); i < size; i++) {
+              if (info.id == response.object.lists.get(i).id) {
+                mSpCity.setSelection(i);
+              }
+            }
+          }
         }
       }
     }, HometownResponse.class, provinceId);
@@ -216,6 +221,18 @@ public class SetHometownFragment extends BaseFragment {
       public void onResponse(HometownInfoResponse response) {
         if (RESTRequester.responseOk(response)) {
           mCurrentHometown = response.object.lists;
+
+          mSpProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+              requestCities(i + 1);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+          });
 
           if (mCurrentHometown != null) {
             mSpProvince.setSelection(mCurrentHometown.get(0).id - 1);
