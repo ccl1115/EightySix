@@ -131,33 +131,43 @@ public class ChatActivity extends BaseActivity implements
 
   @OnClick (R.id.iv_camera)
   public void onIvCameraClicked() {
-    hideSoftKeyboard(mEtPostContent);
-    mIvEmotion.setSelected(false);
-    mIvCamera.setSelected(true);
+    if (mRlActions.getVisibility() == View.VISIBLE) {
+      mRlActions.setVisibility(View.GONE);
+      mIvCamera.setSelected(false);
+    } else {
+      hideSoftKeyboard(mEtPostContent);
+      mIvEmotion.setSelected(false);
+      mIvCamera.setSelected(true);
 
-    getHandler().postDelayed(new Runnable() {
-      @Override
-      public void run() {
-        mRlActions.setVisibility(View.VISIBLE);
-        mFlEmotion.setVisibility(View.GONE);
-      }
-    }, 200);
+      getHandler().postDelayed(new Runnable() {
+        @Override
+        public void run() {
+          mRlActions.setVisibility(View.VISIBLE);
+          mFlEmotion.setVisibility(View.GONE);
+        }
+      }, 200);
+    }
   }
 
   @OnClick (R.id.iv_emotion)
   public void onIvEmationClicked() {
-    hideSoftKeyboard(mEtPostContent);
-    mIvCamera.setSelected(false);
-    mIvEmotion.setSelected(true);
+    if (mFlEmotion.getVisibility() == View.VISIBLE) {
+      mFlEmotion.setVisibility(View.GONE);
+      mIvEmotion.setSelected(false);
+    } else {
+      hideSoftKeyboard(mEtPostContent);
+      mIvCamera.setSelected(false);
+      mIvEmotion.setSelected(true);
 
 
-    getHandler().postDelayed(new Runnable() {
-      @Override
-      public void run() {
-        mFlEmotion.setVisibility(View.VISIBLE);
-        mRlActions.setVisibility(View.GONE);
-      }
-    }, 200);
+      getHandler().postDelayed(new Runnable() {
+        @Override
+        public void run() {
+          mFlEmotion.setVisibility(View.VISIBLE);
+          mRlActions.setVisibility(View.GONE);
+        }
+      }, 200);
+    }
   }
 
   @OnClick (R.id.iv_open_camera)
