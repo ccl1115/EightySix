@@ -151,6 +151,10 @@ public class AbsHometownFeedsFragment extends BaseFragment {
           if (page == 1) {
             mFeedAdapter = new FeedAdapter(response.object);
             mLvFeed.setAdapter(mFeedAdapter);
+
+            getBaseActivity().setTopTitle(String.format("老乡动态(%s)", response.object.hometownName));
+            getBaseActivity().setTopSubTitle(response.object.subInfo);
+            getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
           } else {
             mFeedAdapter.add(response.object.posts.lists);
           }
@@ -160,10 +164,6 @@ public class AbsHometownFeedsFragment extends BaseFragment {
           } else {
             mRstvEmpty.setVisibility(View.GONE);
           }
-
-          getBaseActivity().setTopTitle(String.format("老乡动态(%s)", response.object.hometownName));
-          getBaseActivity().setTopSubTitle(response.object.subInfo);
-          getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
 
           mHometownId = response.object.hometownId;
           mHometownType = response.object.hometownType;
