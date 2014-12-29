@@ -133,7 +133,7 @@ public class ConversationAdapter extends BaseAdapter {
     if (conversation.getOnline() != null) {
       if (System.currentTimeMillis() - conversation.getOnline() > 300000) {
         // 5 minutes
-        holder.mTvStatus.setText(U.timestamp(conversation.getOnline()) + "前在线");
+        holder.mTvStatus.setText(U.timestamp(conversation.getOnline()) + "在线");
         holder.mTvStatus.setTextColor(parent.getResources().getColor(R.color.apptheme_primary_grey_color_200));
       } else {
         holder.mTvStatus.setText("在线");

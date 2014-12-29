@@ -60,7 +60,7 @@ public class ChatUtils {
     Log.d(C.TAG.CH, "receive post id: " + m.getPostId());
 
     String commentId = message.getStringAttribute("commentId", null);
-    if (!"0".equals(commentId)) {
+    if (!TextUtils.isEmpty(commentId) && !"0".equals(commentId)) {
       m.setCommentId(commentId);
       Log.d(C.TAG.CH, "receive comment id: " + m.getCommentId());
     }
@@ -256,25 +256,6 @@ public class ChatUtils {
               ConversationDao.Properties.Favorite.eq(true))
           .orderDesc(ConversationDao.Properties.Timestamp)
           .list();
-    }
-
-    public static void createFromMessageIfNotExist(EMMessage emMessage) {
-      try {
-        String chatId = emMessage.getStringAttribute("chatId");
-        String postId = emMessage.getStringAttribute("postId");
-        String shortName = emMessage.getStringAttribute("relation");
-        Conversation conversation = DaoUtils.getConversationDao().queryBuilder()
-            .where(ConversationDao.Properties.ChatId.eq(chatId))
-            .unique();
-        if (conversation == null) {
-          conversation = new Conversation();
-          conversation.setChatId(chatId);
-          conversation.setPostId(postId);
-          conversation.setPostSource(shortName);
-
-        }
-      } catch (EaseMobException ignored) {
-      }
     }
 
     public static void createIfNotExist(ChatInfoResponse.ChatInfo chatInfo, Post post) {

@@ -217,12 +217,11 @@ public class ChatAccount {
 
       if (!foreground) {
         // 收到的消息，对应的聊天页面不在前台，则更新对话未读数
+        mConversation = ChatUtils.ConversationUtil.updateUnreadCount(mMessage.getChatId());
+        publishProgress(PROGRESS_UPDATE_CONVERSATION);
 
         mUnreadConversationCount = ChatUtils.ConversationUtil.getUnreadConversationCount();
         publishProgress(PROGRESS_UNREAD_CONVERSATION_COUNT);
-
-        mConversation = ChatUtils.ConversationUtil.updateUnreadCount(mMessage.getChatId());
-        publishProgress(PROGRESS_UPDATE_CONVERSATION);
       }
 
       if (mMessage.getType() == MessageConst.TYPE_IMAGE) {
