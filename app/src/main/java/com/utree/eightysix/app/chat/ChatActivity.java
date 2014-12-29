@@ -38,8 +38,6 @@ import com.utree.eightysix.dao.Conversation;
 import com.utree.eightysix.dao.ConversationDao;
 import com.utree.eightysix.dao.Message;
 import com.utree.eightysix.dao.MessageConst;
-import com.utree.eightysix.data.Comment;
-import com.utree.eightysix.data.Post;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
@@ -50,6 +48,7 @@ import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.ImageActionButton;
+import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TopBar;
 import java.io.File;
 import java.util.List;
@@ -176,24 +175,16 @@ public class ChatActivity extends BaseActivity implements
     mIvPost.setEnabled(cs.length() > 0);
   }
 
-  @OnItemLongClick (R.id.alv_chats)
-  public boolean onAlvChatsItemLongClicked(int position) {
-    Message m = mChatAdapter.getItem(position);
-    if (m != null) {
-      if (m.getStatus() == MessageConst.STATUS_FAILED) {
-        showToast(R.string.resending);
-        ChatAccount.inst().getSender().send(m);
-      }
-    }
-    return true;
-  }
-
   @OnItemClick (R.id.alv_chats)
   public void onAlvChatsItemClicked(int position) {
     Message m = mChatAdapter.getItem(position);
-    if (m != null && m.getType() == MessageConst.TYPE_IMAGE) {
-      ImageContent content = U.getGson().fromJson(m.getContent(), ImageContent.class);
-      ImageViewerActivity.start(this, content.local, content.remote, content.secret);
+    if (m != null) {
+      if (m.getStatus() == MessageConst.STATUS_FAILED) {
+        resendConfirm(m);
+      } else if (m.getType() == MessageConst.TYPE_IMAGE) {
+        ImageContent content = U.getGson().fromJson(m.getContent(), ImageContent.class);
+        ImageViewerActivity.start(this, content.local, content.remote, content.secret);
+      }
     }
   }
 
@@ -637,5 +628,29 @@ public class ChatActivity extends BaseActivity implements
 
     mEtPostContent.setText(before + emojicon.getEmoji() + after);
     mEtPostContent.setSelection(before.length() + emojicon.getEmoji().length());
+  }
+
+
+  private void resendConfirm(final Message message) {
+    final ThemedDialog dialog = new ThemedDialog(this);
+    dialog.setTitle("是否重新发送？");
+    dialog.setPositive(R.string.okay, new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        if (message.getStatus() == MessageConst.STATUS_FAILED) {
+          showToast(R.string.resending);
+          ChatAccount.inst().getSender().send(message);
+        }
+        dialog.dismiss();
+      }
+    });
+    dialog.setRbNegative(R.string.cancel, new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        dialog.dismiss();
+      }
+    });
+
+    dialog.show();
   }
 }

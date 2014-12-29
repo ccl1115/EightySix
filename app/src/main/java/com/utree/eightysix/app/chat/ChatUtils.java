@@ -389,7 +389,11 @@ public class ChatUtils {
           .limit(1).unique();
 
       if (conversation != null) {
-        conversation.setLastMsg(message.getContent());
+        if (message.getType() == MessageConst.TYPE_IMAGE) {
+          conversation.setLastMsg("[图片]");
+        } else {
+          conversation.setLastMsg(message.getContent());
+        }
         conversation.setTimestamp(message.getTimestamp());
         conversation.setCommentId(message.getCommentId());
         conversation.setCommentContent(message.getCommentContent());
