@@ -1,5 +1,7 @@
 package com.utree.eightysix.app.publish;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.ExifInterface;
@@ -41,6 +43,16 @@ public class ImageCropActivity extends BaseActivity {
     mCivCrop.rotateImage(mRotateDegree % 360);
   }
 
+  public static void startForResult(Activity context, int requestCode, Uri uri, boolean fixedRatio) {
+    Intent intent = new Intent(context, ImageCropActivity.class);
+
+    intent.putExtra("fixedRatio", fixedRatio);
+    intent.setDataAndType(uri, "image/*");
+
+    context.startActivityForResult(intent, requestCode);
+  }
+
+
   @OnClick(R.id.rb_okay)
   public void onRbOkayClicked() {
     File cropped = IOUtils.createTmpFile("crop_image");
@@ -68,8 +80,10 @@ public class ImageCropActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    boolean fixedRatio = getIntent().getBooleanExtra("fixedRatio", true);
+
     mCivCrop.setAspectRatio(1, 1);
-    mCivCrop.setFixedAspectRatio(true);
+    mCivCrop.setFixedAspectRatio(fixedRatio);
     mCivCrop.setGuidelines(2);
 
     Uri uri = getIntent().getData();

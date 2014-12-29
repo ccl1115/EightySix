@@ -35,9 +35,19 @@ public class CameraUtil {
   private File mOutputFile;
   private Callback mCallback;
 
+  private boolean mFixedRatio = true;
+
   public CameraUtil(BaseActivity activity, Callback callback) {
     mActivity = activity;
     mCallback = callback;
+  }
+
+  /**
+   * Default is true
+   * @param fixedRatio true if want to fix the ratio to 1:1
+   */
+  public void setFixedRatioWhenCrop(boolean fixedRatio) {
+    mFixedRatio = fixedRatio;
   }
 
   public void showCameraDialog() {
@@ -95,21 +105,8 @@ public class CameraUtil {
   }
 
   public boolean startCrop() {
-    try {
-      Intent cropIntent = new Intent(mActivity, ImageCropActivity.class);
-      // indicate image type and Uri
-      cropIntent.setDataAndType(Uri.fromFile(mOutputFile), "image/*");
-      // set crop properties
-      cropIntent.putExtra("crop", "true");
-      // indicate aspect of desired crop
-      cropIntent.putExtra("aspectX", 1);
-      cropIntent.putExtra("aspectY", 1);
-      // start the activity - we handle returning in onActivityResult
-      mActivity.startActivityForResult(cropIntent, REQUEST_CODE_CROP);
-      return true;
-    } catch (Exception e) {
-      return false;
-    }
+    ImageCropActivity.startForResult(mActivity, REQUEST_CODE_CROP, Uri.fromFile(mOutputFile), mFixedRatio);
+    return true;
   }
 
   public File getOutputFile() {

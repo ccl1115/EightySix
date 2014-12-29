@@ -285,6 +285,8 @@ public class ChatActivity extends BaseActivity implements
       }
     });
 
+    mCameraUtil.setFixedRatioWhenCrop(false);
+
     mIvCamera.setVisibility(View.VISIBLE);
     mIvEmotion.setVisibility(View.VISIBLE);
     mIvPost.setEnabled(false);
