@@ -39,8 +39,7 @@ public class ChatAccount {
       sChatAccount = new ChatAccount();
       // 不使用环信默认的通知提醒
       EMChatManager.getInstance().getChatOptions().setNotificationEnable(false);
-      EMChatManager.getInstance().getChatOptions().setUseEncryption(false);
-      EMChat.getInstance().setDebugMode(true);
+      EMChat.getInstance().setDebugMode(BuildConfig.DEBUG);
       sChatAccount.login();
     }
     return sChatAccount;
@@ -60,24 +59,18 @@ public class ChatAccount {
               mIsLogin = true;
 
               BaseApplication.getHandler().post(new Runnable() {
-
                 @Override
                 public void run() {
                   U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_LOGIN_SUC, "登录成功"));
-                }
-              });
 
-              Log.d(C.TAG.CH, "@login register new message broadcast receiver");
-              mNewMessageBroadcastReceiver = new NewMessageBroadcastReceiver();
-              U.getContext().getApplicationContext().registerReceiver(mNewMessageBroadcastReceiver,
-                  new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction()));
-
-              EMChat.getInstance().setAppInited();
-
-              BaseApplication.getHandler().post(new Runnable() {
-                @Override
-                public void run() {
                   if (BuildConfig.DEBUG) U.showToast("聊天服务器登录成功");
+
+                  mNewMessageBroadcastReceiver = new NewMessageBroadcastReceiver();
+                  IntentFilter filter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
+                  filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY - 1);
+                  U.getContext().getApplicationContext().registerReceiver(mNewMessageBroadcastReceiver, filter);
+
+                  EMChat.getInstance().setAppInited();
 
                   U.request("chat_online", new OnResponse2<Response>() {
                     @Override
@@ -127,10 +120,15 @@ public class ChatAccount {
   public void onLogoutEvent(Account.LogoutEvent event) {
     EMChatManager.getInstance().logout();
 
-    if (mNewMessageBroadcastReceiver != null) {
-      U.getContext().unregisterReceiver(mNewMessageBroadcastReceiver);
-    }
+    unregisterReceiver();
+
     M.getRegisterHelper().unregister(this);
+  }
+
+  public void unregisterReceiver() {
+    if (mNewMessageBroadcastReceiver != null) {
+      U.getContext().getApplicationContext().unregisterReceiver(mNewMessageBroadcastReceiver);
+    }
   }
 
 }

@@ -95,4 +95,11 @@ public class BaseApplication extends Application {
     super.onLowMemory();
     ImageUtils.clear();
   }
+
+  @Override
+  public void onTerminate() {
+    super.onTerminate();
+    ChatAccount.inst().unregisterReceiver();
+  }
 }
+

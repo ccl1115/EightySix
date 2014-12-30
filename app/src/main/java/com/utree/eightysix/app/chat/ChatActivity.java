@@ -645,7 +645,7 @@ public class ChatActivity extends BaseActivity implements
 
   private void resendConfirm(final Message message) {
     final ThemedDialog dialog = new ThemedDialog(this);
-    dialog.setTitle("是否重新发送？");
+    dialog.setTitle("是否重新发送此消息？");
     dialog.setPositive(R.string.okay, new View.OnClickListener() {
       @Override
       public void onClick(View view) {

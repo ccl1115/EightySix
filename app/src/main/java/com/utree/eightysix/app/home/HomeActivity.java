@@ -116,7 +116,6 @@ public class HomeActivity extends BaseActivity {
   private Circle mCurrentCircle;
 
   private boolean mCreated;
-  private NewMessageBroadcastReceiver mReceiver;
 
   public static void start(Context context) {
     Intent intent = new Intent(context, HomeActivity.class);
@@ -362,7 +361,6 @@ public class HomeActivity extends BaseActivity {
 
     U.getChatBus().unregister(this);
 
-    if (mReceiver != null) unregisterReceiver(mReceiver);
   }
 
   @Override
