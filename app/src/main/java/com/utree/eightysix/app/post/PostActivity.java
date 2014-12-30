@@ -574,7 +574,12 @@ public class PostActivity extends BaseActivity {
 
   private void requestPublishComment() {
     request(new PublishCommentRequest(mEtPostContent.getText().toString(), mPost.id),
-        new OnResponse<PublishCommentResponse>() {
+        new OnResponse2<PublishCommentResponse>() {
+          @Override
+          public void onResponseError(Throwable e) {
+            mIvPost.setEnabled(true);
+          }
+
           @Override
           public void onResponse(PublishCommentResponse response) {
             if (RESTRequester.responseOk(response)) {
