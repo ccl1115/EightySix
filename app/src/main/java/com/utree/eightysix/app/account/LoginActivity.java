@@ -238,10 +238,6 @@ public class LoginActivity extends BaseActivity {
     };
 
     if (mEtCaptcha.getText().length() > 0) {
-      request(new LoginRequest(mEtPhoneNumber.getText().toString(),
-              mEtPwd.getText().toString(),
-              mEtCaptcha.getText().toString()),
-          onResponse, UserResponse.class);
       U.request("login", onResponse, UserResponse.class,
           mEtPhoneNumber.getText().toString(),
           mEtPwd.getText().toString(),

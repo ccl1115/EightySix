@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import com.easemob.chat.EMChat;
-import com.easemob.chat.EMChatConfig;
-import com.tencent.cloudsdk.tsocket.GlobalContext;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.C;
 import com.utree.eightysix.U;
@@ -57,14 +55,14 @@ public class BaseApplication extends Application {
       U.getReporter().init();
       U.getSyncClient().getSync();
 
+      // 初始化账号信息
+      Account.inst();
+
       // 定时拉去消息服务
       FetchAlarmReceiver.setupAlarm(this);
 
       // 推送服务
       U.getPushHelper().startWork();
-
-      // 腾讯移动加速初始化
-      GlobalContext.initialize(this);
 
       // 域名检查
       startService(new Intent(this, PingService.class));
@@ -74,9 +72,6 @@ public class BaseApplication extends Application {
       ChatAccount.inst();
 
       startService(new Intent(this, BgSyncService.class));
-
-      // 初始化账号信息
-      Account.inst();
     }
   }
 

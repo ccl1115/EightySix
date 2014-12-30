@@ -650,6 +650,9 @@ public class ChatUtils {
     public static void notifyNewMessage(Message message) {
 
       long count = MessageUtil.getUnreadCount();
+      if (count == 0) {
+        return;
+      }
       Context context = U.getContext();
       NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -661,7 +664,6 @@ public class ChatUtils {
             ChatActivity.getIntent(context, message.getChatId())
         };
       } else {
-
         intents = new Intent[]{
             HomeActivity.getIntent(context, 0, 0),
             ConversationActivity.getIntent(context)

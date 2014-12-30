@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.otto.Subscribe;
+import com.utree.eightysix.app.chat.ChatAccount;
 import com.utree.eightysix.app.intro.IntroActivity;
 import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.data.Circle;
@@ -188,8 +189,8 @@ public class Account {
 
         FetchAlarmReceiver.setupAlarm(U.getContext());
 
-        //M.getRegisterHelper().register(ChatAccount.inst());
-        //ChatAccount.inst().login();
+        M.getRegisterHelper().register(ChatAccount.inst());
+        ChatAccount.inst().login();
 
         U.getAppLogger().log(new EntryAdapter() {
 

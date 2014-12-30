@@ -3,6 +3,7 @@ package com.utree.eightysix.app.home;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +21,8 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.easemob.chat.EMChat;
+import com.easemob.chat.EMChatManager;
 import com.nineoldandroids.view.ViewHelper;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
@@ -33,6 +36,7 @@ import com.utree.eightysix.app.account.AccountActivity;
 import com.utree.eightysix.app.account.AddFriendActivity;
 import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.app.chat.ConversationActivity;
+import com.utree.eightysix.app.chat.NewMessageBroadcastReceiver;
 import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
 import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
@@ -112,6 +116,7 @@ public class HomeActivity extends BaseActivity {
   private Circle mCurrentCircle;
 
   private boolean mCreated;
+  private NewMessageBroadcastReceiver mReceiver;
 
   public static void start(Context context) {
     Intent intent = new Intent(context, HomeActivity.class);
@@ -356,6 +361,8 @@ public class HomeActivity extends BaseActivity {
     super.onDestroy();
 
     U.getChatBus().unregister(this);
+
+    if (mReceiver != null) unregisterReceiver(mReceiver);
   }
 
   @Override

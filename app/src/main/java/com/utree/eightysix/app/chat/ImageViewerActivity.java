@@ -74,7 +74,7 @@ public class ImageViewerActivity extends BaseActivity {
     if (!new File(local).exists()) {
       HttpFileManager manager = new HttpFileManager(this, EMChatConfig.getInstance().getStorageUrl());
       String substring = remote.substring(remote.lastIndexOf('/') + 1);
-      Log.d(C.TAG.CH, "ImageViewer remote file: " + substring);
+      Log.d(C.TAG.CH, "ImageViewer filename: " + substring);
 
       Map<String, String> headers = new HashMap<String, String>();
       headers.put("Authorization", "Bearer " + EMChatManager.getInstance().getAccessToken());
