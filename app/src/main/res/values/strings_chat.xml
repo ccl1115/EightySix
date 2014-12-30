@@ -20,4 +20,7 @@
     <string name="create_conversation_failed">创建聊天失败</string>
     <string name="delete_all_unfav_conversation">确定删除所有非收藏的会话</string>
     <string name="mark_all_message_read">确定清除所有未读消息</string>
+    <string name="confirm_shield_chat">是否拉黑聊天？</string>
+    <string name="shield_succeed">拉黑成功</string>
+    <string name="shield">拉黑</string>
 </resources>

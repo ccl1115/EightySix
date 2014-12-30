@@ -148,7 +148,7 @@ public class ConversationActivity extends BaseActivity {
 
   private void showMoreDialog(final Conversation conversation) {
     new AlertDialog.Builder(this).setTitle(getString(R.string.chat_actions))
-        .setItems(new String[]{getString(R.string.report), getString(R.string.delete)}, new DialogInterface.OnClickListener() {
+        .setItems(new String[]{getString(R.string.report), getString(R.string.delete), getString(R.string.shield)}, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialogInterface, int i) {
             switch (i) {
@@ -159,6 +159,9 @@ public class ConversationActivity extends BaseActivity {
               case 1: {
                 showDeleteConfirmDialog(conversation);
                 break;
+              }
+              case 2: {
+                showShieldConfirmDialog(conversation);
               }
             }
           }
@@ -216,6 +219,33 @@ public class ConversationActivity extends BaseActivity {
         }).show();
   }
 
+  private void showShieldConfirmDialog(final Conversation conversation) {
+    new AlertDialog.Builder(this).setTitle(getString(R.string.confirm_shield_chat))
+        .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            U.request("chat_shield", new OnResponse2<Response>() {
+              @Override
+              public void onResponseError(Throwable e) {
+              }
+
+              @Override
+              public void onResponse(Response response) {
+                showToast(getString(R.string.shield_succeed));
+              }
+            }, Response.class, conversation.getChatId());
+
+            dialog.dismiss();
+          }
+        })
+        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            dialog.dismiss();
+          }
+        })
+        .show();
+  }
   private void showActionDialog() {
     new AlertDialog.Builder(this).setItems(
         new String[]{getString(R.string.clear_unread), getString(R.string.chat_delete_all)},

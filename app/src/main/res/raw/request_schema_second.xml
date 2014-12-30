@@ -39,6 +39,17 @@
     </request>
 
     <request>
+        <id>chat_shield</id>
+        <name>屏蔽聊天</name>
+        <path>/commit/im/shield/chat</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>chatId</param>
+        </params>
+    </request>
+
+    <request>
         <id>chat_fav_add</id>
         <name>收藏聊天会话</name>
         <path>/commit/im/favorite/addChat</path>

@@ -17,7 +17,6 @@ import android.widget.RelativeLayout;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
-import butterknife.OnItemLongClick;
 import butterknife.OnTextChanged;
 import com.rockerhieu.emojicon.EmojiconEditText;
 import com.rockerhieu.emojicon.EmojiconGridFragment;
@@ -543,7 +542,7 @@ public class ChatActivity extends BaseActivity implements
 
   private void showMoreDialog() {
     new AlertDialog.Builder(this).setTitle(getString(R.string.chat_actions))
-        .setItems(new String[]{getString(R.string.report), getString(R.string.delete)}, new DialogInterface.OnClickListener() {
+        .setItems(new String[]{getString(R.string.report), getString(R.string.delete), getString(R.string.shield)}, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialogInterface, int i) {
             switch (i) {
@@ -554,6 +553,9 @@ public class ChatActivity extends BaseActivity implements
               case 1: {
                 showDeleteConfirmDialog();
                 break;
+              }
+              case 2: {
+                showShieldConfirmDialog();
               }
             }
           }
@@ -572,7 +574,6 @@ public class ChatActivity extends BaseActivity implements
                 if (RESTRequester.responseOk(response)) {
                   showToast(getString(R.string.report_success));
                 }
-                dialogInterface.dismiss();
               }
 
               @Override
@@ -580,6 +581,8 @@ public class ChatActivity extends BaseActivity implements
                 dialogInterface.dismiss();
               }
             }, Response.class, mChatId);
+
+            dialogInterface.dismiss();
           }
         })
         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -587,7 +590,8 @@ public class ChatActivity extends BaseActivity implements
           public void onClick(DialogInterface dialogInterface, int i) {
             dialogInterface.dismiss();
           }
-        }).show();
+        })
+        .show();
   }
 
   private void showDeleteConfirmDialog() {
@@ -607,6 +611,34 @@ public class ChatActivity extends BaseActivity implements
             dialogInterface.dismiss();
           }
         }).show();
+  }
+
+  private void showShieldConfirmDialog() {
+    new AlertDialog.Builder(this).setTitle(getString(R.string.confirm_shield_chat))
+        .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            U.request("chat_shield", new OnResponse2<Response>() {
+              @Override
+              public void onResponseError(Throwable e) {
+              }
+
+              @Override
+              public void onResponse(Response response) {
+                showToast(getString(R.string.shield_succeed));
+              }
+            }, Response.class, mChatId);
+
+            dialog.dismiss();
+          }
+        })
+        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            dialog.dismiss();
+          }
+        })
+        .show();
   }
 
   private void addPostSummaryInfo() {
