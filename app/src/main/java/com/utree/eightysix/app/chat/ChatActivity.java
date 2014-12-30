@@ -230,6 +230,7 @@ public class ChatActivity extends BaseActivity implements
           if (message.getType() == MessageConst.TYPE_TXT) {
             mEtPostContent.setText(message.getContent());
           }
+          DaoUtils.getMessageDao().delete(message);
         }
       }
     }
