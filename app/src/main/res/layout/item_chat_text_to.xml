@@ -44,7 +44,6 @@
                 android:layout_gravity="center_vertical"
                 android:textColor="#ff3d3d3d"
                 android:textSize="16sp"
-                android:gravity="end"
                 app:emojiconSize="24dp"
                 />
 

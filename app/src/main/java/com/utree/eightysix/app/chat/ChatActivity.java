@@ -226,7 +226,11 @@ public class ChatActivity extends BaseActivity implements
           break;
         }
         case ChatEvent.EVENT_MSG_REMOVE: {
-          mChatAdapter.remove((Message) event.getObj());
+          Message message = (Message) event.getObj();
+          mChatAdapter.remove(message);
+          if (message.getType() == MessageConst.TYPE_TXT) {
+            mEtPostContent.setText(message.getContent());
+          }
         }
       }
     }
@@ -558,7 +562,6 @@ public class ChatActivity extends BaseActivity implements
 
   private void showReportConfirmDialog() {
     new AlertDialog.Builder(this).setTitle(getString(R.string.confirm_report_chat))
-        .setMessage(getString(R.string.report_chat_info))
         .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(final DialogInterface dialogInterface, int i) {
@@ -568,9 +571,6 @@ public class ChatActivity extends BaseActivity implements
               public void onResponse(Response response) {
                 if (RESTRequester.responseOk(response)) {
                   showToast(getString(R.string.report_success));
-                  ChatUtils.ConversationUtil.deleteConversation(mChatId);
-                  U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_REMOVE, mChatId));
-                  finish();
                 }
                 dialogInterface.dismiss();
               }
