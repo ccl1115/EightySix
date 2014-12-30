@@ -76,33 +76,6 @@ public class ImageViewerActivity extends BaseActivity {
       mLoadRemote = true;
       mHash = ImageUtils.getUrlHash(remote);
       ImageUtils.asyncLoad(remote, mHash);
-      //HttpFileManager manager = new HttpFileManager(this, EMChatConfig.getInstance().getStorageUrl());
-      //String substring = remote.substring(remote.lastIndexOf('/') + 1);
-      //Log.d(C.TAG.CH, "ImageViewer filename: " + substring);
-      //
-      //Map<String, String> headers = new HashMap<String, String>();
-      //headers.put("Authorization", "Bearer " + EMChatManager.getInstance().getAccessToken());
-      //headers.put("Accept", "application/octet-stream");
-      //headers.put("share-secret", secret);
-      //
-      //manager.downloadFile(substring, local, EMChatConfig.getInstance().APPKEY, headers, new CloudOperationCallback() {
-      //  @Override
-      //  public void onSuccess(String s) {
-      //    File file = new File(local);
-      //    mHash = IOUtils.fileHash(file);
-      //    ImageUtils.asyncLoad(file, mHash, 600, 600);
-      //  }
-      //
-      //  @Override
-      //  public void onError(String s) {
-      //    showToast(s);
-      //  }
-      //
-      //  @Override
-      //  public void onProgress(int i) {
-      //
-      //  }
-      //});
     } else {
       mImageViewTouch.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
       File file = new File(local);
