@@ -77,33 +77,33 @@ public class RequestSchema {
         } else if ("path".equals(parser.getName())) {
           android.util.Log.d("RequestSchema", "path");
           parser.next();
-          data.api = parser.getText();
+          data.setApi(parser.getText());
           parser.next();
         } else if ("sign".equals(parser.getName())) {
           android.util.Log.d("RequestSchema", "sign");
-          data.sign = true;
+          data.setSign(true);
         } else if ("token".equals(parser.getName())) {
           android.util.Log.d("RequestSchema", "token");
-          data.token = true;
+          data.setToken(true);
         } else if ("cache".equals(parser.getName())) {
           android.util.Log.d("RequestSchema", "cache");
-          data.cache = true;
+          data.setCache(true);
         } else if ("method".equals(parser.getName())) {
           android.util.Log.d("RequestSchema", "method");
           parser.next();
           if ("post".equals(parser.getText().toLowerCase())) {
-            data.method = Method.POST;
+            data.setMethod(Method.POST);
           } else if ("get".equals(parser.getText().toLowerCase())) {
-            data.method = Method.GET;
+            data.setMethod(Method.GET);
           }
         } else if ("host".equals(parser.getName())) {
           android.util.Log.d("RequestSchema", "host");
           parser.next();
-          data.host = parser.getText();
+          data.setHost(parser.getText());
           parser.next();
         } else if ("log".equals(parser.getName())) {
           android.util.Log.d("RequestSchema", "log");
-          data.log = true;
+          data.setLog(true);
         } else if ("params".equals(parser.getName())) {
           android.util.Log.d("RequestSchema", "params");
           List<String> paramKeys = new ArrayList<String>();
@@ -123,8 +123,8 @@ public class RequestSchema {
 
       parser.next();
     }
-    if (data.host == null) {
-      data.host = host;
+    if (data.getHost() == null) {
+      data.setHost(host);
     }
     wrapper.mRequestData = data;
     android.util.Log.d("RequestSchema", data.toString());
@@ -160,8 +160,8 @@ public class RequestSchema {
   public RequestData getRequest(String id, Object... params) {
     RequestWrapper requestWrapper = mRequestWrapper.get(id);
     if (requestWrapper == null) return null;
-    requestWrapper.mRequestData.params = new RequestParams();
-    fill(requestWrapper.mRequestData.params, requestWrapper.mParamKeys, params);
+    requestWrapper.mRequestData.setParams(new RequestParams());
+    fill(requestWrapper.mRequestData.getParams(), requestWrapper.mParamKeys, params);
     return requestWrapper.mRequestData;
   }
 

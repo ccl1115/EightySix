@@ -13,17 +13,17 @@ import java.util.*;
  * @author simon
  */
 public class RequestData<RES extends Response> {
-  String api;
-  boolean cache;
-  boolean log;
-  RequestParams params;
-  int method;
-  org.apache.http.Header[] headers;
-  long requestTime;
-  String host;
-  boolean token;
+  private String api;
+  private boolean cache;
+  private boolean log;
+  private RequestParams params;
+  private int method;
+  private org.apache.http.Header[] headers;
+  private long requestTime;
+  private String host;
+  private boolean token;
 
-  Class<RES> resClz;
+  private Class<RES> resClz;
 
   boolean sign;
 
@@ -222,5 +222,13 @@ public class RequestData<RES extends Response> {
     result = 31 * result + (resClz != null ? resClz.hashCode() : 0);
     result = 31 * result + (sign ? 1 : 0);
     return result;
+  }
+
+  public boolean isToken() {
+    return token;
+  }
+
+  public void setToken(boolean token) {
+    this.token = token;
   }
 }
