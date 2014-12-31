@@ -27,5 +27,8 @@ public class ChatInfoResponse extends Response {
 
     @SerializedName("relation")
     public String relation;
+
+    @SerializedName("factoryName")
+    public String factoryName;
   }
 }

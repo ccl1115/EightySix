@@ -263,7 +263,7 @@ public class ChatUtils {
         conversation = new Conversation();
         conversation.setChatId(chatInfo.chatId);
         conversation.setPostId(post.id);
-        conversation.setPostSource(post.shortName);
+        conversation.setPostSource(chatInfo.factoryName);
         conversation.setBgUrl(post.bgUrl);
         conversation.setBgColor(post.bgColor);
         conversation.setRelation(chatInfo.relation);
@@ -294,7 +294,7 @@ public class ChatUtils {
       if (conversation == null) {
         conversation = new Conversation();
         conversation.setChatId(chatInfo.chatId);
-        conversation.setPostSource(post.shortName);
+        conversation.setPostSource(chatInfo.factoryName);
         conversation.setBgUrl(post.bgUrl);
         conversation.setBgColor(post.bgColor);
         conversation.setPostId(post.id);
