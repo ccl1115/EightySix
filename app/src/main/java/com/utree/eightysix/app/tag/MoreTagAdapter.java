@@ -107,7 +107,6 @@ public class MoreTagAdapter extends BaseAdapter {
 
     holder.mTvTag1.setText("");
     holder.mTvTag2.setText("");
-    holder.mTvTag3.setText("");
 
     List<Tag> tags = mTags.topic.tags;
     for (int i = 0; i < tags.size(); i++) {
@@ -118,9 +117,6 @@ public class MoreTagAdapter extends BaseAdapter {
           break;
         case 1:
           holder.mTvTag2.setText("#" + g.content);
-          break;
-        case 2:
-          holder.mTvTag3.setText("#" + g.content);
           break;
       }
     }

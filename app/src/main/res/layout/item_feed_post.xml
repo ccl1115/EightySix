@@ -30,56 +30,45 @@
                 android:background="#44000000"
                 />
 
-        <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="10dp"
-                >
 
             <TextView
                     android:id="@+id/tv_hometown"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:textColor="@android:color/white"
-                    android:textSize="14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="10dp"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
                     />
 
             <LinearLayout
                     android:id="@+id/ll_tags"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:layout_gravity="center_horizontal"
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
+                    android:paddingTop="16dp"
                     android:orientation="horizontal"
-                    >
+                >
 
-                <com.utree.eightysix.widget.TagView
-                        android:id="@+id/tv_tag_1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="4dp"
-                        android:textColor="@android:color/white"
-                        />
+                    <com.utree.eightysix.widget.TagView
+                            android:id="@+id/tv_tag_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="4dp"
+                    android:textColor="@android:color/white"
+                    />
 
-                <com.utree.eightysix.widget.TagView
-                        android:id="@+id/tv_tag_2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="4dp"
-                        android:textColor="@android:color/white"
-                        />
+                    <com.utree.eightysix.widget.TagView
+                            android:id="@+id/tv_tag_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="4dp"
+                    android:textColor="@android:color/white"
+                            />
 
-                <com.utree.eightysix.widget.TagView
-                        android:id="@+id/tv_tag_3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@android:color/white"
-                        />
-            </LinearLayout>
         </LinearLayout>
 
         <TextView
@@ -95,9 +84,10 @@
                 android:id="@+id/iv_share"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
+                android:layout_gravity="end"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
                 android:src="@drawable/ic_share"
                 />
 

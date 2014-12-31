@@ -68,8 +68,8 @@ public class TagsLayout extends FloatingLayout {
           boolean selected = v.isSelected();
           U.getAnalyser().trackEvent(getContext(), "publish_tag_select",
               ((Tag) v.getTag()).content, selected ? "selected" : "unselected");
-          if (!selected && mCount == 3) {
-            U.showToast("最多只能选择三个标签哦");
+          if (!selected && mCount == 2) {
+            U.showToast("最多只能选择二个标签哦");
           } else {
             if (selected) {
               mSelectedTags.remove(v.getTag());

@@ -8,15 +8,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.app.tag.TagTabActivity;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.data.Topic;
 import com.utree.eightysix.data.Topics;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.utils.ColorUtil;
+
 import java.util.List;
 
 /**
@@ -128,7 +127,6 @@ public class TopicListAdapter extends BaseAdapter {
 
     holder.mTvTag1.setText("");
     holder.mTvTag2.setText("");
-    holder.mTvTag3.setText("");
 
     List<Tag> tags = topic.tags;
     for (int i = 0; i < tags.size(); i++) {
@@ -139,9 +137,6 @@ public class TopicListAdapter extends BaseAdapter {
           break;
         case 1:
           holder.mTvTag2.setText("#" + g.content);
-          break;
-        case 2:
-          holder.mTvTag3.setText("#" + g.content);
           break;
       }
     }
@@ -156,9 +151,6 @@ public class TopicListAdapter extends BaseAdapter {
 
     @InjectView (R.id.tv_tag_2)
     public TextView mTvTag2;
-
-    @InjectView (R.id.tv_tag_3)
-    public TextView mTvTag3;
 
     @InjectView (R.id.tv_text)
     public TextView mTvText;

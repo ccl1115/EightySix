@@ -78,9 +78,6 @@ public class FeedPostView extends LinearLayout {
   @InjectView (R.id.tv_tag_2)
   public TextView mTvTag2;
 
-  @InjectView (R.id.tv_tag_3)
-  public TextView mTvTag3;
-
   @InjectView(R.id.ll_tags)
   public LinearLayout mLlTags;
 
@@ -97,11 +94,6 @@ public class FeedPostView extends LinearLayout {
   @OnClick(R.id.tv_tag_2)
   public void onTvTag2Clicked() {
     TagTabActivity.start(getContext(), mPost.tags.get(1));
-  }
-
-  @OnClick(R.id.tv_tag_3)
-  public void onTvTag3Clicked() {
-    TagTabActivity.start(getContext(), mPost.tags.get(2));
   }
 
   @OnClick(R.id.tv_source)
@@ -237,7 +229,6 @@ public class FeedPostView extends LinearLayout {
 
     mTvTag1.setText("");
     mTvTag2.setText("");
-    mTvTag3.setText("");
 
     List<Tag> tags = mPost.tags;
     if (tags != null) {
@@ -249,9 +240,6 @@ public class FeedPostView extends LinearLayout {
             break;
           case 1:
             mTvTag2.setText("#" + g.content);
-            break;
-          case 2:
-            mTvTag3.setText("#" + g.content);
             break;
         }
       }
