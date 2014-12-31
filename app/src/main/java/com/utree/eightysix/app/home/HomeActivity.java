@@ -3,7 +3,6 @@ package com.utree.eightysix.app.home;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,13 +15,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import com.easemob.chat.EMChat;
-import com.easemob.chat.EMChatManager;
 import com.nineoldandroids.view.ViewHelper;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
@@ -36,7 +32,6 @@ import com.utree.eightysix.app.account.AccountActivity;
 import com.utree.eightysix.app.account.AddFriendActivity;
 import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.app.chat.ConversationActivity;
-import com.utree.eightysix.app.chat.NewMessageBroadcastReceiver;
 import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
 import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
@@ -66,7 +61,6 @@ import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TopBar;
-import de.akquinet.android.androlog.Log;
 
 /**
  */
@@ -597,7 +591,8 @@ public class HomeActivity extends BaseActivity {
       Bundle args = mSetHometownFragment.getArguments();
       args.putString("title", title);
       getSupportFragmentManager().beginTransaction()
-          .attach(mSetHometownFragment).commit();
+          .attach(mSetHometownFragment)
+          .commit();
     }
   }
 

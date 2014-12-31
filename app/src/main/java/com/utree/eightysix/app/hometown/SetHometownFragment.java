@@ -148,7 +148,7 @@ public class SetHometownFragment extends BaseFragment {
             }
           });
 
-          if (mCurrentHometown != null) {
+          if (mCurrentHometown != null && mCurrentHometown.size() > 0) {
             HometownInfoResponse.HometownInfo info = mCurrentHometown.get(1);
             for (int i = 0, size = response.object.lists.size(); i < size; i++) {
               if (info.id == response.object.lists.get(i).id) {
@@ -175,7 +175,7 @@ public class SetHometownFragment extends BaseFragment {
               new ArrayAdapter<Hometown>(getActivity(), android.R.layout.simple_spinner_item, response.object.lists);
           adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
           mSpCounty.setAdapter(adapter);
-          if (mCurrentHometown != null) {
+          if (mCurrentHometown != null && mCurrentHometown.size() > 0) {
             HometownInfoResponse.HometownInfo info = mCurrentHometown.get(2);
             for (int i = 0, size = response.object.lists.size(); i < size; i++) {
               if (info.id == response.object.lists.get(i).id) {
@@ -234,9 +234,11 @@ public class SetHometownFragment extends BaseFragment {
             }
           });
 
-          if (mCurrentHometown != null) {
+          if (mCurrentHometown != null && mCurrentHometown.size() > 0) {
             mSpProvince.setSelection(mCurrentHometown.get(0).id - 1);
             requestCities(mCurrentHometown.get(0).id);
+          } else {
+            requestCities(1);
           }
         } else {
           detachSelf();

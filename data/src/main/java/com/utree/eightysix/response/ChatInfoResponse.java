@@ -24,5 +24,8 @@ public class ChatInfoResponse extends Response {
 
     @SerializedName("myAvatar")
     public String myAvatar;
+
+    @SerializedName("relation")
+    public String relation;
   }
 }

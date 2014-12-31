@@ -106,7 +106,7 @@ public class PostPostView extends LinearLayout {
     }
   }
 
-  @OnClick(R.id.tv_chat)
+  @OnClick(R.id.iv_chat)
   public void onIvChatClicked() {
     ChatUtils.startChat((BaseActivity) getContext(), mPost);
   }
