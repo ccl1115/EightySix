@@ -213,15 +213,17 @@ public class ChatActivity extends BaseActivity implements
           mChatAdapter.notifyDataSetChanged();
           break;
         }
-        case ChatEvent.EVENT_SENT_MSG_SUCCESS:
+        case ChatEvent.EVENT_SENT_MSG_SUCCESS: {
+          mChatAdapter.add((Message) event.getObj());
+          mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
+          break;
+        }
         case ChatEvent.EVENT_SENT_MSG_ERROR: {
           mChatAdapter.notifyDataSetChanged();
           mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
           break;
         }
         case ChatEvent.EVENT_SENDING_MSG: {
-          mChatAdapter.add((Message) event.getObj());
-          mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
           break;
         }
         case ChatEvent.EVENT_MSG_REMOVE: {
@@ -229,6 +231,7 @@ public class ChatActivity extends BaseActivity implements
           mChatAdapter.remove(message);
           if (message.getType() == MessageConst.TYPE_TXT) {
             mEtPostContent.setText(message.getContent());
+            mEtPostContent.setSelection(message.getContent().length());
           }
           DaoUtils.getMessageDao().delete(message);
         }
