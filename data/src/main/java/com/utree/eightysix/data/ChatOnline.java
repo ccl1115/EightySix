@@ -15,4 +15,7 @@ public class ChatOnline {
 
   @SerializedName("isOnline")
   public int isOnline;
+
+  @SerializedName("offlineDuration")
+  public long offlineDuration;
 }

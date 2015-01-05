@@ -25,7 +25,8 @@ public class Conversation {
     private Long timestamp;
     private Long unreadCount;
     private Boolean favorite;
-    private Long online;
+    private Long offlineDuration;
+    private Boolean online;
 
     public Conversation() {
     }
@@ -34,7 +35,7 @@ public class Conversation {
         this.id = id;
     }
 
-    public Conversation(Long id, String chatId, String postId, String postSource, String postContent, String portrait, String portraitColor, String myPortrait, String myPortraitColor, String bgUrl, String bgColor, String commentId, String commentContent, String relation, String lastMsg, Long timestamp, Long unreadCount, Boolean favorite, Long online) {
+    public Conversation(Long id, String chatId, String postId, String postSource, String postContent, String portrait, String portraitColor, String myPortrait, String myPortraitColor, String bgUrl, String bgColor, String commentId, String commentContent, String relation, String lastMsg, Long timestamp, Long unreadCount, Boolean favorite, Long offlineDuration, Boolean online) {
         this.id = id;
         this.chatId = chatId;
         this.postId = postId;
@@ -53,6 +54,7 @@ public class Conversation {
         this.timestamp = timestamp;
         this.unreadCount = unreadCount;
         this.favorite = favorite;
+        this.offlineDuration = offlineDuration;
         this.online = online;
     }
 
@@ -202,11 +204,19 @@ public class Conversation {
         this.favorite = favorite;
     }
 
-    public Long getOnline() {
+    public Long getOfflineDuration() {
+        return offlineDuration;
+    }
+
+    public void setOfflineDuration(Long offlineDuration) {
+        this.offlineDuration = offlineDuration;
+    }
+
+    public Boolean getOnline() {
         return online;
     }
 
-    public void setOnline(Long online) {
+    public void setOnline(Boolean online) {
         this.online = online;
     }
 

@@ -255,6 +255,20 @@ public class ChatUtils {
           .list();
     }
 
+    public static List<Conversation> getConversations(int page, int size) {
+      return DaoUtils.getConversationDao().queryBuilder()
+          .whereOr(ConversationDao.Properties.LastMsg.isNotNull(),
+              ConversationDao.Properties.Favorite.eq(true))
+          .orderDesc(ConversationDao.Properties.Timestamp)
+          .offset(page * size)
+          .limit(size)
+          .list();
+    }
+
+    public static long getPage(int size) {
+      return DaoUtils.getConversationDao().count() / size;
+    }
+
     public static void createIfNotExist(ChatInfoResponse.ChatInfo chatInfo, Post post) {
       Conversation conversation = DaoUtils.getConversationDao().queryBuilder()
           .where(ConversationDao.Properties.ChatId.eq(chatInfo.chatId))

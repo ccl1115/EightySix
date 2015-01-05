@@ -1,12 +1,12 @@
 [submodule "emojicon"]
 	path = emojicon
-	url = http://182.254.185.162:7990/scm/eig/emojicon
-    branch = master
+	url = http://ec2-54-65-186-134.ap-northeast-1.compute.amazonaws.com/scm/eig/emojicon
+        branch = master
 [submodule "wiki"]
 	path = wiki
-	url = http://182.254.185.162:7990/scm/eig/wiki
-    branch = master
+	url = http://ec2-54-65-186-134.ap-northeast-1.compute.amazonaws.com/scm/eig/wiki
+	branch = master
 [submodule "ImageViewZoom"]
 	path = ImageViewZoom
-	url = http://182.254.185.162:7990/scm/eig/ImageViewZoom.git
+	url = http://ec2-54-65-186-134.ap-northeast-1.compute.amazonaws.com/scm/eig/imageviewzoom.git
 	branch = master
