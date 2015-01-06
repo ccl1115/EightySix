@@ -670,12 +670,21 @@ public class ChatActivity extends BaseActivity implements
 
   @Override
   public void onEmojiconClicked(Emojicon emojicon) {
-    String text = mEtPostContent.getText().toString();
-    String before = text.substring(0, mEtPostContent.getSelectionStart());
-    String after = text.substring(mEtPostContent.getSelectionEnd());
+    if ("\u274c".equals(emojicon.getEmoji())) {
+      final int sel = mEtPostContent.getSelectionStart();
+      if (sel > 0) {
+        mEtPostContent.getText().delete(sel - 2, sel);
+//        mEtPostContent.setText(mEtPostContent.getText().delete(sel - 1, 1));
+//        mEtPostContent.setSelection(sel - 1);
+      }
+    } else {
+      String text = mEtPostContent.getText().toString();
+      String before = text.substring(0, mEtPostContent.getSelectionStart());
+      String after = text.substring(mEtPostContent.getSelectionEnd());
 
-    mEtPostContent.setText(before + emojicon.getEmoji() + after);
-    mEtPostContent.setSelection(before.length() + emojicon.getEmoji().length());
+      mEtPostContent.setText(before + emojicon.getEmoji() + after);
+      mEtPostContent.setSelection(before.length() + emojicon.getEmoji().length());
+    }
   }
 
 
