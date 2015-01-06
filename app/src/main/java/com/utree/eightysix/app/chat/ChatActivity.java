@@ -36,7 +36,6 @@ import com.utree.eightysix.app.publish.EmojiFragment;
 import com.utree.eightysix.dao.Conversation;
 import com.utree.eightysix.dao.ConversationDao;
 import com.utree.eightysix.dao.Message;
-import com.utree.eightysix.dao.MessageConst;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;

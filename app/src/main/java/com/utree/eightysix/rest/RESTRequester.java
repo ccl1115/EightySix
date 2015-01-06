@@ -21,6 +21,7 @@ public class RESTRequester implements IRESTRequester {
   private RequestSchema mRequestSchema;
 
   private String mHost;
+  private String mSecondHost;
 
   public RESTRequester(String host, String secondHost) {
     mHost = host;
@@ -29,7 +30,8 @@ public class RESTRequester implements IRESTRequester {
     mAsyncHttpClient.setMaxRetriesAndTimeout(U.getConfigInt("api.retry"), U.getConfigInt("api.retry.timeout"));
 
     mRequestSchema = new RequestSchema();
-    mRequestSchema.load(U.getContext(), secondHost, R.raw.request_schema_second);
+    mSecondHost = secondHost;
+    mRequestSchema.load(U.getContext(), mSecondHost, R.raw.request_schema_second);
     mRequestSchema.load(U.getContext(), host, R.raw.request_schema_new);
 
     compact();
@@ -74,6 +76,11 @@ public class RESTRequester implements IRESTRequester {
   @Override
   public void setHost(String host) {
     mHost = host;
+  }
+
+  @Override
+  public void setSecondHost(String host) {
+    mSecondHost = host;
   }
 
   @Override

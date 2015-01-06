@@ -12,7 +12,6 @@ import com.utree.eightysix.app.BaseApplication;
 import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.dao.Conversation;
 import com.utree.eightysix.dao.Message;
-import com.utree.eightysix.dao.MessageConst;
 import com.utree.eightysix.utils.DaoUtils;
 import de.akquinet.android.androlog.Log;
 

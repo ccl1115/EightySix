@@ -14,7 +14,6 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.chat.content.ImageContent;
 import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.dao.Message;
-import com.utree.eightysix.dao.MessageConst;
 import com.utree.eightysix.utils.TimeUtil;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.FontPortraitView;
