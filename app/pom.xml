@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.utree.eightysix</groupId>
+        <artifactId>EightySix-parent</artifactId>
+        <version>1.6.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>app</artifactId>
+    <packaging>apk</packaging>
+    <name>EightySix-app - Application</name>
+    <version>1.6.0-SNAPSHOT</version>
+
+    <properties>
+        <android.manifest.versionCode>35</android.manifest.versionCode>
+        <android.manifest.versionName>${project.version}</android.manifest.versionName>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>android</groupId>
+            <artifactId>android</artifactId>
+            <version>${platform.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>android.support</groupId>
+            <artifactId>compatibility-v4</artifactId>
+            <type>jar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>mta-sdk</groupId>
+            <artifactId>mta-sdk</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>mid-sdk</groupId>
+            <artifactId>mid-sdk</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>locSDK</groupId>
+            <artifactId>locSDK</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>tencent.opensdk</groupId>
+            <artifactId>opensdk</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>de.akquinet.android.androlog</groupId>
+            <artifactId>androlog</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.nineoldandroids</groupId>
+            <artifactId>library</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.loopj.android</groupId>
+            <artifactId>android-async-http</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jakewharton</groupId>
+            <artifactId>disklrucache</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.squareup</groupId>
+            <artifactId>otto</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>galaxy-lite</groupId>
+            <artifactId>galaxy-lite</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jakewharton</groupId>
+            <artifactId>butterknife</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.edmodo</groupId>
+            <artifactId>cropper</artifactId>
+            <type>aar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>com.utree.eightysix</groupId>
+            <artifactId>data</artifactId>
+            <version>1.6.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.utree.eightysix</groupId>
+            <artifactId>base</artifactId>
+            <version>1.6.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>android-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>easemobchat</groupId>
+            <artifactId>easemobchat</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>xg_sdk</groupId>
+            <artifactId>xg_sdk</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>wup</groupId>
+            <artifactId>wup</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.rockerhieu.emojicon</groupId>
+            <artifactId>library</artifactId>
+            <type>aar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>it.sephiroth.android.library.imagezoom</groupId>
+            <artifactId>imagezoom</artifactId>
+            <type>aar</type>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                <artifactId>android-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>manifest-update</goal>
+                        </goals>
+                        <configuration>
+                            <androidManifestFile>src/main/AndroidManifest.xml</androidManifestFile>
+                            <updatedManifestFile>src/main/AndroidManifest.xml</updatedManifestFile>
+
+                            <aaptVerbose>true</aaptVerbose>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>nightly</id>
+
+            <properties>
+                <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
+                <buildNumber>nightly-${android.manifest.versionName}-${maven.build.timestamp}
+                </buildNumber>
+            </properties>
+
+            <build>
+                <finalName>lanmei-${buildNumber}</finalName>
+            </build>
+        </profile>
+
+
+        <profile>
+            <id>hourly</id>
+
+            <properties>
+                <maven.build.timestamp.format>yyyy-MM-dd-HH:mm</maven.build.timestamp.format>
+                <buildNumber>hourly-${android.manifest.versionName}-${maven.build.timestamp}
+                </buildNumber>
+            </properties>
+
+            <build>
+                <finalName>lanmei-${buildNumber}</finalName>
+            </build>
+        </profile>
+
+        <profile>
+            <id>test</id>
+
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <skip>false</skip>
+                        </configuration>
+
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>release</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                        <artifactId>android-maven-plugin</artifactId>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <release>true</release>
+                        </configuration>
+                    </plugin>
+
+                    <!-- 这种方式会混淆所有的maven依赖包，但是会自动使用Android的工具生成默认的proguard配置-->
+                    <!--<plugin>-->
+                    <!--<groupId>com.jayway.maven.plugins.android.generation2</groupId>-->
+                    <!--<artifactId>android-maven-plugin</artifactId>-->
+                    <!--<configuration>-->
+                    <!--<proguardSkip>false</proguardSkip>-->
+                    <!--<proguardFile>proguard-gen.cfg</proguardFile>-->
+                    <!--<proguardConfig>proguard.cfg</proguardConfig>-->
+                    <!--</configuration>-->
+                    <!--</plugin>-->
+
+                    <!-- 这种方法只混淆源代码，混淆速度更快，但是需要编写一些额外的规则 -->
+                    <plugin>
+                        <groupId>com.github.wvengen</groupId>
+                        <artifactId>proguard-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>process-classes</phase>
+                                <goals>
+                                    <goal>proguard</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <injar>classes</injar>
+                            <libs>
+                                <lib>${java.home}/lib/rt.jar</lib>
+                            </libs>
+                            <obfuscate>true</obfuscate>
+                            <options>
+                                <option>@proguard.cfg</option>
+                            </options>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jarsigner-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>signing</id>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <inherited>true</inherited>
+                                <configuration>
+                                    <removeExistingSignatures>true</removeExistingSignatures>
+                                    <archiveDirectory/>
+                                    <includes>
+                                        <include>target/*.apk</include>
+                                    </includes>
+                                    <keystore>../release.ks</keystore>
+                                    <storepass>qgLMR2HS</storepass>
+                                    <alias>release</alias>
+                                    <keypass>Rjz649S9</keypass>
+                                    <arguments>
+                                        <argument>-sigalg</argument>
+                                        <argument>MD5withRSA</argument>
+                                        <argument>-digestalg</argument>
+                                        <argument>SHA1</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

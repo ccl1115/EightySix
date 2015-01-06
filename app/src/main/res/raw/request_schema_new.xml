@@ -1,0 +1,76 @@
+<!--
+  ~ Copyright (c) 2014. All rights reserved by utree.cn
+  -->
+
+<api>
+    <request>
+        <id>set_hometown</id>
+        <name>设置用户家乡</name>
+        <path>/user/setHomeTown.do</path>
+        <token/>
+        <params>
+            <param>provinceId</param>
+            <param>cityId</param>
+            <param>countyId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>get_hometown</id>
+        <name>获取用户家乡</name>
+        <path>/user/getHomeTown.do</path>
+        <token/>
+    </request>
+
+    <request>
+        <id>get_cities</id>
+        <name>获取城市列表</name>
+        <path>/system/getCities.do</path>
+        <token/>
+        <params>
+            <param>provinceId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>get_counties</id>
+        <name>获取县列表</name>
+        <path>/system/getCounties.do</path>
+        <token/>
+        <params>
+            <param>cityId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>get_hometown_menu</id>
+        <name>获取用户家乡</name>
+        <path>/feed/hometownMenu.do</path>
+        <token/>
+    </request>
+
+    <request>
+        <id>get_hometown_feeds</id>
+        <name>get feeds of hometown</name>
+        <path>/feed/listByHometown.do</path>
+        <token/>
+        <params>
+            <param>currPage</param>
+            <param>tabType</param>
+            <param>hometownId</param>
+            <param>hometownType</param>
+        </params>
+    </request>
+
+    <!--<request>-->
+        <!--<id>login</id>-->
+        <!--<name>登录接口</name>-->
+        <!--<path>/login/login.do</path>-->
+        <!--<sign/>-->
+        <!--<params>-->
+            <!--<param>phone</param>-->
+            <!--<param>password</param>-->
+            <!--<param>valiCode</param>-->
+        <!--</params>-->
+    <!--</request>-->
+</api>

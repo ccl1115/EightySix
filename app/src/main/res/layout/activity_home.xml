@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v4.widget.DrawerLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_drawer"
+        >
+
+    <FrameLayout
+            android:id="@+id/fl_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/activity_top_bar_height"
+            />
+
+    <FrameLayout
+            android:id="@+id/fl_side"
+            android:layout_width="244dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:gravity="center_vertical"
+            >
+
+        <fragment
+                class="com.utree.eightysix.app.home.RegionFragment"
+                android:id="@+id/fragment_range"
+                android:layout_width="244dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                />
+
+    </FrameLayout>
+
+    <FrameLayout
+            android:id="@+id/fl_right"
+            android:layout_width="168dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:gravity="center_vertical"
+            >
+
+        <include
+                layout="@layout/widget_feed_menu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                />
+
+    </FrameLayout>
+
+</android.support.v4.widget.DrawerLayout>

@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="35" android:versionName="1.6.0-SNAPSHOT" package="com.utree.eightysix">
+
+    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="21"/>
+
+    <uses-feature android:name="android.hardware.camera"/>
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
+
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
+
+    <!-- Baidu GeoLocation SDK permission requirement -->
+    <!-- 这个权限用于进行网络定位-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!-- 这个权限用于访问GPS定位-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <!-- 用于访问wifi网络信息,wifi信息会用于进行网络定位-->
+    <!--<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>-->
+    <!-- 获取运营商信息，用于支持提供运营商信息相关的接口-->
+    <!--<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>-->
+    <!-- 这个权限用于获取wifi的获取权限,wifi信息会用来进行网络定位-->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <!-- 用于读取手机当前的状态-->
+    <!--<uses-permission android:name="android.permission.READ_PHONE_STATE"/>-->
+    <!-- 写入扩展存储，向扩展卡写入数据，用于写入离线定位数据-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!-- 访问网络，网络定位需要上网-->
+    <!--<uses-permission android:name="android.permission.INTERNET" />-->
+    <!-- SD卡读取权限，用户写入离线定位数据-->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <!-- 允许应用读取低级别的系统日志文件-->
+    <uses-permission android:name="android.permission.READ_LOGS"/>
+
+    <!-- easemob -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
+    <!-- 信鸽SDK所需权限 -->
+    <!--<uses-permission android:name="android.permission.INTERNET" />-->
+    <!--<uses-permission android:name="android.permission.READ_PHONE_STATE" />-->
+    <!--<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />-->
+    <!--<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.RESTART_PACKAGES"/>
+    <uses-permission android:name="android.permission.BROADCAST_STICKY"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT"/>
+    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
+    <!--<uses-permission android:name="android.permission.WAKE_LOCK" />-->
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
+    <!--<uses-permission android:name="android.permission.GET_TASKS" />-->
+    <!--<uses-permission android:name="android.permission.READ_LOGS" />-->
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <!-- 【可选】 信鸽SDK所需权限 -->
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BATTERY_STATS"/>
+
+    <application android:allowBackup="true" android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:name=".app.BaseApplication" android:theme="@style/AppTheme">
+
+        <meta-data android:name="TA_APPKEY" android:value="AKP9JJ18EC8B"/>
+
+        <meta-data android:name="com.baidu.lbsapi.API_KEY" android:value="Z6S9LBSSdPUi96GkdLS6zO0L"/>
+
+        <meta-data
+                android:name="EASEMOB_APPKEY"
+                android:value="utree-lanmei#lanmei"/>
+
+        <meta-data android:name="XG_V2_ACCESS_ID" android:value="2100052395"/>
+
+        <meta-data android:name="XG_V2_ACCESS_KEY" android:value="AA9PU5RY976B"/>
+
+        <!-- Tencent open sdk -->
+        <activity android:launchMode="singleInstance" android:name="com.tencent.tauth.AuthActivity" android:noHistory="true" android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data android:scheme="tencent1101518269"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:configChanges="orientation|keyboardHidden" android:name="com.tencent.connect.common.AssistActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+
+        <activity android:name=".app.intro.IntroActivity" android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.account.RegisterActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.account.ForgetPwdActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden"/>
+
+        <activity android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.account.LoginActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.feed.FeedActivity" android:screenOrientation="portrait"/>
+
+        <activity android:alwaysRetainTaskState="true" android:clearTaskOnLaunch="true" android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.home.HomeActivity" android:screenOrientation="portrait"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.intro.GuideActivity" android:screenOrientation="portrait"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.publish.PublishActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden|adjustResize"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.circle.CircleSearchActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.circle.CircleCreateActivity" android:screenOrientation="portrait"/>
+
+        <activity
+                android:exported="@bool/exported"
+                android:launchMode="singleTask"
+                android:name=".app.post.PostActivity"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateHidden|adjustPan"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.publish.FeedbackActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden|adjustResize"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.account.PraiseStaticActivity" android:screenOrientation="portrait"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.msg.MsgActivity" android:screenOrientation="portrait"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.circle.BaseCirclesActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateAlwaysHidden"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.settings.MainSettingsActivity" android:screenOrientation="portrait"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.account.ContactsActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.web.BaseWebActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.msg.PraiseActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden"/>
+
+        <activity android:exported="@bool/exported" android:name=".report.ReporterActivity" android:process=":report" android:screenOrientation="portrait"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.publish.ImageCropActivity" android:screenOrientation="portrait"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.settings.HelpActivity" android:screenOrientation="portrait"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.account.MyQRCodeActivity" android:screenOrientation="portrait"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.account.AccountActivity" android:screenOrientation="portrait"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.account.AddFriendActivity" android:screenOrientation="portrait"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.account.ContactFriendsActivity" android:screenOrientation="portrait"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.account.ScanFriendsActivity" android:screenOrientation="portrait"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.feed.OptionPublishActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme.Dialog" android:windowSoftInputMode="adjustResize|stateVisible"/>
+
+        <activity
+                android:exported="@bool/exported"
+                android:name=".app.chat.ChatActivity"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateHidden|adjustResize"/>
+
+        <activity android:exported="@bool/exported" android:label="标签详情" android:launchMode="singleTask" android:name=".app.tag.TagTabActivity" android:screenOrientation="portrait"/>
+
+        <activity android:exported="@bool/exported" android:label="全部话题" android:name=".app.topic.TopicListActivity" android:screenOrientation="portrait"/>
+
+        <activity android:exported="@bool/exported" android:label="话题详情" android:name=".app.topic.TopicActivity" android:screenOrientation="portrait"/>
+
+        <activity android:exported="@bool/exported" android:name=".app.region.FactoryRegionActivity" android:screenOrientation="portrait"/>
+
+        <activity
+                android:exported="@bool/exported"
+                android:name=".app.chat.ConversationActivity"
+                android:label="会话列表"
+                android:screenOrientation="portrait"/>
+
+        <activity
+                android:exported="@bool/exported"
+                android:name=".app.chat.ImageViewerActivity"
+                android:screenOrientation="portrait"/>
+
+        <service android:enabled="true" android:name=".contact.ContactsSyncService"/>
+        <service android:enabled="true" android:name=".app.msg.FetchNotificationService"/>
+        <service android:enabled="true" android:name=".app.SyncService"/>
+        <service android:enabled="true" android:name=".app.msg.PullNotificationService"/>
+        <service android:enabled="true" android:name=".app.settings.UpgradeService"/>
+        <service android:enabled="true" android:name=".utils.PingService"/>
+        <service android:enabled="true" android:name=".app.publish.BgSyncService"/>
+
+
+        <service android:enabled="true" android:name="com.baidu.location.f" android:process=":bdservice_v1"/>
+
+        <service android:name="com.easemob.chat.EMChatService"/>
+
+        <receiver android:name="com.easemob.chat.StartServiceReceiver">
+            <intent-filter android:priority="1000">
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".push.FetchAlarmReceiver">
+            <intent-filter>
+                <action android:name="com.utree.eightysix.action.FETCH"/>
+            </intent-filter>
+        </receiver>
+
+        <receiver android:enabled="true" android:exported="true" android:name="com.utree.eightysix.push.PushMessageReceiver">
+            <intent-filter>
+                <!-- 接收消息透传 -->
+                <action android:name="com.tencent.android.tpush.action.PUSH_MESSAGE"/>
+                <!-- 监听注册、反注册、设置/删除标签、通知被点击等处理结果 -->
+                <action android:name="com.tencent.android.tpush.action.FEEDBACK"/>
+            </intent-filter>
+        </receiver>
+
+        <!-- 【必须】 信鸽receiver广播接收 -->
+        <receiver android:name="com.tencent.android.tpush.XGPushReceiver" android:process=":xg_service_v2">
+            <intent-filter android:priority="0x7fffffff">
+                <!-- 【必须】 信鸽SDK的内部广播 -->
+                <action android:name="com.tencent.android.tpush.action.SDK"/>
+                <action android:name="com.tencent.android.tpush.action.INTERNAL_PUSH_MESSAGE"/>
+                <!-- 【必须】 系统广播：开屏和网络切换 -->
+                <action android:name="android.intent.action.USER_PRESENT"/>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+
+                <!-- 【可选】 一些常用的系统广播，增强信鸽service的复活机会，请根据需要选择。当然，你也可以添加APP自定义的一些广播让启动service -->
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED"/>
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED"/>
+            </intent-filter>
+            <!-- 【可选】 usb相关的系统广播，增强信鸽service的复活机会，请根据需要添加 -->
+            <intent-filter android:priority="0x7fffffff">
+                <action android:name="android.intent.action.MEDIA_UNMOUNTED"/>
+                <action android:name="android.intent.action.MEDIA_REMOVED"/>
+                <action android:name="android.intent.action.MEDIA_CHECKING"/>
+                <action android:name="android.intent.action.MEDIA_EJECT"/>
+                <data android:scheme="file"/>
+            </intent-filter>
+        </receiver>
+
+        <!-- 【必须】 (2.30及以上版新增)展示通知的activity -->
+        <!-- 【注意】 如果被打开的activity是启动模式为SingleTop，SingleTask或SingleInstance，请根据通知的异常自查列表第8点处理-->
+        <activity android:exported="false" android:name="com.tencent.android.tpush.XGPushActivity">
+            <intent-filter>
+                <!-- 若使用AndroidStudio，请设置android:name="android.intent.action"-->
+                <action android:name=""/>
+            </intent-filter>
+        </activity>
+        <activity
+                android:name=".app.devmode.DevModeActivity"
+                android:label="开发者模式">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <!-- 【必须】 信鸽service -->
+        <service android:exported="true" android:name="com.tencent.android.tpush.service.XGPushService" android:persistent="true" android:process=":xg_service_v2"/>
+
+        <!-- 【必须】 通知service，此选项有助于提高抵达率 -->
+        <service android:exported="true" android:name="com.tencent.android.tpush.rpc.XGRemoteService">
+            <intent-filter>
+                <action android:name="com.utree.eightysix.PUSH_ACTION"/>
+            </intent-filter>
+        </service>
+
+
+    </application>
+
+</manifest>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2014. All rights reserved by utree.cn
+  -->
+
+<resources>
+    <string name="start_chat">发起聊天</string>
+    <string name="chat_anonymous">匿名聊天</string>
+    <string name="resending">重新发送</string>
+    <string name="chat_actions">聊天操作</string>
+    <string name="confirm_report_chat">确认举报该对话？</string>
+    <string name="confirm_delete_chat">确认删除该对话？</string>
+    <string name="report_success">举报成功</string>
+    <string name="report_chat_info">举报的同时，该对话会被系统删除</string>
+    <string name="delete_chat_info">所有的消息记录都会被删除</string>
+    <string name="no_more_history">没有更多的消息了</string>
+    <string name="clear_unread">忽略所有未读消息</string>
+    <string name="chat_delete_all">删除所有未收藏会话</string>
+    <string name="create_conversation_failed">创建聊天失败</string>
+    <string name="delete_all_unfav_conversation">确定删除所有非收藏的会话</string>
+    <string name="mark_all_message_read">确定清除所有未读消息</string>
+    <string name="confirm_shield_chat">是否拉黑聊天？</string>
+    <string name="shield_succeed">拉黑成功</string>
+    <string name="shield">拉黑</string>
+</resources>

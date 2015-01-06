@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Copyright (c) 2014. All rights reserved by utree.cn
+  -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+        >
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+        <com.utree.eightysix.widget.TitleTab
+                android:id="@+id/tt_tab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+        <android.support.v4.view.ViewPager
+                android:id="@+id/vp_hometown"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                />
+
+    </LinearLayout>
+
+    <ImageButton
+            android:id="@+id/ib_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="6dp"
+            android:src="@drawable/ic_post_pen"
+            android:background="@drawable/btn_post"
+            />
+</FrameLayout>
