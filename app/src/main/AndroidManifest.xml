@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="35" android:versionName="1.6.0-SNAPSHOT" package="com.utree.eightysix">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          android:versionCode="35"
+          android:versionName="1.6.0-SNAPSHOT"
+          package="com.utree.eightysix">
 
     <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="21"/>
 
@@ -266,10 +270,18 @@
         </activity>
 
         <!-- 【必须】 信鸽service -->
-        <service android:exported="true" android:name="com.tencent.android.tpush.service.XGPushService" android:persistent="true" android:process=":xg_service_v2"/>
+        <service
+                android:exported="true"
+                android:name="com.tencent.android.tpush.service.XGPushService"
+                android:persistent="true"
+                android:process=":xg_service_v2"
+                tools:ignore="ExportedService"/>
 
         <!-- 【必须】 通知service，此选项有助于提高抵达率 -->
-        <service android:exported="true" android:name="com.tencent.android.tpush.rpc.XGRemoteService">
+        <service
+                android:exported="true"
+                android:name="com.tencent.android.tpush.rpc.XGRemoteService"
+                tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="com.utree.eightysix.PUSH_ACTION"/>
             </intent-filter>

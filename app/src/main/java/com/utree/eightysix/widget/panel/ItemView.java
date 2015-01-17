@@ -1,5 +1,6 @@
 package com.utree.eightysix.widget.panel;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
@@ -17,6 +18,7 @@ import com.utree.eightysix.utils.ImageUtils;
 /**
  * @author simon
  */
+@SuppressLint("ViewConstructor")
 public class ItemView extends View implements View.OnClickListener {
 
   private Item mItem;
