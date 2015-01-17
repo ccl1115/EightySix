@@ -6,14 +6,17 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:paddingLeft="16dp"
-             android:paddingRight="16dp">
+             android:paddingRight="16dp"
+             android:background="@android:color/white"
+        >
 
     <LinearLayout
             android:id="@+id/page_1"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="visible"
+            >
 
         <TextView
                 android:id="@+id/receiving_captcha"
@@ -24,7 +27,8 @@
                 android:layout_gravity="center_horizontal"
                 android:visibility="invisible"
                 android:text="@string/receiving_captcha"
-                android:textColor="@color/apptheme_primary_dark_color"/>
+                android:textColor="@color/apptheme_primary_dark_color"
+                />
 
         <include layout="@layout/widget_phone_number"/>
 
@@ -39,7 +43,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:radius="2dp"
-                app:background="@color/apptheme_primary_btn_light"/>
+                app:background="@color/apptheme_primary_btn_light"
+                />
     </LinearLayout>
 
     <LinearLayout
@@ -47,13 +52,15 @@
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:visibility="gone">
+            android:visibility="gone"
+            >
 
         <include
                 layout="@layout/widget_pwd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"/>
+                android:layout_marginTop="30dp"
+                />
 
         <com.utree.eightysix.widget.RoundedButton
                 android:layout_width="match_parent"
@@ -64,7 +71,8 @@
                 android:layout_marginTop="25dp"
                 android:enabled="false"
                 app:radius="2dp"
-                app:background="@color/apptheme_primary_btn_light"/>
+                app:background="@color/apptheme_primary_btn_light"
+                />
 
     </LinearLayout>
 
