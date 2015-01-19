@@ -691,7 +691,7 @@ public class PublishActivity extends BaseActivity {
   }
 
 
-  private void requestPublish() {
+  protected void requestPublish() {
     mRequestStarted = true;
 
     if (mImageUploadFinished || mUseColor) {
