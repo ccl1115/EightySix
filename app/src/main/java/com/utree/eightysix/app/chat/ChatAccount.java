@@ -69,12 +69,10 @@ public class ChatAccount {
                   U.request("chat_online", new OnResponse2<Response>() {
                     @Override
                     public void onResponseError(Throwable e) {
-
                     }
 
                     @Override
                     public void onResponse(Response response) {
-
                     }
                   }, Response.class, null, null);
                 }

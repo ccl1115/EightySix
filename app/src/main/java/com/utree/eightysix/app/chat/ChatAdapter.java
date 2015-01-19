@@ -207,7 +207,7 @@ public class ChatAdapter extends BaseAdapter {
     TextItemViewHolder holder = (TextItemViewHolder) textView.getTag();
     if (mTargetPortrait.equals("\ue800")) {
       holder.mFpvPortrait.setEmotion(' ');
-      holder.mFpvPortrait.setBackgroundResource(R.drawable.host_portrait);
+      holder.mFpvPortrait.setBackgroundResource(R.drawable.ic_host_portrait);
     } else {
       holder.mFpvPortrait.setEmotion(mTargetPortrait.charAt(0));
       holder.mFpvPortrait.setEmotionColor(mTargetPortraitColor);
@@ -220,7 +220,7 @@ public class ChatAdapter extends BaseAdapter {
     TextItemViewHolder holder = (TextItemViewHolder) textView.getTag();
     if (mMyPortrait.equals("\ue800")) {
       holder.mFpvPortrait.setEmotion(' ');
-      holder.mFpvPortrait.setBackgroundResource(R.drawable.host_portrait);
+      holder.mFpvPortrait.setBackgroundResource(R.drawable.ic_host_portrait);
     } else {
       holder.mFpvPortrait.setEmotion(mMyPortrait.charAt(0));
       holder.mFpvPortrait.setEmotionColor(mMyPortraitColor);
@@ -252,7 +252,7 @@ public class ChatAdapter extends BaseAdapter {
     ImageItemViewHolder holder = (ImageItemViewHolder) imageView.getTag();
     if (mTargetPortrait.equals("\ue800")) {
       holder.mFpvPortrait.setEmotion(' ');
-      holder.mFpvPortrait.setBackgroundResource(R.drawable.host_portrait);
+      holder.mFpvPortrait.setBackgroundResource(R.drawable.ic_host_portrait);
     } else {
       holder.mFpvPortrait.setEmotion(mTargetPortrait.charAt(0));
       holder.mFpvPortrait.setEmotionColor(mTargetPortraitColor);
@@ -265,7 +265,7 @@ public class ChatAdapter extends BaseAdapter {
     ImageItemViewHolder holder = (ImageItemViewHolder) imageView.getTag();
     if (mMyPortrait.equals("\ue800")) {
       holder.mFpvPortrait.setEmotion(' ');
-      holder.mFpvPortrait.setBackgroundResource(R.drawable.host_portrait);
+      holder.mFpvPortrait.setBackgroundResource(R.drawable.ic_host_portrait);
     } else {
       holder.mFpvPortrait.setEmotion(mMyPortrait.charAt(0));
       holder.mFpvPortrait.setEmotionColor(mMyPortraitColor);

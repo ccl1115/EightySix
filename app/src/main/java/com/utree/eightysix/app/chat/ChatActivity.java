@@ -148,7 +148,7 @@ public class ChatActivity extends BaseActivity implements
   }
 
   @OnClick (R.id.iv_emotion)
-  public void onIvEmationClicked() {
+  public void onIvEmotionClicked() {
     if (mFlEmotion.getVisibility() == View.VISIBLE) {
       mFlEmotion.setVisibility(View.GONE);
       mIvEmotion.setSelected(false);
@@ -213,8 +213,7 @@ public class ChatActivity extends BaseActivity implements
           break;
         }
         case ChatEvent.EVENT_SENT_MSG_SUCCESS: {
-          mChatAdapter.add((Message) event.getObj());
-          mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
+          mChatAdapter.notifyDataSetChanged();
           break;
         }
         case ChatEvent.EVENT_SENT_MSG_ERROR: {
@@ -223,6 +222,8 @@ public class ChatActivity extends BaseActivity implements
           break;
         }
         case ChatEvent.EVENT_SENDING_MSG: {
+          mChatAdapter.add((Message) event.getObj());
+          mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
           break;
         }
         case ChatEvent.EVENT_MSG_REMOVE: {
@@ -536,6 +537,10 @@ public class ChatActivity extends BaseActivity implements
   public void onBackPressed() {
     if (mFlEmotion.getVisibility() == View.VISIBLE) {
       mFlEmotion.setVisibility(View.GONE);
+      mIvEmotion.setSelected(false);
+      mIvCamera.setSelected(false);
+    } else if (mRlActions.getVisibility() == View.VISIBLE) {
+      mRlActions.setVisibility(View.GONE);
       mIvEmotion.setSelected(false);
       mIvCamera.setSelected(false);
     } else {

@@ -130,7 +130,7 @@ public class ConversationAdapter extends BaseAdapter {
     if (portrait != null) {
       if ("\ue800".equals(portrait)) {
         holder.mFpvPortrait.setEmotion(' ');
-        holder.mFpvPortrait.setBackgroundResource(R.drawable.host_portrait);
+        holder.mFpvPortrait.setBackgroundResource(R.drawable.ic_host_portrait_large);
       } else {
         holder.mFpvPortrait.setEmotion(portrait.charAt(0));
         holder.mFpvPortrait.setEmotionColor(ColorUtil.strToColor(conversation.getPortraitColor()));
