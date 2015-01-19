@@ -20,6 +20,7 @@ import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.app.tag.TagTabActivity;
 import com.utree.eightysix.app.topic.TopicActivity;
 import com.utree.eightysix.app.topic.TopicListActivity;
+import com.utree.eightysix.app.web.BaseWebActivity;
 import com.utree.eightysix.data.Topic;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.IOUtils;
@@ -222,7 +223,14 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
       } else if ("tag".equals(args[0])) {
         HomeActivity.start(context);
         TagTabActivity.start(context, Integer.parseInt(args[1]));
+      } else if ("bs".equals(args[0])) {
+        HomeActivity.start(context);
+        BaseWebActivity.start(U.getContext(),
+            String.format("http://c.lanmeiquan.com/activity/blueStar.do?userid=%s&token=%s",
+                Account.inst().getUserId(),
+                Account.inst().getToken()));
       }
+
     }
   }
 }
