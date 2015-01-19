@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnCheckedChanged;
@@ -183,6 +182,7 @@ public class MainSettingsActivity extends BaseActivity {
     @Override
     protected void onPostExecute(Void aVoid) {
       mTvCacheSize.setText("目前缓存大小：0KB");
+      showToast(getString(R.string.clear_cache_succeed));
       hideProgressBar();
     }
   }

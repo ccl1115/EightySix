@@ -32,6 +32,7 @@
     <string name="copy_to_clipborad">复制至剪贴板</string>
     <string name="app_crash">应用程序奔溃</string>
     <string name="set_current_factory">设置在职工厂</string>
+    <string name="clear_cache_succeed">清除缓存成功</string>
 
     <string name="server_object_error">服务器返回对象解析错误</string>
     <string name="server_connection_exception">无法访问服务器，请检查你的网络设置</string>
