@@ -1,48 +1,44 @@
+/*
+ * Copyright (c) 2015. All rights reserved by utree.cn
+ */
+
 package com.utree.eightysix.widget;
 
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.squareup.otto.Subscribe;
-import com.utree.eightysix.M;
 import com.utree.eightysix.U;
-import com.utree.eightysix.utils.IOUtils;
+import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.utils.ImageUtils;
-
-import java.io.File;
 
 import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.*;
 
 /**
  */
-public class AsyncImageView extends ImageView {
+public class AsyncImageViewWithRoundCorner extends AsyncImageView {
 
-  public static final String TAG = "AsyncImageView";
-
-  protected String mUrlHash;
-
-  protected boolean mLocal;
-
-  public AsyncImageView(Context context) {
-    this(context, null, 0);
+  public AsyncImageViewWithRoundCorner(Context context) {
+    this(context, null);
   }
 
-  public AsyncImageView(Context context, AttributeSet attrs) {
+  public AsyncImageViewWithRoundCorner(Context context, AttributeSet attrs) {
     this(context, attrs, 0);
   }
 
-  public AsyncImageView(Context context, AttributeSet attrs, int defStyle) {
+  public AsyncImageViewWithRoundCorner(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
-    M.getRegisterHelper().register(this);
   }
 
+  @Override
   @Subscribe
   public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
+    int size = U.dp2px(48);
     if (event.getHash().equals(mUrlHash)
-        && ((mLocal && (event.getWidth() == U.dp2px(48)) && (event.getHeight() == U.dp2px(48))) || !mLocal)
+        && (mLocal && event.getWidth() == size && event.getHeight() == size || !mLocal)
         && (event.getBitmap() != null)) {
       switch (event.getFrom()) {
         case FROM_MEM:
@@ -84,42 +80,10 @@ public class AsyncImageView extends ImageView {
           valueAnimator.start();
           break;
       }
-      setImageBitmap(event.getBitmap());
+      setImageDrawable(new RoundRectDrawable(U.dp2px(14), event.getBitmap()));
+      setLayoutParams(new LinearLayout.LayoutParams(event.getBitmap().getWidth(),
+          event.getBitmap().getHeight()));
     }
-  }
-
-  public void setUrl(String url) {
-    if (url == null) {
-      setImageBitmap(null);
-      return;
-    }
-
-    setImageBitmap(null);
-    clearAnimation();
-
-    if (url.startsWith("/")) {
-      File file = new File(url);
-      mUrlHash = IOUtils.fileHash(file);
-      ImageUtils.asyncLoadThumbnail(file, mUrlHash);
-      mLocal = true;
-    } else {
-      mUrlHash = ImageUtils.getUrlHash(url);
-      ImageUtils.asyncLoadWithRes(url, mUrlHash);
-      mLocal = false;
-    }
-
-  }
-
-  @Override
-  protected void onAttachedToWindow() {
-    super.onAttachedToWindow();
-    M.getRegisterHelper().register(this);
-  }
-
-  @Override
-  protected void onDetachedFromWindow() {
-    M.getRegisterHelper().unregister(this);
-    super.onDetachedFromWindow();
   }
 
 }

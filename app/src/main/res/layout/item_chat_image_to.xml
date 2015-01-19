@@ -21,7 +21,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:padding="8dp"
             android:background="@drawable/bg_chat_item_to"
             tools:ignore="UselessParent"
             >
@@ -31,7 +30,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_margin="8dp"
                 android:src="@drawable/ic_warning"
                 />
 
@@ -42,13 +40,18 @@
                 android:layout_gravity="center_vertical"
                 />
 
-        <com.utree.eightysix.widget.AsyncImageView
+        <com.utree.eightysix.widget.AsyncImageViewWithRoundCorner
                 android:id="@+id/iv_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:paddingLeft="1dp"
+                android:paddingStart="1dp"
+                android:paddingTop="1dp"
+                android:paddingRight="3dp"
+                android:paddingEnd="3dp"
+                android:paddingBottom="1dp"
                 android:gravity="end"
-                android:padding="4dp"
                 />
 
     </LinearLayout>
