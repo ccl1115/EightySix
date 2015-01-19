@@ -86,6 +86,9 @@ public class FeedPostView extends LinearLayout {
 
   private Post mPost;
 
+  private final Runnable mShareAnimation;
+  private final Runnable mTagAnimation;
+
   @OnClick(R.id.tv_tag_1)
   public void onTvTag1Clicked() {
     TagTabActivity.start(getContext(), mPost.tags.get(0));
@@ -111,8 +114,6 @@ public class FeedPostView extends LinearLayout {
   public void onIvChatClicked() {
     ChatUtils.startChat((BaseActivity) getContext(), mPost);
   }
-
-  private Runnable mShareAnimation;
 
   private View mTipShare;
   private View mTipSource;
@@ -146,6 +147,25 @@ public class FeedPostView extends LinearLayout {
         ObjectAnimator alpha = ObjectAnimator.ofFloat(mIvShare, "alpha", 0, 1f);
         alpha.setDuration(500);
         alpha.start();
+      }
+    };
+
+    mTagAnimation = new Runnable() {
+
+      @Override
+      public void run() {
+        mTvTag1.setVisibility(VISIBLE);
+        mTvTag2.setVisibility(VISIBLE);
+        ObjectAnimator alpha1 = ObjectAnimator.ofFloat(mTvTag1, "alpha", 0, 1f);
+        ObjectAnimator alpha2 = ObjectAnimator.ofFloat(mTvTag2, "alpha", 0, 1f);
+        ObjectAnimator scaleX1 = ObjectAnimator.ofFloat(mTvTag1, "scaleX", 0.8f, 1.1f, 0.9f, 1.0f);
+        ObjectAnimator scaleX2 = ObjectAnimator.ofFloat(mTvTag2, "scaleX", 0.8f, 1.1f, 0.9f, 1.0f);
+        ObjectAnimator scaleY1 = ObjectAnimator.ofFloat(mTvTag1, "scaleY", 0.8f, 1.1f, 0.9f, 1.0f);
+        ObjectAnimator scaleY2 = ObjectAnimator.ofFloat(mTvTag2, "scaleY", 0.8f, 1.1f, 0.9f, 1.0f);
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(alpha1, alpha2, scaleX1, scaleX2, scaleY1, scaleY2);
+        set.setDuration(500);
+        set.start();
       }
     };
   }
@@ -255,6 +275,11 @@ public class FeedPostView extends LinearLayout {
     mIvShare.setVisibility(INVISIBLE);
     mIvShare.removeCallbacks(mShareAnimation);
     mIvShare.postDelayed(mShareAnimation, 500);
+
+    mTvTag1.setVisibility(INVISIBLE);
+    mTvTag2.setVisibility(INVISIBLE);
+    removeCallbacks(mTagAnimation);
+    postDelayed(mTagAnimation, 500);
   }
 
   @OnClick (R.id.iv_share)
