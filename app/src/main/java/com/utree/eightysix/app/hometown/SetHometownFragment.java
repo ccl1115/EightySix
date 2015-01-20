@@ -253,7 +253,7 @@ public class SetHometownFragment extends BaseFragment {
   private void showConfirmDialog() {
     final ThemedDialog dialog = new ThemedDialog(getActivity());
 
-    final String title = String.format("确认你在%s%s%s么？",
+    final String title = String.format("确认你的家乡在[%s%s%s]么？",
         mSpProvince.getSelectedItem() == null ? "" : mSpProvince.getSelectedItem(),
         mSpCity.getSelectedItem() == null ? "" : mSpCity.getSelectedItem(),
         mSpCounty.getSelectedItem() == null ? "" : mSpCounty.getSelectedItem());
