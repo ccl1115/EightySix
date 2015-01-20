@@ -10,11 +10,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.*;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -61,6 +57,10 @@ public class SetHometownFragment extends BaseFragment {
 
   @InjectView (R.id.sp_county)
   public Spinner mSpCounty;
+
+  @InjectView(R.id.progress_bar)
+  public FrameLayout mFlProgressBar;
+
   private Callback mCallback;
 
   private List<HometownInfoResponse.HometownInfo> mCurrentHometown;
@@ -123,6 +123,7 @@ public class SetHometownFragment extends BaseFragment {
   }
 
   private void requestCities(int provinceId) {
+    mFlProgressBar.setVisibility(View.VISIBLE);
     U.request("get_cities", new OnResponse2<HometownResponse>() {
       @Override
       public void onResponseError(Throwable e) {
@@ -162,14 +163,16 @@ public class SetHometownFragment extends BaseFragment {
   }
 
   private void requestCounties(int cityId) {
+    mFlProgressBar.setVisibility(View.VISIBLE);
     U.request("get_counties", new OnResponse2<HometownResponse>() {
       @Override
       public void onResponseError(Throwable e) {
-
+        mFlProgressBar.setVisibility(View.GONE);
       }
 
       @Override
       public void onResponse(HometownResponse response) {
+        mFlProgressBar.setVisibility(View.GONE);
         if (RESTRequester.responseOk(response)) {
           ArrayAdapter<Hometown> adapter =
               new ArrayAdapter<Hometown>(getActivity(), android.R.layout.simple_spinner_item, response.object.lists);

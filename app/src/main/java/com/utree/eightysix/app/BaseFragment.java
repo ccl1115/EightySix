@@ -3,6 +3,7 @@ package com.utree.eightysix.app;
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.M;
 import com.utree.eightysix.widget.TopBar;
 
@@ -18,7 +19,9 @@ public class BaseFragment extends Fragment {
   private boolean mActive;
 
   public void setActive(boolean active) {
-    Log.d("BaseFragment", getClass().getSimpleName() + ": @setActive " + active);
+    if (BuildConfig.DEBUG) {
+      Log.d("BaseFragment", getClass().getSimpleName() + ": @setActive " + active);
+    }
 
     if (mActive != active) {
       mActive = active;

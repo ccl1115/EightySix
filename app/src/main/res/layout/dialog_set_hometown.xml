@@ -110,4 +110,6 @@
                 android:text="@string/settings"
                 />
     </LinearLayout>
+
+    <include layout="@layout/widget_progress_bar"/>
 </FrameLayout>
