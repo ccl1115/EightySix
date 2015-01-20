@@ -2,9 +2,7 @@ package com.utree.eightysix.app.chat;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.*;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -14,19 +12,13 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import butterknife.InjectView;
-import butterknife.OnClick;
-import butterknife.OnItemClick;
-import butterknife.OnTextChanged;
+import butterknife.*;
 import com.rockerhieu.emojicon.EmojiconEditText;
 import com.rockerhieu.emojicon.EmojiconGridFragment;
 import com.rockerhieu.emojicon.EmojiconsFragment;
 import com.rockerhieu.emojicon.emoji.Emojicon;
 import com.squareup.otto.Subscribe;
-import com.utree.eightysix.Account;
-import com.utree.eightysix.M;
-import com.utree.eightysix.R;
-import com.utree.eightysix.U;
+import com.utree.eightysix.*;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.CameraUtil;
 import com.utree.eightysix.app.Layout;
@@ -196,6 +188,23 @@ public class ChatActivity extends BaseActivity implements
         ImageViewerActivity.start(this, content.local, content.remote, content.secret);
       }
     }
+  }
+
+  @OnItemLongClick(R.id.alv_chats)
+  public boolean onAlvChatsItemLongClicked(int position) {
+    Message m = mChatAdapter.getItem(position);
+    if (m != null) {
+      if (m.getType() == MessageConst.TYPE_TXT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
+          ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+          clipboardManager.setPrimaryClip(
+              new ClipData("chat_text", new String[] { "text/plain" }, new ClipData.Item(m.getContent())));
+          showToast(R.string.clipboard_copied);
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   @Subscribe

@@ -22,14 +22,14 @@
             android:orientation="horizontal"
             >
 
-            <ImageView
-                    android:id="@+id/iv_emotion"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_action_emotion"
-                    android:visibility="gone"
-                    />
+        <ImageView
+                android:id="@+id/iv_emotion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_action_emotion"
+                android:visibility="gone"
+                />
 
         <com.rockerhieu.emojicon.EmojiconEditText
                 android:id="@+id/et_post_content"
@@ -39,8 +39,6 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginEnd="10dp"
                 android:background="@drawable/bg_chat_edit_text"
                 android:maxLength="500"
                 android:maxHeight="100sp"
@@ -49,23 +47,25 @@
                 app:emojiconSize="24dp"
                 />
 
-            <ImageView
-                    android:id="@+id/iv_camera"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_action_image"
-                    android:visibility="gone"
-                    />
-
-
-            <ImageView
-                    android:id="@+id/iv_post"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+        <ImageView
+                android:id="@+id/iv_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="15dp"
-                android:layout_marginStart="15dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/ic_action_image"
+                android:visibility="gone"
+                />
+
+
+        <ImageView
+                android:id="@+id/iv_post"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:enabled="false"
                 android:src="@drawable/ic_action_send"
                 />

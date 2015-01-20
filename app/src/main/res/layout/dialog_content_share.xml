@@ -91,6 +91,6 @@
             android:layout_margin="16dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:text="@string/copy_to_clipborad"
+            android:text="@string/copy_to_clipboard"
             android:visibility="gone"/>
 </LinearLayout>
