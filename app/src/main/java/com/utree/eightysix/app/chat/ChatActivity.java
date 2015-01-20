@@ -91,9 +91,11 @@ public class ChatActivity extends BaseActivity implements
   private ChatAdapter mChatAdapter;
 
   private String mChatId;
+
   private Conversation mConversation;
 
   private CameraUtil mCameraUtil;
+
   private boolean mIsOpened;
 
   static void start(Context context, String chatId) {
@@ -474,6 +476,7 @@ public class ChatActivity extends BaseActivity implements
       }
     });
 
+    addBannedInfoMsg();
 
     getSupportFragmentManager()
         .beginTransaction()
@@ -634,6 +637,10 @@ public class ChatActivity extends BaseActivity implements
               @Override
               public void onResponse(Response response) {
                 showToast(getString(R.string.shield_succeed));
+                mConversation.setBanned(true);
+                DaoUtils.getConversationDao().update(mConversation);
+                U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATIONS_RELOAD, null));
+                addBannedInfoMsg();
               }
             }, Response.class, mChatId);
 
@@ -713,5 +720,11 @@ public class ChatActivity extends BaseActivity implements
     });
 
     dialog.show();
+  }
+
+  private void addBannedInfoMsg() {
+    if (mConversation.getBanned() != null && mConversation.getBanned()) {
+      mChatAdapter.add(ChatUtils.infoMsg(mChatId, "你已将对方拉黑，不会再收到对方发来的消息"));
+    }
   }
 }

@@ -107,8 +107,10 @@ public class PublishActivity extends BaseActivity {
   public TagsLayout mTagsLayout;
 
   protected PublishLayout mPublishLayout;
+
   protected int mFactoryId;
   protected int mTopicId;
+
   private Dialog mDescriptionDialog;
   private boolean mIsOpened;
   private boolean mRequestStarted;
@@ -116,6 +118,7 @@ public class PublishActivity extends BaseActivity {
   private boolean mUseColor = true;
   private String mImageUploadUrl;
   private int mBgColor = Color.WHITE;
+
   private ThemedDialog mQuitConfirmDialog;
 
   private String mLastTempName;

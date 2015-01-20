@@ -15,7 +15,7 @@ import java.io.File;
 public class Generate {
 
   public Generate() {
-    Schema schema = new Schema(25, "com.utree.eightysix.dao");
+    Schema schema = new Schema(26, "com.utree.eightysix.dao");
 
     generateConversation(schema);
     generateMessage(schema);
@@ -57,6 +57,7 @@ public class Generate {
     conversation.addBooleanProperty("favorite");
     conversation.addLongProperty("offlineDuration");
     conversation.addBooleanProperty("online");
+    conversation.addBooleanProperty("banned");
   }
 
   private void generateMessage(Schema schema) {

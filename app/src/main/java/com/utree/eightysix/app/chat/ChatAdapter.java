@@ -150,9 +150,10 @@ public class ChatAdapter extends BaseAdapter {
       case TYPE_IMAGE_TO:
         return getImageToView(position, convertView, parent);
       case TYPE_INFO:
+        return getInfoView(position, convertView, parent);
       case TYPE_POST:
       case TYPE_COMMENT:
-        return getInfoView(position, convertView, parent);
+        return getPostCommentInfoView(position, convertView, parent);
       case TYPE_TIMESTAMP:
         return getTimestampView(position, convertView, parent);
     }
@@ -298,6 +299,18 @@ public class ChatAdapter extends BaseAdapter {
   }
 
   private View getInfoView(int position, View convertView, ViewGroup parent) {
+    if (convertView == null) {
+      convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_info, parent, false);
+    }
+
+    final Message message = getItem(position);
+    RoundedButton roundedButton = (RoundedButton) convertView.findViewById(R.id.rb_info);
+    roundedButton.setText(message.getContent());
+
+    return convertView;
+  }
+
+  private View getPostCommentInfoView(int position, View convertView, ViewGroup parent) {
     if (convertView == null) {
       convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_info, parent, false);
     }
