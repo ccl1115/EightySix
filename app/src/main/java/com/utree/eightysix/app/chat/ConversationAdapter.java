@@ -159,11 +159,11 @@ public class ConversationAdapter extends BaseAdapter {
         holder.mRbUnread.setText(String.valueOf(unread));
       }
     }
-    if (TextUtils.isEmpty(conversation.getBgUrl())) {
+    if (!TextUtils.isEmpty(conversation.getBgUrl())) {
+      holder.mAivPostBg.setUrl(conversation.getBgUrl());
+    } else {
       holder.mAivPostBg.setBackgroundColor(ColorUtil.strToColor(conversation.getBgColor()));
       holder.mAivPostBg.setUrl(null);
-    } else {
-      holder.mAivPostBg.setUrl(conversation.getBgUrl());
     }
     holder.mTvLast.setText(conversation.getLastMsg());
     holder.mTvInfo.setText(String.format("%s %s",
