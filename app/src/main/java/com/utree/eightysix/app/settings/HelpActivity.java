@@ -1,23 +1,15 @@
 package com.utree.eightysix.app.settings;
 
-import android.app.Activity;
-import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.text.Html;
-import android.widget.TextView;
+import android.webkit.WebView;
 import butterknife.InjectView;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringBufferInputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
+
+import java.io.*;
 
 /**
  * @author simon
@@ -26,19 +18,22 @@ import java.io.StringWriter;
 @TopTitle(R.string.help)
 public class HelpActivity extends BaseActivity {
 
-  @InjectView(R.id.tv_help)
-  TextView mTvHelp;
+  @InjectView(R.id.content)
+  WebView mWvHelp;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     try {
-      InputStream inputStream = getAssets().open("help.txt");
-      byte[] buffer = new byte[inputStream.available()];
-      inputStream.read(buffer);
+      InputStream inputStream = getAssets().open("help.html");
+      Reader reader = new InputStreamReader(inputStream);
+      char[] buffer = new char[inputStream.available()];
+      reader.read(buffer);
+      StringWriter sw = new StringWriter();
+      sw.write(buffer);
 
-      mTvHelp.setText(Html.fromHtml(new String(buffer)));
+      mWvHelp.loadDataWithBaseURL(null, sw.toString(), "text/html", "utf-8", null);
     } catch (IOException ignored) {
     }
   }
