@@ -6,3 +6,5 @@ EightySix-parent.iml
 classes
 gen-external-apklibs
 *.ec
+
+data/src/main/java/com/utree/eightysix/dao

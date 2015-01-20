@@ -26,4 +26,18 @@ public class TimeUtil {
       return (t / U.DAY_IN_MS) + "天前";
     }
   }
+
+  public static String getDuration(long duration) {
+    if (duration < 0) {
+      return "刚刚";
+    } else if (duration < U.MINUTE_IN_MS) {
+      return (duration / U.SECOND_IN_MS) + "秒前";
+    } else if (duration < U.HOUR_IN_MS) {
+      return (duration / U.MINUTE_IN_MS) + "分钟前";
+    } else if (duration < U.DAY_IN_MS) {
+      return (duration / U.HOUR_IN_MS) + "小时前";
+    } else {
+      return (duration / U.DAY_IN_MS) + "天前";
+    }
+  }
 }

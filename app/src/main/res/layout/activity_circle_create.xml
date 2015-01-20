@@ -4,14 +4,17 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+        >
 
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:paddingRight="10dp"
+            >
 
         <EditText
                 android:id="@+id/et_circle_name"
@@ -20,7 +23,8 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                />
 
         <EditText
                 android:id="@+id/et_circle_abbreviation"
@@ -30,7 +34,8 @@
                 android:maxLength="6"
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"/>
+                android:layout_marginRight="5dp"
+                />
 
         <TextView
                 style="@style/TextView.SingleLine"
@@ -41,12 +46,14 @@
                 android:drawablePadding="6dp"
                 android:drawableLeft="@drawable/ic_location"
                 android:text="@string/current_location"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                />
 
         <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#fff7f7f7"/>
+                android:background="#fff7f7f7"
+                />
 
         <LinearLayout
                 android:layout_width="match_parent"
@@ -54,7 +61,8 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
 
             <EditText
                     android:id="@+id/et_captcha"
@@ -62,7 +70,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
                     android:layout_gravity="center_vertical"
-                    android:hint="@string/enter_captcha"/>
+                    android:hint="@string/enter_captcha"
+                    />
 
             <ImageView
                     android:id="@+id/iv_captcha"
@@ -71,7 +80,8 @@
                     android:layout_weight="2"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="5dp"
-                    android:scaleType="centerCrop"/>
+                    android:scaleType="centerCrop"
+                    />
 
             <com.utree.eightysix.widget.RoundedButton
                     app:radius="2dp"
@@ -82,7 +92,8 @@
                     android:layout_gravity="center_vertical"
                     android:text="@string/change_captcha"
                     android:textColor="@android:color/black"
-                    android:textSize="13sp"/>
+                    android:textSize="13sp"
+                    />
         </LinearLayout>
 
         <com.utree.eightysix.widget.RoundedButton
@@ -91,7 +102,8 @@
                 android:layout_height="48dp"
                 android:layout_marginTop="25dp"
                 android:text="@string/create_circle"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                />
 
     </LinearLayout>
 </ScrollView>

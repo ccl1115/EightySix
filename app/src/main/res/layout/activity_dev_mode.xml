@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+        >
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            >
+
+        <TextView
+                android:id="@+id/tv_head"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginLeft="16dp"
+                android:paddingTop="6dp"
+                android:gravity="center_vertical"
+                android:textSize="13sp"
+                android:textColor="@color/apptheme_primary_dark_color"
+                android:text="经纬度伪造"
+                />
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:background="#ffcccccc"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                />
+    </FrameLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:gravity="center_vertical"
+            >
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="经度:"
+                />
+
+        <EditText
+                android:id="@+id/et_latitude"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="经度"
+                />
+
+        <com.utree.eightysix.widget.RoundedButton
+                android:id="@+id/rb_latitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="0dp"
+                android:padding="8dp"
+                android:text="应用"
+                />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            >
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="维度:"
+                />
+
+        <EditText
+                android:id="@+id/et_longitude"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="维度"
+                />
+
+        <com.utree.eightysix.widget.RoundedButton
+                android:id="@+id/rb_longitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="0dp"
+                android:padding="8dp"
+                android:text="应用"
+                />
+    </LinearLayout>
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            >
+
+        <TextView
+                android:id="@+id/tv_api"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:paddingTop="6dp"
+                android:gravity="center_vertical"
+                android:textSize="13sp"
+                android:textColor="@color/apptheme_primary_dark_color"
+                android:text="服务器地址"
+                />
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:background="#ffcccccc"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                />
+    </FrameLayout>
+
+    <Spinner
+            android:id="@+id/sp_api"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            >
+
+        <TextView
+                android:id="@+id/tv_api_second"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:paddingTop="6dp"
+                android:gravity="center_vertical"
+                android:textSize="13sp"
+                android:textColor="@color/apptheme_primary_dark_color"
+                android:text="第二服务器地址"
+                />
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:background="#ffcccccc"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                />
+    </FrameLayout>
+
+    <Spinner
+            android:id="@+id/sp_api_seccond"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+</LinearLayout>

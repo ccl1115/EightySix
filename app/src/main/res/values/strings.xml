@@ -28,13 +28,12 @@
     <string name="login">登录</string>
     <string name="logout">注销帐号</string>
     <string name="search">搜索</string>
-    <string name="pull_to_refresh">下拉刷新</string>
     <string name="loading_more">正在加载更多</string>
     <string name="copy_to_clipborad">复制至剪贴板</string>
     <string name="app_crash">应用程序奔溃</string>
     <string name="set_current_factory">设置在职工厂</string>
+    <string name="clear_cache_succeed">清除缓存成功</string>
 
-    <string name="server_error">服务器错误</string>
     <string name="server_object_error">服务器返回对象解析错误</string>
     <string name="server_connection_exception">无法访问服务器，请检查你的网络设置</string>
     <string name="server_500">服务器内部错误</string>
@@ -73,18 +72,12 @@
     <string name="force_update_tip">你的客户端版本太旧，需要升级才能使用</string>
 
     <!-- Action -->
-    <string name="action_settings">@string/settings</string>
 
     <!-- ContentDescription -->
     <string name="cd_action_overflow">action_overflow</string>
     <string name="cd_action_left">action_left</string>
 
     <!-- IntroActivity -->
-    <string name="intro_1">打工之路有酸有甜</string>
-    <string name="intro_2">介绍人发给你的手势密码</string>
-    <string name="get_pattern">获取手势密码</string>
-    <string name="other_login">其它帐号登录</string>
-    <string name="wrong_pattern">解锁手势输入错误</string>
 
     <!-- RegisterActivity -->
     <string name="register_phone_intro">手机号仅用来验证你的打工者身份\n并识别出你在蓝莓里认识的人</string>
@@ -98,36 +91,26 @@
     <string name="reget_captcha">重新发送(%s)</string>
     <string name="find_password">找回密码</string>
     <string name="captcha">验证码</string>
-    <string name="set_new_pwd">设置新密码</string>
     <string name="request_success">请求成功，你将收到验证码短信</string>
     <string name="new_pwd_set">成功修改密码</string>
 
 
     <!-- LoginActivity -->
-    <string name="wrong_password">密码错误</string>
-    <string name="wrong_phone_number">手机号没有注册</string>
-    <string name="login_failed">登录失败</string>
     <string name="forget_pwd">忘记密码？</string>
     <string name="login_success">登录成功</string>
 
 
     <!-- ImportContactActivity -->
     <string name="find_friend">寻找朋友</string>
-    <string name="import_contact_1">通讯录里的朋友，现在都在哪个厂上班？他们正在这些厂里匿名说什么？</string>
-    <string name="import_contact_2">通过手机通讯录，找出和你一个厂的朋友</string>
-    <string name="sync_contact_failed">同步通讯录失败，请尝试重新同步</string>
 
     <!-- PostActivity -->
     <string name="publish_content">发表内容</string>
     <string name="publish_post">发表</string>
-    <string name="publish_submit">提交</string>
-    <string name="publish">发表</string>
     <string name="who_will_see_this_secret">谁会看到这条秘密</string>
     <string name="add_photo">添加照片</string>
     <string name="post_description">你在厂里的朋友会看到这条秘密，并知道是厂里面认识的人发的，但是无法猜到谁是作者。\n\n如果秘密被赞的数量较多，将自动转发到其它打工圈，让更多的人看到！</string>
     <string name="got_it">知道啦</string>
     <string name="post_anonymously">匿名发表秘密或小心情</string>
-    <string name="shuffle_bg_color">随机切换一种色彩</string>
     <string name="post_over_length">内容不能超过%1$d个字</string>
     <string name="quit_confirm">有内容未发布，确认放弃？</string>
     <string name="resume_editing">继续编辑</string>
@@ -252,11 +235,8 @@
 
     <!-- BaseWebActivity -->
     <string name="web_load_failed">页面加载失败</string>
-    <string name="exit">退出</string>
     <string name="exit_app">关闭应用</string>
     <string name="later">稍后再说</string>
-    <string name="guide">欢迎页</string>
-    <string name="server_unknown_host">无法解析域名，请检查你的网络设置</string>
 
     <!-- MainSettingsActivity -->
     <string name="newest_version">已经是最新版本</string>
@@ -279,6 +259,7 @@
     <string name="publish_anonymous">参与话题</string>
     <string name="all_topic">全部话题</string>
     <string name="change">更改</string>
+    <string name="dev_mode">开发者模式</string>
     <string name="unfollow">取消关注</string>
     <string name="clear_cache">清楚图片和数据缓存</string>
     <string name="vibrate_mode_info">开启后无提示音及震动</string>

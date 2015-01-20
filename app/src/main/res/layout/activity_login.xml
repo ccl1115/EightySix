@@ -7,7 +7,9 @@
               android:layout_height="match_parent"
               android:paddingLeft="16dp"
               android:paddingTop="35dp"
-              android:paddingRight="16dp">
+              android:paddingRight="16dp"
+              android:background="@android:color/white"
+        >
 
     <include layout="@layout/widget_phone_number"/>
 
@@ -19,7 +21,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:visibility="gone">
+            android:visibility="gone"
+            >
 
         <TextView
                 android:id="@+id/tv_captcha"
@@ -29,7 +32,8 @@
                 android:text="@string/captcha"
                 android:textSize="16sp"
                 android:layout_marginRight="14dp"
-                android:paddingBottom="6dp"/>
+                android:paddingBottom="6dp"
+                />
 
         <EditText
                 android:id="@+id/et_captcha"
@@ -39,7 +43,8 @@
                 android:inputType="number"
                 android:layout_gravity="center_vertical"
                 android:imeOptions="actionGo"
-                android:imeActionLabel="登录"/>
+                android:imeActionLabel="登录"
+                />
 
         <ImageView
                 android:id="@+id/iv_captcha"
@@ -47,7 +52,8 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="8dp"
-                android:scaleType="fitCenter"/>
+                android:scaleType="fitCenter"
+                />
 
     </LinearLayout>
 
@@ -60,7 +66,8 @@
             android:id="@+id/btn_login"
             android:enabled="false"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="20dp"
+            />
 
     <com.utree.eightysix.widget.RoundedButton
             app:radius="2dp"
@@ -70,7 +77,8 @@
             android:text="@string/fixture"
             android:id="@+id/btn_fixture"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="25dp"/>
+            android:layout_marginTop="25dp"
+            />
 
     <TextView
             android:id="@+id/tv_forget_pwd"
@@ -79,5 +87,6 @@
             android:text="@string/forget_pwd"
             android:textColor="@color/apptheme_primary_dark_color"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            />
 </LinearLayout>

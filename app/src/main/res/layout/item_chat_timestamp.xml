@@ -22,7 +22,7 @@
             android:layout_gravity="center_horizontal"
             android:minHeight="0dp"
             android:textColor="#ff808080"
-            android:textSize="8sp"
+            android:textSize="10sp"
             android:paddingLeft="8dp"
             android:paddingStart="8dp"
             android:paddingRight="8dp"
@@ -30,7 +30,7 @@
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
             app:background="#fff4f4f4"
-            app:radius="10dp"
+            app:radius="6dp"
             tools:ignore="SmallSp"
             />
 

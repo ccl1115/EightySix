@@ -1,15 +1,16 @@
 package com.utree.eightysix.widget.panel;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.AttributeSet;
 import android.view.ViewGroup;
-import de.akquinet.android.androlog.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author simon
  */
+@SuppressLint("ViewConstructor")
 public class PageView extends ViewGroup {
 
   private Page mPage;

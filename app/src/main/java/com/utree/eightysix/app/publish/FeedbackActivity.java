@@ -2,6 +2,7 @@ package com.utree.eightysix.app.publish;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -9,6 +10,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.C;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.TopTitle;
@@ -47,11 +49,17 @@ public class FeedbackActivity extends PublishActivity {
 
     onIvShuffleClicked();
 
-    ((TextActionButton) mTopBar.getActionView(0)).setText(R.string.publish_submit);
+    ((TextActionButton) mTopBar.getActionView(0)).setText("发表");
   }
 
   @Override
   protected void showDescriptionDialogWhenFirstRun() {
+  }
+
+  @Override
+  protected void requestPublish() {
+    mPostEditText.getText().append("\n--").append(Build.MODEL).append(", ").append(String.valueOf(C.VERSION));
+    super.requestPublish();
   }
 
   @Subscribe
@@ -77,4 +85,6 @@ public class FeedbackActivity extends PublishActivity {
   public void onLogout(Account.LogoutEvent event) {
     finish();
   }
+
+
 }

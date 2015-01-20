@@ -2,6 +2,7 @@ package com.utree.eightysix.app.settings;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.utree.eightysix.*;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.app.devmode.DevModeActivity;
 import com.utree.eightysix.data.Sync;
 import com.utree.eightysix.widget.RoundedButton;
 
@@ -32,6 +34,9 @@ public class MainSettingsActivity extends BaseActivity {
 
   @InjectView(R.id.cb_silent_mode)
   public CheckBox mCbSilentMode;
+
+  @InjectView(R.id.tv_dev)
+  public TextView mTvDev;
 
   @InjectView(R.id.tv_cache_size)
   public TextView mTvCacheSize;
@@ -76,6 +81,11 @@ public class MainSettingsActivity extends BaseActivity {
     }
   }
 
+  @OnClick (R.id.tv_dev)
+  public void onTvDevClicked() {
+    startActivity(new Intent(this, DevModeActivity.class));
+  }
+
   @OnClick(R.id.ll_clear_cache)
   public void onLlClearCacheClicked() {
     showProgressBar(true);
@@ -108,6 +118,10 @@ public class MainSettingsActivity extends BaseActivity {
       } else {
         mRbUpgradeDot.setVisibility(View.INVISIBLE);
       }
+    }
+
+    if (BuildConfig.DEBUG) {
+      mTvDev.setVisibility(View.VISIBLE);
     }
 
     mCbSilentMode.setChecked(Account.inst().getSilentMode());
@@ -168,6 +182,7 @@ public class MainSettingsActivity extends BaseActivity {
     @Override
     protected void onPostExecute(Void aVoid) {
       mTvCacheSize.setText("目前缓存大小：0KB");
+      showToast(getString(R.string.clear_cache_succeed));
       hideProgressBar();
     }
   }

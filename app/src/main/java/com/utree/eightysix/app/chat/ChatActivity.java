@@ -36,7 +36,6 @@ import com.utree.eightysix.app.publish.EmojiFragment;
 import com.utree.eightysix.dao.Conversation;
 import com.utree.eightysix.dao.ConversationDao;
 import com.utree.eightysix.dao.Message;
-import com.utree.eightysix.dao.MessageConst;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
@@ -149,7 +148,7 @@ public class ChatActivity extends BaseActivity implements
   }
 
   @OnClick (R.id.iv_emotion)
-  public void onIvEmationClicked() {
+  public void onIvEmotionClicked() {
     if (mFlEmotion.getVisibility() == View.VISIBLE) {
       mFlEmotion.setVisibility(View.GONE);
       mIvEmotion.setSelected(false);
@@ -213,7 +212,10 @@ public class ChatActivity extends BaseActivity implements
           mChatAdapter.notifyDataSetChanged();
           break;
         }
-        case ChatEvent.EVENT_SENT_MSG_SUCCESS:
+        case ChatEvent.EVENT_SENT_MSG_SUCCESS: {
+          mChatAdapter.notifyDataSetChanged();
+          break;
+        }
         case ChatEvent.EVENT_SENT_MSG_ERROR: {
           mChatAdapter.notifyDataSetChanged();
           mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
@@ -229,6 +231,7 @@ public class ChatActivity extends BaseActivity implements
           mChatAdapter.remove(message);
           if (message.getType() == MessageConst.TYPE_TXT) {
             mEtPostContent.setText(message.getContent());
+            mEtPostContent.setSelection(message.getContent().length());
           }
           DaoUtils.getMessageDao().delete(message);
         }
@@ -536,6 +539,10 @@ public class ChatActivity extends BaseActivity implements
       mFlEmotion.setVisibility(View.GONE);
       mIvEmotion.setSelected(false);
       mIvCamera.setSelected(false);
+    } else if (mRlActions.getVisibility() == View.VISIBLE) {
+      mRlActions.setVisibility(View.GONE);
+      mIvEmotion.setSelected(false);
+      mIvCamera.setSelected(false);
     } else {
       super.onBackPressed();
     }
@@ -667,12 +674,21 @@ public class ChatActivity extends BaseActivity implements
 
   @Override
   public void onEmojiconClicked(Emojicon emojicon) {
-    String text = mEtPostContent.getText().toString();
-    String before = text.substring(0, mEtPostContent.getSelectionStart());
-    String after = text.substring(mEtPostContent.getSelectionEnd());
+    if ("\u274c".equals(emojicon.getEmoji())) {
+      final int sel = mEtPostContent.getSelectionStart();
+      if (sel > 0) {
+        mEtPostContent.getText().delete(sel - 2, sel);
+//        mEtPostContent.setText(mEtPostContent.getText().delete(sel - 1, 1));
+//        mEtPostContent.setSelection(sel - 1);
+      }
+    } else {
+      String text = mEtPostContent.getText().toString();
+      String before = text.substring(0, mEtPostContent.getSelectionStart());
+      String after = text.substring(mEtPostContent.getSelectionEnd());
 
-    mEtPostContent.setText(before + emojicon.getEmoji() + after);
-    mEtPostContent.setSelection(before.length() + emojicon.getEmoji().length());
+      mEtPostContent.setText(before + emojicon.getEmoji() + after);
+      mEtPostContent.setSelection(before.length() + emojicon.getEmoji().length());
+    }
   }
 
 

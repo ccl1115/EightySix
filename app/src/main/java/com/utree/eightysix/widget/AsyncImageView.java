@@ -11,10 +11,10 @@ import com.utree.eightysix.M;
 import com.utree.eightysix.U;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
-import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.FROM_DISK;
-import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.FROM_MEM;
-import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.FROM_REMOTE;
+
 import java.io.File;
+
+import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.*;
 
 /**
  */
@@ -22,9 +22,9 @@ public class AsyncImageView extends ImageView {
 
   public static final String TAG = "AsyncImageView";
 
-  private String mUrlHash;
+  protected String mUrlHash;
 
-  private boolean mLocal;
+  protected boolean mLocal;
 
   public AsyncImageView(Context context) {
     this(context, null, 0);

@@ -176,7 +176,7 @@ class PostCommentsAdapter extends BaseAdapter {
     if (comment.owner == 1) {
       floor = "楼主";
       holder.mFpvPortrait.setEmotion(' ');
-      holder.mFpvPortrait.setBackgroundResource(R.drawable.host_portrait);
+      holder.mFpvPortrait.setBackgroundResource(R.drawable.ic_host_portrait);
     } else {
       floor = comment.floor + "楼";
       if (comment.avatar != null && comment.avatar.length() == 1) {

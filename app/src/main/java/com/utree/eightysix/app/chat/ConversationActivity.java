@@ -10,6 +10,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
@@ -31,6 +34,7 @@ import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.DaoUtils;
 import com.utree.eightysix.widget.AdvancedListView;
+import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RandomSceneTextView;
 
 import java.util.ArrayList;
@@ -42,6 +46,8 @@ import java.util.List;
 @TopTitle(R.string.chat_anonymous)
 public class ConversationActivity extends BaseActivity {
 
+  private final static int PAGE_SIZE = 20;
+
   private static boolean sInConversation;
 
   @InjectView(R.id.alv_conversation)
@@ -51,6 +57,8 @@ public class ConversationActivity extends BaseActivity {
   public RandomSceneTextView mRstvEmpty;
 
   private ConversationAdapter mConversationAdapter;
+
+  private int mPage = 0;
 
   public static void start(Context context) {
 
@@ -104,8 +112,10 @@ public class ConversationActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    mConversationAdapter = new ConversationAdapter();
+    List<Conversation> conversations = ChatUtils.ConversationUtil.getConversations(0, PAGE_SIZE);
+    mConversationAdapter = new ConversationAdapter(conversations);
     mAlvConversation.setAdapter(mConversationAdapter);
+    requestOnline(conversations);
 
     mRstvEmpty.setDrawable(R.drawable.scene_1);
     mRstvEmpty.setText("你还没有聊天");
@@ -113,10 +123,31 @@ public class ConversationActivity extends BaseActivity {
 
     mAlvConversation.setEmptyView(mRstvEmpty);
 
+    mAlvConversation.setLoadMoreCallback(new LoadMoreCallback() {
+      @Override
+      public View getLoadMoreView(ViewGroup parent) {
+        return LayoutInflater.from(ConversationActivity.this).inflate(R.layout.footer_load_more, parent, false);
+      }
+
+      @Override
+      public boolean hasMore() {
+        mPage += 1;
+        return mPage < ChatUtils.ConversationUtil.getPage(PAGE_SIZE);
+      }
+
+      @Override
+      public boolean onLoadMoreStart() {
+        List<Conversation> conversations = ChatUtils.ConversationUtil.getConversations(mPage, PAGE_SIZE);
+        mConversationAdapter.add(conversations);
+        requestOnline(conversations);
+        mAlvConversation.stopLoadMore();
+        return true;
+      }
+    });
+
     U.getChatBus().register(mConversationAdapter);
 
     requestFavorites();
-    requestOnline();
   }
 
   @Override
@@ -337,7 +368,13 @@ public class ConversationActivity extends BaseActivity {
     }, ChatFavListResponse.class, null, null);
   }
 
-  private void requestOnline() {
+  private void requestOnline(List<Conversation> conversations) {
+    List<String> chatIds = new ArrayList<String>();
+
+    for (Conversation conversation : conversations) {
+      chatIds.add(conversation.getChatId());
+    }
+
     U.request("chat_ol_list", new OnResponse2<ChatOnlineListResponse>() {
       @Override
       public void onResponseError(Throwable e) {
@@ -350,6 +387,6 @@ public class ConversationActivity extends BaseActivity {
           mConversationAdapter.updateOnline(response.object.list);
         }
       }
-    }, ChatOnlineListResponse.class, mConversationAdapter.getChatIds());
+    }, ChatOnlineListResponse.class, chatIds);
   }
 }

@@ -9,18 +9,13 @@ import com.utree.eightysix.app.chat.content.ImageContent;
 import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.dao.Conversation;
 import com.utree.eightysix.dao.Message;
-import com.utree.eightysix.dao.MessageConst;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.DaoUtils;
 import com.utree.eightysix.utils.IOUtils;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import org.jivesoftware.smack.packet.Packet;
+
+import java.io.*;
 
 /**
  * Note this only use for send text, image and voice message.

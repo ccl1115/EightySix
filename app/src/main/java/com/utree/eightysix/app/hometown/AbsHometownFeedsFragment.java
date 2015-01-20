@@ -2,6 +2,7 @@ package com.utree.eightysix.app.hometown;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -152,7 +153,11 @@ public class AbsHometownFeedsFragment extends BaseFragment {
             mFeedAdapter = new FeedAdapter(response.object);
             mLvFeed.setAdapter(mFeedAdapter);
 
-            getBaseActivity().setTopTitle(String.format("老乡动态(%s)", response.object.hometownName));
+            if (TextUtils.isEmpty(response.object.hometownName)) {
+              getBaseActivity().setTopTitle("老乡动态");
+            } else {
+              getBaseActivity().setTopTitle(String.format("老乡动态(%s)", response.object.hometownName));
+            }
             getBaseActivity().setTopSubTitle(response.object.subInfo);
             getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
           } else {

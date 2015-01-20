@@ -28,13 +28,10 @@ import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.dao.*;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
-import com.utree.eightysix.request.PostCommentsRequest;
 import com.utree.eightysix.response.ChatInfoResponse;
-import com.utree.eightysix.response.PostCommentsResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.utils.DaoUtils;
-import com.utree.eightysix.utils.ParamsRunnable;
 import de.akquinet.android.androlog.Log;
 
 import java.util.ArrayList;
@@ -193,7 +190,7 @@ public class ChatUtils {
         }
         context.hideProgressBar();
       }
-    }, ChatInfoResponse.class, post.id, comment == null ? null : comment.id);
+    }, ChatInfoResponse.class, post.id, comment.id);
   }
 
   public static void startChat(final BaseActivity context, final Post post) {
@@ -258,6 +255,20 @@ public class ChatUtils {
           .list();
     }
 
+    public static List<Conversation> getConversations(int page, int size) {
+      return DaoUtils.getConversationDao().queryBuilder()
+          .whereOr(ConversationDao.Properties.LastMsg.isNotNull(),
+              ConversationDao.Properties.Favorite.eq(true))
+          .orderDesc(ConversationDao.Properties.Timestamp)
+          .offset(page * size)
+          .limit(size)
+          .list();
+    }
+
+    public static long getPage(int size) {
+      return DaoUtils.getConversationDao().count() / size;
+    }
+
     public static void createIfNotExist(ChatInfoResponse.ChatInfo chatInfo, Post post) {
       Conversation conversation = DaoUtils.getConversationDao().queryBuilder()
           .where(ConversationDao.Properties.ChatId.eq(chatInfo.chatId))
@@ -266,10 +277,10 @@ public class ChatUtils {
         conversation = new Conversation();
         conversation.setChatId(chatInfo.chatId);
         conversation.setPostId(post.id);
-        conversation.setPostSource(post.shortName);
+        conversation.setPostSource(chatInfo.factoryName);
         conversation.setBgUrl(post.bgUrl);
         conversation.setBgColor(post.bgColor);
-        conversation.setRelation(post.viewType == 3 ? "认识的人" : "陌生人");
+        conversation.setRelation(chatInfo.relation);
         conversation.setPostContent(post.content);
         conversation.setTimestamp(System.currentTimeMillis());
         conversation.setUnreadCount(0L);
@@ -297,12 +308,12 @@ public class ChatUtils {
       if (conversation == null) {
         conversation = new Conversation();
         conversation.setChatId(chatInfo.chatId);
-        conversation.setPostSource(post.shortName);
+        conversation.setPostSource(chatInfo.factoryName);
         conversation.setBgUrl(post.bgUrl);
         conversation.setBgColor(post.bgColor);
         conversation.setPostId(post.id);
         conversation.setCommentId(comment.id);
-        conversation.setRelation(post.viewType == 3 ? "认识的人" : "陌生人");
+        conversation.setRelation(chatInfo.relation);
         conversation.setPostContent(post.content);
         conversation.setCommentContent(comment.content);
         conversation.setTimestamp(System.currentTimeMillis());

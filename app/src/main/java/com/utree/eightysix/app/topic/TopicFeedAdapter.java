@@ -205,10 +205,6 @@ public class TopicFeedAdapter extends BaseAdapter {
           case 1:
             mTopicViewHolder.mTvTag2.setText("#" + g.content);
             break;
-          case 2:
-            mTopicViewHolder.mTvTag3.setText("#" + g.content);
-            break;
-
         }
       }
     }
@@ -271,9 +267,6 @@ public class TopicFeedAdapter extends BaseAdapter {
 
     @InjectView (R.id.tv_tag_2)
     public TextView mTvTag2;
-
-    @InjectView (R.id.tv_tag_3)
-    public TextView mTvTag3;
 
     @InjectView (R.id.tv_text)
     public TextView mTvText;

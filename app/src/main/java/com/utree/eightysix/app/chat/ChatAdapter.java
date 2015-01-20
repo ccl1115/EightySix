@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.chat;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.chat.content.ImageContent;
 import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.dao.Message;
-import com.utree.eightysix.dao.MessageConst;
-import com.utree.eightysix.utils.ColorUtil;
+import com.utree.eightysix.utils.TimeUtil;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.FontPortraitView;
 import com.utree.eightysix.widget.RoundedButton;
@@ -209,7 +207,7 @@ public class ChatAdapter extends BaseAdapter {
     TextItemViewHolder holder = (TextItemViewHolder) textView.getTag();
     if (mTargetPortrait.equals("\ue800")) {
       holder.mFpvPortrait.setEmotion(' ');
-      holder.mFpvPortrait.setBackgroundResource(R.drawable.host_portrait);
+      holder.mFpvPortrait.setBackgroundResource(R.drawable.ic_host_portrait);
     } else {
       holder.mFpvPortrait.setEmotion(mTargetPortrait.charAt(0));
       holder.mFpvPortrait.setEmotionColor(mTargetPortraitColor);
@@ -222,7 +220,7 @@ public class ChatAdapter extends BaseAdapter {
     TextItemViewHolder holder = (TextItemViewHolder) textView.getTag();
     if (mMyPortrait.equals("\ue800")) {
       holder.mFpvPortrait.setEmotion(' ');
-      holder.mFpvPortrait.setBackgroundResource(R.drawable.host_portrait);
+      holder.mFpvPortrait.setBackgroundResource(R.drawable.ic_host_portrait);
     } else {
       holder.mFpvPortrait.setEmotion(mMyPortrait.charAt(0));
       holder.mFpvPortrait.setEmotionColor(mMyPortraitColor);
@@ -254,7 +252,7 @@ public class ChatAdapter extends BaseAdapter {
     ImageItemViewHolder holder = (ImageItemViewHolder) imageView.getTag();
     if (mTargetPortrait.equals("\ue800")) {
       holder.mFpvPortrait.setEmotion(' ');
-      holder.mFpvPortrait.setBackgroundResource(R.drawable.host_portrait);
+      holder.mFpvPortrait.setBackgroundResource(R.drawable.ic_host_portrait);
     } else {
       holder.mFpvPortrait.setEmotion(mTargetPortrait.charAt(0));
       holder.mFpvPortrait.setEmotionColor(mTargetPortraitColor);
@@ -267,7 +265,7 @@ public class ChatAdapter extends BaseAdapter {
     ImageItemViewHolder holder = (ImageItemViewHolder) imageView.getTag();
     if (mMyPortrait.equals("\ue800")) {
       holder.mFpvPortrait.setEmotion(' ');
-      holder.mFpvPortrait.setBackgroundResource(R.drawable.host_portrait);
+      holder.mFpvPortrait.setBackgroundResource(R.drawable.ic_host_portrait);
     } else {
       holder.mFpvPortrait.setEmotion(mMyPortrait.charAt(0));
       holder.mFpvPortrait.setEmotionColor(mMyPortraitColor);
@@ -338,7 +336,7 @@ public class ChatAdapter extends BaseAdapter {
       if (pre != null && (pre.getType() == MessageConst.TYPE_TXT || pre.getType() == MessageConst.TYPE_IMAGE) &&
           (message.getType() == MessageConst.TYPE_TXT || message.getType() == MessageConst.TYPE_IMAGE)) {
         if (message.getTimestamp() - pre.getTimestamp() > 300000) { // 5 minutes
-          Message m = ChatUtils.infoMsg(message.getChatId(), U.timestamp(message.getTimestamp()));
+          Message m = ChatUtils.infoMsg(message.getChatId(), TimeUtil.getElapsed(message.getTimestamp()));
           m.setType(MessageConst.TYPE_TIMESTAMP);
           m.setTimestamp(message.getTimestamp() - 1);
           toBeAdded.add(m);

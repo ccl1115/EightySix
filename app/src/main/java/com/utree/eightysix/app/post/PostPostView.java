@@ -62,9 +62,6 @@ public class PostPostView extends LinearLayout {
   @InjectView (R.id.tv_tag_2)
   public TagView mTvTag2;
 
-  @InjectView (R.id.tv_tag_3)
-  public TagView mTvTag3;
-
   private Post mPost;
 
   public PostPostView(Context context) {
@@ -90,11 +87,6 @@ public class PostPostView extends LinearLayout {
     TagTabActivity.start(getContext(), mPost.tags.get(1));
   }
 
-  @OnClick (R.id.tv_tag_3)
-  public void onTvTag3Clicked() {
-    TagTabActivity.start(getContext(), mPost.tags.get(2));
-  }
-
   @OnClick(R.id.tv_source)
   public void onTvSourceClicked() {
     if (mPost.viewType == 8 || (mPost.sourceType == 0 && (mPost.viewType == 3 || mPost.viewType == 4))) {
@@ -106,7 +98,7 @@ public class PostPostView extends LinearLayout {
     }
   }
 
-  @OnClick(R.id.tv_chat)
+  @OnClick(R.id.iv_chat)
   public void onIvChatClicked() {
     ChatUtils.startChat((BaseActivity) getContext(), mPost);
   }
@@ -153,7 +145,6 @@ public class PostPostView extends LinearLayout {
 
     mTvTag1.setText("");
     mTvTag2.setText("");
-    mTvTag3.setText("");
 
     List<Tag> tags = mPost.tags;
     if (tags != null) {
@@ -165,9 +156,6 @@ public class PostPostView extends LinearLayout {
             break;
           case 1:
             mTvTag2.setText("#" + g.content);
-            break;
-          case 2:
-            mTvTag3.setText("#" + g.content);
             break;
         }
       }

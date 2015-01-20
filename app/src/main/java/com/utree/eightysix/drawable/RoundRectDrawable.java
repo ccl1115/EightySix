@@ -1,13 +1,7 @@
 package com.utree.eightysix.drawable;
 
 import android.content.res.ColorStateList;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.Paint;
-import android.graphics.PixelFormat;
-import android.graphics.Rect;
-import android.graphics.RectF;
+import android.graphics.*;
 import android.graphics.drawable.Drawable;
 
 /**
@@ -22,6 +16,8 @@ public class RoundRectDrawable extends Drawable {
   private int mColor = Color.WHITE;
   private int mRadius;
 
+  private BitmapShader mBitmapShader;
+
   public RoundRectDrawable(int radius, ColorStateList stateList) {
     mRadius = radius;
     mColorStateList = stateList;
@@ -33,6 +29,15 @@ public class RoundRectDrawable extends Drawable {
     mRadius = radius;
     mColor = color;
     mPaint.setColor(mColor);
+  }
+
+  public RoundRectDrawable(int radius, Bitmap bitmap) {
+    mRadius = radius;
+    mBitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+    mPaint.setShader(mBitmapShader);
+    mPaint.setAntiAlias(true);
+    mPaint.setDither(true);
+    setBounds(0, 0, bitmap.getWidth(), bitmap.getHeight());
   }
 
   @Override

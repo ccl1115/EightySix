@@ -15,13 +15,13 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
-import com.utree.eightysix.U;
 import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.dao.Conversation;
 import com.utree.eightysix.data.ChatOnline;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.DaoUtils;
+import com.utree.eightysix.utils.TimeUtil;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.FontPortraitView;
 import com.utree.eightysix.widget.RoundedButton;
@@ -47,8 +47,14 @@ public class ConversationAdapter extends BaseAdapter {
     }
   };
 
-  public ConversationAdapter() {
-    mConversations = ChatUtils.ConversationUtil.getConversations();
+  public ConversationAdapter(List<Conversation> conversations) {
+    mConversations = conversations;
+  }
+
+  public void add(List<Conversation> conversations) {
+    mConversations.addAll(conversations);
+    Collections.sort(mConversations, sComparator);
+    notifyDataSetChanged();
   }
 
   public Conversation getByChatId(String chatId) {
@@ -73,7 +79,8 @@ public class ConversationAdapter extends BaseAdapter {
     for (ChatOnline online : onlines) {
       for (Conversation conversation : mConversations) {
         if (conversation.getChatId().equals(online.chatId)) {
-          conversation.setOnline(System.currentTimeMillis());
+          conversation.setOnline(online.isOnline == 1);
+          conversation.setOfflineDuration(online.offlineDuration);
           break;
         }
       }
@@ -123,7 +130,7 @@ public class ConversationAdapter extends BaseAdapter {
     if (portrait != null) {
       if ("\ue800".equals(portrait)) {
         holder.mFpvPortrait.setEmotion(' ');
-        holder.mFpvPortrait.setBackgroundResource(R.drawable.host_portrait);
+        holder.mFpvPortrait.setBackgroundResource(R.drawable.ic_host_portrait_large);
       } else {
         holder.mFpvPortrait.setEmotion(portrait.charAt(0));
         holder.mFpvPortrait.setEmotionColor(ColorUtil.strToColor(conversation.getPortraitColor()));
@@ -131,13 +138,12 @@ public class ConversationAdapter extends BaseAdapter {
     }
 
     if (conversation.getOnline() != null) {
-      if (System.currentTimeMillis() - conversation.getOnline() > 300000) {
-        // 5 minutes
-        holder.mTvStatus.setText(U.timestamp(conversation.getOnline()) + "在线");
-        holder.mTvStatus.setTextColor(parent.getResources().getColor(R.color.apptheme_primary_grey_color_200));
-      } else {
+      if (conversation.getOnline()) {
         holder.mTvStatus.setText("在线");
         holder.mTvStatus.setTextColor(parent.getResources().getColor(R.color.apptheme_primary_light_color));
+      } else {
+        holder.mTvStatus.setText(TimeUtil.getDuration(conversation.getOfflineDuration() * 1000) + "在线");
+        holder.mTvStatus.setTextColor(parent.getResources().getColor(R.color.apptheme_primary_grey_color_200));
       }
     }
 

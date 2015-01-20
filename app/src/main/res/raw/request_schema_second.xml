@@ -115,7 +115,7 @@
     <request>
         <id>login</id>
         <name>登录接口</name>
-        <path>/passport/login</path>
+        <path>/login/login.do</path>
         <sign/>
         <params>
             <param>phone</param>

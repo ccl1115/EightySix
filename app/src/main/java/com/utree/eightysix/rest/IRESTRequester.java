@@ -13,6 +13,8 @@ public interface IRESTRequester {
 
   void setHost(String host);
 
+  void setSecondHost(String host);
+
   AsyncHttpClient getClient();
 
   RequestHandle request(Object request, ResponseHandlerInterface handler);

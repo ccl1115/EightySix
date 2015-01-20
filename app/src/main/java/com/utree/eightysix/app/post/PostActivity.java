@@ -12,7 +12,13 @@ import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import butterknife.*;
+import butterknife.InjectView;
+import butterknife.OnClick;
+import butterknife.OnItemClick;
+import butterknife.OnTextChanged;
+import com.rockerhieu.emojicon.EmojiconGridFragment;
+import com.rockerhieu.emojicon.EmojiconsFragment;
+import com.rockerhieu.emojicon.emoji.Emojicon;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.M;
@@ -25,6 +31,7 @@ import com.utree.eightysix.app.bs.BlueStarFragment;
 import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.app.feed.event.*;
 import com.utree.eightysix.app.msg.ReadMsgStore;
+import com.utree.eightysix.app.publish.EmojiFragment;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.*;
@@ -47,7 +54,7 @@ import java.util.regex.Pattern;
  * @author simon
  */
 @Layout (R.layout.activity_post)
-public class PostActivity extends BaseActivity {
+public class PostActivity extends BaseActivity implements EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener {
 
   @InjectView (R.id.lv_comments)
   public AdvancedListView mLvComments;
@@ -63,6 +70,12 @@ public class PostActivity extends BaseActivity {
 
   @InjectView(R.id.fl_post_comment)
   public FrameLayout mFlPostComment;
+
+  @InjectView(R.id.iv_emotion)
+  public ImageView mIvEmotion;
+
+  @InjectView(R.id.fl_emotion)
+  public FrameLayout mFlEmotion;
 
   private Post mPost;
 
@@ -250,7 +263,28 @@ public class PostActivity extends BaseActivity {
     showProgressBar();
     mEtPostContent.setEnabled(false);
     mIvPost.setEnabled(false);
+    mFlEmotion.setVisibility(View.GONE);
+    mIvEmotion.setSelected(false);
     requestPublishComment();
+  }
+
+  @OnClick(R.id.iv_emotion)
+  public void onIvEmotionClicked() {
+    if (mFlEmotion.getVisibility() == View.VISIBLE) {
+      mFlEmotion.setVisibility(View.GONE);
+      mIvEmotion.setSelected(false);
+    } else {
+      hideSoftKeyboard(mEtPostContent);
+      mIvEmotion.setSelected(true);
+
+
+      getHandler().postDelayed(new Runnable() {
+        @Override
+        public void run() {
+          mFlEmotion.setVisibility(View.VISIBLE);
+        }
+      }, 200);
+    }
   }
 
   @Override
@@ -258,6 +292,8 @@ public class PostActivity extends BaseActivity {
     super.onCreate(savedInstanceState);
 
     hideTopBar(false);
+
+    mIvEmotion.setVisibility(View.VISIBLE);
 
     mLvComments.setOnScrollListener(new AbsListView.OnScrollListener() {
       @Override
@@ -306,6 +342,11 @@ public class PostActivity extends BaseActivity {
     });
 
     mIvPost.setEnabled(false);
+
+    getSupportFragmentManager()
+        .beginTransaction()
+        .add(R.id.fl_emotion, EmojiFragment.newInstance())
+        .commitAllowingStateLoss();
 
     onNewIntent(getIntent());
   }
@@ -356,6 +397,9 @@ public class PostActivity extends BaseActivity {
   public void onBackPressed() {
     if (mPortraitTip != null && mPortraitTip.isShowing()) {
       mPortraitTip.dismiss();
+    } else if (mFlEmotion.getVisibility() == View.VISIBLE) {
+      mFlEmotion.setVisibility(View.GONE);
+      mIvEmotion.setSelected(false);
     } else {
       finishOrShowQuitConfirmDialog();
     }
@@ -598,6 +642,30 @@ public class PostActivity extends BaseActivity {
             requestComment(1, true);
           }
         }, PublishCommentResponse.class);
+  }
+
+  @Override
+  public void onEmojiconBackspaceClicked(View v) {
+
+  }
+
+  @Override
+  public void onEmojiconClicked(Emojicon emojicon) {
+    if ("\u274c".equals(emojicon.getEmoji())) {
+      final int sel = mEtPostContent.getSelectionStart();
+      if (sel > 0) {
+        mEtPostContent.getText().delete(sel - 2, sel);
+//        mEtPostContent.setText(mEtPostContent.getText().delete(sel - 1, 1));
+//        mEtPostContent.setSelection(sel - 1);
+      }
+    } else {
+      String text = mEtPostContent.getText().toString();
+      String before = text.substring(0, mEtPostContent.getSelectionStart());
+      String after = text.substring(mEtPostContent.getSelectionEnd());
+
+      mEtPostContent.setText(before + emojicon.getEmoji() + after);
+      mEtPostContent.setSelection(before.length() + emojicon.getEmoji().length());
+    }
   }
 
 }

@@ -5,47 +5,53 @@
         xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        >
 
     <FrameLayout
             android:id="@+id/fl_top"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            >
 
         <com.utree.eightysix.widget.AsyncImageView
                 android:id="@+id/aiv_post_bg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop"
+                />
 
         <View
                 android:id="@+id/v_mask"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#44000000"/>
+                android:background="#44000000"
+                />
 
         <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
 
             <com.utree.eightysix.widget.TagView
                     android:id="@+id/tv_tag_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"/>
+                    android:layout_marginRight="4dp"
+                    android:layout_marginEnd="4dp"
+                    />
 
             <com.utree.eightysix.widget.TagView
                     android:id="@+id/tv_tag_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"/>
+                    android:layout_marginRight="4dp"
+                    android:layout_marginEnd="4dp"
+                    />
 
-            <com.utree.eightysix.widget.TagView
-                    android:id="@+id/tv_tag_3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
         </LinearLayout>
 
         <TextView
@@ -56,7 +62,8 @@
                 android:padding="20dp"
                 android:textSize="24sp"
                 android:textColor="@android:color/white"
-                android:text="@string/post_anonymously"/>
+                android:text="@string/post_anonymously"
+                />
 
         <EditText
                 android:id="@+id/et_post_content"
@@ -73,7 +80,8 @@
                 android:inputType="textMultiLine"
                 android:textColor="@android:color/white"
                 android:textSize="23sp"
-                android:gravity="center"/>
+                android:gravity="center"
+                />
 
     </FrameLayout>
 
@@ -86,7 +94,8 @@
             android:orientation="horizontal"
             android:gravity="end"
             android:paddingLeft="15dp"
-            android:paddingRight="15dp">
+            android:paddingRight="15dp"
+            >
 
         <com.utree.eightysix.widget.RoundedButton
                 android:id="@+id/tv_tag"
@@ -100,7 +109,8 @@
                 android:minHeight="0dp"
                 android:padding="0dp"
                 app:background="#ff333333"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/white"
+                />
 
         <ImageView
                 android:id="@+id/iv_temp_name"
@@ -109,7 +119,8 @@
                 android:layout_margin="4dp"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/tv_tag"
-                android:src="@drawable/ic_temp_name"/>
+                android:src="@drawable/ic_temp_name"
+                />
 
 
         <EditText
@@ -122,7 +133,8 @@
                 android:paddingBottom="12dp"
                 android:maxLength="6"
                 android:textColor="#ffcccccc"
-                android:hint="填个临时名字"/>
+                android:hint="填个临时名字"
+                />
 
 
         <ImageView
@@ -133,7 +145,8 @@
                 android:layout_toLeftOf="@+id/iv_shuffle"
                 android:layout_centerVertical="true"
                 android:padding="5dp"
-                android:src="@drawable/ic_action_camera"/>
+                android:src="@drawable/ic_action_camera"
+                />
 
         <ImageView
                 android:id="@+id/iv_shuffle"
@@ -143,14 +156,16 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:padding="5dp"
-                android:src="@drawable/ic_action_shuffle"/>
+                android:src="@drawable/ic_action_shuffle"
+                />
 
         <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_gravity="bottom"
                 android:layout_alignParentBottom="true"
-                android:background="#ffe3e3e3"/>
+                android:background="#ffe3e3e3"
+                />
     </RelativeLayout>
 
     <LinearLayout
@@ -160,21 +175,24 @@
             android:orientation="vertical"
             android:background="@android:color/white"
             android:paddingTop="37dp"
-            android:paddingBottom="50dp">
+            android:paddingBottom="50dp"
+            >
 
         <FrameLayout
                 android:id="@+id/fl_portrait"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:clickable="false">
+                android:clickable="false"
+                >
 
             <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_people"
-                    android:clickable="false"/>
+                    android:clickable="false"
+                    />
         </FrameLayout>
 
         <TextView
@@ -185,14 +203,17 @@
                 android:layout_marginTop="8dp"
                 android:textSize="14sp"
                 android:textColor="@android:color/black"
-                android:text="@string/who_will_see_this_secret"/>
+                android:text="@string/who_will_see_this_secret"
+                />
     </LinearLayout>
 
     <FrameLayout
             android:id="@+id/fl_grid_panel"
             android:layout_width="match_parent"
             android:layout_height="230dp"
-            android:visibility="gone">
+            android:background="@android:color/white"
+            android:visibility="gone"
+            >
 
         <com.utree.eightysix.widget.panel.GridPanel
                 android:id="@+id/gp_panel"
@@ -201,7 +222,8 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="10dp"
+                />
 
         <com.utree.eightysix.widget.IndicatorView
                 android:id="@+id/in_panel"
@@ -212,7 +234,8 @@
                 app:count="2"
                 app:drawable="@drawable/indicator_dot"
                 app:selector="@drawable/indicator_dot_selected"
-                app:spacing="4dp"/>
+                app:spacing="4dp"
+                />
     </FrameLayout>
 
     <ScrollView
@@ -220,12 +243,14 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:background="#fff0f0f0"
-            android:fillViewport="true">
+            android:fillViewport="true"
+            >
 
         <com.utree.eightysix.app.publish.TagsLayout
                 android:id="@+id/tl_tags"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                />
     </ScrollView>
 
 </merge>

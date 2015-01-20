@@ -18,13 +18,12 @@
     <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="number"
+            android:inputType="number|phone"
             android:ems="10"
             android:id="@+id/et_phone_number"
             android:layout_gravity="center_horizontal"
             android:hint="@string/phone_number"
             android:singleLine="true"
-            android:numeric="integer"
             android:minLines="1"
             android:imeOptions="actionNext"
             android:layout_weight="1"/>

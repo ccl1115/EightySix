@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<!--
+  ~ Copyright (c) 2015. All rights reserved by utree.cn
+  -->
+
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/progress_bar"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        >
+
+    <View
+            android:id="@+id/v_progress_mask"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:clickable="true"
+            android:background="@color/apptheme_mandatory_mask_color"
+            />
+
+    <LinearLayout
+            android:id="@+id/fl_loading_wrapper"
+            android:padding="15dp"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/progress_bar_rounded_bg"
+            >
+
+        <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="8dp"
+                />
+
+        <TextView
+                android:id="@+id/tv_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                />
+    </LinearLayout>
+</FrameLayout>

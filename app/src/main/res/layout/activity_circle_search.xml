@@ -3,21 +3,25 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
              android:layout_width="match_parent"
-             android:layout_height="match_parent">
+             android:layout_height="match_parent"
+             android:background="@android:color/white"
+        >
 
 
     <com.utree.eightysix.widget.AdvancedListView
             android:id="@+id/lv_result"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/white"/>
+            android:background="@android:color/white"
+            />
 
     <LinearLayout
             android:id="@+id/ll_empty_result"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:visibility="invisible">
+            android:visibility="invisible"
+            >
 
         <TextView
                 android:id="@+id/tv_empty_text"
@@ -25,7 +29,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="110dp"
                 android:layout_gravity="center_horizontal"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                />
 
         <TextView
                 android:layout_width="wrap_content"
@@ -34,7 +39,8 @@
                 android:layout_marginTop="10dp"
                 android:text="@string/try_other_search_keyword"
                 android:textSize="14sp"
-                android:textColor="@color/apptheme_primary_dark_color"/>
+                android:textColor="@color/apptheme_primary_dark_color"
+                />
 
         <com.utree.eightysix.widget.RoundedButton
                 android:id="@+id/rb_create_circle"
@@ -43,7 +49,8 @@
                 android:layout_marginTop="70dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:text="@string/create_circle"/>
+                android:text="@string/create_circle"
+                />
 
     </LinearLayout>
 
@@ -51,7 +58,8 @@
             android:id="@+id/lv_history"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/white"/>
+            android:background="@android:color/white"
+            />
 
     <com.utree.eightysix.widget.RandomSceneTextView
             android:id="@+id/rstv_empty"
@@ -60,5 +68,6 @@
             android:layout_gravity="center"
             app:text="@string/not_found_history"
             app:subText="@string/not_found_history_tip"
-            app:drawable="@drawable/scene_2"/>
+            app:drawable="@drawable/scene_2"
+            />
 </FrameLayout>

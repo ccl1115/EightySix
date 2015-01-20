@@ -40,9 +40,6 @@ public class FeedTopicView extends FrameLayout {
   @InjectView (R.id.tv_tag_2)
   public TextView mTvTag2;
 
-  @InjectView (R.id.tv_tag_3)
-  public TextView mTvTag3;
-
   @InjectView (R.id.rb_more)
   public RoundedButton mRbMoreFeeds;
 
@@ -104,11 +101,6 @@ public class FeedTopicView extends FrameLayout {
     TagTabActivity.start(getContext(), mTopic.tags.get(1));
   }
 
-  @OnClick (R.id.tv_tag_3)
-  public void onTvTag3Clicked() {
-    TagTabActivity.start(getContext(), mTopic.tags.get(2));
-  }
-
   public void setData(PostTopic topic) {
     if (topic == null) return;
 
@@ -135,9 +127,6 @@ public class FeedTopicView extends FrameLayout {
           break;
         case 1:
           mTvTag2.setText("#" + g.content);
-          break;
-        case 2:
-          mTvTag3.setText("#" + g.content);
           break;
       }
     }

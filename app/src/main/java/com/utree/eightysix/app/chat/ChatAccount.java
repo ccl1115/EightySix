@@ -1,24 +1,18 @@
 package com.utree.eightysix.app.chat;
 
 import android.content.IntentFilter;
-import android.os.AsyncTask;
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMMessage;
-import com.easemob.chat.ImageMessageBody;
-import com.easemob.exceptions.EaseMobException;
 import com.squareup.otto.Subscribe;
-import com.utree.eightysix.*;
+import com.utree.eightysix.Account;
+import com.utree.eightysix.BuildConfig;
+import com.utree.eightysix.M;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseApplication;
 import com.utree.eightysix.app.chat.event.ChatEvent;
-import com.utree.eightysix.dao.Conversation;
-import com.utree.eightysix.dao.Message;
-import com.utree.eightysix.dao.MessageConst;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.Response;
-import com.utree.eightysix.utils.DaoUtils;
-import de.akquinet.android.androlog.Log;
 
 /**
  * @author simon
@@ -75,12 +69,10 @@ public class ChatAccount {
                   U.request("chat_online", new OnResponse2<Response>() {
                     @Override
                     public void onResponseError(Throwable e) {
-
                     }
 
                     @Override
                     public void onResponse(Response response) {
-
                     }
                   }, Response.class, null, null);
                 }

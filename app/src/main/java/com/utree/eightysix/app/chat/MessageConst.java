@@ -2,7 +2,7 @@
  * Copyright (c) 2014. All rights reserved by utree.cn
  */
 
-package com.utree.eightysix.dao;
+package com.utree.eightysix.app.chat;
 
 /**
  */
@@ -49,3 +49,4 @@ public class MessageConst {
    */
   public static final int TYPE_TIMESTAMP = 0x1005;
 }
+

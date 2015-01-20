@@ -45,12 +45,6 @@
                     android:textColor="@android:color/white"
                     />
 
-            <TextView
-                    android:id="@+id/tv_tag_3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    />
 
             <TextView
                     android:id="@+id/tv_more"

@@ -97,9 +97,6 @@ public class PublishActivity extends BaseActivity {
   @InjectView (R.id.tv_tag_2)
   public TagView mTvTag2;
 
-  @InjectView (R.id.tv_tag_3)
-  public TagView mTvTag3;
-
   @InjectView (R.id.et_temp_name)
   public EditText mEtTempName;
 
@@ -459,7 +456,6 @@ public class PublishActivity extends BaseActivity {
   protected void setSelectedTags(List<Tag> tags) {
     mTvTag1.setText("");
     mTvTag2.setText("");
-    mTvTag3.setText("");
     for (int i = 0; i < tags.size(); i++) {
       Tag g = tags.get(i);
       switch(i) {
@@ -468,9 +464,6 @@ public class PublishActivity extends BaseActivity {
           break;
         case 1:
           mTvTag2.setText("#" + g.content);
-          break;
-        case 2:
-          mTvTag3.setText("#" + g.content);
           break;
       }
     }
@@ -698,7 +691,7 @@ public class PublishActivity extends BaseActivity {
   }
 
 
-  private void requestPublish() {
+  protected void requestPublish() {
     mRequestStarted = true;
 
     if (mImageUploadFinished || mUseColor) {
