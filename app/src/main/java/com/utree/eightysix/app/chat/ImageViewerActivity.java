@@ -3,12 +3,12 @@ package com.utree.eightysix.app.chat;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.View;
 import butterknife.InjectView;
-import com.easemob.chat.EMChatConfig;
-import com.easemob.chat.EMChatManager;
-import com.easemob.cloud.CloudOperationCallback;
-import com.easemob.cloud.HttpFileManager;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.C;
@@ -18,12 +18,12 @@ import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
+import com.utree.eightysix.widget.TopBar;
 import de.akquinet.android.androlog.Log;
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 import it.sephiroth.android.library.imagezoom.ImageViewTouchBase;
+
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  */
@@ -36,6 +36,9 @@ public class ImageViewerActivity extends BaseActivity {
 
   private String mHash;
   private boolean mLoadRemote;
+
+  private Bitmap mBitmap;
+  private boolean mLoaded;
 
   public static void start(Context context, String local, String remote, String secret) {
     Intent intent = new Intent(context, ImageViewerActivity.class);
@@ -56,6 +59,8 @@ public class ImageViewerActivity extends BaseActivity {
     if (event.getHash().equals(mHash) && (mLoadRemote || event.getWidth() == 600 && event.getHeight() == 600)) {
       mImageViewTouch.setImageBitmap(event.getBitmap());
       hideProgressBar();
+      mBitmap = event.getBitmap();
+      mLoaded = true;
     }
   }
 
@@ -83,6 +88,46 @@ public class ImageViewerActivity extends BaseActivity {
       ImageUtils.asyncLoad(file, mHash, 600, 600);
     }
 
+    getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
+      @Override
+      public String getTitle(int position) {
+        return "保存";
+      }
+
+      @Override
+      public Drawable getIcon(int position) {
+        return null;
+      }
+
+      @Override
+      public Drawable getBackgroundDrawable(int position) {
+        return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
+      }
+
+      @Override
+      public void onClick(View view, int position) {
+        if (mLoaded) {
+          String url = MediaStore.Images.Media.insertImage(getContentResolver(),
+              mBitmap, local.substring(local.lastIndexOf("/") + 1), null);
+
+          if (url != null) {
+            showToast(getString(R.string.saved));
+          } else {
+            showToast(getString(R.string.failed_to_save));
+          }
+        }
+      }
+
+      @Override
+      public int getCount() {
+        return 1;
+      }
+
+      @Override
+      public TopBar.LayoutParams getLayoutParams(int position) {
+        return null;
+      }
+    });
 
     showProgressBar();
   }

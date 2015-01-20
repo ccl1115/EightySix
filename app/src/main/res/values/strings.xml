@@ -265,4 +265,6 @@
     <string name="clear_cache">清楚图片和数据缓存</string>
     <string name="vibrate_mode_info">开启后无提示音及震动</string>
     <string name="image_viewer">查看大图</string>
+    <string name="saved">保存成功</string>
+    <string name="failed_to_save">保存失败</string>
 </resources>
