@@ -25,6 +25,7 @@ import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.ThemedDialog;
+
 import java.util.List;
 
 /**
@@ -43,19 +44,19 @@ public class SetHometownFragment extends BaseFragment {
       "山东", "台湾"
   };
 
-  @InjectView (R.id.ll_parent)
+  @InjectView(R.id.ll_parent)
   public LinearLayout mLlParent;
 
-  @InjectView (R.id.sp_province)
+  @InjectView(R.id.sp_province)
   public Spinner mSpProvince;
 
-  @InjectView (R.id.sp_city)
+  @InjectView(R.id.sp_city)
   public Spinner mSpCity;
 
-  @InjectView (R.id.tv_title)
+  @InjectView(R.id.tv_title)
   public TextView mTvTitle;
 
-  @InjectView (R.id.sp_county)
+  @InjectView(R.id.sp_county)
   public Spinner mSpCounty;
 
   @InjectView(R.id.progress_bar)
@@ -65,7 +66,7 @@ public class SetHometownFragment extends BaseFragment {
 
   private List<HometownInfoResponse.HometownInfo> mCurrentHometown;
 
-  @OnClick (R.id.fl_parent)
+  @OnClick(R.id.fl_parent)
   public void onFlParentClicked() {
     if (!isDetached()) {
       getFragmentManager().beginTransaction()
@@ -73,7 +74,7 @@ public class SetHometownFragment extends BaseFragment {
     }
   }
 
-  @OnClick (R.id.rb_settings)
+  @OnClick(R.id.rb_settings)
   public void onRbSettingsClicked() {
     showConfirmDialog();
   }
@@ -253,13 +254,14 @@ public class SetHometownFragment extends BaseFragment {
   private void showConfirmDialog() {
     final ThemedDialog dialog = new ThemedDialog(getActivity());
 
-    final String title = String.format("确认你的家乡在[%s%s%s]么？",
+    final String title = String.format(getActivity().getString(R.string.confirm_hometown),
         mSpProvince.getSelectedItem() == null ? "" : mSpProvince.getSelectedItem(),
         mSpCity.getSelectedItem() == null ? "" : mSpCity.getSelectedItem(),
         mSpCounty.getSelectedItem() == null ? "" : mSpCounty.getSelectedItem());
 
     TextView view = new TextView(getActivity());
-    view.setText("提醒：确认后15天内不可修改哦！");
+    view.setText(String.format(getActivity().getString(R.string.confirm_hometown_tip),
+        U.getSyncClient().getSync() != null ? U.getSyncClient().getSync().selectHometownDays : 15));
     final int p = U.dp2px(16);
     view.setPadding(p, p, p, p);
     dialog.setContent(view);

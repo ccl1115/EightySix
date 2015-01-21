@@ -26,6 +26,12 @@ public class Sync {
   @SerializedName("ip")
   public String ip;
 
+  /**
+   * Default is 15
+   */
+  @SerializedName("selectHometownDays")
+  public int selectHometownDays;
+
   public static class Portrait implements Parcelable {
 
 

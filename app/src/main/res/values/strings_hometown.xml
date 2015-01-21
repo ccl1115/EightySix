@@ -13,4 +13,6 @@
     <string name="choose_county">选择区/县</string>
     <string name="set_hometown_tip">设置完家乡，才可以看老乡动态哦！</string>
     <string name="set_your_hometown">设置你的家乡</string>
+    <string name="confirm_hometown">确认你的家乡在[%1$s%2$s%3$s]么？</string>
+    <string name="confirm_hometown_tip">提醒：确认后%d天内不可修改哦！</string>
 </resources>
