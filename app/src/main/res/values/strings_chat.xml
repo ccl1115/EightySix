@@ -22,4 +22,5 @@
     <string name="confirm_shield_chat">是否拉黑聊天？</string>
     <string name="shield_succeed">拉黑成功</string>
     <string name="shield">拉黑</string>
+    <string name="shielded">已拉黑</string>
 </resources>

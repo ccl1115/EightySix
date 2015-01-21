@@ -179,24 +179,29 @@ public class ConversationActivity extends BaseActivity {
 
   private void showMoreDialog(final Conversation conversation) {
     new AlertDialog.Builder(this).setTitle(getString(R.string.chat_actions))
-        .setItems(new String[]{getString(R.string.report), getString(R.string.delete), getString(R.string.shield)}, new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialogInterface, int i) {
-            switch (i) {
-              case 0: {
-                showReportConfirmDialog(conversation);
-                break;
+        .setItems(
+            new String[]{getString(R.string.report), getString(R.string.delete),
+                (conversation.getBanned() != null && conversation.getBanned()) ? getString(R.string.shielded) : getString(R.string.shield)},
+            new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialogInterface, int i) {
+                switch (i) {
+                  case 0: {
+                    showReportConfirmDialog(conversation);
+                    break;
+                  }
+                  case 1: {
+                    showDeleteConfirmDialog(conversation);
+                    break;
+                  }
+                  case 2: {
+                    if (conversation.getBanned() == null || !conversation.getBanned()) {
+                      showShieldConfirmDialog(conversation);
+                    }
+                  }
+                }
               }
-              case 1: {
-                showDeleteConfirmDialog(conversation);
-                break;
-              }
-              case 2: {
-                showShieldConfirmDialog(conversation);
-              }
-            }
-          }
-        }).show();
+            }).show();
   }
 
   private void showReportConfirmDialog(final Conversation conversation) {
@@ -237,6 +242,18 @@ public class ConversationActivity extends BaseActivity {
         .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialogInterface, int i) {
+
+            U.request("chat_fav_del", new OnResponse2<Response>() {
+              @Override
+              public void onResponseError(Throwable e) {
+
+              }
+
+              @Override
+              public void onResponse(Response response) {
+
+              }
+            }, Response.class, conversation.getChatId(), conversation.getPostId(), conversation.getCommentId());
             dialogInterface.dismiss();
             ChatUtils.ConversationUtil.deleteConversation(conversation);
             mConversationAdapter.remove(conversation);
@@ -263,6 +280,9 @@ public class ConversationActivity extends BaseActivity {
               @Override
               public void onResponse(Response response) {
                 showToast(getString(R.string.shield_succeed));
+                conversation.setBanned(true);
+                DaoUtils.getConversationDao().update(conversation);
+                U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATIONS_RELOAD, null));
               }
             }, Response.class, conversation.getChatId());
 
@@ -277,6 +297,7 @@ public class ConversationActivity extends BaseActivity {
         })
         .show();
   }
+
   private void showActionDialog() {
     new AlertDialog.Builder(this).setItems(
         new String[]{getString(R.string.clear_unread), getString(R.string.chat_delete_all)},

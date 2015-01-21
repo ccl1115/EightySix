@@ -16,6 +16,9 @@ public class ChatFav {
   @SerializedName("bgUrl")
   public String bgUrl;
 
+  @SerializedName("bgColor")
+  public String bgColor;
+
   @SerializedName("postId")
   public String postId;
 
@@ -31,4 +34,7 @@ public class ChatFav {
   @SerializedName("relation")
   public String relation;
 
+  public String targetAvatar;
+
+  public String myAvatar;
 }

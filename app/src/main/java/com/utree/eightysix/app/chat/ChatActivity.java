@@ -18,7 +18,10 @@ import com.rockerhieu.emojicon.EmojiconGridFragment;
 import com.rockerhieu.emojicon.EmojiconsFragment;
 import com.rockerhieu.emojicon.emoji.Emojicon;
 import com.squareup.otto.Subscribe;
-import com.utree.eightysix.*;
+import com.utree.eightysix.Account;
+import com.utree.eightysix.M;
+import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.CameraUtil;
 import com.utree.eightysix.app.Layout;
@@ -40,44 +43,45 @@ import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.ImageActionButton;
 import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TopBar;
+
 import java.io.File;
 import java.util.List;
 
 /**
  * @author simon
  */
-@Layout (R.layout.activity_chat)
+@Layout(R.layout.activity_chat)
 public class ChatActivity extends BaseActivity implements
     EmojiconsFragment.OnEmojiconBackspaceClickedListener,
     EmojiconGridFragment.OnEmojiconClickedListener {
 
   private static String sCurrentChatId;
 
-  @InjectView (R.id.fl_send)
+  @InjectView(R.id.fl_send)
   public FrameLayout mFlSend;
 
-  @InjectView (R.id.fl_emotion)
+  @InjectView(R.id.fl_emotion)
   public FrameLayout mFlEmotion;
 
-  @InjectView (R.id.rl_actions)
+  @InjectView(R.id.rl_actions)
   public RelativeLayout mRlActions;
 
-  @InjectView (R.id.refresh_view)
+  @InjectView(R.id.refresh_view)
   public SwipeRefreshLayout mRefreshView;
 
-  @InjectView (R.id.et_post_content)
+  @InjectView(R.id.et_post_content)
   public EmojiconEditText mEtPostContent;
 
-  @InjectView (R.id.iv_post)
+  @InjectView(R.id.iv_post)
   public ImageView mIvPost;
 
-  @InjectView (R.id.alv_chats)
+  @InjectView(R.id.alv_chats)
   public AdvancedListView mAlvChats;
 
-  @InjectView (R.id.iv_camera)
+  @InjectView(R.id.iv_camera)
   public ImageView mIvCamera;
 
-  @InjectView (R.id.iv_emotion)
+  @InjectView(R.id.iv_emotion)
   public ImageView mIvEmotion;
 
   private ChatAdapter mChatAdapter;
@@ -114,14 +118,14 @@ public class ChatActivity extends BaseActivity implements
     ChatActivity.sCurrentChatId = currentChatId;
   }
 
-  @OnClick (R.id.iv_post)
+  @OnClick(R.id.iv_post)
   public void onRbPostClicked() {
     ChatAccount.inst().getSender()
         .txt(mChatId, mConversation.getPostId(), mConversation.getCommentId(), mEtPostContent.getText().toString());
     mEtPostContent.setText("");
   }
 
-  @OnClick (R.id.iv_camera)
+  @OnClick(R.id.iv_camera)
   public void onIvCameraClicked() {
     if (mRlActions.getVisibility() == View.VISIBLE) {
       mRlActions.setVisibility(View.GONE);
@@ -141,7 +145,7 @@ public class ChatActivity extends BaseActivity implements
     }
   }
 
-  @OnClick (R.id.iv_emotion)
+  @OnClick(R.id.iv_emotion)
   public void onIvEmotionClicked() {
     if (mFlEmotion.getVisibility() == View.VISIBLE) {
       mFlEmotion.setVisibility(View.GONE);
@@ -162,22 +166,22 @@ public class ChatActivity extends BaseActivity implements
     }
   }
 
-  @OnClick (R.id.iv_open_camera)
+  @OnClick(R.id.iv_open_camera)
   public void onIvOpenCameraClicked() {
     mCameraUtil.startCamera();
   }
 
-  @OnClick (R.id.iv_album)
+  @OnClick(R.id.iv_album)
   public void onIvAlbumClicked() {
     mCameraUtil.startAlbum();
   }
 
-  @OnTextChanged (R.id.et_post_content)
+  @OnTextChanged(R.id.et_post_content)
   public void onEtPostContentTextChanged(CharSequence cs) {
     mIvPost.setEnabled(cs.length() > 0);
   }
 
-  @OnItemClick (R.id.alv_chats)
+  @OnItemClick(R.id.alv_chats)
   public void onAlvChatsItemClicked(int position) {
     Message m = mChatAdapter.getItem(position);
     if (m != null) {
@@ -198,7 +202,7 @@ public class ChatActivity extends BaseActivity implements
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
           ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
           clipboardManager.setPrimaryClip(
-              new ClipData("chat_text", new String[] { "text/plain" }, new ClipData.Item(m.getContent())));
+              new ClipData("chat_text", new String[]{"text/plain"}, new ClipData.Item(m.getContent())));
           showToast(R.string.clipboard_copied);
           return true;
         }
@@ -426,51 +430,14 @@ public class ChatActivity extends BaseActivity implements
 
       @Override
       public void onClick(View view, int position) {
-        ((ImageActionButton) getTopBar().getActionView(0))
-            .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_outline));
         if (mConversation.getFavorite()) {
-          U.request("chat_fav_del", new OnResponse2<Response>() {
-            @Override
-            public void onResponseError(Throwable e) {
-              ((ImageActionButton) getTopBar().getActionView(0))
-                  .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
-            }
-
-            @Override
-            public void onResponse(Response response) {
-              if (RESTRequester.responseOk(response)) {
-                mConversation.setFavorite(false);
-                DaoUtils.getConversationDao().update(mConversation);
-                U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, mConversation));
-              } else {
-                ((ImageActionButton) getTopBar().getActionView(0))
-                    .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
-              }
-            }
-          }, Response.class, mChatId, mConversation.getPostId(), mConversation.getCommentId());
+          ((ImageActionButton) getTopBar().getActionView(0))
+              .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_outline));
+          requestFavDel();
         } else {
           ((ImageActionButton) getTopBar().getActionView(0))
               .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
-          U.request("chat_fav_add", new OnResponse2<Response>() {
-            @Override
-            public void onResponseError(Throwable e) {
-              ((ImageActionButton) getTopBar().getActionView(0))
-                  .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_outline));
-            }
-
-            @Override
-            public void onResponse(Response response) {
-              if (RESTRequester.responseOk(response)) {
-                mConversation.setFavorite(true);
-                DaoUtils.getConversationDao().update(mConversation);
-                U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, mConversation));
-              } else {
-                ((ImageActionButton) getTopBar().getActionView(0))
-                    .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_outline));
-              }
-            }
-          }, Response.class, mChatId, mConversation.getPostId(), mConversation.getCommentId());
-
+          requestFavAdd();
         }
       }
 
@@ -491,6 +458,50 @@ public class ChatActivity extends BaseActivity implements
         .beginTransaction()
         .add(R.id.fl_emotion, EmojiFragment.newInstance())
         .commitAllowingStateLoss();
+  }
+
+  public void requestFavAdd() {
+    U.request("chat_fav_add", new OnResponse2<Response>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        ((ImageActionButton) getTopBar().getActionView(0))
+            .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_outline));
+      }
+
+      @Override
+      public void onResponse(Response response) {
+        if (RESTRequester.responseOk(response)) {
+          mConversation.setFavorite(true);
+          DaoUtils.getConversationDao().update(mConversation);
+          U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, mConversation));
+        } else {
+          ((ImageActionButton) getTopBar().getActionView(0))
+              .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_outline));
+        }
+      }
+    }, Response.class, mChatId, mConversation.getPostId(), mConversation.getCommentId());
+  }
+
+  private void requestFavDel() {
+    U.request("chat_fav_del", new OnResponse2<Response>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        ((ImageActionButton) getTopBar().getActionView(0))
+            .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
+      }
+
+      @Override
+      public void onResponse(Response response) {
+        if (RESTRequester.responseOk(response)) {
+          mConversation.setFavorite(false);
+          DaoUtils.getConversationDao().update(mConversation);
+          U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, mConversation));
+        } else {
+          ((ImageActionButton) getTopBar().getActionView(0))
+              .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
+        }
+      }
+    }, Response.class, mChatId, mConversation.getPostId(), mConversation.getCommentId());
   }
 
   @Override
@@ -562,24 +573,31 @@ public class ChatActivity extends BaseActivity implements
 
   private void showMoreDialog() {
     new AlertDialog.Builder(this).setTitle(getString(R.string.chat_actions))
-        .setItems(new String[]{getString(R.string.report), getString(R.string.delete), getString(R.string.shield)}, new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialogInterface, int i) {
-            switch (i) {
-              case 0: {
-                showReportConfirmDialog();
-                break;
+        .setItems(
+            new String[]{getString(R.string.report),
+                getString(R.string.delete),
+                (mConversation.getBanned() != null && mConversation.getBanned()) ? getString(R.string.shielded) : getString(R.string.shield)},
+            new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialogInterface, int i) {
+                switch (i) {
+                  case 0: {
+                    showReportConfirmDialog();
+                    break;
+                  }
+                  case 1: {
+                    showDeleteConfirmDialog();
+                    break;
+                  }
+                  case 2: {
+                    if (mConversation.getBanned() == null || !mConversation.getBanned()) {
+                      showShieldConfirmDialog();
+                    }
+                    break;
+                  }
+                }
               }
-              case 1: {
-                showDeleteConfirmDialog();
-                break;
-              }
-              case 2: {
-                showShieldConfirmDialog();
-              }
-            }
-          }
-        }).show();
+            }).show();
   }
 
   private void showReportConfirmDialog() {
@@ -620,6 +638,7 @@ public class ChatActivity extends BaseActivity implements
         .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialogInterface, int i) {
+            requestFavDel();
             ChatUtils.ConversationUtil.deleteConversation(mChatId);
             U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_REMOVE, mChatId));
             finish();
