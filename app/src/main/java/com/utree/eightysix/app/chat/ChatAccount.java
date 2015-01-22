@@ -33,6 +33,7 @@ public class ChatAccount {
       sChatAccount = new ChatAccount();
       // 不使用环信默认的通知提醒
       EMChatManager.getInstance().getChatOptions().setNotificationEnable(false);
+      EMChatManager.getInstance().getChatOptions().setShowNotificationInBackgroud(false);
       EMChat.getInstance().setDebugMode(BuildConfig.DEBUG);
       sChatAccount.login();
     }
