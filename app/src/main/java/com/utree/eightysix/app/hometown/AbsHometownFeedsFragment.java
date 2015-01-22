@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
+import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
@@ -61,6 +62,15 @@ public class AbsHometownFeedsFragment extends BaseFragment {
     super.onAttach(activity);
 
     if (isActive()) requestFeeds(1);
+  }
+
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+
+    if (mFeedAdapter != null) {
+      M.getRegisterHelper().unregister(mFeedAdapter);
+    }
   }
 
   @Override
@@ -150,7 +160,11 @@ public class AbsHometownFeedsFragment extends BaseFragment {
           }
 
           if (page == 1) {
+            if (mFeedAdapter != null) {
+              M.getRegisterHelper().unregister(mFeedAdapter);
+            }
             mFeedAdapter = new FeedAdapter(response.object);
+            M.getRegisterHelper().register(mFeedAdapter);
             mLvFeed.setAdapter(mFeedAdapter);
 
             if (TextUtils.isEmpty(response.object.hometownName)) {
