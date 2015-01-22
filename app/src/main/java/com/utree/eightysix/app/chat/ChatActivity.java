@@ -199,16 +199,10 @@ public class ChatActivity extends BaseActivity implements
     Message m = mChatAdapter.getItem(position);
     if (m != null) {
       if (m.getType() == MessageConst.TYPE_TXT) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
-          ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-          clipboardManager.setPrimaryClip(
-              new ClipData("chat_text", new String[]{"text/plain"}, new ClipData.Item(m.getContent())));
-          showToast(R.string.clipboard_copied);
-          return true;
-        }
+        showMessageDialog(m);
       }
     }
-    return false;
+    return true;
   }
 
   @Subscribe
@@ -549,6 +543,8 @@ public class ChatActivity extends BaseActivity implements
     super.onDestroy();
 
     U.getChatBus().unregister(this);
+
+    hideSoftKeyboard(mEtPostContent);
   }
 
   @Override
@@ -679,6 +675,26 @@ public class ChatActivity extends BaseActivity implements
           @Override
           public void onClick(DialogInterface dialog, int which) {
             dialog.dismiss();
+          }
+        })
+        .show();
+  }
+
+  private void showMessageDialog(final Message m) {
+    new AlertDialog.Builder(this).setTitle("操作")
+        .setItems(new String[]{getString(R.string.copy_to_clipboard)}, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            switch (which) {
+              case 0:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
+                  ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                  clipboardManager.setPrimaryClip(
+                      new ClipData("chat_text", new String[]{"text/plain"}, new ClipData.Item(m.getContent())));
+                  showToast(R.string.clipboard_copied);
+                }
+                break;
+            }
           }
         })
         .show();

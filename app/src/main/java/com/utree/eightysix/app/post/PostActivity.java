@@ -2,20 +2,24 @@ package com.utree.eightysix.app.post;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Instrumentation;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.OnTextChanged;
+import com.rockerhieu.emojicon.EmojiconEditText;
 import com.rockerhieu.emojicon.EmojiconGridFragment;
 import com.rockerhieu.emojicon.EmojiconsFragment;
 import com.rockerhieu.emojicon.emoji.Emojicon;
@@ -60,7 +64,7 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
   public AdvancedListView mLvComments;
 
   @InjectView (R.id.et_post_content)
-  public EditText mEtPostContent;
+  public EmojiconEditText mEtPostContent;
 
   @InjectView(R.id.iv_post)
   public ImageView mIvPost;
@@ -87,6 +91,8 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
   private AlertDialog mCommentContextDialog;
 
   private boolean mGotoBottom;
+
+  private Instrumentation mInstrumentation = new Instrumentation();
 
   public static void start(Context context, Post post) {
     Intent intent = new Intent(context, PostActivity.class);
@@ -294,6 +300,36 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
     hideTopBar(false);
 
     mIvEmotion.setVisibility(View.VISIBLE);
+
+    //region To detect soft keyboard visibility change
+    // works after ICM
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+      final View activityRootView = findViewById(android.R.id.content);
+      activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+        private int lastY = Integer.MAX_VALUE;
+
+        @Override
+        public void onGlobalLayout() {
+          Log.d("PostActivity", "height of root view " + activityRootView.getRootView().getHeight());
+
+          // below only works when softInputMethodMode is adjustResize
+//          int heightDiff = activityRootView.getRootView().getHeight() - activityRootView.getHeight();
+//          if (heightDiff > 100) { // 99% of the time the height diff will be due to a keyboard.
+//
+//            if (!mIsOpened) {
+//              mFlEmotion.setVisibility(View.GONE);
+//              mIvEmotion.setSelected(false);
+//            }
+//            mIsOpened = true;
+//          } else if (mIsOpened) {
+//            mIsOpened = false;
+//          }
+        }
+      });
+    }
+    //endregion
+
 
     mLvComments.setOnScrollListener(new AbsListView.OnScrollListener() {
       @Override
@@ -652,12 +688,12 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
   @Override
   public void onEmojiconClicked(Emojicon emojicon) {
     if ("\u274c".equals(emojicon.getEmoji())) {
-      final int sel = mEtPostContent.getSelectionStart();
-      if (sel > 0) {
-        mEtPostContent.getText().delete(sel - 2, sel);
-//        mEtPostContent.setText(mEtPostContent.getText().delete(sel - 1, 1));
-//        mEtPostContent.setSelection(sel - 1);
-      }
+      (new Thread() {
+        @Override
+        public void run() {
+          mInstrumentation.sendKeyDownUpSync(KeyEvent.KEYCODE_DEL);
+        }
+      }).start();
     } else {
       String text = mEtPostContent.getText().toString();
       String before = text.substring(0, mEtPostContent.getSelectionStart());
