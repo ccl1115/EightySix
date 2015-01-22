@@ -366,23 +366,11 @@ public class ConversationActivity extends BaseActivity {
             if (conversation != null) {
               conversation.setFavorite(true);
             } else {
-              conversation = new Conversation();
-              conversation.setChatId(fav.chatId);
-              conversation.setPostId(fav.postId);
-              conversation.setPostContent(fav.postContent);
-              conversation.setCommentId(fav.commentId);
-              conversation.setPostSource(fav.chatSource);
-              conversation.setRelation(fav.relation);
-              conversation.setFavorite(true);
-              conversation.setPortrait("\ue800");
-              conversation.setPortraitColor("ff000000");
-              conversation.setMyPortrait("\ue800");
-              conversation.setMyPortraitColor("ff000000");
-              conversation.setTimestamp(0l);
+              conversation = ChatUtils.ConversationUtil.createByChatFav(fav);
               conversations.add(conversation);
             }
           }
-          DaoUtils.getConversationDao().insertInTx(conversations);
+          DaoUtils.getConversationDao().updateInTx(conversations);
           U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATIONS_RELOAD, null));
         }
       }

@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
@@ -398,7 +399,7 @@ public class ChatActivity extends BaseActivity implements
       }
     });
 
-    if (mConversation.getCommentId() == null) {
+    if (TextUtils.isEmpty(mConversation.getCommentContent())) {
       addPostSummaryInfo();
     } else {
       addCommentSummaryInfo();

@@ -26,6 +26,7 @@ import com.utree.eightysix.app.chat.content.ImageContent;
 import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.dao.*;
+import com.utree.eightysix.data.ChatFav;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.response.ChatInfoResponse;
@@ -333,6 +334,33 @@ public class ChatUtils {
         conversation.setCommentContent(comment.content);
         DaoUtils.getConversationDao().update(conversation);
       }
+    }
+
+    public static Conversation createByChatFav(ChatFav chatFav) {
+      Conversation conversation = new Conversation();
+      conversation.setChatId(chatFav.chatId);
+      conversation.setPostSource(chatFav.factoryName);
+      conversation.setBgUrl(chatFav.bgUrl);
+      conversation.setBgColor(chatFav.bgColor);
+      conversation.setPostId(chatFav.postId);
+      conversation.setPostContent(chatFav.postContent);
+      conversation.setCommentId(chatFav.commentId);
+      conversation.setCommentContent(chatFav.commentContent);
+      conversation.setUnreadCount(0L);
+      conversation.setTimestamp(System.currentTimeMillis());
+      conversation.setRelation(chatFav.relation);
+      conversation.setBanned(false);
+      conversation.setFavorite(true);
+
+      String myAvatar[] = chatFav.myAvatar.split("_");
+      conversation.setMyPortrait(myAvatar[0]);
+      conversation.setMyPortraitColor(myAvatar[1]);
+      String targetAvatar[] = chatFav.targetAvatar.split("_");
+      conversation.setPortrait(targetAvatar[0]);
+      conversation.setPortraitColor(targetAvatar[1]);
+
+      DaoUtils.getConversationDao().insert(conversation);
+      return conversation;
     }
 
     public static void deleteConversation(String chatId) {

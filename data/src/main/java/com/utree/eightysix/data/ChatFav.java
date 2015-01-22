@@ -28,8 +28,11 @@ public class ChatFav {
   @SerializedName("commentId")
   public String commentId;
 
-  @SerializedName("chatSource")
-  public String chatSource;
+  @SerializedName("commentContent")
+  public String commentContent;
+
+  @SerializedName("factoryName")
+  public String factoryName;
 
   @SerializedName("relation")
   public String relation;
