@@ -174,6 +174,9 @@ public class AbsHometownFeedsFragment extends BaseFragment {
             }
             getBaseActivity().setTopSubTitle(response.object.subInfo);
             getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
+
+            mHometownId = response.object.hometownId;
+            mHometownType = response.object.hometownType;
           } else {
             mFeedAdapter.add(response.object.posts.lists);
           }
@@ -184,9 +187,6 @@ public class AbsHometownFeedsFragment extends BaseFragment {
             mRstvEmpty.setVisibility(View.GONE);
           }
 
-          mHometownId = response.object.hometownId;
-          mHometownType = response.object.hometownType;
-
         }
 
         mPageInfo = response.object.posts.page;
@@ -195,6 +195,10 @@ public class AbsHometownFeedsFragment extends BaseFragment {
         getBaseActivity().hideRefreshIndicator();
         mLvFeed.stopLoadMore();
       }
-    }, FeedsResponse.class, page, mTabType, mHometownId, mHometownType);
+    }, FeedsResponse.class,
+        page,
+        mTabType,
+        mHometownId,
+        mHometownType);
   }
 }
