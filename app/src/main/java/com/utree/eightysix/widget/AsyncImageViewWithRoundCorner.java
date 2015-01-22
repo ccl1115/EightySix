@@ -5,6 +5,7 @@
 package com.utree.eightysix.widget;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
@@ -21,6 +22,17 @@ import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.*;
  */
 public class AsyncImageViewWithRoundCorner extends AsyncImageView {
 
+  private static final int IMAGE_MIN_WIDTH = 50;
+  private static final int IMAGE_MAX_WIDTH = 200;
+
+  private static final int IMAGE_MIN_HEIGHT = 50;
+  private static final int IMAGE_MAX_HEIGHT = 300;
+
+  private final int sImageMinWidth;
+  private final int sImageMaxWidth;
+  private final int sImageMinHeight;
+  private final int sImageMaxHeight;
+
   public AsyncImageViewWithRoundCorner(Context context) {
     this(context, null);
   }
@@ -31,15 +43,22 @@ public class AsyncImageViewWithRoundCorner extends AsyncImageView {
 
   public AsyncImageViewWithRoundCorner(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
+
+    sImageMinWidth = U.dp2px(IMAGE_MIN_WIDTH);
+    sImageMaxWidth = U.dp2px(IMAGE_MAX_WIDTH);
+
+    sImageMinHeight = U.dp2px(IMAGE_MIN_HEIGHT);
+    sImageMaxHeight = U.dp2px(IMAGE_MAX_HEIGHT);
   }
 
   @Override
   @Subscribe
   public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
     int size = U.dp2px(48);
+    Bitmap bitmap = event.getBitmap();
     if (event.getHash().equals(mUrlHash)
         && (mLocal && event.getWidth() == size && event.getHeight() == size || !mLocal)
-        && (event.getBitmap() != null)) {
+        && (bitmap != null)) {
       switch (event.getFrom()) {
         case FROM_MEM:
           break;
@@ -80,9 +99,30 @@ public class AsyncImageViewWithRoundCorner extends AsyncImageView {
           valueAnimator.start();
           break;
       }
-      setImageDrawable(new RoundRectDrawable(U.dp2px(14), event.getBitmap()));
-      setLayoutParams(new LinearLayout.LayoutParams(event.getBitmap().getWidth(),
-          event.getBitmap().getHeight()));
+      int width, height;
+      if (bitmap.getWidth() < sImageMinWidth) {
+        width = sImageMinWidth;
+        height = Math.min(sImageMaxHeight,
+            (int) (((float) width / bitmap.getWidth()) * bitmap.getHeight()));
+      } else if (bitmap.getWidth() > sImageMaxWidth) {
+        width = sImageMaxWidth;
+        height = Math.max(sImageMinHeight,
+            (int) (((float) width / bitmap.getWidth()) * bitmap.getHeight()));
+      } else if (bitmap.getHeight() < sImageMinHeight) {
+        height = sImageMinHeight;
+        width = Math.max(sImageMaxWidth,
+            (int) (((float) height / bitmap.getHeight()) * bitmap.getWidth()));
+      } else if (bitmap.getHeight() > sImageMaxHeight) {
+        height = sImageMaxHeight;
+        width = Math.min(sImageMinWidth,
+            (int) (((float) height / bitmap.getHeight()) * bitmap.getWidth()));
+      } else {
+        width = bitmap.getWidth();
+        height = bitmap.getHeight();
+      }
+      setLayoutParams(new LinearLayout.LayoutParams(width, height));
+
+      setImageDrawable(new RoundRectDrawable(U.dp2px(14), bitmap));
     }
   }
 

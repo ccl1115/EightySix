@@ -17,6 +17,8 @@ public class RoundRectDrawable extends Drawable {
   private int mRadius;
 
   private BitmapShader mBitmapShader;
+  private int mBitmapWidth;
+  private int mBitmapHeight;
 
   public RoundRectDrawable(int radius, ColorStateList stateList) {
     mRadius = radius;
@@ -37,16 +39,9 @@ public class RoundRectDrawable extends Drawable {
     mPaint.setShader(mBitmapShader);
     mPaint.setAntiAlias(true);
     mPaint.setDither(true);
-    setBounds(0, 0, bitmap.getWidth(), bitmap.getHeight());
-  }
-
-  @Override
-  public void setBounds(Rect bounds) {
-    super.setBounds(bounds);
-    mRectF.left = bounds.left;
-    mRectF.right = bounds.right;
-    mRectF.top = bounds.top;
-    mRectF.bottom = bounds.bottom;
+    mBitmapWidth = bitmap.getWidth();
+    mBitmapHeight = bitmap.getHeight();
+    setBounds(0, 0, mBitmapWidth, mBitmapHeight);
   }
 
   @Override
@@ -71,6 +66,11 @@ public class RoundRectDrawable extends Drawable {
     mRectF.right = bounds.right;
     mRectF.top = bounds.top;
     mRectF.bottom = bounds.bottom;
+    if (mBitmapShader != null) {
+      Matrix localM = new Matrix();
+      localM.postScale(mRectF.width() / (float) mBitmapWidth, mRectF.height() / (float) mBitmapHeight, 0, 0);
+      mBitmapShader.setLocalMatrix(localM);
+    }
   }
 
   @Override

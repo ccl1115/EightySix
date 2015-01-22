@@ -1,7 +1,6 @@
 package com.utree.eightysix.app.publish;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.ExifInterface;
@@ -17,7 +16,6 @@ import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
-import com.utree.eightysix.widget.RoundedButton;
 
 import java.io.File;
 import java.io.FileNotFoundException;
