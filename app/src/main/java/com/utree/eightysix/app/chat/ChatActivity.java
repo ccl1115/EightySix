@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
@@ -396,7 +395,7 @@ public class ChatActivity extends BaseActivity implements
       }
     });
 
-    if (TextUtils.isEmpty(mConversation.getCommentContent())) {
+    if (mConversation.getCommentId() == null || "0".equals(mConversation.getCommentId())) {
       addPostSummaryInfo();
     } else {
       addCommentSummaryInfo();
@@ -475,25 +474,27 @@ public class ChatActivity extends BaseActivity implements
   }
 
   private void requestFavDel() {
-    U.request("chat_fav_del", new OnResponse2<Response>() {
-      @Override
-      public void onResponseError(Throwable e) {
-        ((ImageActionButton) getTopBar().getActionView(0))
-            .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
-      }
-
-      @Override
-      public void onResponse(Response response) {
-        if (RESTRequester.responseOk(response)) {
-          mConversation.setFavorite(false);
-          DaoUtils.getConversationDao().update(mConversation);
-          U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, mConversation));
-        } else {
+    if (mConversation.getFavorite() != null && mConversation.getFavorite()) {
+      U.request("chat_fav_del", new OnResponse2<Response>() {
+        @Override
+        public void onResponseError(Throwable e) {
           ((ImageActionButton) getTopBar().getActionView(0))
               .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
         }
-      }
-    }, Response.class, mChatId, mConversation.getPostId(), mConversation.getCommentId());
+
+        @Override
+        public void onResponse(Response response) {
+          if (RESTRequester.responseOk(response)) {
+            mConversation.setFavorite(false);
+            DaoUtils.getConversationDao().update(mConversation);
+            U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, mConversation));
+          } else {
+            ((ImageActionButton) getTopBar().getActionView(0))
+                .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
+          }
+        }
+      }, Response.class, mChatId, mConversation.getPostId(), mConversation.getCommentId());
+    }
   }
 
   @Override

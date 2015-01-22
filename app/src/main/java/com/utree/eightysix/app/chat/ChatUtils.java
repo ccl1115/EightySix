@@ -65,6 +65,7 @@ public class ChatUtils {
 
     try {
       m.setCommentContent(message.getStringAttribute("commentContent"));
+      Log.d(C.TAG.CH, "receive comment content: " + m.getCommentContent());
     } catch (EaseMobException ignored) {
     }
 
@@ -78,6 +79,7 @@ public class ChatUtils {
         m.setType(MessageConst.TYPE_TXT);
         m.setStatus(MessageConst.STATUS_SUCCESS);
         m.setContent(((TextMessageBody) message.getBody()).getMessage());
+        Log.d(C.TAG.CH, "receive post content: " + m.getContent());
         break;
       case IMAGE:
         m.setType(MessageConst.TYPE_IMAGE);
@@ -94,6 +96,7 @@ public class ChatUtils {
 
         ImageContent content = new ImageContent(body.getLocalUrl(), body.getRemoteUrl(), body.getSecret(), local, body.getThumbnailUrl());
         m.setContent(U.getGson().toJson(content));
+        Log.d(C.TAG.CH, "receive post content: " + m.getContent());
         break;
     }
 

@@ -243,18 +243,19 @@ public class ConversationActivity extends BaseActivity {
           @Override
           public void onClick(DialogInterface dialogInterface, int i) {
 
-            U.request("chat_fav_del", new OnResponse2<Response>() {
-              @Override
-              public void onResponseError(Throwable e) {
+            if (conversation.getFavorite() != null && conversation.getFavorite()) {
+              U.request("chat_fav_del", new OnResponse2<Response>() {
+                @Override
+                public void onResponseError(Throwable e) {
 
-              }
+                }
 
-              @Override
-              public void onResponse(Response response) {
+                @Override
+                public void onResponse(Response response) {
 
-              }
-            }, Response.class, conversation.getChatId(), conversation.getPostId(), conversation.getCommentId());
-            dialogInterface.dismiss();
+                }
+              }, Response.class, conversation.getChatId(), conversation.getPostId(), conversation.getCommentId());
+            }
             ChatUtils.ConversationUtil.deleteConversation(conversation);
             mConversationAdapter.remove(conversation);
           }
