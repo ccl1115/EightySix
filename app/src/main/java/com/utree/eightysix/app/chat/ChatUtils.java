@@ -711,7 +711,7 @@ public class ChatUtils {
 
       NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
           .setContentTitle("匿名聊天")
-          .setContentTitle(String.format("你收到了%d条聊天消息", count))
+          .setContentText(String.format("你收到了%d条聊天消息", count))
           .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher))
           .setSmallIcon(R.drawable.ic_launcher)
           .setDefaults(Account.inst().getSilentMode() ? Notification.DEFAULT_LIGHTS : Notification.DEFAULT_ALL)
