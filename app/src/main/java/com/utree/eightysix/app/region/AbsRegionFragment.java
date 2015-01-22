@@ -18,6 +18,7 @@ import com.utree.eightysix.app.feed.FeedAdapter;
 import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
 import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
+import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.app.region.event.RegionResponseEvent;
@@ -331,13 +332,8 @@ public abstract class AbsRegionFragment extends BaseFragment {
         if (getRegionType() == 0 && mCircle != null) {
           U.getBus().post(new NewAllPostCountEvent(mCircle.id, response.object.fetch.newPostAllCount));
           U.getBus().post(new NewHotPostCountEvent(mCircle.id, response.object.fetch.newPostHotCount));
-        } else {
-          U.getBus().post(new NewAllPostCountEvent(0, 0));
-          U.getBus().post(new NewHotPostCountEvent(0, 0));
+          U.getBus().post(new NewFriendsPostCountEvent(mCircle.id, response.object.fetch.newPostFriendsCount));
         }
-      } else {
-        U.getBus().post(new NewAllPostCountEvent(0, 0));
-        U.getBus().post(new NewHotPostCountEvent(0, 0));
       }
 
       if (getRegionType() == 0) {
