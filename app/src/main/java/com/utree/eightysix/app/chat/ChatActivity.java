@@ -464,7 +464,7 @@ public class ChatActivity extends BaseActivity implements
         if (RESTRequester.responseOk(response)) {
           mConversation.setFavorite(true);
           DaoUtils.getConversationDao().update(mConversation);
-          U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, mConversation));
+          U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_INSERT_OR_UPDATE, mConversation));
         } else {
           ((ImageActionButton) getTopBar().getActionView(0))
               .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_outline));
@@ -521,7 +521,7 @@ public class ChatActivity extends BaseActivity implements
       protected void onProgressUpdate(Integer... values) {
         switch (values[0]) {
           case 1:
-            U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, mConversation));
+            U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_INSERT_OR_UPDATE, mConversation));
             break;
           case 2:
             U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT, mUnreadConversationCount));

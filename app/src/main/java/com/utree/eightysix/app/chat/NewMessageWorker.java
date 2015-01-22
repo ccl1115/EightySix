@@ -134,7 +134,7 @@ class NewMessageWorker extends AsyncTask<Void, Integer, Void> {
         U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT, mUnreadConversationCount));
         break;
       case PROGRESS_UPDATE_CONVERSATION:
-        U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, mConversation));
+        U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_INSERT_OR_UPDATE, mConversation));
         break;
       case PROGRESS_INSERT_MESSAGE:
         U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_RECEIVE_MSG, mMessage));

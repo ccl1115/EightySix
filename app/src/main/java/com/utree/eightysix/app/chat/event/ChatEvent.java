@@ -38,22 +38,24 @@ public class ChatEvent {
   /**
    * Event when conversation data update from db
    */
-  public static final int EVENT_CONVERSATION_UPDATE = 31;
+  public static final int EVENT_CONVERSATION_INSERT_OR_UPDATE = 31;
+
+  public static final int EVENT_CONVERSATION_UPDATE = 33;
 
   /**
    * Event to reload all conversation from db
    */
-  public static final int EVENT_CONVERSATIONS_RELOAD = 32;
+  public static final int EVENT_CONVERSATIONS_RELOAD = 34;
 
   /**
    * Event fire when conversation remove from db
    */
-  public static final int EVENT_CONVERSATION_REMOVE = 33;
+  public static final int EVENT_CONVERSATION_REMOVE = 35;
 
   /**
    * Event fire when db return unread conversation count
    */
-  public static final int EVENT_UPDATE_UNREAD_CONVERSATION_COUNT = 34;
+  public static final int EVENT_UPDATE_UNREAD_CONVERSATION_COUNT = 36;
 
   private int mStatus;
 

@@ -23,6 +23,7 @@ import com.utree.eightysix.rest.HandlerWrapper;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RequestData;
 import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.utils.DaoUtils;
 
 import java.util.List;
 
@@ -240,6 +241,9 @@ public class Account {
       if (!Account.inst().setUserId("") && !Account.inst().setToken("")) {
         Account.inst().mIsLogin = false;
       }
+
+      DaoUtils.getConversationDao().deleteAll();
+      DaoUtils.getMessageDao().deleteAll();
 
       U.getAppLogger().log(new EntryAdapter() {
 

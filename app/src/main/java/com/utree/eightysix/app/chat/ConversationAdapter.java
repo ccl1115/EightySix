@@ -199,7 +199,7 @@ public class ConversationAdapter extends BaseAdapter {
   @Subscribe
   public void onChatEvent(ChatEvent event) {
     switch (event.getStatus()) {
-      case ChatEvent.EVENT_CONVERSATION_UPDATE:
+      case ChatEvent.EVENT_CONVERSATION_INSERT_OR_UPDATE: {
         Conversation obj = (Conversation) event.getObj();
         if (obj == null) return;
         for (int i = 0; i < mConversations.size(); i++) {
@@ -216,13 +216,30 @@ public class ConversationAdapter extends BaseAdapter {
         Collections.sort(mConversations, sComparator);
         notifyDataSetChanged();
         break;
-      case ChatEvent.EVENT_CONVERSATIONS_RELOAD:
+      }
+      case ChatEvent.EVENT_CONVERSATION_UPDATE: {
+        Conversation obj = (Conversation) event.getObj();
+        if (obj == null) return;
+        for (int i = 0; i < mConversations.size(); i++) {
+          Conversation conversation = mConversations.get(i);
+          if (conversation.getId().equals(obj.getId())) {
+            mConversations.set(i, obj);
+            Collections.sort(mConversations, sComparator);
+            notifyDataSetChanged();
+            return;
+          }
+        }
+        break;
+      }
+      case ChatEvent.EVENT_CONVERSATIONS_RELOAD: {
         mConversations = ChatUtils.ConversationUtil.getConversations();
         notifyDataSetChanged();
         break;
-      case ChatEvent.EVENT_CONVERSATION_REMOVE:
+      }
+      case ChatEvent.EVENT_CONVERSATION_REMOVE: {
         removeByChatId(((String) event.getObj()));
         break;
+      }
     }
   }
 

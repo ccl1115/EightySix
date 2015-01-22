@@ -120,7 +120,7 @@ public class SenderImpl implements Sender {
     DaoUtils.getMessageDao().insertOrReplace(message);
     Conversation conversation = ChatUtils.ConversationUtil.setLastMessage(message);
     message.setStatus(MessageConst.STATUS_IN_PROGRESS);
-    U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, conversation));
+    U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_INSERT_OR_UPDATE, conversation));
     U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_SENDING_MSG, message));
 
   }
