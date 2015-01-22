@@ -35,14 +35,16 @@
             android:orientation="horizontal"
             android:layout_gravity="bottom"
             android:layout_marginBottom="5dp"
+            android:paddingLeft="15dp"
+            android:paddingStart="15dp"
+            android:paddingRight="15dp"
+            android:paddingEnd="15dp"
             >
 
         <TextView
                 android:id="@+id/tv_source"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginStart="15dp"
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"
                 android:singleLine="true"
@@ -77,18 +79,15 @@
                 android:layout_marginRight="15dp"
                 />
 
-            <ImageView
-                    android:id="@+id/iv_chat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_chat_normal"
-                    />
+        <ImageView
+                android:id="@+id/iv_chat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:padding="8dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_chat_normal"
+                />
 
     </LinearLayout>
 

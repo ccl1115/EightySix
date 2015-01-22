@@ -391,6 +391,8 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
   protected void onResume() {
     super.onResume();
     M.getRegisterHelper().register(mLvComments);
+    
+    hideSoftKeyboard(mEtPostContent);
   }
 
   @Override

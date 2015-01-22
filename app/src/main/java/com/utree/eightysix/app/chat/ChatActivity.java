@@ -256,6 +256,7 @@ public class ChatActivity extends BaseActivity implements
 
   @Override
   public void onActionLeftClicked() {
+    hideSoftKeyboard(mEtPostContent);
     finish();
   }
 
@@ -542,10 +543,7 @@ public class ChatActivity extends BaseActivity implements
   @Override
   protected void onDestroy() {
     super.onDestroy();
-
     U.getChatBus().unregister(this);
-
-    hideSoftKeyboard(mEtPostContent);
   }
 
   @Override
