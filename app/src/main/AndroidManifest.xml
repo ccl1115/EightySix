@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          android:versionCode="35"
-          android:versionName="1.6.0"
-          package="com.utree.eightysix">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" android:versionCode="36" android:versionName="1.6.0" package="com.utree.eightysix">
 
     <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="21"/>
 
@@ -157,11 +153,7 @@
 
         <activity android:exported="@bool/exported" android:name=".app.feed.OptionPublishActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme.Dialog" android:windowSoftInputMode="adjustResize|stateVisible"/>
 
-        <activity
-                android:exported="@bool/exported"
-                android:name=".app.chat.ChatActivity"
-                android:screenOrientation="portrait"
-                android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <activity android:exported="@bool/exported" android:name=".app.chat.ChatActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden|adjustResize"/>
 
         <activity android:exported="@bool/exported" android:label="标签详情" android:launchMode="singleTask" android:name=".app.tag.TagTabActivity" android:screenOrientation="portrait"/>
 
@@ -171,16 +163,9 @@
 
         <activity android:exported="@bool/exported" android:name=".app.region.FactoryRegionActivity" android:screenOrientation="portrait"/>
 
-        <activity
-                android:exported="@bool/exported"
-                android:name=".app.chat.ConversationActivity"
-                android:label="会话列表"
-                android:screenOrientation="portrait"/>
+        <activity android:exported="@bool/exported" android:label="会话列表" android:name=".app.chat.ConversationActivity" android:screenOrientation="portrait"/>
 
-        <activity
-                android:exported="@bool/exported"
-                android:name=".app.chat.ImageViewerActivity"
-                android:screenOrientation="portrait"/>
+        <activity android:exported="@bool/exported" android:name=".app.chat.ImageViewerActivity" android:screenOrientation="portrait"/>
 
         <service android:enabled="true" android:name=".contact.ContactsSyncService"/>
         <service android:enabled="true" android:name=".app.msg.FetchNotificationService"/>
@@ -197,10 +182,10 @@
 
         <receiver android:name="com.easemob.chat.StartServiceReceiver">
             <intent-filter android:priority="1000">
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </receiver>
 
@@ -253,23 +238,13 @@
                 <action android:name=""/>
             </intent-filter>
         </activity>
-        <activity
-                android:name=".app.devmode.DevModeActivity"
-                android:label="开发者模式"/>
+        <activity android:label="开发者模式" android:name=".app.devmode.DevModeActivity"/>
 
         <!-- 【必须】 信鸽service -->
-        <service
-                android:exported="true"
-                android:name="com.tencent.android.tpush.service.XGPushService"
-                android:persistent="true"
-                android:process=":xg_service_v2"
-                tools:ignore="ExportedService"/>
+        <service android:exported="true" android:name="com.tencent.android.tpush.service.XGPushService" android:persistent="true" android:process=":xg_service_v2" tools:ignore="ExportedService"/>
 
         <!-- 【必须】 通知service，此选项有助于提高抵达率 -->
-        <service
-                android:exported="true"
-                android:name="com.tencent.android.tpush.rpc.XGRemoteService"
-                tools:ignore="ExportedService">
+        <service android:exported="true" android:name="com.tencent.android.tpush.rpc.XGRemoteService" tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="com.utree.eightysix.PUSH_ACTION"/>
             </intent-filter>
