@@ -3,10 +3,7 @@ package com.utree.eightysix.app.chat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.*;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.utree.eightysix.R;
@@ -274,7 +271,7 @@ public class ChatAdapter extends BaseAdapter {
     return imageView;
   }
 
-  private View getImageView(int layout, int position, View convertView, ViewGroup parent) {
+  private View getImageView(int layout, int position, View convertView, final ViewGroup parent) {
     ImageItemViewHolder holder;
     if (convertView == null) {
       convertView = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
@@ -284,7 +281,7 @@ public class ChatAdapter extends BaseAdapter {
       holder = (ImageItemViewHolder) convertView.getTag();
     }
 
-    Message message = getItem(position);
+    final Message message = getItem(position);
 
     ImageContent content = U.getGson().fromJson(message.getContent(), ImageContent.class);
     if (content.localThumb != null) {
@@ -294,6 +291,14 @@ public class ChatAdapter extends BaseAdapter {
     }
     holder.mPbLoading.setVisibility(message.getStatus() == MessageConst.STATUS_IN_PROGRESS ? View.VISIBLE : View.GONE);
     holder.mIvError.setVisibility(message.getStatus() == MessageConst.STATUS_FAILED ? View.VISIBLE : View.GONE);
+
+    holder.mLlBubble.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        ImageContent content = U.getGson().fromJson(message.getContent(), ImageContent.class);
+        ImageViewerActivity.start(parent.getContext(), content.local, content.remote, content.secret);
+      }
+    });
 
     return convertView;
   }
@@ -394,6 +399,9 @@ public class ChatAdapter extends BaseAdapter {
 
     @InjectView(R.id.iv_error)
     ImageView mIvError;
+
+    @InjectView(R.id.ll_bubble)
+    LinearLayout mLlBubble;
 
     ImageItemViewHolder(View view) {
       ButterKnife.inject(this, view);

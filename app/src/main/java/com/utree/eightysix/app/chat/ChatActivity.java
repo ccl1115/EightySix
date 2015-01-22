@@ -26,7 +26,6 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.CameraUtil;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.chat.content.ImageContent;
 import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.app.publish.EmojiFragment;
 import com.utree.eightysix.dao.Conversation;
@@ -188,9 +187,6 @@ public class ChatActivity extends BaseActivity implements
     if (m != null) {
       if (m.getStatus() == MessageConst.STATUS_FAILED) {
         resendConfirm(m);
-      } else if (m.getType() == MessageConst.TYPE_IMAGE) {
-        ImageContent content = U.getGson().fromJson(m.getContent(), ImageContent.class);
-        ImageViewerActivity.start(this, content.local, content.remote, content.secret);
       }
     }
   }
