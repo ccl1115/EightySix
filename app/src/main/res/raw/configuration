@@ -51,6 +51,12 @@ cache.image.version = 0
 cache.image.count = 1
 cache.image.size = 104857600
 
+# configs for cache chat images
+cache.chat.image.dir = chat_image_cache
+cache.chat.image.version = 0
+cache.chat.image.count = 1
+cache.chat.image.size = 104857600
+
 # pattern http://{bucket-name}.{host}/
 storage.host = oss-cn-beijing.aliyuncs.com
 

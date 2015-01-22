@@ -252,6 +252,13 @@ public class U {
         U.getConfigInt("cache.image.size"));
   }
 
+  public static DiskLruCache getChatImageCache() {
+    return getCacheUtils().getCache(U.getConfig("cache.chat.image.dir"),
+        U.getConfigInt("cache.chat.image.version"),
+        U.getConfigInt("cache.chat.image.count"),
+        U.getConfigInt("cache.chat.image.size"));
+  }
+
   public static String getConfig(String key) {
     if (sConfiguration == null) {
       loadConfig();
