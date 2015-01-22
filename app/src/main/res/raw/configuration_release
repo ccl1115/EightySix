@@ -6,4 +6,4 @@
 
 api.host = http://lanmei.gz.1251114078.clb.myqcloud.com
 
-api.host.second = http://production.gz.1251114078.cee.myqcloud.com
+api.host.second = http://production.gz.1251114078.clb.myqcloud.com
