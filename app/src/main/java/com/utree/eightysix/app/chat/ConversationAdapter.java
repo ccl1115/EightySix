@@ -123,6 +123,12 @@ public class ConversationAdapter extends BaseAdapter {
       convertView.setBackgroundColor(0x00000000);
     }
 
+    if (conversation.getBanned() != null && conversation.getBanned()) {
+      holder.mTvBanned.setVisibility(View.VISIBLE);
+    } else {
+      holder.mTvBanned.setVisibility(View.INVISIBLE);
+    }
+
     holder.mTvName.setText(conversation.getRelation());
     holder.mTvLast.setText(conversation.getLastMsg());
 
@@ -254,6 +260,8 @@ public class ConversationAdapter extends BaseAdapter {
     @InjectView(R.id.fl_post)
     public FrameLayout mFlPost;
 
+    @InjectView(R.id.tv_banned)
+    public TextView mTvBanned;
 
     public ViewHolder(View view) {
       ButterKnife.inject(this, view);
