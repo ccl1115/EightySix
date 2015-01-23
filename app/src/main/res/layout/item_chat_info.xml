@@ -12,7 +12,7 @@
         android:padding="12dp"
         >
 
-    <com.utree.eightysix.widget.RoundedButton
+    <com.rockerhieu.emojicon.EmojiconTextView
             android:id="@+id/rb_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -26,8 +26,7 @@
             android:paddingStart="8dp"
             android:paddingRight="8dp"
             android:paddingEnd="8dp"
-            app:background="#fff4f4f4"
-            app:radius="16dp"
+            android:background="@drawable/bg_chat_info"
             />
 
 </FrameLayout>

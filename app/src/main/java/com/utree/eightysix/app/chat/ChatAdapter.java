@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.rockerhieu.emojicon.EmojiconTextView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.chat.content.ImageContent;
@@ -14,7 +15,6 @@ import com.utree.eightysix.dao.Message;
 import com.utree.eightysix.utils.TimeUtil;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.FontPortraitView;
-import com.utree.eightysix.widget.RoundedButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -309,8 +309,8 @@ public class ChatAdapter extends BaseAdapter {
     }
 
     final Message message = getItem(position);
-    RoundedButton roundedButton = (RoundedButton) convertView.findViewById(R.id.rb_info);
-    roundedButton.setText(message.getContent());
+    EmojiconTextView textView = (EmojiconTextView) convertView.findViewById(R.id.rb_info);
+    textView.setText(message.getContent());
 
     return convertView;
   }
@@ -321,9 +321,9 @@ public class ChatAdapter extends BaseAdapter {
     }
 
     final Message message = getItem(position);
-    RoundedButton roundedButton = (RoundedButton) convertView.findViewById(R.id.rb_info);
-    roundedButton.setText(message.getContent());
-    roundedButton.setOnClickListener(new View.OnClickListener() {
+    EmojiconTextView textView = (EmojiconTextView) convertView.findViewById(R.id.rb_info);
+    textView.setText(message.getContent());
+    textView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
         PostActivity.start(view.getContext(), message.getPostId());
@@ -339,7 +339,7 @@ public class ChatAdapter extends BaseAdapter {
     }
 
     Message message = getItem(position);
-    ((RoundedButton) convertView.findViewById(R.id.rb_info)).setText(ChatUtils.timestamp(message.getTimestamp()));
+    ((EmojiconTextView) convertView.findViewById(R.id.rb_info)).setText(ChatUtils.timestamp(message.getTimestamp()));
 
     return convertView;
   }
