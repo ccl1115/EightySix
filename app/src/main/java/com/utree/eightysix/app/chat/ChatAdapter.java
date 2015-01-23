@@ -15,6 +15,7 @@ import com.utree.eightysix.dao.Message;
 import com.utree.eightysix.utils.TimeUtil;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.FontPortraitView;
+import com.utree.eightysix.widget.RoundedButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -339,7 +340,7 @@ public class ChatAdapter extends BaseAdapter {
     }
 
     Message message = getItem(position);
-    ((EmojiconTextView) convertView.findViewById(R.id.rb_info)).setText(ChatUtils.timestamp(message.getTimestamp()));
+    ((RoundedButton) convertView.findViewById(R.id.rb_info)).setText(ChatUtils.timestamp(message.getTimestamp()));
 
     return convertView;
   }
