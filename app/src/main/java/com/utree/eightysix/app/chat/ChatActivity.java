@@ -218,6 +218,8 @@ public class ChatActivity extends BaseActivity implements
           break;
         }
         case ChatEvent.EVENT_SENT_MSG_SUCCESS: {
+          Conversation conversation = ChatUtils.ConversationUtil.setLastMessage((Message) event.getObj());
+          U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_INSERT_OR_UPDATE, conversation));
           mChatAdapter.notifyDataSetChanged();
           break;
         }
