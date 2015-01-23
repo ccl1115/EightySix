@@ -6,6 +6,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.app.feed.event.RefreshFeedEvent;
+import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
 import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.data.BaseItem;
@@ -62,6 +63,12 @@ public class HotFeedRegionFragment extends AbsRegionFragment {
       }
     }, FeedsByRegionResponse.class);
 
+  }
+
+  @Override
+  protected void responseForRequest(FeedsByRegionResponse response, int regionType, int page) {
+    super.responseForRequest(response, regionType, page);
+    U.getBus().post(new NewHotPostCountEvent(mCircle.id, 0));
   }
 
   @Override
