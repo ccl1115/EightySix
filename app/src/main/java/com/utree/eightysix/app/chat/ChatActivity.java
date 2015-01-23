@@ -305,6 +305,7 @@ public class ChatActivity extends BaseActivity implements
     mIvCamera.setVisibility(View.VISIBLE);
     mIvEmotion.setVisibility(View.VISIBLE);
     mIvPost.setEnabled(false);
+    mEtPostContent.setHint("");
 
     //region To detect soft keyboard visibility change
     // works after ICM
