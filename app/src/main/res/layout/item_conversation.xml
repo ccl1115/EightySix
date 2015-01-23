@@ -151,12 +151,12 @@
                     android:id="@+id/tv_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="4dp"
                     android:gravity="center"
                     android:textColor="@android:color/white"
                     android:textSize="10sp"
                     android:ellipsize="end"
                     android:maxLines="4"
+                    android:padding="4dp"
                     tools:ignore="SmallSp"
                     />
 

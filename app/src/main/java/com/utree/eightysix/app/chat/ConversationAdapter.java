@@ -167,8 +167,9 @@ public class ConversationAdapter extends BaseAdapter {
     }
     if (!TextUtils.isEmpty(conversation.getBgUrl())) {
       holder.mAivPostBg.setUrl(conversation.getBgUrl());
+      holder.mTvContent.setBackgroundColor(0x00000000);
     } else {
-      holder.mAivPostBg.setBackgroundColor(ColorUtil.strToColor(conversation.getBgColor()));
+      holder.mTvContent.setBackgroundColor(ColorUtil.strToColor(conversation.getBgColor()));
       holder.mAivPostBg.setUrl(null);
     }
     holder.mTvLast.setText(conversation.getLastMsg());
