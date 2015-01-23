@@ -404,19 +404,11 @@ public class U {
       BaseApplication.getHandler().post(new Runnable() {
         @Override
         public void run() {
-          if (sToast != null) {
-            sToast.cancel();
-          }
-          sToast = Toast.makeText(getContext(), string, Toast.LENGTH_SHORT);
-          sToast.show();
+          Toast.makeText(getContext(), string, Toast.LENGTH_SHORT).show();
         }
       });
     } else {
-      if (sToast != null) {
-        sToast.cancel();
-      }
-      sToast = Toast.makeText(getContext(), string, Toast.LENGTH_SHORT);
-      sToast.show();
+      Toast.makeText(getContext(), string, Toast.LENGTH_SHORT).show();
     }
   }
 
