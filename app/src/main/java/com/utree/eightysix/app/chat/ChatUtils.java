@@ -534,7 +534,7 @@ public class ChatUtils {
     public static List<Message> getConversation(String chatId, int page) {
       return DaoUtils.getMessageDao().queryBuilder()
           .where(MessageDao.Properties.ChatId.eq(chatId))
-          .orderAsc(MessageDao.Properties.Timestamp)
+          .orderDesc(MessageDao.Properties.Timestamp)
           .limit(20)
           .offset(20 * page)
           .build()
