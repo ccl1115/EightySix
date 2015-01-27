@@ -133,4 +133,43 @@ class ShareToQzone extends IShare {
     shareApp(activity, circle, url);
   }
 
+  @Override
+  public void shareBainian(final BaseActivity activity, final String recipient, final String content) {
+    new AsyncTask<Void, Void, Void>() {
+
+      @Override
+      protected void onPreExecute() {
+        activity.showProgressBar(true);
+      }
+
+      @Override
+      protected Void doInBackground(Void... params) {
+        Bundle data = new Bundle();
+        data.putString(QzoneShare.SHARE_TO_QQ_TITLE, String.format(shareTitleForBainian(), recipient));
+        data.putString(QzoneShare.SHARE_TO_QQ_SUMMARY, content);
+        ArrayList<String> urls = new ArrayList<String>();
+        urls.add("http://utree-resource.oss-cn-beijing.aliyuncs.com/faceless.png");
+        data.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL, urls);
+        data.putInt(QzoneShare.SHARE_TO_QZONE_KEY_TYPE, QzoneShare.SHARE_TO_QZONE_TYPE_IMAGE_TEXT);
+        shareToQzone(activity, data, defaultListener());
+        return null;
+      }
+
+      @Override
+      protected void onPostExecute(Void aVoid) {
+        activity.hideProgressBar();
+      }
+    }.execute();
+  }
+
+  @Override
+  protected String shareTitleForBainian() {
+    return "Hello %s，送你一张超炫酷的拜年卡，我是通过蓝莓制作的哦";
+  }
+
+  @Override
+  protected String shareContentForBainian() {
+    return null;
+  }
+
 }

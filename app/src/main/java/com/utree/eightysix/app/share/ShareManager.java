@@ -72,6 +72,15 @@ public class ShareManager {
     };
   }
 
+  public ThemedDialog shareBainianDialog(final BaseActivity activity, final Post post) {
+    return new ShareDialog(activity, "发送百年卡片") {
+      @Override
+      protected Object getViewHolder(ShareDialog dialog) {
+        return null;
+      }
+    };
+  }
+
   public void shareAppToQzone(final BaseActivity activity, final Circle circle) {
     mShortener.shorten(shareLinkForApp(circle.id), new Shortener.Callback() {
       @Override
@@ -124,13 +133,17 @@ public class ShareManager {
     return String.format("%s/shareTag.do?factoryId=%d&tagId=%d", U.getConfig("api.host"), id, tagId);
   }
 
+  private String shareLinkForBainian() {
+    return "";
+  }
+
   @Keep
   public class ShareCommentViewHolder {
-    @InjectView (R.id.aiv_qr_code)
+    @InjectView(R.id.aiv_qr_code)
     ImageView mIvQrCode;
-    @InjectView (R.id.tv_qr_code)
+    @InjectView(R.id.tv_qr_code)
     TextView mTvQrCode;
-    @InjectView (R.id.rb_clipboard)
+    @InjectView(R.id.rb_clipboard)
     RoundedButton mRbClipboard;
     private BaseActivity mActivity;
     private ShareDialog mDialog;
@@ -149,7 +162,7 @@ public class ShareManager {
       mRbClipboard.setVisibility(View.VISIBLE);
     }
 
-    @OnClick (R.id.tv_sms)
+    @OnClick(R.id.tv_sms)
     void onTvSmsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_msg", "comment");
       mShortener.shorten(shareLinkForComment(mPost.id), new Shortener.Callback() {
@@ -165,7 +178,7 @@ public class ShareManager {
       mDialog.dismiss();
     }
 
-    @OnClick (R.id.tv_qq_friends)
+    @OnClick(R.id.tv_qq_friends)
     void onQQFriendsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_qq", "comment");
       mActivity.showProgressBar();
@@ -182,7 +195,7 @@ public class ShareManager {
       mDialog.dismiss();
     }
 
-    @OnClick (R.id.tv_qzone)
+    @OnClick(R.id.tv_qzone)
     void onQzoneClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_qzone", "comment");
       mActivity.showProgressBar();
@@ -199,7 +212,7 @@ public class ShareManager {
       mDialog.dismiss();
     }
 
-    @OnClick (R.id.rb_clipboard)
+    @OnClick(R.id.rb_clipboard)
     void onRbClipboardClicked() {
       mShortener.shorten(shareLinkForComment(mPost.id), new Shortener.Callback() {
         @Override
@@ -219,11 +232,11 @@ public class ShareManager {
 
   @Keep
   public class SharePostViewHolder {
-    @InjectView (R.id.aiv_qr_code)
+    @InjectView(R.id.aiv_qr_code)
     ImageView mIvQrCode;
-    @InjectView (R.id.tv_qr_code)
+    @InjectView(R.id.tv_qr_code)
     TextView mTvQrCode;
-    @InjectView (R.id.rb_clipboard)
+    @InjectView(R.id.rb_clipboard)
     RoundedButton mRbClipboard;
     private BaseActivity mActivity;
     private ShareDialog mDialog;
@@ -240,7 +253,7 @@ public class ShareManager {
       mRbClipboard.setVisibility(View.VISIBLE);
     }
 
-    @OnClick (R.id.tv_sms)
+    @OnClick(R.id.tv_sms)
     void onTvSmsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_msg", "post");
       mShortener.shorten(shareLinkForPost(mPost.id), new Shortener.Callback() {
@@ -256,7 +269,7 @@ public class ShareManager {
       mDialog.dismiss();
     }
 
-    @OnClick (R.id.tv_qq_friends)
+    @OnClick(R.id.tv_qq_friends)
     void onQQFriendsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_qq", "post");
       mActivity.showProgressBar();
@@ -273,7 +286,7 @@ public class ShareManager {
       mDialog.dismiss();
     }
 
-    @OnClick (R.id.tv_qzone)
+    @OnClick(R.id.tv_qzone)
     void onQzoneClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_qzone", "post");
       mActivity.showProgressBar();
@@ -290,7 +303,7 @@ public class ShareManager {
       mDialog.dismiss();
     }
 
-    @OnClick (R.id.rb_clipboard)
+    @OnClick(R.id.rb_clipboard)
     void onRbClipboardClicked() {
       mShortener.shorten(shareLinkForPost(mPost.id), new Shortener.Callback() {
         @Override
@@ -321,7 +334,7 @@ public class ShareManager {
       ButterKnife.inject(this, dialog);
     }
 
-    @OnClick (R.id.tv_sms)
+    @OnClick(R.id.tv_sms)
     void onTvSmsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_msg", "app");
       if (mCircle == null) return;
@@ -338,7 +351,7 @@ public class ShareManager {
       mDialog.dismiss();
     }
 
-    @OnClick (R.id.tv_qq_friends)
+    @OnClick(R.id.tv_qq_friends)
     void onQQFriendsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_qq", "app");
       if (mCircle == null) return;
@@ -356,7 +369,7 @@ public class ShareManager {
       mDialog.dismiss();
     }
 
-    @OnClick (R.id.tv_qzone)
+    @OnClick(R.id.tv_qzone)
     void onQzoneClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_qzone", "app");
       if (mCircle == null) return;
@@ -377,11 +390,11 @@ public class ShareManager {
 
   @Keep
   public class ShareTagViewHolder {
-    @InjectView (R.id.aiv_qr_code)
+    @InjectView(R.id.aiv_qr_code)
     ImageView mIvQrCode;
-    @InjectView (R.id.tv_qr_code)
+    @InjectView(R.id.tv_qr_code)
     TextView mTvQrCode;
-    @InjectView (R.id.rb_clipboard)
+    @InjectView(R.id.rb_clipboard)
     RoundedButton mRbClipboard;
 
     private final BaseActivity mActivity;
@@ -401,7 +414,7 @@ public class ShareManager {
       mRbClipboard.setVisibility(View.VISIBLE);
     }
 
-    @OnClick (R.id.tv_qzone)
+    @OnClick(R.id.tv_qzone)
     void onQzoneClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_qzone", "tag");
 
@@ -421,7 +434,7 @@ public class ShareManager {
       mDialog.dismiss();
     }
 
-    @OnClick (R.id.tv_qq_friends)
+    @OnClick(R.id.tv_qq_friends)
     void onQQClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_qq", "tag");
 
@@ -441,7 +454,7 @@ public class ShareManager {
       mDialog.dismiss();
     }
 
-    @OnClick (R.id.tv_sms)
+    @OnClick(R.id.tv_sms)
     void onTvSmsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_msg", "tag");
       if (mCircle == null) return;
@@ -456,6 +469,58 @@ public class ShareManager {
         }
       });
       mDialog.dismiss();
+    }
+  }
+
+  @Keep
+  public class ShareBainianViewHolder {
+
+    @InjectView(R.id.aiv_qr_code)
+    ImageView mIvQrCode;
+    @InjectView(R.id.tv_qr_code)
+    TextView mTvQrCode;
+    @InjectView(R.id.rb_clipboard)
+    RoundedButton mRbClipboard;
+
+    private final BaseActivity mActivity;
+    private final String mRecipient;
+    private final String mMsg;
+    private ShareDialog mShareDialog;
+
+    ShareBainianViewHolder(final BaseActivity activity, ShareDialog dialog, String recipient, String msg) {
+      mActivity = activity;
+      mRecipient = recipient;
+      mMsg = msg;
+      mShareDialog = dialog;
+      ButterKnife.inject(this, dialog);
+
+      mIvQrCode.setVisibility(View.GONE);
+      mTvQrCode.setVisibility(View.GONE);
+      mRbClipboard.setVisibility(View.VISIBLE);
+    }
+
+
+    @OnClick(R.id.tv_sms)
+    void onTvSmsClicked() {
+      U.getAnalyser().trackEvent(mActivity, "share_by_msg", "bainian");
+      mShareViaSMS.shareBainian(mActivity, mRecipient, mMsg);
+      mShareDialog.dismiss();
+    }
+
+    @OnClick(R.id.tv_qq_friends)
+    void onQQClicked() {
+      U.getAnalyser().trackEvent(mActivity, "share_by_qq", "bainian");
+
+      mShareToQQ.shareBainian(mActivity, mRecipient, mMsg);
+      mShareDialog.dismiss();
+    }
+
+    @OnClick(R.id.tv_qzone)
+    void onQzoneClicked() {
+      U.getAnalyser().trackEvent(mActivity, "share_by_qq", "bainian");
+
+      mShareToQzone.shareBainian(mActivity, mRecipient, mMsg);
+      mShareDialog.dismiss();
     }
   }
 }

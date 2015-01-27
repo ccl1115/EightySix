@@ -33,6 +33,8 @@ public class BaseItemDeserializer implements JsonDeserializer<BaseItem> {
             return getOptionSet(jObj);
           case BaseItem.TYPE_TOPIC:
             return getPostTopicView(jObj);
+          case BaseItem.TYPE_BAINIAN:
+            return getBainianView(jObj);
         }
       }
       return getBaseItem(jObj);
@@ -209,6 +211,37 @@ public class BaseItemDeserializer implements JsonDeserializer<BaseItem> {
     postTopic.tags = tags;
 
     return postTopic;
+  }
+
+  private Bainian getBainianView(JsonObject jObj) {
+    if (jObj == null) return null;
+
+    Bainian bainian = new Bainian();
+
+    serializeBaseItem(jObj, bainian);
+
+    bainian.buttonText = safeGetAsString(jObj.get("buttonText"));
+    bainian.contentText = safeGetAsString(jObj.get("contentText"));
+    bainian.receiveText = safeGetAsString(jObj.get("receiveText"));
+    bainian.subTitle = safeGetAsString(jObj.get("subTitle"));
+    bainian.title = safeGetAsString(jObj.get("title"));
+
+    bainian.newYearContents = new ArrayList<Bainian.NewYearContent>();
+
+    JsonArray ja = jObj.getAsJsonArray("newYearContents");
+
+    for (JsonElement element : ja) {
+      JsonObject contentObj = element.getAsJsonObject();
+
+      Bainian.NewYearContent content = new Bainian.NewYearContent();
+
+      content.content = safeGetAsString(contentObj.get("content"));
+      content.id = safeGetAsInt(contentObj.get("id"));
+
+      bainian.newYearContents.add(content);
+    }
+
+    return bainian;
   }
 
   private void serializeBaseItem(JsonObject jObj, BaseItem item) {

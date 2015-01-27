@@ -11,14 +11,17 @@ import android.view.LayoutInflater;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.utree.eightysix.R;
+import com.utree.eightysix.data.Bainian;
 import com.utree.eightysix.widget.RoundedButton;
 
 /**
  */
-public class FeedBainianView extends FrameLayout {
+public final class FeedBainianView extends FrameLayout {
 
   @InjectView(R.id.et_recipient)
   public EditText mEtRecipient;
@@ -26,11 +29,23 @@ public class FeedBainianView extends FrameLayout {
   @InjectView(R.id.et_msg)
   public EditText mEtMsg;
 
+  @InjectView(R.id.iv_refresh)
+  public ImageView mIvRefresh;
+
+  @InjectView(R.id.tv_title)
+  public TextView mTvTitle;
+
+  @InjectView(R.id.tv_sub_title)
+  public TextView mTvSubTitle;
+
+  @InjectView(R.id.tv_tip)
+  public TextView mTvTip;
+
   @InjectView(R.id.rb_generate)
   public RoundedButton mRbGenerate;
 
-  @InjectView(R.id.iv_refresh)
-  public ImageView mIvRefresh;
+  private int mIndex;
+  private Bainian mBainian;
 
   public FeedBainianView(Context context) {
     this(context, null, 0);
@@ -48,4 +63,19 @@ public class FeedBainianView extends FrameLayout {
     ButterKnife.inject(this);
   }
 
+  public void setData(Bainian bainian) {
+    mBainian = bainian;
+    mEtRecipient.setHint(mBainian.receiveText);
+    mTvTitle.setText(mBainian.title);
+    mTvSubTitle.setText(mBainian.subTitle);
+    mTvTip.setText(mBainian.receiveText);
+    mRbGenerate.setText(mBainian.buttonText);
+    mEtMsg.setText(mBainian.newYearContents.get(mIndex).content);
+  }
+
+  @OnClick(R.id.iv_refresh)
+  public void onIvRefreshClicked() {
+    mIndex = mIndex >= mBainian.newYearContents.size() - 1 ? 0 : mIndex + 1;
+    mEtMsg.setText(mBainian.newYearContents.get(mIndex).content);
+  }
 }

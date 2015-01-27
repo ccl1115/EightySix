@@ -29,7 +29,7 @@ public class FeedAdapter extends BaseAdapter {
 
   private static final int TIP_NOT_SHOWN = -1;
 
-  public static final int TYPE_COUNT = 12;
+  public static final int TYPE_COUNT = 13;
   static final int TYPE_PLACEHOLDER = 0;
   static final int TYPE_UNLOCK = 1;
   static final int TYPE_UPLOAD = 2;
@@ -42,6 +42,7 @@ public class FeedAdapter extends BaseAdapter {
   static final int TYPE_INVITE_FACTORY = 9;
   static final int TYPE_OPTION_SET = 10;
   static final int TYPE_TOPIC = 11;
+  static final int TYPE_BAINIAN = 12;
 
   private Feeds mFeeds;
 
@@ -208,6 +209,8 @@ public class FeedAdapter extends BaseAdapter {
           return TYPE_OPTION_SET;
         case BaseItem.TYPE_TOPIC:
           return TYPE_TOPIC;
+        case BaseItem.TYPE_BAINIAN:
+          return TYPE_BAINIAN;
         case TYPE_UPLOAD:
         case TYPE_UNLOCK:
         case TYPE_SELECT:
@@ -441,6 +444,16 @@ public class FeedAdapter extends BaseAdapter {
     }
 
     ((FeedTopicView) convertView).setData((PostTopic) getItem(position));
+
+    return convertView;
+  }
+
+  private View getBainianView(int position, View convertView, final ViewGroup parent) {
+    if (convertView == null) {
+      convertView = new FeedBainianView(parent.getContext());
+    }
+
+    ((FeedBainianView) convertView).setData((Bainian) getItem(position));
 
     return convertView;
   }

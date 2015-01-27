@@ -122,4 +122,41 @@ class ShareToQQ extends IShare {
   public void shareTag(BaseActivity activity, Circle circle, int tagId, String url) {
     shareApp(activity, circle, url);
   }
+
+  @Override
+  public void shareBainian(final BaseActivity activity, final String recipient, final String content) {
+    new AsyncTask<Void, Void, Void>() {
+
+      @Override
+      protected void onPreExecute() {
+        activity.showProgressBar(true);
+      }
+
+      @Override
+      protected Void doInBackground(Void... params) {
+        Bundle data = new Bundle();
+        data.putString(QQShare.SHARE_TO_QQ_TITLE, String.format(shareTitleForBainian(), recipient));
+        data.putString(QQShare.SHARE_TO_QQ_SUMMARY, content);
+        data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "");
+        data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
+        shareToQQ(activity, data, defaultListener());
+        return null;
+      }
+
+      @Override
+      protected void onPostExecute(Void aVoid) {
+        activity.hideProgressBar();
+      }
+    }.execute();
+  }
+
+  @Override
+  protected String shareTitleForBainian() {
+    return "我通过蓝莓，制作了一张超酷炫的拜年卡，送给%s";
+  }
+
+  @Override
+  protected String shareContentForBainian() {
+    return "";
+  }
 }

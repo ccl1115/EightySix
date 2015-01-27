@@ -25,7 +25,6 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.app.home.HomeActivity;
-import com.utree.eightysix.request.LoginRequest;
 import com.utree.eightysix.response.UserResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RequestParams;
@@ -238,12 +237,12 @@ public class LoginActivity extends BaseActivity {
     };
 
     if (mEtCaptcha.getText().length() > 0) {
-      U.request("login", onResponse, UserResponse.class,
+      U.request("login_old", onResponse, UserResponse.class,
           mEtPhoneNumber.getText().toString(),
           mEtPwd.getText().toString(),
           mEtCaptcha.getText().toString());
     } else {
-      U.request("login", onResponse, UserResponse.class,
+      U.request("login_old", onResponse, UserResponse.class,
           mEtPhoneNumber.getText().toString(),
           mEtPwd.getText().toString(),
           null);

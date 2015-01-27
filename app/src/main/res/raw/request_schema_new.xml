@@ -62,15 +62,15 @@
         </params>
     </request>
 
-    <!--<request>-->
-        <!--<id>login</id>-->
-        <!--<name>登录接口</name>-->
-        <!--<path>/login/login.do</path>-->
-        <!--<sign/>-->
-        <!--<params>-->
-            <!--<param>phone</param>-->
-            <!--<param>password</param>-->
-            <!--<param>valiCode</param>-->
-        <!--</params>-->
-    <!--</request>-->
+    <request>
+        <id>login_old</id>
+        <name>登录接口</name>
+        <path>/login/login.do</path>
+        <sign/>
+        <params>
+            <param>phone</param>
+            <param>password</param>
+            <param>valiCode</param>
+        </params>
+    </request>
 </api>

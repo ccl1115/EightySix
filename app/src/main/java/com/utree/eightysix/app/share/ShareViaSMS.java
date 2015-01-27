@@ -32,11 +32,27 @@ class ShareViaSMS extends IShare {
         String.format(shareContentForApp(), circle.shortName, circle.shortName) + url);
   }
 
+  @Override
+  public void shareBainian(BaseActivity activity, String recipient, String content) {
+    ContactsActivity.start(activity,
+        String.format(shareContentForBainian(), recipient, content));
+  }
+
   protected String shareContentForApp() {
     return "%s的某同事匿名邀请你加入【蓝莓-%s圈】。点击查看-";
   }
 
   protected String shareContentForPost() {
     return "%s的同事匿名给你分享了1条厂里的秘密，点击查看-";
+  }
+
+  @Override
+  protected String shareTitleForBainian() {
+    return "%s，送你一张超炫酷的拜年卡，我是通过蓝莓制作的哦！\n%s";
+  }
+
+  @Override
+  protected String shareContentForBainian() {
+    return null;
   }
 }

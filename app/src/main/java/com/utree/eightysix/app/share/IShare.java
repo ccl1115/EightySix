@@ -29,6 +29,8 @@ public abstract class IShare {
 
   public abstract void shareTag(BaseActivity activity, Circle circle, int tagId, String url);
 
+  public abstract void shareBainian(BaseActivity activity, String recipient, String content);
+
   protected String shareTitleForApp() {
     return "和我一起玩【蓝莓】吧！";
   }
@@ -48,6 +50,10 @@ public abstract class IShare {
   protected String shareContentForPost() {
     return "转自【蓝莓】-工厂里的秘密社区";
   }
+
+  protected abstract String shareTitleForBainian();
+
+  protected abstract String shareContentForBainian();
 
   static IUiListener postUiCallback(final Post post, final boolean fromBs) {
     return new BaseUiListener() {
