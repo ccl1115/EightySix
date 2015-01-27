@@ -301,36 +301,6 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
 
     mIvEmotion.setVisibility(View.VISIBLE);
 
-    //region To detect soft keyboard visibility change
-    // works after ICM
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-      final View activityRootView = findViewById(android.R.id.content);
-      activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-        private int lastY = Integer.MAX_VALUE;
-
-        @Override
-        public void onGlobalLayout() {
-          Log.d("PostActivity", "height of root view " + activityRootView.getRootView().getHeight());
-
-          // below only works when softInputMethodMode is adjustResize
-//          int heightDiff = activityRootView.getRootView().getHeight() - activityRootView.getHeight();
-//          if (heightDiff > 100) { // 99% of the time the height diff will be due to a keyboard.
-//
-//            if (!mIsOpened) {
-//              mFlEmotion.setVisibility(View.GONE);
-//              mIvEmotion.setSelected(false);
-//            }
-//            mIsOpened = true;
-//          } else if (mIsOpened) {
-//            mIsOpened = false;
-//          }
-        }
-      });
-    }
-    //endregion
-
-
     mLvComments.setOnScrollListener(new AbsListView.OnScrollListener() {
       @Override
       public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -623,6 +593,7 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
 
         if (bottom) {
           mLvComments.setSelection(Integer.MAX_VALUE);
+          mFlBanner.setClickable(true);
         }
 
         hideProgressBar();
