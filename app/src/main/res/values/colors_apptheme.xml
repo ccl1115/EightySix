@@ -31,6 +31,8 @@
     <color name="apptheme_secondary_dark_color_pressed">#ff3f2f56</color>
     <color name="apptheme_secondary_dark_color_disabled">#fff7f7f7</color>
 
+    <color name="apptheme_light_green">#ff1f9d2f</color>
+
     <color name="apptheme_top_bar_bg_color">#ff363940</color>
 
     <color name="apptheme_primary_light_color_100">#12d60ff4</color>
