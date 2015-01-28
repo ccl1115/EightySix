@@ -50,8 +50,9 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 @Layout (R.layout.activity_base_circles)
 public class BaseCirclesActivity extends BaseActivity {
 
-  private static final int MODE_SELECT = 1;
-  private static final int MODE_MY = 2;
+  public static final int MODE_SELECT = 1;
+  public static final int MODE_MY = 2;
+  public static final int MODE_SNAPSHOT = 3;
 
   @InjectView (R.id.alv_refresh)
   public AdvancedListView mLvCircles;
@@ -94,6 +95,12 @@ public class BaseCirclesActivity extends BaseActivity {
   public static void startMyCircles(Context context) {
     Intent intent = new Intent(context, BaseCirclesActivity.class);
     intent.putExtra("mode", MODE_MY);
+    context.startActivity(intent);
+  }
+
+  public static void startSnapshot(Context context){
+    Intent intent = new Intent(context, BaseCirclesActivity.class);
+    intent.putExtra("mode", MODE_SNAPSHOT);
     context.startActivity(intent);
   }
 
@@ -336,7 +343,7 @@ public class BaseCirclesActivity extends BaseActivity {
       public void onResponse(CirclesResponse response) {
         if (response != null && response.code == 0) {
           if (page == 1) {
-            mCircleListAdapter = new CircleListAdapter(response.object.lists);
+            mCircleListAdapter = new CircleListAdapter(response.object.lists, mMode);
             mLvCircles.setAdapter(mCircleListAdapter);
 
             if (response.object.lists.size() == 0) {
@@ -370,7 +377,7 @@ public class BaseCirclesActivity extends BaseActivity {
       public void onResponse(CirclesResponse response) {
         if (RESTRequester.responseOk(response)) {
           if (page == 1) {
-            mCircleListAdapter = new CircleListAdapter(response.object.lists);
+            mCircleListAdapter = new CircleListAdapter(response.object.lists, mMode);
             mLvCircles.setAdapter(mCircleListAdapter);
 
             if (response.object.lists.size() == 0) {
@@ -424,7 +431,7 @@ public class BaseCirclesActivity extends BaseActivity {
       public void onResponse(CirclesResponse response) {
         if (RESTRequester.responseOk(response)) {
           if (page == 1) {
-            mCircleListAdapter = new CircleListAdapter(response.object.lists);
+            mCircleListAdapter = new CircleListAdapter(response.object.lists, mMode);
             mLvCircles.setAdapter(mCircleListAdapter);
 
             if (response.object.lists.size() == 0) {

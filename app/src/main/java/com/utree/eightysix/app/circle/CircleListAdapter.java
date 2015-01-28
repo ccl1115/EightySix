@@ -33,10 +33,13 @@ class CircleListAdapter extends BaseAdapter {
   private List<Circle> mCircles;
   private SparseArray<String> mHeadMark;
 
+  private int mMode;
+
   private ThemedDialog mCircleChangeDialog;
 
-  public CircleListAdapter(List<Circle> circles) {
+  public CircleListAdapter(List<Circle> circles, int mode) {
     mCircles = circles;
+    mMode = mode;
     markHeadPosition();
   }
 
@@ -95,15 +98,15 @@ class CircleListAdapter extends BaseAdapter {
     ((TextView) convertView.findViewById(R.id.tv_head)).setText(mHeadMark.get(position));
 
     TextView viewById = (TextView) convertView.findViewById(R.id.tv_right);
-    if (position == 0) {
-      viewById.setText(R.string.change);
-      viewById.setVisibility(View.VISIBLE);
-      viewById.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-          showCircleChangeDialog(view.getContext());
-        }
-      });
+    if (mMode == BaseCirclesActivity.MODE_MY && position == 0) {
+        viewById.setText(R.string.change);
+        viewById.setVisibility(View.VISIBLE);
+        viewById.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+            showCircleChangeDialog(view.getContext());
+          }
+        });
     } else {
       viewById.setVisibility(View.GONE);
     }

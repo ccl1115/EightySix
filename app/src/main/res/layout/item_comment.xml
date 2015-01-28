@@ -68,16 +68,16 @@
     </LinearLayout>
 
     <TextView
+            style="@style/border_outline_secondary_dark_color_btn"
             android:id="@+id/tv_chat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:paddingTop="16dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
+            android:layout_centerVertical="true"
             android:text="@string/chat"
-            android:textColor="@color/apptheme_primary_light_color"
             />
 
     <View
