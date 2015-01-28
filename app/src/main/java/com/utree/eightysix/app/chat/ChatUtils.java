@@ -268,7 +268,8 @@ public class ChatUtils {
     }
 
     public static long getPage(int size) {
-      return DaoUtils.getConversationDao().count() / size;
+      long count = DaoUtils.getConversationDao().count();
+      return count == 0 ? count : (count + size) / size;
     }
 
     public static void createIfNotExist(ChatInfoResponse.ChatInfo chatInfo, Post post) {
