@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+              android:layout_height="wrap_content"
+        >
 
     <LinearLayout
             android:orientation="horizontal"
@@ -12,7 +12,8 @@
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:background="@drawable/apptheme_primary_list_selector">
+            android:background="@drawable/apptheme_primary_list_selector"
+            >
 
         <LinearLayout
                 android:layout_width="0dp"
@@ -21,7 +22,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                >
 
             <TextView
                     android:id="@+id/tv_circle_name"
@@ -30,7 +32,8 @@
                     android:lines="1"
                     android:singleLine="true"
                     android:ellipsize="end"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp"
+                    />
 
             <TextView
                     android:id="@+id/tv_circle_info"
@@ -41,27 +44,27 @@
                     android:singleLine="true"
                     android:ellipsize="end"
                     android:textSize="13sp"
-                    android:textColor="@color/apptheme_primary_dark_color"/>
+                    android:textColor="@color/apptheme_primary_dark_color"
+                    />
 
         </LinearLayout>
 
-        <com.utree.eightysix.widget.RoundedButton
+        <TextView
                 android:id="@+id/rb_snapshot"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_gravity="center_vertical"
-                android:minHeight="18dp"
+                android:minHeight="0dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:text="@string/snapshot"
                 android:textSize="12sp"
-                android:paddingLeft="6dp"
-                android:paddingRight="6dp"
-                android:paddingTop="2dp"
-                android:paddingBottom="2dp"
-                android:textColor="@android:color/white"
-                android:text="快照"
-                android:clickable="false"
-                app:background="@color/apptheme_secondary_dark_color"
-                app:radius="1dp"
+                android:textColor="@color/border_outline_secondary_dark_color_btn_text"
+                android:background="@drawable/border_outline_secondary_dark_color_btn"
                 />
 
         <ImageView
@@ -70,7 +73,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"
-                android:src="@drawable/ic_forward"/>
+                android:src="@drawable/ic_forward"
+                />
     </LinearLayout>
 
     <View
@@ -78,5 +82,6 @@
             android:layout_height="1px"
             android:background="#fff0f0f0"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginRight="10dp"
+            />
 </LinearLayout>

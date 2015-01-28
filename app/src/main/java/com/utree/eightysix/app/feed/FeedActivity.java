@@ -203,6 +203,7 @@ public class FeedActivity extends BaseActivity {
             ViewGroup.LayoutParams.MATCH_PARENT);
       }
     });
+
     onNewIntent(getIntent());
   }
 

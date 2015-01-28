@@ -81,23 +81,22 @@
                 app:background="@color/apptheme_primary_dark_color"
                 />
 
-        <com.utree.eightysix.widget.RoundedButton
+        <TextView
                 android:id="@+id/rb_snapshot"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_gravity="center_vertical"
                 android:minHeight="18dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:text="@string/snapshot"
                 android:textSize="12sp"
-                android:paddingLeft="6dp"
-                android:paddingRight="6dp"
-                android:paddingTop="2dp"
-                android:paddingBottom="2dp"
-                android:textColor="@android:color/white"
-                android:text="快照"
-                android:clickable="false"
-                app:background="@color/apptheme_secondary_dark_color"
-                app:radius="1dp"
+                android:textColor="@color/border_outline_secondary_dark_color_btn_text"
+                android:background="@drawable/border_outline_secondary_dark_color_btn"
                 />
 
         <ImageView
