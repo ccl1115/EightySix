@@ -15,6 +15,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.region.event.RegionResponseEvent;
+import com.utree.eightysix.app.snapshot.SnapshotActivity;
 import com.utree.eightysix.data.Circle;
 
 /**
@@ -95,6 +96,11 @@ public class RegionFragment extends BaseFragment {
   public void onRbRegion3Clicked(View v) {
     mRegionType = 3;
     setRangeSelected(3, v);
+  }
+
+  @OnClick (R.id.rb_snapshot)
+  public void onRbSnapshotClicked(View v) {
+    SnapshotActivity.start(v.getContext(), mCurrent);
   }
 
   public int getRegionType() {

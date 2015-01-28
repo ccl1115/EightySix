@@ -167,6 +167,8 @@
 
         <activity android:exported="@bool/exported" android:name=".app.chat.ImageViewerActivity" android:screenOrientation="portrait"/>
 
+        <activity android:exported="@bool/exported" android:label="厂区快照" android:name=".app.snapshot.SnapshotActivity" android:screenOrientation="portrait"/>
+
         <service android:enabled="true" android:name=".contact.ContactsSyncService"/>
         <service android:enabled="true" android:name=".app.msg.FetchNotificationService"/>
         <service android:enabled="true" android:name=".app.SyncService"/>

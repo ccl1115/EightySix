@@ -1,15 +1,20 @@
 package com.utree.eightysix.app.circle;
 
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.annotations.Keep;
+import com.utree.eightysix.app.snapshot.SnapshotActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.utils.*;
+import com.utree.eightysix.widget.RoundedButton;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -50,17 +55,13 @@ class CircleBaseListAdapter extends BaseAdapter {
 
     if (convertView == null) {
       convertView = View.inflate(parent.getContext(), R.layout.item_circle_base, null);
-      viewHolder = new CircleBaseViewHolder();
-      ButterKnife.inject(viewHolder, convertView);
+      viewHolder = new CircleBaseViewHolder(convertView);
       convertView.setTag(viewHolder);
     } else {
       viewHolder = (CircleBaseViewHolder) convertView.getTag();
     }
 
-    Circle item = getItem(position);
-
-    viewHolder.mTvCircleInfo.setText(item.info);
-    viewHolder.mTvCircleName.setText(item.name);
+    viewHolder.setCircle(getItem(position));
 
     return convertView;
   }
@@ -68,10 +69,27 @@ class CircleBaseListAdapter extends BaseAdapter {
   @Keep
   public static class CircleBaseViewHolder {
 
+    private Circle mCircle;
+
+    public CircleBaseViewHolder(View view) {
+      ButterKnife.inject(this, view);
+    }
+
+    public void setCircle(Circle circle) {
+      mCircle = circle;
+      mTvCircleInfo.setText(circle.info);
+      mTvCircleName.setText(circle.name);
+    }
+
     @InjectView (R.id.tv_circle_name)
     public TextView mTvCircleName;
 
     @InjectView (R.id.tv_circle_info)
     public TextView mTvCircleInfo;
+
+    @OnClick(R.id.rb_snapshot)
+    public void onRbSnapshotClicked(View view) {
+      SnapshotActivity.start(view.getContext(), mCircle);
+    }
   }
 }

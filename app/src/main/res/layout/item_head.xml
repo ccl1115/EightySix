@@ -21,12 +21,13 @@
             android:id="@+id/tv_right"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             android:paddingTop="6dp"
             android:gravity="center_vertical"
             android:textSize="13sp"
-            android:textColor="@color/apptheme_primary_dark_color"
+            android:textColor="@color/apptheme_secondary_dark_color"
             android:visibility="gone"
             />
 

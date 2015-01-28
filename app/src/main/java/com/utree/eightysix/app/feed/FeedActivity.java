@@ -4,12 +4,14 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -25,13 +27,16 @@ import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
 import com.utree.eightysix.app.feed.event.UploadClickedEvent;
 import com.utree.eightysix.app.publish.PublishActivity;
+import com.utree.eightysix.app.snapshot.SnapshotActivity;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.Circle;
+import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.request.FriendsSizeRequest;
 import com.utree.eightysix.response.FriendsSizeResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.ThemedDialog;
+import com.utree.eightysix.widget.TopBar;
 
 /**
  */
@@ -166,6 +171,38 @@ public class FeedActivity extends BaseActivity {
       return;
     }
 
+    mTopBar.setActionAdapter(new TopBar.ActionAdapter() {
+      @Override
+      public String getTitle(int position) {
+        return getString(R.string.snapshot);
+      }
+
+      @Override
+      public Drawable getIcon(int position) {
+        return null;
+      }
+
+      @Override
+      public Drawable getBackgroundDrawable(int position) {
+        return new RoundRectDrawable(dp2px(2), getResources().getColorStateList(R.color.apptheme_primary_btn_light));
+      }
+
+      @Override
+      public void onClick(View view, int position) {
+        SnapshotActivity.start(FeedActivity.this, mTabFragment.getCircle());
+      }
+
+      @Override
+      public int getCount() {
+        return 1;
+      }
+
+      @Override
+      public TopBar.LayoutParams getLayoutParams(int position) {
+        return new TopBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.MATCH_PARENT);
+      }
+    });
     onNewIntent(getIntent());
   }
 

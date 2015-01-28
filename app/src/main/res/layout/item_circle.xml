@@ -65,19 +65,6 @@
         </LinearLayout>
 
         <com.utree.eightysix.widget.RoundedButton
-                android:id="@+id/rb_change"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:minHeight="0dp"
-                android:padding="8dp"
-                android:text="@string/change"
-                android:textSize="12sp"
-                android:textColor="@color/apptheme_primary_text_dark"
-                app:background="@color/apptheme_primary_transparent_btn"
-                />
-
-        <com.utree.eightysix.widget.RoundedButton
                 android:id="@+id/rb_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -90,6 +77,26 @@
                 android:paddingBottom="2dp"
                 android:textColor="@android:color/white"
                 android:clickable="false"
+                app:radius="1dp"
+                app:background="@color/apptheme_primary_dark_color"
+                />
+
+        <com.utree.eightysix.widget.RoundedButton
+                android:id="@+id/rb_snapshot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_gravity="center_vertical"
+                android:minHeight="18dp"
+                android:textSize="12sp"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:textColor="@android:color/white"
+                android:text="快照"
+                android:clickable="false"
+                app:background="@color/apptheme_secondary_dark_color"
                 app:radius="1dp"
                 />
 

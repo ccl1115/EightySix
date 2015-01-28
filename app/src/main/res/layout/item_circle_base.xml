@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
@@ -43,6 +44,25 @@
                     android:textColor="@color/apptheme_primary_dark_color"/>
 
         </LinearLayout>
+
+        <com.utree.eightysix.widget.RoundedButton
+                android:id="@+id/rb_snapshot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_gravity="center_vertical"
+                android:minHeight="18dp"
+                android:textSize="12sp"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:textColor="@android:color/white"
+                android:text="快照"
+                android:clickable="false"
+                app:background="@color/apptheme_secondary_dark_color"
+                app:radius="1dp"
+                />
 
         <ImageView
                 android:id="@+id/iv_arrow"
