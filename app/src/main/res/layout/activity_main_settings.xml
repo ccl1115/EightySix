@@ -20,6 +20,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:gravity="center_vertical"
                 android:textSize="16sp"
                 android:text="@string/check_update"
@@ -30,6 +31,7 @@
                 android:layout_width="8dp"
                 android:layout_height="8dp"
                 android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_gravity="center_vertical"
                 android:visibility="invisible"
                 app:radius="5dp"
@@ -98,6 +100,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:gravity="center_vertical"
             android:textSize="16sp"
             android:text="@string/dev_mode"
@@ -107,10 +110,39 @@
     <include layout="@layout/widget_primary_divider"/>
 
     <TextView
+            android:id="@+id/tv_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:gravity="center_vertical"
+            android:textSize="16sp"
+            android:text="@string/feedback"
+            android:background="@drawable/apptheme_primary_list_selector"
+            />
+
+    <include layout="@layout/widget_primary_divider"/>
+
+    <TextView
+            android:id="@+id/tv_help"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:gravity="center_vertical"
+            android:textSize="16sp"
+            android:text="@string/help"
+            android:background="@drawable/apptheme_primary_list_selector"
+            />
+
+    <include layout="@layout/widget_primary_divider"/>
+
+    <TextView
             android:id="@+id/tv_logout"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:gravity="center_vertical"
             android:textSize="16sp"
             android:text="@string/logout"

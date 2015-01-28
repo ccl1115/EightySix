@@ -16,6 +16,7 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.devmode.DevModeActivity;
+import com.utree.eightysix.app.publish.FeedbackActivity;
 import com.utree.eightysix.data.Sync;
 import com.utree.eightysix.widget.RoundedButton;
 
@@ -83,6 +84,16 @@ public class MainSettingsActivity extends BaseActivity {
   @OnCheckedChanged(R.id.cb_silent_mode)
   public void onCbSilentModeChecked(boolean checked){
     Account.inst().setSilentMode(checked);
+  }
+
+  @OnClick(R.id.tv_help)
+  public void onTvHelpClicked() {
+    startActivity(new Intent(this, HelpActivity.class));
+  }
+
+  @OnClick(R.id.tv_feedback)
+  public void onTvFeedbackClicked() {
+    FeedbackActivity.start(this);
   }
 
   @Override

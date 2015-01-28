@@ -221,7 +221,7 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
     U.getAnalyser().trackEvent(this, "comment_more", "comment_more");
 
     String[] items;
-    if (comment.self == 1) {
+    if (comment.self == 1 || comment.owner == 1) {
       items = new String[]{getString(R.string.start_chat), getString(R.string.like), getString(R.string.share), getString(R.string.report), getString(R.string.delete)};
     } else {
       items = new String[]{getString(R.string.start_chat), getString(R.string.like), getString(R.string.share), getString(R.string.report)};

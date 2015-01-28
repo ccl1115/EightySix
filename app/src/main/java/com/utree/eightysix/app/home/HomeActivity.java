@@ -806,19 +806,9 @@ public class HomeActivity extends BaseActivity {
       PraiseActivity.start(HomeActivity.this, Account.inst().getHasNewPraise());
     }
 
-    @OnClick (R.id.ll_feedback)
-    void onLlFeedbackClicked() {
-      FeedbackActivity.start(HomeActivity.this);
-    }
-
     @OnClick (R.id.ll_settings)
     void onLlSettingsClicked() {
       startActivity(new Intent(HomeActivity.this, MainSettingsActivity.class));
-    }
-
-    @OnClick (R.id.ll_help)
-    void onLlHelpClicked() {
-      startActivity(new Intent(HomeActivity.this, HelpActivity.class));
     }
 
     @OnClick (R.id.rl_topic_list)

@@ -145,58 +145,6 @@
             android:layout_height="1px"
             android:background="#ff697289"/>
 
-    <LinearLayout
-            android:id="@+id/ll_feedback"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:orientation="horizontal">
-
-        <TextView
-                style="@style/TextView.SingleLine"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingLeft="45dp"
-                android:paddingStart="45dp"
-                android:gravity="center_vertical"
-                android:text="@string/feedback"
-                android:textSize="16sp"
-                android:textColor="@color/apptheme_side_drawer_selector"
-                />
-
-    </LinearLayout>
-
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="#ff697289"/>
-
-    <LinearLayout
-            android:id="@+id/ll_help"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:orientation="horizontal">
-
-        <TextView
-                style="@style/TextView.SingleLine"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingLeft="45dp"
-                android:paddingStart="45dp"
-                android:gravity="center_vertical"
-                android:text="@string/help"
-                android:textSize="16sp"
-                android:textColor="@color/apptheme_side_drawer_selector"
-                />
-
-    </LinearLayout>
-
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="#ff697289"/>
-
     <RelativeLayout
             android:id="@+id/ll_settings"
             android:layout_width="match_parent"
