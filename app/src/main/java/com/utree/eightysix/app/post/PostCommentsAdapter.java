@@ -204,7 +204,7 @@ class PostCommentsAdapter extends BaseAdapter {
     } else {
       holder.mTvComment.setText(comment.content);
       if (comment.owner == 1) {
-        holder.mTvComment.setTextColor(resources.getColor(R.color.apptheme_secondary_dark_color));
+        holder.mTvComment.setTextColor(resources.getColor(R.color.apptheme_primary_light_color_200));
       } else if (comment.self == 1) {
         holder.mTvComment.setTextColor(resources.getColor(R.color.apptheme_light_green));
       } else {
