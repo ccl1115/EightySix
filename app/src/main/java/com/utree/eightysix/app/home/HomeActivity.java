@@ -9,11 +9,10 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -814,6 +813,35 @@ public class HomeActivity extends BaseActivity {
     @OnClick (R.id.rl_topic_list)
     void onLlTopicListClicked() {
       TopicListActivity.start(HomeActivity.this);
+    }
+
+    @OnClick(R.id.rl_invite_code)
+    void onRlInviteCodeClicked() {
+      final ThemedDialog dialog = new ThemedDialog(HomeActivity.this);
+      dialog.setTitle("你的专属邀请码");
+
+      TextView textView = new TextView(HomeActivity.this);
+      SpannableStringBuilder builder = new SpannableStringBuilder();
+      builder.append("\n邀请厂里的朋友加入蓝莓，只要Ta注册时填写了你的专属邀请码，你就会马上收到10个蓝星奖励，你的朋友也将获得5个蓝星哟！还等什么，赶快行动起来吧！\n" +
+          "\n" +
+          "你的专属邀请码是：\n");
+      SpannableString color = new SpannableString("23a1523");
+      color.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.apptheme_primary_light_color)), 0, color.length(), 0);
+      builder.append(color);
+      textView.setText(builder);
+      textView.setGravity(Gravity.CENTER);
+      textView.setEms(14);
+      textView.setPadding(dp2px(16), dp2px(8), dp2px(16), dp2px(8));
+      textView.setTextSize(16);
+      dialog.setContent(textView);
+      dialog.setPositive("知道啦", new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          dialog.dismiss();
+        }
+      });
+
+      dialog.show();
     }
   }
 
