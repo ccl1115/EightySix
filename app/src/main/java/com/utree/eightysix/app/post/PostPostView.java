@@ -91,7 +91,7 @@ public class PostPostView extends LinearLayout {
   public void onTvSourceClicked() {
     if (mPost.viewType == 8 || (mPost.sourceType == 0 && (mPost.viewType == 3 || mPost.viewType == 4))) {
       if (mPost.userCurrFactoryId == mPost.factoryId) {
-        HomeActivity.start(getContext());
+        HomeActivity.start(getContext(), 0);
       } else {
         FeedActivity.start(getContext(), mPost.factoryId);
       }
