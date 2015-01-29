@@ -10,6 +10,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
@@ -25,7 +26,10 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.chat.content.ImageContent;
 import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.app.home.HomeActivity;
-import com.utree.eightysix.dao.*;
+import com.utree.eightysix.dao.Conversation;
+import com.utree.eightysix.dao.ConversationDao;
+import com.utree.eightysix.dao.Message;
+import com.utree.eightysix.dao.MessageDao;
 import com.utree.eightysix.data.ChatFav;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
@@ -721,8 +725,14 @@ public class ChatUtils {
           .setContentText(String.format("你收到了%d条聊天消息", count))
           .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher))
           .setSmallIcon(R.drawable.ic_launcher)
-          .setDefaults(Account.inst().getSilentMode() ? Notification.DEFAULT_LIGHTS : Notification.DEFAULT_ALL)
+          .setLights(Color.GREEN, 500, 2000)
           .setAutoCancel(true);
+
+      if (Account.inst().getSilentMode()) {
+        builder.setSound(null);
+      } else {
+        builder.setDefaults(Notification.DEFAULT_SOUND);
+      }
 
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
         builder.setContentIntent(PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT));
@@ -732,7 +742,9 @@ public class ChatUtils {
             PendingIntent.FLAG_UPDATE_CURRENT));
       }
 
-      manager.notify(ID_MESSAGE, builder.build());
+      Notification build = builder.build();
+
+      manager.notify(ID_MESSAGE, build);
 
     }
   }
