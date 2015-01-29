@@ -68,12 +68,15 @@
     </LinearLayout>
 
     <ImageView
-            android:id="@+id/iv_heart"
+            android:id="@+id/iv_chat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/ic_chat_grey_normal"
             android:layout_alignParentRight="true"
-            android:paddingTop="6dp"
-            android:paddingRight="10dp"
+            android:layout_alignParentEnd="true"
+            android:paddingTop="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             />
 
     <View
