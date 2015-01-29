@@ -156,6 +156,13 @@ public class ConversationActivity extends BaseActivity {
   }
 
   @Override
+  protected void onResume() {
+    super.onResume();
+
+    ChatUtils.NotifyUtil.clear();
+  }
+
+  @Override
   public boolean showActionOverflow() {
     return true;
   }

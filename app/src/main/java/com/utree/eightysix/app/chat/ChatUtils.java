@@ -686,7 +686,12 @@ public class ChatUtils {
 
   public static class NotifyUtil {
 
-    private static final int ID_MESSAGE = 0x1000;
+    private static final int ID_MESSAGE = 0x101000;
+
+    public static void clear() {
+      NotificationManager manager = (NotificationManager) U.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+      manager.cancel(ID_MESSAGE);
+    }
 
     public static void notifyNewMessage(Message message) {
 
