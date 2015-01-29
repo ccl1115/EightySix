@@ -424,10 +424,10 @@ public class HomeActivity extends BaseActivity {
   @Override
   public boolean onKeyUp(int keyCode, KeyEvent event) {
     if (keyCode == KeyEvent.KEYCODE_MENU) {
-      if (!mDlContent.isDrawerOpen(mFlSide)) {
-        openMenu();
-      } else {
+      if (mDlContent.isDrawerOpen(mFlSide)) {
         mDlContent.closeDrawer(mFlSide);
+      } else {
+        mDlContent.openDrawer(mFlSide);
       }
       return true;
     } else if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -445,7 +445,6 @@ public class HomeActivity extends BaseActivity {
           @Override
           public void run() {
             mShouldExit = false;
-            mDlContent.openDrawer(mFlSide);
           }
         }, 1000);
         return true;
