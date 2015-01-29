@@ -280,28 +280,30 @@ public abstract class AbsFeedFragment extends BaseFragment {
           R.drawable.ic_post_pen : R.drawable.ic_post_pen_disabled);
 
 
-      int count = 0;
-      if (response.object.fetch.newComment != null) {
-        count += response.object.fetch.newComment.unread;
+      if (response.object.fetch != null) {
+        int count = 0;
+        if (response.object.fetch.newComment != null) {
+          count += response.object.fetch.newComment.unread;
+        }
+
+        if (response.object.fetch.myPostComment != null) {
+          count += response.object.fetch.myPostComment.unread;
+        }
+
+        Account.inst().setNewCommentCount(count);
+
+        if (response.object.fetch.newPraise != null) {
+          Account.inst().setHasNewPraise(response.object.fetch.newPraise.praise == 1);
+          U.getBus().post(new UpdatePraiseCountEvent(response.object.fetch.newPraise.praiseCount,
+              response.object.fetch.newPraise.percent));
+        }
+
+        U.getBus().post(new NewAllPostCountEvent(mCircle.id, response.object.fetch.newPostAllCount));
+        U.getBus().post(new NewHotPostCountEvent(mCircle.id, response.object.fetch.newPostHotCount));
+        U.getBus().post(new NewFriendsPostCountEvent(mCircle.id, response.object.fetch.newPostFriendsCount));
+
+        FetchNotificationService.setCircleId(mCircle.id);
       }
-
-      if (response.object.fetch.myPostComment != null) {
-        count += response.object.fetch.myPostComment.unread;
-      }
-
-      Account.inst().setNewCommentCount(count);
-
-      if (response.object.fetch.newPraise != null) {
-        Account.inst().setHasNewPraise(response.object.fetch.newPraise.praise == 1);
-        U.getBus().post(new UpdatePraiseCountEvent(response.object.fetch.newPraise.praiseCount,
-            response.object.fetch.newPraise.percent));
-      }
-
-      U.getBus().post(new NewAllPostCountEvent(mCircle.id, response.object.fetch.newPostAllCount));
-      U.getBus().post(new NewHotPostCountEvent(mCircle.id, response.object.fetch.newPostHotCount));
-      U.getBus().post(new NewFriendsPostCountEvent(mCircle.id, response.object.fetch.newPostFriendsCount));
-
-      FetchNotificationService.setCircleId(mCircle.id);
     } else {
       cacheOutFeeds(circleId, page);
     }
