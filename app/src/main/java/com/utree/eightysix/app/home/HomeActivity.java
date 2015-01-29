@@ -437,6 +437,7 @@ public class HomeActivity extends BaseActivity {
 
       if (mShouldExit) {
         finish();
+        return true;
       } else {
         mShouldExit = true;
         showToast(getString(R.string.press_again_to_exit));
@@ -444,11 +445,13 @@ public class HomeActivity extends BaseActivity {
           @Override
           public void run() {
             mShouldExit = false;
+            mDlContent.openDrawer(mFlSide);
           }
         }, 1000);
+        return true;
       }
     }
-    return super.onKeyDown(keyCode, event);
+    return super.onKeyUp(keyCode, event);
   }
 
   @Override
