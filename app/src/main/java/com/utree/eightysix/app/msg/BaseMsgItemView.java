@@ -121,7 +121,7 @@ public class BaseMsgItemView extends LinearLayout {
       mFlRight.setVisibility(VISIBLE);
       mTvContentRight.setText(right.content);
       if (!TextUtils.isEmpty(right.bgUrl)) {
-        mAivBgRight.setUrl(right.bgUrl);
+        mAivBgLeft.setUrl(right.bgUrl, 300, 300);
         mTvContentRight.setBackgroundColor(Color.TRANSPARENT);
       } else {
         mAivBgRight.setUrl(null);
@@ -143,7 +143,7 @@ public class BaseMsgItemView extends LinearLayout {
       mFlLeft.setVisibility(VISIBLE);
       mTvContentLeft.setText(left.content);
       if (!TextUtils.isEmpty(left.bgUrl)) {
-        mAivBgLeft.setUrl(left.bgUrl);
+        mAivBgLeft.setUrl(left.bgUrl, 300, 300);
         mTvContentLeft.setBackgroundColor(Color.TRANSPARENT);
       } else {
         mAivBgLeft.setUrl(null);

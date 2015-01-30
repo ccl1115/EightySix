@@ -2,74 +2,37 @@ package com.utree.eightysix.widget.panel;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.StateListDrawable;
 import android.util.TypedValue;
 import android.view.View;
-import com.utree.eightysix.M;
-import com.utree.eightysix.R;
+import android.widget.ImageView;
+import com.squareup.picasso.Picasso;
 import com.utree.eightysix.U;
-import com.utree.eightysix.drawable.AsyncImageDrawable;
 import com.utree.eightysix.utils.ImageUtils;
 
 /**
  * @author simon
  */
 @SuppressLint("ViewConstructor")
-public class ItemView extends View implements View.OnClickListener {
+public class ItemView extends ImageView implements View.OnClickListener {
 
   private Item mItem;
 
   private Drawable mDrawable;
 
-  private StateListDrawable mSelectDrawableList;
-
   public ItemView(Context context, Item item) {
     super(context);
     mItem = item;
 
-    mSelectDrawableList = (StateListDrawable) getResources().getDrawable(R.drawable.apptheme_transparent_bg);
-    mSelectDrawableList.setCallback(this);
-
     setOnClickListener(this);
+
   }
 
   @Override
   public void onClick(View v) {
     U.getBus().post(mItem);
-  }
-
-  @Override
-  protected void drawableStateChanged() {
-    super.drawableStateChanged();
-    mSelectDrawableList.setState(getDrawableState());
-    invalidate();
-  }
-
-  @Override
-  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-    if (mDrawable != null) {
-      mDrawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
-    }
-    mSelectDrawableList.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
-
-  }
-
-  @Override
-  protected boolean verifyDrawable(Drawable who) {
-    return who == mDrawable || who == mSelectDrawableList || super.verifyDrawable(who);
-  }
-
-  @Override
-  protected void dispatchDraw(Canvas canvas) {
-    if (mDrawable != null) {
-      mDrawable.draw(canvas);
-    }
-    mSelectDrawableList.draw(canvas);
   }
 
   @Override
@@ -79,27 +42,17 @@ public class ItemView extends View implements View.OnClickListener {
     TypedValue value = mItem.getValue();
     if (value.type == TypedValue.TYPE_INT_COLOR_ARGB8) {
       mDrawable = new ColorDrawable(value.data);
+      setImageDrawable(mDrawable);
     } else if(value.type == TypedValue.TYPE_STRING) {
-      mDrawable = new AsyncImageDrawable(getResources(), value.string.toString());
+      Picasso.with(getContext()).load(value.string.toString()).resize(U.dp2px(48), U.dp2px(48)).into(this);
     } else if (value.type == TypedValue.TYPE_REFERENCE) {
       String imageUrl = U.getCloudStorage().getUrl(U.getBgBucket(),
           "",
           getResources().getResourceEntryName(value.resourceId) + ".jpg");
       mDrawable = new BitmapDrawable(getResources(),
           ImageUtils.syncLoadResourceBitmapThumbnail(value.resourceId, ImageUtils.getUrlHash(imageUrl)));
+      setImageDrawable(mDrawable);
     }
-    if (mDrawable != null) {
-      M.getRegisterHelper().register(mDrawable);
-      mDrawable.setCallback(this);
-    }
-  }
 
-  @Override
-  protected void onDetachedFromWindow() {
-    if (mDrawable != null) {
-      M.getRegisterHelper().unregister(mDrawable);
-    }
-    super.onDetachedFromWindow();
   }
-
 }

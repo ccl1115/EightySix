@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import com.easemob.chat.EMChat;
+import com.squareup.picasso.Picasso;
 import com.utree.eightysix.Account;
+import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.C;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.chat.ChatAccount;
@@ -72,6 +74,11 @@ public class BaseApplication extends Application {
       ChatAccount.inst();
 
       startService(new Intent(this, BgSyncService.class));
+
+      if (BuildConfig.DEBUG) {
+        Picasso.with(this).setIndicatorsEnabled(true);
+        Picasso.with(this).setLoggingEnabled(true);
+      }
     }
   }
 
