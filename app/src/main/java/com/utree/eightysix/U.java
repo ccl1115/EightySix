@@ -359,10 +359,6 @@ public class U {
     U.getRESTRequester().request(requestId, response, clz, params);
   }
 
-  public static <T extends Response> void request(Object object, OnResponse<T> response, Class<T> clz) {
-    U.getRESTRequester().request(object, response, clz);
-  }
-
   public static String timestamp(long timestamp) {
     return TimeUtil.getElapsed(timestamp);
   }

@@ -99,14 +99,23 @@ class CircleListAdapter extends BaseAdapter {
 
     TextView viewById = (TextView) convertView.findViewById(R.id.tv_right);
     if (mMode == BaseCirclesActivity.MODE_MY && position == 0) {
-        viewById.setText(R.string.change);
-        viewById.setVisibility(View.VISIBLE);
-        viewById.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {
-            showCircleChangeDialog(view.getContext());
-          }
-        });
+      viewById.setText(R.string.change);
+      viewById.setVisibility(View.VISIBLE);
+      viewById.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          showCircleChangeDialog(view.getContext());
+        }
+      });
+    } else if (mMode == BaseCirclesActivity.MODE_SELECT && position == 0) {
+      viewById.setText("找工作中，还没有在职工厂？");
+      viewById.setVisibility(View.VISIBLE);
+      viewById.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          BaseCirclesActivity.startSnapshot(view.getContext());
+        }
+      });
     } else {
       viewById.setVisibility(View.GONE);
     }
