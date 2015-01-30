@@ -84,8 +84,7 @@
     <request>
         <id>feed_snapshot_list</id>
         <name>Get the snapshot list of factory</name>
-        <!-- TODO add path of snapshot list -->
-        <path></path>
+        <path>/factory/snapshotList.do</path>
         <token/>
         <params>
             <param>factoryId</param>
@@ -93,13 +92,14 @@
     </request>
 
     <request>
-        <id>feed_snapshot.do</id>
+        <id>feed_snapshot</id>
         <name>得到某个快照的列表</name>
         <path>/feed/listWithSnapshot.do</path>
         <token/>
         <params>
             <param>factoryId</param>
             <param>snapshot</param>
+            <param>currPage</param>
         </params>
     </request>
 </api>
