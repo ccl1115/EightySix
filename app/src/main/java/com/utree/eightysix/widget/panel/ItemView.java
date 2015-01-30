@@ -20,8 +20,6 @@ public class ItemView extends ImageView implements View.OnClickListener {
 
   private Item mItem;
 
-  private Drawable mDrawable;
-
   public ItemView(Context context, Item item) {
     super(context);
     mItem = item;
@@ -40,18 +38,19 @@ public class ItemView extends ImageView implements View.OnClickListener {
     super.onAttachedToWindow();
 
     TypedValue value = mItem.getValue();
+    Drawable drawable;
     if (value.type == TypedValue.TYPE_INT_COLOR_ARGB8) {
-      mDrawable = new ColorDrawable(value.data);
-      setImageDrawable(mDrawable);
+      drawable = new ColorDrawable(value.data);
+      setImageDrawable(drawable);
     } else if(value.type == TypedValue.TYPE_STRING) {
       Picasso.with(getContext()).load(value.string.toString()).resize(U.dp2px(48), U.dp2px(48)).into(this);
     } else if (value.type == TypedValue.TYPE_REFERENCE) {
       String imageUrl = U.getCloudStorage().getUrl(U.getBgBucket(),
           "",
           getResources().getResourceEntryName(value.resourceId) + ".jpg");
-      mDrawable = new BitmapDrawable(getResources(),
+      drawable = new BitmapDrawable(getResources(),
           ImageUtils.syncLoadResourceBitmapThumbnail(value.resourceId, ImageUtils.getUrlHash(imageUrl)));
-      setImageDrawable(mDrawable);
+      setImageDrawable(drawable);
     }
 
   }
