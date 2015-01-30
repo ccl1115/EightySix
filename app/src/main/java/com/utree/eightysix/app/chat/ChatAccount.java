@@ -2,6 +2,8 @@ package com.utree.eightysix.app.chat;
 
 import android.content.IntentFilter;
 import com.easemob.EMCallBack;
+import com.easemob.EMConnectionListener;
+import com.easemob.chat.ConnectionListener;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.squareup.otto.Subscribe;
@@ -13,6 +15,7 @@ import com.utree.eightysix.app.BaseApplication;
 import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.Response;
+import de.akquinet.android.androlog.Log;
 
 /**
  * @author simon
@@ -46,6 +49,45 @@ public class ChatAccount {
 
   public void login() {
     if (Account.inst().isLogin()) {
+      EMChatManager.getInstance().addConnectionListener(new EMConnectionListener() {
+        @Override
+        public void onConnected() {
+          if (BuildConfig.DEBUG) Log.d("Chat onConnected");
+        }
+
+        @Override
+        public void onDisconnected(int i) {
+          if (BuildConfig.DEBUG) Log.d("Chat onDisconnected code: " + i);
+        }
+      });
+
+      EMChatManager.getInstance().addConnectionListener(new ConnectionListener() {
+        @Override
+        public void onConnected() {
+          if (BuildConfig.DEBUG) Log.d("Chat onConnected");
+        }
+
+        @Override
+        public void onDisConnected(String s) {
+          if (BuildConfig.DEBUG) Log.d("Chat onDisConnected msg: " + s);
+        }
+
+        @Override
+        public void onReConnected() {
+          if (BuildConfig.DEBUG) Log.d("Chat onReConnected");
+        }
+
+        @Override
+        public void onReConnecting() {
+          if (BuildConfig.DEBUG) Log.d("Chat onReConnecting");
+        }
+
+        @Override
+        public void onConnecting(String s) {
+          if (BuildConfig.DEBUG) Log.d("Chat onConnecting");
+        }
+      });
+
       EMChatManager.getInstance().login(Account.inst().getUserId(), Account.inst().getToken(),
           new EMCallBack() {
 

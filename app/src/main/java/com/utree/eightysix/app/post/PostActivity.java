@@ -6,12 +6,10 @@ import android.app.Instrumentation;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -221,7 +219,7 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
     U.getAnalyser().trackEvent(this, "comment_more", "comment_more");
 
     String[] items;
-    if (comment.self == 1 || comment.owner == 1) {
+    if (comment.self == 1 || mPost.owner == 1) {
       items = new String[]{getString(R.string.start_chat), getString(R.string.like), getString(R.string.share), getString(R.string.report), getString(R.string.delete)};
     } else {
       items = new String[]{getString(R.string.start_chat), getString(R.string.like), getString(R.string.share), getString(R.string.report)};

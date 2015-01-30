@@ -58,7 +58,7 @@ public class ConversationActivity extends BaseActivity {
 
   private ConversationAdapter mConversationAdapter;
 
-  private int mPage = 0;
+  private int mPage = 1;
 
   public static void start(Context context) {
 
@@ -131,16 +131,21 @@ public class ConversationActivity extends BaseActivity {
 
       @Override
       public boolean hasMore() {
-        mPage += 1;
         return mPage < ChatUtils.ConversationUtil.getPage(PAGE_SIZE);
       }
 
       @Override
       public boolean onLoadMoreStart() {
-        List<Conversation> conversations = ChatUtils.ConversationUtil.getConversations(mPage, PAGE_SIZE);
-        mConversationAdapter.add(conversations);
-        requestOnline(conversations);
-        mAlvConversation.stopLoadMore();
+        getHandler().postDelayed(new Runnable() {
+          @Override
+          public void run() {
+            List<Conversation> conversations = ChatUtils.ConversationUtil.getConversations(mPage, PAGE_SIZE);
+            mConversationAdapter.add(conversations);
+            requestOnline(conversations);
+            mAlvConversation.stopLoadMore();
+            mPage += 1;
+          }
+        }, 500);
         return true;
       }
     });
@@ -148,6 +153,13 @@ public class ConversationActivity extends BaseActivity {
     U.getChatBus().register(mConversationAdapter);
 
     requestFavorites();
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+
+    ChatUtils.NotifyUtil.clear();
   }
 
   @Override

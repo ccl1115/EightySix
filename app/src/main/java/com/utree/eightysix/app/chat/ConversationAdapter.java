@@ -47,6 +47,10 @@ public class ConversationAdapter extends BaseAdapter {
     }
   };
 
+  public ConversationAdapter() {
+    mConversations = new ArrayList<Conversation>();
+  }
+
   public ConversationAdapter(List<Conversation> conversations) {
     mConversations = conversations;
   }
@@ -85,8 +89,8 @@ public class ConversationAdapter extends BaseAdapter {
         }
       }
     }
-    DaoUtils.getConversationDao().updateInTx(mConversations);
     notifyDataSetChanged();
+    DaoUtils.getConversationDao().updateInTx(mConversations);
   }
 
   @Override

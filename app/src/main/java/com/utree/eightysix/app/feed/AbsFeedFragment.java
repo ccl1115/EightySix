@@ -280,8 +280,8 @@ public abstract class AbsFeedFragment extends BaseFragment {
           R.drawable.ic_post_pen : R.drawable.ic_post_pen_disabled);
 
 
-      int count = 0;
       if (response.object.fetch != null) {
+        int count = 0;
         if (response.object.fetch.newComment != null) {
           count += response.object.fetch.newComment.unread;
         }

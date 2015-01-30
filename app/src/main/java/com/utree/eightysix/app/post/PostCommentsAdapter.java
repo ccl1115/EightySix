@@ -13,8 +13,8 @@ import butterknife.InjectView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
+import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.chat.ChatUtils;
-import com.utree.eightysix.app.feed.event.PostCommentPraiseEvent;
 import com.utree.eightysix.app.feed.event.ReloadCommentEvent;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
@@ -158,10 +158,10 @@ class PostCommentsAdapter extends BaseAdapter {
     final Comment comment = (Comment) getItem(position);
     Resources resources = parent.getContext().getResources();
 
-    holder.mTvChat.setOnClickListener(new View.OnClickListener() {
+    holder.mIvChat.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        ChatUtils.startChat((com.utree.eightysix.app.BaseActivity) v.getContext(), mPost, comment);
+        ChatUtils.startChat(((BaseActivity) v.getContext()), mPost, comment);
       }
     });
     String floor;
@@ -260,8 +260,8 @@ class PostCommentsAdapter extends BaseAdapter {
     @InjectView (R.id.tv_info)
     public TextView mTvInfo;
 
-    @InjectView (R.id.tv_chat)
-    public TextView mTvChat;
+    @InjectView (R.id.iv_chat)
+    public ImageView mIvChat;
 
     @InjectView(R.id.tv_distance)
     public TextView mTvDistance;

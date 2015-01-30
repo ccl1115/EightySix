@@ -423,10 +423,10 @@ public class HomeActivity extends BaseActivity {
   @Override
   public boolean onKeyUp(int keyCode, KeyEvent event) {
     if (keyCode == KeyEvent.KEYCODE_MENU) {
-      if (!mDlContent.isDrawerOpen(mFlSide)) {
-        openMenu();
-      } else {
+      if (mDlContent.isDrawerOpen(mFlSide)) {
         mDlContent.closeDrawer(mFlSide);
+      } else {
+        mDlContent.openDrawer(mFlSide);
       }
       return true;
     } else if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -436,6 +436,7 @@ public class HomeActivity extends BaseActivity {
 
       if (mShouldExit) {
         finish();
+        return true;
       } else {
         mShouldExit = true;
         showToast(getString(R.string.press_again_to_exit));
@@ -445,9 +446,10 @@ public class HomeActivity extends BaseActivity {
             mShouldExit = false;
           }
         }, 1000);
+        return true;
       }
     }
-    return super.onKeyDown(keyCode, event);
+    return super.onKeyUp(keyCode, event);
   }
 
   @Override

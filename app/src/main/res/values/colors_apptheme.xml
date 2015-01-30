@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="apptheme_primary_light_color">#ff8422e5</color>
-    <color name="apptheme_primary_light_color_100">#ffcc80fa</color>
+    <color name="apptheme_primary_light_color_100">#ffeee8fb</color>
     <color name="apptheme_primary_light_color_200">#ffaf64f7</color>
     <color name="apptheme_primary_light_color_pressed">#ff551694</color>
     <color name="apptheme_primary_light_color_disabled">#ffeeeeee</color>
