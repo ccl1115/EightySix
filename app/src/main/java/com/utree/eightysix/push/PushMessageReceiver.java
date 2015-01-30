@@ -5,7 +5,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
-import com.google.gson.annotations.SerializedName;
 import com.tencent.android.tpush.*;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.BuildConfig;
@@ -21,6 +20,7 @@ import com.utree.eightysix.app.tag.TagTabActivity;
 import com.utree.eightysix.app.topic.TopicActivity;
 import com.utree.eightysix.app.topic.TopicListActivity;
 import com.utree.eightysix.app.web.BaseWebActivity;
+import com.utree.eightysix.data.AppIntent;
 import com.utree.eightysix.data.Topic;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.IOUtils;
@@ -99,9 +99,9 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
 
   @Override
   public void onTextMessage(Context context, XGPushTextMessage xgPushTextMessage) {
-    Message m;
+    AppIntent m;
     try {
-      m = U.getGson().fromJson(xgPushTextMessage.getContent(), Message.class);
+      m = U.getGson().fromJson(xgPushTextMessage.getContent(), AppIntent.class);
     } catch (Exception e) {
       U.getAnalyser().reportError(context, "xg push invalid msg: " + xgPushTextMessage.getContent());
       return;
@@ -153,7 +153,7 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
   @Override
   public void onNotifactionClickedResult(Context context, XGPushClickedResult xgPushClickedResult) {
     try {
-      Message m = U.getGson().fromJson(xgPushClickedResult.getCustomContent(), Message.class);
+      AppIntent m = U.getGson().fromJson(xgPushClickedResult.getCustomContent(), AppIntent.class);
       if (m.type == TYPE_CMD) {
         mCmdHandler.handle(context, m.cmd);
       }
@@ -173,18 +173,6 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
     }
   }
 
-
-  static class Message {
-
-    @SerializedName("type")
-    int type;
-
-    @SerializedName("pushFlag")
-    String pushFlag;
-
-    @SerializedName("cmd")
-    String cmd;
-  }
 
   /**
    * feed:id
@@ -229,8 +217,10 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
             String.format("http://c.lanmeiquan.com/activity/blueStar.do?userid=%s&token=%s",
                 Account.inst().getUserId(),
                 Account.inst().getToken()));
+      } else if ("webview".equals(args[0])) {
+        HomeActivity.start(context);
+        BaseWebActivity.start(U.getContext(), args[1]);
       }
-
     }
   }
 }

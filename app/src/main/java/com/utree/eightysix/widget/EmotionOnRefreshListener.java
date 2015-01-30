@@ -7,7 +7,7 @@ import android.os.Message;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.utree.eightysix.U;
-import com.utree.eightysix.widget.IRefreshable;
+
 import java.util.Random;
 
 /**
@@ -48,7 +48,6 @@ public abstract class EmotionOnRefreshListener extends Handler implements IRefre
   public void handleMessage(Message msg) {
     if (msg.what == MSG_ANIMATE) {
       mHead.setText(String.format("%c", (char) (0xe801 + mRandom.nextInt(14))));
-      // FIXME this caused by a bug in refresh view of update child view drawing.
       ((ViewGroup) mHead.getParent()).invalidate();
       sendEmptyMessageDelayed(MSG_ANIMATE, 500);
     }

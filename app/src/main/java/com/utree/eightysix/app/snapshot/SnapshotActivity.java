@@ -113,4 +113,7 @@ public class SnapshotActivity extends BaseActivity {
   }
 
 
+  private void requestSnapshotList() {
+
+  }
 }

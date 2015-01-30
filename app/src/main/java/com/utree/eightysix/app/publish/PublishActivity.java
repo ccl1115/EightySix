@@ -441,8 +441,6 @@ public class PublishActivity extends BaseActivity {
       }
     });
 
-    // TODO add publish button
-
     showDescriptionDialogWhenFirstRun();
 
     cacheOutTags();

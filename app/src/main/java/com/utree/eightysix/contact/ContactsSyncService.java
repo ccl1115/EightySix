@@ -134,7 +134,6 @@ public class ContactsSyncService extends IntentService {
     List<Contact> contacts = new ArrayList<Contact>();
     DiskLruCache.Snapshot snapshot = null;
     try {
-      // #FIXME fixed null pointer exception
       snapshot = U.getContactsCache().get(String.format("contacts_%s", Account.inst().getUserId()));
       if (snapshot == null) {
         return null;

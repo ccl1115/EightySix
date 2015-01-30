@@ -14,6 +14,11 @@ public class BaseItem {
   public static final int TYPE_TOPIC = 1005;
   public static final int TYPE_BAINIAN = 1006;
 
+  /**
+   * Entrance of snapshot
+   */
+  public static final int TYPE_FEED_INTENT = 1007;
+
   @SerializedName ("bgUrl")
   public String bgUrl;
 

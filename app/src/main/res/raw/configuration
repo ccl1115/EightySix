@@ -7,20 +7,19 @@ app.logger.host = http://203.195.149.48:8086
 # use fixture data or not [true|false]
 debug.fixture = false
 
-# TODO
 feedback.circle.id = 8
 
 # report crash on debug build
 report.debug = true
 
 #configs for request REST api
-api.host = http://c.lanmeiquan.com
+#api.host = http://c.lanmeiquan.com
 #api.host = http://lanmei.gz.1251114078.clb.myqcloud.com
 #api.host = http://10.18.126.45:8080/wm-webapp
 #api.host = http://10.18.126.77:8088/wm-webapp
 #api.host = http://192.168.0.117:8080
 #api.host = http://192.168.0.101:8080
-#api.host = http://192.168.0.118:8088
+api.host = http://192.168.0.118:8088
 #api.host = http://192.168.0.105:8088
 #api.host = http://182.254.172.170
 
