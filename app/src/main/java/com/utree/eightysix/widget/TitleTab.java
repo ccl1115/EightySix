@@ -59,17 +59,17 @@ public class TitleTab extends FrameLayout {
       public void onPageSelected(int position) {
         if (mListener != null) {
           mListener.onPageSelected(position);
-
-          for (int i = 0, size = mLlTabs.getChildCount(); i < size; i++) {
-            TextView textView = (TextView) mLlTabs.getChildAt(i).findViewById(R.id.tv_title);
-            textView.setTextColor(getResources().getColor(R.color.apptheme_primary_grey_color_pressed));
-            textView.setTextSize(14);
-          }
-
-          TextView textView = (TextView) mLlTabs.getChildAt(position).findViewById(R.id.tv_title);
-          textView.setTextColor(getResources().getColor(R.color.apptheme_primary_light_color));
-          textView.setTextSize(16);
         }
+
+        for (int i = 0, size = mLlTabs.getChildCount(); i < size; i++) {
+          TextView textView = (TextView) mLlTabs.getChildAt(i).findViewById(R.id.tv_title);
+          textView.setTextColor(getResources().getColor(R.color.apptheme_primary_grey_color_pressed));
+          textView.setTextSize(14);
+        }
+
+        TextView textView = (TextView) mLlTabs.getChildAt(position).findViewById(R.id.tv_title);
+        textView.setTextColor(getResources().getColor(R.color.apptheme_primary_light_color));
+        textView.setTextSize(16);
       }
 
       @Override
