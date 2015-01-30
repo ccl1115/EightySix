@@ -121,7 +121,7 @@ public class BaseMsgItemView extends LinearLayout {
       mFlRight.setVisibility(VISIBLE);
       mTvContentRight.setText(right.content);
       if (!TextUtils.isEmpty(right.bgUrl)) {
-        mAivBgLeft.setUrl(right.bgUrl, 300, 300);
+        mAivBgRight.setUrl(right.bgUrl, 300, 300);
         mTvContentRight.setBackgroundColor(Color.TRANSPARENT);
       } else {
         mAivBgRight.setUrl(null);
