@@ -16,7 +16,7 @@ public class Bainian extends BaseItem {
   @SerializedName("title")
   public String title;
 
-  @SerializedName("subtitle")
+  @SerializedName("subTitle")
   public String subTitle;
 
   @SerializedName("receiveText")

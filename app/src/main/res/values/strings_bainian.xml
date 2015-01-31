@@ -4,9 +4,9 @@
   -->
 
 <resources>
-    <string name="lanmei_bainian_title">这个春节，蓝么陪你过</string>
+    <string name="lanmei_bainian_title">这个春节，蓝莓陪你过</string>
     <string name="lanmei_bainian_info">春节到了！快通过蓝莓给厂里的小伙伴送祝福吧！</string>
     <string name="recipient_hint">你想要把祝福送给谁呢？</string>
-    <string name="what_to_say">想对Ta说</string>
+    <string name="what_to_say">想对Ta说：</string>
     <string name="generate_bainian">生成拜年卡</string>
 </resources>

@@ -34,13 +34,13 @@ public class FeedRegionAdapter extends BaseAdapter {
    */
   private static final int TNS = -1;
 
-  public static final int TYPE_COUNT = 13;
+  public static final int TYPE_COUNT = 14;
   static final int TYPE_PLACEHOLDER = 0;
   static final int TYPE_UNLOCK = 1;
   static final int TYPE_UPLOAD = 2;
   static final int TYPE_SELECT = 3;
   static final int TYPE_UNKNOWN = 4;
-  public static final int TYPE_POST = 5;
+  static final int TYPE_POST = 5;
   static final int TYPE_PROMO = 6;
   static final int TYPE_QUESTION = 7;
   static final int TYPE_INVITE_FRIEND = 8;
@@ -48,6 +48,7 @@ public class FeedRegionAdapter extends BaseAdapter {
   static final int TYPE_OPTION_SET = 10;
   static final int TYPE_TOPIC = 11;
   static final int TYPE_FEED_INTENT = 12;
+  static final int TYPE_BAINIAN = 13;
 
   private Feeds mFeeds;
 
@@ -187,7 +188,20 @@ public class FeedRegionAdapter extends BaseAdapter {
       case TYPE_FEED_INTENT:
         convertView = getFeedIntentView(position, convertView, parent);
         break;
+      case TYPE_BAINIAN:
+        convertView = getBainianView(position, convertView, parent);
+        break;
     }
+
+    return convertView;
+  }
+
+  private View getBainianView(int position, View convertView, ViewGroup parent) {
+    if (convertView == null) {
+      convertView = new FeedBainianView(parent.getContext());
+    }
+
+    ((FeedBainianView) convertView).setData(((Bainian) getItem(position)));
 
     return convertView;
   }
@@ -227,6 +241,8 @@ public class FeedRegionAdapter extends BaseAdapter {
           return TYPE_TOPIC;
         case BaseItem.TYPE_FEED_INTENT:
           return TYPE_FEED_INTENT;
+        case BaseItem.TYPE_BAINIAN:
+          return TYPE_BAINIAN;
         case TYPE_UPLOAD:
         case TYPE_UNLOCK:
         case TYPE_SELECT:
