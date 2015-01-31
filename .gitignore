@@ -1,10 +1,9 @@
 .idea
 gen
 target
-EightySix-parent.iml
 *.iml
-classes
 gen-external-apklibs
 *.ec
 
 data/src/main/java/com/utree/eightysix/dao
+app/src/main/res/raw/configuration_local
