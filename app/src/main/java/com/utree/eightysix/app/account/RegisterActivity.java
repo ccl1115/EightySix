@@ -5,10 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.widget.EditText;
+import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.google.gson.annotations.SerializedName;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
@@ -29,21 +33,23 @@ import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.widget.RoundedButton;
+import com.utree.eightysix.widget.ThemedDialog;
+
 import java.util.Date;
 
 /**
  */
-@Layout (R.layout.activity_register)
+@Layout(R.layout.activity_register)
 public class RegisterActivity extends BaseActivity {
 
   private static final int MSG_COUNTDOWN = 0;
-  @InjectView (R.id.et_phone_number)
+  @InjectView(R.id.et_phone_number)
   public EditText mEtPhoneNumber;
 
-  @InjectView (R.id.et_pwd)
+  @InjectView(R.id.et_pwd)
   public EditText mEtPwd;
 
-  @InjectView (R.id.btn_register)
+  @InjectView(R.id.btn_register)
   public RoundedButton mBtnRegister;
 
   @InjectView(R.id.et_captcha)
@@ -52,13 +58,10 @@ public class RegisterActivity extends BaseActivity {
   @InjectView(R.id.btn_get_captcha)
   public RoundedButton mRbGetCaptcha;
 
-  private long mTargetTime;
+  @InjectView(R.id.et_invite)
+  public EditText mEtInvite;
 
-  @OnClick(R.id.btn_get_captcha)
-  public void onRbGetCaptchaClicked() {
-    requestCaptcha();
-    mRbGetCaptcha.setEnabled(false);
-  }
+  private long mTargetTime;
 
   private boolean mCorrectPhoneNumber;
   private boolean mCorrectPwd;
@@ -69,7 +72,18 @@ public class RegisterActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
-  @OnClick (R.id.btn_register)
+  @OnClick(R.id.btn_get_captcha)
+  public void onRbGetCaptchaClicked() {
+    requestCaptcha();
+    mRbGetCaptcha.setEnabled(false);
+  }
+
+  @OnClick(R.id.iv_info)
+  public void onIvInfoClicked() {
+    requestInfo();
+  }
+
+  @OnClick(R.id.btn_register)
   public void onBtnRegisterClicked() {
     requestRegister();
   }
@@ -169,32 +183,71 @@ public class RegisterActivity extends BaseActivity {
       return;
     }
 
-    request(new RegisterRequest(mEtPhoneNumber.getText().toString(), mEtPwd.getText().toString(), mEtCaptcha.getText().toString()),
-        new OnResponse<UserResponse>() {
-          @Override
-          public void onResponse(UserResponse response) {
-            if (response != null) {
-              if (response.code == 0) {
-                User user = response.object;
-                if (user != null) {
-                  Account.inst().login(user.userId, user.token);
-                  showToast(R.string.register_success, false);
-                  setLoadingText("身份验证中");
-                  ContactsSyncService.start(RegisterActivity.this, true);
-                  return;
-                } else {
-                  showToast(R.string.server_object_error);
-                }
-              }
+    OnResponse<UserResponse> onResponse = new OnResponse<UserResponse>() {
+      @Override
+      public void onResponse(UserResponse response) {
+        if (response != null) {
+          if (response.code == 0) {
+            User user = response.object;
+            if (user != null) {
+              Account.inst().login(user.userId, user.token);
+              showToast(R.string.register_success, false);
+              setLoadingText("身份验证中");
+              ContactsSyncService.start(RegisterActivity.this, true);
+              return;
+            } else {
+              showToast(R.string.server_object_error);
             }
-            mBtnRegister.setEnabled(true);
-            hideProgressBar();
           }
-        }, UserResponse.class);
+        }
+        mBtnRegister.setEnabled(true);
+        hideProgressBar();
+      }
+    };
+
+    if (TextUtils.isEmpty(mEtInvite.getText().toString())) {
+      request(new RegisterRequest(mEtPhoneNumber.getText().toString(), mEtPwd.getText().toString(), mEtCaptcha.getText().toString()),
+          onResponse, UserResponse.class);
+    } else {
+      request(new RegisterRequest(mEtPhoneNumber.getText().toString(),
+              mEtPwd.getText().toString(),
+              mEtCaptcha.getText().toString(),
+              mEtCaptcha.getText().toString()),
+          onResponse, UserResponse.class);
+    }
 
     showProgressBar();
     hideSoftKeyboard(mEtPwd);
     mBtnRegister.setEnabled(false);
+  }
+
+  private void requestInfo() {
+    showProgressBar(true);
+    U.request("invite_code_desc", new OnResponse2<InviteCodeDescResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        hideProgressBar();
+      }
+
+      @Override
+      public void onResponse(InviteCodeDescResponse response) {
+        hideProgressBar();
+
+        ThemedDialog dialog = new ThemedDialog(RegisterActivity.this);
+        dialog.setTitle("邀请码的意义");
+
+        TextView textView = new TextView(RegisterActivity.this);
+
+        textView.setText(response.object.desc);
+        textView.setPadding(dp2px(8), dp2px(8), dp2px(8), dp2px(8));
+        textView.setGravity(Gravity.CENTER);
+        textView.setEms(12);
+
+        dialog.setContent(textView);
+
+        dialog.show();
+      }
+    }, InviteCodeDescResponse.class);
   }
 
   private void requestCaptcha() {
@@ -246,5 +299,17 @@ public class RegisterActivity extends BaseActivity {
         mRbGetCaptcha.setEnabled(true);
       }
     }
+  }
+
+  public static class InviteCodeDescResponse extends Response {
+
+    @SerializedName("object")
+    public InviteCodeDesc object;
+  }
+
+  public static class InviteCodeDesc {
+
+    @SerializedName("desc")
+    public String desc;
   }
 }
