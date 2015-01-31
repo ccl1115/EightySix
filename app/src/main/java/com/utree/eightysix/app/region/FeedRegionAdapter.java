@@ -3,7 +3,10 @@ package com.utree.eightysix.app.region;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.AbsListView;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -12,22 +15,14 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
-import com.utree.eightysix.app.feed.FeedOptionSetView;
-import com.utree.eightysix.app.feed.FeedPostView;
-import com.utree.eightysix.app.feed.FeedPromotionView;
-import com.utree.eightysix.app.feed.FeedQuestionView;
-import com.utree.eightysix.app.feed.FeedTopicView;
+import com.utree.eightysix.app.feed.*;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
 import com.utree.eightysix.app.feed.event.UploadClickedEvent;
-import com.utree.eightysix.data.BaseItem;
-import com.utree.eightysix.data.Feeds;
-import com.utree.eightysix.data.OptionSet;
-import com.utree.eightysix.data.Post;
-import com.utree.eightysix.data.PostTopic;
-import com.utree.eightysix.data.Promotion;
-import com.utree.eightysix.data.QuestionSet;
+import com.utree.eightysix.data.*;
+import com.utree.eightysix.utils.CmdHandler;
 import com.utree.eightysix.widget.RoundedButton;
+
 import java.util.List;
 
 /**
@@ -39,7 +34,7 @@ public class FeedRegionAdapter extends BaseAdapter {
    */
   private static final int TNS = -1;
 
-  public static final int TYPE_COUNT = 12;
+  public static final int TYPE_COUNT = 13;
   static final int TYPE_PLACEHOLDER = 0;
   static final int TYPE_UNLOCK = 1;
   static final int TYPE_UPLOAD = 2;
@@ -52,6 +47,7 @@ public class FeedRegionAdapter extends BaseAdapter {
   static final int TYPE_INVITE_FACTORY = 9;
   static final int TYPE_OPTION_SET = 10;
   static final int TYPE_TOPIC = 11;
+  static final int TYPE_FEED_INTENT = 12;
 
   private Feeds mFeeds;
 
@@ -72,7 +68,7 @@ public class FeedRegionAdapter extends BaseAdapter {
     } else if (mFeeds.upContact != 1) {
       // 上传通讯录
       mFeeds.posts.lists.add(0, new BaseItem(TYPE_UPLOAD));
-    }  else {
+    } else {
       boolean hasPosts = false;
       for (BaseItem item : mFeeds.posts.lists) {
         if (item.type == BaseItem.TYPE_POST) {
@@ -188,7 +184,26 @@ public class FeedRegionAdapter extends BaseAdapter {
       case TYPE_TOPIC:
         convertView = getTopicView(position, convertView, parent);
         break;
+      case TYPE_FEED_INTENT:
+        convertView = getFeedIntentView(position, convertView, parent);
+        break;
     }
+
+    return convertView;
+  }
+
+  private View getFeedIntentView(int position, View convertView, ViewGroup parent) {
+    FeedIntentViewHolder holder;
+    if (convertView == null) {
+      convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_feed_intent, parent, false);
+      holder = new FeedIntentViewHolder(convertView);
+      convertView.setTag(holder);
+    } else {
+      holder = (FeedIntentViewHolder) convertView.getTag();
+    }
+
+
+    holder.setFeedIntent((FeedIntent) getItem(position));
 
     return convertView;
   }
@@ -210,6 +225,8 @@ public class FeedRegionAdapter extends BaseAdapter {
           return TYPE_OPTION_SET;
         case BaseItem.TYPE_TOPIC:
           return TYPE_TOPIC;
+        case BaseItem.TYPE_FEED_INTENT:
+          return TYPE_FEED_INTENT;
         case TYPE_UPLOAD:
         case TYPE_UNLOCK:
         case TYPE_SELECT:
@@ -482,7 +499,7 @@ public class FeedRegionAdapter extends BaseAdapter {
       ButterKnife.inject(this, view);
     }
 
-    @OnClick (R.id.rb_select)
+    @OnClick(R.id.rb_select)
     public void onRbSelectClicked(View view) {
       U.getAnalyser().trackEvent(U.getContext(), "feed_select", "feed_select");
       BaseCirclesActivity.startSelect(view.getContext(), false);
@@ -496,7 +513,7 @@ public class FeedRegionAdapter extends BaseAdapter {
       ButterKnife.inject(this, view);
     }
 
-    @OnClick (R.id.rb_invite)
+    @OnClick(R.id.rb_invite)
     public void onRbInviteClicked() {
       U.getAnalyser().trackEvent(U.getContext(), "feed_upload", "feed_upload");
       U.getBus().post(new UploadClickedEvent());
@@ -505,16 +522,16 @@ public class FeedRegionAdapter extends BaseAdapter {
 
   @Keep
   static class UnlockViewHolder {
-    @InjectView (R.id.rb_unlock)
+    @InjectView(R.id.rb_unlock)
     public RoundedButton mRbUnlock;
 
-    @InjectView (R.id.tv_hidden_count)
+    @InjectView(R.id.tv_hidden_count)
     public TextView mTvHidden;
 
-    @InjectView (R.id.rb_hidden_count)
+    @InjectView(R.id.rb_hidden_count)
     public RoundedButton mRbHidden;
 
-    @InjectView (R.id.iv_hidden_count)
+    @InjectView(R.id.iv_hidden_count)
     public ImageView mIvHiddenCount;
 
     public UnlockViewHolder(View view) {
@@ -523,7 +540,7 @@ public class FeedRegionAdapter extends BaseAdapter {
   }
 
   static class InviteFriendViewHolder {
-    @OnClick (R.id.rb_invite)
+    @OnClick(R.id.rb_invite)
     public void onRbInviteClicked() {
       U.getAnalyser().trackEvent(U.getContext(), "feed_invite_friend", "feed_invite_friend");
       U.getBus().post(new InviteClickedEvent());
@@ -535,7 +552,7 @@ public class FeedRegionAdapter extends BaseAdapter {
   }
 
   static class InviteFactoryViewHolder {
-    @OnClick (R.id.rb_invite)
+    @OnClick(R.id.rb_invite)
     public void onRbInviteClicked() {
       U.getAnalyser().trackEvent(U.getContext(), "feed_invite_factory", "feed_invite_factory");
       U.getBus().post(new InviteClickedEvent());
@@ -543,6 +560,37 @@ public class FeedRegionAdapter extends BaseAdapter {
 
     public InviteFactoryViewHolder(View view) {
       ButterKnife.inject(this, view);
+    }
+  }
+
+  static class FeedIntentViewHolder {
+
+    FeedIntent mFeedIntent;
+
+    public FeedIntentViewHolder(View view) {
+      ButterKnife.inject(this, view);
+    }
+
+    @InjectView(R.id.tv_title)
+    public TextView mTvTitle;
+
+    @InjectView(R.id.tv_sub_title)
+    public TextView mTvSubTitle;
+
+    @InjectView(R.id.rb_action)
+    public RoundedButton mRbAction;
+
+    @OnClick(R.id.rb_action)
+    public void onTvButtonClicked(View v) {
+      new CmdHandler().handle(v.getContext(), mFeedIntent.appIntent.cmd);
+    }
+
+    public void setFeedIntent(FeedIntent data) {
+      mFeedIntent = data;
+
+      mTvSubTitle.setText(data.subTitle);
+      mTvTitle.setText(data.title);
+      mRbAction.setText(data.buttonText);
     }
   }
 

@@ -10,6 +10,15 @@ import com.google.gson.annotations.SerializedName;
  */
 public class FeedIntent extends BaseItem {
 
-  @SerializedName("appIntent")
+  @SerializedName("message")
   public AppIntent appIntent;
+
+  @SerializedName("title")
+  public String title;
+
+  @SerializedName("subTitle")
+  public String subTitle;
+
+  @SerializedName("buttonText")
+  public String buttonText;
 }
