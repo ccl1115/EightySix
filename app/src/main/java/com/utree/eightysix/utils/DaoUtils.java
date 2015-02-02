@@ -20,7 +20,7 @@ public class DaoUtils {
   private static DaoMaster sDaoMaster;
   private static DaoSession mDaoSession;
 
-  private static void init() {
+  public static void init() {
     sDaoMaster = BuildConfig.DEBUG ?
         new DaoMaster(new DaoMaster.DevOpenHelper(U.getContext(), "com.utree.eightysix.db." + Account.inst().getUserId(), null).getWritableDatabase()) :
         new DaoMaster(new DaoMaster.OpenHelper(U.getContext(), "com.utree.eightysix.db." + Account.inst().getUserId(), null) {

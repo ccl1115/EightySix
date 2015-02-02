@@ -23,6 +23,7 @@ import com.utree.eightysix.rest.HandlerWrapper;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RequestData;
 import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.utils.DaoUtils;
 
 import java.util.List;
 
@@ -188,6 +189,8 @@ public class Account {
         U.getPushHelper().startWork();
 
         FetchAlarmReceiver.setupAlarm(U.getContext());
+
+        DaoUtils.init();
 
         M.getRegisterHelper().register(ChatAccount.inst());
         ChatAccount.inst().login();
