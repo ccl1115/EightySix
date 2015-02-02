@@ -10,6 +10,13 @@
        android:layout_height="match_parent"
         >
 
+    <ImageView
+            android:id="@+id/iv_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            />
+
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -20,7 +27,6 @@
             android:paddingRight="8dp"
             android:paddingEnd="8dp"
             android:paddingBottom="8dp"
-            android:background="@drawable/bg_feed_bainian"
             android:gravity="center_horizontal"
             android:orientation="vertical"
             >

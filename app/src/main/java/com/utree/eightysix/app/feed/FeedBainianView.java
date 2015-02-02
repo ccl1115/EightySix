@@ -10,10 +10,12 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.squareup.picasso.Picasso;
 import com.utree.eightysix.R;
 import com.utree.eightysix.data.Bainian;
 
@@ -39,6 +41,9 @@ public final class FeedBainianView extends FrameLayout {
   @InjectView(R.id.rb_generate)
   public TextView mRbGenerate;
 
+  @InjectView(R.id.iv_bg)
+  public ImageView mIvBg;
+
   private int mIndex;
   private Bainian mBainian;
 
@@ -59,6 +64,7 @@ public final class FeedBainianView extends FrameLayout {
   }
 
   public void setData(Bainian bainian) {
+    Picasso.with(getContext()).load(R.drawable.bg_feed_bainian).into(mIvBg);
     mBainian = bainian;
     mEtRecipient.setHint(mBainian.receiveText);
     mTvTitle.setText(mBainian.title);

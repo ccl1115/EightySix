@@ -26,7 +26,9 @@ import java.util.concurrent.Executors;
 import static com.utree.eightysix.utils.ImageUtils.ImageLoadedEvent.*;
 
 /**
+ * This util for loading images is replace by Picasso
  */
+@Deprecated
 public class ImageUtils {
   public static final int MAX_SIZE = (((ActivityManager) U.getContext().getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass() >> 2) * 1024 * 1024;
   private static final String TAG = "ImageUtils";
