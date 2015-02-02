@@ -143,13 +143,13 @@ public abstract class AbsFeedFragment extends BaseFragment {
 
 
           if ((post.viewType == 1 || post.viewType == 2 || post.viewType == 5) && Env.firstRun("overlay_tip_source")) {
-            mFeedAdapter.showTipOverlaySource(firstItem);
+            mFeedAdapter.showTipSource(firstItem);
           } else if (Env.firstRun("overlay_tip_praise")) {
-            mFeedAdapter.showTipOverlayPraise(firstItem);
+            mFeedAdapter.showTipPraise(firstItem);
           } else if (Env.firstRun("overlay_tip_share")) {
-            mFeedAdapter.showTipOverlayShare(firstItem);
+            mFeedAdapter.showTipShare(firstItem);
           } else if (post.isRepost == 1 && Env.firstRun("overlay_tip_repost")) {
-            mFeedAdapter.showTipOverlayRepost(firstItem);
+            mFeedAdapter.showTipRepost(firstItem);
           }
         }
       }

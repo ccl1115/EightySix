@@ -32,32 +32,32 @@ public class FeedRegionAdapter extends BaseAdapter {
   /**
    * TIP_NOT_SHOWN
    */
-  private static final int TNS = -1;
+  protected static final int TNS = -1;
 
-  public static final int TYPE_COUNT = 14;
-  static final int TYPE_PLACEHOLDER = 0;
-  static final int TYPE_UNLOCK = 1;
-  static final int TYPE_UPLOAD = 2;
-  static final int TYPE_SELECT = 3;
-  static final int TYPE_UNKNOWN = 4;
-  static final int TYPE_POST = 5;
-  static final int TYPE_PROMO = 6;
-  static final int TYPE_QUESTION = 7;
-  static final int TYPE_INVITE_FRIEND = 8;
-  static final int TYPE_INVITE_FACTORY = 9;
-  static final int TYPE_OPTION_SET = 10;
-  static final int TYPE_TOPIC = 11;
-  static final int TYPE_FEED_INTENT = 12;
-  static final int TYPE_BAINIAN = 13;
+  protected final int TYPE_COUNT = 14;
+  public static final int TYPE_PLACEHOLDER = 0;
+  public static final int TYPE_UNLOCK = 1;
+  public static final int TYPE_UPLOAD = 2;
+  public static final int TYPE_SELECT = 3;
+  public static final int TYPE_UNKNOWN = 4;
+  public static final int TYPE_POST = 5;
+  public static final int TYPE_PROMO = 6;
+  public static final int TYPE_QUESTION = 7;
+  public static final int TYPE_INVITE_FRIEND = 8;
+  public static final int TYPE_INVITE_FACTORY = 9;
+  public static final int TYPE_OPTION_SET = 10;
+  public static final int TYPE_TOPIC = 11;
+  public static final int TYPE_FEED_INTENT = 12;
+  public static final int TYPE_BAINIAN = 13;
 
-  private Feeds mFeeds;
+  protected Feeds mFeeds;
 
-  private int mTipSourcePosition = TNS;
-  private int mTipPraisePosition = TNS;
-  private int mTipSharePosition = TNS;
-  private int mTipRepostPosition = TNS;
-  private int mTipTempNamePosition = TNS;
-  private int mTipTagsPosition = TNS;
+  protected int mTipSourcePosition = TNS;
+  protected int mTipPraisePosition = TNS;
+  protected int mTipSharePosition = TNS;
+  protected int mTipRepostPosition = TNS;
+  protected int mTipTempNamePosition = TNS;
+  protected int mTipTagsPosition = TNS;
 
 
   public FeedRegionAdapter(Feeds feeds) {
@@ -82,6 +82,9 @@ public class FeedRegionAdapter extends BaseAdapter {
         mFeeds.posts.lists.add(0, new BaseItem(TYPE_INVITE_FACTORY));
       }
     }
+  }
+
+  public FeedRegionAdapter() {
   }
 
   public void add(List<BaseItem> posts) {
