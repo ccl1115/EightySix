@@ -103,11 +103,7 @@ public class LoginActivity extends BaseActivity {
     setTopTitle(getString(R.string.login) + getString(R.string.app_name));
 
 
-    if (U.useFixture()) {
-      mBtnFixture.setVisibility(View.VISIBLE);
-    } else {
-      mBtnFixture.setVisibility(View.GONE);
-    }
+    mBtnFixture.setVisibility(View.GONE);
 
     mEtPhoneNumber.addTextChangedListener(new TextWatcher() {
       @Override

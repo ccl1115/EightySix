@@ -28,8 +28,6 @@ import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RandomSceneTextView;
 
-import java.util.List;
-
 /**
  * @author simon
  */
@@ -66,33 +64,11 @@ public class PraiseActivity extends BaseActivity {
     mRvMsg.setColorScheme(R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed,
         R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed);
 
-    if (U.useFixture()) {
-      showProgressBar();
-      getHandler().postDelayed(new Runnable() {
-        @Override
-        public void run() {
-          List<Post> valid = U.getFixture(Post.class, 23, "valid");
-          for (Post p : valid) {
-            if (p.read == 1) {
-              mTvNoNewMsg.setVisibility(View.INVISIBLE);
-            }
-          }
-          mAlvMsg.setAdapter(new MsgAdapter<PraiseMsgItemView>(valid) {
-            @Override
-            protected PraiseMsgItemView newView(Context context) {
-              return new PraiseMsgItemView(context);
-            }
-          });
-          hideProgressBar();
-        }
-      }, 1000);
+    mRefreshed = getIntent().getBooleanExtra("refresh", false);
+    if (mRefreshed) {
+      requestPraises(1);
     } else {
-      mRefreshed = getIntent().getBooleanExtra("refresh", false);
-      if (mRefreshed) {
-        requestPraises(1);
-      } else {
-        cacheOutPraises(1);
-      }
+      cacheOutPraises(1);
     }
 
     mAlvMsg.setLoadMoreCallback(new LoadMoreCallback() {

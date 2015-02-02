@@ -40,7 +40,6 @@ import com.utree.eightysix.utils.TimeUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Properties;
 
 /**
@@ -441,20 +440,4 @@ public class U {
     return sEntryLogger;
   }
 
-  public static boolean useFixture() {
-    return getConfigBoolean("debug.fixture");
-  }
-
-  public static <T> List<T> getFixture(Class<T> clz, int quantity, String template) {
-    return sFixture == null ? null : sFixture.get(clz, quantity, template);
-  }
-
-  static {
-    try {
-      Class fixtureClass = Class.forName("com.utree.eightysix.fixture.FixtureImpl");
-      sFixture = (Fixture) fixtureClass.newInstance();
-    } catch (Exception e) {
-      if (BuildConfig.DEBUG) e.printStackTrace();
-    }
-  }
 }
