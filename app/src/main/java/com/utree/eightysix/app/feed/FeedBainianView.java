@@ -10,14 +10,12 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.data.Bainian;
-import com.utree.eightysix.widget.RoundedButton;
 
 /**
  */
@@ -29,9 +27,6 @@ public final class FeedBainianView extends FrameLayout {
   @InjectView(R.id.et_msg)
   public EditText mEtMsg;
 
-  @InjectView(R.id.iv_refresh)
-  public ImageView mIvRefresh;
-
   @InjectView(R.id.tv_title)
   public TextView mTvTitle;
 
@@ -42,7 +37,7 @@ public final class FeedBainianView extends FrameLayout {
   public TextView mTvTip;
 
   @InjectView(R.id.rb_generate)
-  public RoundedButton mRbGenerate;
+  public TextView mRbGenerate;
 
   private int mIndex;
   private Bainian mBainian;

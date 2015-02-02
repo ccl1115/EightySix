@@ -26,7 +26,10 @@ import com.utree.eightysix.qrcode.ActionDispatcher;
 import com.utree.eightysix.qrcode.actions.AddFriendAction;
 import com.utree.eightysix.report.Reporter;
 import com.utree.eightysix.report.ReporterImpl;
-import com.utree.eightysix.rest.*;
+import com.utree.eightysix.rest.IRESTRequester;
+import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.rest.bus.RequestBus;
 import com.utree.eightysix.statistics.Analyser;
 import com.utree.eightysix.statistics.MtaAnalyserImpl;
@@ -37,7 +40,6 @@ import com.utree.eightysix.utils.TimeUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Properties;
 
 /**
@@ -295,6 +297,8 @@ public class U {
       if (!BuildConfig.DEBUG) {
         sConfiguration.load(U.getContext().getResources().openRawResource(R.raw.configuration_release));
       }
+
+      sConfiguration.load(getContext().getAssets().open("configuration_local"));
     } catch (IOException ignored) {
     }
   }
@@ -436,20 +440,4 @@ public class U {
     return sEntryLogger;
   }
 
-  public static boolean useFixture() {
-    return getConfigBoolean("debug.fixture");
-  }
-
-  public static <T> List<T> getFixture(Class<T> clz, int quantity, String template) {
-    return sFixture == null ? null : sFixture.get(clz, quantity, template);
-  }
-
-  static {
-    try {
-      Class fixtureClass = Class.forName("com.utree.eightysix.fixture.FixtureImpl");
-      sFixture = (Fixture) fixtureClass.newInstance();
-    } catch (Exception e) {
-      if (BuildConfig.DEBUG) e.printStackTrace();
-    }
-  }
 }

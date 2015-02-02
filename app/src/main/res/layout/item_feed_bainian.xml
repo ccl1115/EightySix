@@ -5,7 +5,6 @@
   -->
 
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-       xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
        android:orientation="vertical"
        android:layout_width="match_parent"
        android:layout_height="match_parent"
@@ -14,58 +13,67 @@
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:paddingTop="16sp"
+            android:layout_marginTop="8dp"
+            android:paddingTop="28sp"
             android:paddingLeft="8dp"
             android:paddingStart="8dp"
             android:paddingRight="8dp"
             android:paddingEnd="8dp"
-            android:paddingBottom="16dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/bg_feed_bainian"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:background="#ffff3850"
             >
 
         <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="22sp"
-                android:textColor="@android:color/white"
+                android:textSize="26sp"
                 android:text="@string/lanmei_bainian_title"
+                android:textColor="#ffff531b"
+                android:shadowColor="@android:color/white"
+                android:shadowDx="0"
+                android:shadowDy="1"
+                android:shadowRadius="1"
                 />
 
         <TextView
                 android:id="@+id/tv_sub_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:textSize="14sp"
-                android:textColor="@android:color/white"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp"
+                android:textSize="12sp"
                 android:text="@string/lanmei_bainian_info"
+                android:textColor="#ffff531b"
+                android:shadowColor="@android:color/white"
+                android:shadowDx="0"
+                android:shadowDy="1"
+                android:shadowRadius="1"
                 />
 
         <EditText
                 android:id="@+id/et_recipient"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="32sp"
-                android:layout_marginRight="32sp"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
                 android:textSize="14sp"
+                android:textColor="#ff262626"
+                android:textColorHint="#ff262626"
+                android:gravity="center_vertical"
                 android:maxLength="10"
                 android:singleLine="true"
                 android:maxLines="1"
                 android:inputType="text"
+                android:padding="8dp"
                 android:hint="@string/recipient_hint"
+                android:background="@drawable/bg_bainian_edit_text_small"
                 />
 
         <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="32sp"
-                android:layout_marginRight="32sp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="8dp"
                 android:orientation="horizontal"
                 android:gravity="bottom"
@@ -76,42 +84,52 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="16sp"
-                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
                     android:text="@string/what_to_say"
+                    android:textColor="#ffff531b"
+                    android:shadowColor="@android:color/white"
+                    android:shadowDx="0"
+                    android:shadowDy="1"
+                    android:shadowRadius="1"
                     />
 
-            <ImageView
+            <TextView
                     android:id="@+id/iv_refresh"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_action_refresh"
+                    android:textSize="14sp"
+                    android:text="换一换"
+                    android:textColor="#ffff531b"
+                    android:shadowColor="@android:color/white"
+                    android:shadowDx="0"
+                    android:shadowDy="1"
+                    android:shadowRadius="1"
                     />
         </LinearLayout>
 
         <EditText
                 android:id="@+id/et_msg"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="32sp"
-                android:layout_marginRight="32sp"
+                android:layout_width="wrap_content"
+                android:layout_height="64dp"
                 android:textSize="14sp"
-                android:maxLength="10"
-                android:singleLine="true"
-                android:maxLines="1"
-                android:inputType="text"
+                android:textColor="#ff262626"
+                android:inputType="textMultiLine"
+                android:maxLines="4"
+                android:padding="8dp"
+                android:background="@drawable/bg_bainian_edit_text_large"
                 />
 
-        <com.utree.eightysix.widget.RoundedButton
+        <TextView
                 android:id="@+id/rb_generate"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp"
                 android:text="@string/generate_bainian"
-                android:textSize="16sp"
-                app:radius="8dp"
-                app:background="@android:color/white"
+                android:textSize="14sp"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:background="@drawable/bg_bainian_button_generate"
                 />
     </LinearLayout>
 </merge>

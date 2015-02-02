@@ -48,7 +48,7 @@ public class FactoryRegionFragment extends BaseFragment {
   public void onAlvItemClicked(int position, View view) {
     Circle item = mAdapter.getItem(position);
     if (item.currFactory == 1) {
-      HomeActivity.start(view.getContext());
+      HomeActivity.start(view.getContext(), 0);
     } else {
       FeedActivity.start(view.getContext(), item);
     }

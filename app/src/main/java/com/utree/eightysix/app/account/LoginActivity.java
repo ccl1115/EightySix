@@ -103,11 +103,7 @@ public class LoginActivity extends BaseActivity {
     setTopTitle(getString(R.string.login) + getString(R.string.app_name));
 
 
-    if (U.useFixture()) {
-      mBtnFixture.setVisibility(View.VISIBLE);
-    } else {
-      mBtnFixture.setVisibility(View.GONE);
-    }
+    mBtnFixture.setVisibility(View.GONE);
 
     mEtPhoneNumber.addTextChangedListener(new TextWatcher() {
       @Override
@@ -237,12 +233,12 @@ public class LoginActivity extends BaseActivity {
     };
 
     if (mEtCaptcha.getText().length() > 0) {
-      U.request("login_old", onResponse, UserResponse.class,
+      U.request("login", onResponse, UserResponse.class,
           mEtPhoneNumber.getText().toString(),
           mEtPwd.getText().toString(),
           mEtCaptcha.getText().toString());
     } else {
-      U.request("login_old", onResponse, UserResponse.class,
+      U.request("login", onResponse, UserResponse.class,
           mEtPhoneNumber.getText().toString(),
           mEtPwd.getText().toString(),
           null);

@@ -10,14 +10,14 @@ import com.squareup.otto.Subscribe;
 import com.utree.eightysix.app.chat.ChatAccount;
 import com.utree.eightysix.app.intro.IntroActivity;
 import com.utree.eightysix.app.msg.FetchNotificationService;
+import com.utree.eightysix.applogger.EntryAdapter;
+import com.utree.eightysix.applogger.Payload;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.User;
 import com.utree.eightysix.event.CurrentCircleResponseEvent;
 import com.utree.eightysix.event.HasNewPraiseEvent;
 import com.utree.eightysix.event.NewCommentCountEvent;
 import com.utree.eightysix.push.FetchAlarmReceiver;
-import com.utree.eightysix.applogger.EntryAdapter;
-import com.utree.eightysix.applogger.Payload;
 import com.utree.eightysix.request.LogoutRequest;
 import com.utree.eightysix.rest.HandlerWrapper;
 import com.utree.eightysix.rest.OnResponse;
@@ -190,6 +190,8 @@ public class Account {
 
         FetchAlarmReceiver.setupAlarm(U.getContext());
 
+        DaoUtils.init();
+
         M.getRegisterHelper().register(ChatAccount.inst());
         ChatAccount.inst().login();
 
@@ -241,9 +243,6 @@ public class Account {
       if (!Account.inst().setUserId("") && !Account.inst().setToken("")) {
         Account.inst().mIsLogin = false;
       }
-
-      DaoUtils.getConversationDao().deleteAll();
-      DaoUtils.getMessageDao().deleteAll();
 
       U.getAppLogger().log(new EntryAdapter() {
 

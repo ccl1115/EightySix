@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Copyright (c) 2015. All rights reserved by utree.cn
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+        >
+
+    <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/invite"
+            android:textSize="16sp"
+            android:layout_marginRight="14dp"
+            android:paddingBottom="6dp"
+            android:layout_gravity="center_vertical"
+            />
+
+
+    <EditText
+            android:id="@+id/et_invite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/textView"
+            android:layout_centerVertical="true"
+            android:inputType="text"
+            android:maxLength="7"
+            android:singleLine="true"
+            android:minLines="1"
+            />
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_toLeftOf="@+id/iv_info"
+            android:layout_toStartOf="@+id/iv_info"
+            android:layout_centerVertical="true"
+            android:enabled="false"
+            android:textSize="12sp"
+            android:text="@string/optional"
+            />
+
+    <ImageView
+            android:id="@+id/iv_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:padding="8dp"
+            android:src="@drawable/ic_info"
+            />
+
+</RelativeLayout>

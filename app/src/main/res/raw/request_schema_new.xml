@@ -75,6 +75,12 @@
     </request>
 
     <request>
+        <id>invite_code_desc</id>
+        <name>注册得到邀请码的说明</name>
+        <path>/login/inviteCodeDesc.do</path>
+    </request>
+
+    <request>
         <id>factory_snapshot</id>
         <name>得到推介的有快照的工厂列表</name>
         <token/>
@@ -101,5 +107,12 @@
             <param>snapshot</param>
             <param>currPage</param>
         </params>
+    </request>
+
+    <request>
+        <id>get_invite_code</id>
+        <name>得到自已的邀请码</name>
+        <path>/user/getInviteCode.do</path>
+        <token/>
     </request>
 </api>

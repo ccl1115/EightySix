@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.*;
 import android.widget.FrameLayout;
@@ -18,6 +17,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.google.gson.annotations.SerializedName;
 import com.nineoldandroids.view.ViewHelper;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
@@ -43,11 +43,9 @@ import com.utree.eightysix.app.hometown.event.HometownNotSetEvent;
 import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.msg.PraiseActivity;
-import com.utree.eightysix.app.publish.FeedbackActivity;
 import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.app.region.FactoryRegionFragment;
 import com.utree.eightysix.app.region.TabRegionFragment;
-import com.utree.eightysix.app.settings.HelpActivity;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
 import com.utree.eightysix.app.topic.TopicListActivity;
 import com.utree.eightysix.contact.ContactsSyncService;
@@ -56,6 +54,8 @@ import com.utree.eightysix.data.Sync;
 import com.utree.eightysix.event.CurrentCircleResponseEvent;
 import com.utree.eightysix.event.HasNewPraiseEvent;
 import com.utree.eightysix.event.NewCommentCountEvent;
+import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.ThemedDialog;
@@ -529,6 +529,7 @@ public class HomeActivity extends BaseActivity {
     if (mFactoryRegionFragment == null) {
       mFactoryRegionFragment = new FactoryRegionFragment();
 
+      mFactoryRegionFragment.setRegionType(mRegionFragment.getRegionType());
       getSupportFragmentManager().beginTransaction()
           .add(R.id.fl_main, mFactoryRegionFragment).commit();
     } else if (mFactoryRegionFragment.isDetached()) {
@@ -819,32 +820,60 @@ public class HomeActivity extends BaseActivity {
 
     @OnClick(R.id.rl_invite_code)
     void onRlInviteCodeClicked() {
-      final ThemedDialog dialog = new ThemedDialog(HomeActivity.this);
-      dialog.setTitle("你的专属邀请码");
 
-      TextView textView = new TextView(HomeActivity.this);
-      SpannableStringBuilder builder = new SpannableStringBuilder();
-      builder.append("\n邀请厂里的朋友加入蓝莓，只要Ta注册时填写了你的专属邀请码，你就会马上收到10个蓝星奖励，你的朋友也将获得5个蓝星哟！还等什么，赶快行动起来吧！\n" +
-          "\n" +
-          "你的专属邀请码是：\n");
-      SpannableString color = new SpannableString("23a1523");
-      color.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.apptheme_primary_light_color)), 0, color.length(), 0);
-      builder.append(color);
-      textView.setText(builder);
-      textView.setGravity(Gravity.CENTER);
-      textView.setEms(14);
-      textView.setPadding(dp2px(16), dp2px(8), dp2px(16), dp2px(8));
-      textView.setTextSize(16);
-      dialog.setContent(textView);
-      dialog.setPositive("知道啦", new View.OnClickListener() {
+      U.request("get_invite_code", new OnResponse2<GetInviteCodeResponse>() {
         @Override
-        public void onClick(View view) {
-          dialog.dismiss();
-        }
-      });
+        public void onResponseError(Throwable e) {
 
-      dialog.show();
+        }
+
+        @Override
+        public void onResponse(GetInviteCodeResponse response) {
+          final ThemedDialog dialog = new ThemedDialog(HomeActivity.this);
+          dialog.setTitle("你的专属邀请码");
+
+          TextView textView = new TextView(HomeActivity.this);
+          SpannableStringBuilder builder = new SpannableStringBuilder();
+          builder.append(response.object.msg).append("\n\n").append("你的专属邀请码是：\n");
+          SpannableString color = new SpannableString(response.object.inviteCode);
+          color.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.apptheme_primary_light_color)), 0, color.length(), 0);
+          builder.append(color);
+          builder.append("\n\n").append("你已经邀请了").append(String.valueOf(response.object.newCount)).append("个人\n");
+
+          textView.setText(builder);
+          textView.setGravity(Gravity.CENTER);
+          textView.setEms(12);
+          textView.setPadding(dp2px(16), dp2px(8), dp2px(16), dp2px(8));
+          textView.setTextSize(16);
+          dialog.setContent(textView);
+          dialog.setPositive("知道啦", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+              dialog.dismiss();
+            }
+          });
+
+          dialog.show();
+        }
+      }, GetInviteCodeResponse.class, null, null);
+
     }
   }
 
+  public static class GetInviteCodeResponse extends Response {
+
+
+    @SerializedName("object")
+    public GetInviteCode object;
+  }
+
+  public static class GetInviteCode {
+    @SerializedName("msg")
+    public String msg;
+
+    @SerializedName("newCount")
+    public int newCount;
+
+    public String inviteCode;
+  }
 }

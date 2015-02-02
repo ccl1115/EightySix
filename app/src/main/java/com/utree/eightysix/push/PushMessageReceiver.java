@@ -10,18 +10,9 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.app.feed.FeedActivity;
-import com.utree.eightysix.app.home.HomeActivity;
-import com.utree.eightysix.app.msg.MsgActivity;
-import com.utree.eightysix.app.msg.PraiseActivity;
 import com.utree.eightysix.app.msg.PullNotificationService;
-import com.utree.eightysix.app.post.PostActivity;
-import com.utree.eightysix.app.tag.TagTabActivity;
-import com.utree.eightysix.app.topic.TopicActivity;
-import com.utree.eightysix.app.topic.TopicListActivity;
-import com.utree.eightysix.app.web.BaseWebActivity;
 import com.utree.eightysix.data.AppIntent;
-import com.utree.eightysix.data.Topic;
+import com.utree.eightysix.utils.CmdHandler;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.IOUtils;
 import de.akquinet.android.androlog.Log;
@@ -174,53 +165,4 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
   }
 
 
-  /**
-   * feed:id
-   *
-   * post:id
-   *
-   * msg
-   *
-   * praise
-   *
-   */
-  class CmdHandler {
-    void handle(Context context, String cmd) {
-      String[] args = cmd.split(":");
-
-      if ("feed".equals(args[0])) {
-        HomeActivity.start(context);
-        FeedActivity.start(context, Integer.parseInt(args[1]));
-      } else if ("post".equals(args[0])) {
-        HomeActivity.start(context);
-        PostActivity.start(context, args[1]);
-      } else if ("msg".equals(args[0])) {
-        HomeActivity.start(context);
-        MsgActivity.start(context, true);
-      } else if ("praise".equals(args[0])) {
-        HomeActivity.start(context);
-        PraiseActivity.start(context, true);
-      } else if ("topic-list".equals(args[0])) {
-        HomeActivity.start(context);
-        TopicListActivity.start(context);
-      } else if ("topic".equals(args[0])) {
-        HomeActivity.start(context);
-        Topic topic = new Topic();
-        topic.id = Integer.parseInt(args[1]);
-        TopicActivity.start(context, topic);
-      } else if ("tag".equals(args[0])) {
-        HomeActivity.start(context);
-        TagTabActivity.start(context, Integer.parseInt(args[1]));
-      } else if ("bs".equals(args[0])) {
-        HomeActivity.start(context);
-        BaseWebActivity.start(U.getContext(),
-            String.format("http://c.lanmeiquan.com/activity/blueStar.do?userid=%s&token=%s",
-                Account.inst().getUserId(),
-                Account.inst().getToken()));
-      } else if ("webview".equals(args[0])) {
-        HomeActivity.start(context);
-        BaseWebActivity.start(U.getContext(), args[1]);
-      }
-    }
-  }
 }
