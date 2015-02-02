@@ -639,11 +639,13 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
               mPost.relation = 1;
               U.getBus().post(mPost);
               mEtPostContent.setText("");
+              mIvPost.setEnabled(false);
+            } else {
+              mIvPost.setEnabled(true);
             }
 
             hideProgressBar();
             mEtPostContent.setEnabled(true);
-            mIvPost.setEnabled(false);
             mLvComments.setSelection(Integer.MAX_VALUE);
 
             requestComment(1, true);
