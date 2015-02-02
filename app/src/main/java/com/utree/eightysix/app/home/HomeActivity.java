@@ -529,6 +529,7 @@ public class HomeActivity extends BaseActivity {
     if (mFactoryRegionFragment == null) {
       mFactoryRegionFragment = new FactoryRegionFragment();
 
+      mFactoryRegionFragment.setRegionType(mRegionFragment.getRegionType());
       getSupportFragmentManager().beginTransaction()
           .add(R.id.fl_main, mFactoryRegionFragment).commit();
     } else if (mFactoryRegionFragment.isDetached()) {
