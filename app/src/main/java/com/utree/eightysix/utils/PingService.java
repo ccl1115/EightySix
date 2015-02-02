@@ -61,6 +61,8 @@ public class PingService extends IntentService {
       Log.d(TAG, "ping failed, io exception");
     } catch (InterruptedException e) {
       Log.d(TAG, "ping failed, interrupted exception");
+    } catch (Exception e) {
+      Log.d(TAG, "ping failed: " + e.toString());
     }
   }
 

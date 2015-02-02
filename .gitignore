@@ -6,4 +6,4 @@ gen-external-apklibs
 *.ec
 
 data/src/main/java/com/utree/eightysix/dao
-app/src/main/res/raw/configuration_local
+app/src/main/assets/configuration_local

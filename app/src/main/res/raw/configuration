@@ -13,7 +13,7 @@ feedback.circle.id = 8
 report.debug = true
 
 #configs for request REST api
-#api.host = http://c.lanmeiquan.com
+api.host = http://c.lanmeiquan.com
 
 api.host.second = http://testing.gz.1251114078.cee.myqcloud.com
 

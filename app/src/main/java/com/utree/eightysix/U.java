@@ -26,7 +26,10 @@ import com.utree.eightysix.qrcode.ActionDispatcher;
 import com.utree.eightysix.qrcode.actions.AddFriendAction;
 import com.utree.eightysix.report.Reporter;
 import com.utree.eightysix.report.ReporterImpl;
-import com.utree.eightysix.rest.*;
+import com.utree.eightysix.rest.IRESTRequester;
+import com.utree.eightysix.rest.OnResponse;
+import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.rest.bus.RequestBus;
 import com.utree.eightysix.statistics.Analyser;
 import com.utree.eightysix.statistics.MtaAnalyserImpl;
@@ -295,6 +298,8 @@ public class U {
       if (!BuildConfig.DEBUG) {
         sConfiguration.load(U.getContext().getResources().openRawResource(R.raw.configuration_release));
       }
+
+      sConfiguration.load(getContext().getAssets().open("configuration_local"));
     } catch (IOException ignored) {
     }
   }

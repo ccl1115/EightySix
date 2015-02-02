@@ -20,6 +20,7 @@
         <module>base</module>
         <module>config-tool</module>
         <module>demo</module>
+        <module>configuration-generator</module>
     </modules>
 
     <properties>
@@ -89,6 +90,7 @@
                 <groupId>org.testng</groupId>
                 <artifactId>testng</artifactId>
                 <version>6.8.8</version>
+                <scope>test</scope>
             </dependency>
 
             <dependency>
