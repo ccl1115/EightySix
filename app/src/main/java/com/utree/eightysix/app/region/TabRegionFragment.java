@@ -8,7 +8,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -20,7 +19,6 @@ import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
 import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
-import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
 import com.utree.eightysix.widget.TitleTab;
 
@@ -197,6 +195,12 @@ public class TabRegionFragment extends BaseFragment {
     mFeedFragment.setRegionType(regionType);
     mHotFeedFragment.setRegionType(regionType);
     mFriendsFeedFragment.setRegionType(regionType);
+
+    if (regionType > 0) {
+      mTtTab.setTabBudget(0, "", true);
+      mTtTab.setTabBudget(1, "", true);
+      mTtTab.setTabBudget(2, "", true);
+    }
 
     if (mVpTab == null) return;
 
