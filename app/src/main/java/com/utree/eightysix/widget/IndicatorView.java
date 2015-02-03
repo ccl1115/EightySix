@@ -33,6 +33,9 @@ public class IndicatorView extends View {
   private Drawable mDrawable;
   private Drawable mSelector;
 
+  private final Rect mDrawableBounds = new Rect();
+  private final Rect mSelectorBounds = new Rect();
+
   private final ViewDelegate mViewInjector = new HorizontalViewInjector();
 
   public IndicatorView(Context context) {
@@ -194,18 +197,18 @@ public class IndicatorView extends View {
 
       drawableWidth = Math.max(drawableWidth, (measuredWidth - ((mCount - 1) * mSpacing)) / mCount);
       Log.d(TAG, "Drawable width =" + drawableWidth);
-      mDrawable.getBounds().left = 0;
-      mDrawable.getBounds().right = drawableWidth;
+      mDrawableBounds.left = 0;
+      mDrawableBounds.right = drawableWidth;
 
       selectorWidth = Math.max(selectorWidth, (measuredWidth - ((mCount - 1) * mSpacing)) / mCount);
       Log.d(TAG, "Selector width =" + selectorWidth);
-      mSelector.getBounds().left = 0;
-      mSelector.getBounds().right = selectorWidth;
+      mSelectorBounds.left = 0;
+      mSelectorBounds.right = selectorWidth;
 
       if (drawableWidth - selectorWidth > 0) {
-        mSelector.getBounds().offset((drawableWidth - selectorWidth) >> 1, 0);
+        mSelectorBounds.offset((drawableWidth - selectorWidth) >> 1, 0);
       } else {
-        mDrawable.getBounds().offset((selectorWidth - drawableWidth) >> 1, 0);
+        mDrawableBounds.offset((selectorWidth - drawableWidth) >> 1, 0);
       }
 
       int drawableHeight = mDrawable.getIntrinsicHeight();
@@ -213,29 +216,35 @@ public class IndicatorView extends View {
 
       if (drawableHeight == 0) {
         drawableHeight = measuredHeight;
-        mDrawable.getBounds().top = 0;
-        mDrawable.getBounds().bottom = drawableHeight;
       }
+
+      mDrawableBounds.top = 0;
+      mDrawableBounds.bottom = drawableHeight;
 
       if (selectorHeight == 0) {
         selectorHeight = measuredHeight;
-        mSelector.getBounds().top = 0;
-        mSelector.getBounds().bottom = selectorHeight;
       }
 
+      mSelectorBounds.top = 0;
+      mSelectorBounds.bottom = selectorHeight;
+
       if (drawableHeight > selectorHeight) {
-        mSelector.getBounds().offset(0, (drawableHeight - selectorHeight) >> 1);
+        mSelectorBounds.offset(0, (drawableHeight - selectorHeight) >> 1);
       } else {
-        mDrawable.getBounds().offset(0, (selectorHeight - drawableHeight) >> 1);
+        mDrawableBounds.offset(0, (selectorHeight - drawableHeight) >> 1);
       }
+
+      mDrawable.setBounds(mDrawableBounds);
+      mSelector.setBounds(mSelectorBounds);
 
       Log.d(TAG, "Drawable bounds=" + mDrawable.getBounds());
       Log.d(TAG, "Selector bounds=" + mSelector.getBounds());
+
     }
 
     private int measureWidth(int widthMeasureSpec) {
       final int mode = widthMeasureSpec & (0x3 << 30);
-      final int size = widthMeasureSpec & ~(0x3 << 30);
+      final int size = Math.max(widthMeasureSpec & ~(0x3 << 30), getLayoutParams().width);
 
       final int suppose = (mSpacing * (mCount - 1)) +
           (Math.max(mDrawable.getIntrinsicWidth(), mSelector.getIntrinsicWidth()) * mCount);

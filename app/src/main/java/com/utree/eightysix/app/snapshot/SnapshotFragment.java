@@ -99,9 +99,8 @@ public class SnapshotFragment extends BaseFragment {
     super.onActive();
 
     if (isActive()) {
-      Log.d("SnapshotFragment", "onActive " + this.toString());
       mRefreshView.setRefreshing(true);
-      getBaseActivity().showRefreshIndicator();
+      getBaseActivity().showRefreshIndicator(true);
       requestSnapshotFeed(1);
     }
   }

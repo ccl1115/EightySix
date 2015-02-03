@@ -196,7 +196,7 @@ public class TabRegionFragment extends BaseFragment {
     mHotFeedFragment.setRegionType(regionType);
     mFriendsFeedFragment.setRegionType(regionType);
 
-    if (regionType > 0) {
+    if (regionType > 0 && mTtTab != null) {
       mTtTab.setTabBudget(0, "", true);
       mTtTab.setTabBudget(1, "", true);
       mTtTab.setTabBudget(2, "", true);

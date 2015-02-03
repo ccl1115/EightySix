@@ -20,14 +20,16 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.feed.FeedActivity;
+import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
-import com.utree.eightysix.widget.TitleTab;
+import com.utree.eightysix.widget.ScrollableTitleTab;
 import com.utree.eightysix.widget.TopBar;
 
 import java.util.ArrayList;
@@ -35,22 +37,35 @@ import java.util.List;
 
 /**
  */
-@Layout(R.layout.activity_tag_tab)
+@Layout(R.layout.activity_snapshot)
 public class SnapshotActivity extends BaseActivity {
 
   @InjectView(R.id.tt_tab)
-  public TitleTab mTitleTab;
+  public ScrollableTitleTab mTitleTab;
 
   @InjectView(R.id.vp_tab)
   public ViewPager mVpTab;
 
   private Circle mCircle;
+
   private FragmentPagerAdapter mPagerAdapter;
 
   public static void start(Context context, Circle circle) {
     Intent intent = new Intent(context, SnapshotActivity.class);
 
     intent.putExtra("circle", circle);
+
+    if (!(context instanceof Activity)) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    context.startActivity(intent);
+  }
+
+  public static void start(Context context, int circleId) {
+    Intent intent = new Intent(context, SnapshotActivity.class);
+
+    intent.putExtra("circleId", circleId);
 
     if (!(context instanceof Activity)) {
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -66,42 +81,15 @@ public class SnapshotActivity extends BaseActivity {
     mCircle = getIntent().getParcelableExtra("circle");
 
     if (mCircle == null) {
-      finish();
-      return;
+      int circleId = getIntent().getIntExtra("circleId", -1);
+
+      if (circleId == -1) {
+        mCircle = new Circle();
+        mCircle.id = circleId;
+        finish();
+        return;
+      }
     }
-
-    mTopBar.setActionAdapter(new TopBar.ActionAdapter() {
-      @Override
-      public String getTitle(int position) {
-        return "动态";
-      }
-
-      @Override
-      public Drawable getIcon(int position) {
-        return null;
-      }
-
-      @Override
-      public Drawable getBackgroundDrawable(int position) {
-        return new RoundRectDrawable(dp2px(2), getResources().getColorStateList(R.color.apptheme_primary_btn_light));
-      }
-
-      @Override
-      public void onClick(View view, int position) {
-        FeedActivity.start(SnapshotActivity.this, mCircle);
-      }
-
-      @Override
-      public int getCount() {
-        return 1;
-      }
-
-      @Override
-      public TopBar.LayoutParams getLayoutParams(int position) {
-        return new TopBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.MATCH_PARENT);
-      }
-    });
 
     onNewIntent(getIntent());
   }
@@ -141,7 +129,49 @@ public class SnapshotActivity extends BaseActivity {
         hideProgressBar();
 
         if (RESTRequester.responseOk(response)) {
+          mCircle = response.object.circle;
+
+          setTopTitle(mCircle.shortName);
+
           buildFragments(response.object.list);
+
+          mTopBar.setActionAdapter(new TopBar.ActionAdapter() {
+            @Override
+            public String getTitle(int position) {
+              return "动态";
+            }
+
+            @Override
+            public Drawable getIcon(int position) {
+              return null;
+            }
+
+            @Override
+            public Drawable getBackgroundDrawable(int position) {
+              return new RoundRectDrawable(dp2px(2), getResources().getColorStateList(R.color.apptheme_primary_btn_light));
+            }
+
+            @Override
+            public void onClick(View view, int position) {
+              if (mCircle.currFactory == 1) {
+                HomeActivity.start(SnapshotActivity.this, 0);
+              } else {
+                FeedActivity.start(SnapshotActivity.this, mCircle);
+              }
+            }
+
+            @Override
+            public int getCount() {
+              return 1;
+            }
+
+            @Override
+            public TopBar.LayoutParams getLayoutParams(int position) {
+              return new TopBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                  ViewGroup.LayoutParams.MATCH_PARENT);
+            }
+          });
+
         } else {
           finish();
         }
@@ -160,6 +190,9 @@ public class SnapshotActivity extends BaseActivity {
 
     @SerializedName("list")
     public List<Snapshot> list;
+
+    @SerializedName("factoryView")
+    public Circle circle;
   }
 
   public static class Snapshot {
@@ -198,7 +231,15 @@ public class SnapshotActivity extends BaseActivity {
       public CharSequence getPageTitle(int position) {
         return list.get(position).content;
       }
+
+      @Override
+      public void destroyItem(ViewGroup container, int position, Object object) {
+        super.destroyItem(container, position, object);
+
+        ((BaseFragment) object).setActive(false);
+      }
     };
+
     mVpTab.setAdapter(mPagerAdapter);
 
     mTitleTab.setViewPager(mVpTab);
