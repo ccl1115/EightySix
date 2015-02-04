@@ -28,6 +28,17 @@
     </request>
 
     <request>
+        <id>chat_ack</id>
+        <name>收到消息确认</name>
+        <path>/commit/im/send/privateChatAck</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>msgId</param>
+        </params>
+    </request>
+
+    <request>
         <id>chat_report</id>
         <name>举报聊天会话</name>
         <path>/commit/im/report/chat</path>

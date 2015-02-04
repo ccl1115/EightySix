@@ -12,11 +12,13 @@ import com.utree.eightysix.app.BaseApplication;
 import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.dao.Conversation;
 import com.utree.eightysix.dao.Message;
+import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.DaoUtils;
 import de.akquinet.android.androlog.Log;
 
 /**
-*/
+ */
 class NewMessageWorker extends AsyncTask<Void, Integer, Void> {
 
 
@@ -120,6 +122,18 @@ class NewMessageWorker extends AsyncTask<Void, Integer, Void> {
         }
       });
     }
+
+    U.request("chat_ack", new OnResponse2<Response>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
+      @Override
+      public void onResponse(Response response) {
+
+      }
+    }, Response.class, new String[]{mEmMessage.getMsgId()});
 
     return null;
   }
