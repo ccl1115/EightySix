@@ -11,6 +11,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
+import com.squareup.picasso.Picasso;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
@@ -586,30 +587,22 @@ public class FeedRegionAdapter extends BaseAdapter {
 
     FeedIntent mFeedIntent;
 
+    @InjectView(R.id.iv_bg)
+    public ImageView mIvBg;
+
     public FeedIntentViewHolder(View view) {
       ButterKnife.inject(this, view);
     }
 
-    @InjectView(R.id.tv_title)
-    public TextView mTvTitle;
-
-    @InjectView(R.id.tv_sub_title)
-    public TextView mTvSubTitle;
-
-    @InjectView(R.id.rb_action)
-    public RoundedButton mRbAction;
-
-    @OnClick(R.id.rb_action)
-    public void onTvButtonClicked(View v) {
+    @OnClick(R.id.iv_bg)
+    public void onIvBgClicked(View v) {
       new CmdHandler().handle(v.getContext(), mFeedIntent.appIntent.cmd);
     }
 
     public void setFeedIntent(FeedIntent data) {
       mFeedIntent = data;
 
-      mTvSubTitle.setText(data.subTitle);
-      mTvTitle.setText(data.title);
-      mRbAction.setText(data.buttonText);
+      Picasso.with(U.getContext()).load(mFeedIntent.bgUrl).into(mIvBg);
     }
   }
 
