@@ -26,6 +26,7 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.app.home.HomeActivity;
+import com.utree.eightysix.app.snapshot.SnapshotActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.drawable.RoundRectDrawable;
@@ -131,6 +132,8 @@ public class BaseCirclesActivity extends BaseActivity {
       } else if (mMode == MODE_SELECT) {
         showCircleSetDialog(circle);
         U.getAnalyser().trackEvent(this, "circle_select", "select");
+      } else if (mMode == MODE_SNAPSHOT) {
+        SnapshotActivity.start(this, circle);
       }
     }
   }
@@ -341,6 +344,7 @@ public class BaseCirclesActivity extends BaseActivity {
 
   private void cacheOutCircles(final int page) {
     if (mMode == MODE_SNAPSHOT) {
+      requestSnapshot(page);
       return;
     }
     cacheOut(mMode == MODE_MY ? new MyCirclesRequest("", page) : new SelectCirclesRequest("", page),
@@ -451,7 +455,7 @@ public class BaseCirclesActivity extends BaseActivity {
         hideRefreshIndicator();
         mRefresherView.setRefreshing(false);
       }
-    }, CirclesResponse.class, null, null);
+    }, CirclesResponse.class, page);
   }
 
   private void requestCircleSet(final Circle circle) {

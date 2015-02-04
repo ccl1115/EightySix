@@ -85,6 +85,9 @@
         <name>得到推介的有快照的工厂列表</name>
         <token/>
         <path>/factory/snapshot.do</path>
+        <params>
+            <param>currPage</param>
+        </params>
     </request>
 
     <request>
