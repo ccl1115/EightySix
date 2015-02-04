@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import com.tencent.connect.share.QQShare;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
-import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
@@ -20,7 +19,7 @@ import com.utree.eightysix.data.Post;
 class ShareToQQ extends IShare {
 
   private Tencent sTencent =
-      Tencent.createInstance(BuildConfig.DEBUG ? U.getConfig("qq.app_id") : U.getConfig("qq.app_id.release"), U.getContext().getApplicationContext());
+      Tencent.createInstance(U.getConfig("qq.app_id"), U.getContext().getApplicationContext());
 
   private void shareToQQ(Activity from, Bundle data, IUiListener listener) {
     data.putString(QQShare.SHARE_TO_QQ_APP_NAME, U.getContext().getString(R.string.app_name));

@@ -11,6 +11,7 @@ import butterknife.InjectView;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
+import com.tencent.tauth.Tencent;
 import com.utree.eightysix.*;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
@@ -94,6 +95,11 @@ public class MainSettingsActivity extends BaseActivity {
   @OnClick(R.id.tv_feedback)
   public void onTvFeedbackClicked() {
     FeedbackActivity.start(this);
+  }
+
+  @OnClick(R.id.tv_join_qq)
+  public void onTvJoinQQClicked() {
+    Tencent.createInstance(U.getConfig("qq.app_id"), this).joinQQGroup(this, "Q2hi2FH3Mjq27D0jd3s8Vi3zOWl13UHe");
   }
 
   @Override
