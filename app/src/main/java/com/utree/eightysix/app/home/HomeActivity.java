@@ -68,6 +68,8 @@ public class HomeActivity extends BaseActivity {
 
   private static final String FIRST_RUN_KEY = "feed";
 
+  public  static boolean sIsRunning = false;
+
   @InjectView (R.id.fl_side)
   public FrameLayout mFlSide;
 
@@ -198,6 +200,8 @@ public class HomeActivity extends BaseActivity {
   @Override
   public void onCreate(final Bundle savedInstanceState) {
     super.onCreate(null);
+
+    sIsRunning = true;
 
     setFillContent(true);
 
@@ -350,10 +354,9 @@ public class HomeActivity extends BaseActivity {
   @Override
   protected void onDestroy() {
     Env.setFirstRun(FIRST_RUN_KEY, false);
-    super.onDestroy();
-
     U.getChatBus().unregister(this);
-
+    sIsRunning = false;
+    super.onDestroy();
   }
 
   @Override

@@ -43,11 +43,15 @@ public class NotifyUtil {
   }
 
   private Intent[] wrapIntent(Intent... intents) {
-    Intent[] wrap = new Intent[intents.length + 1];
-    wrap[0] = HomeActivity.getIntent(mContext, 0, 0);
+    if (HomeActivity.sIsRunning) {
+      return intents;
+    } else {
+      Intent[] wrap = new Intent[intents.length + 1];
+      wrap[0] = HomeActivity.getIntent(mContext, 0, 0);
 
-    System.arraycopy(intents, 0, wrap, 1, intents.length);
-    return wrap;
+      System.arraycopy(intents, 0, wrap, 1, intents.length);
+      return wrap;
+    }
   }
 
   Notification buildPost(int i, String postId, String shortName) {

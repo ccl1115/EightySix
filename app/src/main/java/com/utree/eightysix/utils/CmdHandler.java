@@ -32,37 +32,32 @@ public class CmdHandler {
   public void handle(Context context, String cmd) {
     String[] args = cmd.split(":");
 
-    if ("feed".equals(args[0])) {
+    if (!HomeActivity.sIsRunning) {
       HomeActivity.start(context);
+    }
+
+    if ("feed".equals(args[0])) {
       FeedActivity.start(context, Integer.parseInt(args[1]));
     } else if ("post".equals(args[0])) {
-      HomeActivity.start(context);
       PostActivity.start(context, args[1]);
     } else if ("msg".equals(args[0])) {
-      HomeActivity.start(context);
       MsgActivity.start(context, true);
     } else if ("praise".equals(args[0])) {
-      HomeActivity.start(context);
       PraiseActivity.start(context, true);
     } else if ("topic-list".equals(args[0])) {
-      HomeActivity.start(context);
       TopicListActivity.start(context);
     } else if ("topic".equals(args[0])) {
-      HomeActivity.start(context);
       Topic topic = new Topic();
       topic.id = Integer.parseInt(args[1]);
       TopicActivity.start(context, topic);
     } else if ("tag".equals(args[0])) {
-      HomeActivity.start(context);
       TagTabActivity.start(context, Integer.parseInt(args[1]));
     } else if ("bs".equals(args[0])) {
-      HomeActivity.start(context);
       BaseWebActivity.start(U.getContext(),
           String.format("http://c.lanmeiquan.com/activity/blueStar.do?userid=%s&token=%s",
               Account.inst().getUserId(),
               Account.inst().getToken()));
     } else if ("webview".equals(args[0])) {
-      HomeActivity.start(context);
       BaseWebActivity.start(U.getContext(), args[1]);
     }
   }
