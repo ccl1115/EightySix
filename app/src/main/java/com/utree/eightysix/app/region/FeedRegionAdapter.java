@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.region;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -602,7 +603,9 @@ public class FeedRegionAdapter extends BaseAdapter {
     public void setFeedIntent(FeedIntent data) {
       mFeedIntent = data;
 
-      Picasso.with(U.getContext()).load(mFeedIntent.bgUrl).into(mIvBg);
+      if (!TextUtils.isEmpty(mFeedIntent.bgUrl)) {
+        Picasso.with(U.getContext()).load(mFeedIntent.bgUrl).into(mIvBg);
+      }
     }
   }
 

@@ -129,6 +129,13 @@ public class SnapshotActivity extends BaseActivity {
         hideProgressBar();
 
         if (RESTRequester.responseOk(response)) {
+
+          if (response.object.list.size() == 0) {
+            showToast("该工厂没有快照数据");
+            finish();
+            return;
+          }
+
           mCircle = response.object.circle;
 
           setTopTitle(mCircle.shortName);

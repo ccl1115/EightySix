@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.circle;
 
-import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -12,8 +11,6 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.snapshot.SnapshotActivity;
 import com.utree.eightysix.data.Circle;
-import com.utree.eightysix.utils.*;
-import com.utree.eightysix.widget.RoundedButton;
 
 import java.util.Collection;
 import java.util.List;
@@ -79,6 +76,12 @@ class CircleBaseListAdapter extends BaseAdapter {
       mCircle = circle;
       mTvCircleInfo.setText(circle.info);
       mTvCircleName.setText(circle.name);
+
+      if (circle.snapshot == 1) {
+        mRbSnapshot.setVisibility(View.VISIBLE);
+      } else {
+        mRbSnapshot.setVisibility(View.INVISIBLE);
+      }
     }
 
     @InjectView (R.id.tv_circle_name)
@@ -86,6 +89,9 @@ class CircleBaseListAdapter extends BaseAdapter {
 
     @InjectView (R.id.tv_circle_info)
     public TextView mTvCircleInfo;
+
+    @InjectView(R.id.rb_snapshot)
+    public TextView mRbSnapshot;
 
     @OnClick(R.id.rb_snapshot)
     public void onRbSnapshotClicked(View view) {

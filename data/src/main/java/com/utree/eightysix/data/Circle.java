@@ -44,6 +44,9 @@ public class Circle extends BaseCircle implements Comparator<Circle>, Comparable
   @SerializedName ("friendCount")
   public int friendCount;
 
+  @SerializedName("snapshot")
+  public int snapshot;
+
   /**
    * 最佳建议(1)
    * 智能推荐(2)

@@ -210,6 +210,9 @@ class CircleListAdapter extends BaseAdapter {
     @InjectView(R.id.iv_arrow)
     public ImageView mIvArrow;
 
+    @InjectView(R.id.rb_snapshot)
+    public TextView mRbSnapshot;
+
     @OnClick(R.id.rb_snapshot)
     public void onRbSnapshotClicked(View view) {
       SnapshotActivity.start(view.getContext(), mItem);
@@ -247,6 +250,12 @@ class CircleListAdapter extends BaseAdapter {
           mRbType.setText(U.gs(R.string.last_visited));
           //mRbType.setBackgroundColor(0xff12bce7);
         }
+      }
+
+      if (item.snapshot == 1) {
+        mRbSnapshot.setVisibility(View.VISIBLE);
+      } else {
+        mRbSnapshot.setVisibility(View.INVISIBLE);
       }
     }
 
