@@ -48,6 +48,8 @@ public class ScrollableTitleTab extends HorizontalScrollView {
     LayoutInflater.from(context).inflate(R.layout.widget_scrollable_title_tab, this, true);
 
     ButterKnife.inject(this);
+
+    setBackgroundColor(0xffebe9f0);
   }
 
   public void setViewPager(ViewPager viewPager) {

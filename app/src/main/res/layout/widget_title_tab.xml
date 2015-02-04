@@ -3,14 +3,15 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
        android:layout_width="match_parent"
-       android:layout_height="match_parent">
+       android:layout_height="match_parent"
+        >
 
     <LinearLayout
             android:id="@+id/ll_tabs"
             android:layout_width="match_parent"
             android:layout_height="36dp"
             android:orientation="horizontal"
-            android:background="#ffebe9f0"/>
+            />
 
     <com.utree.eightysix.widget.IndicatorView
             android:id="@+id/in_tab"
@@ -19,6 +20,7 @@
             android:layout_gravity="top"
             app:drawable="@drawable/apptheme_indicator_tab"
             app:selector="@drawable/apptheme_indicator_tab_selected"
-            app:spacing="0dp"/>
+            app:spacing="0dp"
+            />
 
 </merge>

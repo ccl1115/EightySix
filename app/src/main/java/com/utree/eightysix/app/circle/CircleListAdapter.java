@@ -255,7 +255,7 @@ class CircleListAdapter extends BaseAdapter {
       if (item.snapshot == 1) {
         mRbSnapshot.setVisibility(View.VISIBLE);
       } else {
-        mRbSnapshot.setVisibility(View.INVISIBLE);
+        mRbSnapshot.setVisibility(View.GONE);
       }
     }
 
