@@ -190,7 +190,7 @@ class CircleListAdapter extends BaseAdapter {
 
 
   @Keep
-  public static class CircleViewHolder {
+  public class CircleViewHolder {
 
     private Circle mItem;
 
@@ -248,10 +248,10 @@ class CircleListAdapter extends BaseAdapter {
         }
       }
 
-      if (item.snapshot == 1) {
-        mRbSnapshot.setVisibility(View.VISIBLE);
-      } else {
+      if (item.snapshot == 0 || mMode == BaseCirclesActivity.MODE_SELECT) {
         mRbSnapshot.setVisibility(View.GONE);
+      } else {
+        mRbSnapshot.setVisibility(View.VISIBLE);
       }
     }
 
