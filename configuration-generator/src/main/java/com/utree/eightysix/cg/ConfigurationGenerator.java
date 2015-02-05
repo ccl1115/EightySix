@@ -46,6 +46,7 @@ public class ConfigurationGenerator {
       writer = new FileWriter(file);
 
       for (Map.Entry<String, String> entry : map.entrySet()) {
+        System.out.printf("Write entry: %s=%s%n", entry.getKey(), entry.getValue());
         writer.write(entry.getKey());
         writer.write("=");
         writer.write(entry.getValue());
