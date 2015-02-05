@@ -9,9 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
+import com.utree.eightysix.app.snapshot.SnapshotActivity;
 import com.utree.eightysix.data.Circle;
 
 import java.util.List;
@@ -69,53 +71,7 @@ class FactoryRegionAdapter2 extends BaseAdapter {
 
     Circle circle = getItem(position);
 
-    viewHolder.mTvName.setText(circle.shortName);
-    viewHolder.mTvInfo.setText(circle.info);
-
-    Resources res = parent.getResources();
-    if (circle.currFactory == 1) {
-      viewHolder.mIvHouse.setVisibility(View.VISIBLE);
-    } else {
-      viewHolder.mIvHouse.setVisibility(View.INVISIBLE);
-    }
-
-    switch (circle.hotLevel) {
-      case 0:
-        viewHolder.mIvFire.setVisibility(View.GONE);
-        break;
-      case 1:
-        viewHolder.mIvFire.setImageResource(R.drawable.fire_1);
-        viewHolder.mIvFire.setVisibility(View.VISIBLE);
-        break;
-      case 2:
-        viewHolder.mIvFire.setImageResource(R.drawable.fire_2);
-        viewHolder.mIvFire.setVisibility(View.VISIBLE);
-        break;
-      case 3:
-        viewHolder.mIvFire.setImageResource(R.drawable.fire_3);
-        viewHolder.mIvFire.setVisibility(View.VISIBLE);
-        break;
-      case 4:
-        viewHolder.mIvFire.setImageResource(R.drawable.fire_4);
-        viewHolder.mIvFire.setVisibility(View.VISIBLE);
-        break;
-      case 5:
-        viewHolder.mIvFire.setImageResource(R.drawable.fire_5);
-        viewHolder.mIvFire.setVisibility(View.VISIBLE);
-        break;
-    }
-
-    viewHolder.mTvName.setTextColor(res.getColorStateList(R.color.apptheme_primary_text_dark));
-      viewHolder.mTvInfo.setTextColor(0xffb3b3b3);
-      viewHolder.mIvHouse.setImageResource(R.drawable.house);
-
-    if (circle.lock == 1) {
-      viewHolder.mTvInfo.setCompoundDrawablesWithIntrinsicBounds(
-          res.getDrawable(R.drawable.ic_lock_small), null, null, null);
-      viewHolder.mTvInfo.setCompoundDrawablePadding(U.dp2px(5));
-    } else {
-      viewHolder.mTvInfo.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-    }
+    viewHolder.setData(circle, parent.getResources());
 
     return convertView;
   }
@@ -134,6 +90,71 @@ class FactoryRegionAdapter2 extends BaseAdapter {
 
     @InjectView(R.id.iv_fire)
     public ImageView mIvFire;
+
+    @InjectView(R.id.rb_snapshot)
+    public TextView mRbSnapshot;
+    private Circle mCircle;
+
+    @OnClick(R.id.rb_snapshot)
+    public void onRbSnapshotClicked(View v) {
+      SnapshotActivity.start(v.getContext(), mCircle);
+    }
+
+    public void setData(Circle circle, Resources res) {
+      mCircle = circle;
+      mTvName.setText(circle.shortName);
+      mTvInfo.setText(circle.info);
+
+      if (circle.currFactory == 1) {
+        mIvHouse.setVisibility(View.VISIBLE);
+      } else {
+        mIvHouse.setVisibility(View.INVISIBLE);
+      }
+
+      switch (circle.hotLevel) {
+        case 0:
+          mIvFire.setVisibility(View.GONE);
+          break;
+        case 1:
+          mIvFire.setImageResource(R.drawable.fire_1);
+          mIvFire.setVisibility(View.VISIBLE);
+          break;
+        case 2:
+          mIvFire.setImageResource(R.drawable.fire_2);
+          mIvFire.setVisibility(View.VISIBLE);
+          break;
+        case 3:
+          mIvFire.setImageResource(R.drawable.fire_3);
+          mIvFire.setVisibility(View.VISIBLE);
+          break;
+        case 4:
+          mIvFire.setImageResource(R.drawable.fire_4);
+          mIvFire.setVisibility(View.VISIBLE);
+          break;
+        case 5:
+          mIvFire.setImageResource(R.drawable.fire_5);
+          mIvFire.setVisibility(View.VISIBLE);
+          break;
+      }
+
+      mTvName.setTextColor(res.getColorStateList(R.color.apptheme_primary_text_dark));
+      mTvInfo.setTextColor(0xffb3b3b3);
+      mIvHouse.setImageResource(R.drawable.house);
+
+      if (circle.lock == 1) {
+        mTvInfo.setCompoundDrawablesWithIntrinsicBounds(
+            res.getDrawable(R.drawable.ic_lock_small), null, null, null);
+        mTvInfo.setCompoundDrawablePadding(U.dp2px(5));
+      } else {
+        mTvInfo.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+      }
+
+      if (circle.snapshot == 1) {
+        mRbSnapshot.setVisibility(View.VISIBLE);
+      } else {
+        mRbSnapshot.setVisibility(View.GONE);
+      }
+    }
 
     ViewHolder(View view) {
       ButterKnife.inject(this, view);

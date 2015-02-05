@@ -68,6 +68,18 @@
                 android:layout_gravity="center_vertical"
                 />
 
+        <TextView
+                style="@style/border_outline_secondary_dark_color_btn"
+                android:id="@+id/rb_snapshot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_gravity="center_vertical"
+                android:text="@string/snapshot"
+                />
+
+
         <ImageView
                 android:id="@+id/iv_arrow"
                 android:layout_width="wrap_content"
