@@ -275,7 +275,7 @@ public class BaseCirclesActivity extends BaseActivity {
       }
     });
 
-    if (mMode == MODE_SELECT) {
+    if (mMode == MODE_SELECT && !mCancelable) {
       setActionLeftDrawable(null);
     }
   }
