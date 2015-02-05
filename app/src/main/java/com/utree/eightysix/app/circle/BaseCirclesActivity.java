@@ -157,6 +157,7 @@ public class BaseCirclesActivity extends BaseActivity {
       finish();
     } else if (mMode == MODE_SNAPSHOT) {
       U.getAnalyser().trackEvent(this, "circle_title", "snapshot");
+      finish();
     } else {
       U.getAnalyser().trackEvent(this, "circle_title", "select");
       if (mCancelable) {

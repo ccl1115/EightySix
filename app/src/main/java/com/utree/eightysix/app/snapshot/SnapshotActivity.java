@@ -131,7 +131,7 @@ public class SnapshotActivity extends BaseActivity {
         if (RESTRequester.responseOk(response)) {
 
           if (response.object.list.size() == 0) {
-            showToast("该工厂没有快照数据");
+            showToast("该工厂没有快照数据", false);
             finish();
             return;
           }

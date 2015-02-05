@@ -17,6 +17,7 @@ import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.region.event.RegionResponseEvent;
 import com.utree.eightysix.app.snapshot.SnapshotActivity;
 import com.utree.eightysix.data.Circle;
+import com.utree.eightysix.widget.RoundedButton;
 
 /**
  */
@@ -36,6 +37,9 @@ public class RegionFragment extends BaseFragment {
 
   @InjectView(R.id.tv_fellow)
   public TextView mTvFellow;
+
+  @InjectView(R.id.rb_snapshot)
+  public RoundedButton mRbSnapshot;
 
   private Circle mCurrent;
   private Callback mCallback;
@@ -117,7 +121,13 @@ public class RegionFragment extends BaseFragment {
     if (mCurrent == null) {
       mRbCurrent.setText(U.gs(R.string.set_current_factory));
     } else {
-      mRbCurrent.setText(mCurrent.shortName + "(在职)");
+      mRbCurrent.setText(mCurrent.shortName);
+    }
+
+    if (mCurrent.snapshot == 1) {
+      mRbSnapshot.setVisibility(View.VISIBLE);
+    } else {
+      mRbSnapshot.setVisibility(View.GONE);
     }
   }
 
