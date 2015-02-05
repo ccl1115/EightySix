@@ -21,11 +21,14 @@ public class ConfigurationGenerator {
   }
 
   public static void main(String[] args) {
+    System.out.println("Configuration Generator Tool");
     new ConfigurationGenerator().generate(args);
   }
 
   public void generate(String[] args) {
     File file = new File(TARGET_FILE);
+
+    System.out.println("Write configuration file: " + file.getAbsolutePath());
 
     Map<String, String> map = new HashMap<String, String>();
 
@@ -49,6 +52,7 @@ public class ConfigurationGenerator {
         writer.write("\n");
       }
     } catch (IOException ignored) {
+      ignored.printStackTrace();
     } finally {
       if (writer != null) {
         try {

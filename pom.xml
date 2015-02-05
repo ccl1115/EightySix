@@ -11,6 +11,7 @@
 
     <modules>
         <module>dao-generator</module>
+        <module>configuration-generator</module>
         <module>oss-batch</module>
         <module>emojicon/library</module>
         <module>ImageViewZoom/library</module>
@@ -20,7 +21,6 @@
         <module>base</module>
         <module>config-tool</module>
         <module>demo</module>
-        <module>configuration-generator</module>
     </modules>
 
     <properties>
