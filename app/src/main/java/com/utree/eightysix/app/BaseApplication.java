@@ -16,7 +16,6 @@ import com.utree.eightysix.app.publish.BgSyncService;
 import com.utree.eightysix.push.FetchAlarmReceiver;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.PingService;
-import de.akquinet.android.androlog.Constants;
 import de.akquinet.android.androlog.Log;
 
 import java.util.List;
@@ -51,8 +50,6 @@ public class BaseApplication extends Application {
 
     if (isMainProcess()) {
       Log.init(this);
-      Log.activateLogging();
-      Log.setDefaultLogLevel(Constants.VERBOSE);
 
       U.getReporter().init();
       U.getSyncClient().getSync();

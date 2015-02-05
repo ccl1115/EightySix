@@ -21,12 +21,18 @@ public class ConfigurationGenerator {
   }
 
   public static void main(String[] args) {
+    new ConfigurationGenerator(TARGET_FILE).generate(args);
+  }
+
+  private String mTargetFile;
+
+  public ConfigurationGenerator(String targetFile) {
     System.out.println("Configuration Generator Tool");
-    new ConfigurationGenerator().generate(args);
+    mTargetFile = targetFile;
   }
 
   public void generate(String[] args) {
-    File file = new File(TARGET_FILE);
+    File file = new File(mTargetFile);
 
     System.out.println("Write configuration file: " + file.getAbsolutePath());
 
