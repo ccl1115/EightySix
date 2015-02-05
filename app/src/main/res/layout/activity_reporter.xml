@@ -3,18 +3,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+        >
 
 
     <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            >
 
         <TextView
                 android:id="@+id/tv_stacktrace"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                />
     </ScrollView>
 
     <com.utree.eightysix.widget.RoundedButton
@@ -22,5 +26,6 @@
             android:layout_margin="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/report"/>
+            android:text="@string/report"
+            />
 </LinearLayout>

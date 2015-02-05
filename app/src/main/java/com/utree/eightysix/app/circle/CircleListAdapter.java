@@ -6,7 +6,6 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -206,9 +205,6 @@ class CircleListAdapter extends BaseAdapter {
 
     @InjectView(R.id.rb_type)
     public RoundedButton mRbType;
-
-    @InjectView(R.id.iv_arrow)
-    public ImageView mIvArrow;
 
     @InjectView(R.id.rb_snapshot)
     public TextView mRbSnapshot;
