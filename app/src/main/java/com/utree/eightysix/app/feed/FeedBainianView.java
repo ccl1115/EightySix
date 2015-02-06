@@ -17,6 +17,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.squareup.picasso.Picasso;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.data.Bainian;
 
 /**
@@ -78,5 +79,10 @@ public final class FeedBainianView extends FrameLayout {
   public void onIvRefreshClicked() {
     mIndex = mIndex >= mBainian.newYearContents.size() - 1 ? 0 : mIndex + 1;
     mEtMsg.setText(mBainian.newYearContents.get(mIndex).content);
+  }
+
+  @Override
+  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    super.onMeasure(widthMeasureSpec, widthMeasureSpec - U.dp2px(8));
   }
 }
