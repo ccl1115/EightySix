@@ -124,7 +124,7 @@ public class BaseCirclesActivity extends BaseActivity {
         circle.selected = true;
         if (circle.currFactory == 1) {
           finish();
-          HomeActivity.start(this);
+          HomeActivity.start(this, 0);
         } else {
           FeedActivity.start(this, circle, true);
         }
