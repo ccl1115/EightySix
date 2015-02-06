@@ -35,4 +35,23 @@ public class EmojiFragment extends EmojiconGridFragment {
     emojiGridFragment.setArguments(args);
     return emojiGridFragment;
   }
+
+  public static EmojiFragment newInstance(int[] emojis) {
+
+    EmojiFragment emojiGridFragment = new EmojiFragment();
+
+    Emojicon[] data = new Emojicon[emojis.length];
+    for (int i = 0; i < emojis.length; i++) {
+      if (emojis[i] < 0xffff) {
+        data[i] = Emojicon.fromChar((char) emojis[i]);
+      } else {
+        data[i] = Emojicon.fromCodePoint(emojis[i]);
+      }
+    }
+
+    Bundle args = new Bundle();
+    args.putSerializable("emojicons", data);
+    emojiGridFragment.setArguments(args);
+    return emojiGridFragment;
+  }
 }

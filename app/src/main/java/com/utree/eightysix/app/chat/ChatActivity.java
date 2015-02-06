@@ -27,6 +27,7 @@ import com.utree.eightysix.app.CameraUtil;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.app.publish.EmojiFragment;
+import com.utree.eightysix.app.publish.EmojiViewPager;
 import com.utree.eightysix.dao.Conversation;
 import com.utree.eightysix.dao.ConversationDao;
 import com.utree.eightysix.dao.Message;
@@ -60,7 +61,7 @@ public class ChatActivity extends BaseActivity implements
   public FrameLayout mFlSend;
 
   @InjectView(R.id.fl_emotion)
-  public FrameLayout mFlEmotion;
+  public EmojiViewPager mFlEmotion;
 
   @InjectView(R.id.rl_actions)
   public RelativeLayout mRlActions;
@@ -452,6 +453,8 @@ public class ChatActivity extends BaseActivity implements
         .beginTransaction()
         .add(R.id.fl_emotion, EmojiFragment.newInstance())
         .commitAllowingStateLoss();
+
+    mFlEmotion.setFragmentManager(getSupportFragmentManager());
   }
 
   public void requestFavAdd() {

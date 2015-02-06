@@ -28,12 +28,7 @@
 
     <profiles>
         <profile>
-            <id>api-host</id>
-            <activation>
-                <property>
-                    <name>env.API_HOST</name>
-                </property>
-            </activation>
+            <id>release</id>
             <build>
                 <plugins>
                     <plugin>
@@ -49,9 +44,9 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <mainClass>com.utree.eightysix.cg.ConfigurationGenerator</mainClass>
+                            <mainClass>com.utree.eightysix.cg.LoggerConfigurationGenerator</mainClass>
                             <arguments>
-                                <argument>${env.API_HOST}</argument>
+                                <argument>androlog.active=false</argument>
                             </arguments>
                         </configuration>
                     </plugin>

@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 />
 
-        <FrameLayout
+        <com.utree.eightysix.app.publish.EmojiViewPager
                 android:id="@+id/fl_emotion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

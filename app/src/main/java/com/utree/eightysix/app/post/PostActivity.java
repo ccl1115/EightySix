@@ -34,6 +34,7 @@ import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.app.feed.event.*;
 import com.utree.eightysix.app.msg.ReadMsgStore;
 import com.utree.eightysix.app.publish.EmojiFragment;
+import com.utree.eightysix.app.publish.EmojiViewPager;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.*;
@@ -77,7 +78,7 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
   public ImageView mIvEmotion;
 
   @InjectView(R.id.fl_emotion)
-  public FrameLayout mFlEmotion;
+  public EmojiViewPager mFlEmotion;
 
   private Post mPost;
 
@@ -351,6 +352,8 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
         .beginTransaction()
         .add(R.id.fl_emotion, EmojiFragment.newInstance())
         .commitAllowingStateLoss();
+
+    mFlEmotion.setFragmentManager(getSupportFragmentManager());
 
     onNewIntent(getIntent());
   }
