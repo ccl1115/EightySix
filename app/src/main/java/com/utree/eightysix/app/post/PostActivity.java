@@ -249,7 +249,7 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
                     break;
                   case 3:
                     U.getAnalyser().trackEvent(PostActivity.this, "comment_more_report", "comment_more_report");
-                    new ReportDialog(PostActivity.this, mPostId, comment.id).show();
+                    new ReportDialog(PostActivity.this, mPost.id, comment.id).show();
                     break;
                   case 4:
                     U.getBus().post(new PostCommentDeleteRequest(mPost.id, comment.id));

@@ -20,10 +20,10 @@ public class ReportRequest {
   public static final int TYPE_5 = 5;
   public static final int TYPE_6 = 6;
 
-  @Param("postId")
+  @Param("ownerPostId")
   public String postId;
 
-  @Param("commentId")
+  @Param("postId")
   @Optional
   public String commentId;
 
@@ -34,7 +34,7 @@ public class ReportRequest {
   @Optional
   public String content;
 
-  public ReportRequest(int type, String commentId, String postId) {
+  public ReportRequest(int type, String postId, String commentId) {
     this.type = type;
     this.commentId = commentId;
     this.postId = postId;
