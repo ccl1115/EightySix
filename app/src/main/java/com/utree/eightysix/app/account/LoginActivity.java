@@ -233,12 +233,12 @@ public class LoginActivity extends BaseActivity {
     };
 
     if (mEtCaptcha.getText().length() > 0) {
-      U.request("login", onResponse, UserResponse.class,
+      U.request("login_old", onResponse, UserResponse.class,
           mEtPhoneNumber.getText().toString(),
           mEtPwd.getText().toString(),
           mEtCaptcha.getText().toString());
     } else {
-      U.request("login", onResponse, UserResponse.class,
+      U.request("login_old", onResponse, UserResponse.class,
           mEtPhoneNumber.getText().toString(),
           mEtPwd.getText().toString(),
           null);

@@ -41,6 +41,11 @@ public class ShareManager {
         U.getConfig("api.host"), postId, U.getConfig("app.parentId"), U.getConfig("app.channel"));
   }
 
+  static String shareLinkForBainian(String recipient, String content) {
+    return String.format("http://203.195.217.85/wapui/index.php/share/greetingCards?to=%s&content=%s&send=%s",
+        recipient, content, "bless");
+  }
+
   static String shareLinkForComment(String postId) {
     return shareLinkForPost(postId);
   }
@@ -72,11 +77,11 @@ public class ShareManager {
     };
   }
 
-  public ThemedDialog shareBainianDialog(final BaseActivity activity, final Post post) {
+  public ThemedDialog shareBainianDialog(final BaseActivity activity, final String recipient, final String msg) {
     return new ShareDialog(activity, "发送百年卡片") {
       @Override
       protected Object getViewHolder(ShareDialog dialog) {
-        return null;
+        return new ShareBainianViewHolder(activity, dialog, recipient, msg);
       }
     };
   }
@@ -131,10 +136,6 @@ public class ShareManager {
 
   private String shareLinkForTag(int id, int tagId) {
     return String.format("%s/shareTag.do?factoryId=%d&tagId=%d", U.getConfig("api.host"), id, tagId);
-  }
-
-  private String shareLinkForBainian() {
-    return "";
   }
 
   @Keep
@@ -486,24 +487,36 @@ public class ShareManager {
     private final String mRecipient;
     private final String mMsg;
     private ShareDialog mShareDialog;
+    private String mShareLinkForBainian;
 
     ShareBainianViewHolder(final BaseActivity activity, ShareDialog dialog, String recipient, String msg) {
       mActivity = activity;
       mRecipient = recipient;
       mMsg = msg;
       mShareDialog = dialog;
+      mShareLinkForBainian = shareLinkForBainian(mRecipient, mMsg);
+
       ButterKnife.inject(this, dialog);
 
       mIvQrCode.setVisibility(View.GONE);
       mTvQrCode.setVisibility(View.GONE);
-      mRbClipboard.setVisibility(View.VISIBLE);
+      mRbClipboard.setVisibility(View.GONE);
     }
 
 
     @OnClick(R.id.tv_sms)
     void onTvSmsClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_msg", "bainian");
-      mShareViaSMS.shareBainian(mActivity, mRecipient, mMsg);
+      mShortener.shorten(mShareLinkForBainian, new Shortener.Callback() {
+        @Override
+        public void onShorten(String shorten) {
+          if (shorten == null) {
+            mShareViaSMS.shareBainian(mActivity, mRecipient, mMsg, mShareLinkForBainian);
+          } else {
+            mShareViaSMS.shareBainian(mActivity, mRecipient, mMsg, shorten);
+          }
+        }
+      });
       mShareDialog.dismiss();
     }
 
@@ -511,7 +524,16 @@ public class ShareManager {
     void onQQClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_qq", "bainian");
 
-      mShareToQQ.shareBainian(mActivity, mRecipient, mMsg);
+      mShortener.shorten(mShareLinkForBainian, new Shortener.Callback() {
+        @Override
+        public void onShorten(String shorten) {
+          if (shorten == null) {
+            mShareToQQ.shareBainian(mActivity, mRecipient, mMsg, mShareLinkForBainian);
+          } else {
+            mShareToQQ.shareBainian(mActivity, mRecipient, mMsg, shorten);
+          }
+        }
+      });
       mShareDialog.dismiss();
     }
 
@@ -519,7 +541,17 @@ public class ShareManager {
     void onQzoneClicked() {
       U.getAnalyser().trackEvent(mActivity, "share_by_qq", "bainian");
 
-      mShareToQzone.shareBainian(mActivity, mRecipient, mMsg);
+      mShortener.shorten(mShareLinkForBainian, new Shortener.Callback() {
+        @Override
+        public void onShorten(String shorten) {
+          if (shorten == null) {
+            mShareToQzone.shareBainian(mActivity, mRecipient, mMsg, mShareLinkForBainian);
+          } else {
+            mShareToQzone.shareBainian(mActivity, mRecipient, mMsg, shorten);
+          }
+        }
+      });
+
       mShareDialog.dismiss();
     }
   }

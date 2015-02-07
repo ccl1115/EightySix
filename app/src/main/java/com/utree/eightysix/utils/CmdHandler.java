@@ -6,7 +6,7 @@ package com.utree.eightysix.utils;
 
 import android.content.Context;
 import com.utree.eightysix.Account;
-import com.utree.eightysix.U;
+import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.app.msg.MsgActivity;
@@ -53,12 +53,14 @@ public class CmdHandler {
     } else if ("tag".equals(args[0])) {
       TagTabActivity.start(context, Integer.parseInt(args[1]));
     } else if ("bs".equals(args[0])) {
-      BaseWebActivity.start(U.getContext(),
+      BaseWebActivity.start(context,
           String.format("http://c.lanmeiquan.com/activity/blueStar.do?userid=%s&token=%s",
               Account.inst().getUserId(),
               Account.inst().getToken()));
     } else if ("webview".equals(args[0])) {
-      BaseWebActivity.start(U.getContext(), args[1]);
+      BaseWebActivity.start(context, args[1]);
+    } else if ("snapshot".equals(args[0])) {
+      BaseCirclesActivity.startSnapshot(context);
     }
   }
 }

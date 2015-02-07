@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.share;
 
-import android.widget.Toast;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.UiError;
 import com.utree.eightysix.BuildConfig;
@@ -29,7 +28,7 @@ public abstract class IShare {
 
   public abstract void shareTag(BaseActivity activity, Circle circle, int tagId, String url);
 
-  public abstract void shareBainian(BaseActivity activity, String recipient, String content);
+  public abstract void shareBainian(BaseActivity activity, String recipient, String content, String url);
 
   protected String shareTitleForApp() {
     return "和我一起玩【蓝莓】吧！";
@@ -101,20 +100,23 @@ public abstract class IShare {
         }
       }, Response.class, null, null);
 
-      if (BuildConfig.DEBUG) Toast.makeText(U.getContext(), "onComplete", Toast.LENGTH_LONG).show();
+      if (BuildConfig.DEBUG) {
+        U.showToast("onComplete");
+      }
     }
 
     @Override
     public void onError(UiError uiError) {
-      if (BuildConfig.DEBUG)
-        Toast.makeText(U.getContext(),
-            String.format("%d: %s - %s", uiError.errorCode, uiError.errorMessage, uiError.errorDetail),
-            Toast.LENGTH_LONG).show();
+      if (BuildConfig.DEBUG) {
+        U.showToast(String.format("%d: %s - %s", uiError.errorCode, uiError.errorMessage, uiError.errorDetail));
+      }
     }
 
     @Override
     public void onCancel() {
-      if (BuildConfig.DEBUG) Toast.makeText(U.getContext(), "onCancel", Toast.LENGTH_LONG).show();
+      if (BuildConfig.DEBUG) {
+        U.showToast("onCancel");
+      }
     }
   }
 
@@ -123,7 +125,7 @@ public abstract class IShare {
 
       @Override
       public void onComplete(Object o) {
-        if (BuildConfig.DEBUG) Toast.makeText(U.getContext(), "onComplete", Toast.LENGTH_LONG).show();
+        if (BuildConfig.DEBUG) U.showToast("onComplete");
         U.request("share_callback", new OnResponse2<Response>() {
           @Override
           public void onResponseError(Throwable e) {
@@ -140,14 +142,14 @@ public abstract class IShare {
       @Override
       public void onError(UiError uiError) {
         if (BuildConfig.DEBUG)
-          Toast.makeText(U.getContext(),
-              String.format("%d: %s - %s", uiError.errorCode, uiError.errorMessage, uiError.errorDetail),
-              Toast.LENGTH_LONG).show();
+          U.showToast(String.format("%d: %s - %s", uiError.errorCode, uiError.errorMessage, uiError.errorDetail));
       }
 
       @Override
       public void onCancel() {
-        if (BuildConfig.DEBUG) Toast.makeText(U.getContext(), "onCancel", Toast.LENGTH_LONG).show();
+        if (BuildConfig.DEBUG) {
+          U.showToast("onCancel");
+        }
       }
     };
   }

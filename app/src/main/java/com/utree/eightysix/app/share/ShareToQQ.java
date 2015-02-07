@@ -123,7 +123,7 @@ class ShareToQQ extends IShare {
   }
 
   @Override
-  public void shareBainian(final BaseActivity activity, final String recipient, final String content) {
+  public void shareBainian(final BaseActivity activity, final String recipient, final String content, final String url) {
     new AsyncTask<Void, Void, Void>() {
 
       @Override
@@ -133,11 +133,13 @@ class ShareToQQ extends IShare {
 
       @Override
       protected Void doInBackground(Void... params) {
+
         Bundle data = new Bundle();
         data.putString(QQShare.SHARE_TO_QQ_TITLE, String.format(shareTitleForBainian(), recipient));
-        data.putString(QQShare.SHARE_TO_QQ_SUMMARY, content);
+        data.putString(QQShare.SHARE_TO_QQ_SUMMARY, "祝：" + content);
         data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "");
         data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
+        data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, url);
         shareToQQ(activity, data, defaultListener());
         return null;
       }
@@ -151,7 +153,7 @@ class ShareToQQ extends IShare {
 
   @Override
   protected String shareTitleForBainian() {
-    return "我通过蓝莓，制作了一张超酷炫的拜年卡，送给%s";
+    return "Hello %s，送你一张超炫酷的拜年卡，我是通过蓝莓制作的哦";
   }
 
   @Override

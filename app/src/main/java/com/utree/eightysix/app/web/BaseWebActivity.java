@@ -4,9 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -18,14 +18,11 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.share.ShareDialog;
 import com.utree.eightysix.data.Circle;
-import com.utree.eightysix.drawable.GearsDrawable;
 import com.utree.eightysix.widget.GearsView;
 import de.akquinet.android.androlog.Log;
 
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 
 /**
  * @author simon
@@ -106,6 +103,7 @@ public class BaseWebActivity extends BaseActivity {
         Log.d("BaseWebActivity", "overriding url loading: " + url);
         int factoryId = 0;
         String shortName = "";
+        int bainian = 0;
         if (url.contains("?")) {
           String[] str = url.split("\\?")[1].split("&");
           for (String s : str) {
@@ -113,11 +111,11 @@ public class BaseWebActivity extends BaseActivity {
             if (kv.length == 2) {
               if (kv[0].equals("factoryId")) {
                 factoryId = Integer.parseInt(kv[1]);
-                continue;
-              }
-              if (kv[0].equals("shortName")) {
+              } else if (kv[0].equals("shortName")) {
                 shortName = kv[1];
                 shortName = URLDecoder.decode(shortName);
+              } else if (kv[0].equals("share")) {
+
               }
             }
           }
@@ -128,8 +126,9 @@ public class BaseWebActivity extends BaseActivity {
           circle.shortName = shortName;
           U.getShareManager().shareAppDialog(BaseWebActivity.this, circle).show();
           return true;
+        } else {
+          return handleShare(url);
         }
-        return super.shouldOverrideUrlLoading(view, url);
       }
     };
 
@@ -137,5 +136,18 @@ public class BaseWebActivity extends BaseActivity {
     mWbBase.loadUrl(getIntent().getStringExtra("url"));
   }
 
+  private boolean handleShare(String url) {
+    Uri uri = Uri.parse(url);
+    if ("share".equals(uri.getScheme()) && "lanmeiquan.com".equals(uri.getHost())) {
+      if ("/bainian".equals(uri.getPath())) {
+        U.getShareManager().shareBainianDialog(this, uri.getQueryParameter("to"), uri.getQueryParameter("content")).show();
+        return true;
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  }
 
 }

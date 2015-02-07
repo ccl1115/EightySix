@@ -33,9 +33,9 @@ class ShareViaSMS extends IShare {
   }
 
   @Override
-  public void shareBainian(BaseActivity activity, String recipient, String content) {
+  public void shareBainian(BaseActivity activity, String recipient, String content, String url) {
     ContactsActivity.start(activity,
-        String.format(shareContentForBainian(), recipient, content));
+        String.format(shareContentForBainian(), recipient, content) + url);
   }
 
   protected String shareContentForApp() {
@@ -53,6 +53,6 @@ class ShareViaSMS extends IShare {
 
   @Override
   protected String shareContentForBainian() {
-    return null;
+    return "Hello %s，送你一张超炫酷的拜年卡，我是通过蓝莓制作的哦！\n 祝：%s \n";
   }
 }

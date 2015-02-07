@@ -20,6 +20,7 @@ import butterknife.OnTextChanged;
 import com.squareup.picasso.Picasso;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.web.BaseWebActivity;
 import com.utree.eightysix.data.Bainian;
 import com.utree.eightysix.widget.ThemedDialog;
 
@@ -53,6 +54,13 @@ public final class FeedBainianView extends FrameLayout {
   @OnTextChanged(R.id.et_msg)
   public void onEtMsgTextChanged(CharSequence cs) {
     mTextChanged = true;
+  }
+
+  @OnClick(R.id.rb_generate)
+  public void onRbGenerateClicked() {
+    BaseWebActivity.start(getContext(), "拜年卡",
+        String.format("http://203.195.217.85/wapui/index.php/share/greetingCards?to=%s&content=%s&send=%s",
+            mEtRecipient.getText().toString(), mEtMsg.getText().toString(), "inner"));
   }
 
   public FeedBainianView(Context context) {

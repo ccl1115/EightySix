@@ -134,7 +134,7 @@ class ShareToQzone extends IShare {
   }
 
   @Override
-  public void shareBainian(final BaseActivity activity, final String recipient, final String content) {
+  public void shareBainian(final BaseActivity activity, final String recipient, final String content, final String url) {
     new AsyncTask<Void, Void, Void>() {
 
       @Override
@@ -146,7 +146,8 @@ class ShareToQzone extends IShare {
       protected Void doInBackground(Void... params) {
         Bundle data = new Bundle();
         data.putString(QzoneShare.SHARE_TO_QQ_TITLE, String.format(shareTitleForBainian(), recipient));
-        data.putString(QzoneShare.SHARE_TO_QQ_SUMMARY, content);
+        data.putString(QzoneShare.SHARE_TO_QQ_SUMMARY, "祝：" + content);
+        data.putString(QzoneShare.SHARE_TO_QQ_TARGET_URL, url);
         ArrayList<String> urls = new ArrayList<String>();
         urls.add("http://utree-resource.oss-cn-beijing.aliyuncs.com/faceless.png");
         data.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL, urls);
@@ -164,7 +165,7 @@ class ShareToQzone extends IShare {
 
   @Override
   protected String shareTitleForBainian() {
-    return "Hello %s，送你一张超炫酷的拜年卡，我是通过蓝莓制作的哦";
+    return "我通过蓝莓，制作了一张超酷炫的拜年卡，送给%s";
   }
 
   @Override
