@@ -42,6 +42,6 @@ public class ReportRequest {
 
   public ReportRequest(int type, String postId) {
     this.type = type;
-    this.postId = postId;
+    this.commentId = postId;
   }
 }
