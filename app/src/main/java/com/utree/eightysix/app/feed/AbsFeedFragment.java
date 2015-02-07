@@ -279,6 +279,9 @@ public abstract class AbsFeedFragment extends BaseFragment {
       ((FeedActivity) getBaseActivity()).mSend.setImageResource(response.object.lock != 1 || response.object.current == 1 ?
           R.drawable.ic_post_pen : R.drawable.ic_post_pen_disabled);
 
+      if (mCircle.snapshot == 1) {
+        ((FeedActivity) getBaseActivity()).setAdapter();
+      }
 
       if (response.object.fetch != null) {
         int count = 0;

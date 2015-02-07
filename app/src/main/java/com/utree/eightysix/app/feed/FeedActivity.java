@@ -1,12 +1,10 @@
 package com.utree.eightysix.app.feed;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
@@ -18,7 +16,9 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
-import com.utree.eightysix.*;
+import com.utree.eightysix.Account;
+import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
@@ -34,7 +34,6 @@ import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.request.FriendsSizeRequest;
 import com.utree.eightysix.response.FriendsSizeResponse;
 import com.utree.eightysix.rest.OnResponse2;
-import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TopBar;
 
@@ -171,6 +170,10 @@ public class FeedActivity extends BaseActivity {
       return;
     }
 
+    onNewIntent(getIntent());
+  }
+
+  public void setAdapter() {
     mTopBar.setActionAdapter(new TopBar.ActionAdapter() {
       @Override
       public String getTitle(int position) {
@@ -203,8 +206,6 @@ public class FeedActivity extends BaseActivity {
             ViewGroup.LayoutParams.MATCH_PARENT);
       }
     });
-
-    onNewIntent(getIntent());
   }
 
   @Override
