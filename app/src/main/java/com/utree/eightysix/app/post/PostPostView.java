@@ -5,10 +5,7 @@ import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -61,6 +58,9 @@ public class PostPostView extends LinearLayout {
 
   @InjectView (R.id.tv_tag_2)
   public TagView mTvTag2;
+
+  @InjectView(R.id.iv_chat)
+  public ImageView mIvChat;
 
   private Post mPost;
 
