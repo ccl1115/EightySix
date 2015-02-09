@@ -70,5 +70,7 @@ public class BainianWebActivity extends BaseWebActivity {
         return new TopBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
       }
     });
+
+    mGvLoading.setVisibility(View.INVISIBLE);
   }
 }
