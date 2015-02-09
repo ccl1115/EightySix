@@ -42,7 +42,7 @@ public class ShareManager {
   }
 
   static String shareLinkForBainian(String recipient, String content) {
-    return String.format("http://203.195.217.85/wapui/index.php/share/greetingCards?to=%s&content=%s&send=%s",
+    return String.format(U.getConfig("api.host.second") + "/wapui/index.php/share/greetingCards?to=%s&content=%s&send=%s",
         recipient, content, "bless");
   }
 

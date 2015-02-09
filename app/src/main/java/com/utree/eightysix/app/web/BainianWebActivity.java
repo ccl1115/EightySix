@@ -22,7 +22,7 @@ public class BainianWebActivity extends BaseWebActivity {
 
   public static void start(Context context, String recipient, String msg) {
 
-    String url = String.format("http://203.195.217.85/wapui/index.php/share/greetingCards?to=%s&content=%s&send=%s",
+    String url = String.format(U.getConfig("api.host.second") + "/wapui/index.php/share/greetingCards?to=%s&content=%s&send=%s",
         recipient, msg, "inner");
     Intent intent = new Intent(context, BainianWebActivity.class);
     intent.putExtra("title", "蓝莓专属拜年卡");
