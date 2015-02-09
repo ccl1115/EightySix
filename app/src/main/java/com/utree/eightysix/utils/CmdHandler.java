@@ -30,7 +30,7 @@ import com.utree.eightysix.data.Topic;
  */
 public class CmdHandler {
   public void handle(Context context, String cmd) {
-    String[] args = cmd.split(":");
+    String[] args = cmd.split(":", 2);
 
     if (!HomeActivity.sIsRunning) {
       HomeActivity.start(context);
