@@ -227,8 +227,11 @@ class CircleListAdapter extends BaseAdapter {
       if (item.circleType == 1) {
         mRbIcon.setText(U.gs(R.string.factory));
         mRbIcon.setBackgroundColor(res.getColor(R.color.apptheme_secondary_dark_color));
-      } else {
+      } else if (item.circleType == 2) {
         mRbIcon.setText(U.gs(R.string.business));
+        mRbIcon.setBackgroundColor(0xffff6600);
+      } else if (item.circleType == 3) {
+        mRbIcon.setText("官");
         mRbIcon.setBackgroundColor(0xffff6600);
       }
 
@@ -238,13 +241,13 @@ class CircleListAdapter extends BaseAdapter {
         mRbType.setVisibility(View.VISIBLE);
         if (item.viewType == 1) {
           mRbType.setText(U.gs(R.string.most_friends));
-          //mRbType.setBackgroundColor(0xffea6161);
+          mRbType.setBackgroundColor(0xffea6161);
         } else if (item.viewType == 2) {
           mRbType.setText(U.gs(R.string.nearest));
-          //mRbType.setBackgroundColor(0xff1cbd51);
+          mRbType.setBackgroundColor(0xff1cbd51);
         } else if (item.viewType == 3) {
           mRbType.setText(U.gs(R.string.last_visited));
-          //mRbType.setBackgroundColor(0xff12bce7);
+          mRbType.setBackgroundColor(0xff12bce7);
         }
       }
 
