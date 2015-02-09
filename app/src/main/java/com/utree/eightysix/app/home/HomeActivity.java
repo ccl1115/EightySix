@@ -471,6 +471,14 @@ public class HomeActivity extends BaseActivity {
 
     setHasNewPraise();
     setNewCommentCount();
+
+    getHandler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        mDlContent.closeDrawer(mFlSide);
+        mDlContent.closeDrawer(mFlRight);
+      }
+    }, 1000);
   }
 
   @Override
