@@ -78,7 +78,7 @@ public class ShareManager {
   }
 
   public ThemedDialog shareBainianDialog(final BaseActivity activity, final String recipient, final String msg) {
-    return new ShareDialog(activity, "发送百年卡片") {
+    return new ShareDialog(activity, "发送拜年卡给朋友吧") {
       @Override
       protected Object getViewHolder(ShareDialog dialog) {
         return new ShareBainianViewHolder(activity, dialog, recipient, msg);

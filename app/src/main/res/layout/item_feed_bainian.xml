@@ -124,7 +124,7 @@
                 android:inputType="textMultiLine"
                 android:maxWidth="250dp"
                 android:maxLines="4"
-                android:maxLength="40"
+                android:maxLength="80"
                 android:singleLine="true"
                 android:padding="8dp"
                 android:background="@drawable/bg_bainian_edit_text_large"
