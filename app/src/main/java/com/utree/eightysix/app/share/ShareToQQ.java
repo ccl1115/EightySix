@@ -137,9 +137,10 @@ class ShareToQQ extends IShare {
         Bundle data = new Bundle();
         data.putString(QQShare.SHARE_TO_QQ_TITLE, String.format(shareTitleForBainian(), recipient));
         data.putString(QQShare.SHARE_TO_QQ_SUMMARY, "祝：" + content);
-        data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "");
         data.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
         data.putString(QQShare.SHARE_TO_QQ_TARGET_URL, url);
+        data.putString(QQShare.SHARE_TO_QQ_IMAGE_URL,
+            "http://utree-resource.oss-cn-beijing.aliyuncs.com/bainian_share_pic.jpg");
         shareToQQ(activity, data, defaultListener());
         return null;
       }

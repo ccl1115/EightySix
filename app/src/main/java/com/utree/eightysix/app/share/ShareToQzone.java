@@ -149,7 +149,7 @@ class ShareToQzone extends IShare {
         data.putString(QzoneShare.SHARE_TO_QQ_SUMMARY, "祝：" + content);
         data.putString(QzoneShare.SHARE_TO_QQ_TARGET_URL, url);
         ArrayList<String> urls = new ArrayList<String>();
-        urls.add("http://utree-resource.oss-cn-beijing.aliyuncs.com/faceless.png");
+        urls.add("http://utree-resource.oss-cn-beijing.aliyuncs.com/bainian_share_pic.jpg");
         data.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL, urls);
         data.putInt(QzoneShare.SHARE_TO_QZONE_KEY_TYPE, QzoneShare.SHARE_TO_QZONE_TYPE_IMAGE_TEXT);
         shareToQzone(activity, data, defaultListener());
