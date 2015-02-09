@@ -38,7 +38,7 @@ public class NotifyUtil {
 
   private final Context mContext;
 
-  NotifyUtil(Context context) {
+  public NotifyUtil(Context context) {
     mContext = context;
   }
 
@@ -222,4 +222,20 @@ public class NotifyUtil {
 
     return builder.build();
   }
+
+  public Notification buildReport() {
+    NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext);
+    builder
+        .setLargeIcon(sLargeIcon)
+        .setAutoCancel(true)
+        .setDefaults(Account.inst().getSilentMode() ? Notification.DEFAULT_LIGHTS : Notification.DEFAULT_ALL)
+        .setSmallIcon(R.drawable.ic_launcher)
+        .setTicker(mContext.getString(R.string.notification_new_friend))
+        .setContentTitle("蓝莓小助手")
+        .setContentText("感谢举报，我们已收到，并一定尽快处理")
+        .setContentIntent(PendingIntent.getActivity(mContext, 0,
+            HomeActivity.getIntent(mContext, 0, 0), PendingIntent.FLAG_UPDATE_CURRENT));
+    return builder.build();
+  }
 }
+

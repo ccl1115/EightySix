@@ -27,6 +27,7 @@ import java.util.List;
  */
 public class PullNotificationService extends Service {
 
+  private static final int ID_REPORT = 0x2000;
 
   private NotifyUtil mNotifyUtil;
 
@@ -164,6 +165,7 @@ public class PullNotificationService extends Service {
           getNM().notify(String.valueOf(item.factoryId), NotifyUtil.ID_POST,
               mNotifyUtil.buildPosts(item.shortName, item.currFactory == 1, item.factoryId, count));
         }
+        break;
       }
     }
   }

@@ -10,6 +10,7 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.msg.NotifyUtil;
 import com.utree.eightysix.app.msg.PullNotificationService;
 import com.utree.eightysix.data.AppIntent;
 import com.utree.eightysix.utils.CmdHandler;
@@ -61,9 +62,12 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
    */
   public static final int TYPE_MERGED_NEW_POST = 8;
 
+  public static final int TYPE_REPORT = 9;
+
   public static final int TYPE_CMD = 1000;
 
   public CmdHandler mCmdHandler = new CmdHandler();
+  private NotifyUtil mNotifyUtil;
 
   @Override
   public void onRegisterResult(Context context, int i, XGPushRegisterResult xgPushRegisterResult) {
@@ -93,6 +97,8 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
     AppIntent m;
     try {
       m = U.getGson().fromJson(xgPushTextMessage.getContent(), AppIntent.class);
+
+
     } catch (Exception e) {
       U.getAnalyser().reportError(context, "xg push invalid msg: " + xgPushTextMessage.getContent());
       return;
@@ -138,7 +144,15 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
       }
     }
 
-    PullNotificationService.start(context, m.type, m.pushFlag);
+    if (m.type == PushMessageReceiver.TYPE_REPORT) {
+      NotificationManager manager = ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE));
+      if (mNotifyUtil == null) {
+        mNotifyUtil = new NotifyUtil(context);
+      }
+      manager.notify(0x2000, mNotifyUtil.buildReport());
+    } else {
+      PullNotificationService.start(context, m.type, m.pushFlag);
+    }
   }
 
   @Override
