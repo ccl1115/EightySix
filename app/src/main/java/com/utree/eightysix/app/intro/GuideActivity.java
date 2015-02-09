@@ -41,7 +41,7 @@ public class GuideActivity extends BaseActivity {
     LOCAL_POST.source = "仁宝电脑";
     LOCAL_POST.comments = 165;
     LOCAL_POST.praise = 391;
-    LOCAL_POST.content = "找我50块假钱的傻逼，每天都在宿舍门口碰到！好想上去揍他。。。";
+    LOCAL_POST.content = "以前换厂找工作，总顾虑听到的跟进厂后实际看到的不一样，进去了就想出来。蓝莓厂区快照，汇集了昆山百个大厂的真实信息，麻麻再也不用担心我被忽悠咯！";
   }
 
 
@@ -74,7 +74,6 @@ public class GuideActivity extends BaseActivity {
   }
 
   private Page3ViewHolder mPage3ViewHolder;
-  private Post mPost;
 
   @Override
   public void onActionLeftClicked() {
