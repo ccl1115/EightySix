@@ -230,7 +230,7 @@ public class NotifyUtil {
         .setAutoCancel(true)
         .setDefaults(Account.inst().getSilentMode() ? Notification.DEFAULT_LIGHTS : Notification.DEFAULT_ALL)
         .setSmallIcon(R.drawable.ic_launcher)
-        .setTicker(mContext.getString(R.string.notification_new_friend))
+        .setTicker("蓝莓小助手")
         .setContentTitle("蓝莓小助手")
         .setContentText("感谢举报，我们已收到，并一定尽快处理")
         .setContentIntent(PendingIntent.getActivity(mContext, 0,

@@ -6,6 +6,7 @@ package com.utree.eightysix.app.feed;
 
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +59,14 @@ public final class FeedBainianView extends FrameLayout {
 
   @OnClick(R.id.rb_generate)
   public void onRbGenerateClicked() {
+    if (TextUtils.isEmpty(mEtMsg.getText()) ){
+      U.showToast("祝福语还未输入哦");
+      return;
+    }
+    if (TextUtils.isEmpty(mEtRecipient.getText())) {
+      U.showToast("被祝福者的名字还未输入哦");
+      return;
+    }
     BainianWebActivity.start(getContext(), mEtRecipient.getText().toString(), mEtMsg.getText().toString());
   }
 
