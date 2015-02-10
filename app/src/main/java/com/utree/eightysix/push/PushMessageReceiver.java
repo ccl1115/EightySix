@@ -62,7 +62,15 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
    */
   public static final int TYPE_MERGED_NEW_POST = 8;
 
+  /**
+   * 举报提示
+   */
   public static final int TYPE_REPORT = 9;
+
+  /**
+   * 蓝星提示
+   */
+  public static final int TYPE_BLUE_STAR = 10;
 
   public static final int TYPE_CMD = 1000;
 

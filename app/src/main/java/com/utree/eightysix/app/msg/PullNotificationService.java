@@ -167,6 +167,9 @@ public class PullNotificationService extends Service {
         }
         break;
       }
+      case PushMessageReceiver.TYPE_BLUE_STAR: {
+        getNM().notify(NotifyUtil.ID_BLUE_STAR, mNotifyUtil.buildBlueStar(response.object.msg));
+      }
     }
   }
 

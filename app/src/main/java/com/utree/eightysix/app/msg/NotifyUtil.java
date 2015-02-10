@@ -30,6 +30,8 @@ public class NotifyUtil {
   static final int ID_PRAISE = 0x5000;
   static final int ID_APPROVE = 0x6000;
   static final int ID_OWN_COMMENT = 0x7000;
+  static final int ID_BLUE_STAR = 0x8000;
+
   private static Bitmap sLargeIcon;
 
   static {
@@ -233,6 +235,21 @@ public class NotifyUtil {
         .setTicker("蓝莓小助手")
         .setContentTitle("蓝莓小助手")
         .setContentText("感谢举报，我们已收到，并一定尽快处理")
+        .setContentIntent(PendingIntent.getActivity(mContext, 0,
+            HomeActivity.getIntent(mContext, 0, 0), PendingIntent.FLAG_UPDATE_CURRENT));
+    return builder.build();
+  }
+
+  public Notification buildBlueStar(String msg) {
+    NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext);
+    builder
+        .setLargeIcon(sLargeIcon)
+        .setAutoCancel(true)
+        .setDefaults(Account.inst().getSilentMode() ? Notification.DEFAULT_LIGHTS : Notification.DEFAULT_ALL)
+        .setSmallIcon(R.drawable.ic_launcher)
+        .setTicker("蓝星奖励")
+        .setContentTitle("蓝星奖励")
+        .setContentText(msg)
         .setContentIntent(PendingIntent.getActivity(mContext, 0,
             HomeActivity.getIntent(mContext, 0, 0), PendingIntent.FLAG_UPDATE_CURRENT));
     return builder.build();
