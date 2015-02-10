@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="2014 utree.cn, all rights reserved"
+            android:text="2015 utree.cn, all rights reserved"
             android:textSize="12sp"
             android:textColor="#44ffffff"
             android:layout_marginBottom="10dp"
