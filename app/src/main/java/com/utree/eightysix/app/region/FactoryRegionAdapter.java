@@ -119,12 +119,6 @@ class FactoryRegionAdapter extends BaseAdapter {
       viewHolder.mTvFriends.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
     }
 
-    if (circle.snapshot == 1) {
-      viewHolder.mRbSnapshot.setVisibility(View.VISIBLE);
-    } else {
-      viewHolder.mRbSnapshot.setVisibility(View.GONE);
-    }
-
     return convertView;
   }
 
@@ -145,9 +139,6 @@ class FactoryRegionAdapter extends BaseAdapter {
 
     @InjectView(R.id.iv_fire)
     public ImageView mIvFire;
-
-    @InjectView(R.id.rb_snapshot)
-    public TextView mRbSnapshot;
 
     ViewHolder(View view) {
       ButterKnife.inject(this, view);
