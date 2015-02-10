@@ -16,6 +16,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.app.post.PostActivity;
+import com.utree.eightysix.app.web.BaseWebActivity;
 import com.utree.eightysix.push.PushMessageReceiver;
 
 /**
@@ -249,9 +250,19 @@ public class NotifyUtil {
         .setSmallIcon(R.drawable.ic_launcher)
         .setTicker("蓝星奖励")
         .setContentTitle("蓝星奖励")
-        .setContentText(msg)
-        .setContentIntent(PendingIntent.getActivity(mContext, 0,
-            HomeActivity.getIntent(mContext, 0, 0), PendingIntent.FLAG_UPDATE_CURRENT));
+        .setContentText(msg);
+
+    Intent intent = BaseWebActivity.getIntent(mContext,
+        String.format("http://c.lanmeiquan.com/activity/blueStar.do?userid=%s&token=%s",
+            Account.inst().getUserId(),
+            Account.inst().getToken()));
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+      builder.setContentIntent(PendingIntent.getActivities(mContext, 0,
+              wrapIntent(intent), PendingIntent.FLAG_UPDATE_CURRENT));
+    } else {
+      builder.setContentIntent(PendingIntent.getActivity(mContext, 0,
+          intent, PendingIntent.FLAG_UPDATE_CURRENT));
+    }
     return builder.build();
   }
 }

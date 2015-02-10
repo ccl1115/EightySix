@@ -41,16 +41,24 @@ public class BaseWebActivity extends BaseActivity {
   public LinearLayout mLlError;
 
   public static void start(Context context, String url) {
-    Intent intent = new Intent(context, BaseWebActivity.class);
-    intent.putExtra("url", url);
-    context.startActivity(intent);
+    context.startActivity(getIntent(context, url));
   }
 
   public static void start(Context context, String title, String url) {
+    context.startActivity(getIntent(context, title, url));
+  }
+
+  public static Intent getIntent(Context context, String url) {
+    Intent intent = new Intent(context, BaseWebActivity.class);
+    intent.putExtra("url", url);
+    return intent;
+  }
+
+  public static Intent getIntent(Context context, String title, String url) {
     Intent intent = new Intent(context, BaseWebActivity.class);
     intent.putExtra("title", title);
     intent.putExtra("url", url);
-    context.startActivity(intent);
+    return intent;
   }
 
   @Override
