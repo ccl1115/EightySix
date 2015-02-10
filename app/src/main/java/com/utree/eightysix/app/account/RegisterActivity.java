@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import butterknife.InjectView;
@@ -233,7 +234,7 @@ public class RegisterActivity extends BaseActivity {
       public void onResponse(InviteCodeDescResponse response) {
         hideProgressBar();
 
-        ThemedDialog dialog = new ThemedDialog(RegisterActivity.this);
+        final ThemedDialog dialog = new ThemedDialog(RegisterActivity.this);
         dialog.setTitle("邀请码的意义");
 
         TextView textView = new TextView(RegisterActivity.this);
@@ -244,6 +245,13 @@ public class RegisterActivity extends BaseActivity {
         textView.setEms(12);
 
         dialog.setContent(textView);
+
+        dialog.setPositive("知道了", new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            dialog.dismiss();
+          }
+        });
 
         dialog.show();
       }
