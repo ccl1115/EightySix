@@ -27,7 +27,7 @@ public class RegisterRequest {
     this.valiCode = valiCode;
   }
 
-  public RegisterRequest(String password, String phone, String valiCode, String inviteCode) {
+  public RegisterRequest(String phone, String password, String valiCode, String inviteCode) {
     this.password = password;
     this.phone = phone;
     this.valiCode = valiCode;

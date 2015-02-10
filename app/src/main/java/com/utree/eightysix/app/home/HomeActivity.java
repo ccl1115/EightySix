@@ -832,14 +832,17 @@ public class HomeActivity extends BaseActivity {
     @OnClick(R.id.rl_invite_code)
     void onRlInviteCodeClicked() {
 
+      showProgressBar(true);
+
       U.request("get_invite_code", new OnResponse2<GetInviteCodeResponse>() {
         @Override
         public void onResponseError(Throwable e) {
-
+          hideProgressBar();
         }
 
         @Override
         public void onResponse(GetInviteCodeResponse response) {
+          hideProgressBar();
           final ThemedDialog dialog = new ThemedDialog(HomeActivity.this);
           dialog.setTitle("你的专属邀请码");
 

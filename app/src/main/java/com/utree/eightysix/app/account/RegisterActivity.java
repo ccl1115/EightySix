@@ -213,7 +213,7 @@ public class RegisterActivity extends BaseActivity {
       request(new RegisterRequest(mEtPhoneNumber.getText().toString(),
               mEtPwd.getText().toString(),
               mEtCaptcha.getText().toString(),
-              mEtCaptcha.getText().toString()),
+              mEtInvite.getText().toString()),
           onResponse, UserResponse.class);
     }
 
