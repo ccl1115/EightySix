@@ -51,10 +51,17 @@ public final class FeedBainianView extends FrameLayout {
 
   private int mIndex;
   private Bainian mBainian;
+  private CharSequence mPrevious;
 
   @OnTextChanged(R.id.et_msg)
   public void onEtMsgTextChanged(CharSequence cs) {
-    mTextChanged = true;
+    if (mPrevious == null) {
+      mPrevious = cs;
+    }
+    if (!cs.equals(mPrevious)) {
+      mTextChanged = true;
+    }
+    mPrevious = cs;
   }
 
   @OnClick(R.id.rb_generate)

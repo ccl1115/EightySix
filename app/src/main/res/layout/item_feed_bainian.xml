@@ -128,10 +128,6 @@
                 android:singleLine="true"
                 android:padding="8dp"
                 android:background="@drawable/bg_bainian_edit_text_large"
-                android:scrollbars="vertical"
-                android:scrollbarAlwaysDrawVerticalTrack="true"
-                android:scrollbarStyle="insideInset"
-                android:fadeScrollbars="false"
                 />
 
         <TextView
