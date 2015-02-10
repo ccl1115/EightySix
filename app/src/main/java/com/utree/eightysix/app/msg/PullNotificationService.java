@@ -5,6 +5,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.text.TextUtils;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.BuildConfig;
@@ -168,7 +169,9 @@ public class PullNotificationService extends Service {
         break;
       }
       case PushMessageReceiver.TYPE_BLUE_STAR: {
-        getNM().notify(NotifyUtil.ID_BLUE_STAR, mNotifyUtil.buildBlueStar(response.object.msg));
+        if (!TextUtils.isEmpty(response.object.msg)) {
+          getNM().notify(NotifyUtil.ID_BLUE_STAR, mNotifyUtil.buildBlueStar(response.object.msg));
+        }
       }
     }
   }
