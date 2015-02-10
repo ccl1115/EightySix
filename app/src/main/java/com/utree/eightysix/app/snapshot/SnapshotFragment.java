@@ -10,10 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnItemClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
+import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.data.Paginate;
+import com.utree.eightysix.data.Post;
 import com.utree.eightysix.response.FeedsResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
@@ -39,6 +42,16 @@ public class SnapshotFragment extends BaseFragment {
   public FeedAdapter mFeedAdapter;
 
   public Paginate.Page mPageInfo;
+
+
+  @OnItemClick(R.id.lv_feed)
+  public void onAlvFeedItemClicked(int position) {
+    Post post = (Post) mFeedAdapter.getItem(position);
+
+    if (post != null) {
+      PostActivity.start(getActivity(), post);
+    }
+  }
 
   private int mFactoryId;
   private int mSnapshot;

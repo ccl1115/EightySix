@@ -48,8 +48,6 @@ public class SnapshotActivity extends BaseActivity {
 
   private Circle mCircle;
 
-  private FragmentPagerAdapter mPagerAdapter;
-
   public static void start(Context context, Circle circle) {
     Intent intent = new Intent(context, SnapshotActivity.class);
 
@@ -223,7 +221,7 @@ public class SnapshotActivity extends BaseActivity {
 
     mVpTab.setOffscreenPageLimit(2);
 
-    mPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
+    FragmentPagerAdapter pagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
       @Override
       public Fragment getItem(int position) {
         return fragments.get(position);
@@ -247,7 +245,7 @@ public class SnapshotActivity extends BaseActivity {
       }
     };
 
-    mVpTab.setAdapter(mPagerAdapter);
+    mVpTab.setAdapter(pagerAdapter);
 
     mTitleTab.setViewPager(mVpTab);
 
