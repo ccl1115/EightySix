@@ -19,6 +19,7 @@ import com.google.gson.annotations.SerializedName;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.Layout;
@@ -185,12 +186,14 @@ public class SnapshotActivity extends BaseActivity {
     }, SnapshotListResponse.class, mCircle.id);
   }
 
+  @Keep
   public static class SnapshotListResponse extends Response {
 
     @SerializedName("object")
     public SnapshotList object;
   }
 
+  @Keep
   public static class SnapshotList {
 
     @SerializedName("list")
@@ -200,6 +203,7 @@ public class SnapshotActivity extends BaseActivity {
     public Circle circle;
   }
 
+  @Keep
   public static class Snapshot {
 
     @SerializedName("id")

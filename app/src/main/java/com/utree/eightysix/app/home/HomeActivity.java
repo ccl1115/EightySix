@@ -874,6 +874,7 @@ public class HomeActivity extends BaseActivity {
     }
   }
 
+  @Keep
   public static class GetInviteCodeResponse extends Response {
 
 
@@ -881,6 +882,7 @@ public class HomeActivity extends BaseActivity {
     public GetInviteCode object;
   }
 
+  @Keep
   public static class GetInviteCode {
     @SerializedName("msg")
     public String msg;
@@ -888,6 +890,7 @@ public class HomeActivity extends BaseActivity {
     @SerializedName("newCount")
     public int newCount;
 
+    @SerializedName("inviteCode")
     public String inviteCode;
   }
 }
