@@ -113,6 +113,9 @@ public class BaseCirclesActivity extends BaseActivity {
     } else if (mMode == MODE_SELECT) {
       U.getAnalyser().trackEvent(this, "circle_search", "select");
       CircleSearchActivity.start(this, true);
+    } else if (mMode == MODE_SNAPSHOT) {
+      U.getAnalyser().trackEvent(this, "circle_search", "snapshot");
+      CircleSearchActivity.start(this, false);
     }
   }
 
