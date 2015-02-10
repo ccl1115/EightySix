@@ -1,11 +1,13 @@
 package com.utree.eightysix.app.region;
 
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.utree.eightysix.R;
@@ -117,6 +119,12 @@ class FactoryRegionAdapter extends BaseAdapter {
       viewHolder.mTvFriends.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
     }
 
+    if (circle.snapshot == 1) {
+      viewHolder.mRbSnapshot.setVisibility(View.VISIBLE);
+    } else {
+      viewHolder.mRbSnapshot.setVisibility(View.GONE);
+    }
+
     return convertView;
   }
 
@@ -137,6 +145,9 @@ class FactoryRegionAdapter extends BaseAdapter {
 
     @InjectView(R.id.iv_fire)
     public ImageView mIvFire;
+
+    @InjectView(R.id.rb_snapshot)
+    public TextView mRbSnapshot;
 
     ViewHolder(View view) {
       ButterKnife.inject(this, view);
