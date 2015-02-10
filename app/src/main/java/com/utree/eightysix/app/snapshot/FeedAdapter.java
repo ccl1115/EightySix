@@ -7,6 +7,7 @@ package com.utree.eightysix.app.snapshot;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.FeedPostView;
 import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.data.Post;
@@ -49,6 +50,13 @@ public class FeedAdapter extends BaseAdapter {
       convertView = new FeedPostView(parent.getContext());
     }
     ((FeedPostView) convertView).setData((Post) getItem(position));
+
+    int p = U.dp2px(8);
+    if (position == getCount() - 1) {
+      convertView.setPadding(p, p, p, p);
+    } else {
+      convertView.setPadding(p, p, p, 0);
+    }
     return convertView;
   }
 }

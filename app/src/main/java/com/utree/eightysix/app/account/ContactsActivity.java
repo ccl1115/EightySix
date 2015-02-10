@@ -112,10 +112,11 @@ public class ContactsActivity extends BaseActivity {
       @Override
       public void onClick(View view, int position) {
         for (Contact contact : mContactsAdapter.getChecked()) {
-          String textToShare = String.format("%s, %s", contact.name, getIntent().getStringExtra("textToShare"));
+          String textToShare = getIntent().getStringExtra("textToShare");
+          sendSMS(contact.phone, textToShare);
           Log.d(TAG, "send Share msg to " + contact.toString());
           Log.d(TAG, "with share msg " + textToShare);
-          sendSMS(contact.phone, textToShare);
+
         }
 
         showToast(getString(R.string.share_succeed), false);
