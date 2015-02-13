@@ -27,7 +27,7 @@
         </params>
     </request>
 
-    <request>
+    <!--<request>
         <id>chat_ack</id>
         <name>收到消息确认</name>
         <path>/commit/im/send/privateChatAck</path>
@@ -36,7 +36,7 @@
         <params>
             <param>msgId</param>
         </params>
-    </request>
+    </request>-->
 
     <request>
         <id>chat_report</id>

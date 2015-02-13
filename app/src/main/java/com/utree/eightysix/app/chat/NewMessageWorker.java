@@ -123,17 +123,17 @@ class NewMessageWorker extends AsyncTask<Void, Integer, Void> {
       });
     }
 
-    U.request("chat_ack", new OnResponse2<Response>() {
-      @Override
-      public void onResponseError(Throwable e) {
-
-      }
-
-      @Override
-      public void onResponse(Response response) {
-
-      }
-    }, Response.class, new String[]{mEmMessage.getMsgId()});
+//    U.request("chat_ack", new OnResponse2<Response>() {
+//      @Override
+//      public void onResponseError(Throwable e) {
+//
+//      }
+//
+//      @Override
+//      public void onResponse(Response response) {
+//
+//      }
+//    }, Response.class, new String[]{mEmMessage.getMsgId()});
 
     return null;
   }
