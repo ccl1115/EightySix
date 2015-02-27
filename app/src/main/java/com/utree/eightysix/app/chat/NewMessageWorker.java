@@ -28,6 +28,7 @@ class NewMessageWorker extends AsyncTask<Void, Integer, Void> {
   private static final int PROGRESS_UPDATE_CONVERSATION = 3;
   private static final int PROGRESS_INFO_MESSAGE = 6;
   private static final int PROGRESS_MESSAGE_DOWNLOADED = 7;
+  private static final int PROGRESS_MESSAGE_ACK = 8;
 
   private Message mMessage;
   private EMMessage mEmMessage;
@@ -123,17 +124,7 @@ class NewMessageWorker extends AsyncTask<Void, Integer, Void> {
       });
     }
 
-    //U.request("chat_ack", new OnResponse2<Response>() {
-    //  @Override
-    //  public void onResponseError(Throwable e) {
-    //
-    //  }
-    //
-    //  @Override
-    //  public void onResponse(Response response) {
-    //
-    //  }
-    //}, Response.class, new String[]{mEmMessage.getMsgId()});
+    publishProgress(PROGRESS_MESSAGE_ACK);
 
     return null;
   }
@@ -157,6 +148,19 @@ class NewMessageWorker extends AsyncTask<Void, Integer, Void> {
         U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_RECEIVE_MSG, mInfoMessage));
         break;
       case PROGRESS_MESSAGE_DOWNLOADED:
+        break;
+      case PROGRESS_MESSAGE_ACK:
+        U.request("chat_ack", new OnResponse2<Response>() {
+          @Override
+          public void onResponseError(Throwable e) {
+
+          }
+
+          @Override
+          public void onResponse(Response response) {
+
+          }
+        }, Response.class, new String[]{mEmMessage.getMsgId()});
         break;
     }
   }
