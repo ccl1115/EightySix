@@ -17,10 +17,8 @@ import butterknife.OnClick;
 import com.google.zxing.*;
 import com.google.zxing.client.android.camera.CameraConfigurationUtils;
 import com.google.zxing.common.HybridBinarizer;
-import com.google.zxing.qrcode.encoder.QRCode;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.app.event.QRCodeScanEvent;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 
 /**

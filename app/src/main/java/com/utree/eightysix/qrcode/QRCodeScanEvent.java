@@ -1,4 +1,4 @@
-package com.utree.eightysix.app.event;
+package com.utree.eightysix.qrcode;
 
 /**
  * @author simon

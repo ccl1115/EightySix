@@ -13,10 +13,9 @@ import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.qrcode.QRCodeScanFragment;
 import com.utree.eightysix.app.TopTitle;
-import com.utree.eightysix.app.event.QRCodeScanEvent;
+import com.utree.eightysix.qrcode.QRCodeScanEvent;
 import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
-import com.utree.eightysix.utils.Env;
 
 /**
  * @author simon
