@@ -9,6 +9,7 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.app.home.HomeActivity;
+import com.utree.eightysix.app.home.HomeTabActivity;
 import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.msg.PraiseActivity;
 import com.utree.eightysix.app.post.PostActivity;
@@ -33,7 +34,7 @@ public class CmdHandler {
     String[] args = cmd.split(":", 2);
 
     if (!HomeActivity.sIsRunning) {
-      HomeActivity.start(context);
+      HomeTabActivity.start(context);
     }
 
     if ("feed".equals(args[0])) {

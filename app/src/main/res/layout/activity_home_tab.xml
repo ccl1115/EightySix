@@ -35,7 +35,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:textColor="@android:color/white"
-                    android:text="打工圈"
+                    android:text="蓝莓圈"
                     />
 
         </FrameLayout>
@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:textColor="@android:color/white"
-                    android:text="探索"
+                    android:text="发现"
                     />
 
         </FrameLayout>

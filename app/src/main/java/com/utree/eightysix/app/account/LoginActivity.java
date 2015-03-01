@@ -24,7 +24,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.feed.FeedActivity;
-import com.utree.eightysix.app.home.HomeActivity;
+import com.utree.eightysix.app.home.HomeTabActivity;
 import com.utree.eightysix.response.UserResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.RequestParams;
@@ -219,7 +219,7 @@ public class LoginActivity extends BaseActivity {
               Account.inst().login(response.object.userId, response.object.token);
               showToast(R.string.login_success, false);
               finish();
-              HomeActivity.start(LoginActivity.this);
+              HomeTabActivity.start(LoginActivity.this);
             }
           } else if (response.code == 2450 || response.code == 140371) {
             mLlCaptcha.setVisibility(View.VISIBLE);
