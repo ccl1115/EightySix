@@ -111,6 +111,7 @@ public class HomeActivity extends BaseActivity {
   private Circle mCurrentCircle;
 
   private boolean mCreated;
+  private int mRegionType;
 
   public static void start(Context context) {
     Intent intent = new Intent(context, HomeActivity.class);
@@ -460,14 +461,16 @@ public class HomeActivity extends BaseActivity {
     if (mCreated) {
       showTabFragment();
     }
+
     final int regionType = intent.getIntExtra("regionType", Account.inst().getLastRegionType());
     final int tabIndex = intent.getIntExtra("tabIndex", 0);
 
-    if (regionType != -1) {
+    if (regionType != -1 && regionType != mRegionType) {
       mTabFragment.setRegionType(regionType);
+      mTabFragment.setTabIndex(tabIndex);
     }
 
-    mTabFragment.setTabIndex(tabIndex);
+    mRegionType = regionType;
 
     setHasNewPraise();
     setNewCommentCount();

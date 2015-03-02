@@ -4,6 +4,7 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="@android:color/white"
         >
 
     <FrameLayout
@@ -58,17 +59,8 @@
 
         </FrameLayout>
 
-        <ImageView
-                android:id="@+id/iv_send"
-                android:layout_width="0dp"
-                android:layout_height="64dp"
-                android:layout_weight="1"
-                android:padding="16dp"
-                android:src="@drawable/ic_post_pen"
-                />
-
         <FrameLayout
-                android:id="@+id/fl_nearby"
+                android:id="@+id/fl_message"
                 android:layout_width="0dp"
                 android:layout_height="64dp"
                 android:layout_weight="1"

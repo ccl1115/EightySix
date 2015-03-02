@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Copyright (c) 2015. All rights reserved by utree.cn
+  -->
+
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="24dp"
+            android:paddingBottom="24dp"
+            android:background="@color/apptheme_primary_grey_color"
+            >
+
+        <LinearLayout
+                android:id="@+id/ll_msg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/apptheme_primary_list_selector"
+                android:padding="16dp"
+                >
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="评论消息"
+                    />
+
+            <com.utree.eightysix.widget.RoundedButton
+                    android:id="@+id/rb_count_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:background="@color/apptheme_secondary_light_color"
+                    app:radius="8dp"
+                    />
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/ll_chat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:orientation="horizontal"
+                android:background="@drawable/apptheme_primary_list_selector"
+                android:padding="16dp"
+                >
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="悄悄话"
+                    />
+
+            <com.utree.eightysix.widget.RoundedButton
+                    android:id="@+id/rb_count_chat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:background="@color/apptheme_primary_light_color"
+                    app:radius="8dp"
+                    />
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/ll_fchat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="horizontal"
+                android:background="@drawable/apptheme_primary_list_selector"
+                android:padding="16dp"
+                >
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="聊天"
+                    />
+
+            <com.utree.eightysix.widget.RoundedButton
+                    android:id="@+id/rb_count_fchat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:background="@color/apptheme_primary_light_color"
+                    app:radius="8dp"
+                    />
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/ll_request"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="horizontal"
+                android:background="@drawable/apptheme_primary_list_selector"
+                android:padding="16dp"
+                >
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="好友请求"
+                    />
+
+
+            <com.utree.eightysix.widget.RoundedButton
+                    android:id="@+id/rb_count_request"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:background="@color/apptheme_primary_light_color"
+                    app:radius="8dp"
+                    />
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/ll_praise"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="horizontal"
+                android:background="@drawable/apptheme_primary_list_selector"
+                android:padding="16dp"
+                >
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="我收到的赞"
+                    />
+
+
+            <com.utree.eightysix.widget.RoundedButton
+                    android:id="@+id/rb_count_praise"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:background="@color/apptheme_primary_light_color"
+                    app:radius="8dp"
+                    />
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/ll_assist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="horizontal"
+                android:background="@drawable/apptheme_primary_list_selector"
+                android:padding="16dp"
+                >
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="蓝莓小助手"
+                    />
+
+
+            <com.utree.eightysix.widget.RoundedButton
+                    android:id="@+id/rb_count_assist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:background="@color/apptheme_primary_light_color"
+                    app:radius="8dp"
+                    />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
