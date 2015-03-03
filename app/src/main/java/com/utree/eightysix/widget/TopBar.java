@@ -11,10 +11,7 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
@@ -36,47 +33,41 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
   private final Paint mTopLinePaint = new Paint();
   private final Paint mBotLinePaint = new Paint();
 
-  @InjectView (R.id.tb_tv_bar_title)
+  @InjectView(R.id.tb_tv_bar_title)
   public TextView mTitle;
 
-  @InjectView (R.id.tb_tv_sub_title)
+  @InjectView(R.id.tb_tv_sub_title)
   public TextView mSubTitle;
 
-  @InjectView (R.id.tb_iab_action_overflow)
+  @InjectView(R.id.tb_iab_action_overflow)
   public ImageActionButton mActionOverFlow;
 
-  @InjectView (R.id.tb_iv_action_left)
+  @InjectView(R.id.tb_iv_action_left)
   public ImageView mActionLeft;
 
-  @InjectView (R.id.tb_iv_search_close)
+  @InjectView(R.id.tb_iv_search_close)
   public ImageView mIvSearchClose;
 
-  @InjectView (R.id.tb_et_search)
+  @InjectView(R.id.tb_et_search)
   public EditText mEtSearch;
 
-  @InjectView (R.id.tb_ll_left)
+  @InjectView(R.id.tb_ll_left)
   public LinearLayout mLlLeft;
 
-  @InjectView (R.id.tb_iv_app_icon)
-  public ImageView mIvAppIcon;
+  @InjectView(R.id.tb_fl_center)
+  public FrameLayout mFlCenter;
 
-  @InjectView (R.id.tb_rb_search)
+  @InjectView(R.id.tb_rb_search)
   public RoundedButton mRbSearch;
 
-  @InjectView (R.id.tb_ll_search)
+  @InjectView(R.id.tb_ll_search)
   public LinearLayout mLlSearch;
 
-  @InjectView (R.id.tb_ll_title)
+  @InjectView(R.id.tb_ll_title)
   public LinearLayout mLlTitle;
 
-  @InjectView (R.id.tb_ll_icon)
-  public LinearLayout mLlIcon;
-
-  @InjectView (R.id.tb_iv_indicator)
+  @InjectView(R.id.tb_iv_indicator)
   public ImageView mIvIndicator;
-
-  @InjectView (R.id.tb_v_divider)
-  public View mVDivider;
 
   @InjectView(R.id.refresh_indicator)
   public RefreshIndicator mRefreshIndicator;
@@ -201,44 +192,36 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     }
   }
 
-  @OnClick (R.id.tb_iv_search_close)
+  @OnClick(R.id.tb_iv_search_close)
   public void onIvSearchCloseClicked() {
     mEtSearch.setText("");
   }
 
-  @OnClick (R.id.tb_ll_left)
+  @OnClick(R.id.tb_ll_left)
   public void onActionLeftClicked() {
     if (mTitleClickMode == TITLE_CLICK_MODE_ONE) {
       if (mCallback != null) mCallback.onActionLeftClicked();
     }
   }
 
-  @OnClick (R.id.tb_ll_title)
+  @OnClick(R.id.tb_ll_title)
   public void onLlTitleClicked() {
     if (mTitleClickMode == TITLE_CLICK_MODE_DIVIDE) {
       if (mCallback != null) mCallback.onTitleClicked();
     }
   }
 
-  @OnClick (R.id.tb_ll_icon)
-  public void onLlIconClicked() {
-    if (mTitleClickMode == TITLE_CLICK_MODE_DIVIDE) {
-      if (mCallback != null) mCallback.onIconClicked();
-    }
-  }
-
-
-  @OnClick (R.id.tb_iab_action_overflow)
+  @OnClick(R.id.tb_iab_action_overflow)
   public void onActionOverflowClicked(View v) {
     if (mCallback != null) mCallback.onActionOverflowClicked();
   }
 
-  @OnClick (R.id.tb_rb_search)
+  @OnClick(R.id.tb_rb_search)
   public void onRbSearchClicked() {
     if (mCallback != null) mCallback.onActionSearchClicked(mEtSearch.getText());
   }
 
-  @OnTextChanged (R.id.tb_et_search)
+  @OnTextChanged(R.id.tb_et_search)
   public void onEtSearchTextChanged(CharSequence cs) {
     if (cs.length() == 0) {
       mIvSearchClose.setVisibility(INVISIBLE);
@@ -263,16 +246,12 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     if (mTitleClickMode == TITLE_CLICK_MODE_ONE) {
       mLlTitle.setClickable(false);
-      mLlIcon.setClickable(false);
       mLlLeft.setClickable(true);
       mIvIndicator.setVisibility(GONE);
-      mVDivider.setVisibility(GONE);
     } else {
       mLlTitle.setClickable(true);
-      mLlIcon.setClickable(true);
       mLlLeft.setClickable(false);
       mIvIndicator.setVisibility(VISIBLE);
-      mVDivider.setVisibility(VISIBLE);
     }
   }
 
@@ -294,29 +273,20 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
   protected void onLayout(boolean changed, int l, int t, int r, int b) {
 
     final int height = b - t;
+    final int width = r - l;
 
     mLlLeft.layout(0, 0, mLlLeft.getMeasuredWidth(), b);
 
-    mLlSearch.layout(mIvAppIcon.getRight(), 0, mIvAppIcon.getRight() + mLlSearch.getMeasuredWidth(), b);
-
-    mRefreshIndicator.layout(0, 0, r - l, b - t);
-
     mActionOverFlow.layout(r - mActionOverFlow.getMeasuredWidth(), 0, r, b);
 
-    r -= mActionOverFlow.getMeasuredWidth();
+    mFlCenter.layout((width - mFlCenter.getMeasuredWidth()) >> 1,
+        (height - mFlCenter.getMeasuredHeight()) >> 1,
+        (width + mFlCenter.getMeasuredWidth()) >> 1,
+        (height + mFlCenter.getMeasuredHeight()) >> 1);
 
-    if (mCurCount != 0) {
-      for (View child : mActionViews) {
-        MarginLayoutParams params = (MarginLayoutParams) child.getLayoutParams();
-        r -= params.rightMargin;
-        r -= child.getMeasuredWidth();
-        child.layout(r,
-            (height - child.getMeasuredHeight()) >> 1,
-            r + child.getMeasuredWidth(),
-            (height + child.getMeasuredHeight()) >> 1);
-        r -= params.leftMargin;
-      }
-    }
+    mLlSearch.layout(mLlLeft.getRight(), 0, mLlLeft.getRight() + mLlSearch.getMeasuredWidth(), b);
+
+    mRefreshIndicator.layout(0, 0, r - l, b - t);
   }
 
   @Override
@@ -342,7 +312,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     return false;
   }
 
-  @SuppressWarnings ("SuspiciousNameCombination")
+  @SuppressWarnings("SuspiciousNameCombination")
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
@@ -358,53 +328,15 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     widthLeft -= mActionOverFlow.getMeasuredWidth();
 
-    if (mActionAdapter != null) {
-      if (mCurCount != mActionAdapter.getCount()) {
-        throw new IllegalStateException("Adapter count updates");
-      }
-      if (mCurCount != 0) {
-        for (View view : mActionViews) {
-          if (widthLeft < heightSize) {
-            measureChild(view, MeasureSpec.EXACTLY, heightSize + MeasureSpec.AT_MOST);
-          } else {
-            LayoutParams lp = (LayoutParams) view.getLayoutParams();
-            int childHeightSpec, childWidthSpec;
-            switch (lp.height) {
-              case LayoutParams.WRAP_CONTENT:
-                childHeightSpec = heightSize + MeasureSpec.AT_MOST;
-                break;
-              case LayoutParams.MATCH_PARENT:
-                childHeightSpec = heightSize + MeasureSpec.EXACTLY;
-                break;
-              default:
-                childHeightSpec = lp.height + MeasureSpec.EXACTLY;
-                break;
-            }
-
-            switch (lp.width) {
-              case LayoutParams.WRAP_CONTENT:
-                childWidthSpec = widthLeft + MeasureSpec.AT_MOST;
-                break;
-              case LayoutParams.MATCH_PARENT:
-                childWidthSpec = (int) (heightSize * 0.9f) + MeasureSpec.EXACTLY;
-                break;
-              default:
-                childWidthSpec = lp.width + MeasureSpec.EXACTLY;
-                break;
-            }
-            measureChild(view, childWidthSpec, childHeightSpec);
-          }
-          widthLeft -= view.getMeasuredWidth();
-        }
-      }
-    }
-
     measureChild(mLlLeft, widthLeft + MeasureSpec.AT_MOST, heightSize + MeasureSpec.EXACTLY);
 
-    measureChild(mLlSearch, widthSize - mIvAppIcon.getRight() + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
+    widthLeft -= mLlLeft.getMeasuredWidth();
+
+    measureChild(mFlCenter, widthLeft + MeasureSpec.AT_MOST, heightSize + MeasureSpec.EXACTLY);
+
+    measureChild(mLlSearch, widthSize - mLlLeft.getRight() + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
 
     measureChild(mRefreshIndicator, widthSize + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
-
 
     setMeasuredDimension(widthSize, heightSize);
   }

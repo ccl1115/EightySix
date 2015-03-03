@@ -11,49 +11,27 @@
             android:id="@+id/tb_ll_left"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@drawable/apptheme_primary_btn_dark"
-            android:paddingRight="8dp"
+            android:background="@drawable/apptheme_transparent_bg"
             android:orientation="horizontal"
             >
 
-        <LinearLayout
-                android:id="@+id/tb_ll_icon"
+        <ImageView
+                android:id="@+id/tb_iv_action_left"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:background="@drawable/apptheme_primary_btn_dark"
-                >
-
-            <ImageView
-                    android:id="@+id/tb_iv_action_left"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/top_bar_return"
-                    android:contentDescription="@string/cd_action_left"
-                    />
-
-            <ImageView
-                    android:id="@+id/tb_iv_app_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginRight="5dp"
-                    android:src="@drawable/ic_app_icon"
-                    />
-
-        </LinearLayout>
-
-        <View
-                android:id="@+id/tb_v_divider"
-                android:layout_width="1px"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginTop="8px"
-                android:layout_marginBottom="8px"
-                android:background="#ff696969"
+                android:src="@drawable/top_bar_return"
+                android:contentDescription="@string/cd_action_left"
                 />
 
+
+    </LinearLayout>
+
+    <FrameLayout
+            android:id="@+id/tb_fl_center"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            >
 
         <LinearLayout
                 android:id="@+id/tb_ll_title"
@@ -62,11 +40,11 @@
                 android:layout_height="match_parent"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:background="@drawable/apptheme_primary_btn_dark"
+                android:background="@drawable/apptheme_transparent_bg"
                 >
 
 
-        <LinearLayout
+            <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -77,6 +55,7 @@
                         android:id="@+id/tb_tv_bar_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
                         android:textSize="16sp"
                         android:textColor="#fff7f7f7"
                         android:singleLine="true"
@@ -88,8 +67,9 @@
                         android:id="@+id/tb_tv_sub_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
                         android:textSize="11sp"
-                        android:textColor="#ff8a8e99"
+                        android:textColor="#fff7f7f7"
                         android:visibility="gone"
                         android:singleLine="true"
                         android:ellipsize="end"
@@ -106,12 +86,13 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
                     android:layout_marginBottom="8dp"
                     android:src="@drawable/ic_tb_indicator"
                     />
 
         </LinearLayout>
-    </LinearLayout>
+    </FrameLayout>
 
     <com.utree.eightysix.widget.ImageActionButton
             android:id="@+id/tb_iab_action_overflow"
@@ -135,6 +116,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:background="#ff363940"
                 >
@@ -188,10 +170,11 @@
                 />
     </LinearLayout>
 
-        <com.utree.eightysix.widget.RefreshIndicator
-                android:id="@+id/refresh_indicator"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="invisible"/>
+    <com.utree.eightysix.widget.RefreshIndicator
+            android:id="@+id/refresh_indicator"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            />
 
 </merge>
