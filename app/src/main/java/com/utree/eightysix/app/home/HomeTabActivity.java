@@ -18,6 +18,7 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.explore.ExploreFragment;
 import com.utree.eightysix.app.msg.MsgCenterFragment;
 import com.utree.eightysix.app.region.TabRegionFragment;
 
@@ -41,6 +42,7 @@ public class HomeTabActivity extends BaseActivity {
 
   public TabRegionFragment mTabRegionFragment;
   public MsgCenterFragment mMsgCenterFragment;
+  public ExploreFragment mExploreFragment;
 
   public Fragment mCurrentFragment;
 
@@ -81,6 +83,14 @@ public class HomeTabActivity extends BaseActivity {
         mCurrentFragment = mTabRegionFragment;
         break;
       case R.id.fl_explore:
+        if (mExploreFragment == null) {
+          mExploreFragment = new ExploreFragment();
+          t.add(R.id.fl_content, mExploreFragment).commit();
+        } else if (mExploreFragment.isHidden()) {
+          t.show(mExploreFragment).commit();
+          mExploreFragment.onHiddenChanged(false);
+        }
+        mCurrentFragment = mExploreFragment;
         break;
       case R.id.fl_message:
         if (mMsgCenterFragment == null) {

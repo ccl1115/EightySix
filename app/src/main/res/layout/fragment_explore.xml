@@ -1,15 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/apptheme_primary_grey_color"
+        >
 
-    <TextView
-            android:layout_width="wrap_content"
+    <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textSize="24sp"
-            android:text="探索"
-            />
+            android:orientation="vertical"
+            android:paddingTop="24dp"
+            android:paddingBottom="24dp"
+            >
 
-</FrameLayout>
+        <TextView
+                android:id="@+id/tv_circles"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:background="@drawable/apptheme_primary_list_selector"
+                android:text="打工圈"
+                />
+
+        <TextView
+                android:id="@+id/tv_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:padding="16dp"
+                android:background="@drawable/apptheme_primary_list_selector"
+                android:text="搜索帖子"
+                />
+
+        <TextView
+                android:id="@+id/tv_hometown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:padding="16dp"
+                android:background="@drawable/apptheme_primary_list_selector"
+                android:text="老乡动态"
+                />
+
+        <TextView
+                android:id="@+id/tv_snapshot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:padding="16dp"
+                android:background="@drawable/apptheme_primary_list_selector"
+                android:text="厂区快照"
+                />
+
+        <TextView
+                android:id="@+id/tv_blue_star"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:padding="16dp"
+                android:background="@drawable/apptheme_primary_list_selector"
+                android:text="蓝星商城"
+                />
+    </LinearLayout>
+
+</ScrollView>

@@ -16,14 +16,14 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.app.BaseFragment;
+import com.utree.eightysix.app.HolderFragment;
 import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
 import com.utree.eightysix.widget.TitleTab;
 import com.utree.eightysix.widget.TopBar;
 
 /**
  */
-public class HometownTabFragment extends BaseFragment {
+public class HometownTabFragment extends HolderFragment {
 
   @InjectView(R.id.tt_tab)
   public TitleTab mTtTab;
@@ -168,5 +168,10 @@ public class HometownTabFragment extends BaseFragment {
   private void clearActive() {
     mNewHometownFeedsFragment.setActive(false);
     mHotHometownFeedsFragment.setActive(false);
+  }
+
+  @Override
+  public void onTitleClicked() {
+
   }
 }

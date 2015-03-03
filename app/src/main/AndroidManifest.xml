@@ -245,6 +245,7 @@
         <activity android:label="开发者模式" android:name=".app.devmode.DevModeActivity"/>
         <activity android:name=".app.home.HomeTabActivity"/>
         <activity android:name=".app.msg.MsgCenterFragment"/>
+        <activity android:name=".app.FragmentHolder"/>
 
         <!-- 【必须】 信鸽service -->
         <service android:exported="true" android:name="com.tencent.android.tpush.service.XGPushService" android:persistent="true" android:process=":xg_service_v2" tools:ignore="ExportedService"/>
