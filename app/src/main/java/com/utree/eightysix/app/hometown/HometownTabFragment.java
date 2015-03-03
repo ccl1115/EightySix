@@ -174,4 +174,14 @@ public class HometownTabFragment extends HolderFragment {
   public void onTitleClicked() {
 
   }
+
+  @Override
+  protected void onActionLeftClicked() {
+
+  }
+
+  @Override
+  protected void onActionOverflowClicked() {
+
+  }
 }

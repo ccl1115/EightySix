@@ -11,4 +11,6 @@ public abstract class HolderFragment extends BaseFragment {
   protected abstract void onTitleClicked();
 
   protected abstract void onActionLeftClicked();
+
+  protected abstract void onActionOverflowClicked();
 }
