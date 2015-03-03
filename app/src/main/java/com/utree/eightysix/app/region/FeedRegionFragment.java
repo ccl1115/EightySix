@@ -112,8 +112,8 @@ public class FeedRegionFragment extends AbsRegionFragment {
 
       @Override
       public void onResponseError(Throwable e) {
-                                               mPostPraiseRequesting = false;
-                                                                                                                  }
+        mPostPraiseRequesting = false;
+      }
     }, Response.class);
   }
 

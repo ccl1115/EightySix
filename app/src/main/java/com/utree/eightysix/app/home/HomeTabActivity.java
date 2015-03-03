@@ -63,7 +63,6 @@ public class HomeTabActivity extends BaseActivity {
     final int id = v.getId();
 
     FragmentTransaction t = getSupportFragmentManager().beginTransaction();
-    t.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
     if (mCurrentFragment != null) {
       t.hide(mCurrentFragment);
     }
@@ -77,6 +76,7 @@ public class HomeTabActivity extends BaseActivity {
           t.add(R.id.fl_content, mTabRegionFragment).commit();
         } else if (mTabRegionFragment.isHidden()) {
           t.show(mTabRegionFragment).commit();
+          mTabRegionFragment.onHiddenChanged(false);
         }
         mCurrentFragment = mTabRegionFragment;
         break;
@@ -89,6 +89,7 @@ public class HomeTabActivity extends BaseActivity {
 
         } else if (mMsgCenterFragment.isHidden()) {
           t.show(mMsgCenterFragment).commit();
+          mMsgCenterFragment.onHiddenChanged(false);
         }
         mCurrentFragment = mMsgCenterFragment;
         break;

@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.region;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -150,6 +151,20 @@ public class TabRegionFragment extends BaseFragment {
   public void onDestroyView() {
     super.onDestroyView();
     clearActive();
+  }
+
+  @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
+    getBaseActivity().setTopTitle("");
+    getBaseActivity().setTopSubTitle("");
+  }
+
+  @Override
+  public void onHiddenChanged(boolean hidden) {
+    if (!hidden) {
+      mFeedFragment.onHiddenChanged(hidden);
+    }
   }
 
   @Subscribe
