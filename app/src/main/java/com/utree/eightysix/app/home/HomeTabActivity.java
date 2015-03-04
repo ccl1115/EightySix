@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
@@ -21,6 +22,7 @@ import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.explore.ExploreFragment;
 import com.utree.eightysix.app.msg.MsgCenterFragment;
 import com.utree.eightysix.app.region.TabRegionFragment;
+import com.utree.eightysix.widget.RoundedButton;
 
 /**
  */
@@ -39,6 +41,9 @@ public class HomeTabActivity extends BaseActivity {
 
   @InjectView(R.id.fl_more)
   public FrameLayout mFlMore;
+
+  @InjectView(R.id.rb_msg_count)
+  public RoundedButton mRbMsgCount;
 
   public TabRegionFragment mTabRegionFragment;
   public MsgCenterFragment mMsgCenterFragment;
@@ -146,10 +151,33 @@ public class HomeTabActivity extends BaseActivity {
     finish();
   }
 
+  @Subscribe
+  public void onMsgCountEvent(MsgCountEvent event) {
+    if (event.getCount() == 0) {
+      mRbMsgCount.setVisibility(View.INVISIBLE);
+    } else {
+      mRbMsgCount.setVisibility(View.VISIBLE);
+    }
+
+    mRbMsgCount.setText(String.valueOf(event.getCount()));
+  }
+
   private void clearSelected() {
     mFlExplore.setSelected(false);
     mFlFeed.setSelected(false);
     mFlMessage.setSelected(false);
     mFlMore.setSelected(false);
+  }
+
+  public static class MsgCountEvent {
+    private int count;
+
+    public MsgCountEvent(int count) {
+      this.count = count;
+    }
+
+    public int getCount() {
+      return count;
+    }
   }
 }

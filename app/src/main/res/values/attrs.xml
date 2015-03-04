@@ -27,8 +27,12 @@
         <attr name="drawable"/>
     </declare-styleable>
 
+    <!--标题栏样式-->
     <attr name="topBarStyle" format="reference"/>
+    <!--圆角按钮默认样式-->
     <attr name="roundedButtonStyle" format="reference"/>
+    <!--计数样式-->
+    <attr name="counterViewStyle" format="reference"/>
     <attr name="postEditTextStyle" format="reference"/>
     <attr name="refreshIndicatorStyle" format="reference"/>
 

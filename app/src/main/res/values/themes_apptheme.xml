@@ -26,6 +26,7 @@
         <item name="roundedButtonStyle">@style/Widget.RoundedButton.Apptheme</item>
         <item name="postEditTextStyle">@style/Widget.PostEditText.Apptheme</item>
         <item name="refreshIndicatorStyle">@style/Widget.RefreshIndicator.AppTheme</item>
+        <item name="counterViewStyle">@style/Widget.RoundedButton.Apptheme.Count</item>
 
         <item name="android:editTextStyle">@style/Widget.EditText.AppTheme</item>
         <item name="android:checkboxStyle">@style/Widget.CheckBox.AppTheme</item>
