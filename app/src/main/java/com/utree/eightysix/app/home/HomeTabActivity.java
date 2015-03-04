@@ -20,8 +20,11 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.explore.ExploreFragment;
+import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.MsgCenterFragment;
 import com.utree.eightysix.app.region.TabRegionFragment;
+import com.utree.eightysix.contact.ContactsSyncService;
+import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.RoundedButton;
 
 /**
@@ -29,6 +32,10 @@ import com.utree.eightysix.widget.RoundedButton;
 
 @Layout(R.layout.activity_home_tab)
 public class HomeTabActivity extends BaseActivity {
+
+  public static boolean sIsRunning = false;
+
+  private static final String FIRST_RUN_KEY = "feed";
 
   @InjectView(R.id.fl_feed)
   public FrameLayout mFlFeed;
@@ -133,12 +140,39 @@ public class HomeTabActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    ContactsSyncService.start(this, false);
+
+    setActionLeftDrawable(null);
+
     getHandler().postDelayed(new Runnable() {
       @Override
       public void run() {
         onTabItemClicked(mFlFeed);
       }
     }, 1000);
+
+    sIsRunning = true;
+
+    onNewIntent(getIntent());
+  }
+
+  @Override
+  protected void onStart() {
+    super.onStart();
+    startService(new Intent(this, FetchNotificationService.class));
+  }
+
+  @Override
+  protected void onStop() {
+    super.onStop();
+    stopService(new Intent(this, FetchNotificationService.class));
+  }
+
+  @Override
+  protected void onDestroy() {
+    sIsRunning = false;
+    Env.setFirstRun(FIRST_RUN_KEY, false);
+    super.onDestroy();
   }
 
   @Override
