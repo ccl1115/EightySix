@@ -34,7 +34,6 @@ import com.utree.eightysix.dao.Message;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
-import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.DaoUtils;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
@@ -348,10 +347,7 @@ public class ChatActivity extends BaseActivity implements
       finish();
     }
 
-    mChatAdapter = new ChatAdapter(mConversation.getMyPortrait(),
-        ColorUtil.strToColor(mConversation.getMyPortraitColor()),
-        mConversation.getPortrait(),
-        ColorUtil.strToColor(mConversation.getPortraitColor()));
+    mChatAdapter = new ChatAdapter(mConversation);
 
     mAlvChats.setAdapter(mChatAdapter);
 
