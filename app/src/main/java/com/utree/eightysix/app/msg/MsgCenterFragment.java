@@ -14,8 +14,10 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.chat.ConversationActivity;
+import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.event.HasNewPraiseEvent;
 import com.utree.eightysix.event.NewCommentCountEvent;
 import com.utree.eightysix.widget.RoundedButton;
@@ -26,6 +28,9 @@ public class MsgCenterFragment extends BaseFragment {
 
   @InjectView(R.id.rb_count_msg)
   public RoundedButton mRbCountMsg;
+
+  @InjectView(R.id.rb_count_chat)
+  public RoundedButton mRbCountChat;
 
   @InjectView(R.id.rb_praise)
   public RoundedButton mRbPraise;
@@ -75,12 +80,33 @@ public class MsgCenterFragment extends BaseFragment {
     }
   }
 
+  @Subscribe
+  public void onChatEvent(ChatEvent event) {
+    if (event.getStatus() == ChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT) {
+      if (((Integer) event.getObj()) == 0) {
+        mRbCountChat.setVisibility(View.INVISIBLE);
+      } else {
+        mRbCountChat.setVisibility(View.VISIBLE);
+      }
+      mRbCountChat.setText(String.valueOf(event.getObj()));
+    }
+  }
+
   @Override
   public void onAttach(Activity activity) {
     super.onAttach(activity);
 
+    U.getChatBus().register(this);
+
     getBaseActivity().setTopTitle("消息");
     getBaseActivity().setTopSubTitle("");
+  }
+
+  @Override
+  public void onDetach() {
+    super.onDetach();
+
+    U.getChatBus().unregister(this);
   }
 
   @Override
