@@ -342,8 +342,7 @@ public class ChatActivity extends BaseActivity implements
         .where(ConversationDao.Properties.ChatId.eq(mChatId))
         .unique();
 
-    setTopTitle(mConversation.getRelation());
-    setTopSubTitle("来自" + mConversation.getPostSource());
+    setTopTitle("悄悄话");
 
     if (mChatId == null) {
       finish();

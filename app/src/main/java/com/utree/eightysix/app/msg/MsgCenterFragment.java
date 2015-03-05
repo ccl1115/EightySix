@@ -16,6 +16,7 @@ import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
+import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.app.chat.ConversationActivity;
 import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.event.HasNewPraiseEvent;
@@ -58,6 +59,14 @@ public class MsgCenterFragment extends BaseFragment {
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
+
+    long unreadConversationCount = ChatUtils.ConversationUtil.getUnreadConversationCount();
+    if (unreadConversationCount == 0) {
+      mRbCountChat.setVisibility(View.INVISIBLE);
+    } else {
+      mRbCountChat.setVisibility(View.VISIBLE);
+    }
+    mRbCountChat.setText(String.valueOf(unreadConversationCount));
   }
 
   @Subscribe
@@ -83,7 +92,7 @@ public class MsgCenterFragment extends BaseFragment {
   @Subscribe
   public void onChatEvent(ChatEvent event) {
     if (event.getStatus() == ChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT) {
-      if (((Integer) event.getObj()) == 0) {
+      if (((Long) event.getObj()) == 0) {
         mRbCountChat.setVisibility(View.INVISIBLE);
       } else {
         mRbCountChat.setVisibility(View.VISIBLE);

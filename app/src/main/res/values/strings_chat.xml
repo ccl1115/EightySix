@@ -5,7 +5,7 @@
 
 <resources>
     <string name="start_chat">发起聊天</string>
-    <string name="chat_anonymous">匿名聊天</string>
+    <string name="chat_anonymous">悄悄话</string>
     <string name="resending">重新发送</string>
     <string name="chat_actions">聊天操作</string>
     <string name="confirm_report_chat">确认举报该对话？</string>
