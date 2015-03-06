@@ -14,72 +14,76 @@
             />
 
 
-    <FrameLayout
-            android:id="@+id/tb_fl_center"
+    <LinearLayout
+            android:id="@+id/tb_ll_title"
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:background="@drawable/apptheme_transparent_bg"
             >
 
+
         <LinearLayout
-                android:id="@+id/tb_ll_title"
-                android:orientation="horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:background="@drawable/apptheme_transparent_bg"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical"
                 >
 
-
-            <LinearLayout
+            <TextView
+                    android:id="@+id/tb_tv_bar_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:orientation="vertical"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="16sp"
+                    android:textColor="#fff7f7f7"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    />
+
+            <LinearLayout
+                    android:id="@+id/tb_ll_title_tab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
                     >
-
-                <TextView
-                        android:id="@+id/tb_tv_bar_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:textSize="16sp"
-                        android:textColor="#fff7f7f7"
-                        android:singleLine="true"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        />
-
-                <TextView
-                        android:id="@+id/tb_tv_sub_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:textSize="11sp"
-                        android:textColor="#fff7f7f7"
-                        android:visibility="gone"
-                        android:singleLine="true"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        tools:ignore="SmallSp"
-                        />
 
             </LinearLayout>
 
-
-            <ImageView
-                    android:id="@+id/tb_iv_indicator"
+            <TextView
+                    android:id="@+id/tb_tv_sub_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:src="@drawable/ic_tb_indicator"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="11sp"
+                    android:textColor="#fff7f7f7"
+                    android:visibility="gone"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    tools:ignore="SmallSp"
                     />
 
         </LinearLayout>
-    </FrameLayout>
+
+
+        <ImageView
+                android:id="@+id/tb_iv_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/ic_tb_indicator"
+                />
+
+    </LinearLayout>
 
     <com.utree.eightysix.widget.ActionButton
             android:id="@+id/tb_ab_right"

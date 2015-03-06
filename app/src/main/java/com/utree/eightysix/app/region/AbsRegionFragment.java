@@ -245,22 +245,34 @@ public abstract class AbsRegionFragment extends BaseFragment {
   @Override
   public void onHiddenChanged(boolean hidden) {
     if (!hidden) {
-      switch (getRegionType()) {
-        case 0:
-          getTopBar().setTitle(mCircle == null ? "" : mCircle.shortName);
-          break;
-        case 1:
-          getTopBar().setTitle("1公里内");
-          break;
-        case 2:
-          getTopBar().setTitle("5公里内");
-          break;
-        case 3:
-          getTopBar().setTitle("同城");
-          break;
-      }
-      getTopBar().setSubTitle(mSubInfo == null ? "" : mSubInfo);
+      updateTitleBar();
     }
+  }
+
+  public void updateTitleBar() {
+    getTopBar().setTitleAdapter(new TopBar.TitleAdapter() {
+      @Override
+      public String getTitle(int position) {
+        switch (position) {
+          case 0:
+            return "在职";
+          case 1:
+            return "附近";
+        }
+        return null;
+      }
+
+      @Override
+      public void onSelected(View view, int position) {
+
+      }
+
+      @Override
+      public int getCount() {
+        return 2;
+      }
+    });
+    getTopBar().setSubTitle(String.format("%s | %s", mCircle.shortName, mSubInfo == null ? "" : mSubInfo));
   }
 
   protected abstract void requestFeeds(final int regionType, final int page);
@@ -287,20 +299,6 @@ public abstract class AbsRegionFragment extends BaseFragment {
 
         Account.inst().setLastRegionType(getRegionType());
 
-        switch (getRegionType()) {
-          case 0:
-            getTopBar().setTitle(mCircle.shortName);
-            break;
-          case 1:
-            getTopBar().setTitle("1公里内");
-            break;
-          case 2:
-            getTopBar().setTitle("5公里内");
-            break;
-          case 3:
-            getTopBar().setTitle("同城");
-            break;
-        }
 
         U.getBus().post(new RegionResponseEvent(getRegionType(), mCircle));
       } else if (mFeedAdapter != null) {
@@ -309,7 +307,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
 
       mPageInfo = response.object.posts.page;
       mSubInfo = response.object.subInfo;
-      getTopBar().setSubTitle(mSubInfo);
+      updateTitleBar();
 
       if (response.object.fetch != null) {
         int count = 0;

@@ -10,7 +10,10 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
@@ -47,9 +50,6 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
   @InjectView(R.id.tb_et_search)
   public EditText mEtSearch;
 
-  @InjectView(R.id.tb_fl_center)
-  public FrameLayout mFlCenter;
-
   @InjectView(R.id.tb_rb_search)
   public RoundedButton mRbSearch;
 
@@ -65,7 +65,12 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
   @InjectView(R.id.refresh_indicator)
   public RefreshIndicator mRefreshIndicator;
 
+  @InjectView(R.id.tb_ll_title_tab)
+  public LinearLayout mLlTitleTab;
+
   private Callback mCallback;
+
+  private TitleAdapter mTitleAdapter;
 
   public TopBar(Context context) {
     this(context, null, R.attr.topBarStyle);
@@ -110,6 +115,8 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
   public void setTitle(String title) {
     mTitle.setText(title);
+    mTitle.setVisibility(VISIBLE);
+    mLlTitleTab.setVisibility(GONE);
   }
 
   public EditText getSearchEditText() {
@@ -195,6 +202,41 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     return mAbRight;
   }
 
+  public void setTitleAdapter(TitleAdapter adapter) {
+    mTitleAdapter = adapter;
+    mTitle.setVisibility(GONE);
+    mLlTitleTab.setVisibility(VISIBLE);
+
+    final int count = mTitleAdapter.getCount();
+
+    mLlTitleTab.removeAllViews();
+
+    final int p = U.dp2px(4);
+    for (int i = 0; i < count; i++) {
+      TextView t = new TextView(getContext());
+      t.setTextColor(getResources().getColorStateList(R.color.apptheme_primary_text_light));
+      t.setPadding(2 * p, p, 2 * p, p);
+      t.setText(mTitleAdapter.getTitle(i));
+
+      if (i == 0) {
+        t.setBackgroundResource(R.drawable.tb_title_left);
+      } else if (i == count - 1) {
+        t.setBackgroundResource(R.drawable.tb_title_right);
+      } else {
+        t.setBackgroundResource(R.drawable.tb_title_center);
+      }
+
+      final int finalI = i;
+      t.setOnClickListener(new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          mTitleAdapter.onSelected(v, finalI);
+        }
+      });
+      mLlTitleTab.addView(t);
+    }
+  }
+
   public void setTitleClickMode(int mode) {
     mTitleClickMode = mode;
 
@@ -231,10 +273,10 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     mAbRight.layout(r - mAbRight.getMeasuredWidth(), 0, r, b);
 
-    mFlCenter.layout((width - mFlCenter.getMeasuredWidth()) >> 1,
-        (height - mFlCenter.getMeasuredHeight()) >> 1,
-        (width + mFlCenter.getMeasuredWidth()) >> 1,
-        (height + mFlCenter.getMeasuredHeight()) >> 1);
+    mLlTitle.layout((width - mLlTitle.getMeasuredWidth()) >> 1,
+        (height - mLlTitle.getMeasuredHeight()) >> 1,
+        (width + mLlTitle.getMeasuredWidth()) >> 1,
+        (height + mLlTitle.getMeasuredHeight()) >> 1);
 
     mLlSearch.layout(mAbLeft.getRight(), 0, mAbLeft.getRight() + mLlSearch.getMeasuredWidth(), b);
 
@@ -286,7 +328,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     widthLeft -= mAbLeft.getMeasuredWidth();
 
-    measureChild(mFlCenter, widthLeft + MeasureSpec.AT_MOST, heightSize + MeasureSpec.EXACTLY);
+    measureChild(mLlTitle, widthLeft + MeasureSpec.AT_MOST, heightSize + MeasureSpec.EXACTLY);
 
     measureChild(mLlSearch, widthSize - mAbLeft.getRight() + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
 
@@ -307,6 +349,14 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     int getCount();
 
     LayoutParams getLayoutParams(int position);
+  }
+
+  public interface TitleAdapter {
+    String getTitle(int position);
+
+    void onSelected(View view, int position);
+
+    int getCount();
   }
 
   public interface Callback {

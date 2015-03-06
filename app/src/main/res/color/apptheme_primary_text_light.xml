@@ -3,5 +3,6 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:color="@android:color/white" android:state_enabled="true" android:state_pressed="false"/>
     <item android:color="@color/apptheme_primary_grey_color_pressed" android:state_enabled="true" android:state_pressed="true"/>
+    <item android:color="@color/apptheme_primary_grey_color_pressed" android:state_selected="true"/>
     <item android:color="@color/apptheme_primary_grey_color_disabled" android:state_enabled="false"/>
 </selector>
