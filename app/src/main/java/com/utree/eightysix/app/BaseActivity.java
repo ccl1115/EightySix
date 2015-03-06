@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.ResultReceiver;
 import android.support.v4.app.FragmentActivity;
-import android.util.*;
 import android.view.*;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -27,8 +26,6 @@ import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.event.LogoutListener;
 import com.utree.eightysix.rest.*;
 import com.utree.eightysix.utils.Env;
-import com.utree.eightysix.widget.ITopBar2;
-import com.utree.eightysix.widget.RefreshIndicator;
 import com.utree.eightysix.widget.TopBar;
 
 import java.io.InputStream;
@@ -543,15 +540,15 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
 
   protected final void setActionLeftDrawable(Drawable drawable) {
     if (drawable == null) {
-      mTopBar.mActionLeft.setPadding(U.dp2px(10), 0, 0, 0);
+      mTopBar.mAbLeft.setPadding(U.dp2px(10), 0, 0, 0);
     } else {
-      mTopBar.mActionLeft.setPadding(0, 0, 0, 0);
+      mTopBar.mAbLeft.setPadding(0, 0, 0, 0);
     }
-    mTopBar.mActionLeft.setImageDrawable(drawable);
+    mTopBar.mAbLeft.setDrawable(drawable);
   }
 
   protected final void setActionLeftVisibility(int visibility) {
-    mTopBar.mActionLeft.setVisibility(visibility);
+    mTopBar.mAbLeft.setVisibility(visibility);
   }
 
 

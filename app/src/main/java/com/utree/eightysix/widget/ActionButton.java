@@ -1,18 +1,17 @@
 package com.utree.eightysix.widget;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.SparseBooleanArray;
-import android.view.Gravity;
-import android.view.ViewGroup;
+import android.view.LayoutInflater;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import com.utree.eightysix.R;
-import com.utree.eightysix.U;
-import com.utree.eightysix.drawable.RoundRectDrawable;
 
 /**
  * @author simon
@@ -21,14 +20,19 @@ public class ActionButton extends FrameLayout {
 
   private boolean mHasNew;
 
-  private Drawable mNewIndicator;
-
-  private TextView mCountIndicator;
-
-  private final int kIndicatorMargin;
-  private final int kIndicatorSize;
-
   private SparseBooleanArray mHasNews = new SparseBooleanArray();
+
+  @InjectView(R.id.tv)
+  public TextView mTv;
+
+  @InjectView(R.id.iv)
+  public ImageView mIv;
+
+  @InjectView(R.id.cv)
+  public CounterView mCv;
+
+  @InjectView(R.id.rb_new)
+  public RoundedButton mRbNew;
 
   public ActionButton(Context context) {
     this(context, null);
@@ -37,46 +41,49 @@ public class ActionButton extends FrameLayout {
   public ActionButton(Context context, AttributeSet attrs) {
     super(context, attrs);
 
-    kIndicatorMargin = U.dp2px(8);
-    kIndicatorSize = U.dp2px(8);
+    LayoutInflater.from(context).inflate(R.layout.widget_action_button, this, true);
 
-    mNewIndicator =
-        new RoundRectDrawable(U.dp2px(10), getResources().getColor(R.color.apptheme_secondary_light_color));
-
-    mCountIndicator = new TextView(context);
-    mCountIndicator.setSingleLine(true);
-    mCountIndicator.setTextSize(12);
-    mCountIndicator.setTextColor(Color.WHITE);
-    final int p = U.dp2px(5);
-    mCountIndicator.setPadding(p, 0, p, 0);
-    mCountIndicator.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(10),
-        getResources().getColor(R.color.apptheme_secondary_light_color)));
-    LayoutParams params =
-        new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-    final int m = kIndicatorMargin;
-    params.setMargins(m, m, m, m);
-    params.gravity = Gravity.RIGHT;
-    mCountIndicator.setLayoutParams(params);
-    addView(mCountIndicator);
-    mCountIndicator.setVisibility(GONE);
-
-    mNewIndicator.setCallback(this);
+    ButterKnife.inject(this);
   }
 
   public void setActionLayoutParams(LayoutParams params) {}
 
   public void setActionBackgroundDrawable(Drawable drawable) {}
 
+  public void setDrawable(Drawable drawable) {
+    if (drawable != null) {
+      mIv.setVisibility(VISIBLE);
+      mTv.setVisibility(GONE);
+      mIv.setImageDrawable(drawable);
+    } else {
+      mIv.setVisibility(GONE);
+      mTv.setVisibility(VISIBLE);
+    }
+  }
+
+  public void setText(CharSequence text) {
+    if (!TextUtils.isEmpty(text)) {
+      mTv.setVisibility(VISIBLE);
+      mTv.setText(text);
+      mIv.setVisibility(GONE);
+    } else {
+      mIv.setVisibility(VISIBLE);
+      mTv.setVisibility(GONE);
+    }
+  }
+
   public void setHasNew(boolean n) {
     mHasNew = n;
-    requestLayout();
-    invalidate();
+    if (mHasNew) {
+      mRbNew.setVisibility(VISIBLE);
+      mCv.setVisibility(GONE);
+    } else {
+      mRbNew.setVisibility(GONE);
+    }
   }
 
   public void setHasNew(int index, boolean n) {
     mHasNews.append(index, n);
-
-    mHasNew = false;
 
     for (int i = 0, size = mHasNews.size(); i < size; i++) {
       if (mHasNews.get(i, false)) {
@@ -84,37 +91,24 @@ public class ActionButton extends FrameLayout {
       }
     }
 
-    requestLayout();
-    invalidate();
+    if (mHasNew) {
+      mRbNew.setVisibility(VISIBLE);
+      mCv.setVisibility(GONE);
+    } else {
+      mRbNew.setVisibility(GONE);
+    }
   }
 
   public void setCount(int c) {
     if (c > 99) {
       c = 99;
     }
-    mCountIndicator.setText(String.valueOf(c));
+    mCv.setText(String.valueOf(c));
     if (c > 0) {
-      mCountIndicator.setVisibility(VISIBLE);
+      mCv.setVisibility(VISIBLE);
+      mRbNew.setVisibility(GONE);
     } else {
-      mCountIndicator.setVisibility(GONE);
-    }
-    requestLayout();
-    invalidate();
-  }
-
-  @Override
-  protected void onLayout(boolean changed, int l, int t, int r, int b) {
-    super.onLayout(changed, l, t, r, b);
-    mNewIndicator.setBounds(r - l - kIndicatorMargin - kIndicatorSize, t + kIndicatorMargin,
-        r - l - kIndicatorMargin, t + kIndicatorMargin + kIndicatorSize);
-  }
-
-  @Override
-  protected void dispatchDraw(Canvas canvas) {
-    super.dispatchDraw(canvas);
-
-    if (mHasNew) {
-      mNewIndicator.draw(canvas);
+      mCv.setVisibility(GONE);
     }
   }
 }

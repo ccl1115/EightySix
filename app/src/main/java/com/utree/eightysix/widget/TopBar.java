@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -19,9 +18,6 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import de.akquinet.android.androlog.Log;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  */
 public class TopBar extends ViewGroup implements View.OnClickListener {
@@ -29,7 +25,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
   public static final int TITLE_CLICK_MODE_ONE = 1;
   private int mTitleClickMode = TITLE_CLICK_MODE_ONE;
   public static final int TITLE_CLICK_MODE_DIVIDE = 2;
-  private final List<ActionButton> mActionViews = new ArrayList<ActionButton>();
+
   private final Paint mTopLinePaint = new Paint();
   private final Paint mBotLinePaint = new Paint();
 
@@ -39,20 +35,17 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
   @InjectView(R.id.tb_tv_sub_title)
   public TextView mSubTitle;
 
-  @InjectView(R.id.tb_iab_action_overflow)
-  public ImageActionButton mActionOverFlow;
+  @InjectView(R.id.tb_ab_right)
+  public ActionButton mAbRight;
 
-  @InjectView(R.id.tb_iv_action_left)
-  public ImageView mActionLeft;
+  @InjectView(R.id.tb_ab_left)
+  public ActionButton mAbLeft;
 
   @InjectView(R.id.tb_iv_search_close)
   public ImageView mIvSearchClose;
 
   @InjectView(R.id.tb_et_search)
   public EditText mEtSearch;
-
-  @InjectView(R.id.tb_ll_left)
-  public LinearLayout mLlLeft;
 
   @InjectView(R.id.tb_fl_center)
   public FrameLayout mFlCenter;
@@ -73,8 +66,6 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
   public RefreshIndicator mRefreshIndicator;
 
   private Callback mCallback;
-  private ActionAdapter mActionAdapter;
-  private int mCurCount;
 
   public TopBar(Context context) {
     this(context, null, R.attr.topBarStyle);
@@ -100,7 +91,11 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     mTopLinePaint.setStrokeWidth(1);
     mBotLinePaint.setStrokeWidth(1);
 
-    mActionOverFlow.setBackgroundDrawable(getResources().getDrawable(R.drawable.apptheme_primary_btn_dark));
+    mAbLeft.setBackgroundDrawable(getResources().getDrawable(R.drawable.apptheme_primary_btn_dark));
+    mAbRight.setBackgroundDrawable(getResources().getDrawable(R.drawable.apptheme_primary_btn_dark));
+
+    mAbLeft.setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+    mAbRight.setDrawable(getResources().getDrawable(R.drawable.ic_action_overflow));
 
     setOnClickListener(this);
 
@@ -131,32 +126,6 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
   }
 
   public void setActionAdapter(ActionAdapter actionAdapter) {
-    mActionAdapter = actionAdapter;
-    mCurCount = mActionAdapter == null ? 0 : mActionAdapter.getCount();
-    if (mCurCount < 0) throw new IllegalArgumentException("Count less than 0");
-
-    for (View v : mActionViews) {
-      v.setOnClickListener(null);
-      v.setBackgroundDrawable(null);
-      removeView(v);
-    }
-    mActionViews.clear();
-
-    for (int i = 0; i < mCurCount; i++) {
-      ActionButton view;
-      LayoutParams layoutParams = mActionAdapter.getLayoutParams(i);
-      if (layoutParams == null)
-        layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-      if (TextUtils.isEmpty(mActionAdapter.getTitle(i))) {
-        view = buildActionItemView(mActionAdapter.getIcon(i), mActionAdapter.getBackgroundDrawable(i), layoutParams);
-      } else {
-        view = buildActionItemView(mActionAdapter.getTitle(i), mActionAdapter.getBackgroundDrawable(i), layoutParams);
-      }
-      addView(view, 0);
-      mActionViews.add(view);
-    }
-    requestLayout();
-    invalidate();
   }
 
   public void setCallback(Callback callback) {
@@ -175,21 +144,6 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
   @Override
   public void onClick(View v) {
-
-    final int id = v.getId();
-
-    switch (id) {
-      default:
-        for (int i = 0; i < mActionViews.size(); i++) {
-          View view = mActionViews.get(i);
-
-          if (view.equals(v)) {
-            mActionAdapter.onClick(view, i);
-            break;
-          }
-        }
-        break;
-    }
   }
 
   @OnClick(R.id.tb_iv_search_close)
@@ -197,7 +151,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     mEtSearch.setText("");
   }
 
-  @OnClick(R.id.tb_ll_left)
+  @OnClick(R.id.tb_ab_left)
   public void onActionLeftClicked() {
     if (mTitleClickMode == TITLE_CLICK_MODE_ONE) {
       if (mCallback != null) mCallback.onActionLeftClicked();
@@ -211,7 +165,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     }
   }
 
-  @OnClick(R.id.tb_iab_action_overflow)
+  @OnClick(R.id.tb_ab_right)
   public void onActionOverflowClicked(View v) {
     if (mCallback != null) mCallback.onActionOverflowClicked();
   }
@@ -234,11 +188,11 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
   }
 
   public ActionButton getActionView(int position) {
-    return mActionViews.get(position);
+    return null;
   }
 
   public ActionButton getActionOverflow() {
-    return mActionOverFlow;
+    return mAbRight;
   }
 
   public void setTitleClickMode(int mode) {
@@ -246,11 +200,9 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     if (mTitleClickMode == TITLE_CLICK_MODE_ONE) {
       mLlTitle.setClickable(false);
-      mLlLeft.setClickable(true);
       mIvIndicator.setVisibility(GONE);
     } else {
       mLlTitle.setClickable(true);
-      mLlLeft.setClickable(false);
       mIvIndicator.setVisibility(VISIBLE);
     }
   }
@@ -275,16 +227,16 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     final int height = b - t;
     final int width = r - l;
 
-    mLlLeft.layout(0, 0, mLlLeft.getMeasuredWidth(), b);
+    mAbLeft.layout(0, 0, mAbLeft.getMeasuredWidth(), b);
 
-    mActionOverFlow.layout(r - mActionOverFlow.getMeasuredWidth(), 0, r, b);
+    mAbRight.layout(r - mAbRight.getMeasuredWidth(), 0, r, b);
 
     mFlCenter.layout((width - mFlCenter.getMeasuredWidth()) >> 1,
         (height - mFlCenter.getMeasuredHeight()) >> 1,
         (width + mFlCenter.getMeasuredWidth()) >> 1,
         (height + mFlCenter.getMeasuredHeight()) >> 1);
 
-    mLlSearch.layout(mLlLeft.getRight(), 0, mLlLeft.getRight() + mLlSearch.getMeasuredWidth(), b);
+    mLlSearch.layout(mAbLeft.getRight(), 0, mAbLeft.getRight() + mLlSearch.getMeasuredWidth(), b);
 
     mRefreshIndicator.layout(0, 0, r - l, b - t);
   }
@@ -323,54 +275,24 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     int widthLeft = widthSize;
 
     if (mCallback != null && mCallback.showActionOverflow()) {
-      measureChild(mActionOverFlow, (int) (heightSize * 0.9f) + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
+      measureChild(mAbRight, (int) (heightSize * 0.9f) + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
+    } else {
+      measureChild(mAbRight, MeasureSpec.EXACTLY, MeasureSpec.EXACTLY);
     }
 
-    widthLeft -= mActionOverFlow.getMeasuredWidth();
+    widthLeft -= mAbRight.getMeasuredWidth();
 
-    measureChild(mLlLeft, widthLeft + MeasureSpec.AT_MOST, heightSize + MeasureSpec.EXACTLY);
+    measureChild(mAbLeft, widthLeft + MeasureSpec.AT_MOST, heightSize + MeasureSpec.EXACTLY);
 
-    widthLeft -= mLlLeft.getMeasuredWidth();
+    widthLeft -= mAbLeft.getMeasuredWidth();
 
     measureChild(mFlCenter, widthLeft + MeasureSpec.AT_MOST, heightSize + MeasureSpec.EXACTLY);
 
-    measureChild(mLlSearch, widthSize - mLlLeft.getRight() + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
+    measureChild(mLlSearch, widthSize - mAbLeft.getRight() + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
 
     measureChild(mRefreshIndicator, widthSize + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
 
     setMeasuredDimension(widthSize, heightSize);
-  }
-
-  private ActionButton buildActionItemView(Drawable drawable, Drawable backgroundDrawable, LayoutParams layoutParams) {
-    if (drawable == null) return null;
-
-    final ImageActionButton imageView = new ImageActionButton(getContext());
-    imageView.setImageDrawable(drawable);
-    imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-    imageView.setLayoutParams(layoutParams);
-    imageView.setActionBackgroundDrawable(backgroundDrawable);
-    imageView.setOnClickListener(this);
-
-    return imageView;
-  }
-
-  private ActionButton buildActionItemView(String text, Drawable backgroundDrawable, LayoutParams layoutParams) {
-    if (TextUtils.isEmpty(text)) return null;
-
-    final TextActionButton button = new TextActionButton(getContext());
-    button.setActionBackgroundDrawable(backgroundDrawable);
-    button.setLayoutParams(layoutParams);
-    button.setTextSize(14);
-    button.setText(text);
-    button.setGravity(Gravity.CENTER);
-    button.setTextColor(getResources().getColor(R.color.apptheme_primary_text_light));
-    button.setSingleLine(true);
-    button.setLines(1);
-    button.setOnClickListener(this);
-    final int hPadding = U.dp2px(8);
-    final int vPadding = U.dp2px(6);
-    button.setActionPadding(hPadding, vPadding, hPadding, vPadding);
-    return button;
   }
 
   public interface ActionAdapter {
