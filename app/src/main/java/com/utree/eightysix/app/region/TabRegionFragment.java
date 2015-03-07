@@ -158,13 +158,17 @@ public class TabRegionFragment extends BaseFragment {
     super.onAttach(activity);
     getBaseActivity().setTopTitle("");
     getBaseActivity().setTopSubTitle("");
+
+    getBaseActivity().getTopBar().getAbRight().setText(getString(R.string.snapshot));
   }
 
   @Override
   public void onHiddenChanged(boolean hidden) {
     if (!hidden) {
-      mFeedFragment.onHiddenChanged(hidden);
+      mFeedFragment.onHiddenChanged(false);
     }
+
+    getBaseActivity().getTopBar().getAbRight().setText(getString(R.string.snapshot));
   }
 
   @Subscribe

@@ -7,7 +7,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
              android:layout_width="wrap_content"
-             android:layout_height="match_parent">
+             android:layout_height="match_parent"
+        >
 
     <com.utree.eightysix.widget.CounterView
             android:id="@+id/cv"
@@ -22,7 +23,7 @@
             android:id="@+id/rb_new"
             android:layout_width="4dp"
             android:layout_height="4dp"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             android:layout_margin="4dp"
             android:visibility="gone"
             app:radius="8dp"
@@ -35,6 +36,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="gone"
+            android:textColor="@color/apptheme_primary_text_light"
+            android:background="@drawable/tb_title_center"
+            android:padding="4dp"
             />
 
     <ImageView

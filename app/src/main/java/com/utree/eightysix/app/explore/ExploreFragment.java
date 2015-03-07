@@ -62,11 +62,17 @@ public class ExploreFragment extends BaseFragment {
     super.onAttach(activity);
     getBaseActivity().setTopTitle("发现");
     getBaseActivity().setTopSubTitle("");
+    getBaseActivity().getTopBar().getAbRight().hide();
+    getBaseActivity().getTopBar().getAbLeft().hide();
   }
 
   @Override
   public void onHiddenChanged(boolean hidden) {
-    getBaseActivity().setTopTitle("发现");
-    getBaseActivity().setTopSubTitle("");
+    if (!hidden) {
+      getBaseActivity().setTopTitle("发现");
+      getBaseActivity().setTopSubTitle("");
+      getBaseActivity().getTopBar().getAbRight().hide();
+      getBaseActivity().getTopBar().getAbLeft().hide();
+    }
   }
 }

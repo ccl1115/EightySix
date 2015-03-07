@@ -96,8 +96,6 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     mTopLinePaint.setStrokeWidth(1);
     mBotLinePaint.setStrokeWidth(1);
 
-    mAbLeft.setBackgroundDrawable(getResources().getDrawable(R.drawable.apptheme_primary_btn_dark));
-    mAbRight.setBackgroundDrawable(getResources().getDrawable(R.drawable.apptheme_primary_btn_dark));
 
     mAbLeft.setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
     mAbRight.setDrawable(getResources().getDrawable(R.drawable.ic_action_overflow));
@@ -199,7 +197,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
   }
 
   public ActionButton getActionOverflow() {
-    return mAbRight;
+    return getAbRight();
   }
 
   public void setTitleAdapter(TitleAdapter adapter) {
@@ -316,11 +314,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     int widthLeft = widthSize;
 
-    if (mCallback != null && mCallback.showActionOverflow()) {
-      measureChild(mAbRight, (int) (heightSize * 0.9f) + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
-    } else {
-      measureChild(mAbRight, MeasureSpec.EXACTLY, MeasureSpec.EXACTLY);
-    }
+    measureChild(mAbRight, (int) (heightSize * 0.9f) + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
 
     widthLeft -= mAbRight.getMeasuredWidth();
 
@@ -335,6 +329,14 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     measureChild(mRefreshIndicator, widthSize + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
 
     setMeasuredDimension(widthSize, heightSize);
+  }
+
+  public ActionButton getAbRight() {
+    return mAbRight;
+  }
+
+  public ActionButton getAbLeft() {
+    return mAbLeft;
   }
 
   public interface ActionAdapter {

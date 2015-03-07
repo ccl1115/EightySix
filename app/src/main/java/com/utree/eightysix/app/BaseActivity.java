@@ -540,15 +540,15 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
 
   protected final void setActionLeftDrawable(Drawable drawable) {
     if (drawable == null) {
-      mTopBar.mAbLeft.setPadding(U.dp2px(10), 0, 0, 0);
+      mTopBar.getAbLeft().setPadding(U.dp2px(10), 0, 0, 0);
     } else {
-      mTopBar.mAbLeft.setPadding(0, 0, 0, 0);
+      mTopBar.getAbLeft().setPadding(0, 0, 0, 0);
     }
-    mTopBar.mAbLeft.setDrawable(drawable);
+    mTopBar.getAbLeft().setDrawable(drawable);
   }
 
   protected final void setActionLeftVisibility(int visibility) {
-    mTopBar.mAbLeft.setVisibility(visibility);
+    mTopBar.getAbLeft().setVisibility(visibility);
   }
 
 

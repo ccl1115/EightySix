@@ -109,6 +109,9 @@ public class MsgCenterFragment extends BaseFragment {
 
     getBaseActivity().setTopTitle("消息");
     getBaseActivity().setTopSubTitle("");
+
+    getBaseActivity().getTopBar().getAbLeft().hide();
+    getBaseActivity().getTopBar().getAbRight().hide();
   }
 
   @Override
@@ -125,6 +128,9 @@ public class MsgCenterFragment extends BaseFragment {
     if (!hidden) {
       getBaseActivity().setTopTitle("消息");
       getBaseActivity().setTopSubTitle("");
+
+      getBaseActivity().getTopBar().getAbLeft().hide();
+      getBaseActivity().getTopBar().getAbRight().hide();
     }
   }
 }
