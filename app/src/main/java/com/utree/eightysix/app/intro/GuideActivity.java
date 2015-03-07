@@ -119,7 +119,6 @@ public class GuideActivity extends BaseActivity {
             mPage3ViewHolder = new Page3ViewHolder(inflate);
             container.addView(inflate);
             mPage3ViewHolder.mPostPostView.mTvPraise.setOnClickListener(null);
-            mPage3ViewHolder.mPostPostView.mIvChat.setOnClickListener(null);
             mPage3ViewHolder.mPostPostView.setData(LOCAL_POST);
             mPage3ViewHolder.mPostPostView.mAivBg.setImageResource(mRandomBg);
             return inflate;

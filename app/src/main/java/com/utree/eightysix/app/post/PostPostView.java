@@ -1,6 +1,8 @@
 package com.utree.eightysix.app.post;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -22,6 +24,7 @@ import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.app.tag.TagTabActivity;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.data.Tag;
+import com.utree.eightysix.request.PostDeleteRequest;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.TagView;
@@ -59,9 +62,6 @@ public class PostPostView extends LinearLayout {
   @InjectView (R.id.tv_tag_2)
   public TagView mTvTag2;
 
-  @InjectView(R.id.iv_chat)
-  public ImageView mIvChat;
-
   private Post mPost;
 
   public PostPostView(Context context) {
@@ -98,9 +98,56 @@ public class PostPostView extends LinearLayout {
     }
   }
 
-  @OnClick(R.id.iv_chat)
-  public void onIvChatClicked() {
-    ChatUtils.startChat((BaseActivity) getContext(), mPost);
+  @OnClick(R.id.iv_more)
+  public void onIvMoreClicked() {
+    if (mPost == null) return;
+    
+    U.getAnalyser().trackEvent(U.getContext(), "post_more", "post_more");
+    String[] items;
+    if (mPost.owner == 1) {
+      items = new String[]{U.gs(R.string.share),
+          getResources().getString(R.string.start_chat),
+          getResources().getString(R.string.report),
+          getResources().getString(R.string.like),
+          getResources().getString(R.string.delete)};
+    } else {
+      items = new String[]{U.gs(R.string.share),
+          getResources().getString(R.string.start_chat),
+          getResources().getString(R.string.report),
+          getResources().getString(R.string.like)};
+    }
+    new AlertDialog.Builder(getContext()).setTitle(U.gs(R.string.post_action))
+        .setItems(items,
+            new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                  case 0:
+                    U.getAnalyser().trackEvent(U.getContext(), "post_more_share", "post_more_share");
+                    U.getShareManager().sharePostDialog(((BaseActivity) getContext()), mPost).show();
+                    break;
+                  case 1:
+                    ChatUtils.startChat(((BaseActivity) getContext()), mPost);
+                    break;
+                  case 2:
+                    U.getAnalyser().trackEvent(U.getContext(), "post_more_report", "post_more_report");
+                    new ReportDialog(getContext(), mPost.id).show();
+                    break;
+                  case 3:
+                    if (mPost == null) return;
+                    if (mPost.praised != 1) {
+                      U.getAnalyser().trackEvent(U.getContext(), "post_more_praise", "praise");
+                      doPraise();
+                    }
+                    break;
+                  case 4:
+                    U.getAnalyser().trackEvent(U.getContext(), "post_more_delete", "post_more_delete");
+                    U.getBus().post(new PostDeleteRequest(mPost.id));
+                    break;
+                }
+              }
+            }).create().show();
+
   }
 
   public void setData(Post post) {

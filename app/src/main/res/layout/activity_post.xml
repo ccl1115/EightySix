@@ -50,13 +50,5 @@
                 android:src="@drawable/ic_action_post_close"
                 />
 
-        <ImageView
-                android:id="@+id/iv_more"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|top"
-                android:background="@drawable/apptheme_transparent_bg"
-                android:src="@drawable/ic_action_post_more"
-                />
     </FrameLayout>
 </FrameLayout>

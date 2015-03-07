@@ -155,59 +155,6 @@ public class PostActivity extends BaseActivity
     finishOrShowQuitConfirmDialog();
   }
 
-  @OnClick(R.id.iv_more)
-  public void onIvMoreClicked() {
-    if (mPost == null) return;
-
-    U.getAnalyser().trackEvent(U.getContext(), "post_more", "post_more");
-    String[] items;
-    if (mPost.owner == 1) {
-      items = new String[]{U.gs(R.string.share),
-          getString(R.string.start_chat),
-          getString(R.string.report),
-          getString(R.string.like),
-          getString(R.string.delete)};
-    } else {
-      items = new String[]{U.gs(R.string.share),
-          getString(R.string.start_chat),
-          getString(R.string.report),
-          getString(R.string.like)};
-    }
-    new AlertDialog.Builder(this).setTitle(U.gs(R.string.post_action))
-        .setItems(items,
-            new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                  case 0:
-                    U.getAnalyser().trackEvent(U.getContext(), "post_more_share", "post_more_share");
-                    U.getShareManager().sharePostDialog(PostActivity.this, mPost).show();
-                    break;
-                  case 1:
-                    ChatUtils.startChat(PostActivity.this, mPost);
-                    break;
-                  case 2:
-                    U.getAnalyser().trackEvent(U.getContext(), "post_more_report", "post_more_report");
-                    new ReportDialog(PostActivity.this, mPost.id).show();
-                    break;
-                  case 3:
-                    if (mPost == null) return;
-                    if (mPost.praised != 1) {
-                      U.getAnalyser().trackEvent(U.getContext(), "post_more_praise", "praise");
-                      mPostCommentsAdapter.getPostPostView().doPraise();
-                    }
-                    mPostCommentsAdapter.notifyDataSetChanged();
-                    break;
-                  case 4:
-                    U.getAnalyser().trackEvent(U.getContext(), "post_more_delete", "post_more_delete");
-                    U.getBus().post(new PostDeleteRequest(mPost.id));
-                    break;
-                }
-              }
-            }).create().show();
-  }
-
-
   @OnItemClick (R.id.lv_comments)
   public void onLvCommentsItemClicked(final int position) {
     if (position == 0) return;
