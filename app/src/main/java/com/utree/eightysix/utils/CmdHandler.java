@@ -8,7 +8,6 @@ import android.content.Context;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.FeedActivity;
-import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.app.home.HomeTabActivity;
 import com.utree.eightysix.app.msg.MsgActivity;
 import com.utree.eightysix.app.msg.PraiseActivity;
@@ -33,7 +32,7 @@ public class CmdHandler {
   public void handle(Context context, String cmd) {
     String[] args = cmd.split(":", 2);
 
-    if (!HomeActivity.sIsRunning) {
+    if (!HomeTabActivity.sIsRunning) {
       HomeTabActivity.start(context);
     }
 

@@ -25,6 +25,7 @@ import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
+import com.utree.eightysix.app.snapshot.SnapshotActivity;
 import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TitleTab;
 
@@ -198,6 +199,15 @@ public class TabRegionFragment extends BaseFragment {
     getBaseActivity().setTopSubTitle("");
 
     getBaseActivity().getTopBar().getAbRight().setText(getString(R.string.snapshot));
+
+    getBaseActivity().getTopBar().getAbRight().setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            SnapshotActivity.start(getActivity(), mFeedFragment.getCircle());
+          }
+        }
+    );
   }
 
   @Override
@@ -207,6 +217,15 @@ public class TabRegionFragment extends BaseFragment {
     }
 
     getBaseActivity().getTopBar().getAbRight().setText(getString(R.string.snapshot));
+
+    getBaseActivity().getTopBar().getAbRight().setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            SnapshotActivity.start(getActivity(), mFeedFragment.getCircle());
+          }
+        }
+    );
   }
 
   @Subscribe

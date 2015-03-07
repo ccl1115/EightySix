@@ -109,6 +109,8 @@
 
         <activity android:clearTaskOnLaunch="true" android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.home.HomeActivity" android:screenOrientation="portrait"/>
 
+        <activity android:clearTaskOnLaunch="true" android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.home.HomeTabActivity" android:screenOrientation="portrait"/>
+
         <activity android:exported="@bool/exported" android:name=".app.intro.GuideActivity" android:screenOrientation="portrait"/>
 
         <activity android:exported="@bool/exported" android:name=".app.publish.PublishActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden|adjustResize"/>
@@ -170,6 +172,8 @@
         <activity android:exported="@bool/exported" android:label="厂区快照" android:name=".app.snapshot.SnapshotActivity" android:screenOrientation="portrait"/>
 
         <activity android:exported="@bool/exported" android:name=".app.web.BainianWebActivity" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.FragmentHolder" android:screenOrientation="portrait"/>
 
         <service android:enabled="true" android:name=".contact.ContactsSyncService"/>
         <service android:enabled="true" android:name=".app.msg.FetchNotificationService"/>
@@ -243,9 +247,6 @@
             </intent-filter>
         </activity>
         <activity android:label="开发者模式" android:name=".app.devmode.DevModeActivity"/>
-        <activity android:name=".app.home.HomeTabActivity"/>
-        <activity android:name=".app.msg.MsgCenterFragment"/>
-        <activity android:name=".app.FragmentHolder"/>
 
         <!-- 【必须】 信鸽service -->
         <service android:exported="true" android:name="com.tencent.android.tpush.service.XGPushService" android:persistent="true" android:process=":xg_service_v2" tools:ignore="ExportedService"/>
