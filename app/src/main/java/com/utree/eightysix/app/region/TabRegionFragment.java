@@ -6,21 +6,26 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseFragment;
-import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
 import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
+import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
+import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TitleTab;
 
 /**
@@ -37,6 +42,7 @@ public class TabRegionFragment extends BaseFragment {
   private FeedRegionFragment mFeedFragment;
   private HotFeedRegionFragment mHotFeedFragment;
   private FriendsFeedRegionFragment mFriendsFeedFragment;
+  private ThemedDialog mNoPermDialog;
 
   public TabRegionFragment() {
     mFeedFragment = new FeedRegionFragment();
@@ -46,7 +52,39 @@ public class TabRegionFragment extends BaseFragment {
 
   @OnClick(R.id.ib_send)
   public void onIbSendClicked() {
-    U.getBus().post(new StartPublishActivityEvent());
+    if (!canPublish()) {
+      showNoPermDialog();
+    } else {
+      PublishActivity.start(getActivity(), -1, null);
+    }
+  }
+
+  private void showNoPermDialog() {
+    if (mNoPermDialog == null) {
+      mNoPermDialog = new ThemedDialog(getActivity());
+      View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_publish_locked, null);
+      NoPermViewHolder noPermViewHolder = new NoPermViewHolder(view);
+      String tip = getString(R.string.no_perm_tip);
+      int index = tip.indexOf("解锁条件");
+      ForegroundColorSpan span = new ForegroundColorSpan(
+          getResources().getColor(R.color.apptheme_primary_light_color));
+      SpannableString spannableString = new SpannableString(tip);
+      spannableString.setSpan(span, index, index + 4, 0);
+      noPermViewHolder.mTvNoPermTip.setText(spannableString);
+      mNoPermDialog.setContent(view);
+      mNoPermDialog.setPositive(R.string.invite_people, new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          mNoPermDialog.dismiss();
+          U.getShareManager().shareAppDialog(getBaseActivity(), mFeedFragment.getCircle());
+        }
+      });
+      mNoPermDialog.setTitle(getString(R.string.no_perm_to_publish));
+    }
+
+    if (!mNoPermDialog.isShowing()) {
+      mNoPermDialog.show();
+    }
   }
 
   @Override
@@ -261,5 +299,16 @@ public class TabRegionFragment extends BaseFragment {
     if (mFeedFragment != null) mFeedFragment.setActive(false);
     if (mHotFeedFragment != null) mHotFeedFragment.setActive(false);
     if (mFriendsFeedFragment != null) mFriendsFeedFragment.setActive(false);
+  }
+
+  @Keep
+  class NoPermViewHolder {
+
+    @InjectView (R.id.tv_no_perm_tip)
+    TextView mTvNoPermTip;
+
+    NoPermViewHolder(View view) {
+      ButterKnife.inject(this, view);
+    }
   }
 }
