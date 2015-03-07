@@ -82,9 +82,6 @@ public class FeedAdapter extends FeedRegionAdapter {
       case DismissTipOverlayEvent.TYPE_PRAISE:
         mTipPraisePosition = TNS;
         break;
-      case DismissTipOverlayEvent.TYPE_SHARE:
-        mTipSharePosition = TNS;
-        break;
       case DismissTipOverlayEvent.TYPE_SOURCE:
         mTipSourcePosition = TNS;
         break;

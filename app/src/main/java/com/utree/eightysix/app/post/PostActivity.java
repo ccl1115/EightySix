@@ -57,7 +57,9 @@ import java.util.regex.Pattern;
  * @author simon
  */
 @Layout (R.layout.activity_post)
-public class PostActivity extends BaseActivity implements EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener {
+public class PostActivity extends BaseActivity
+    implements EmojiconGridFragment.OnEmojiconClickedListener,
+    EmojiconsFragment.OnEmojiconBackspaceClickedListener {
 
   @InjectView (R.id.lv_comments)
   public AdvancedListView mLvComments;

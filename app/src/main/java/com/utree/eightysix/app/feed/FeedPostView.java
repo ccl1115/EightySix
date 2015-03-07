@@ -1,6 +1,8 @@
 package com.utree.eightysix.app.feed;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.text.TextUtils;
@@ -19,11 +21,13 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.app.home.HomeActivity;
+import com.utree.eightysix.app.post.ReportDialog;
 import com.utree.eightysix.app.region.FeedRegionAdapter;
 import com.utree.eightysix.app.tag.TagTabActivity;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.drawable.RoundRectDrawable;
+import com.utree.eightysix.request.PostDeleteRequest;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AsyncImageView;
@@ -39,43 +43,40 @@ public class FeedPostView extends LinearLayout {
 
   private static int sPostLength = U.getConfigInt("post.length");
 
-  @InjectView (R.id.tv_content)
+  @InjectView(R.id.tv_content)
   public TextView mTvContent;
 
-  @InjectView (R.id.tv_source)
+  @InjectView(R.id.tv_source)
   public TextView mTvSource;
 
-  @InjectView (R.id.tv_praise)
+  @InjectView(R.id.tv_praise)
   public TextView mTvPraise;
 
-  @InjectView (R.id.tv_comment)
+  @InjectView(R.id.tv_comment)
   public TextView mTvComment;
 
-  @InjectView (R.id.tv_last_comment)
+  @InjectView(R.id.tv_last_comment)
   public TextView mTvLastComment;
 
-  @InjectView (R.id.tv_last_comment_head)
+  @InjectView(R.id.tv_last_comment_head)
   public TextView mTvLastCommentHead;
 
-  @InjectView (R.id.tv_last_comment_tail)
+  @InjectView(R.id.tv_last_comment_tail)
   public TextView mTvLastCommentTail;
 
-  @InjectView (R.id.iv_share)
-  public ImageView mIvShare;
-
-  @InjectView (R.id.aiv_bg)
+  @InjectView(R.id.aiv_bg)
   public AsyncImageView mAivBg;
 
-  @InjectView (R.id.ll_comment)
+  @InjectView(R.id.ll_comment)
   public LinearLayout mLlComment;
 
-  @InjectView (R.id.fl_content)
+  @InjectView(R.id.fl_content)
   public FrameLayout mFlContent;
 
-  @InjectView (R.id.tv_tag_1)
+  @InjectView(R.id.tv_tag_1)
   public TextView mTvTag1;
 
-  @InjectView (R.id.tv_tag_2)
+  @InjectView(R.id.tv_tag_2)
   public TextView mTvTag2;
 
   @InjectView(R.id.ll_tags)
@@ -86,7 +87,6 @@ public class FeedPostView extends LinearLayout {
 
   private Post mPost;
 
-  private final Runnable mShareAnimation;
   private final Runnable mTagAnimation;
 
   @OnClick(R.id.tv_tag_1)
@@ -110,9 +110,47 @@ public class FeedPostView extends LinearLayout {
     }
   }
 
-  @OnClick(R.id.iv_chat)
-  public void onIvChatClicked() {
-    ChatUtils.startChat((BaseActivity) getContext(), mPost);
+  @OnClick(R.id.iv_more)
+  public void onIvMoreClicked() {
+    String[] items;
+    if (mPost.owner == 1) {
+      items = new String[]{
+          getResources().getString(R.string.start_chat),
+          getResources().getString(R.string.share),
+          getResources().getString(R.string.report),
+          getResources().getString(R.string.delete),
+      };
+    } else {
+      items = new String[]{
+          getResources().getString(R.string.start_chat),
+          getResources().getString(R.string.share),
+          getResources().getString(R.string.report),
+      };
+    }
+    new AlertDialog.Builder(getContext()).setTitle(U.gs(R.string.post_action))
+        .setItems(items,
+            new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                  case 0:
+                    ChatUtils.startChat(((BaseActivity) getContext()), mPost);
+                    break;
+                  case 1:
+                    U.getAnalyser().trackEvent(U.getContext(), "post_more_share", "post_more_share");
+                    U.getShareManager().sharePostDialog(((BaseActivity) getContext()), mPost).show();
+                    break;
+                  case 2:
+                    U.getAnalyser().trackEvent(U.getContext(), "post_more_report", "post_more_report");
+                    new ReportDialog(getContext(), mPost.id).show();
+                    break;
+                  case 3:
+                    U.getAnalyser().trackEvent(U.getContext(), "post_more_delete", "post_more_delete");
+                    U.getBus().post(new PostDeleteRequest(mPost.id));
+                    break;
+                }
+              }
+            }).create().show();
   }
 
   private View mTipShare;
@@ -135,20 +173,7 @@ public class FeedPostView extends LinearLayout {
 
     U.viewBinding(this, this);
 
-    mIvShare.setBackgroundDrawable(
-        new RoundRectDrawable(U.dp2px(2), getResources().getColorStateList(R.color.apptheme_transparent_bg)));
-
     M.getRegisterHelper().register(this);
-
-    mShareAnimation = new Runnable() {
-      @Override
-      public void run() {
-        mIvShare.setVisibility(VISIBLE);
-        ObjectAnimator alpha = ObjectAnimator.ofFloat(mIvShare, "alpha", 0, 1f);
-        alpha.setDuration(500);
-        alpha.start();
-      }
-    };
 
     mTagAnimation = new Runnable() {
 
@@ -168,10 +193,6 @@ public class FeedPostView extends LinearLayout {
         set.start();
       }
     };
-  }
-
-  public ImageView getIvShare() {
-    return mIvShare;
   }
 
   public CharSequence getContent() {
@@ -272,22 +293,13 @@ public class FeedPostView extends LinearLayout {
       mTvHometown.setText(post.hometownText);
     }
 
-    mIvShare.setVisibility(INVISIBLE);
-    mIvShare.removeCallbacks(mShareAnimation);
-    mIvShare.postDelayed(mShareAnimation, 500);
-
     mTvTag1.setVisibility(INVISIBLE);
     mTvTag2.setVisibility(INVISIBLE);
     removeCallbacks(mTagAnimation);
     postDelayed(mTagAnimation, 500);
   }
 
-  @OnClick (R.id.iv_share)
-  public void onIvShareClicked() {
-    U.getShareManager().sharePostDialog((BaseActivity) getContext(), mPost).show();
-  }
-
-  @OnClick (R.id.tv_praise)
+  @OnClick(R.id.tv_praise)
   public void onTvPraiseClicked() {
     if (mPost.praised != 1) {
       U.getAnalyser().trackEvent(U.getContext(), "feed_post_praise", "praise");
@@ -309,32 +321,6 @@ public class FeedPostView extends LinearLayout {
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
     int widthSize = MeasureSpec.getSize(widthMeasureSpec);
     super.onMeasure(widthMeasureSpec, widthSize + MeasureSpec.EXACTLY);
-  }
-
-  public void showShareTip() {
-    if (mTipShare == null) {
-      mTipShare = LayoutInflater.from(getContext())
-          .inflate(R.layout.overlay_tip_share, this, false);
-
-      mTipShare.setBackgroundDrawable(new BitmapDrawable(getResources(),
-          new ViewHighlighter(mIvShare, mFlContent).genMask()));
-
-      mTipShare.findViewById(R.id.ll_tip).setBackgroundDrawable(
-          new RoundRectDrawable(U.dp2px(8), Color.WHITE));
-
-      mFlContent.addView(mTipShare);
-
-      mTipShare.setOnClickListener(new OnClickListener() {
-        @Override
-        public void onClick(View view) {
-          view.setVisibility(GONE);
-          U.getBus().post(new FeedRegionAdapter.DismissTipOverlayEvent(TYPE_SHARE));
-          Env.setFirstRun("overlay_tip_share", false);
-        }
-      });
-    } else {
-      mTipShare.setVisibility(VISIBLE);
-    }
   }
 
   public void hideShareTip() {

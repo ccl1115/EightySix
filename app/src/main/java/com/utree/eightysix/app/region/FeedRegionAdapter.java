@@ -56,7 +56,6 @@ public class FeedRegionAdapter extends BaseAdapter {
 
   protected int mTipSourcePosition = TNS;
   protected int mTipPraisePosition = TNS;
-  protected int mTipSharePosition = TNS;
   protected int mTipRepostPosition = TNS;
   protected int mTipTempNamePosition = TNS;
   protected int mTipTagsPosition = TNS;
@@ -291,7 +290,6 @@ public class FeedRegionAdapter extends BaseAdapter {
   }
 
   public void showTipShare(int position) {
-    mTipSharePosition = position;
     notifyDataSetChanged();
   }
 
@@ -316,9 +314,6 @@ public class FeedRegionAdapter extends BaseAdapter {
       case DismissTipOverlayEvent.TYPE_PRAISE:
         mTipPraisePosition = TNS;
         break;
-      case DismissTipOverlayEvent.TYPE_SHARE:
-        mTipSharePosition = TNS;
-        break;
       case DismissTipOverlayEvent.TYPE_SOURCE:
         mTipSourcePosition = TNS;
         break;
@@ -336,7 +331,6 @@ public class FeedRegionAdapter extends BaseAdapter {
 
   public boolean tipsShowing() {
     return mTipPraisePosition != TNS
-        || mTipSharePosition != TNS
         || mTipSourcePosition != TNS
         || mTipRepostPosition != TNS
         || mTipTagsPosition != TNS
@@ -359,10 +353,6 @@ public class FeedRegionAdapter extends BaseAdapter {
       feedPostView.showSourceTip();
     } else if (mTipSourcePosition == TNS && mTipPraisePosition == position) {
       feedPostView.showPraiseTip();
-    } else if (mTipPraisePosition == TNS && mTipSharePosition == position) {
-      feedPostView.showShareTip();
-    } else if (mTipSharePosition == TNS && mTipRepostPosition == position) {
-      feedPostView.showRepostTip();
     } else if (mTipRepostPosition == TNS && mTipTagsPosition == position) {
       feedPostView.showTagsTip();
     } else {
@@ -614,7 +604,6 @@ public class FeedRegionAdapter extends BaseAdapter {
 
     public static final int TYPE_SOURCE = 1;
     public static final int TYPE_PRAISE = 2;
-    public static final int TYPE_SHARE = 3;
     public static final int TYPE_REPOST = 4;
     public static final int TYPE_TEMP_NAME = 5;
     public static final int TYPE_TAGS = 6;
