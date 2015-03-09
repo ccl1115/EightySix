@@ -20,7 +20,6 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.User;
@@ -279,7 +278,8 @@ public class RegisterActivity extends BaseActivity {
 
   @Subscribe
   public void onContactsSyncEvent(ContactsSyncEvent event) {
-    BaseCirclesActivity.startSelect(this, false);
+    Intent i = new Intent(this, ProfileFillActivity.class);
+    startActivity(i);
     finish();
   }
 

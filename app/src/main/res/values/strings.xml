@@ -274,4 +274,6 @@
     <string name="image_viewer">查看大图</string>
     <string name="saved">保存成功</string>
     <string name="failed_to_save">保存失败</string>
+    <string name="profile_fill">完善资料</string>
+    <string name="skip">跳过</string>
 </resources>
