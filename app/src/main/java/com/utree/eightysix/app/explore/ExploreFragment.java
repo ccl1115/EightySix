@@ -5,6 +5,7 @@
 package com.utree.eightysix.app.explore;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.FragmentHolder;
+import com.utree.eightysix.app.account.AddFriendActivity;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.hometown.HometownTabFragment;
 import com.utree.eightysix.app.web.BaseWebActivity;
@@ -62,7 +64,14 @@ public class ExploreFragment extends BaseFragment {
     super.onAttach(activity);
     getBaseActivity().setTopTitle("发现");
     getBaseActivity().setTopSubTitle("");
-    getBaseActivity().getTopBar().getAbRight().hide();
+    getBaseActivity().getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_add));
+    getBaseActivity().getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Intent intent = new Intent(getActivity(), AddFriendActivity.class);
+        getActivity().startActivity(intent);
+      }
+    });
     getBaseActivity().getTopBar().getAbLeft().hide();
   }
 
@@ -71,7 +80,14 @@ public class ExploreFragment extends BaseFragment {
     if (!hidden) {
       getBaseActivity().setTopTitle("发现");
       getBaseActivity().setTopSubTitle("");
-      getBaseActivity().getTopBar().getAbRight().hide();
+      getBaseActivity().getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_add));
+      getBaseActivity().getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          Intent intent = new Intent(getActivity(), AddFriendActivity.class);
+          getActivity().startActivity(intent);
+        }
+      });
       getBaseActivity().getTopBar().getAbLeft().hide();
     }
   }

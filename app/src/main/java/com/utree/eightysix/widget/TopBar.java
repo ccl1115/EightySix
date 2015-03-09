@@ -97,9 +97,6 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     mBotLinePaint.setStrokeWidth(1);
 
 
-    mAbLeft.setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
-    mAbRight.setDrawable(getResources().getDrawable(R.drawable.ic_action_overflow));
-
     setOnClickListener(this);
 
     mRbSearch.setEnabled(false);
@@ -314,7 +311,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     int widthLeft = widthSize;
 
-    measureChild(mAbRight, (int) (heightSize * 0.9f) + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
+    measureChild(mAbRight, widthLeft + MeasureSpec.AT_MOST, heightSize + MeasureSpec.EXACTLY);
 
     widthLeft -= mAbRight.getMeasuredWidth();
 
