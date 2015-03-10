@@ -27,14 +27,20 @@
 
             <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
+                    android:layout_height="305dp"
                     >
 
                 <com.utree.eightysix.widget.AsyncImageView
                         android:id="@+id/aiv_bg"
                         android:layout_width="match_parent"
-                        android:layout_height="260dp"
+                        android:layout_height="245dp"
                         android:scaleType="centerCrop"
+                        />
+
+                <View
+                        android:layout_width="match_parent"
+                        android:layout_height="245dp"
+                        android:background="#33000000"
                         />
 
                 <com.utree.eightysix.widget.RoundedButton
@@ -136,7 +142,7 @@
                     android:id="@+id/ll_signature"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="16dp"
                     android:orientation="vertical"
                     android:padding="16dp"
                     android:background="@drawable/apptheme_primary_list_selector"
@@ -154,6 +160,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/apptheme_primary_grey_color_200"
                         />
             </LinearLayout>
 

@@ -3,6 +3,7 @@ package com.utree.eightysix.app.account;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -139,7 +140,11 @@ public class ProfileFragment extends BaseFragment {
           mTvConstellation.setText(response.object.constellation);
           mAivBg.setUrl(response.object.background);
           mAivPortrait.setUrl(response.object.avatar);
-          mTvSignature.setText(response.object.signature);
+          if (TextUtils.isEmpty(response.object.signature)) {
+            mTvSignature.setText("还没有设置签名");
+          } else {
+            mTvSignature.setText(response.object.signature);
+          }
           mTvCircleName.setText(response.object.workinFactoryName);
           mTvHometown.setText(response.object.hometown);
         }
