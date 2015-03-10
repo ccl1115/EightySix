@@ -124,6 +124,33 @@
     </request>
 
     <request>
+        <id>profile_fill</id>
+        <name>完善个人资料</name>
+        <path>/commit/user/profile/replace</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>avatar</param>
+            <param>sex</param>
+            <param>userName</param>
+            <param>birthday</param>
+            <param>constellation</param>
+            <param>background</param>
+        </params>
+    </request>
+
+    <request>
+        <id>profile</id>
+        <name>个人资料</name>
+        <path>/user/profile</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>hisUserId</param>
+        </params>
+    </request>
+
+    <request>
         <id>login</id>
         <name>登录接口</name>
         <path>/passport/login</path>

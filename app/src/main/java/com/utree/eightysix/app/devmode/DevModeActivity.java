@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.devmode;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,6 +14,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.account.ProfileFillActivity;
 import com.utree.eightysix.utils.Env;
 
 /**
@@ -50,6 +52,11 @@ public class DevModeActivity extends BaseActivity {
     } catch (NumberFormatException e) {
       showToast("错误的经纬度格式");
     }
+  }
+
+  @OnClick(R.id.tv_profile_file)
+  public void onTvProfileFillClicked() {
+    startActivity(new Intent(this, ProfileFillActivity.class));
   }
 
   @Override

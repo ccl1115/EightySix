@@ -278,8 +278,7 @@ public class RegisterActivity extends BaseActivity {
 
   @Subscribe
   public void onContactsSyncEvent(ContactsSyncEvent event) {
-    Intent i = new Intent(this, ProfileFillActivity.class);
-    startActivity(i);
+    ProfileFillActivity.start(this, true);
     finish();
   }
 
