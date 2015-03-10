@@ -24,6 +24,7 @@ import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.widget.AsyncImageView;
@@ -82,14 +83,20 @@ public class ProfileFillActivity extends BaseActivity {
           @Override
           public void onResponseError(Throwable e) {
             mRbSubmit.setEnabled(true);
-            showProgressBar(false);
+            hideProgressBar();
           }
 
           @Override
           public void onResponse(Response response) {
             mRbSubmit.setEnabled(true);
-            showProgressBar(false);
-            BaseCirclesActivity.startSelect(ProfileFillActivity.this, false);
+            hideProgressBar();
+            if (RESTRequester.responseOk(response)) {
+              if (mFromRegister) {
+                BaseCirclesActivity.startSelect(ProfileFillActivity.this, false);
+              } else {
+                finish();
+              }
+            }
           }
         }, Response.class,
         mPortraitUrl,

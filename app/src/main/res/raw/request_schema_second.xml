@@ -127,6 +127,7 @@
         <id>profile_fill</id>
         <name>完善个人资料</name>
         <path>/commit/user/profile/replace</path>
+        <host>http://203.195.245.99:8000</host>
         <sign/>
         <token/>
         <params>
@@ -142,7 +143,8 @@
     <request>
         <id>profile</id>
         <name>个人资料</name>
-        <path>/user/profile</path>
+        <path>/user/info</path>
+        <host>http://203.195.245.99:8000</host>
         <sign/>
         <token/>
         <params>

@@ -187,7 +187,6 @@ public class HomeTabActivity extends BaseActivity {
 
   @Override
   public void onActionLeftClicked() {
-
   }
 
   @Override
