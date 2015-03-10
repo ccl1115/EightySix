@@ -60,6 +60,7 @@
                 />
 
         <EditText
+                android:id="@+id/et_nickname"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -87,20 +88,24 @@
                 />
 
         <RadioGroup
+                android:id="@+id/rg_gender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:orientation="horizontal"
+                android:checkedButton="@+id/rb_female"
                 >
 
             <RadioButton
+                    android:id="@+id/rb_male"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="男"
                     />
 
             <RadioButton
+                    android:id="@+id/rb_female"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="女"

@@ -9,19 +9,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RadioGroup;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.CameraUtil;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
+import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.widget.AsyncImageView;
+import com.utree.eightysix.widget.RoundedButton;
 
 import java.io.File;
 
@@ -42,20 +48,58 @@ public class ProfileFillActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
+  @InjectView(R.id.rg_gender)
+  public RadioGroup mRgGender;
+
+  @InjectView(R.id.et_nickname)
+  public EditText mEtNickname;
+
   @InjectView(R.id.aiv_portrait)
   public AsyncImageView mAivPortrait;
 
   @InjectView(R.id.progress_bar)
   public ProgressBar mProgressBar;
 
+  @InjectView(R.id.rb_submit)
+  public RoundedButton mRbSubmit;
+
   private CameraUtil mCameraUtil;
+
+  private boolean mFromRegister;
+
+  private String mPortraitUrl;
 
   @OnClick(R.id.fl_upload_portrait)
   public void onFlUploadClicked() {
     mCameraUtil.showCameraDialog();
   }
 
-  private boolean mFromRegister;
+  @OnClick(R.id.rb_submit)
+  public void onRbSubmit() {
+    mRbSubmit.setEnabled(false);
+    showProgressBar(true);
+    U.request("profile_fill", new OnResponse2<Response>() {
+          @Override
+          public void onResponseError(Throwable e) {
+            mRbSubmit.setEnabled(true);
+            showProgressBar(false);
+          }
+
+          @Override
+          public void onResponse(Response response) {
+            mRbSubmit.setEnabled(true);
+            showProgressBar(false);
+            BaseCirclesActivity.startSelect(ProfileFillActivity.this, false);
+          }
+        }, Response.class,
+        mPortraitUrl,
+        mRgGender.getCheckedRadioButtonId() == R.id.rb_male ? "男" : "女",
+        mEtNickname.getText(),
+        null,
+        null,
+        null
+    );
+  }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -75,6 +119,7 @@ public class ProfileFillActivity extends BaseActivity {
     } else {
       getTopBar().getAbRight().hide();
     }
+
     getTopBar().getAbLeft().hide();
 
     mCameraUtil = new CameraUtil(this, new CameraUtil.Callback() {
@@ -90,6 +135,7 @@ public class ProfileFillActivity extends BaseActivity {
   @Subscribe
   public void onImageUploadEvent(ImageUtils.ImageUploadedEvent event) {
     mProgressBar.setVisibility(View.INVISIBLE);
+    mPortraitUrl = event.getUrl();
   }
 
   @Override
