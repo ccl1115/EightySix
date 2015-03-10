@@ -102,9 +102,10 @@ public class ProfileFillActivity extends BaseActivity {
         mPortraitUrl,
         mRgGender.getCheckedRadioButtonId() == R.id.rb_male ? "男" : "女",
         mEtNickname.getText(),
-        null,
-        null,
-        null
+        null, /* 生日 */
+        null, /* 星座 */
+        null, /* 背景 */
+        null  /* 签名 */
     );
   }
 

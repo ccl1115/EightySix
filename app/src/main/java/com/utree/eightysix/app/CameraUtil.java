@@ -29,6 +29,7 @@ public class CameraUtil {
   private static final int REQUEST_CODE_ALBUM = 0x1001;
   private static final int REQUEST_CODE_CROP = 0x1002;
   private BaseActivity mActivity;
+  private BaseFragment mFragment;
   private AlertDialog mCameraDialog;
   private boolean mStartCamera;
   private boolean mStartAlbum;
@@ -39,6 +40,12 @@ public class CameraUtil {
 
   public CameraUtil(BaseActivity activity, Callback callback) {
     mActivity = activity;
+    mCallback = callback;
+  }
+
+  public CameraUtil(BaseFragment fragment, Callback callback) {
+    mFragment = fragment;
+    mActivity = fragment.getBaseActivity();
     mCallback = callback;
   }
 
@@ -86,7 +93,11 @@ public class CameraUtil {
       Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
       mOutputFile = IOUtils.createTmpFile("camera_output");
       i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mOutputFile));
-      mActivity.startActivityForResult(i, REQUEST_CODE_CAMERA);
+      if (mFragment != null) {
+        mFragment.startActivityForResult(i, REQUEST_CODE_CAMERA);
+      } else {
+        mActivity.startActivityForResult(i, REQUEST_CODE_CAMERA);
+      }
       return true;
     } catch (Exception e) {
       return false;
@@ -97,7 +108,11 @@ public class CameraUtil {
     try {
       Intent i = new Intent(Intent.ACTION_PICK);
       i.setType("image/*");
-      mActivity.startActivityForResult(i, REQUEST_CODE_ALBUM);
+      if (mFragment != null) {
+        mFragment.startActivityForResult(i, REQUEST_CODE_ALBUM);
+      } else {
+        mActivity.startActivityForResult(i, REQUEST_CODE_ALBUM);
+      }
       return true;
     } catch (Exception e) {
       return false;
@@ -105,7 +120,11 @@ public class CameraUtil {
   }
 
   public boolean startCrop() {
-    ImageCropActivity.startForResult(mActivity, REQUEST_CODE_CROP, Uri.fromFile(mOutputFile), mFixedRatio);
+    if (mFragment != null) {
+      ImageCropActivity.startForResult(mFragment, REQUEST_CODE_CROP, Uri.fromFile(mOutputFile), mFixedRatio);
+    } else {
+      ImageCropActivity.startForResult(mActivity, REQUEST_CODE_CROP, Uri.fromFile(mOutputFile), mFixedRatio);
+    }
     return true;
   }
 

@@ -137,6 +137,7 @@
             <param>birthday</param>
             <param>constellation</param>
             <param>background</param>
+            <param>signature</param>
         </params>
     </request>
 

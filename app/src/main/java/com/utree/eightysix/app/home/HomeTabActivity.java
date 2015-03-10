@@ -19,7 +19,7 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.account.MeFragment;
+import com.utree.eightysix.app.account.ProfileFragment;
 import com.utree.eightysix.app.explore.ExploreFragment;
 import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.MsgCenterFragment;
@@ -56,7 +56,7 @@ public class HomeTabActivity extends BaseActivity {
   public TabRegionFragment mTabRegionFragment;
   public MsgCenterFragment mMsgCenterFragment;
   public ExploreFragment mExploreFragment;
-  public MeFragment mMeFragment;
+  public ProfileFragment mProfileFragment;
 
   public Fragment mCurrentFragment;
 
@@ -118,14 +118,14 @@ public class HomeTabActivity extends BaseActivity {
         mCurrentFragment = mMsgCenterFragment;
         break;
       case R.id.fl_more:
-        if (mMeFragment == null) {
-          mMeFragment = new MeFragment();
-          t.add(R.id.fl_content, mMeFragment).commit();
-        } else if (mMeFragment.isHidden()) {
-          t.show(mMeFragment).commit();
-          mMeFragment.onHiddenChanged(false);
+        if (mProfileFragment == null) {
+          mProfileFragment = new ProfileFragment();
+          t.add(R.id.fl_content, mProfileFragment).commit();
+        } else if (mProfileFragment.isHidden()) {
+          t.show(mProfileFragment).commit();
+          mProfileFragment.onHiddenChanged(false);
         }
-        mCurrentFragment = mMeFragment;
+        mCurrentFragment = mProfileFragment;
         break;
     }
   }
@@ -183,6 +183,11 @@ public class HomeTabActivity extends BaseActivity {
     sIsRunning = false;
     Env.setFirstRun(FIRST_RUN_KEY, false);
     super.onDestroy();
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
   }
 
   @Override

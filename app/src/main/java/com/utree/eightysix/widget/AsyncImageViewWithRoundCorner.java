@@ -8,7 +8,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.widget.LinearLayout;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.utree.eightysix.U;
@@ -30,7 +29,8 @@ public class AsyncImageViewWithRoundCorner extends AsyncImageView {
   private final int sImageMaxWidth;
   private final int sImageMinHeight;
   private final int sImageMaxHeight;
-  private Target mTarget = new Target() {
+
+  private final Target mTarget = new Target() {
     @Override
     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
       setBitmap(bitmap);
@@ -46,6 +46,9 @@ public class AsyncImageViewWithRoundCorner extends AsyncImageView {
 
     }
   };
+
+  private int mWidthMode;
+  private int mHeightMode;
 
   public AsyncImageViewWithRoundCorner(Context context) {
     this(context, null);
@@ -118,8 +121,28 @@ public class AsyncImageViewWithRoundCorner extends AsyncImageView {
       width = bitmap.getWidth();
       height = bitmap.getHeight();
     }
-    setLayoutParams(new LinearLayout.LayoutParams(width, height));
+    if (mWidthMode == MeasureSpec.EXACTLY) {
+      getLayoutParams().width = getMeasuredWidth();
+    } else {
+      getLayoutParams().width = width;
+    }
+
+    if (mHeightMode == MeasureSpec.EXACTLY) {
+      getLayoutParams().height = getMeasuredHeight();
+    } else {
+      getLayoutParams().height = height;
+    }
+
+    setLayoutParams(getLayoutParams());
 
     setImageDrawable(new RoundRectDrawable(U.dp2px(14), bitmap));
+  }
+
+  @Override
+  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+
+    mWidthMode = widthMeasureSpec & (0x3 << 30);
+    mHeightMode = heightMeasureSpec & (0x3 << 30);
+    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
   }
 }
