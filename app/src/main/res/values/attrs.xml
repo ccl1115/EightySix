@@ -59,4 +59,8 @@
         <!-- regex: (before|after|both) -->
         <attr name="layout_clear" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="AsyncImageViewWithRoundCorner">
+        <attr name="radius"/>
+    </declare-styleable>
 </resources>

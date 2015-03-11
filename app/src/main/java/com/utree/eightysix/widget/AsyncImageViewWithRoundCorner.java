@@ -5,11 +5,13 @@
 package com.utree.eightysix.widget;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 
@@ -47,6 +49,8 @@ public class AsyncImageViewWithRoundCorner extends AsyncImageView {
     }
   };
 
+  private final int mRadius;
+
   private int mWidthMode;
   private int mHeightMode;
 
@@ -66,6 +70,10 @@ public class AsyncImageViewWithRoundCorner extends AsyncImageView {
 
     sImageMinHeight = U.dp2px(IMAGE_MIN_HEIGHT);
     sImageMaxHeight = U.dp2px(IMAGE_MAX_HEIGHT);
+
+    TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.AsyncImageViewWithRoundCorner);
+
+    mRadius = (int) ta.getDimension(R.styleable.AsyncImageViewWithRoundCorner_radius, U.dp2px(14));
   }
 
   @Override
@@ -135,7 +143,7 @@ public class AsyncImageViewWithRoundCorner extends AsyncImageView {
 
     setLayoutParams(getLayoutParams());
 
-    setImageDrawable(new RoundRectDrawable(U.dp2px(14), bitmap));
+    setImageDrawable(new RoundRectDrawable(mRadius, bitmap));
   }
 
   @Override
