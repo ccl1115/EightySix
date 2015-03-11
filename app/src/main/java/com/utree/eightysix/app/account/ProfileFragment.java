@@ -16,6 +16,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.CameraUtil;
+import com.utree.eightysix.app.account.event.BirthdayUpdatedEvent;
 import com.utree.eightysix.app.account.event.GenderUpdatedEvent;
 import com.utree.eightysix.app.account.event.NameUpdatedEvent;
 import com.utree.eightysix.app.account.event.PortraitUpdatedEvent;
@@ -25,6 +26,7 @@ import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.ImageUtils;
+import com.utree.eightysix.utils.TimeUtil;
 import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.AsyncImageViewWithRoundCorner;
@@ -143,7 +145,12 @@ public class ProfileFragment extends BaseFragment {
         if (RESTRequester.responseOk(response)) {
           mTvName.setText(response.object.userName);
           mTvAge.setText(String.valueOf(response.object.age));
-          mTvBirthday.setText(response.object.birthday);
+          if (response.object.birthday == -1) {
+            mTvBirthday.setVisibility(View.GONE);
+          } else {
+            mTvBirthday.setVisibility(View.VISIBLE);
+            mTvBirthday.setText(TimeUtil.getDate(response.object.birthday));
+          }
           mTvGender.setText(response.object.sex);
           mTvConstellation.setText(response.object.constellation);
           mAivBg.setUrl(response.object.background);
@@ -209,6 +216,11 @@ public class ProfileFragment extends BaseFragment {
   @Subscribe
   public void onNameUpdatedEvent(NameUpdatedEvent event) {
     mTvName.setText(event.getName());
+  }
+
+  @Subscribe
+  public void onBirthdayUpdatedEvent(BirthdayUpdatedEvent event) {
+    mTvBirthday.setText(TimeUtil.getDate(event.getCalendar()));
   }
 
   private void updateTopTitle() {

@@ -280,4 +280,5 @@
     <string name="male">男</string>
     <string name="female">女</string>
     <string name="submit">提交</string>
+    <string name="birthday_edit">修改生日</string>
 </resources>

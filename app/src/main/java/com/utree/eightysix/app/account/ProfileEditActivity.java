@@ -21,6 +21,7 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.CameraUtil;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.app.account.event.BirthdayUpdatedEvent;
 import com.utree.eightysix.app.account.event.GenderUpdatedEvent;
 import com.utree.eightysix.app.account.event.NameUpdatedEvent;
 import com.utree.eightysix.app.account.event.PortraitUpdatedEvent;
@@ -29,10 +30,12 @@ import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.ImageUtils;
+import com.utree.eightysix.utils.TimeUtil;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.ThemedDialog;
 
 import java.io.File;
+import java.util.Calendar;
 
 /**
  */
@@ -62,6 +65,7 @@ public class ProfileEditActivity extends BaseActivity {
   public TextView mTvSignature;
 
   private CameraUtil mCameraUtil;
+  private Calendar mCalendar;
 
   @OnClick(R.id.ll_portrait)
   public void onLlPortraitClicked() {
@@ -116,6 +120,11 @@ public class ProfileEditActivity extends BaseActivity {
     dialog.show();
   }
 
+  @OnClick(R.id.ll_birthday)
+  public void onLlBirthdayClicked() {
+    BirthdayEditActivity.start(this, mCalendar);
+  }
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -138,7 +147,13 @@ public class ProfileEditActivity extends BaseActivity {
         mAivPortrait.setUrl(response.object.avatar);
         mTvName.setText(response.object.userName);
         mTvGender.setText(response.object.sex);
-        mTvBirthday.setText(response.object.birthday);
+        mCalendar = Calendar.getInstance();
+        if (response.object.birthday == -1) {
+          mTvBirthday.setText("未设置");
+        } else {
+          mCalendar.setTimeInMillis(response.object.birthday);
+          mTvBirthday.setText(TimeUtil.getDate(mCalendar));
+        }
         mTvCurrent.setText(response.object.workinFactoryName);
         mTvHometown.setText(response.object.hometown);
         if (TextUtils.isEmpty(response.object.signature)) {
@@ -188,5 +203,10 @@ public class ProfileEditActivity extends BaseActivity {
   @Subscribe
   public void onNameUpdatedEvent(NameUpdatedEvent event) {
     mTvName.setText(event.getName());
+  }
+
+  @Subscribe
+  public void onBirdayUpdatedEvent(BirthdayUpdatedEvent event) {
+    mTvBirthday.setText(TimeUtil.getDate(event.getCalendar()));
   }
 }

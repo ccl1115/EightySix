@@ -15,7 +15,7 @@ class Utils {
   static void updateProfile(String avatar,
                             String name,
                             String sex,
-                            String birthday,
+                            Long birthday,
                             String constellation,
                             String background,
                             String signature,

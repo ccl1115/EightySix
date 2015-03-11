@@ -6,6 +6,7 @@ package com.utree.eightysix.utils;
 
 import com.utree.eightysix.U;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -39,5 +40,21 @@ public class TimeUtil {
     } else {
       return (duration / U.DAY_IN_MS) + "天前";
     }
+  }
+
+  public static String getDate(Calendar calendar) {
+    return String.format("%d/%d/%d",
+              calendar.get(Calendar.YEAR),
+              calendar.get(Calendar.MONTH) + 1,
+              calendar.get(Calendar.DAY_OF_MONTH));
+  }
+
+  public static String getDate(long timestamp) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTimeInMillis(timestamp);
+    return String.format("%d/%d/%d",
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH) + 1,
+        calendar.get(Calendar.DAY_OF_MONTH));
   }
 }

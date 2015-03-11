@@ -26,7 +26,7 @@ public class Profile {
   public String userName;
 
   @SerializedName("birthday")
-  public String birthday;
+  public long birthday;
 
   @SerializedName("constellation")
   public String constellation;
