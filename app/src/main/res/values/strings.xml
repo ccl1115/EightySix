@@ -277,4 +277,6 @@
     <string name="profile_fill">完善资料</string>
     <string name="skip">跳过</string>
     <string name="profile">个人资料</string>
+    <string name="male">男</string>
+    <string name="female">女</string>
 </resources>

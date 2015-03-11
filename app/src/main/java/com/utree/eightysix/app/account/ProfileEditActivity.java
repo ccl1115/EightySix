@@ -4,19 +4,34 @@
 
 package com.utree.eightysix.app.account;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import butterknife.InjectView;
+import butterknife.OnClick;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.app.CameraUtil;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.app.account.event.GenderUpdatedEvent;
+import com.utree.eightysix.app.account.event.PortraitUpdatedEvent;
 import com.utree.eightysix.response.ProfileResponse;
 import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.widget.AsyncImageView;
+import com.utree.eightysix.widget.ThemedDialog;
+
+import java.io.File;
 
 /**
  */
@@ -45,11 +60,66 @@ public class ProfileEditActivity extends BaseActivity {
   @InjectView(R.id.tv_signature)
   public TextView mTvSignature;
 
+  private CameraUtil mCameraUtil;
 
+  @OnClick(R.id.ll_portrait)
+  public void onLlPortraitClicked() {
+    mCameraUtil.showCameraDialog();
+  }
+
+  @OnClick(R.id.ll_gender)
+  public void onLlGenderClicked() {
+    final ThemedDialog dialog = new ThemedDialog(this);
+
+    dialog.setTitle("修改性别");
+
+    View view = LayoutInflater.from(this).inflate(R.layout.widget_select_gender, null);
+    dialog.setContent(view);
+
+    ((RadioGroup) view).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+      @Override
+      public void onCheckedChanged(RadioGroup group, int checkedId) {
+        String gender = null;
+        if (checkedId == R.id.rb_male) {
+          gender = "男";
+        } else if (checkedId == R.id.rb_female) {
+          gender = "女";
+        }
+
+        dialog.dismiss();
+
+        final String finalGender = gender;
+        Utils.updateProfile(null, null, gender, null, null, null, null,
+            new OnResponse2<Response>() {
+              @Override
+              public void onResponse(Response response) {
+                if (RESTRequester.responseOk(response)) {
+                  mTvGender.setText(finalGender);
+                  U.getBus().post(new GenderUpdatedEvent(finalGender));
+                }
+              }
+
+              @Override
+              public void onResponseError(Throwable e) {
+
+              }
+            });
+      }
+    });
+
+    dialog.show();
+  }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    mCameraUtil = new CameraUtil(this, new CameraUtil.Callback() {
+      @Override
+      public void onImageReturn(String path) {
+        ImageUtils.asyncUpload(new File(path));
+      }
+    });
 
     U.request("profile", new OnResponse2<ProfileResponse>() {
       @Override
@@ -77,6 +147,11 @@ public class ProfileEditActivity extends BaseActivity {
   }
 
   @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    mCameraUtil.onActivityResult(requestCode, resultCode, data);
+  }
+
+  @Override
   public void onActionLeftClicked() {
     finish();
   }
@@ -84,5 +159,23 @@ public class ProfileEditActivity extends BaseActivity {
   @Override
   public void onLogout(Account.LogoutEvent event) {
     finish();
+  }
+
+  @Subscribe
+  public void onImageUploadEvent(final ImageUtils.ImageUploadedEvent event) {
+    mAivPortrait.setUrl(event.getUrl());
+    Utils.updateProfile(event.getUrl(), null, null, null, null, null, null, new OnResponse2<Response>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
+      @Override
+      public void onResponse(Response response) {
+        if (RESTRequester.responseOk(response)) {
+          U.getBus().post(new PortraitUpdatedEvent(event.getUrl()));
+        }
+      }
+    });
   }
 }

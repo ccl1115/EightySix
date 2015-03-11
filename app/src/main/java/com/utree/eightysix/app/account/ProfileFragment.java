@@ -16,6 +16,8 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.CameraUtil;
+import com.utree.eightysix.app.account.event.GenderUpdatedEvent;
+import com.utree.eightysix.app.account.event.PortraitUpdatedEvent;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
 import com.utree.eightysix.response.ProfileResponse;
 import com.utree.eightysix.rest.OnResponse2;
@@ -177,8 +179,8 @@ public class ProfileFragment extends BaseFragment {
   }
 
   @Subscribe
-  public void onImageUploadEvent(final ImageUtils.ImageUploadedEvent event)  {
-    U.request("profile_fill", new OnResponse2<Response>() {
+  public void onImageUploadEvent(final ImageUtils.ImageUploadedEvent event) {
+    Utils.updateProfile(null, null, null, null, null, event.getUrl(), null, new OnResponse2<Response>() {
       @Override
       public void onResponseError(Throwable e) {
 
@@ -190,7 +192,17 @@ public class ProfileFragment extends BaseFragment {
           mAivBg.setUrl(event.getUrl());
         }
       }
-    }, Response.class, null, null, null, null, null, event.getUrl(), null);
+    });
+  }
+
+  @Subscribe
+  public void onPortraitUpdatedEvent(PortraitUpdatedEvent event) {
+    mAivPortrait.setUrl(event.getUrl());
+  }
+
+  @Subscribe
+  public void onGenderUpdatedEvent(GenderUpdatedEvent event) {
+    mTvGender.setText(event.getGender());
   }
 
   private void updateTopTitle() {
