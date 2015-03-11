@@ -17,6 +17,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.CameraUtil;
 import com.utree.eightysix.app.account.event.GenderUpdatedEvent;
+import com.utree.eightysix.app.account.event.NameUpdatedEvent;
 import com.utree.eightysix.app.account.event.PortraitUpdatedEvent;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
 import com.utree.eightysix.response.ProfileResponse;
@@ -203,6 +204,11 @@ public class ProfileFragment extends BaseFragment {
   @Subscribe
   public void onGenderUpdatedEvent(GenderUpdatedEvent event) {
     mTvGender.setText(event.getGender());
+  }
+
+  @Subscribe
+  public void onNameUpdatedEvent(NameUpdatedEvent event) {
+    mTvName.setText(event.getName());
   }
 
   private void updateTopTitle() {

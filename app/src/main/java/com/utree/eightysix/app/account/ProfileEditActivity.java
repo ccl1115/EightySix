@@ -22,6 +22,7 @@ import com.utree.eightysix.app.CameraUtil;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.account.event.GenderUpdatedEvent;
+import com.utree.eightysix.app.account.event.NameUpdatedEvent;
 import com.utree.eightysix.app.account.event.PortraitUpdatedEvent;
 import com.utree.eightysix.response.ProfileResponse;
 import com.utree.eightysix.rest.OnResponse2;
@@ -65,6 +66,11 @@ public class ProfileEditActivity extends BaseActivity {
   @OnClick(R.id.ll_portrait)
   public void onLlPortraitClicked() {
     mCameraUtil.showCameraDialog();
+  }
+
+  @OnClick(R.id.ll_name)
+  public void onLlNameClicked() {
+    NameEditActivity.start(this, mTvName.getText().toString());
   }
 
   @OnClick(R.id.ll_gender)
@@ -177,5 +183,10 @@ public class ProfileEditActivity extends BaseActivity {
         }
       }
     });
+  }
+
+  @Subscribe
+  public void onNameUpdatedEvent(NameUpdatedEvent event) {
+    mTvName.setText(event.getName());
   }
 }
