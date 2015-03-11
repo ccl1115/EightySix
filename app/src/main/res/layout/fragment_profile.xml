@@ -72,7 +72,9 @@
                             android:layout_height="wrap_content"
                             android:layout_toRightOf="@+id/aiv_portrait"
                             android:layout_toEndOf="@+id/aiv_portrait"
-                            android:padding="4dp"
+                            android:textSize="18sp"
+                            android:textColor="@color/apptheme_primary_light_color"
+                            android:padding="8dp"
                             />
 
                     <TextView

@@ -276,4 +276,5 @@
     <string name="failed_to_save">保存失败</string>
     <string name="profile_fill">完善资料</string>
     <string name="skip">跳过</string>
+    <string name="profile">个人资料</string>
 </resources>

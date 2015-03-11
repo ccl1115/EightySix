@@ -66,6 +66,7 @@ public class ProfileFragment extends BaseFragment {
   public AsyncImageView mAivBg;
 
   private CameraUtil mCameraUtil;
+  private boolean mIsVisitor;
 
   @OnClick(R.id.rb_change_bg)
   public void onRbChageBgClicked() {
@@ -85,6 +86,10 @@ public class ProfileFragment extends BaseFragment {
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
+
+    if (getArguments() != null) {
+      mIsVisitor = getArguments().getBoolean("isVisitor", false);
+    }
 
     mCameraUtil = new CameraUtil(this, new CameraUtil.Callback() {
       @Override
@@ -156,19 +161,13 @@ public class ProfileFragment extends BaseFragment {
   @Override
   public void onAttach(Activity activity) {
     super.onAttach(activity);
-    getBaseActivity().setTopTitle("我");
-    getBaseActivity().setTopSubTitle("");
-    getBaseActivity().getTopBar().getAbRight().hide();
-    getBaseActivity().getTopBar().getAbLeft().hide();
+    updateTopTitle();
   }
 
   @Override
   public void onHiddenChanged(boolean hidden) {
     if (!hidden) {
-      getBaseActivity().setTopTitle("我");
-      getBaseActivity().setTopSubTitle("");
-      getBaseActivity().getTopBar().getAbRight().hide();
-      getBaseActivity().getTopBar().getAbLeft().hide();
+      updateTopTitle();
     }
   }
 
@@ -192,5 +191,29 @@ public class ProfileFragment extends BaseFragment {
         }
       }
     }, Response.class, null, null, null, null, null, event.getUrl(), null);
+  }
+
+  private void updateTopTitle() {
+    getBaseActivity().setTopTitle("我");
+    getBaseActivity().setTopSubTitle("");
+    getBaseActivity().getTopBar().getAbRight().hide();
+    getBaseActivity().getTopBar().getAbLeft().hide();
+    if (mIsVisitor) {
+      getBaseActivity().getTopBar().getAbRight().setText("拉黑");
+      getBaseActivity().getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+        }
+      });
+    } else {
+      getBaseActivity().getTopBar().getAbRight().setText("编辑");
+      getBaseActivity().getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          startActivity(new Intent(getActivity(), ProfileEditActivity.class));
+        }
+      });
+    }
   }
 }
