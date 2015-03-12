@@ -32,6 +32,7 @@ import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.AsyncImageViewWithRoundCorner;
 
 import java.io.File;
+import java.util.Calendar;
 
 /**
  */
@@ -188,19 +189,20 @@ public class ProfileFragment extends BaseFragment {
 
   @Subscribe
   public void onImageUploadEvent(final ImageUtils.ImageUploadedEvent event) {
-    Utils.updateProfile(null, null, null, null, null, event.getUrl(), null, new OnResponse2<Response>() {
-      @Override
-      public void onResponseError(Throwable e) {
+    Utils.updateProfile(null, null, null, null, null, event.getUrl(), null, null,
+        new OnResponse2<Response>() {
+          @Override
+          public void onResponseError(Throwable e) {
 
-      }
+          }
 
-      @Override
-      public void onResponse(Response response) {
-        if (RESTRequester.responseOk(response)) {
-          mAivBg.setUrl(event.getUrl());
-        }
-      }
-    });
+          @Override
+          public void onResponse(Response response) {
+            if (RESTRequester.responseOk(response)) {
+              mAivBg.setUrl(event.getUrl());
+            }
+          }
+        });
   }
 
   @Subscribe
@@ -221,6 +223,8 @@ public class ProfileFragment extends BaseFragment {
   @Subscribe
   public void onBirthdayUpdatedEvent(BirthdayUpdatedEvent event) {
     mTvBirthday.setText(TimeUtil.getDate(event.getCalendar()));
+    mTvAge.setText(String.valueOf(Utils.computeAge(Calendar.getInstance(), event.getCalendar())) + "岁");
+    mTvConstellation.setText(Utils.Constellation.get(event.getCalendar()));
   }
 
   private void updateTopTitle() {

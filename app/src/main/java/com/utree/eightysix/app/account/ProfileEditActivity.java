@@ -99,7 +99,7 @@ public class ProfileEditActivity extends BaseActivity {
         dialog.dismiss();
 
         final String finalGender = gender;
-        Utils.updateProfile(null, null, gender, null, null, null, null,
+        Utils.updateProfile(null, null, gender, null, null, null, null, null,
             new OnResponse2<Response>() {
               @Override
               public void onResponse(Response response) {
@@ -185,19 +185,20 @@ public class ProfileEditActivity extends BaseActivity {
   @Subscribe
   public void onImageUploadEvent(final ImageUtils.ImageUploadedEvent event) {
     mAivPortrait.setUrl(event.getUrl());
-    Utils.updateProfile(event.getUrl(), null, null, null, null, null, null, new OnResponse2<Response>() {
-      @Override
-      public void onResponseError(Throwable e) {
+    Utils.updateProfile(event.getUrl(), null, null, null, null, null, null, null,
+        new OnResponse2<Response>() {
+          @Override
+          public void onResponseError(Throwable e) {
 
-      }
+          }
 
-      @Override
-      public void onResponse(Response response) {
-        if (RESTRequester.responseOk(response)) {
-          U.getBus().post(new PortraitUpdatedEvent(event.getUrl()));
-        }
-      }
-    });
+          @Override
+          public void onResponse(Response response) {
+            if (RESTRequester.responseOk(response)) {
+              U.getBus().post(new PortraitUpdatedEvent(event.getUrl()));
+            }
+          }
+        });
   }
 
   @Subscribe
@@ -207,6 +208,11 @@ public class ProfileEditActivity extends BaseActivity {
 
   @Subscribe
   public void onBirdayUpdatedEvent(BirthdayUpdatedEvent event) {
-    mTvBirthday.setText(TimeUtil.getDate(event.getCalendar()));
+    Calendar calendar = event.getCalendar();
+    mTvBirthday.setText(String.format("%d岁 %s %s",
+        Utils.computeAge(Calendar.getInstance(), calendar),
+        TimeUtil.getDate(calendar),
+        Utils.Constellation.get(calendar)));
   }
+
 }

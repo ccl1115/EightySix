@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.TextView;
 import butterknife.InjectView;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
@@ -30,6 +31,10 @@ import java.util.Calendar;
 @TopTitle(R.string.birthday_edit)
 public class BirthdayEditActivity extends BaseActivity {
 
+  public final Calendar mNowCalendar = Calendar.getInstance();
+  private int mAge;
+  private String mConstellation;
+
   public static void start(Context context, Calendar calendar) {
     Intent intent = new Intent(context, BirthdayEditActivity.class);
     intent.putExtra("calendar", calendar);
@@ -43,6 +48,12 @@ public class BirthdayEditActivity extends BaseActivity {
 
   @InjectView(R.id.dp_birthday)
   public DatePicker mDpBirthday;
+
+  @InjectView(R.id.tv_age)
+  public TextView mTvAge;
+
+  @InjectView(R.id.tv_constellation)
+  public TextView mTvConstellation;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -58,28 +69,35 @@ public class BirthdayEditActivity extends BaseActivity {
             calendar.set(Calendar.YEAR, year);
             calendar.set(Calendar.MONTH, monthOfYear);
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            mAge = Utils.computeAge(mNowCalendar, calendar);
+            mConstellation = Utils.Constellation.get(calendar);
+            mTvAge.setText(String.valueOf(mAge) + "岁");
+            mTvConstellation.setText(mConstellation);
           }
         });
+
+    mDpBirthday.setMaxDate(Calendar.getInstance().getTimeInMillis());
 
     getTopBar().getAbLeft().setDrawable(getDrawable(R.drawable.top_bar_return));
     getTopBar().getAbRight().setText(getString(R.string.submit));
     getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        Utils.updateProfile(null, null, null, calendar.getTimeInMillis(), null, null, null, new OnResponse2<Response>() {
-          @Override
-          public void onResponseError(Throwable e) {
+        Utils.updateProfile(null, null, null, calendar.getTimeInMillis(), mConstellation, null, null, mAge,
+            new OnResponse2<Response>() {
+              @Override
+              public void onResponseError(Throwable e) {
 
-          }
+              }
 
-          @Override
-          public void onResponse(Response response) {
-            if (RESTRequester.responseOk(response)) {
-              U.getBus().post(new BirthdayUpdatedEvent(calendar));
-              finish();
-            }
-          }
-        });
+              @Override
+              public void onResponse(Response response) {
+                if (RESTRequester.responseOk(response)) {
+                  U.getBus().post(new BirthdayUpdatedEvent(calendar));
+                  finish();
+                }
+              }
+            });
       }
     });
   }
@@ -93,4 +111,5 @@ public class BirthdayEditActivity extends BaseActivity {
   public void onLogout(Account.LogoutEvent event) {
     finish();
   }
+
 }

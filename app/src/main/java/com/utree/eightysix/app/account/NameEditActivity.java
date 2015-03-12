@@ -57,20 +57,21 @@ public class NameEditActivity extends BaseActivity {
       @Override
       public void onClick(View v) {
         final String name = mEtName.getText().toString();
-        Utils.updateProfile(null, name, null, null, null, null, null, new OnResponse2<Response>() {
-          @Override
-          public void onResponseError(Throwable e) {
+        Utils.updateProfile(null, name, null, null, null, null, null, null,
+            new OnResponse2<Response>() {
+              @Override
+              public void onResponseError(Throwable e) {
 
-          }
+              }
 
-          @Override
-          public void onResponse(Response response) {
-            if (RESTRequester.responseOk(response)) {
-              U.getBus().post(new NameUpdatedEvent(name));
-              finish();
-            }
-          }
-        });
+              @Override
+              public void onResponse(Response response) {
+                if (RESTRequester.responseOk(response)) {
+                  U.getBus().post(new NameUpdatedEvent(name));
+                  finish();
+                }
+              }
+            });
       }
     });
 
