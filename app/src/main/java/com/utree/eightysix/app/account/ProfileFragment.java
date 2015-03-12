@@ -16,10 +16,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.CameraUtil;
-import com.utree.eightysix.app.account.event.BirthdayUpdatedEvent;
-import com.utree.eightysix.app.account.event.GenderUpdatedEvent;
-import com.utree.eightysix.app.account.event.NameUpdatedEvent;
-import com.utree.eightysix.app.account.event.PortraitUpdatedEvent;
+import com.utree.eightysix.app.account.event.*;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
 import com.utree.eightysix.response.ProfileResponse;
 import com.utree.eightysix.rest.OnResponse2;
@@ -225,6 +222,16 @@ public class ProfileFragment extends BaseFragment {
     mTvBirthday.setText(TimeUtil.getDate(event.getCalendar()));
     mTvAge.setText(String.valueOf(Utils.computeAge(Calendar.getInstance(), event.getCalendar())) + "岁");
     mTvConstellation.setText(Utils.Constellation.get(event.getCalendar()));
+  }
+
+  @Subscribe
+  public void onCurrentCircleNameUpdatedEvent(CurrentCircleNameUpdatedEvent event) {
+    mTvCircleName.setText(event.getName());
+  }
+
+  @Subscribe
+  public void onHometownUpdatedEvent(HometownUpdatedEvent event) {
+    mTvHometown.setText(event.getName());
   }
 
   private void updateTopTitle() {

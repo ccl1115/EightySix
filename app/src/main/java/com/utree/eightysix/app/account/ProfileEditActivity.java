@@ -21,10 +21,9 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.CameraUtil;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
-import com.utree.eightysix.app.account.event.BirthdayUpdatedEvent;
-import com.utree.eightysix.app.account.event.GenderUpdatedEvent;
-import com.utree.eightysix.app.account.event.NameUpdatedEvent;
-import com.utree.eightysix.app.account.event.PortraitUpdatedEvent;
+import com.utree.eightysix.app.account.event.*;
+import com.utree.eightysix.app.circle.BaseCirclesActivity;
+import com.utree.eightysix.app.hometown.SetHometownFragment;
 import com.utree.eightysix.response.ProfileResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
@@ -125,6 +124,19 @@ public class ProfileEditActivity extends BaseActivity {
     BirthdayEditActivity.start(this, mCalendar);
   }
 
+  @OnClick(R.id.ll_current)
+  public void onLlCurrentClicked() {
+    BaseCirclesActivity.startSelect(this, true);
+  }
+
+  @OnClick(R.id.ll_hometown)
+  public void onLlHometownClicked() {
+    SetHometownFragment fragment = new SetHometownFragment();
+    getSupportFragmentManager().beginTransaction()
+        .add(R.id.content, fragment)
+        .commit();
+  }
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -217,7 +229,14 @@ public class ProfileEditActivity extends BaseActivity {
         Utils.computeAge(Calendar.getInstance(), calendar),
         TimeUtil.getDate(calendar),
         Utils.Constellation.get(calendar)));
-
   }
 
+  @Subscribe
+  public void onCurrentCircleNameUpdatedEvent(CurrentCircleNameUpdatedEvent event) {
+    mTvCurrent.setText(event.getName());
+  }
+
+  public void onHometownUpdatedEvent(HometownUpdatedEvent event) {
+    mTvHometown.setText(event.getName());
+  }
 }

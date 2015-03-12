@@ -24,6 +24,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.account.event.CurrentCircleNameUpdatedEvent;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.app.home.HomeTabActivity;
@@ -280,16 +281,14 @@ public class BaseCirclesActivity extends BaseActivity {
       }
     });
 
-    if (mMode == MODE_SELECT && !mCancelable) {
-      setActionLeftDrawable(null);
+    if (mMode != MODE_SELECT || mCancelable) {
+      getTopBar().getAbLeft().setDrawable(getDrawable(R.drawable.top_bar_return));
     }
   }
 
   @Override
   public void onBackPressed() {
-    if (mMode != MODE_SELECT) {
-      super.onBackPressed();
-    } else if (mCancelable) {
+    if (mMode != MODE_SELECT || mCancelable) {
       super.onBackPressed();
     }
   }
@@ -470,7 +469,7 @@ public class BaseCirclesActivity extends BaseActivity {
       @Override
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
-          HomeTabActivity.start(BaseCirclesActivity.this);
+          U.getBus().post(new CurrentCircleNameUpdatedEvent(circle.shortName));
           finish();
         }
       }
