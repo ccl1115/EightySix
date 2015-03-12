@@ -152,7 +152,11 @@ public class ProfileEditActivity extends BaseActivity {
           mTvBirthday.setText("未设置");
         } else {
           mCalendar.setTimeInMillis(response.object.birthday);
-          mTvBirthday.setText(TimeUtil.getDate(mCalendar));
+          mTvBirthday.setText(String.format("%d岁 %s %s",
+              Utils.computeAge(Calendar.getInstance(), mCalendar),
+              TimeUtil.getDate(mCalendar),
+              Utils.Constellation.get(mCalendar)));
+
         }
         mTvCurrent.setText(response.object.workinFactoryName);
         mTvHometown.setText(response.object.hometown);
@@ -213,6 +217,7 @@ public class ProfileEditActivity extends BaseActivity {
         Utils.computeAge(Calendar.getInstance(), calendar),
         TimeUtil.getDate(calendar),
         Utils.Constellation.get(calendar)));
+
   }
 
 }

@@ -14,6 +14,14 @@ import java.util.Calendar;
  */
 class Utils {
 
+  static Calendar END_OF_YEAR = Calendar.getInstance();
+  static Calendar START_OF_YEAR = Calendar.getInstance();
+
+  static {
+    END_OF_YEAR.set(2015, Calendar.JANUARY, 1);
+    START_OF_YEAR.set(2014, Calendar.JANUARY, 1);
+  }
+
   static class Constellation {
     Calendar start = Calendar.getInstance();
     Calendar end = Calendar.getInstance();
@@ -28,7 +36,11 @@ class Utils {
     boolean is(Calendar calendar) {
       Calendar c = (Calendar) calendar.clone();
       c.set(Calendar.YEAR, 2014);
-      return (c.after(start) && c.before(end));
+      if (name.equals("摩羯座")) {
+        return ((c.after(start) && c.before(END_OF_YEAR)) || (c.before(end) && c.after(START_OF_YEAR)));
+      } else {
+        return (c.after(start) && c.before(end));
+      }
     }
 
     static String get(Calendar calendar) {
@@ -61,18 +73,18 @@ class Utils {
       }
     }
 
-    static Constellation ARIES = new Constellation(2, 20, 3, 20, "白羊座");
-    static Constellation TAURUS = new Constellation(3, 19, 4, 19, "金牛座");
-    static Constellation GEMINI = new Constellation(4, 20, 5, 22, "双子座");
-    static Constellation CANCER = new Constellation(5, 21, 6, 23, "巨蟹座");
-    static Constellation LEO = new Constellation(6, 22, 7, 23, "狮子座");
-    static Constellation VIRGO = new Constellation(7, 22, 8, 23, "处女座");
-    static Constellation LIBRA = new Constellation(8, 22, 9, 24, "天平座");
-    static Constellation SCORPIO = new Constellation(9, 23, 10, 22, "天蝎座");
-    static Constellation SAGITTARIUS = new Constellation(10, 21, 11, 22, "射手座");
-    static Constellation CAPRICORN = new Constellation(11, 21, 0, 20, "摩羯座");
-    static Constellation AQUARIUS = new Constellation(0, 19, 1, 19, "水瓶座");
-    static Constellation PISCES = new Constellation(1, 18, 2, 21, "双鱼座");
+    static Constellation ARIES = new Constellation(2, 20, 3, 19, "白羊座");
+    static Constellation TAURUS = new Constellation(3, 19, 4, 18, "金牛座");
+    static Constellation GEMINI = new Constellation(4, 20, 5, 21, "双子座");
+    static Constellation CANCER = new Constellation(5, 21, 6, 22, "巨蟹座");
+    static Constellation LEO = new Constellation(6, 22, 7, 22, "狮子座");
+    static Constellation VIRGO = new Constellation(7, 22, 8, 22, "处女座");
+    static Constellation LIBRA = new Constellation(8, 22, 9, 23, "天平座");
+    static Constellation SCORPIO = new Constellation(9, 23, 10, 21, "天蝎座");
+    static Constellation SAGITTARIUS = new Constellation(10, 21, 11, 21, "射手座");
+    static Constellation CAPRICORN = new Constellation(11, 21, 0, 19, "摩羯座");
+    static Constellation AQUARIUS = new Constellation(0, 19, 1, 18, "水瓶座");
+    static Constellation PISCES = new Constellation(1, 18, 2, 20, "双鱼座");
 
     @Override
     public String toString() {
