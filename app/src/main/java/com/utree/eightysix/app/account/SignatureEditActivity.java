@@ -8,6 +8,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import butterknife.InjectView;
@@ -20,11 +22,15 @@ import com.utree.eightysix.app.account.event.SignatureUpdatedEvent;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.widget.ThemedDialog;
 
 /**
  */
 @Layout(R.layout.activity_signature)
 public class SignatureEditActivity extends BaseActivity {
+
+  private boolean mTextChanged;
+  private String mText;
 
   public static void start(Context context, String text) {
     Intent intent = new Intent(context, SignatureEditActivity.class);
@@ -44,10 +50,27 @@ public class SignatureEditActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    String text = getIntent().getStringExtra("text");
+    mText = getIntent().getStringExtra("text");
 
-    mEtSignature.setText(text);
-    mEtSignature.setSelection(text.length());
+    mEtSignature.setText(mText);
+    mEtSignature.setSelection(mText.length());
+
+    mEtSignature.addTextChangedListener(new TextWatcher() {
+      @Override
+      public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+      }
+
+      @Override
+      public void onTextChanged(CharSequence s, int start, int before, int count) {
+        mTextChanged = !s.equals(mText);
+      }
+
+      @Override
+      public void afterTextChanged(Editable s) {
+
+      }
+    });
 
     getTopBar().getAbLeft().setDrawable(getDrawable(R.drawable.top_bar_return));
     getTopBar().getAbRight().setText(getString(R.string.submit));
@@ -76,11 +99,48 @@ public class SignatureEditActivity extends BaseActivity {
 
   @Override
   public void onActionLeftClicked() {
-    finish();
+    if (mTextChanged) {
+      showQuitConfirmDialog();
+    } else {
+      finish();
+    }
   }
 
   @Override
   public void onLogout(Account.LogoutEvent event) {
     finish();
   }
+
+  @Override
+  public void onBackPressed() {
+    if (mTextChanged) {
+      showQuitConfirmDialog();
+    } else {
+      super.onBackPressed();
+    }
+  }
+
+  private void showQuitConfirmDialog() {
+    final ThemedDialog dialog = new ThemedDialog(this);
+
+    dialog.setTitle("你的签名已改动，确认不提交？");
+
+    dialog.setPositive(R.string.okay, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        dialog.dismiss();
+        finish();
+      }
+    });
+
+    dialog.setRbNegative(R.string.cancel, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        dialog.dismiss();
+      }
+    });
+
+    dialog.show();
+  }
+
 }
