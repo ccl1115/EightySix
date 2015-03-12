@@ -234,6 +234,11 @@ public class ProfileFragment extends BaseFragment {
     mTvHometown.setText(event.getName());
   }
 
+  @Subscribe
+  public void onSignatureUpdateEvent(SignatureUpdatedEvent event) {
+    mTvSignature.setText(event.getText());
+  }
+
   private void updateTopTitle() {
     getBaseActivity().setTopTitle("我");
     getBaseActivity().setTopSubTitle("");

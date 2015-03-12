@@ -65,6 +65,7 @@ public class ProfileEditActivity extends BaseActivity {
 
   private CameraUtil mCameraUtil;
   private Calendar mCalendar;
+  private String mSignature;
 
   @OnClick(R.id.ll_portrait)
   public void onLlPortraitClicked() {
@@ -137,6 +138,11 @@ public class ProfileEditActivity extends BaseActivity {
         .commit();
   }
 
+  @OnClick(R.id.ll_signature)
+  public void onLlSignatureClicked() {
+    SignatureEditActivity.start(this, mSignature);
+  }
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -172,10 +178,11 @@ public class ProfileEditActivity extends BaseActivity {
         }
         mTvCurrent.setText(response.object.workinFactoryName);
         mTvHometown.setText(response.object.hometown);
-        if (TextUtils.isEmpty(response.object.signature)) {
+        mSignature = response.object.signature;
+        if (TextUtils.isEmpty(mSignature)) {
           mTvSignature.setText("没有设置个性签名");
         } else {
-          mTvSignature.setText(response.object.signature);
+          mTvSignature.setText(mSignature);
         }
       }
     }, ProfileResponse.class, (Integer) null);
@@ -236,7 +243,13 @@ public class ProfileEditActivity extends BaseActivity {
     mTvCurrent.setText(event.getName());
   }
 
+  @Subscribe
   public void onHometownUpdatedEvent(HometownUpdatedEvent event) {
     mTvHometown.setText(event.getName());
+  }
+
+  @Subscribe
+  public void onSignatureUpdateEvent(SignatureUpdatedEvent event) {
+    mTvSignature.setText(event.getText());
   }
 }
