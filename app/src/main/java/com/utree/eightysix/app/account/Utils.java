@@ -73,6 +73,11 @@ class Utils {
     static Constellation CAPRICORN = new Constellation(11, 21, 0, 20, "摩羯座");
     static Constellation AQUARIUS = new Constellation(0, 19, 1, 19, "水瓶座");
     static Constellation PISCES = new Constellation(1, 18, 2, 21, "双鱼座");
+
+    @Override
+    public String toString() {
+      return String.format("%s (%d.%d - %d.%d)", name, start.get(Calendar.MONTH), start.get(Calendar.DAY_OF_MONTH), end.get(Calendar.MONTH), end.get(Calendar.DAY_OF_MONTH));
+    }
   }
 
   static void updateProfile(String avatar,

@@ -9,9 +9,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.DatePicker;
-import android.widget.TextView;
+import android.widget.*;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -22,8 +22,11 @@ import com.utree.eightysix.app.account.event.BirthdayUpdatedEvent;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.widget.ThemedDialog;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  */
@@ -54,6 +57,11 @@ public class BirthdayEditActivity extends BaseActivity {
 
   @InjectView(R.id.tv_constellation)
   public TextView mTvConstellation;
+
+  @OnClick(R.id.ll_constellation)
+  public void onLlConstellationClicked() {
+    showConstellationSpinnerDialog();
+  }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -112,4 +120,45 @@ public class BirthdayEditActivity extends BaseActivity {
     finish();
   }
 
+  private void showConstellationSpinnerDialog() {
+    ThemedDialog dialog = new ThemedDialog(this);
+
+    dialog.setTitle("重设星座");
+
+    Spinner spinner = new Spinner(this);
+
+    List<Utils.Constellation> list = new ArrayList<Utils.Constellation>();
+
+    list.add(Utils.Constellation.ARIES);
+    list.add(Utils.Constellation.TAURUS);
+    list.add(Utils.Constellation.GEMINI);
+    list.add(Utils.Constellation.CANCER);
+    list.add(Utils.Constellation.LEO);
+    list.add(Utils.Constellation.VIRGO);
+    list.add(Utils.Constellation.LIBRA);
+    list.add(Utils.Constellation.SCORPIO);
+    list.add(Utils.Constellation.SAGITTARIUS);
+    list.add(Utils.Constellation.CAPRICORN);
+    list.add(Utils.Constellation.AQUARIUS);
+    list.add(Utils.Constellation.PISCES);
+
+    final ArrayAdapter<Utils.Constellation> a = new ArrayAdapter<Utils.Constellation>(this, android.R.layout.simple_spinner_item, list);
+    a.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    spinner.setAdapter(a);
+    spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+      @Override
+      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        mTvConstellation.setText(a.getItem(position).name);
+      }
+
+      @Override
+      public void onNothingSelected(AdapterView<?> parent) {
+
+      }
+    });
+
+    dialog.setContent(spinner);
+
+    dialog.show();
+  }
 }
