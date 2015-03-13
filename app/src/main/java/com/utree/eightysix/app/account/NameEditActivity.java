@@ -18,6 +18,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.account.event.NameUpdatedEvent;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
@@ -26,6 +27,7 @@ import com.utree.eightysix.rest.Response;
 /**
  */
 @Layout(R.layout.activity_name_edit)
+@TopTitle(R.string.name_edit)
 public class NameEditActivity extends BaseActivity {
 
   public static void start(Context context, String name) {
