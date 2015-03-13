@@ -165,4 +165,58 @@
             <param>valiCode</param>
         </params>
     </request>
+
+    <request>
+        <id>follow_circle_add</id>
+        <name>添加关注圈子</name>
+        <path>/commit/user/like/factory/create</path>
+        <host>http://203.195.245.99:8000</host>
+        <sign/>
+        <token/>
+        <params>
+            <param>factoryId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>follow_circle_del</id>
+        <name>删除关注圈子</name>
+        <path>/service/user/like_factory/delete</path>
+        <host>http://203.195.245.99:8000</host>
+        <sign/>
+        <token/>
+        <params>
+            <param>factoryId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>follow_circle_list</id>
+        <name>关注圈子列表</name>
+        <path>/user/like/factory</path>
+        <host>http://203.195.245.99:8000</host>
+        <sign/>
+        <token/>
+    </request>
+
+    <request>
+        <id>user_avatars</id>
+        <name>头像列表</name>
+        <path>/user/avatar</path>
+        <host>http://203.195.245.99:8000</host>
+        <sign/>
+        <token/>
+    </request>
+
+    <request>
+        <id>user_avatars_del</id>
+        <name>删除头像</name>
+        <path>/commit/user/avatar/delete</path>
+        <host>http://203.195.245.99:8000</host>
+        <sign/>
+        <token/>
+        <params>
+            <param>avatar</param>
+        </params>
+    </request>
 </api>

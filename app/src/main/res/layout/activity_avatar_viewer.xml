@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Copyright (c) 2015. All rights reserved by utree.cn
+  -->
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+        android:background="@android:color/black">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_avatars"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <TextView
+            android:id="@+id/tv_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginBottom="24dp"
+            android:textColor="@android:color/white"
+            android:textSize="22sp"
+            android:padding="8dp"
+            />
+</FrameLayout>

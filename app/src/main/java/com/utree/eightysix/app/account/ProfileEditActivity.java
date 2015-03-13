@@ -28,6 +28,7 @@ import com.utree.eightysix.response.ProfileResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.TimeUtil;
 import com.utree.eightysix.widget.AsyncImageView;
@@ -66,6 +67,7 @@ public class ProfileEditActivity extends BaseActivity {
   private CameraUtil mCameraUtil;
   private Calendar mCalendar;
   private String mSignature;
+  private String mFileHash;
 
   @OnClick(R.id.ll_portrait)
   public void onLlPortraitClicked() {
@@ -150,7 +152,9 @@ public class ProfileEditActivity extends BaseActivity {
     mCameraUtil = new CameraUtil(this, new CameraUtil.Callback() {
       @Override
       public void onImageReturn(String path) {
-        ImageUtils.asyncUpload(new File(path));
+        File file = new File(path);
+        mFileHash = IOUtils.fileHash(file);
+        ImageUtils.asyncUpload(file);
       }
     });
 
@@ -207,21 +211,23 @@ public class ProfileEditActivity extends BaseActivity {
 
   @Subscribe
   public void onImageUploadEvent(final ImageUtils.ImageUploadedEvent event) {
-    mAivPortrait.setUrl(event.getUrl());
-    Utils.updateProfile(event.getUrl(), null, null, null, null, null, null, null,
-        new OnResponse2<Response>() {
-          @Override
-          public void onResponseError(Throwable e) {
+    if (event.getHash().equals(mFileHash)) {
+      mAivPortrait.setUrl(event.getUrl());
+      Utils.updateProfile(event.getUrl(), null, null, null, null, null, null, null,
+          new OnResponse2<Response>() {
+            @Override
+            public void onResponseError(Throwable e) {
 
-          }
-
-          @Override
-          public void onResponse(Response response) {
-            if (RESTRequester.responseOk(response)) {
-              U.getBus().post(new PortraitUpdatedEvent(event.getUrl()));
             }
-          }
-        });
+
+            @Override
+            public void onResponse(Response response) {
+              if (RESTRequester.responseOk(response)) {
+                U.getBus().post(new PortraitUpdatedEvent(event.getUrl()));
+              }
+            }
+          });
+    }
   }
 
   @Subscribe

@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import butterknife.InjectView;
 import com.google.gson.annotations.SerializedName;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -110,6 +111,7 @@ public class SnapshotActivity extends BaseActivity {
   }
 
   @Override
+  @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();
   }

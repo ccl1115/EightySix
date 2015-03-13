@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.edmodo.cropper.CropImageView;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
@@ -138,6 +139,7 @@ public class ImageCropActivity extends BaseActivity {
   }
 
   @Override
+  @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();
   }

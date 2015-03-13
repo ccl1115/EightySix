@@ -281,4 +281,6 @@
     <string name="female">女</string>
     <string name="submit">提交</string>
     <string name="birthday_edit">修改生日</string>
+    <string name="avatar_viewer">查看头像</string>
+    <string name="avatars">头像相册</string>
 </resources>

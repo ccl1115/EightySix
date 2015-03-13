@@ -3,6 +3,7 @@ package com.utree.eightysix.app.settings;
 import android.os.Bundle;
 import android.webkit.WebView;
 import butterknife.InjectView;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
@@ -39,6 +40,7 @@ public class HelpActivity extends BaseActivity {
   }
 
   @Override
+  @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();
   }

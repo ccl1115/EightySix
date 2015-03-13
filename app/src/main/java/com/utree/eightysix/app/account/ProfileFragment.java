@@ -22,6 +22,7 @@ import com.utree.eightysix.response.ProfileResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.TimeUtil;
 import com.utree.eightysix.view.SwipeRefreshLayout;
@@ -70,6 +71,7 @@ public class ProfileFragment extends BaseFragment {
 
   private CameraUtil mCameraUtil;
   private boolean mIsVisitor;
+  private String mFileHash;
 
   @OnClick(R.id.rb_change_bg)
   public void onRbChageBgClicked() {
@@ -79,6 +81,11 @@ public class ProfileFragment extends BaseFragment {
   @OnClick(R.id.tv_settings)
   public void onTvSettingsClicked() {
     startActivity(new Intent(getActivity(), MainSettingsActivity.class));
+  }
+
+  @OnClick(R.id.aiv_portrait)
+  public void onAivPortraitClicked() {
+    startActivity(new Intent(getActivity(), AvatarViewerActivity.class));
   }
 
   @Override
@@ -97,7 +104,9 @@ public class ProfileFragment extends BaseFragment {
     mCameraUtil = new CameraUtil(this, new CameraUtil.Callback() {
       @Override
       public void onImageReturn(String path) {
-        ImageUtils.asyncUpload(new File(path));
+        File file = new File(path);
+        mFileHash = IOUtils.fileHash(file);
+        ImageUtils.asyncUpload(file);
       }
     });
 
@@ -186,20 +195,22 @@ public class ProfileFragment extends BaseFragment {
 
   @Subscribe
   public void onImageUploadEvent(final ImageUtils.ImageUploadedEvent event) {
-    Utils.updateProfile(null, null, null, null, null, event.getUrl(), null, null,
-        new OnResponse2<Response>() {
-          @Override
-          public void onResponseError(Throwable e) {
+    if (event.getHash().equals(mFileHash)) {
+      Utils.updateProfile(null, null, null, null, null, event.getUrl(), null, null,
+          new OnResponse2<Response>() {
+            @Override
+            public void onResponseError(Throwable e) {
 
-          }
-
-          @Override
-          public void onResponse(Response response) {
-            if (RESTRequester.responseOk(response)) {
-              mAivBg.setUrl(event.getUrl());
             }
-          }
-        });
+
+            @Override
+            public void onResponse(Response response) {
+              if (RESTRequester.responseOk(response)) {
+                mAivBg.setUrl(event.getUrl());
+              }
+            }
+          });
+    }
   }
 
   @Subscribe

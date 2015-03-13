@@ -177,10 +177,19 @@
 
         <activity android:label="开发者模式" android:name=".app.devmode.DevModeActivity"/>
 
-        <activity
-                android:name=".app.account.ProfileFillActivity"
-                android:label="完善资料"
-                android:screenOrientation="portrait"/>
+        <activity android:name=".app.account.ProfileFillActivity" android:label="完善资料" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.account.ProfileEditActivity" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.account.NameEditActivity" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.account.BirthdayEditActivity" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.account.SignatureEditActivity" android:label="更新签名" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.account.AvatarsActivity" android:label="用户头像列表" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.account.AvatarViewerActivity" android:label="查看头像大图" android:launchMode="singleTask" android:screenOrientation="portrait"/>
 
         <service android:enabled="true" android:name=".contact.ContactsSyncService"/>
         <service android:enabled="true" android:name=".app.msg.FetchNotificationService"/>
@@ -253,12 +262,6 @@
                 <action android:name=""/>
             </intent-filter>
         </activity>
-        <activity android:name=".app.account.ProfileEditActivity"/>
-        <activity android:name=".app.account.NameEditActivity"/>
-        <activity android:name=".app.account.BirthdayEditActivity"/>
-        <activity
-                android:name=".app.account.SignatureEditActivity"
-                android:label="更新签名"/>
 
         <!-- 【必须】 信鸽service -->
         <service android:exported="true" android:name="com.tencent.android.tpush.service.XGPushService" android:persistent="true" android:process=":xg_service_v2" tools:ignore="ExportedService"/>

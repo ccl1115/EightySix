@@ -247,6 +247,7 @@ public class ChatActivity extends BaseActivity implements
   }
 
   @Override
+  @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();
   }

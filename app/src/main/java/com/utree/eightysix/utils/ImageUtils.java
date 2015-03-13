@@ -434,6 +434,9 @@ public class ImageUtils {
 
     @Override
     protected Void doInBackground(Void... params) {
+      final String hash = IOUtils.fileHash(mFile);
+      mFileHash = hash;
+
       if (mFile != null) {
         mBitmap = safeDecodeBitmap(mFile, 600, 600);
       }
@@ -459,8 +462,6 @@ public class ImageUtils {
         }
       }
 
-      final String hash = IOUtils.fileHash(file);
-      mFileHash = hash;
       File newPath = new File(file.getParent() + "/" + hash + ".jpg");
       file.renameTo(newPath);
       mFile = newPath;
