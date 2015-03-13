@@ -25,6 +25,7 @@ import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.widget.AsyncImageView;
+import com.utree.eightysix.widget.ThemedDialog;
 
 import java.io.File;
 
@@ -82,7 +83,7 @@ public class AvatarsActivity extends BaseActivity {
         if (RESTRequester.responseOk(response)) {
           int size = response.object.size();
           for (int i = 0; i < size; i++) {
-            String avatar = response.object.get(i).avatar;
+            final String avatar = response.object.get(i).avatar;
             if (!TextUtils.isEmpty(avatar)) {
               mAivAvatars[i].setUrl(avatar);
               final int finalI = i;
@@ -90,6 +91,13 @@ public class AvatarsActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                   AvatarViewerActivity.start(v.getContext(), finalI);
+                }
+              });
+              mAivAvatars[i].setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                  showSelectConfirmDialog(avatar);
+                  return true;
                 }
               });
             }
@@ -103,6 +111,10 @@ public class AvatarsActivity extends BaseActivity {
                 mCameraUtil.showCameraDialog();
               }
             });
+
+            for (int i = size + 1; i < 9; i++) {
+              mAivAvatars[i].setImageResource(0);
+            }
           }
         }
       }
@@ -145,9 +157,44 @@ public class AvatarsActivity extends BaseActivity {
     }
   }
 
-
   @Subscribe
   public void onPortraitUpdatedEvent(PortraitUpdatedEvent event) {
     requestAvatars();
+  }
+
+  private void showSelectConfirmDialog(final String avatar) {
+    final ThemedDialog dialog = new ThemedDialog(this);
+
+    dialog.setTitle("确认更改此图片为头像");
+
+    dialog.setPositive(R.string.okay, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Utils.updateProfile(avatar, null, null, null, null, null, null, null,
+            new OnResponse2<Response>() {
+              @Override
+              public void onResponseError(Throwable e) {
+
+              }
+
+              @Override
+              public void onResponse(Response response) {
+                if (RESTRequester.responseOk(response)) {
+                  U.getBus().post(new PortraitUpdatedEvent(avatar));
+                }
+              }
+            });
+        dialog.dismiss();
+      }
+    });
+
+    dialog.setRbNegative(R.string.cancel, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        dialog.dismiss();
+      }
+    });
+
+    dialog.show();
   }
 }

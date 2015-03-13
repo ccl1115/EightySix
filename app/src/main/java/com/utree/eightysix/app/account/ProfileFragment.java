@@ -215,7 +215,9 @@ public class ProfileFragment extends BaseFragment {
 
   @Subscribe
   public void onPortraitUpdatedEvent(PortraitUpdatedEvent event) {
-    mAivPortrait.setUrl(event.getUrl());
+    if (event.getUrl() != null) {
+      mAivPortrait.setUrl(event.getUrl());
+    }
   }
 
   @Subscribe
