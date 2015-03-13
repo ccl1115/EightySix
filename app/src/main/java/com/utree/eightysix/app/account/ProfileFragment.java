@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -68,6 +69,15 @@ public class ProfileFragment extends BaseFragment {
 
   @InjectView(R.id.aiv_bg)
   public AsyncImageView mAivBg;
+
+  @InjectView(R.id.fl_guide)
+  public FrameLayout mFlGuide;
+
+
+  @OnClick(R.id.rb_edit)
+  public void onRbEditClicked() {
+    ProfileFillActivity.start(getActivity(), false);
+  }
 
   private CameraUtil mCameraUtil;
   private boolean mIsVisitor;
@@ -150,6 +160,12 @@ public class ProfileFragment extends BaseFragment {
         getBaseActivity().hideRefreshIndicator();
         mRefreshLayout.setRefreshing(false);
         if (RESTRequester.responseOk(response)) {
+
+          if (TextUtils.isEmpty(response.object.userName)) {
+            mFlGuide.setVisibility(View.VISIBLE);
+            return;
+          }
+
           mTvName.setText(response.object.userName);
           mTvAge.setText(String.valueOf(response.object.age));
           if (response.object.birthday == -1) {
