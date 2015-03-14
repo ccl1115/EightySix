@@ -228,4 +228,50 @@
         <sign/>
         <token/>
     </request>
+
+    <request>
+        <id>user_friend_request</id>
+        <name>添加好友</name>
+        <path>/commit/user/friend/create</path>
+        <host>http://203.195.245.99:8000</host>
+        <sign/>
+        <token/>
+        <params>
+            <param>viewId</param>
+            <param>content</param>
+        </params>
+    </request>
+
+    <request>
+        <id>user_friend_accept</id>
+        <name>通过请求</name>
+        <path>/commit/user/friend/pass</path>
+        <host>http://203.195.245.99:8000</host>
+        <sign/>
+        <token/>
+        <params>
+            <param>viewId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>user_friend_requests</id>
+        <name>好友请求</name>
+        <path>/user/createdFriend</path>
+        <host>http://203.195.245.99:8000</host>
+        <sign/>
+        <token/>
+    </request>
+
+    <request>
+        <id>user_friend_ignore</id>
+        <name>忽略请求</name>
+        <path>/commit/user/friend/ignore</path>
+        <host>http://203.195.245.99:8000</host>
+        <sign/>
+        <token/>
+        <params>
+            <param>viewId</param>
+        </params>
+    </request>
 </api>
