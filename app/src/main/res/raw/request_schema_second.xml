@@ -223,7 +223,7 @@
     <request>
         <id>user_friend_list</id>
         <name>朋友列表</name>
-        <path>/commit/user/friend</path>
+        <path>/user/friend</path>
         <host>http://203.195.245.99:8000</host>
         <sign/>
         <token/>

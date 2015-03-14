@@ -16,7 +16,7 @@ import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.response.FriendListResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.widget.AdvancedListView;
+import com.utree.eightysix.view.PinnedHeaderListView;
 
 /**
  */
@@ -24,15 +24,18 @@ import com.utree.eightysix.widget.AdvancedListView;
 @TopTitle(R.string.my_friends)
 public class FriendListActivity extends BaseActivity {
 
-  @InjectView(R.id.aiv_friends)
-  public AdvancedListView mAdvFriends;
+  @InjectView(R.id.content)
+  public PinnedHeaderListView mAdvFriends;
 
   private FriendListAdapter mFriendListAdapter;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    U.request("friend_list", new OnResponse2<FriendListResponse>() {
+
+    getTopBar().getAbLeft().setDrawable(getDrawable(R.drawable.top_bar_return));
+
+    U.request("user_friend_list", new OnResponse2<FriendListResponse>() {
       @Override
       public void onResponseError(Throwable e) {
 

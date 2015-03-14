@@ -4,16 +4,12 @@
   ~ Copyright (c) 2015. All rights reserved by utree.cn
   -->
 
-<com.utree.eightysix.view.SwipeRefreshLayout
+<com.utree.eightysix.view.PinnedHeaderListView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
+        android:background="@android:color/white"
+        android:divider="@color/apptheme_primary_grey_color_200"
+        android:dividerHeight="1px"
+        />
 
-    <com.utree.eightysix.widget.AdvancedListView
-            android:id="@+id/aiv_friends"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
-
-</com.utree.eightysix.view.SwipeRefreshLayout>

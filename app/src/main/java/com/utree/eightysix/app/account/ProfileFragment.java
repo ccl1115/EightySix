@@ -18,6 +18,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.CameraUtil;
 import com.utree.eightysix.app.account.event.*;
+import com.utree.eightysix.app.friends.FriendListActivity;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
 import com.utree.eightysix.response.ProfileResponse;
 import com.utree.eightysix.rest.OnResponse2;
@@ -70,14 +71,20 @@ public class ProfileFragment extends BaseFragment {
   public FrameLayout mFlGuide;
 
 
+
+  private CameraUtil mCameraUtil;
+  private boolean mIsVisitor;
+  private String mFileHash;
+
   @OnClick(R.id.rb_edit)
   public void onRbEditClicked() {
     ProfileFillActivity.start(getActivity(), false);
   }
 
-  private CameraUtil mCameraUtil;
-  private boolean mIsVisitor;
-  private String mFileHash;
+  @OnClick(R.id.tv_my_friends)
+  public void onLlFriendsClicked() {
+    startActivity(new Intent(getActivity(), FriendListActivity.class));
+  }
 
   @OnClick(R.id.rb_change_bg)
   public void onRbChageBgClicked() {
