@@ -132,7 +132,7 @@ public class ContactFriendsActivity extends BaseActivity {
       ItemViewHolder holder;
       if (convertView == null) {
         convertView = LayoutInflater.from(ContactFriendsActivity.this)
-            .inflate(R.layout.item_friend, parent, false);
+            .inflate(R.layout.item_contact_friend, parent, false);
         holder = new ItemViewHolder(convertView);
         convertView.setTag(holder);
       } else {

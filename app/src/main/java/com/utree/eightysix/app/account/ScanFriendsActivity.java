@@ -133,7 +133,7 @@ public class ScanFriendsActivity extends BaseActivity {
 
     private View getItemView(int position, View convertView, ViewGroup parent) {
       if (convertView == null) {
-        convertView = getLayoutInflater().inflate(R.layout.item_friend, parent, false);
+        convertView = getLayoutInflater().inflate(R.layout.item_contact_friend, parent, false);
       }
 
       ScanFriends.ScanFriend friend = getItem(position);

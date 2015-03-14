@@ -1,33 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+<!--
+  ~ Copyright (c) 2015. All rights reserved by utree.cn
+  -->
 
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:background="@drawable/apptheme_primary_list_selector">
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:orientation="horizontal"
+        >
 
-        <TextView
-                android:id="@+id/tv_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:textSize="16sp"/>
+    <com.utree.eightysix.widget.AsyncImageViewWithRoundCorner
+            android:id="@+id/aiv_portrait"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            />
 
-        <TextView
-                android:id="@+id/tv_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:textColor="@color/apptheme_primary_dark_color"
-                android:textSize="14sp"/>
-    </LinearLayout>
+    <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/aiv_portrait"
+            android:layout_toEndOf="@+id/aiv_portrait"
+            />
 
-    <include layout="@layout/widget_primary_divider"/>
-</LinearLayout>
+    <TextView
+            android:id="@+id/tv_signature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/aiv_portrait"
+            android:layout_toEndOf="@+id/aiv_portrait"
+            android:layout_below="@+id/tv_name"
+            />
+
+    <TextView
+            android:id="@+id/tv_circle_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/aiv_portrait"
+            android:layout_toEndOf="@+id/aiv_portrait"
+            android:layout_below="@id/tv_signature"
+            />
+
+    <ImageView
+            android:id="@+id/iv_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_chat_normal"
+            />
+</RelativeLayout>
