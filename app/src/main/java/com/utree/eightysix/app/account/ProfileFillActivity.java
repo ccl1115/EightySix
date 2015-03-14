@@ -17,7 +17,6 @@ import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
-import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.CameraUtil;
 import com.utree.eightysix.app.Layout;
@@ -79,7 +78,15 @@ public class ProfileFillActivity extends BaseActivity {
   public void onRbSubmit() {
     mRbSubmit.setEnabled(false);
     showProgressBar(true);
-    U.request("profile_fill", new OnResponse2<Response>() {
+    Utils.updateProfile(mPortraitUrl,
+        mEtNickname.getText().toString(),
+        mRgGender.getCheckedRadioButtonId() == R.id.rb_male ? "男" : "女",
+        null,
+        null,
+        null,
+        null,
+        null,
+        new OnResponse2<Response>() {
           @Override
           public void onResponseError(Throwable e) {
             mRbSubmit.setEnabled(true);
@@ -98,15 +105,7 @@ public class ProfileFillActivity extends BaseActivity {
               }
             }
           }
-        }, Response.class,
-        mPortraitUrl,
-        mRgGender.getCheckedRadioButtonId() == R.id.rb_male ? "男" : "女",
-        mEtNickname.getText(),
-        null, /* 生日 */
-        null, /* 星座 */
-        null, /* 背景 */
-        null  /* 签名 */
-    );
+        });
   }
 
   @Override

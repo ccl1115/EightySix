@@ -26,7 +26,6 @@ import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.TimeUtil;
-import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.AsyncImageViewWithRoundCorner;
 
@@ -36,9 +35,6 @@ import java.util.Calendar;
 /**
  */
 public class ProfileFragment extends BaseFragment {
-
-  @InjectView(R.id.refresh_view)
-  public SwipeRefreshLayout mRefreshLayout;
 
   @InjectView(R.id.tv_name)
   public TextView mTvName;
@@ -120,28 +116,6 @@ public class ProfileFragment extends BaseFragment {
       }
     });
 
-    mRefreshLayout.setColorSchemeResources(R.color.apptheme_primary_light_color,
-        R.color.apptheme_primary_light_color_pressed,
-        R.color.apptheme_primary_light_color,
-        R.color.apptheme_primary_light_color_pressed);
-
-    mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-      @Override
-      public void onRefresh() {
-        getBaseActivity().showRefreshIndicator(true);
-        requestProfile(null);
-      }
-
-      @Override
-      public void onDrag() {
-        getBaseActivity().showRefreshIndicator(false);
-      }
-
-      @Override
-      public void onCancel() {
-        getBaseActivity().hideRefreshIndicator();
-      }
-    });
 
     requestProfile(null);
   }
@@ -152,18 +126,18 @@ public class ProfileFragment extends BaseFragment {
       @Override
       public void onResponseError(Throwable e) {
         getBaseActivity().hideRefreshIndicator();
-        mRefreshLayout.setRefreshing(false);
       }
 
       @Override
       public void onResponse(ProfileResponse response) {
         getBaseActivity().hideRefreshIndicator();
-        mRefreshLayout.setRefreshing(false);
         if (RESTRequester.responseOk(response)) {
 
           if (TextUtils.isEmpty(response.object.userName)) {
             mFlGuide.setVisibility(View.VISIBLE);
             return;
+          } else {
+            mFlGuide.setVisibility(View.GONE);
           }
 
           mTvName.setText(response.object.userName);

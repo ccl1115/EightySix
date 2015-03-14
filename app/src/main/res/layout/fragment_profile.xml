@@ -4,271 +4,265 @@
   ~ Copyright (c) 2015. All rights reserved by utree.cn
   -->
 
-<com.utree.eightysix.view.SwipeRefreshLayout
+
+<FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
-        android:id="@+id/refresh_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
 
-    <FrameLayout
+    <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             >
 
-        <ScrollView
+        <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/apptheme_primary_grey_color"
                 >
 
-            <LinearLayout
+            <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@color/apptheme_primary_grey_color"
+                    android:layout_height="305dp"
                     >
 
-                <FrameLayout
+                <com.utree.eightysix.widget.AsyncImageView
+                        android:id="@+id/aiv_bg"
                         android:layout_width="match_parent"
-                        android:layout_height="305dp"
-                        >
-
-                    <com.utree.eightysix.widget.AsyncImageView
-                            android:id="@+id/aiv_bg"
-                            android:layout_width="match_parent"
-                            android:layout_height="245dp"
-                            android:scaleType="centerCrop"
-                            />
-
-                    <View
-                            android:layout_width="match_parent"
-                            android:layout_height="245dp"
-                            android:background="#33000000"
-                            />
-
-                    <com.utree.eightysix.widget.RoundedButton
-                            android:id="@+id/rb_change_bg"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="16dp"
-                            android:text="更换个性背景"
-                            app:background="@color/apptheme_transparent_bg"
-                            />
-
-                    <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
-                            android:padding="8dp"
-                            >
-
-                        <com.utree.eightysix.widget.AsyncImageViewWithRoundCorner
-                                android:id="@+id/aiv_portrait"
-                                android:layout_width="88dp"
-                                android:layout_height="88dp"
-                                android:layout_margin="8dp"
-                                />
-
-                        <TextView
-                                android:id="@+id/tv_name"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_toRightOf="@+id/aiv_portrait"
-                                android:layout_toEndOf="@+id/aiv_portrait"
-                                android:textSize="18sp"
-                                android:textColor="@color/apptheme_primary_light_color"
-                                android:padding="8dp"
-                                />
-
-                        <TextView
-                                android:id="@+id/tv_circle_name"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_toRightOf="@+id/aiv_portrait"
-                                android:layout_toEndOf="@+id/aiv_portrait"
-                                android:layout_below="@+id/tv_name"
-                                android:padding="4dp"
-                                />
-
-                        <TextView
-                                android:id="@+id/tv_gender"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_toRightOf="@+id/aiv_portrait"
-                                android:layout_toEndOf="@+id/aiv_portrait"
-                                android:layout_below="@+id/tv_circle_name"
-                                android:padding="4dp"
-                                />
-
-                        <TextView
-                                android:id="@+id/tv_age"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_toRightOf="@+id/tv_gender"
-                                android:layout_toEndOf="@+id/tv_gender"
-                                android:layout_below="@+id/tv_circle_name"
-                                android:padding="4dp"
-                                />
-
-                        <TextView
-                                android:id="@+id/tv_birthday"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_toRightOf="@+id/tv_age"
-                                android:layout_toEndOf="@+id/tv_age"
-                                android:layout_below="@+id/tv_circle_name"
-                                android:padding="4dp"
-                                />
-
-                        <TextView
-                                android:id="@+id/tv_constellation"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_toRightOf="@+id/tv_birthday"
-                                android:layout_toEndOf="@+id/tv_birthday"
-                                android:layout_below="@+id/tv_circle_name"
-                                android:padding="4dp"
-                                />
-
-                        <TextView
-                                android:id="@+id/tv_hometown"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_toRightOf="@+id/aiv_portrait"
-                                android:layout_toEndOf="@+id/aiv_portrait"
-                                android:layout_below="@+id/tv_constellation"
-                                android:padding="4dp"
-                                />
-                    </RelativeLayout>
-
-                </FrameLayout>
-
-                <LinearLayout
-                        android:id="@+id/ll_signature"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:orientation="vertical"
-                        android:padding="16dp"
-                        android:background="@drawable/apptheme_primary_list_selector"
-                        >
-
-                    <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="我的签名"
-                            />
-
-                    <TextView
-                            android:id="@+id/tv_signature"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="16dp"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="8dp"
-                            android:textColor="@color/apptheme_primary_grey_color_200"
-                            />
-                </LinearLayout>
-
-                <TextView
-                        android:id="@+id/tv_my_posts"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:padding="16dp"
-                        android:text="我的帖子"
-                        android:background="@drawable/apptheme_primary_list_selector"
-                        />
-
-                <TextView
-                        android:id="@+id/tv_my_circles"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="1px"
-                        android:padding="16dp"
-                        android:text="我关注的圈子"
-                        android:background="@drawable/apptheme_primary_list_selector"
-                        />
-
-                <TextView
-                        android:id="@+id/tv_my_friends"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:padding="16dp"
-                        android:text="我的朋友"
-                        android:background="@drawable/apptheme_primary_list_selector"
-                        />
-
-                <TextView
-                        android:id="@+id/tv_settings"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginBottom="24dp"
-                        android:padding="16dp"
-                        android:text="设置"
-                        android:background="@drawable/apptheme_primary_list_selector"
-                        />
-
-            </LinearLayout>
-
-        </ScrollView>
-
-        <FrameLayout
-                android:id="@+id/fl_guide"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/translucent"
-                android:clickable="true"
-                android:visibility="gone"
-                >
-
-            <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/rounded_rect_white"
-                    android:layout_gravity="center"
-                    android:padding="16dp"
-                    android:orientation="vertical"
-                    android:gravity="center_horizontal"
-                    >
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="温馨提示"
-                        android:textSize="18sp"
-                        android:textColor="@color/apptheme_primary_light_color"
+                        android:layout_height="245dp"
+                        android:scaleType="centerCrop"
                         />
 
                 <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="16dp"
-                        android:background="@color/apptheme_primary_grey_color"
+                        android:layout_height="245dp"
+                        android:background="#33000000"
                         />
+
+                <com.utree.eightysix.widget.RoundedButton
+                        android:id="@+id/rb_change_bg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:text="更换个性背景"
+                        app:background="@color/apptheme_transparent_bg"
+                        />
+
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:padding="8dp"
+                        >
+
+                    <com.utree.eightysix.widget.AsyncImageViewWithRoundCorner
+                            android:id="@+id/aiv_portrait"
+                            android:layout_width="88dp"
+                            android:layout_height="88dp"
+                            android:layout_margin="8dp"
+                            />
+
+                    <TextView
+                            android:id="@+id/tv_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/aiv_portrait"
+                            android:layout_toEndOf="@+id/aiv_portrait"
+                            android:textSize="18sp"
+                            android:textColor="@color/apptheme_primary_light_color"
+                            android:padding="8dp"
+                            />
+
+                    <TextView
+                            android:id="@+id/tv_circle_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/aiv_portrait"
+                            android:layout_toEndOf="@+id/aiv_portrait"
+                            android:layout_below="@+id/tv_name"
+                            android:padding="4dp"
+                            />
+
+                    <TextView
+                            android:id="@+id/tv_gender"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/aiv_portrait"
+                            android:layout_toEndOf="@+id/aiv_portrait"
+                            android:layout_below="@+id/tv_circle_name"
+                            android:padding="4dp"
+                            />
+
+                    <TextView
+                            android:id="@+id/tv_age"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/tv_gender"
+                            android:layout_toEndOf="@+id/tv_gender"
+                            android:layout_below="@+id/tv_circle_name"
+                            android:padding="4dp"
+                            />
+
+                    <TextView
+                            android:id="@+id/tv_birthday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/tv_age"
+                            android:layout_toEndOf="@+id/tv_age"
+                            android:layout_below="@+id/tv_circle_name"
+                            android:padding="4dp"
+                            />
+
+                    <TextView
+                            android:id="@+id/tv_constellation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/tv_birthday"
+                            android:layout_toEndOf="@+id/tv_birthday"
+                            android:layout_below="@+id/tv_circle_name"
+                            android:padding="4dp"
+                            />
+
+                    <TextView
+                            android:id="@+id/tv_hometown"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/aiv_portrait"
+                            android:layout_toEndOf="@+id/aiv_portrait"
+                            android:layout_below="@+id/tv_constellation"
+                            android:padding="4dp"
+                            />
+                </RelativeLayout>
+
+            </FrameLayout>
+
+            <LinearLayout
+                    android:id="@+id/ll_signature"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:background="@drawable/apptheme_primary_list_selector"
+                    >
 
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:gravity="center_horizontal"
-                        android:text="你还没有昵称和头像，不能查看自己的主页哦\n\n编辑资料，乐趣更多！"
-                        android:ems="10"
+                        android:text="我的签名"
                         />
 
-                <com.utree.eightysix.widget.RoundedButton
-                        android:id="@+id/rb_edit"
+                <TextView
+                        android:id="@+id/tv_signature"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:padding="8dp"
-                        android:text="现在去编辑"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/apptheme_primary_grey_color_200"
                         />
             </LinearLayout>
-        </FrameLayout>
-    </FrameLayout>
 
-</com.utree.eightysix.view.SwipeRefreshLayout>
+            <TextView
+                    android:id="@+id/tv_my_posts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:padding="16dp"
+                    android:text="我的帖子"
+                    android:background="@drawable/apptheme_primary_list_selector"
+                    />
+
+            <TextView
+                    android:id="@+id/tv_my_circles"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1px"
+                    android:padding="16dp"
+                    android:text="我关注的圈子"
+                    android:background="@drawable/apptheme_primary_list_selector"
+                    />
+
+            <TextView
+                    android:id="@+id/tv_my_friends"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:padding="16dp"
+                    android:text="我的朋友"
+                    android:background="@drawable/apptheme_primary_list_selector"
+                    />
+
+            <TextView
+                    android:id="@+id/tv_settings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:padding="16dp"
+                    android:text="设置"
+                    android:background="@drawable/apptheme_primary_list_selector"
+                    />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <FrameLayout
+            android:id="@+id/fl_guide"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/translucent"
+            android:clickable="true"
+            android:visibility="gone"
+            >
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_rect_white"
+                android:layout_gravity="center"
+                android:padding="16dp"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                >
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="温馨提示"
+                    android:textSize="18sp"
+                    android:textColor="@color/apptheme_primary_light_color"
+                    />
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/apptheme_primary_grey_color"
+                    />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_horizontal"
+                    android:text="你还没有昵称和头像，不能查看自己的主页哦\n\n编辑资料，乐趣更多！"
+                    android:ems="10"
+                    />
+
+            <com.utree.eightysix.widget.RoundedButton
+                    android:id="@+id/rb_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:padding="8dp"
+                    android:text="现在去编辑"
+                    />
+        </LinearLayout>
+    </FrameLayout>
+</FrameLayout>
+
