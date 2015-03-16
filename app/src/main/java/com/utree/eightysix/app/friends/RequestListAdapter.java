@@ -14,8 +14,12 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.data.FriendRequest;
+import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.TimeUtil;
 import com.utree.eightysix.widget.RoundedButton;
 
@@ -88,11 +92,54 @@ public class RequestListAdapter extends BaseAdapter {
     @OnClick(R.id.rb_accept)
     public void onRbAcceptClicked() {
 
+      mTvResult.setVisibility(View.VISIBLE);
+      mRbAccept.setVisibility(View.INVISIBLE);
+      mTvIgnore.setVisibility(View.INVISIBLE);
+      mTvResult.setText("已同意");
+
+      U.request("user_friend_accepted", new OnResponse2<Response>() {
+        @Override
+        public void onResponseError(Throwable e) {
+          mRbAccept.setVisibility(View.VISIBLE);
+          mTvIgnore.setVisibility(View.VISIBLE);
+          mTvResult.setVisibility(View.INVISIBLE);
+        }
+
+        @Override
+        public void onResponse(Response response) {
+          if (!RESTRequester.responseOk(response)) {
+            mRbAccept.setVisibility(View.VISIBLE);
+            mTvIgnore.setVisibility(View.VISIBLE);
+            mTvResult.setVisibility(View.INVISIBLE);
+          }
+        }
+      }, Response.class);
     }
 
     @OnClick(R.id.tv_ignore)
     public void onTvIgnoreClicked() {
 
+      mRbAccept.setVisibility(View.INVISIBLE);
+      mTvIgnore.setVisibility(View.INVISIBLE);
+      mTvResult.setText("已忽略");
+
+      U.request("user_friend_ignore", new OnResponse2<Response>() {
+        @Override
+        public void onResponseError(Throwable e) {
+          mRbAccept.setVisibility(View.VISIBLE);
+          mTvIgnore.setVisibility(View.VISIBLE);
+          mTvResult.setVisibility(View.INVISIBLE);
+        }
+
+        @Override
+        public void onResponse(Response response) {
+          if (!RESTRequester.responseOk(response)) {
+            mRbAccept.setVisibility(View.VISIBLE);
+            mTvIgnore.setVisibility(View.VISIBLE);
+            mTvResult.setVisibility(View.INVISIBLE);
+          }
+        }
+      }, Response.class);
     }
 
     public void setData(FriendRequest request) {
@@ -106,9 +153,9 @@ public class RequestListAdapter extends BaseAdapter {
         mTvIgnore.setVisibility(View.VISIBLE);
         mTvResult.setVisibility(View.INVISIBLE);
       } else if ("ignored".equals(mRequest.type)) {
+        mTvResult.setVisibility(View.VISIBLE);
         mRbAccept.setVisibility(View.INVISIBLE);
         mTvIgnore.setVisibility(View.INVISIBLE);
-        mTvResult.setText("已同意");
         mTvResult.setText("已忽略");
       } else if ("passed".equals(mRequest.type)) {
         mTvResult.setVisibility(View.VISIBLE);
