@@ -18,6 +18,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.CameraUtil;
 import com.utree.eightysix.app.account.event.*;
+import com.utree.eightysix.app.circle.FollowCircleListActivity;
 import com.utree.eightysix.app.friends.FriendListActivity;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
 import com.utree.eightysix.response.ProfileResponse;
@@ -84,6 +85,11 @@ public class ProfileFragment extends BaseFragment {
   @OnClick(R.id.tv_my_friends)
   public void onLlFriendsClicked() {
     startActivity(new Intent(getActivity(), FriendListActivity.class));
+  }
+
+  @OnClick(R.id.tv_my_circles)
+  public void onLlMyCirclesClicked() {
+    startActivity(new Intent(getActivity(), FollowCircleListActivity.class));
   }
 
   @OnClick(R.id.rb_change_bg)

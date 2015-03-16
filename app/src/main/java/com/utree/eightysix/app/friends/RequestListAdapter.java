@@ -16,6 +16,7 @@ import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
+import com.utree.eightysix.app.account.ProfileFillDialog;
 import com.utree.eightysix.data.FriendRequest;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
@@ -90,7 +91,7 @@ public class RequestListAdapter extends BaseAdapter {
     private FriendRequest mRequest;
 
     @OnClick(R.id.rb_accept)
-    public void onRbAcceptClicked() {
+    public void onRbAcceptClicked(final View view) {
 
       mTvResult.setVisibility(View.VISIBLE);
       mRbAccept.setVisibility(View.INVISIBLE);
@@ -108,6 +109,9 @@ public class RequestListAdapter extends BaseAdapter {
         @Override
         public void onResponse(Response response) {
           if (!RESTRequester.responseOk(response)) {
+            if (response.code == 0x10AA) {
+              new ProfileFillDialog(view.getContext()).show();
+            }
             mRbAccept.setVisibility(View.VISIBLE);
             mTvIgnore.setVisibility(View.VISIBLE);
             mTvResult.setVisibility(View.INVISIBLE);
