@@ -6,9 +6,9 @@
 
 <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:background="@drawable/apptheme_primary_list_selector"
         >
 
@@ -28,7 +28,7 @@
             />
 
     <TextView
-            android:id="@+id/tv_signature"
+            android:id="@+id/tv_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/aiv_portrait"
@@ -37,31 +37,55 @@
             />
 
     <TextView
-            android:id="@+id/tv_circle_name"
+            android:id="@+id/tv_timestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/aiv_portrait"
             android:layout_toEndOf="@+id/aiv_portrait"
-            android:layout_below="@id/tv_signature"
-            android:layout_marginBottom="16dp"
+            android:layout_below="@+id/tv_info"
             />
 
-    <ImageView
-            android:id="@+id/iv_chat"
+    <com.utree.eightysix.widget.RoundedButton
+            android:id="@+id/rb_accept"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_toLeftOf="@+id/tv_ignore"
+            android:layout_toStartOf="@+id/tv_ignore"
+            android:layout_centerVertical="true"
+            android:layout_margin="8dp"
+            android:text="接受"
+            android:textColor="@android:color/white"
+            />
+
+    <TextView
+            android:id="@+id/tv_ignore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_chat_grey_normal"
+            android:layout_margin="8dp"
+            android:background="@drawable/border_outline_secondary_dark_color_btn"
+            android:text="忽略"
+            android:textColor="@color/border_outline_secondary_dark_color_btn_text"
+            />
+
+    <TextView
+            android:id="@+id/tv_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="8dp"
+            android:textColor="@color/apptheme_primary_grey_color_200"
+            android:visibility="gone"
             />
 
     <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:background="@color/apptheme_primary_grey_color"
             />
 

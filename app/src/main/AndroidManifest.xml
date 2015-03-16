@@ -263,6 +263,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".app.friends.FriendListActivity"/>
+        <activity
+                android:name=".app.friends.RequestListActivity"
+                android:label="好友请求"/>
 
         <!-- 【必须】 信鸽service -->
         <service android:exported="true" android:name="com.tencent.android.tpush.service.XGPushService" android:persistent="true" android:process=":xg_service_v2" tools:ignore="ExportedService"/>

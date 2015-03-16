@@ -5,6 +5,7 @@
 package com.utree.eightysix.app.msg;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.app.chat.ConversationActivity;
 import com.utree.eightysix.app.chat.event.ChatEvent;
+import com.utree.eightysix.app.friends.RequestListActivity;
 import com.utree.eightysix.event.HasNewPraiseEvent;
 import com.utree.eightysix.event.NewCommentCountEvent;
 import com.utree.eightysix.widget.RoundedButton;
@@ -49,6 +51,11 @@ public class MsgCenterFragment extends BaseFragment {
   @OnClick(R.id.ll_praise)
   public void onLlPraiseClicked() {
     PraiseActivity.start(getActivity(), true);
+  }
+
+  @OnClick(R.id.ll_request)
+  public void onLlFriendRequestClicked() {
+    startActivity(new Intent(getActivity(), RequestListActivity.class));
   }
 
   @Override

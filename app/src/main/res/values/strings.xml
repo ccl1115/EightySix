@@ -284,4 +284,5 @@
     <string name="avatar_viewer">查看头像</string>
     <string name="avatars">头像相册</string>
     <string name="name_edit">修改昵称</string>
+    <string name="friend_request">朋友请求</string>
 </resources>
