@@ -6,9 +6,11 @@ package com.utree.eightysix.data;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  */
-public class FriendRequest {
+public class FriendRequest implements Serializable {
 
   @SerializedName("userName")
   public String userName;

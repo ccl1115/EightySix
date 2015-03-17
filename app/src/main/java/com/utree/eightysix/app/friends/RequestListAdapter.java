@@ -22,6 +22,7 @@ import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.TimeUtil;
+import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.RoundedButton;
 
 import java.util.List;
@@ -87,6 +88,8 @@ public class RequestListAdapter extends BaseAdapter {
     @InjectView(R.id.tv_ignore)
     public TextView mTvIgnore;
 
+    @InjectView(R.id.aiv_portrait)
+    public AsyncImageView mAivPortrait;
 
     private FriendRequest mRequest;
 
@@ -149,6 +152,7 @@ public class RequestListAdapter extends BaseAdapter {
     public void setData(FriendRequest request) {
       mRequest = request;
 
+      mAivPortrait.setUrl(mRequest.avatar);
       mTvName.setText(mRequest.userName);
       mTvInfo.setText(mRequest.content);
       mTvTimestamp.setText(TimeUtil.getElapsed(mRequest.timestamp));

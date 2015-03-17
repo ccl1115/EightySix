@@ -7,6 +7,7 @@ package com.utree.eightysix.app.friends;
 import android.os.Bundle;
 import android.view.View;
 import butterknife.InjectView;
+import butterknife.OnItemClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
@@ -34,6 +35,11 @@ public class RequestListActivity extends BaseActivity {
 
   @InjectView(R.id.rstv_empty)
   public RandomSceneTextView mRstvEmpty;
+
+  @OnItemClick(R.id.alv_requests)
+  public void onAlvRequestsClicked(int position) {
+    RequestDetailActivity.start(this, (FriendRequest) mAlvRequests.getAdapter().getItem(position));
+  }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
