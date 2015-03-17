@@ -2,7 +2,6 @@
 
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,27 +17,37 @@
 
     </FrameLayout>
 
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#ffcccccc"
+            />
+
     <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="55dp"
             android:orientation="horizontal"
-            android:background="@color/apptheme_primary_dark_grey"
+            android:background="#fffcfcfc"
             >
+
 
         <FrameLayout
                 android:id="@+id/fl_feed"
                 android:layout_width="0dp"
-                android:layout_height="64dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/apptheme_transparent_bg"
                 >
 
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textColor="@android:color/white"
+                    android:gravity="center"
+                    android:textColor="@color/home_tab_text"
                     android:text="蓝莓圈"
+                    android:textSize="12sp"
+                    android:drawableTop="@drawable/ic_tab_feed"
+                    android:drawablePadding="4dp"
                     />
 
         </FrameLayout>
@@ -46,17 +55,20 @@
         <FrameLayout
                 android:id="@+id/fl_explore"
                 android:layout_width="0dp"
-                android:layout_height="64dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/apptheme_transparent_bg"
                 >
 
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textColor="@android:color/white"
+                    android:gravity="center"
                     android:text="发现"
+                    android:textColor="@color/home_tab_text"
+                    android:textSize="12sp"
+                    android:drawableTop="@drawable/ic_tab_explore"
+                    android:drawablePadding="4dp"
                     />
 
         </FrameLayout>
@@ -64,17 +76,20 @@
         <FrameLayout
                 android:id="@+id/fl_message"
                 android:layout_width="0dp"
-                android:layout_height="64dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/apptheme_transparent_bg"
                 >
 
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textColor="@android:color/white"
+                    android:gravity="center"
+                    android:textColor="@color/home_tab_text"
+                    android:drawableTop="@drawable/ic_tab_message"
+                    android:drawablePadding="5dp"
                     android:text="消息"
+                    android:textSize="12sp"
                     />
 
             <com.utree.eightysix.widget.CounterView
@@ -90,17 +105,20 @@
         <FrameLayout
                 android:id="@+id/fl_more"
                 android:layout_width="0dp"
-                android:layout_height="64dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/apptheme_transparent_bg"
                 >
 
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textColor="@android:color/white"
+                    android:gravity="center"
+                    android:textColor="@color/home_tab_text"
+                    android:textSize="12sp"
                     android:text="我"
+                    android:drawableTop="@drawable/ic_tab_me"
+                    android:drawablePadding="4dp"
                     />
         </FrameLayout>
     </LinearLayout>
