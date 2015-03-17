@@ -26,13 +26,20 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:background="@drawable/apptheme_primary_list_selector"
-                android:padding="16dp"
+                android:paddingTop="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="10dp"
                 >
 
             <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:drawableLeft="@drawable/ic_item_msg"
+                    android:drawableStart="@drawable/ic_item_msg"
+                    android:drawablePadding="10dp"
                     android:text="评论消息"
                     />
 
@@ -48,10 +55,13 @@
                 android:id="@+id/ll_chat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
+                android:layout_marginTop="1px"
                 android:orientation="horizontal"
                 android:background="@drawable/apptheme_primary_list_selector"
-                android:padding="16dp"
+                android:paddingTop="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="10dp"
                 >
 
             <TextView
@@ -59,6 +69,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="悄悄话"
+                    android:drawableLeft="@drawable/ic_item_chat"
+                    android:drawableStart="@drawable/ic_item_chat"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
                     />
 
             <com.utree.eightysix.widget.CounterView
@@ -76,7 +90,10 @@
                 android:layout_marginTop="24dp"
                 android:orientation="horizontal"
                 android:background="@drawable/apptheme_primary_list_selector"
-                android:padding="16dp"
+                android:paddingTop="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="10dp"
                 >
 
             <TextView
@@ -84,6 +101,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="聊天"
+                    android:drawableLeft="@drawable/ic_item_fchat"
+                    android:drawableStart="@drawable/ic_item_fchat"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
                     />
 
             <com.utree.eightysix.widget.CounterView
@@ -101,7 +122,10 @@
                 android:layout_marginTop="24dp"
                 android:orientation="horizontal"
                 android:background="@drawable/apptheme_primary_list_selector"
-                android:padding="16dp"
+                android:paddingTop="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="10dp"
                 >
 
             <TextView
@@ -109,6 +133,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="好友请求"
+                    android:drawableLeft="@drawable/ic_item_friend_requests"
+                    android:drawableStart="@drawable/ic_item_friend_requests"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
                     />
 
 
@@ -127,7 +155,10 @@
                 android:layout_marginTop="24dp"
                 android:orientation="horizontal"
                 android:background="@drawable/apptheme_primary_list_selector"
-                android:padding="16dp"
+                android:paddingTop="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="10dp"
                 >
 
             <TextView
@@ -135,6 +166,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="我收到的赞"
+                    android:drawableLeft="@drawable/ic_item_my_praises"
+                    android:drawableStart="@drawable/ic_item_my_praises"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
                     />
 
 
@@ -155,7 +190,10 @@
                 android:layout_marginTop="24dp"
                 android:orientation="horizontal"
                 android:background="@drawable/apptheme_primary_list_selector"
-                android:padding="16dp"
+                android:paddingTop="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="10dp"
                 >
 
             <TextView
@@ -163,6 +201,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="蓝莓小助手"
+                    android:drawableLeft="@drawable/ic_item_assist"
+                    android:drawableStart="@drawable/ic_item_assist"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
                     />
 
 
