@@ -6,7 +6,7 @@
     <color name="apptheme_primary_light_color_pressed">#ff551694</color>
     <color name="apptheme_primary_light_color_disabled">#ffeeeeee</color>
 
-    <color name="apptheme_primary_grey_color">#ffdddddd</color>
+    <color name="apptheme_primary_grey_color">#ffebebeb</color>
     <color name="apptheme_primary_grey_color_pressed">#ff898989</color>
     <color name="apptheme_primary_grey_color_disabled">#ffd8d8d8</color>
     <color name="apptheme_primary_grey_color_200">#ff999999</color>

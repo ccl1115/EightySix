@@ -73,7 +73,7 @@
                             android:layout_toEndOf="@+id/aiv_portrait"
                             android:textSize="18sp"
                             android:textColor="@color/apptheme_primary_light_color"
-                            android:padding="8dp"
+                            android:padding="10dp"
                             />
 
                     <TextView
@@ -145,13 +145,20 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:orientation="vertical"
-                    android:padding="16dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
                     android:background="@drawable/apptheme_primary_list_selector"
                     >
 
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_item_signature"
+                        android:drawableStart="@drawable/ic_item_signature"
+                        android:drawablePadding="15dp"
+                        android:gravity="center_vertical"
                         android:text="我的签名"
                         />
 
@@ -159,9 +166,9 @@
                         android:id="@+id/tv_signature"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginTop="10dp"
                         android:textColor="@color/apptheme_primary_grey_color_200"
                         />
             </LinearLayout>
@@ -171,9 +178,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:padding="16dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
                     android:text="我的帖子"
                     android:background="@drawable/apptheme_primary_list_selector"
+                    android:gravity="center_vertical"
+                    android:drawableLeft="@drawable/ic_item_my_posts"
+                    android:drawableStart="@drawable/ic_item_my_posts"
+                    android:drawablePadding="15dp"
                     />
 
             <TextView
@@ -181,9 +195,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1px"
-                    android:padding="16dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
                     android:text="我关注的圈子"
                     android:background="@drawable/apptheme_primary_list_selector"
+                    android:gravity="center_vertical"
+                    android:drawableLeft="@drawable/ic_item_my_circles"
+                    android:drawableStart="@drawable/ic_item_my_circles"
+                    android:drawablePadding="15dp"
                     />
 
             <TextView
@@ -191,9 +212,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:padding="16dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
                     android:text="我的朋友"
                     android:background="@drawable/apptheme_primary_list_selector"
+                    android:gravity="center_vertical"
+                    android:drawableLeft="@drawable/ic_item_my_friends"
+                    android:drawableStart="@drawable/ic_item_my_friends"
+                    android:drawablePadding="15dp"
                     />
 
             <TextView
@@ -202,9 +230,16 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:layout_marginBottom="24dp"
-                    android:padding="16dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
                     android:text="设置"
                     android:background="@drawable/apptheme_primary_list_selector"
+                    android:gravity="center_vertical"
+                    android:drawableLeft="@drawable/ic_item_settings"
+                    android:drawableStart="@drawable/ic_item_settings"
+                    android:drawablePadding="15dp"
                     />
 
         </LinearLayout>
