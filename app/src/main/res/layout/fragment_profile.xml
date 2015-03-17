@@ -26,19 +26,19 @@
 
             <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="305dp"
+                    android:layout_height="250dp"
                     >
 
                 <com.utree.eightysix.widget.AsyncImageView
                         android:id="@+id/aiv_bg"
                         android:layout_width="match_parent"
-                        android:layout_height="245dp"
+                        android:layout_height="160dp"
                         android:scaleType="centerCrop"
                         />
 
                 <View
                         android:layout_width="match_parent"
-                        android:layout_height="245dp"
+                        android:layout_height="160dp"
                         android:background="#33000000"
                         />
 
@@ -48,6 +48,9 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp"
                         android:text="更换个性背景"
+                        android:textSize="12sp"
+                        android:textColor="#88ffffff"
+                        android:padding="4dp"
                         app:background="@color/apptheme_transparent_bg"
                         />
 
@@ -55,45 +58,75 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
-                        android:padding="8dp"
+                        android:padding="16dp"
                         >
 
-                    <com.utree.eightysix.widget.AsyncImageViewWithRoundCorner
-                            android:id="@+id/aiv_portrait"
-                            android:layout_width="88dp"
-                            android:layout_height="88dp"
-                            android:layout_margin="8dp"
-                            />
+                    <FrameLayout
+                            android:id="@+id/fl_portrait"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            >
+
+                        <com.utree.eightysix.widget.RoundedButton
+                                android:layout_width="68dp"
+                                android:layout_height="68dp"
+                                android:layout_gravity="center"
+                                app:radius="10dp"
+                                app:background="#88ffffff"
+                                />
+
+                        <com.utree.eightysix.widget.AsyncImageViewWithRoundCorner
+                                android:id="@+id/aiv_portrait"
+                                android:layout_width="64dp"
+                                android:layout_height="64dp"
+                                android:layout_gravity="center"
+                                app:radius="10dp"
+                                />
+
+                    </FrameLayout>
 
                     <TextView
                             android:id="@+id/tv_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_toRightOf="@+id/aiv_portrait"
-                            android:layout_toEndOf="@+id/aiv_portrait"
-                            android:textSize="18sp"
-                            android:textColor="@color/apptheme_primary_light_color"
-                            android:padding="10dp"
+                            android:layout_toRightOf="@+id/fl_portrait"
+                            android:layout_toEndOf="@+id/fl_portrait"
+                            android:paddingLeft="10dp"
+                            android:paddingBottom="2dp"
+                            android:paddingRight="4dp"
+                            android:textSize="16sp"
+                            android:textColor="@android:color/white"
                             />
 
                     <TextView
                             android:id="@+id/tv_circle_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_toRightOf="@+id/aiv_portrait"
-                            android:layout_toEndOf="@+id/aiv_portrait"
+                            android:layout_marginTop="6dp"
+                            android:layout_toRightOf="@+id/fl_portrait"
+                            android:layout_toEndOf="@+id/fl_portrait"
                             android:layout_below="@+id/tv_name"
-                            android:padding="4dp"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:textSize="14sp"
+                            android:textColor="@color/apptheme_primary_grey_color_200"
                             />
 
                     <TextView
                             android:id="@+id/tv_gender"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_toRightOf="@+id/aiv_portrait"
-                            android:layout_toEndOf="@+id/aiv_portrait"
+                            android:layout_toRightOf="@+id/fl_portrait"
+                            android:layout_toEndOf="@+id/fl_portrait"
                             android:layout_below="@+id/tv_circle_name"
-                            android:padding="4dp"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="4dp"
+                            android:textSize="14sp"
+                            android:textColor="@color/apptheme_primary_grey_color_200"
                             />
 
                     <TextView
@@ -103,7 +136,12 @@
                             android:layout_toRightOf="@+id/tv_gender"
                             android:layout_toEndOf="@+id/tv_gender"
                             android:layout_below="@+id/tv_circle_name"
-                            android:padding="4dp"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="4dp"
+                            android:paddingRight="10dp"
+                            android:textSize="14sp"
+                            android:textColor="@color/apptheme_primary_grey_color_200"
                             />
 
                     <TextView
@@ -113,7 +151,12 @@
                             android:layout_toRightOf="@+id/tv_age"
                             android:layout_toEndOf="@+id/tv_age"
                             android:layout_below="@+id/tv_circle_name"
-                            android:padding="4dp"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="4dp"
+                            android:paddingRight="4dp"
+                            android:textSize="14sp"
+                            android:textColor="@color/apptheme_primary_grey_color_200"
                             />
 
                     <TextView
@@ -123,17 +166,26 @@
                             android:layout_toRightOf="@+id/tv_birthday"
                             android:layout_toEndOf="@+id/tv_birthday"
                             android:layout_below="@+id/tv_circle_name"
-                            android:padding="4dp"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="4dp"
+                            android:paddingRight="4dp"
+                            android:textSize="14sp"
+                            android:textColor="@color/apptheme_primary_grey_color_200"
                             />
 
                     <TextView
                             android:id="@+id/tv_hometown"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_toRightOf="@+id/aiv_portrait"
-                            android:layout_toEndOf="@+id/aiv_portrait"
+                            android:layout_toRightOf="@+id/fl_portrait"
+                            android:layout_toEndOf="@+id/fl_portrait"
                             android:layout_below="@+id/tv_constellation"
-                            android:padding="4dp"
+                            android:paddingTop="2dp"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:textSize="14sp"
+                            android:textColor="@color/apptheme_primary_grey_color_200"
                             />
                 </RelativeLayout>
 
