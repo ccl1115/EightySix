@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -18,7 +17,6 @@ import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,7 +40,6 @@ import com.utree.eightysix.app.publish.event.PostPublishedEvent;
 import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.data.Tag;
-import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.request.PublishRequest;
 import com.utree.eightysix.request.TagsRequest;
 import com.utree.eightysix.response.PublishPostResponse;
@@ -54,7 +51,10 @@ import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.InputValidator;
-import com.utree.eightysix.widget.*;
+import com.utree.eightysix.widget.AsyncImageView;
+import com.utree.eightysix.widget.IndicatorView;
+import com.utree.eightysix.widget.TagView;
+import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.panel.GridPanel;
 import com.utree.eightysix.widget.panel.Item;
 
@@ -382,43 +382,15 @@ public class PublishActivity extends BaseActivity {
       }
     });
 
-    mTopBar.setActionAdapter(new TopBar.ActionAdapter() {
+    getTopBar().getAbRight().setText("发表");
+    getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
       @Override
-      public String getTitle(int position) {
-        return getString(R.string.publish_post);
-      }
-
-      @Override
-      public Drawable getIcon(int position) {
-        return null;
-      }
-
-      @Override
-      public Drawable getBackgroundDrawable(int position) {
-        return new RoundRectDrawable(dp2px(2), getResources().getColorStateList(R.color.apptheme_primary_btn_light));
-      }
-
-      @Override
-      public void onClick(View view, int position) {
-        if (position == 0) {
-
-          if (mPostEditText.getText().length() == 0) {
-            showToast(getString(R.string.cannot_post_empty_content));
-          } else {
-            requestPublish();
-          }
+      public void onClick(View v) {
+        if (mPostEditText.getText().length() == 0) {
+          showToast(getString(R.string.cannot_post_empty_content));
+        } else {
+          requestPublish();
         }
-      }
-
-      @Override
-      public int getCount() {
-        return 1;
-      }
-
-      @Override
-      public TopBar.LayoutParams getLayoutParams(int position) {
-        return new TopBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.MATCH_PARENT);
       }
     });
 
@@ -548,30 +520,9 @@ public class PublishActivity extends BaseActivity {
   }
 
   protected void disablePublishButton() {
-    getHandler().postDelayed(new Runnable() {
-      @Override
-      public void run() {
-        mTopBar.getActionView(0).setEnabled(false);
-        mTopBar.getActionView(0).setActionBackgroundDrawable(
-            new RoundRectDrawable(U.dp2px(2),
-                getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
-        ((TextActionButton) mTopBar.getActionView(0)).setTextColor(
-            getResources().getColor(R.color.apptheme_primary_grey_color_disabled));
-      }
-    }, 200);
   }
 
   protected void enablePublishButton() {
-    getHandler().postDelayed(new Runnable() {
-      @Override
-      public void run() {
-        mTopBar.getActionView(0).setEnabled(true);
-        mTopBar.getActionView(0).setActionBackgroundDrawable(
-            new RoundRectDrawable(U.dp2px(2),
-                getResources().getColorStateList(R.color.apptheme_primary_btn_light)));
-        ((TextActionButton) mTopBar.getActionView(0)).setTextColor(Color.WHITE);
-      }
-    }, 200);
   }
 
   private void randomItem() {
@@ -712,6 +663,8 @@ public class PublishActivity extends BaseActivity {
       }
 
       builder.sendType(mSendType);
+
+      builder.realName(0);
 
       String tags = "";
       for (Tag t : mTagsLayout.getSelectedTags()) {
