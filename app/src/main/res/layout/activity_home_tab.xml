@@ -47,7 +47,7 @@
                     android:text="蓝莓圈"
                     android:textSize="12sp"
                     android:drawableTop="@drawable/ic_tab_feed"
-                    android:drawablePadding="4dp"
+                    android:drawablePadding="3dp"
                     />
 
         </FrameLayout>
@@ -68,7 +68,7 @@
                     android:textColor="@color/home_tab_text"
                     android:textSize="12sp"
                     android:drawableTop="@drawable/ic_tab_explore"
-                    android:drawablePadding="4dp"
+                    android:drawablePadding="2dp"
                     />
 
         </FrameLayout>
@@ -87,7 +87,7 @@
                     android:gravity="center"
                     android:textColor="@color/home_tab_text"
                     android:drawableTop="@drawable/ic_tab_message"
-                    android:drawablePadding="5dp"
+                    android:drawablePadding="4dp"
                     android:text="消息"
                     android:textSize="12sp"
                     />
@@ -97,7 +97,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:layout_margin="4dp"
+                    android:layout_margin="3dp"
                     android:visibility="invisible"
                     />
         </FrameLayout>
@@ -118,7 +118,7 @@
                     android:textSize="12sp"
                     android:text="我"
                     android:drawableTop="@drawable/ic_tab_me"
-                    android:drawablePadding="4dp"
+                    android:drawablePadding="3dp"
                     />
         </FrameLayout>
     </LinearLayout>

@@ -52,8 +52,7 @@ public class TimeUtil {
   public static String getDate(long timestamp) {
     Calendar calendar = Calendar.getInstance();
     calendar.setTimeInMillis(timestamp);
-    return String.format("%d/%d/%d",
-        calendar.get(Calendar.YEAR),
+    return String.format("%d-%d",
         calendar.get(Calendar.MONTH) + 1,
         calendar.get(Calendar.DAY_OF_MONTH));
   }
