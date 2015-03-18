@@ -33,6 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
+                android:layout_gravity="center_horizontal"
                 android:orientation="horizontal"
                 >
 
@@ -83,6 +84,28 @@
                 android:gravity="center"
                 />
 
+
+        <com.utree.eightysix.widget.RoundedButton
+                android:id="@+id/rb_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="8dp"
+                app:radius="4dp"
+                app:background="@color/apptheme_primary_transparent_btn"
+                android:text="插入标签"
+                android:textSize="14sp"
+                />
+
+        <CheckBox
+                android:id="@+id/cb_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_gravity="end|bottom"
+                android:text="匿名发表"
+                android:checked="true"
+                />
     </FrameLayout>
 
 
@@ -91,58 +114,24 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:background="@android:color/white"
-            android:orientation="horizontal"
-            android:gravity="end"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             >
 
-        <com.utree.eightysix.widget.RoundedButton
-                android:id="@+id/tv_tag"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_margin="8dp"
-                android:layout_centerVertical="true"
-                android:text="#"
-                android:textSize="16sp"
-                android:gravity="center"
-                android:minHeight="0dp"
-                android:padding="0dp"
-                app:background="#ff333333"
-                android:textColor="@android:color/white"
-                />
-
         <ImageView
-                android:id="@+id/iv_temp_name"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_margin="4dp"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/tv_tag"
-                android:src="@drawable/ic_temp_name"
-                />
-
-
-        <EditText
-                android:id="@+id/et_temp_name"
+                android:id="@+id/iv_emotion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/iv_temp_name"
-                android:layout_marginRight="8dp"
-                android:paddingBottom="12dp"
-                android:maxLength="6"
-                android:textColor="#ffcccccc"
-                android:hint="填个临时名字"
+                android:src="@drawable/ic_action_emotion"
                 />
-
 
         <ImageView
                 android:id="@+id/iv_camera"
-                android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@+id/iv_shuffle"
+                android:layout_toStartOf="@+id/iv_shuffle"
                 android:layout_centerVertical="true"
                 android:padding="5dp"
                 android:src="@drawable/ic_action_camera"
@@ -150,10 +139,10 @@
 
         <ImageView
                 android:id="@+id/iv_shuffle"
-                android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:padding="5dp"
                 android:src="@drawable/ic_action_shuffle"

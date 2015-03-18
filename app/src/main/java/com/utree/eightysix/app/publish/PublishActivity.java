@@ -16,15 +16,14 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.*;
 import butterknife.InjectView;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
-import butterknife.OnTextChanged;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ArgbEvaluator;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -51,10 +50,7 @@ import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.InputValidator;
-import com.utree.eightysix.widget.AsyncImageView;
-import com.utree.eightysix.widget.IndicatorView;
-import com.utree.eightysix.widget.TagView;
-import com.utree.eightysix.widget.ThemedDialog;
+import com.utree.eightysix.widget.*;
 import com.utree.eightysix.widget.panel.GridPanel;
 import com.utree.eightysix.widget.panel.Item;
 
@@ -97,14 +93,14 @@ public class PublishActivity extends BaseActivity {
   @InjectView (R.id.tv_tag_2)
   public TagView mTvTag2;
 
-  @InjectView (R.id.et_temp_name)
-  public EditText mEtTempName;
-
-  @InjectView (R.id.iv_temp_name)
-  public ImageView mIvTempName;
+  @InjectView(R.id.rb_tag)
+  public RoundedButton mRbTag;
 
   @InjectView (R.id.tl_tags)
   public TagsLayout mTagsLayout;
+
+  @InjectView(R.id.cb_check)
+  public CheckBox mCbAnonymous;
 
   protected PublishLayout mPublishLayout;
 
@@ -121,7 +117,6 @@ public class PublishActivity extends BaseActivity {
 
   private ThemedDialog mQuitConfirmDialog;
 
-  private String mLastTempName;
   private List<Tag> mTags;
   private int mSendType;
 
@@ -183,8 +178,8 @@ public class PublishActivity extends BaseActivity {
     }
   }
 
-  @OnClick (R.id.tv_tag)
-  public void onTvTagClicked() {
+  @OnClick(R.id.rb_tag)
+  public void onRbTagClicked() {
 
     U.getAnalyser().trackEvent(this, "publish_tag_panel", "publish_tag_panel");
 
@@ -221,26 +216,12 @@ public class PublishActivity extends BaseActivity {
     }
   }
 
-  @OnTextChanged (R.id.et_temp_name)
-  public void onEtTempNameClicked(CharSequence cs) {
-    if (mEtTempName.isFocused()) {
-      mIvTempName.setSelected(cs.length() > 1);
-    }
-
-    if (cs.length() > 1) {
-      mEtTempName.setTextColor(0xff000000);
-    } else {
-      mEtTempName.setTextColor(0xffcccccc);
-    }
-  }
-
-  @OnClick (R.id.iv_temp_name)
-  public void onIvTempNameClicked() {
-    if (mEtTempName.getText().length() > 1) {
-      mIvTempName.setSelected(!mIvTempName.isSelected());
-      mEtTempName.setTextColor(mIvTempName.isSelected() ? 0xff000000 : 0xffcccccc);
-    } else {
-      showToast("临时名要两个字以上哦");
+  @OnCheckedChanged(R.id.cb_check)
+  public void onCbAnonymousCheckChanged(boolean checked) {
+    if (!checked) {
+      if (Env.firstRun("cancel_anonymous")) {
+        showCancelAnonymousDialog();
+      }
     }
   }
 
@@ -252,6 +233,8 @@ public class PublishActivity extends BaseActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    getTopBar().getAbLeft().setDrawable(getDrawable(R.drawable.top_bar_return));
 
     mCameraUtil = new CameraUtil(this, new CameraUtil.Callback() {
       @Override
@@ -427,6 +410,11 @@ public class PublishActivity extends BaseActivity {
   }
 
   protected void setSelectedTags(List<Tag> tags) {
+    if (tags.size() > 0) {
+      mRbTag.setVisibility(View.GONE);
+    } else {
+      mRbTag.setVisibility(View.VISIBLE);
+    }
     mTvTag1.setText("");
     mTvTag2.setText("");
     for (int i = 0; i < tags.size(); i++) {
@@ -629,6 +617,39 @@ public class PublishActivity extends BaseActivity {
     }
   }
 
+  private void showCancelAnonymousDialog() {
+    final ThemedDialog dialog = new ThemedDialog(this);
+
+    View view = LayoutInflater.from(this).inflate(R.layout.dialog_cancel_anonymouse, null, false);
+
+    dialog.setContent(view);
+
+    ((CheckBox) view.findViewById(R.id.cb_check)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+      @Override
+      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        Env.setFirstRun("cancel_anonymous", !isChecked);
+      }
+    });
+
+    dialog.setPositive(R.string.okay, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        dialog.dismiss();
+        mCbAnonymous.setChecked(false);
+      }
+    });
+
+    dialog.setRbNegative(R.string.cancel, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        dialog.dismiss();
+        mCbAnonymous.setChecked(true);
+      }
+    });
+
+    dialog.show();
+  }
+
   private void setBgImage(String p) {
     final File file = new File(p);
     Bitmap bitmap = ImageUtils.safeDecodeBitmap(file);
@@ -676,10 +697,7 @@ public class PublishActivity extends BaseActivity {
         builder.tags(tags);
       }
 
-      if (mIvTempName.isSelected() && mEtTempName.getText().length() > 1) {
-        builder.tempName(mEtTempName.getText().toString());
-        builder.sourceType(2);
-      }
+      builder.realName(mCbAnonymous.isChecked() ? 0 : 1);
 
       disablePublishButton();
 
@@ -694,8 +712,7 @@ public class PublishActivity extends BaseActivity {
             post.bgUrl = mImageUploadUrl;
             post.id = response.object.id;
             post.content = mPostEditText.getText().toString();
-            post.source = (mIvTempName.isSelected() && mEtTempName.getText().length() > 0) ?
-                mEtTempName.getText().toString() : "认识的人";
+            post.source = ("认识的人");
             post.type = BaseItem.TYPE_POST;
             post.tags = mTagsLayout.getSelectedTags();
             U.getBus().post(new PostPublishedEvent(post, mFactoryId));
@@ -723,11 +740,8 @@ public class PublishActivity extends BaseActivity {
       public void onResponse(TagsResponse response) {
         if (RESTRequester.responseOk(response)) {
           mTags = response.object.tags;
-          mLastTempName = response.object.lastTempName;
 
           mTagsLayout.setTag(mTags);
-          mEtTempName.setText(mLastTempName);
-          mEtTempName.setTextColor(0xffcccccc);
         }
         requestTags();
       }
@@ -745,11 +759,8 @@ public class PublishActivity extends BaseActivity {
       public void onResponse(TagsResponse response) {
         if (RESTRequester.responseOk(response)) {
           mTags = response.object.tags;
-          mLastTempName = response.object.lastTempName;
 
           mTagsLayout.setTag(mTags);
-          mEtTempName.setText(mLastTempName);
-          mEtTempName.setTextColor(0xffcccccc);
         }
       }
     }, TagsResponse.class);

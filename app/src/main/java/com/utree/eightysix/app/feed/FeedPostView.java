@@ -169,7 +169,7 @@ public class FeedPostView extends LinearLayout {
     inflate(context, R.layout.item_feed_post, this);
 
     setOrientation(VERTICAL);
-    setPadding(U.dp2px(8), U.dp2px(8), U.dp2px(8), 0);
+    setPadding(0, U.dp2px(3), 0, 0);
 
     U.viewBinding(this, this);
 
