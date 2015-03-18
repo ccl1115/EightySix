@@ -9,15 +9,15 @@
         xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/apptheme_primary_grey_color"
         >
 
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="24dp"
-            android:paddingBottom="24dp"
-            android:background="@color/apptheme_primary_grey_color"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
             >
 
         <LinearLayout
@@ -87,7 +87,7 @@
                 android:id="@+id/ll_fchat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:orientation="horizontal"
                 android:background="@drawable/apptheme_primary_list_selector"
                 android:paddingTop="10dp"
@@ -119,7 +119,7 @@
                 android:id="@+id/ll_request"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:orientation="horizontal"
                 android:background="@drawable/apptheme_primary_list_selector"
                 android:paddingTop="10dp"
@@ -152,7 +152,7 @@
                 android:id="@+id/ll_praise"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:orientation="horizontal"
                 android:background="@drawable/apptheme_primary_list_selector"
                 android:paddingTop="10dp"
@@ -187,7 +187,7 @@
                 android:id="@+id/ll_assist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:orientation="horizontal"
                 android:background="@drawable/apptheme_primary_list_selector"
                 android:paddingTop="10dp"
