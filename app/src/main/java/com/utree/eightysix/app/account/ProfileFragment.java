@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -87,9 +88,17 @@ public class ProfileFragment extends HolderFragment {
   @InjectView(R.id.tv_title_signature)
   public TextView mTvTitleSignature;
 
-
   @InjectView(R.id.tv_title_my_posts)
   public TextView mTvTitleMyPosts;
+
+  @InjectView(R.id.tv_exp)
+  public TextView mTvExp;
+
+  @InjectView(R.id.pb_exp)
+  public ProgressBar mPbExp;
+
+  @InjectView(R.id.aiv_level_icon)
+  public AsyncImageView mAivLevelIcon;
 
   private CameraUtil mCameraUtil;
   private boolean mIsVisitor;
@@ -216,6 +225,11 @@ public class ProfileFragment extends HolderFragment {
               mTvTitleSignature.setText("Ta的签名");
             }
           }
+
+          mAivLevelIcon.setUrl(response.object.levelIcon);
+          mTvExp.setText(String.format("%d/%d", response.object.level, response.object.nextLevel));
+          mPbExp.setMax(response.object.nextLevel);
+          mPbExp.setProgress(response.object.level);
         }
       }
     }, ProfileResponse.class, userId);
