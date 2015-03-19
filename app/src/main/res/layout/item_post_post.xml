@@ -1,124 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         >
 
-    <com.utree.eightysix.widget.AsyncImageView
-            android:id="@+id/aiv_bg"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            />
-
-    <View
-            android:id="@+id/v_mask"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#44000000"
-            />
-
-    <TextView
-            android:id="@+id/tv_content"
-            style="@style/TextView.PostStyle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingLeft="48dp"
-            android:paddingRight="48dp"
-            android:textColor="@android:color/white"
-            />
 
     <LinearLayout
-            android:id="@+id/fl_panel"
+            android:id="@+id/ll_top"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="53dp"
+            android:background="@color/apptheme_primary_grey_color_200"
             android:orientation="horizontal"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="5dp"
-            android:paddingLeft="15dp"
-            android:paddingStart="15dp"
-            android:paddingRight="15dp"
-            android:paddingEnd="15dp"
+            android:visibility="gone"
+            android:paddingLeft="53dp"
+            android:paddingRight="53dp"
             >
 
-        <TextView
-                android:id="@+id/tv_source"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+        <com.utree.eightysix.widget.AsyncImageViewWithRoundCorner
+                android:id="@+id/aiv_portrait"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center_vertical"
-                android:singleLine="true"
-                android:maxLines="1"
-                android:textSize="14sp"
-                android:textColor="@android:color/white"
+                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
+                app:radius="4dp"
+                app:width="30dp"
+                app:height="30dp"
                 />
 
         <TextView
-                android:id="@+id/tv_praise"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="2dp"
-                android:layout_marginStart="2dp"
-                android:gravity="center_vertical|end"
-                android:textSize="14sp"
-                android:textColor="@android:color/white"
-                android:minWidth="45dp"
-                />
-
-        <TextView
-                android:id="@+id/tv_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_reply"
-                android:drawableStart="@drawable/ic_reply"
-                android:gravity="center_vertical|end"
-                android:textSize="14sp"
-                android:textColor="@android:color/white"
-                android:minWidth="45dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="15dp"
-                />
-
-        <ImageView
-                android:id="@+id/iv_more"
+                android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_s_overflow"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                />
+
+        <com.utree.eightysix.widget.AsyncImageView
+                android:id="@+id/aiv_level_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                app:width="16dp"
+                app:height="16dp"
                 />
 
     </LinearLayout>
 
-    <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|top"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal"
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="360dp"
             >
 
-        <com.utree.eightysix.widget.TagView
-                android:id="@+id/tv_tag_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="4dp"
-                android:layout_marginEnd="4dp"
+        <com.utree.eightysix.widget.AsyncImageView
+                android:id="@+id/aiv_bg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
                 />
 
-        <com.utree.eightysix.widget.TagView
-                android:id="@+id/tv_tag_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+        <View
+                android:id="@+id/v_mask"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#44000000"
                 />
 
-    </LinearLayout>
+        <TextView
+                android:id="@+id/tv_content"
+                style="@style/TextView.PostStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="48dp"
+                android:paddingRight="48dp"
+                android:textColor="@android:color/white"
+                />
 
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_gravity="bottom"
-            android:background="#ffcccccc"
-            />
+        <LinearLayout
+                android:id="@+id/fl_panel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="5dp"
+                android:paddingLeft="15dp"
+                android:paddingStart="15dp"
+                android:paddingRight="15dp"
+                android:paddingEnd="15dp"
+                >
+
+            <TextView
+                    android:id="@+id/tv_source"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/white"
+                    />
+
+            <TextView
+                    android:id="@+id/tv_praise"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginStart="2dp"
+                    android:gravity="center_vertical|end"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/white"
+                    android:minWidth="45dp"
+                    />
+
+            <TextView
+                    android:id="@+id/tv_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_reply"
+                    android:drawableStart="@drawable/ic_reply"
+                    android:gravity="center_vertical|end"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/white"
+                    android:minWidth="45dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="15dp"
+                    />
+
+            <ImageView
+                    android:id="@+id/iv_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_s_overflow"
+                    />
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                >
+
+            <com.utree.eightysix.widget.TagView
+                    android:id="@+id/tv_tag_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginEnd="4dp"
+                    />
+
+            <com.utree.eightysix.widget.TagView
+                    android:id="@+id/tv_tag_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+        </LinearLayout>
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_gravity="bottom"
+                android:background="#ffcccccc"
+                />
 
 
-</FrameLayout>
+    </FrameLayout>
+</LinearLayout>
+

@@ -49,6 +49,8 @@
                         android:layout_marginRight="16dp"
                         android:layout_marginEnd="16dp"
                         app:radius="4dp"
+                        app:width="40dp"
+                        app:height="40dp"
                         />
             </LinearLayout>
 

@@ -116,11 +116,6 @@ public class Post extends BaseItem implements Parcelable {
   }
 
   @Override
-  public int describeContents() {
-    return 0;
-  }
-
-  @Override
   public String toString() {
     return "Post{" +
         "factoryId=" + factoryId +
@@ -149,6 +144,11 @@ public class Post extends BaseItem implements Parcelable {
   }
 
   @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
   public void writeToParcel(Parcel dest, int flags) {
     dest.writeInt(this.factoryId);
     dest.writeString(this.circle);
@@ -168,7 +168,16 @@ public class Post extends BaseItem implements Parcelable {
     dest.writeInt(this.isRepost);
     dest.writeInt(this.isHot);
     dest.writeInt(this.owner);
+    dest.writeInt(this.sourceType);
+    dest.writeInt(this.userCurrFactoryId);
     dest.writeTypedList(tags);
+    dest.writeInt(this.relation);
+    dest.writeString(this.hometownText);
+    dest.writeString(this.distance);
+    dest.writeString(this.userName);
+    dest.writeString(this.avatar);
+    dest.writeString(this.viewUserId);
+    dest.writeString(this.levelIcon);
     dest.writeString(this.bgUrl);
     dest.writeString(this.bgColor);
     dest.writeString(this.content);
@@ -176,7 +185,6 @@ public class Post extends BaseItem implements Parcelable {
   }
 
   private Post(Parcel in) {
-    tags = new ArrayList<Tag>();
     this.factoryId = in.readInt();
     this.circle = in.readString();
     this.shortName = in.readString();
@@ -195,7 +203,17 @@ public class Post extends BaseItem implements Parcelable {
     this.isRepost = in.readInt();
     this.isHot = in.readInt();
     this.owner = in.readInt();
+    this.sourceType = in.readInt();
+    this.userCurrFactoryId = in.readInt();
+    tags = new ArrayList<Tag>();
     in.readTypedList(tags, Tag.CREATOR);
+    this.relation = in.readInt();
+    this.hometownText = in.readString();
+    this.distance = in.readString();
+    this.userName = in.readString();
+    this.avatar = in.readString();
+    this.viewUserId = in.readString();
+    this.levelIcon = in.readString();
     this.bgUrl = in.readString();
     this.bgColor = in.readString();
     this.content = in.readString();

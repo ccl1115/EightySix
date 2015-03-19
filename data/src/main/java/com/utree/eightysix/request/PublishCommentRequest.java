@@ -18,8 +18,17 @@ public class PublishCommentRequest {
   @Param ("postId")
   public String postId;
 
+  @Param("realName")
+  public int realName;
+
   public PublishCommentRequest(String content, String postId) {
     this.content = content;
     this.postId = postId;
+  }
+
+  public PublishCommentRequest(String content, String postId, int realName) {
+    this.content = content;
+    this.postId = postId;
+    this.realName = realName;
   }
 }
