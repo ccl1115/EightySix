@@ -101,6 +101,9 @@ public class FeedPostView extends LinearLayout {
   @InjectView(R.id.ll_top)
   public LinearLayout mLlTop;
 
+  @InjectView(R.id.aiv_level_icon)
+  public AsyncImageView mAivLevelIcon;
+
   private Post mPost;
 
   private final Runnable mTagAnimation;
@@ -325,6 +328,12 @@ public class FeedPostView extends LinearLayout {
       mAivPortrait.setUrl(mPost.avatar);
     } else {
       mLlTop.setVisibility(GONE);
+    }
+
+    mTvDistance.setText(mPost.distance);
+
+    if (!TextUtils.isEmpty(mPost.levelIcon)) {
+      mAivLevelIcon.setUrl(mPost.levelIcon);
     }
 
     mTvTag1.setVisibility(INVISIBLE);

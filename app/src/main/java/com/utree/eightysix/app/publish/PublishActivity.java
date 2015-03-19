@@ -234,7 +234,7 @@ public class PublishActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    getTopBar().getAbLeft().setDrawable(getDrawable(R.drawable.top_bar_return));
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
     mCameraUtil = new CameraUtil(this, new CameraUtil.Callback() {
       @Override
