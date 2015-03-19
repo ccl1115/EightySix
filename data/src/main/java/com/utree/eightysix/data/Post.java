@@ -80,13 +80,13 @@ public class Post extends BaseItem implements Parcelable {
   @SerializedName("hometownText")
   public String hometownText;
 
-  public int distance;
+  public String distance;
 
   public String userName;
 
   public String avatar;
 
-  public int viewUserId;
+  public String viewUserId;
 
   @Override
   public boolean equals(Object o) {

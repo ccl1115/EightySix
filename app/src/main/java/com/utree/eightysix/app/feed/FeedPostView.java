@@ -31,6 +31,7 @@ import com.utree.eightysix.request.PostDeleteRequest;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AsyncImageView;
+import com.utree.eightysix.widget.AsyncImageViewWithRoundCorner;
 import com.utree.eightysix.widget.ViewHighlighter;
 
 import java.util.List;
@@ -84,6 +85,18 @@ public class FeedPostView extends LinearLayout {
 
   @InjectView(R.id.tv_hometown)
   public TextView mTvHometown;
+
+  @InjectView(R.id.tv_distance)
+  public TextView mTvDistance;
+
+  @InjectView(R.id.tv_name)
+  public TextView mTvName;
+
+  @InjectView(R.id.aiv_portrait)
+  public AsyncImageViewWithRoundCorner mAivPortrait;
+
+  @InjectView(R.id.ll_top)
+  public LinearLayout mLlTop;
 
   private Post mPost;
 
@@ -153,7 +166,6 @@ public class FeedPostView extends LinearLayout {
             }).create().show();
   }
 
-  private View mTipShare;
   private View mTipSource;
   private View mTipPraise;
   private View mTipRepost;
@@ -293,6 +305,14 @@ public class FeedPostView extends LinearLayout {
       mTvHometown.setText(post.hometownText);
     }
 
+    if (!TextUtils.isEmpty(mPost.userName)) {
+      mLlTop.setVisibility(VISIBLE);
+      mTvName.setText(mPost.userName);
+      mAivPortrait.setUrl(mPost.avatar);
+    } else {
+      mLlTop.setVisibility(GONE);
+    }
+
     mTvTag1.setVisibility(INVISIBLE);
     mTvTag2.setVisibility(INVISIBLE);
     removeCallbacks(mTagAnimation);
@@ -315,16 +335,6 @@ public class FeedPostView extends LinearLayout {
       U.getBus().post(new FeedPostPraiseEvent(mPost, false));
       ((BaseAdapter) ((AdapterView) getParent()).getAdapter()).notifyDataSetChanged();
     }
-  }
-
-  @Override
-  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-    super.onMeasure(widthMeasureSpec, widthSize + MeasureSpec.EXACTLY);
-  }
-
-  public void hideShareTip() {
-    hideTip(mTipShare);
   }
 
   public void showSourceTip() {

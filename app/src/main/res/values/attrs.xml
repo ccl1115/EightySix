@@ -62,5 +62,7 @@
 
     <declare-styleable name="AsyncImageViewWithRoundCorner">
         <attr name="radius"/>
+        <attr name="width" format="dimension|reference"/>
+        <attr name="height" format="dimension|reference"/>
     </declare-styleable>
 </resources>

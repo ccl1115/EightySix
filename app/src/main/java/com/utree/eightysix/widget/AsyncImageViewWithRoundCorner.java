@@ -51,8 +51,8 @@ public class AsyncImageViewWithRoundCorner extends AsyncImageView {
 
   private final int mRadius;
 
-  private int mWidthMode;
-  private int mHeightMode;
+  private int mImageWidth = -1;
+  private int mImageHeight = -1;
 
   public AsyncImageViewWithRoundCorner(Context context) {
     this(context, null);
@@ -74,12 +74,13 @@ public class AsyncImageViewWithRoundCorner extends AsyncImageView {
     TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.AsyncImageViewWithRoundCorner);
 
     mRadius = (int) ta.getDimension(R.styleable.AsyncImageViewWithRoundCorner_radius, U.dp2px(14));
+
+    mImageWidth = (int) ta.getDimension(R.styleable.AsyncImageViewWithRoundCorner_width, U.dp2px(300));
+    mImageHeight = (int) ta.getDimension(R.styleable.AsyncImageViewWithRoundCorner_height, U.dp2px(300));
   }
 
   @Override
   public void setUrl(String url) {
-    super.setUrl(url);
-
     if (url == null) {
       setImageBitmap(null);
       return;
@@ -87,9 +88,9 @@ public class AsyncImageViewWithRoundCorner extends AsyncImageView {
 
     if (url.startsWith("/")) {
       File file = new File(url);
-      Picasso.with(getContext()).load(file).resize(600, 600).into(mTarget);
+      Picasso.with(getContext()).load(file).resize(mImageWidth, mImageHeight).into(mTarget);
     } else {
-      Picasso.with(getContext()).load(url).resize(600, 600).into(mTarget);
+      Picasso.with(getContext()).load(url).resize(mImageWidth, mImageHeight).into(mTarget);
     }
   }
 
@@ -129,28 +130,13 @@ public class AsyncImageViewWithRoundCorner extends AsyncImageView {
       width = bitmap.getWidth();
       height = bitmap.getHeight();
     }
-    if (mWidthMode == MeasureSpec.EXACTLY) {
-      getLayoutParams().width = getMeasuredWidth();
-    } else {
-      getLayoutParams().width = width;
-    }
 
-    if (mHeightMode == MeasureSpec.EXACTLY) {
-      getLayoutParams().height = getMeasuredHeight();
-    } else {
-      getLayoutParams().height = height;
-    }
+    getLayoutParams().width = mImageWidth != -1 ? mImageWidth : width;
+    getLayoutParams().height = mImageHeight != -1 ? mImageHeight : height;
 
     setLayoutParams(getLayoutParams());
 
     setImageDrawable(new RoundRectDrawable(mRadius, bitmap));
   }
 
-  @Override
-  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
-    mWidthMode = widthMeasureSpec & (0x3 << 30);
-    mHeightMode = heightMeasureSpec & (0x3 << 30);
-    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-  }
 }

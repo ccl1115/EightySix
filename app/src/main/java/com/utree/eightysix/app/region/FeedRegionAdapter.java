@@ -358,7 +358,6 @@ public class FeedRegionAdapter extends BaseAdapter {
     } else {
       feedPostView.hidePraiseTip();
       feedPostView.hideSourceTip();
-      feedPostView.hideShareTip();
       feedPostView.hideRepostTip();
       feedPostView.hideTempNameTip();
       feedPostView.hideTagsTip();

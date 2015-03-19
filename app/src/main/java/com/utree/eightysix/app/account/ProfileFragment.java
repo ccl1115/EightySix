@@ -71,8 +71,6 @@ public class ProfileFragment extends BaseFragment {
   @InjectView(R.id.fl_guide)
   public FrameLayout mFlGuide;
 
-
-
   private CameraUtil mCameraUtil;
   private boolean mIsVisitor;
   private String mFileHash;
