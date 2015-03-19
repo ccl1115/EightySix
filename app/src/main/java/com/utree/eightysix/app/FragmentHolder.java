@@ -31,14 +31,33 @@ public class FragmentHolder extends BaseActivity {
     context.startActivity(i);
   }
 
+  public static <T extends HolderFragment> void start(Context context, Class<T> clz, Bundle args) {
+    Intent i = new Intent(context, FragmentHolder.class);
+
+    i.putExtra("fragmentClass", clz);
+    i.putExtra("args", args);
+
+    if (!(context instanceof Activity)) {
+      i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    context.startActivity(i);
+  }
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     Class clz = (Class) getIntent().getSerializableExtra("fragmentClass");
 
+    Bundle args = getIntent().getBundleExtra("args");
+
     try {
       mFragment = (HolderFragment) clz.newInstance();
+
+      if (args != null) {
+        mFragment.setArguments(args);
+      }
 
       getSupportFragmentManager().beginTransaction()
           .add(R.id.content, mFragment)

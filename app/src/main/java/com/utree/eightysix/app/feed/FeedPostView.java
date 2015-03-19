@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -18,6 +19,8 @@ import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.app.FragmentHolder;
+import com.utree.eightysix.app.account.ProfileFragment;
 import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.app.home.HomeActivity;
@@ -120,6 +123,17 @@ public class FeedPostView extends LinearLayout {
       } else {
         FeedActivity.start(getContext(), mPost.factoryId);
       }
+    }
+  }
+
+  @OnClick(R.id.ll_top)
+  public void onLlTopClicked() {
+    if (!TextUtils.isEmpty(mPost.viewUserId)) {
+      Bundle args = new Bundle();
+      args.putInt("viewId", Integer.valueOf(mPost.viewUserId));
+      args.putBoolean("isVisitor", true);
+      args.putString("userName", mPost.userName);
+      FragmentHolder.start(getContext(), ProfileFragment.class, args);
     }
   }
 

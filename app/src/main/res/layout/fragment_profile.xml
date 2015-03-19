@@ -10,6 +10,7 @@
         xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/apptheme_primary_grey_color"
         >
 
     <ScrollView
@@ -21,7 +22,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@color/apptheme_primary_grey_color"
                 >
 
             <FrameLayout
@@ -81,6 +81,8 @@
                                 android:layout_height="64dp"
                                 android:layout_gravity="center"
                                 app:radius="10dp"
+                                app:width="64dp"
+                                app:height="64dp"
                                 />
 
                     </FrameLayout>
@@ -205,6 +207,7 @@
                     >
 
                 <TextView
+                        android:id="@+id/tv_title_signature"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/ic_item_signature"
@@ -226,7 +229,7 @@
             </LinearLayout>
 
             <TextView
-                    android:id="@+id/tv_my_posts"
+                    android:id="@+id/tv_title_my_posts"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"

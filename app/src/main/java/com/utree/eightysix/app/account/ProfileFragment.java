@@ -15,8 +15,8 @@ import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.CameraUtil;
+import com.utree.eightysix.app.HolderFragment;
 import com.utree.eightysix.app.account.event.*;
 import com.utree.eightysix.app.circle.FollowCircleListActivity;
 import com.utree.eightysix.app.friends.FriendListActivity;
@@ -30,13 +30,14 @@ import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.TimeUtil;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.AsyncImageViewWithRoundCorner;
+import com.utree.eightysix.widget.RoundedButton;
 
 import java.io.File;
 import java.util.Calendar;
 
 /**
  */
-public class ProfileFragment extends BaseFragment {
+public class ProfileFragment extends HolderFragment {
 
   @InjectView(R.id.tv_name)
   public TextView mTvName;
@@ -71,8 +72,28 @@ public class ProfileFragment extends BaseFragment {
   @InjectView(R.id.fl_guide)
   public FrameLayout mFlGuide;
 
+  @InjectView(R.id.rb_change_bg)
+  public RoundedButton mRbChangeBg;
+
+  @InjectView(R.id.tv_my_friends)
+  public TextView mTvMyFriends;
+
+  @InjectView(R.id.tv_my_circles)
+  public TextView mTvMyCircles;
+
+  @InjectView(R.id.tv_settings)
+  public TextView mTvSettings;
+
+  @InjectView(R.id.tv_title_signature)
+  public TextView mTvTitleSignature;
+
+
+  @InjectView(R.id.tv_title_my_posts)
+  public TextView mTvTitleMyPosts;
+
   private CameraUtil mCameraUtil;
   private boolean mIsVisitor;
+  private int mViewId;
   private String mFileHash;
 
   @OnClick(R.id.rb_edit)
@@ -116,6 +137,9 @@ public class ProfileFragment extends BaseFragment {
 
     if (getArguments() != null) {
       mIsVisitor = getArguments().getBoolean("isVisitor", false);
+      mViewId = getArguments().getInt("viewId");
+      getBaseActivity().getTopBar().setTitle(getArguments().getString("userName"));
+      getBaseActivity().getTopBar().getAbRight().hide();
     }
 
     mCameraUtil = new CameraUtil(this, new CameraUtil.Callback() {
@@ -128,7 +152,16 @@ public class ProfileFragment extends BaseFragment {
     });
 
 
-    requestProfile(null);
+    if (mIsVisitor) {
+      mRbChangeBg.setVisibility(View.GONE);
+      mTvSettings.setVisibility(View.GONE);
+      mTvMyCircles.setVisibility(View.GONE);
+      mTvMyFriends.setVisibility(View.GONE);
+      mTvTitleMyPosts.setText("他的帖子");
+      mTvTitleSignature.setText("他的签名");
+    }
+
+    requestProfile(mIsVisitor ? mViewId : null);
   }
 
   public void requestProfile(Integer userId) {
@@ -152,7 +185,7 @@ public class ProfileFragment extends BaseFragment {
           }
 
           mTvName.setText(response.object.userName);
-          mTvAge.setText(String.valueOf(response.object.age));
+          mTvAge.setText(String.valueOf(response.object.age) + "岁");
           if (response.object.birthday == -1) {
             mTvBirthday.setVisibility(View.GONE);
           } else {
@@ -170,6 +203,19 @@ public class ProfileFragment extends BaseFragment {
           }
           mTvCircleName.setText(response.object.workinFactoryName);
           mTvHometown.setText(response.object.hometown);
+
+          if (mIsVisitor) {
+            if ("男".equals(response.object.sex)) {
+              mTvTitleMyPosts.setText("他的帖子");
+              mTvTitleSignature.setText("他的签名");
+            } else if ("女".equals(response.object.sex)) {
+              mTvTitleMyPosts.setText("她的帖子");
+              mTvTitleSignature.setText("她的签名");
+            } else {
+              mTvTitleMyPosts.setText("Ta的帖子");
+              mTvTitleSignature.setText("Ta的签名");
+            }
+          }
         }
       }
     }, ProfileResponse.class, userId);
@@ -275,5 +321,19 @@ public class ProfileFragment extends BaseFragment {
         }
       });
     }
+  }
+
+  @Override
+  protected void onTitleClicked() {
+
+  }
+
+  @Override
+  protected void onActionLeftClicked() {
+  }
+
+  @Override
+  protected void onActionOverflowClicked() {
+
   }
 }
