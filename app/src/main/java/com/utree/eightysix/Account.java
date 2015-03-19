@@ -175,6 +175,70 @@ public class Account {
     return getAccountSharedPreferences().getInt("last_region_type", -1);
   }
 
+  /**
+   * 设置是否匿名发帖
+   * @param anonymous true if anonymous
+   */
+  public void setPostAnonymous(boolean anonymous) {
+    getAccountSharedPreferences().edit().putBoolean("post_anonymous", anonymous).apply();
+  }
+
+  /**
+   * 是否匿名发帖
+   * @return true if anonymous
+   */
+  public boolean getPostAnonymous() {
+    return getAccountSharedPreferences().getBoolean("post_anonymous", true);
+  }
+
+  /**
+   * 设置是否展示取消匿名发帖提醒对话框
+   * @param anonymous true if show
+   */
+  public void setCancelPostAnonymousDialog(boolean anonymous) {
+    getAccountSharedPreferences().edit().putBoolean("cancel_post_anonymous", anonymous).apply();
+  }
+
+  /**
+   * 是否展示取消匿名提醒发帖对话框
+   * @return true if show
+   */
+  public boolean getCancelPostAnonymousDialog() {
+    return getAccountSharedPreferences().getBoolean("cancel_post_anonymous", true);
+  }
+
+  /**
+   * 设置是否匿名发评论
+   * @param anonymous true if anonymous
+   */
+  public void setCommentAnonymous(boolean anonymous) {
+    getAccountSharedPreferences().edit().putBoolean("comment_anonymous", anonymous).apply();
+  }
+
+  /**
+   * 是否匿名发评论
+   * @return true if anonymous
+   */
+  public boolean getCommentAnonymous() {
+    return getAccountSharedPreferences().getBoolean("comment_anonymous", true);
+  }
+
+  /**
+   * 设置是否展示取消匿名发评论对话框
+   * @param anonymous true if show
+   */
+  public void setCancelCommentAnonymousDialog(boolean anonymous) {
+    getAccountSharedPreferences().edit().putBoolean("cancel_comment_anonymous", anonymous).apply();
+  }
+
+  /**
+   * 设置是否展示取消匿名发评论对话框
+   * @return true if show
+   */
+  public boolean getCancelCommentAnonymousDialog() {
+    return getAccountSharedPreferences().getBoolean("cancel_comment_anonymous", true);
+  }
+
   private SharedPreferences getSharedPreferences() {
     return U.getContext().getSharedPreferences("account", Context.MODE_PRIVATE);
   }

@@ -23,7 +23,7 @@
             >
 
         <ImageView
-                android:id="@+id/iv_emotion"
+                android:id="@+id/iv_anonymous"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -31,21 +31,39 @@
                 android:visibility="gone"
                 />
 
-        <com.rockerhieu.emojicon.EmojiconEditText
-                android:id="@+id/et_post_content"
+        <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/bg_chat_edit_text"
-                android:maxLength="500"
-                android:maxHeight="100sp"
-                android:hint="@string/anonymously_comment"
-                android:gravity="center_vertical"
-                app:emojiconSize="24dp"
-                />
+                >
+
+            <com.rockerhieu.emojicon.EmojiconEditText
+                    android:id="@+id/et_post_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/bg_chat_edit_text"
+                    android:maxLength="500"
+                    android:maxHeight="100sp"
+                    android:hint="@string/anonymously_comment"
+                    android:gravity="center_vertical"
+                    app:emojiconSize="24dp"
+                    />
+
+            <ImageView
+                    android:id="@+id/iv_emotion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_gravity="center_vertical|end"
+                    android:src="@drawable/ic_action_emotion"
+                    android:visibility="gone"
+                    />
+
+        </FrameLayout>
+
 
         <ImageView
                 android:id="@+id/iv_camera"

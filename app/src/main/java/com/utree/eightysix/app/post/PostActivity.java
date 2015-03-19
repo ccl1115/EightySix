@@ -9,10 +9,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AbsListView;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
+import android.widget.*;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
@@ -56,15 +55,15 @@ import java.util.regex.Pattern;
 /**
  * @author simon
  */
-@Layout (R.layout.activity_post)
+@Layout(R.layout.activity_post)
 public class PostActivity extends BaseActivity
     implements EmojiconGridFragment.OnEmojiconClickedListener,
     EmojiconsFragment.OnEmojiconBackspaceClickedListener {
 
-  @InjectView (R.id.lv_comments)
+  @InjectView(R.id.lv_comments)
   public AdvancedListView mLvComments;
 
-  @InjectView (R.id.et_post_content)
+  @InjectView(R.id.et_post_content)
   public EmojiconEditText mEtPostContent;
 
   @InjectView(R.id.iv_post)
@@ -81,6 +80,10 @@ public class PostActivity extends BaseActivity
 
   @InjectView(R.id.fl_emotion)
   public EmojiViewPager mFlEmotion;
+
+  @InjectView(R.id.iv_anonymous)
+  public ImageView mIvAnonymous;
+
 
   private Post mPost;
 
@@ -135,7 +138,7 @@ public class PostActivity extends BaseActivity
 
   private static final Pattern POST_CONTENT_PATTERN = Pattern.compile("[ \r\n]*");
 
-  @OnTextChanged (R.id.et_post_content)
+  @OnTextChanged(R.id.et_post_content)
   public void onEtPostContentTextChanged(CharSequence text) {
     if (TextUtils.isEmpty(text) || POST_CONTENT_PATTERN.matcher(text).matches()) {
       mIvPost.setEnabled(false);
@@ -155,7 +158,58 @@ public class PostActivity extends BaseActivity
     finishOrShowQuitConfirmDialog();
   }
 
-  @OnItemClick (R.id.lv_comments)
+  @OnClick(R.id.iv_anonymous)
+  public void onIvAnonymousClicked() {
+    boolean selected = mIvAnonymous.isSelected();
+
+    if (selected) {
+      if (Account.inst().getCancelCommentAnonymousDialog()) {
+        showCancelAnonymousDialog();
+      }
+    }
+
+    mIvAnonymous.setSelected(!selected);
+
+    Account.inst().setCommentAnonymous(!selected);
+  }
+
+  private void showCancelAnonymousDialog() {
+    final ThemedDialog dialog = new ThemedDialog(this);
+
+    dialog.setTitle("确认取消匿名么？");
+
+    View view = LayoutInflater.from(this).inflate(R.layout.dialog_cancel_comment_anonymouse, null, false);
+
+    ((CheckBox) view.findViewById(R.id.cb_check)).setOnCheckedChangeListener(
+        new CompoundButton.OnCheckedChangeListener() {
+          @Override
+          public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            Account.inst().setCancelCommentAnonymousDialog(!isChecked);
+          }
+        });
+
+    dialog.setContent(view);
+
+    dialog.setPositive(R.string.okay, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        mIvAnonymous.setSelected(false);
+        dialog.dismiss();
+      }
+    });
+
+    dialog.setRbNegative(R.string.cancel, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        mIvAnonymous.setSelected(true);
+        dialog.dismiss();
+      }
+    });
+
+    dialog.show();
+  }
+
+  @OnItemClick(R.id.lv_comments)
   public void onLvCommentsItemClicked(final int position) {
     if (position == 0) return;
 
@@ -249,6 +303,9 @@ public class PostActivity extends BaseActivity
 
     mIvEmotion.setVisibility(View.VISIBLE);
 
+    mIvAnonymous.setVisibility(View.VISIBLE);
+    mIvAnonymous.setSelected(Account.inst().getCommentAnonymous());
+
     mLvComments.setOnScrollListener(new AbsListView.OnScrollListener() {
       @Override
       public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -311,7 +368,7 @@ public class PostActivity extends BaseActivity
   protected void onResume() {
     super.onResume();
     M.getRegisterHelper().register(mLvComments);
-    
+
     hideSoftKeyboard(mEtPostContent);
   }
 
@@ -372,7 +429,6 @@ public class PostActivity extends BaseActivity
   public void onLogout(Account.LogoutEvent event) {
     finish();
   }
-
 
 
   @Subscribe
@@ -576,7 +632,13 @@ public class PostActivity extends BaseActivity
   }
 
   private void requestPublishComment() {
-    request(new PublishCommentRequest(mEtPostContent.getText().toString(), mPost.id),
+    PublishCommentRequest request;
+    if (mIvAnonymous.isSelected()) {
+      request = new PublishCommentRequest(mEtPostContent.getText().toString(), mPost.id);
+    } else {
+      request = new PublishCommentRequest(mEtPostContent.getText().toString(), mPost.id, 1);
+    }
+    request(request,
         new OnResponse2<PublishCommentResponse>() {
           @Override
           public void onResponseError(Throwable e) {

@@ -219,10 +219,12 @@ public class PublishActivity extends BaseActivity {
   @OnCheckedChanged(R.id.cb_check)
   public void onCbAnonymousCheckChanged(boolean checked) {
     if (!checked) {
-      if (Env.firstRun("cancel_anonymous")) {
+      if (Account.inst().getCancelPostAnonymousDialog()) {
         showCancelAnonymousDialog();
       }
     }
+
+    Account.inst().setPostAnonymous(checked);
   }
 
   @Override
@@ -258,6 +260,8 @@ public class PublishActivity extends BaseActivity {
     }
 
     mTvPostTip.setText(getHintText());
+
+    mCbAnonymous.setChecked(Account.inst().getPostAnonymous());
 
     //region To detect soft keyboard visibility change
     // works after ICM
@@ -620,14 +624,14 @@ public class PublishActivity extends BaseActivity {
   private void showCancelAnonymousDialog() {
     final ThemedDialog dialog = new ThemedDialog(this);
 
-    View view = LayoutInflater.from(this).inflate(R.layout.dialog_cancel_anonymouse, null, false);
+    View view = LayoutInflater.from(this).inflate(R.layout.dialog_cancel_post_anonymouse, null, false);
 
     dialog.setContent(view);
 
     ((CheckBox) view.findViewById(R.id.cb_check)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
       @Override
       public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        Env.setFirstRun("cancel_anonymous", !isChecked);
+        Account.inst().setCancelPostAnonymousDialog(!isChecked);
       }
     });
 
