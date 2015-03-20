@@ -73,6 +73,11 @@ public class FollowCircleListAdapter extends BaseAdapter {
     notifyDataSetChanged();
   }
 
+  public void remove(FollowCircle item) {
+    mCircles.remove(item);
+    notifyDataSetChanged();
+  }
+
   @Keep
   public class ViewHolder {
 
@@ -86,12 +91,6 @@ public class FollowCircleListAdapter extends BaseAdapter {
 
     @InjectView(R.id.rb_icon)
     public RoundedButton mRbIcon;
-
-    @InjectView(R.id.rb_type)
-    public RoundedButton mRbType;
-
-    @InjectView(R.id.rb_snapshot)
-    public TextView mRbSnapshot;
 
     @InjectView(R.id.tv_delete)
     public TextView mTvDelete;
@@ -112,7 +111,7 @@ public class FollowCircleListAdapter extends BaseAdapter {
           }
 
         }
-      }, Response.class);
+      }, Response.class, mItem.factoryId);
     }
 
     public void setData(FollowCircle item, Resources res) {
