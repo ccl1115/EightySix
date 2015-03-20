@@ -29,6 +29,7 @@ import com.utree.eightysix.data.Post;
 import com.utree.eightysix.event.CurrentCircleResponseEvent;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
 import com.utree.eightysix.response.FeedsByRegionResponse;
+import com.utree.eightysix.response.FeedsResponse;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.view.SwipeRefreshLayout;
@@ -49,10 +50,13 @@ public abstract class AbsRegionFragment extends BaseFragment {
   public RandomSceneTextView mRstvEmpty;
 
   protected FeedRegionAdapter mFeedAdapter;
+
   protected Circle mCircle;
+
   protected Paginate.Page mPageInfo;
 
-  private int mRegionType = -1;
+  protected int mRegionType = -1;
+  protected int mDistance = 0;
 
   protected boolean mPostPraiseRequesting;
   private String mSubInfo;
@@ -76,7 +80,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
   public void onAttach(Activity activity) {
     super.onAttach(activity);
 
-    if (isActive()) requestFeeds(getRegionType(), 1);
+    if (isActive()) requestRegionFeeds(mRegionType, mDistance, 1);
   }
 
   @Override
@@ -84,7 +88,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
     if (mLvFeed != null) mLvFeed.setAdapter(null);
 
     if (isAdded()) {
-      requestFeeds(getRegionType(), 1);
+      requestRegionFeeds(mRegionType, mDistance, 1);
     }
   }
 
@@ -113,7 +117,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
       public boolean onLoadMoreStart() {
         if (mPageInfo != null) {
           onLoadMore(mPageInfo.currPage + 1);
-          requestFeeds(getRegionType(), mPageInfo.currPage + 1);
+          requestRegionFeeds(getRegionType(), mDistance, mPageInfo.currPage + 1);
           return true;
         } else {
           return false;
@@ -130,9 +134,9 @@ public abstract class AbsRegionFragment extends BaseFragment {
         onPullRefresh();
         if (isAdded()) {
           if (mCircle != null) {
-            requestFeeds(getRegionType(), 1);
+            requestRegionFeeds(getRegionType(), mDistance, 1);
           } else {
-            requestFeeds(-1, 1);
+            requestRegionFeeds(-1, mDistance, 1);
           }
         }
       }
@@ -224,11 +228,11 @@ public abstract class AbsRegionFragment extends BaseFragment {
     getBaseActivity().showProgressBar();
     if (mCircle != null) {
       if (isAdded()) {
-        requestFeeds(getRegionType(), 1);
+        requestRegionFeeds(mRegionType, 0, 1);
       }
     } else {
       if (isAdded()) {
-        requestFeeds(-1, 1);
+        requestRegionFeeds(-1, mDistance, 1);
       }
     }
   }
@@ -250,34 +254,14 @@ public abstract class AbsRegionFragment extends BaseFragment {
   }
 
   public void updateTitleBar() {
-    getTopBar().setTitleAdapter(new TopBar.TitleAdapter() {
-      @Override
-      public String getTitle(int position) {
-        switch (position) {
-          case 0:
-            return "在职";
-          case 1:
-            return "附近";
-        }
-        return null;
-      }
-
-      @Override
-      public void onSelected(View view, int position) {
-
-      }
-
-      @Override
-      public int getCount() {
-        return 2;
-      }
-    });
     getTopBar().setSubTitle(String.format("%s | %s", mCircle.shortName, mSubInfo == null ? "" : mSubInfo));
   }
 
-  protected abstract void requestFeeds(final int regionType, final int page);
+  protected abstract void requestRegionFeeds(int regionType, int distance, int page);
 
-  protected void responseForRequest(FeedsByRegionResponse response, int regionType, int page) {
+  protected abstract void requestFeeds(int circleId, int page);
+
+  protected void responseForFeedsByRegionRequest(FeedsByRegionResponse response, int page) {
     if (RESTRequester.responseOk(response)) {
       if (page == 1) {
         mCircle = response.object.circle;
@@ -296,6 +280,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
         }
 
         mRegionType = response.object.regionType;
+        mDistance = response.object.regionRadius;
 
         Account.inst().setLastRegionType(getRegionType());
 
@@ -340,7 +325,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
         FetchNotificationService.setCircleId(0);
       }
     } else {
-      cacheOutFeeds(regionType, page);
+      cacheOutFeedsByRegion(mRegionType, page);
     }
     mRefresherView.setRefreshing(false);
     mLvFeed.stopLoadMore();
@@ -348,9 +333,80 @@ public abstract class AbsRegionFragment extends BaseFragment {
     getBaseActivity().hideRefreshIndicator();
   }
 
-  protected abstract void cacheOutFeeds(final int regionType, final int page);
+  protected void responseForFeedsRequest(FeedsResponse response, int page) {
+    if (RESTRequester.responseOk(response)) {
+      if (page == 1) {
+        mCircle = response.object.circle;
 
-  protected void responseForCache(FeedsByRegionResponse response, int regionType, int page) {
+        U.getBus().post(new CurrentCircleResponseEvent(mCircle));
+
+        M.getRegisterHelper().unregister(mFeedAdapter);
+        mFeedAdapter = new FeedRegionAdapter(response.object);
+        M.getRegisterHelper().register(mFeedAdapter);
+        mLvFeed.setAdapter(mFeedAdapter);
+
+        if (response.object.posts.lists.size() == 0) {
+          mRstvEmpty.setVisibility(View.VISIBLE);
+        } else {
+          mRstvEmpty.setVisibility(View.GONE);
+        }
+
+        Account.inst().setLastRegionType(getRegionType());
+
+
+        U.getBus().post(new RegionResponseEvent(getRegionType(), mCircle));
+      } else if (mFeedAdapter != null) {
+        mFeedAdapter.add(response.object.posts.lists);
+      }
+
+      mPageInfo = response.object.posts.page;
+      mSubInfo = response.object.subInfo;
+      updateTitleBar();
+
+      if (response.object.fetch != null) {
+        int count = 0;
+        if (response.object.fetch.newComment != null) {
+          count += response.object.fetch.newComment.unread;
+        }
+
+        if (response.object.fetch.myPostComment != null) {
+          count += response.object.fetch.myPostComment.unread;
+        }
+
+        Account.inst().setNewCommentCount(count);
+
+        if (response.object.fetch.newPraise != null) {
+          Account.inst().setHasNewPraise(response.object.fetch.newPraise.praise == 1);
+          U.getBus().post(new UpdatePraiseCountEvent(response.object.fetch.newPraise.praiseCount,
+              response.object.fetch.newPraise.percent));
+        }
+
+        if (getRegionType() == 0 && mCircle != null) {
+          U.getBus().post(new NewAllPostCountEvent(mCircle.id, response.object.fetch.newPostAllCount));
+          U.getBus().post(new NewHotPostCountEvent(mCircle.id, response.object.fetch.newPostHotCount));
+          U.getBus().post(new NewFriendsPostCountEvent(mCircle.id, response.object.fetch.newPostFriendsCount));
+        }
+      }
+
+      if (getRegionType() == 0) {
+        FetchNotificationService.setCircleId(mCircle == null ? 0 : mCircle.id);
+      } else {
+        FetchNotificationService.setCircleId(0);
+      }
+    } else {
+      cacheOutFeedsByRegion(mRegionType, page);
+    }
+    mRefresherView.setRefreshing(false);
+    mLvFeed.stopLoadMore();
+    getBaseActivity().hideProgressBar();
+    getBaseActivity().hideRefreshIndicator();
+  }
+
+  protected abstract void cacheOutFeedsByRegion(int regionType, int page);
+
+  protected abstract void cacheOutFeeds(int circle, int page);
+
+  protected void responseForFeedsByRegionCache(FeedsByRegionResponse response, int page) {
     if (response != null && response.code == 0 && response.object != null) {
       if (page == 1) {
         mCircle = response.object.circle;
@@ -394,6 +450,65 @@ public abstract class AbsRegionFragment extends BaseFragment {
 
       mPageInfo = response.object.posts.page;
       mRegionType = response.object.regionType;
+      getBaseActivity().setTopSubTitle(response.object.subInfo);
+
+      FetchNotificationService.setCircleId(mCircle == null ? 0 : mCircle.id);
+    } else {
+      if (mFeedAdapter != null && mFeedAdapter.getCount() == 0) {
+        mRstvEmpty.setVisibility(View.VISIBLE);
+      }
+      if (mCircle != null) {
+        getBaseActivity().setTopTitle(mCircle.shortName);
+      }
+
+      mPageInfo = null;
+    }
+    mRefresherView.setRefreshing(false);
+    mLvFeed.stopLoadMore();
+    getBaseActivity().hideProgressBar();
+    getBaseActivity().hideRefreshIndicator();
+  }
+
+  protected void responseForFeedsCache(FeedsResponse response, int page) {
+    if (response != null && response.code == 0 && response.object != null) {
+      if (page == 1) {
+        mCircle = response.object.circle;
+
+        U.getBus().post(new CurrentCircleResponseEvent(mCircle));
+
+        if (response.object.posts.lists.size() == 0) {
+          mRstvEmpty.setVisibility(View.VISIBLE);
+        } else {
+          mRstvEmpty.setVisibility(View.INVISIBLE);
+        }
+
+        M.getRegisterHelper().unregister(mFeedAdapter);
+        mFeedAdapter = new FeedRegionAdapter(response.object);
+        M.getRegisterHelper().register(mFeedAdapter);
+        mLvFeed.setAdapter(mFeedAdapter);
+
+        switch (getRegionType()) {
+          case 0:
+            getBaseActivity().setTopTitle(mCircle.shortName);
+            break;
+          case 1:
+            getBaseActivity().setTopTitle("1公里内");
+            break;
+          case 2:
+            getBaseActivity().setTopTitle("5公里内");
+            break;
+          case 3:
+            getBaseActivity().setTopTitle("同城");
+            break;
+        }
+
+        U.getBus().post(new RegionResponseEvent(getRegionType(), mCircle));
+
+      } else if (mFeedAdapter != null) {
+        mFeedAdapter.add(response.object.posts.lists);
+      }
+
+      mPageInfo = response.object.posts.page;
       getBaseActivity().setTopSubTitle(response.object.subInfo);
 
       FetchNotificationService.setCircleId(mCircle == null ? 0 : mCircle.id);

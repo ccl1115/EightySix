@@ -37,4 +37,7 @@
             android:src="@drawable/ic_post_pen"
             android:background="@drawable/btn_post"
             />
+
+    <include layout="@layout/widget_follow_circles"
+            />
 </FrameLayout>

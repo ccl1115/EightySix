@@ -9,4 +9,6 @@ public class FeedsByRegion extends Feeds {
   @SerializedName("regionType")
   public int regionType;
 
+  @SerializedName("regionRadius")
+  public int regionRadius;
 }

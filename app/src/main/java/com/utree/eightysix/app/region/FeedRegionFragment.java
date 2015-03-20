@@ -11,13 +11,14 @@ import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.FeedByRegionRequest;
+import com.utree.eightysix.request.FeedsRequest;
 import com.utree.eightysix.request.PostPraiseRequest;
 import com.utree.eightysix.response.FeedsByRegionResponse;
+import com.utree.eightysix.response.FeedsResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
-import com.utree.eightysix.widget.TopBar;
 
 import java.util.Iterator;
 
@@ -30,50 +31,71 @@ public class FeedRegionFragment extends AbsRegionFragment {
   }
 
   @Override
-  protected void requestFeeds(final int regionType, final int page) {
+  protected void requestRegionFeeds(final int regionType, int distance, final int page) {
     if (getBaseActivity() == null) return;
     if (mRefresherView != null && page == 1) {
       mRefresherView.setRefreshing(true);
       getBaseActivity().showRefreshIndicator(true);
     }
 
-    switch (regionType) {
-      case 0:
-        getBaseActivity().setTopTitle(mCircle == null ? "" : mCircle.shortName);
-        getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_ONE);
-        break;
-      case 1:
-        getBaseActivity().setTopTitle("1公里内");
-        getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
-        break;
-      case 2:
-        getBaseActivity().setTopTitle("5公里内");
-        getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
-        break;
-      case 3:
-        getBaseActivity().setTopTitle("同城");
-        getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
-        break;
-    }
     getBaseActivity().setTopSubTitle("");
-    getBaseActivity().request(new FeedByRegionRequest(page, regionType, 0), new OnResponse<FeedsByRegionResponse>() {
-      @Override
-      public void onResponse(FeedsByRegionResponse response) {
-        responseForRequest(response, regionType, page);
-      }
-    }, FeedsByRegionResponse.class);
+
+    getBaseActivity().request(new FeedByRegionRequest(page, regionType, 0),
+        new OnResponse<FeedsByRegionResponse>() {
+          @Override
+          public void onResponse(FeedsByRegionResponse response) {
+            responseForFeedsByRegionRequest(response, page);
+          }
+        }, FeedsByRegionResponse.class);
 
   }
 
   @Override
-  protected void cacheOutFeeds(final int regionType, final int page) {
+  protected void requestFeeds(final int circleId, final int page) {
+    getBaseActivity().request(new FeedsRequest(circleId, page), new OnResponse2<FeedsResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        cacheOutFeeds(circleId, page);
+      }
+
+      @Override
+      public void onResponse(FeedsResponse response) {
+        if (getBaseActivity() == null) return;
+        if (mRefresherView != null && page == 1) {
+          mRefresherView.setRefreshing(true);
+          getBaseActivity().showRefreshIndicator(true);
+        }
+        getBaseActivity().setTopSubTitle("");
+        getBaseActivity().request(new FeedsRequest(circleId, page), new OnResponse<FeedsResponse>() {
+          @Override
+          public void onResponse(FeedsResponse response) {
+            responseForFeedsRequest(response, page);
+          }
+        }, FeedsResponse.class);
+      }
+    }, FeedsResponse.class);
+  }
+
+  @Override
+  protected void cacheOutFeedsByRegion(final int regionType, final int page) {
     if (getBaseActivity() == null) return;
     getBaseActivity().cacheOut(new FeedByRegionRequest(page, regionType, 0), new OnResponse<FeedsByRegionResponse>() {
       @Override
       public void onResponse(FeedsByRegionResponse response) {
-        responseForCache(response, regionType, page);
+        responseForFeedsByRegionCache(response, page);
       }
     }, FeedsByRegionResponse.class);
+  }
+
+  @Override
+  protected void cacheOutFeeds(int circle, final int page) {
+    if (getBaseActivity() == null) return;
+    getBaseActivity().cacheOut(new FeedsRequest(circle, page), new OnResponse<FeedsResponse>() {
+      @Override
+      public void onResponse(FeedsResponse response) {
+        responseForFeedsCache(response, page);
+      }
+    }, FeedsResponse.class);
   }
 
   @Override
@@ -128,7 +150,7 @@ public class FeedRegionFragment extends AbsRegionFragment {
       }
     }
     if (isAdded()) {
-      requestFeeds(getRegionType(), 1);
+      requestRegionFeeds(mRegionType, mDistance, 1);
     }
   }
 

@@ -11,6 +11,7 @@ import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -20,12 +21,16 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseFragment;
+import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
+import com.utree.eightysix.app.region.event.RegionResponseEvent;
 import com.utree.eightysix.app.snapshot.SnapshotActivity;
+import com.utree.eightysix.data.Circle;
+import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TitleTab;
 
@@ -34,16 +39,30 @@ import com.utree.eightysix.widget.TitleTab;
  */
 public class TabRegionFragment extends BaseFragment {
 
-  @InjectView (R.id.vp_tab)
+  @InjectView(R.id.vp_tab)
   public ViewPager mVpTab;
 
-  @InjectView (R.id.tt_tab)
+  @InjectView(R.id.tt_tab)
   public TitleTab mTtTab;
+
+  @InjectView(R.id.ll_follow_circles)
+  public LinearLayout mLlFollowCircles;
+
+  @InjectView(R.id.ll_set_current)
+  public LinearLayout mLlSetCurrent;
+
+  @InjectView(R.id.ll_current)
+  public LinearLayout mLlCurrent;
+
+  @InjectView(R.id.rb_current)
+  public RoundedButton mRbCurrent;
 
   private FeedRegionFragment mFeedFragment;
   private HotFeedRegionFragment mHotFeedFragment;
   private FriendsFeedRegionFragment mFriendsFeedFragment;
   private ThemedDialog mNoPermDialog;
+
+  private Circle mCurrentCircle;
 
   public TabRegionFragment() {
     mFeedFragment = new FeedRegionFragment();
@@ -58,6 +77,16 @@ public class TabRegionFragment extends BaseFragment {
     } else {
       PublishActivity.start(getActivity(), -1, null);
     }
+  }
+
+  @OnClick(R.id.ll_follow_circles)
+  public void onLlFollowCirclesClicked() {
+    mLlFollowCircles.setVisibility(View.GONE);
+  }
+
+  @OnClick(R.id.tv_set_current)
+  public void onTvSetCurrent() {
+    BaseCirclesActivity.startSelect(getActivity(), true);
   }
 
   private void showNoPermDialog() {
@@ -179,7 +208,8 @@ public class TabRegionFragment extends BaseFragment {
 
     getBaseActivity().getHandler().postDelayed(new Runnable() {
       @Override
-      public void run() { if (getArguments().getInt("tabIndex") == 0) {
+      public void run() {
+        if (getArguments().getInt("tabIndex") == 0) {
           mFeedFragment.setActive(true);
         }
       }
@@ -198,9 +228,18 @@ public class TabRegionFragment extends BaseFragment {
     getBaseActivity().setTopTitle("");
     getBaseActivity().setTopSubTitle("");
 
-    getBaseActivity().getTopBar().getAbRight().setText(getString(R.string.snapshot));
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.ic_drawer));
+    getTopBar().getAbLeft().setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            mLlFollowCircles.setVisibility(
+                mLlFollowCircles.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+          }
+        });
 
-    getBaseActivity().getTopBar().getAbRight().setOnClickListener(
+    getTopBar().getAbRight().setText(getString(R.string.snapshot));
+    getTopBar().getAbRight().setOnClickListener(
         new View.OnClickListener() {
           @Override
           public void onClick(View v) {
@@ -216,9 +255,18 @@ public class TabRegionFragment extends BaseFragment {
       mFeedFragment.onHiddenChanged(false);
     }
 
-    getBaseActivity().getTopBar().getAbRight().setText(getString(R.string.snapshot));
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.ic_drawer));
+    getTopBar().getAbLeft().setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            mLlFollowCircles.setVisibility(
+                mLlFollowCircles.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+          }
+        });
 
-    getBaseActivity().getTopBar().getAbRight().setOnClickListener(
+    getTopBar().getAbRight().setText(getString(R.string.snapshot));
+    getTopBar().getAbRight().setOnClickListener(
         new View.OnClickListener() {
           @Override
           public void onClick(View v) {
@@ -258,6 +306,23 @@ public class TabRegionFragment extends BaseFragment {
       mTtTab.setTabBudget(2, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
     } else {
       mTtTab.setTabBudget(2, "", true);
+    }
+  }
+
+  @Subscribe
+  public void onRegionResponseEvent(RegionResponseEvent event) {
+    mCurrentCircle = event.getCircle();
+
+    if (mCurrentCircle != null) {
+      mLlSetCurrent.setVisibility(View.GONE);
+      mLlCurrent.setVisibility(View.VISIBLE);
+      mRbCurrent.setText(mCurrentCircle.shortName);
+      mRbCurrent.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          setRegionType(0);
+        }
+      });
     }
   }
 
@@ -323,7 +388,7 @@ public class TabRegionFragment extends BaseFragment {
   @Keep
   class NoPermViewHolder {
 
-    @InjectView (R.id.tv_no_perm_tip)
+    @InjectView(R.id.tv_no_perm_tip)
     TextView mTvNoPermTip;
 
     NoPermViewHolder(View view) {

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Copyright (c) 2015. All rights reserved by utree.cn
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/ll_follow_circles"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/translucent"
+              android:visibility="gone"
+        >
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:text="我在职的圈子"
+            android:background="@color/apptheme_primary_grey_color"
+            />
+
+    <LinearLayout
+            android:id="@+id/ll_set_current"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@android:color/white"
+            >
+
+        <TextView
+                android:id="@+id/tv_set_current"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:layout_margin="8dp"
+                android:text=" + 设置在职"
+                android:textColor="@color/border_outline_secondary_dark_color_btn_text"
+                android:gravity="center"
+                android:background="@drawable/border_outline_secondary_dark_color_btn"
+                />
+
+        <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="0.5"
+                android:layout_margin="4dp"
+                />
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/ll_current"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@android:color/white"
+            android:visibility="gone"
+            >
+
+        <com.utree.eightysix.widget.RoundedButton
+                android:id="@+id/rb_current"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:layout_margin="8dp"
+                android:padding="2dp"
+                android:gravity="center"
+                android:textSize="14sp"
+                />
+
+        <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="0.5"
+                android:layout_margin="4dp"
+                />
+
+    </LinearLayout>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:text="我关注的圈子"
+            android:background="@color/apptheme_primary_grey_color"
+            />
+
+    <LinearLayout
+            android:id="@+id/ll_add_follow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@android:color/white"
+            >
+
+        <TextView
+                android:id="@+id/tv_add_follow"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:layout_margin="8dp"
+                android:text=" + 添加关注"
+                android:textColor="@color/border_outline_secondary_dark_color_btn_text"
+                android:gravity="center"
+                android:background="@drawable/border_outline_secondary_dark_color_btn"
+                />
+
+        <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="0.5"
+                android:layout_margin="4dp"
+                />
+
+    </LinearLayout>
+</LinearLayout>
