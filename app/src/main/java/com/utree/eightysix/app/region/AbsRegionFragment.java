@@ -254,7 +254,11 @@ public abstract class AbsRegionFragment extends BaseFragment {
   }
 
   public void updateTitleBar() {
-    getTopBar().setSubTitle(String.format("%s | %s", mCircle.shortName, mSubInfo == null ? "" : mSubInfo));
+    if (mRegionType == 0) {
+      getTopBar().setSubTitle(String.format("%s | %s", mCircle.shortName, mSubInfo == null ? "" : mSubInfo));
+    } else {
+      getTopBar().setSubTitle(mSubInfo == null ? "" : mSubInfo);
+    }
   }
 
   protected abstract void requestRegionFeeds(int regionType, int distance, int page);
@@ -280,12 +284,11 @@ public abstract class AbsRegionFragment extends BaseFragment {
         }
 
         mRegionType = response.object.regionType;
-        mDistance = response.object.regionRadius;
+        if (mRegionType == 4) {
+          mDistance = response.object.regionRadius;
+        }
 
-        Account.inst().setLastRegionType(getRegionType());
-
-
-        U.getBus().post(new RegionResponseEvent(getRegionType(), mCircle));
+        U.getBus().post(new RegionResponseEvent(getRegionType()));
       } else if (mFeedAdapter != null) {
         mFeedAdapter.add(response.object.posts.lists);
       }
@@ -338,8 +341,6 @@ public abstract class AbsRegionFragment extends BaseFragment {
       if (page == 1) {
         mCircle = response.object.circle;
 
-        U.getBus().post(new CurrentCircleResponseEvent(mCircle));
-
         M.getRegisterHelper().unregister(mFeedAdapter);
         mFeedAdapter = new FeedRegionAdapter(response.object);
         M.getRegisterHelper().register(mFeedAdapter);
@@ -353,8 +354,6 @@ public abstract class AbsRegionFragment extends BaseFragment {
 
         Account.inst().setLastRegionType(getRegionType());
 
-
-        U.getBus().post(new RegionResponseEvent(getRegionType(), mCircle));
       } else if (mFeedAdapter != null) {
         mFeedAdapter.add(response.object.posts.lists);
       }
@@ -427,22 +426,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
         mRegionType = response.object.regionType;
 
 
-        switch (getRegionType()) {
-          case 0:
-            getBaseActivity().setTopTitle(mCircle.shortName);
-            break;
-          case 1:
-            getBaseActivity().setTopTitle("1公里内");
-            break;
-          case 2:
-            getBaseActivity().setTopTitle("5公里内");
-            break;
-          case 3:
-            getBaseActivity().setTopTitle("同城");
-            break;
-        }
-
-        U.getBus().post(new RegionResponseEvent(getRegionType(), mCircle));
+        U.getBus().post(new RegionResponseEvent(getRegionType()));
 
       } else if (mFeedAdapter != null) {
         mFeedAdapter.add(response.object.posts.lists);
@@ -487,22 +471,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
         M.getRegisterHelper().register(mFeedAdapter);
         mLvFeed.setAdapter(mFeedAdapter);
 
-        switch (getRegionType()) {
-          case 0:
-            getBaseActivity().setTopTitle(mCircle.shortName);
-            break;
-          case 1:
-            getBaseActivity().setTopTitle("1公里内");
-            break;
-          case 2:
-            getBaseActivity().setTopTitle("5公里内");
-            break;
-          case 3:
-            getBaseActivity().setTopTitle("同城");
-            break;
-        }
-
-        U.getBus().post(new RegionResponseEvent(getRegionType(), mCircle));
+        U.getBus().post(new RegionResponseEvent(getRegionType()));
 
       } else if (mFeedAdapter != null) {
         mFeedAdapter.add(response.object.posts.lists);

@@ -58,7 +58,7 @@ public class FollowCircleListAdapter extends BaseAdapter {
     if (convertView == null) {
       convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_follow_circle, parent, false);
       viewHolder = new ViewHolder(convertView);
-      convertView.setTag(convertView);
+      convertView.setTag(viewHolder);
     } else {
       viewHolder = (ViewHolder) convertView.getTag();
     }

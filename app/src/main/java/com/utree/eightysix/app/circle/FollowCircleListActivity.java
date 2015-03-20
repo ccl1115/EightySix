@@ -60,9 +60,10 @@ public class FollowCircleListActivity extends BaseActivity {
     }, new DialogInterface.OnClickListener() {
       @Override
       public void onClick(DialogInterface dialog, int which) {
+        final FollowCircle circle = mAdapter.getItem(position);
         switch (which) {
           case 0:
-            showCircleSetDialog(mAdapter.getItem(position));
+            showCircleSetDialog(circle);
             break;
           case 1:
             U.request("follow_circle_del", new OnResponse2<Response>() {
@@ -74,10 +75,10 @@ public class FollowCircleListActivity extends BaseActivity {
               @Override
               public void onResponse(Response response) {
                 if (RESTRequester.responseOk(response)) {
-                  mAdapter.remove(mAdapter.getItem(position));
+                  mAdapter.remove(circle);
                 }
               }
-            }, Response.class);
+            }, Response.class, circle.factoryId);
             break;
         }
       }
@@ -105,10 +106,11 @@ public class FollowCircleListActivity extends BaseActivity {
     mRstvEmpty.setDrawable(R.drawable.scene_3);
     mRstvEmpty.setText("你还没有关注任何圈子");
 
+    showProgressBar(true);
     U.request("follow_circle_list", new OnResponse2<FollowCircleListResponse>() {
       @Override
       public void onResponseError(Throwable e) {
-
+        hideProgressBar();
       }
 
       @Override
@@ -120,6 +122,7 @@ public class FollowCircleListActivity extends BaseActivity {
           mAdapter = new FollowCircleListAdapter(response.object);
           mAlvFollowCircles.setAdapter(mAdapter);
         }
+        hideProgressBar();
       }
     }, FollowCircleListResponse.class);
   }

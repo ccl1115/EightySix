@@ -27,12 +27,15 @@ import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
+import com.utree.eightysix.app.region.event.CircleResponseEvent;
 import com.utree.eightysix.app.region.event.RegionResponseEvent;
 import com.utree.eightysix.app.snapshot.SnapshotActivity;
 import com.utree.eightysix.data.Circle;
+import com.utree.eightysix.event.CurrentCircleResponseEvent;
 import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TitleTab;
+import com.utree.eightysix.widget.TopBar;
 
 /**
  * @author simon
@@ -228,6 +231,10 @@ public class TabRegionFragment extends BaseFragment {
     getBaseActivity().setTopTitle("");
     getBaseActivity().setTopSubTitle("");
 
+    setTopBarTitle();
+  }
+
+  private void setTopBarTitle() {
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.ic_drawer));
     getTopBar().getAbLeft().setOnClickListener(
         new View.OnClickListener() {
@@ -247,6 +254,34 @@ public class TabRegionFragment extends BaseFragment {
           }
         }
     );
+
+    getTopBar().setTitleAdapter(new TopBar.TitleAdapter() {
+      @Override
+      public String getTitle(int position) {
+        if (position == 0) {
+          return "在职";
+        } else if (position == 1) {
+          return "附近";
+        }
+        return null;
+      }
+
+      @Override
+      public void onClick(View view, int position) {
+        if (view.isSelected()) {
+          if (position == 0) {
+            setRegionType(0);
+          } else if (position == 1) {
+            setRegionType(4);
+          }
+        }
+      }
+
+      @Override
+      public int getCount() {
+        return 2;
+      }
+    });
   }
 
   @Override
@@ -255,25 +290,7 @@ public class TabRegionFragment extends BaseFragment {
       mFeedFragment.onHiddenChanged(false);
     }
 
-    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.ic_drawer));
-    getTopBar().getAbLeft().setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-            mLlFollowCircles.setVisibility(
-                mLlFollowCircles.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-          }
-        });
-
-    getTopBar().getAbRight().setText(getString(R.string.snapshot));
-    getTopBar().getAbRight().setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-            SnapshotActivity.start(getActivity(), mFeedFragment.getCircle());
-          }
-        }
-    );
+    setTopBarTitle();
   }
 
   @Subscribe
@@ -311,6 +328,15 @@ public class TabRegionFragment extends BaseFragment {
 
   @Subscribe
   public void onRegionResponseEvent(RegionResponseEvent event) {
+    if (event.getRegion() == 0) {
+      getTopBar().setTitleTabSelected(0);
+    } else  {
+      getTopBar().setTitleTabSelected(1);
+    }
+  }
+
+  @Subscribe
+  public void onCurrentCircleResponseEvent(CurrentCircleResponseEvent event)  {
     mCurrentCircle = event.getCircle();
 
     if (mCurrentCircle != null) {
@@ -325,6 +351,12 @@ public class TabRegionFragment extends BaseFragment {
       });
     }
   }
+
+  @Subscribe
+  public void onCircleResponseEvent(CircleResponseEvent event) {
+    getTopBar().setTitleTabText(0, "关注");
+  }
+
 
   public boolean canPublish() {
     return mFeedFragment != null && mFeedFragment.canPublish();
