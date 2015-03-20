@@ -127,7 +127,7 @@
         <id>profile_fill</id>
         <name>完善个人资料</name>
         <path>/commit/user/profile/replace</path>
-        <host>http://203.195.245.99:8000</host>
+        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -146,7 +146,7 @@
         <id>profile</id>
         <name>个人资料</name>
         <path>/user/info</path>
-        <host>http://203.195.245.99:8000</host>
+        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -169,8 +169,8 @@
     <request>
         <id>follow_circle_add</id>
         <name>添加关注圈子</name>
-        <path>/commit/user/like/factory/create</path>
-        <host>http://203.195.245.99:8000</host>
+        <path>/commit/userfactory/like/create</path>
+        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -181,8 +181,8 @@
     <request>
         <id>follow_circle_del</id>
         <name>删除关注圈子</name>
-        <path>/service/user/like_factory/delete</path>
-        <host>http://203.195.245.99:8000</host>
+        <path>/commit/userfactory/like/delete</path>
+        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -193,8 +193,8 @@
     <request>
         <id>follow_circle_list</id>
         <name>关注圈子列表</name>
-        <path>/user/like/factory</path>
-        <host>http://203.195.245.99:8000</host>
+        <path>/userfactory/like</path>
+        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
     </request>
@@ -203,7 +203,7 @@
         <id>user_avatars</id>
         <name>头像列表</name>
         <path>/user/avatar</path>
-        <host>http://203.195.245.99:8000</host>
+        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
     </request>
@@ -212,7 +212,7 @@
         <id>user_avatars_del</id>
         <name>删除头像</name>
         <path>/commit/user/avatar/delete</path>
-        <host>http://203.195.245.99:8000</host>
+        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -223,8 +223,8 @@
     <request>
         <id>user_friend_list</id>
         <name>朋友列表</name>
-        <path>/user/friend</path>
-        <host>http://203.195.245.99:8000</host>
+        <path>/user/friend/mine</path>
+        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
     </request>
@@ -233,7 +233,7 @@
         <id>user_friend_request</id>
         <name>添加好友</name>
         <path>/commit/user/friend/create</path>
-        <host>http://203.195.245.99:8000</host>
+        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -246,7 +246,7 @@
         <id>user_friend_accept</id>
         <name>通过请求</name>
         <path>/commit/user/friend/pass</path>
-        <host>http://203.195.245.99:8000</host>
+        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -257,8 +257,8 @@
     <request>
         <id>user_friend_requests</id>
         <name>好友请求</name>
-        <path>/user/createdFriend</path>
-        <host>http://203.195.245.99:8000</host>
+        <path>/user/friend/created</path>
+        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
     </request>
@@ -267,7 +267,7 @@
         <id>user_friend_ignore</id>
         <name>忽略请求</name>
         <path>/commit/user/friend/ignore</path>
-        <host>http://203.195.245.99:8000</host>
+        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>

@@ -38,10 +38,10 @@ public class Profile {
   public String signature;
 
   @SerializedName("experience")
-  public String experience;
+  public int experience;
 
   @SerializedName("nextExperience")
-  public String nextExperience;
+  public int nextExperience;
 
   @SerializedName("level")
   public int level;

@@ -2,6 +2,13 @@ package com.utree.eightysix.app.post;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +21,8 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.app.FragmentHolder;
+import com.utree.eightysix.app.account.ProfileFragment;
 import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.app.feed.event.ReloadCommentEvent;
 import com.utree.eightysix.data.Comment;
@@ -194,7 +203,28 @@ class PostCommentsAdapter extends BaseAdapter {
       holder.mTvComment.setText(comment.content);
       holder.mTvComment.setTextColor(resources.getColor(R.color.apptheme_primary_grey_color));
     } else {
-      holder.mTvComment.setText(comment.content);
+      if (TextUtils.isEmpty(comment.name)) {
+        holder.mTvComment.setText(comment.content);
+      } else {
+        ClickableSpan span = new ClickableSpan() {
+          @Override
+          public void onClick(View widget) {
+            Bundle args = new Bundle();
+            args.putInt("viewId", Integer.valueOf(comment.viewId));
+            args.putBoolean("isVisitor", true);
+            args.putString("userName", comment.name);
+            FragmentHolder.start(widget.getContext(), ProfileFragment.class, args);
+          }
+
+          @Override
+          public void updateDrawState(TextPaint ds) {
+            ds.setColor(ds.linkColor);
+          }
+        };
+        SpannableString spannable = new SpannableString(comment.content + " -- " + comment.name);
+        spannable.setSpan(span, comment.content.length() + 4, spannable.length(), Spanned.SPAN_INTERMEDIATE);
+        holder.mTvComment.setText(spannable);
+      }
       if (comment.owner == 1) {
         holder.mTvComment.setTextColor(resources.getColor(R.color.apptheme_primary_light_color_200));
       } else if (comment.self == 1) {
@@ -271,6 +301,8 @@ class PostCommentsAdapter extends BaseAdapter {
 
     public CommentViewHolder(View view) {
       ButterKnife.inject(this, view);
+
+      mTvComment.setMovementMethod(LinkMovementMethod.getInstance());
     }
   }
 }

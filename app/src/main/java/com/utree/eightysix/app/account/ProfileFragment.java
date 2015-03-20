@@ -227,9 +227,9 @@ public class ProfileFragment extends HolderFragment {
           }
 
           mAivLevelIcon.setUrl(response.object.levelIcon);
-          mTvExp.setText(String.format("%d/%d", response.object.level, response.object.nextLevel));
-          mPbExp.setMax(response.object.nextLevel);
-          mPbExp.setProgress(response.object.level);
+          mTvExp.setText(String.format("%d/%d", response.object.experience, response.object.nextExperience));
+          mPbExp.setMax(response.object.nextExperience);
+          mPbExp.setProgress(response.object.experience);
         }
       }
     }, ProfileResponse.class, userId);
