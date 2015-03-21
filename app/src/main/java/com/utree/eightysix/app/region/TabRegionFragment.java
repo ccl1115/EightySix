@@ -40,6 +40,9 @@ import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TitleTab;
 import com.utree.eightysix.widget.TopBar;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author simon
  */
@@ -69,7 +72,10 @@ public class TabRegionFragment extends BaseFragment {
   private FeedRegionFragment mFeedFragment;
   private HotFeedRegionFragment mHotFeedFragment;
   private FriendsFeedRegionFragment mFriendsFeedFragment;
+
   private ThemedDialog mNoPermDialog;
+
+  private List<View> mFollowCircleViews = new ArrayList<View>();
 
   public TabRegionFragment() {
     mFeedFragment = new FeedRegionFragment();
@@ -282,6 +288,7 @@ public class TabRegionFragment extends BaseFragment {
         if (position == 0) {
           setRegionType(0);
         } else if (position == 1) {
+          clearFollowCircleViews();
           setRegionType(4);
         }
       }
@@ -354,6 +361,8 @@ public class TabRegionFragment extends BaseFragment {
         @Override
         public void onClick(View v) {
           if (!v.isSelected()) {
+            clearFollowCircleViews();
+            v.setSelected(true);
             setRegionType(0);
             mLlFollowCircles.setVisibility(View.GONE);
             getTopBar().setTitleTabSelected(0);
@@ -504,14 +513,19 @@ public class TabRegionFragment extends BaseFragment {
       textView.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-          setCircleId(circles[0].factoryId);
-          getTopBar().setTitleTabText(0, "关注");
-          getTopBar().setTitleTabSelected(0);
-          getTopBar().setSubTitle("");
-          mLlFollowCircles.setVisibility(View.GONE);
+          if (!v.isSelected()) {
+            clearFollowCircleViews();
+            v.setSelected(true);
+            setCircleId(circles[0].factoryId);
+            getTopBar().setTitleTabText(0, "关注");
+            getTopBar().setTitleTabSelected(0);
+            getTopBar().setSubTitle("");
+            mLlFollowCircles.setVisibility(View.GONE);
+          }
         }
       });
 
+      mFollowCircleViews.add(textView);
       linearLayout.addView(textView);
     }
     if (circles[1] != null) {
@@ -530,14 +544,19 @@ public class TabRegionFragment extends BaseFragment {
       textView.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-          setCircleId(circles[1].factoryId);
-          getTopBar().setTitleTabText(0, "关注");
-          getTopBar().setTitleTabSelected(0);
-          getTopBar().setSubTitle("");
-          mLlFollowCircles.setVisibility(View.GONE);
+          if (!v.isSelected()) {
+            clearFollowCircleViews();
+            v.setSelected(true);
+            setCircleId(circles[1].factoryId);
+            getTopBar().setTitleTabText(0, "关注");
+            getTopBar().setTitleTabSelected(0);
+            getTopBar().setSubTitle("");
+            mLlFollowCircles.setVisibility(View.GONE);
+          }
         }
       });
 
+      mFollowCircleViews.add(textView);
       linearLayout.addView(textView);
     } else {
       View view = new View(getActivity());
@@ -546,6 +565,13 @@ public class TabRegionFragment extends BaseFragment {
     }
 
     mLlFollowCircles.addView(linearLayout);
+  }
+
+  private void clearFollowCircleViews() {
+    mTvCurrent.setSelected(false);
+    for(View view : mFollowCircleViews) {
+      view.setSelected(false);
+    }
   }
 
   @Keep

@@ -51,7 +51,6 @@ public class ActionButton extends FrameLayout {
   public void setActionBackgroundDrawable(Drawable drawable) {}
 
   public void setDrawable(Drawable drawable) {
-    setBackgroundResource(R.drawable.apptheme_primary_btn_dark);
     if (drawable != null) {
       mIv.setVisibility(VISIBLE);
       mTv.setVisibility(GONE);
