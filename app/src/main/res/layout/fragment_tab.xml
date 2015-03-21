@@ -38,6 +38,5 @@
             android:background="@drawable/btn_post"
             />
 
-    <include layout="@layout/widget_follow_circles"
-            />
+    <include layout="@layout/widget_follow_circles" />
 </FrameLayout>

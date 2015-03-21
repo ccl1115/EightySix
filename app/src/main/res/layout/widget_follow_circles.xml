@@ -45,7 +45,7 @@
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_weight="0.5"
-                android:layout_margin="4dp"
+                android:layout_margin="8dp"
                 />
 
     </LinearLayout>
@@ -59,22 +59,23 @@
             android:visibility="gone"
             >
 
-        <com.utree.eightysix.widget.RoundedButton
-                android:id="@+id/rb_current"
+
+        <TextView
+                android:id="@+id/tv_current"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:layout_margin="8dp"
-                android:padding="2dp"
+                android:textColor="@color/border_outline_secondary_dark_color_btn_text"
                 android:gravity="center"
-                android:textSize="14sp"
+                android:background="@drawable/border_outline_secondary_dark_color_btn"
                 />
 
         <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_weight="0.5"
-                android:layout_margin="4dp"
+                android:layout_margin="8dp"
                 />
 
     </LinearLayout>
@@ -111,8 +112,9 @@
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_weight="0.5"
-                android:layout_margin="4dp"
+                android:layout_margin="8dp"
                 />
 
     </LinearLayout>
+
 </LinearLayout>

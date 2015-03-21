@@ -21,6 +21,7 @@ import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.app.post.PostActivity;
+import com.utree.eightysix.app.region.event.CircleResponseEvent;
 import com.utree.eightysix.app.region.event.RegionResponseEvent;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Feeds;
@@ -40,6 +41,9 @@ import com.utree.eightysix.widget.*;
  */
 public abstract class AbsRegionFragment extends BaseFragment {
 
+  private static final int MODE_REGION = 1;
+  private static final int MODE_FEED = 2;
+
   @InjectView (R.id.lv_feed)
   public AdvancedListView mLvFeed;
 
@@ -55,14 +59,24 @@ public abstract class AbsRegionFragment extends BaseFragment {
 
   protected Paginate.Page mPageInfo;
 
+  private int mCircleId;
+
   protected int mRegionType = -1;
   protected int mDistance = 0;
+
+  protected int mMode = MODE_REGION;
 
   protected boolean mPostPraiseRequesting;
   private String mSubInfo;
 
-  public void setRegionType(int regionType) {
+  public void requestRegion(int regionType) {
+    mMode = MODE_REGION;
     mRegionType = regionType;
+  }
+
+  public void requestFeeds(int circleId) {
+    mMode = MODE_FEED;
+    mCircleId = circleId;
   }
 
   public FeedRegionAdapter getFeedAdapter() {
@@ -70,7 +84,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
   }
 
   @OnItemClick (R.id.lv_feed)
-  public void onLvFeedItemClicked(int position, View view) {
+  public void onLvFeedItemClicked(int position) {
     Object item = mLvFeed.getAdapter().getItem(position);
     if (item == null || !(item instanceof Post)) return;
     PostActivity.start(getActivity(), (Post) item);
@@ -80,7 +94,13 @@ public abstract class AbsRegionFragment extends BaseFragment {
   public void onAttach(Activity activity) {
     super.onAttach(activity);
 
-    if (isActive()) requestRegionFeeds(mRegionType, mDistance, 1);
+    if (isActive()) {
+      if (mMode == MODE_REGION) {
+        requestRegionFeeds(mRegionType, mDistance, 1);
+      } else if (mMode == MODE_FEED) {
+        requestFeeds(mCircleId, 1);
+      }
+    }
   }
 
   @Override
@@ -88,7 +108,11 @@ public abstract class AbsRegionFragment extends BaseFragment {
     if (mLvFeed != null) mLvFeed.setAdapter(null);
 
     if (isAdded()) {
-      requestRegionFeeds(mRegionType, mDistance, 1);
+      if (mMode == MODE_REGION) {
+        requestRegionFeeds(mRegionType, mDistance, 1);
+      } else if (mMode == MODE_FEED) {
+        requestFeeds(mCircleId, 1);
+      }
     }
   }
 
@@ -133,10 +157,10 @@ public abstract class AbsRegionFragment extends BaseFragment {
         getBaseActivity().showRefreshIndicator(true);
         onPullRefresh();
         if (isAdded()) {
-          if (mCircle != null) {
-            requestRegionFeeds(getRegionType(), mDistance, 1);
-          } else {
-            requestRegionFeeds(-1, mDistance, 1);
+          if (mMode == MODE_REGION) {
+            requestRegionFeeds(mRegionType, mDistance, 1);
+          } else if (mMode == MODE_FEED) {
+            requestFeeds(mCircleId, 1);
           }
         }
       }
@@ -212,39 +236,22 @@ public abstract class AbsRegionFragment extends BaseFragment {
     return mCircle;
   }
 
-  public int getFriendCount() {
-    if (mCircle != null) {
-      return mCircle.friendCount;
-    } else {
-      return 0;
-    }
-  }
-
+  @Deprecated
   public int getCircleId() {
     return mCircle == null ? 0 : mCircle.id;
   }
 
   public void refresh() {
     getBaseActivity().showProgressBar();
-    if (mCircle != null) {
-      if (isAdded()) {
-        requestRegionFeeds(mRegionType, 0, 1);
-      }
-    } else {
-      if (isAdded()) {
-        requestRegionFeeds(-1, mDistance, 1);
+    if (isAdded()) {
+      if (mMode == MODE_REGION) {
+        requestRegionFeeds(mRegionType, mDistance, 1);
+      } else if (mMode == MODE_FEED) {
+        requestFeeds(mCircleId, 1);
       }
     }
   }
 
-
-  public int getWorkerCount() {
-    if (mFeedAdapter != null && mFeedAdapter.getFeeds() != null) {
-      return mFeedAdapter.getFeeds().workerCount;
-    } else {
-      return 0;
-    }
-  }
 
   @Override
   public void onHiddenChanged(boolean hidden) {
@@ -286,6 +293,8 @@ public abstract class AbsRegionFragment extends BaseFragment {
         mRegionType = response.object.regionType;
         if (mRegionType == 4) {
           mDistance = response.object.regionRadius;
+        } else if (mRegionType == 0) {
+          getBaseActivity().getTopBar().setTitleTabText(0, "在职");
         }
 
         U.getBus().post(new RegionResponseEvent(getRegionType()));
@@ -341,6 +350,8 @@ public abstract class AbsRegionFragment extends BaseFragment {
       if (page == 1) {
         mCircle = response.object.circle;
 
+        U.getBus().post(new CircleResponseEvent(mCircle));
+
         M.getRegisterHelper().unregister(mFeedAdapter);
         mFeedAdapter = new FeedRegionAdapter(response.object);
         M.getRegisterHelper().register(mFeedAdapter);
@@ -351,8 +362,6 @@ public abstract class AbsRegionFragment extends BaseFragment {
         } else {
           mRstvEmpty.setVisibility(View.GONE);
         }
-
-        Account.inst().setLastRegionType(getRegionType());
 
       } else if (mFeedAdapter != null) {
         mFeedAdapter.add(response.object.posts.lists);
@@ -387,13 +396,9 @@ public abstract class AbsRegionFragment extends BaseFragment {
         }
       }
 
-      if (getRegionType() == 0) {
-        FetchNotificationService.setCircleId(mCircle == null ? 0 : mCircle.id);
-      } else {
-        FetchNotificationService.setCircleId(0);
-      }
+      FetchNotificationService.setCircleId(mCircle == null ? 0 : mCircle.id);
     } else {
-      cacheOutFeedsByRegion(mRegionType, page);
+      cacheOutFeeds(mCircle.id, page);
     }
     mRefresherView.setRefreshing(false);
     mLvFeed.stopLoadMore();

@@ -225,15 +225,15 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
       t.setOnClickListener(new OnClickListener() {
         @Override
         public void onClick(View v) {
+          if (!v.isSelected()) {
+            mTitleAdapter.onSelected(v, finalI);
+          }
+
           for (int i = 0, size = mLlTitleTab.getChildCount(); i < size; i++) {
             mLlTitleTab.getChildAt(i).setSelected(false);
           }
 
           v.setSelected(!v.isSelected());
-
-          if (mTitleAdapter != null) {
-            mTitleAdapter.onClick(v, finalI);
-          }
         }
       });
       mLlTitleTab.addView(t);
@@ -375,7 +375,7 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
   public interface TitleAdapter {
     String getTitle(int position);
 
-    void onClick(View view, int position);
+    void onSelected(View view, int position);
 
     int getCount();
   }
