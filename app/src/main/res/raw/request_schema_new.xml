@@ -118,4 +118,25 @@
         <path>/user/getInviteCode.do</path>
         <token/>
     </request>
+
+    <reqeust>
+        <id>tags_and_keywords</id>
+        <name>标签和关键字</name>
+        <path>/feed/getTagsAndKeyWord.do</path>
+        <token/>
+    </reqeust>
+
+    <request>
+        <id>feeds_search</id>
+        <name>搜索</name>
+        <path>/feed/searchContent.do</path>
+        <token/>
+        <params>
+            <param>content</param>
+            <param>tagId</param>
+            <param>currFactory</param>
+            <param>currPage</param>
+        </params>
+    </request>
+
 </api>

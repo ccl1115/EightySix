@@ -10,10 +10,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
@@ -61,6 +58,9 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
   @InjectView(R.id.tb_iv_indicator)
   public ImageView mIvIndicator;
+
+  @InjectView(R.id.sp_search)
+  public Spinner mSpSearch;
 
   @InjectView(R.id.refresh_indicator)
   public RefreshIndicator mRefreshIndicator;
@@ -144,6 +144,10 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
   public void exitSearch() {
     mLlSearch.setVisibility(INVISIBLE);
     if (mCallback != null) mCallback.onExitSearch();
+  }
+
+  public Spinner getSpinner() {
+    return mSpSearch;
   }
 
   @Override

@@ -33,6 +33,9 @@
         <item name="android:radioButtonStyle">@style/Widget.RadioButton.AppTheme</item>
 
         <item name="android:listViewStyle">@style/Widget.ListView.Apptheme</item>
+
+        <item name="android:spinnerDropDownItemStyle">@style/Widget.Spinner.DropdownItem.Apptheme</item>
+        <item name="android:spinnerItemStyle">@style/Widget.Spinner.Item.Apptheme</item>
     </style>
 
     <style name="AppTheme.Dialog" parent="AppTheme">

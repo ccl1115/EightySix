@@ -18,6 +18,7 @@ import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.FragmentHolder;
 import com.utree.eightysix.app.account.AddFriendActivity;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
+import com.utree.eightysix.app.feed.FeedsSearchActivity;
 import com.utree.eightysix.app.hometown.HometownTabFragment;
 import com.utree.eightysix.app.web.BaseWebActivity;
 
@@ -47,6 +48,11 @@ public class ExploreFragment extends BaseFragment {
         String.format("http://c.lanmeiquan.com/activity/blueStar.do?userid=%s&token=%s",
             Account.inst().getUserId(),
             Account.inst().getToken()));
+  }
+
+  @OnClick(R.id.tv_search)
+  public void onTvSearchClicked() {
+    startActivity(new Intent(getActivity(), FeedsSearchActivity.class));
   }
 
   @Override

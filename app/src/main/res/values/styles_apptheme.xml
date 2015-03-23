@@ -103,4 +103,24 @@
         <item name="android:lines">1</item>
         <item name="android:ellipsize">end</item>
     </style>
+
+    <style name="Widget.Spinner"/>
+
+    <style name="Widget.Spinner.DropdownItem"/>
+
+    <style name="Widget.Spinner.Item"/>
+
+    <style name="Widget.Spinner.Item.Apptheme">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">4dp</item>
+    </style>
+
+    <style name="Widget.Spinner.DropdownItem.Apptheme" parent="android:Widget.TextView.SpinnerItem">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">16dp</item>
+    </style>
 </resources>

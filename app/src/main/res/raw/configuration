@@ -59,7 +59,7 @@ storage.image.bucket.name.release = utree-image-release
 storage.portrait.bucket.name = utree-portraits
 
 # storage bucket name to store background images
-storage.bg.bucket.name = utree-bg
+storage.bg.bucket.name = utree-bg-release
 storage.bg.bucket.name.release = utree-bg-release
 
 account.phone.length = 11

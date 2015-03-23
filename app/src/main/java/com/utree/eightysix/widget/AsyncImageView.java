@@ -15,8 +15,6 @@ public class AsyncImageView extends ImageView {
 
   protected String mUrlHash;
 
-  protected boolean mLocal;
-
   public AsyncImageView(Context context) {
     this(context, null, 0);
   }

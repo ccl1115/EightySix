@@ -269,19 +269,11 @@ public class U {
   }
 
   public static String getImageBucket() {
-    if (BuildConfig.DEBUG) {
-      return U.getConfig("storage.image.bucket.name");
-    } else {
-      return U.getConfig("storage.image.bucket.name.release");
-    }
+    return U.getConfig("storage.image.bucket.name.release");
   }
 
   public static String getBgBucket() {
-    if (BuildConfig.DEBUG) {
-      return U.getConfig("storage.bg.bucket.name");
-    } else {
-      return U.getConfig("storage.bg.bucket.name.release");
-    }
+    return U.getConfig("storage.bg.bucket.name.release");
   }
 
   @SuppressLint("SdCardPath")
