@@ -39,12 +39,13 @@ public class HotFeedRegionFragment extends AbsRegionFragment {
       getBaseActivity().showRefreshIndicator(true);
     }
     getBaseActivity().setTopSubTitle("");
-    getBaseActivity().request(new FeedByRegionRequest(page, regionType, 1), new OnResponse<FeedsByRegionResponse>() {
-      @Override
-      public void onResponse(FeedsByRegionResponse response) {
-        responseForFeedsByRegionRequest(response, page);
-      }
-    }, FeedsByRegionResponse.class);
+    getBaseActivity().request(new FeedByRegionRequest(page, regionType, 1, distance),
+        new OnResponse<FeedsByRegionResponse>() {
+          @Override
+          public void onResponse(FeedsByRegionResponse response) {
+            responseForFeedsByRegionRequest(response, page);
+          }
+        }, FeedsByRegionResponse.class);
 
   }
 
@@ -71,7 +72,7 @@ public class HotFeedRegionFragment extends AbsRegionFragment {
   }
 
   @Override
-  protected void cacheOutFeedsByRegion(final int regionType, final int page) {
+  protected void cacheOutFeedsByRegion(final int regionType, int distance, final int page) {
     if (getBaseActivity() == null) return;
     getBaseActivity().cacheOut(new FeedByRegionRequest(page, regionType, 1), new OnResponse<FeedsByRegionResponse>() {
       @Override
@@ -128,8 +129,8 @@ public class HotFeedRegionFragment extends AbsRegionFragment {
 
       @Override
       public void onResponseError(Throwable e) {
-                                               mPostPraiseRequesting = false;
-                                                                                                                  }
+        mPostPraiseRequesting = false;
+      }
     }, Response.class);
   }
 

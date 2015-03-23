@@ -41,8 +41,8 @@ import com.utree.eightysix.widget.*;
  */
 public abstract class AbsRegionFragment extends BaseFragment {
 
-  private static final int MODE_REGION = 1;
-  private static final int MODE_FEED = 2;
+  public static final int MODE_REGION = 1;
+  public static final int MODE_FEED = 2;
 
   @InjectView (R.id.lv_feed)
   public AdvancedListView mLvFeed;
@@ -297,7 +297,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
           getBaseActivity().getTopBar().setTitleTabText(0, "在职");
         }
 
-        U.getBus().post(new RegionResponseEvent(getRegionType()));
+        U.getBus().post(new RegionResponseEvent(getRegionType(), mDistance));
       } else if (mFeedAdapter != null) {
         mFeedAdapter.add(response.object.posts.lists);
       }
@@ -337,7 +337,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
         FetchNotificationService.setCircleId(0);
       }
     } else {
-      cacheOutFeedsByRegion(mRegionType, page);
+      cacheOutFeedsByRegion(mRegionType, mDistance, page);
     }
     mRefresherView.setRefreshing(false);
     mLvFeed.stopLoadMore();
@@ -406,7 +406,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
     getBaseActivity().hideRefreshIndicator();
   }
 
-  protected abstract void cacheOutFeedsByRegion(int regionType, int page);
+  protected abstract void cacheOutFeedsByRegion(int regionType, int distance, int page);
 
   protected abstract void cacheOutFeeds(int circle, int page);
 
@@ -429,10 +429,13 @@ public abstract class AbsRegionFragment extends BaseFragment {
         mLvFeed.setAdapter(mFeedAdapter);
 
         mRegionType = response.object.regionType;
+        if (mRegionType == 4) {
+          mDistance = response.object.regionRadius;
+        } else if (mRegionType == 0) {
+          getBaseActivity().getTopBar().setTitleTabText(0, "在职");
+        }
 
-
-        U.getBus().post(new RegionResponseEvent(getRegionType()));
-
+        U.getBus().post(new RegionResponseEvent(getRegionType(), mDistance));
       } else if (mFeedAdapter != null) {
         mFeedAdapter.add(response.object.posts.lists);
       }
@@ -475,8 +478,6 @@ public abstract class AbsRegionFragment extends BaseFragment {
         mFeedAdapter = new FeedRegionAdapter(response.object);
         M.getRegisterHelper().register(mFeedAdapter);
         mLvFeed.setAdapter(mFeedAdapter);
-
-        U.getBus().post(new RegionResponseEvent(getRegionType()));
 
       } else if (mFeedAdapter != null) {
         mFeedAdapter.add(response.object.posts.lists);

@@ -12,7 +12,7 @@ import java.io.File;
 /**
  */
 @Api(C.COMMIT_UPLOADIMAGE)
-@Host("http://production.gz.1251114078.cee.myqcloud.com")
+@Host("http://119.29.43.68")
 @Token
 @Sign
 public class UploadImageRequest {

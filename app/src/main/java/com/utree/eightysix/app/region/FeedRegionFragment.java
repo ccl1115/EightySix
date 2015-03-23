@@ -40,7 +40,7 @@ public class FeedRegionFragment extends AbsRegionFragment {
 
     getBaseActivity().setTopSubTitle("");
 
-    getBaseActivity().request(new FeedByRegionRequest(page, regionType, 0),
+    getBaseActivity().request(new FeedByRegionRequest(page, regionType, 0, distance),
         new OnResponse<FeedsByRegionResponse>() {
           @Override
           public void onResponse(FeedsByRegionResponse response) {
@@ -77,9 +77,9 @@ public class FeedRegionFragment extends AbsRegionFragment {
   }
 
   @Override
-  protected void cacheOutFeedsByRegion(final int regionType, final int page) {
+  protected void cacheOutFeedsByRegion(final int regionType, int distance, final int page) {
     if (getBaseActivity() == null) return;
-    getBaseActivity().cacheOut(new FeedByRegionRequest(page, regionType, 0), new OnResponse<FeedsByRegionResponse>() {
+    getBaseActivity().cacheOut(new FeedByRegionRequest(page, regionType, distance), new OnResponse<FeedsByRegionResponse>() {
       @Override
       public void onResponse(FeedsByRegionResponse response) {
         responseForFeedsByRegionCache(response, page);

@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -66,8 +67,17 @@ public class TabRegionFragment extends BaseFragment {
   @InjectView(R.id.tv_current)
   public TextView mTvCurrent;
 
+  @InjectView(R.id.ll_distance_selector)
+  public LinearLayout mLlDistanceSelector;
+
   @InjectView(R.id.ll_add_follow)
   public LinearLayout mLlAddFollow;
+
+  @InjectView(R.id.sb_distance)
+  public SeekBar mSbDistance;
+
+  @InjectView(R.id.tv_distance)
+  public TextView mTvDistance;
 
   private FeedRegionFragment mFeedFragment;
   private HotFeedRegionFragment mHotFeedFragment;
@@ -107,6 +117,20 @@ public class TabRegionFragment extends BaseFragment {
     BaseCirclesActivity.startMyCircles(getActivity());
   }
 
+  @OnClick(R.id.ll_distance_selector)
+  public void onLlDistanceSelector() {
+    mLlDistanceSelector.setVisibility(View.GONE);
+  }
+
+  @OnClick(R.id.rb_select)
+  public void onRbSelect() {
+    mLlDistanceSelector.setVisibility(View.GONE);
+    mFeedFragment.mDistance = mSbDistance.getProgress();
+    mHotFeedFragment.mDistance = mSbDistance.getProgress();
+    mFriendsFeedFragment.mDistance = mSbDistance.getProgress();
+    setRegionType(4);
+  }
+
   private void showNoPermDialog() {
     if (mNoPermDialog == null) {
       mNoPermDialog = new ThemedDialog(getActivity());
@@ -143,6 +167,28 @@ public class TabRegionFragment extends BaseFragment {
   @Override
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
+
+    mSbDistance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+      @Override
+      public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        float value = progress / 1000f + 1;
+        if (((int) value) == 10) {
+          mTvDistance.setText("同城");
+        } else {
+          mTvDistance.setText(String.format("%.2fkm", value));
+        }
+      }
+
+      @Override
+      public void onStartTrackingTouch(SeekBar seekBar) {
+
+      }
+
+      @Override
+      public void onStopTrackingTouch(SeekBar seekBar) {
+
+      }
+    });
 
     mVpTab.setOffscreenPageLimit(2);
 
@@ -257,8 +303,13 @@ public class TabRegionFragment extends BaseFragment {
         new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-            mLlFollowCircles.setVisibility(
-                mLlFollowCircles.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+            if (getTopBar().getTitleBarSelectedIndex() == 0) {
+              mLlFollowCircles.setVisibility(
+                  mLlFollowCircles.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+            } else if (getTopBar().getTitleBarSelectedIndex() == 1) {
+              mLlDistanceSelector.setVisibility(
+                  mLlDistanceSelector.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+            }
           }
         });
 
@@ -285,6 +336,8 @@ public class TabRegionFragment extends BaseFragment {
 
       @Override
       public void onSelected(View view, int position) {
+        mLlFollowCircles.setVisibility(View.GONE);
+        mLlDistanceSelector.setVisibility(View.GONE);
         if (position == 0) {
           setRegionType(0);
         } else if (position == 1) {

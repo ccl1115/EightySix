@@ -6,7 +6,7 @@ public class RegionResponseEvent {
 
   private int region;
 
-  public RegionResponseEvent(int region) {
+  public RegionResponseEvent(int region, int distance) {
     this.region = region;
   }
 

@@ -68,6 +68,8 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
   @InjectView(R.id.tb_ll_title_tab)
   public LinearLayout mLlTitleTab;
 
+  private int mSelectedIndex;
+
   private Callback mCallback;
 
   private TitleAdapter mTitleAdapter;
@@ -234,6 +236,8 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
           }
 
           v.setSelected(!v.isSelected());
+
+          mSelectedIndex = finalI;
         }
       });
       mLlTitleTab.addView(t);
@@ -247,6 +251,8 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
     View childAt = mLlTitleTab.getChildAt(position);
     childAt.setSelected(true);
+
+    mSelectedIndex = position;
   }
 
   public void setTitleTabText(int position, String text) {
@@ -356,6 +362,10 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
 
   public ActionButton getAbLeft() {
     return mAbLeft;
+  }
+
+  public int getTitleBarSelectedIndex() {
+    return mSelectedIndex;
   }
 
   public interface ActionAdapter {

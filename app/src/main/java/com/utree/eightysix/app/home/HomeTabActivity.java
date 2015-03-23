@@ -89,9 +89,9 @@ public class HomeTabActivity extends BaseActivity {
           Bundle args = new Bundle();
           args.putInt("tabIndex", getIntent().getIntExtra("tabIndex", 0));
           mTabRegionFragment.setArguments(args);
-          t.add(R.id.fl_content, mTabRegionFragment).commit();
+          t.add(R.id.fl_content, mTabRegionFragment).commitAllowingStateLoss();
         } else if (mTabRegionFragment.isHidden()) {
-          t.show(mTabRegionFragment).commit();
+          t.show(mTabRegionFragment).commitAllowingStateLoss();
           mTabRegionFragment.onHiddenChanged(false);
         }
         mCurrentFragment = mTabRegionFragment;
@@ -99,9 +99,9 @@ public class HomeTabActivity extends BaseActivity {
       case R.id.fl_explore:
         if (mExploreFragment == null) {
           mExploreFragment = new ExploreFragment();
-          t.add(R.id.fl_content, mExploreFragment).commit();
+          t.add(R.id.fl_content, mExploreFragment).commitAllowingStateLoss();
         } else if (mExploreFragment.isHidden()) {
-          t.show(mExploreFragment).commit();
+          t.show(mExploreFragment).commitAllowingStateLoss();
           mExploreFragment.onHiddenChanged(false);
         }
         mCurrentFragment = mExploreFragment;
@@ -109,10 +109,10 @@ public class HomeTabActivity extends BaseActivity {
       case R.id.fl_message:
         if (mMsgCenterFragment == null) {
           mMsgCenterFragment = new MsgCenterFragment();
-          t.add(R.id.fl_content, mMsgCenterFragment).commit();
+          t.add(R.id.fl_content, mMsgCenterFragment).commitAllowingStateLoss();
 
         } else if (mMsgCenterFragment.isHidden()) {
-          t.show(mMsgCenterFragment).commit();
+          t.show(mMsgCenterFragment).commitAllowingStateLoss();
           mMsgCenterFragment.onHiddenChanged(false);
         }
         mCurrentFragment = mMsgCenterFragment;
@@ -120,9 +120,9 @@ public class HomeTabActivity extends BaseActivity {
       case R.id.fl_more:
         if (mProfileFragment == null) {
           mProfileFragment = new ProfileFragment();
-          t.add(R.id.fl_content, mProfileFragment).commit();
+          t.add(R.id.fl_content, mProfileFragment).commitAllowingStateLoss();
         } else if (mProfileFragment.isHidden()) {
-          t.show(mProfileFragment).commit();
+          t.show(mProfileFragment).commitAllowingStateLoss();
           mProfileFragment.onHiddenChanged(false);
         }
         mCurrentFragment = mProfileFragment;
