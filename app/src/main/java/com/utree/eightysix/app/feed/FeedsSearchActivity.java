@@ -68,7 +68,7 @@ public class FeedsSearchActivity extends BaseActivity {
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (position == 0) {
           mCurrent = 0;
-        } else if (mCurrent == 1) {
+        } else if (position == 1) {
           mCurrent = 1;
         }
       }
@@ -111,6 +111,7 @@ public class FeedsSearchActivity extends BaseActivity {
 
   @Override
   public void onActionSearchClicked(CharSequence cs) {
+    hideSoftKeyboard(mAlvFeeds);
     mSearchContent = cs.toString();
     requestFeeds(1);
   }
@@ -132,6 +133,7 @@ public class FeedsSearchActivity extends BaseActivity {
 
             if (response.object.posts.lists.size() == 0) {
               mRstvEmpty.setVisibility(View.VISIBLE);
+              mAlvFeeds.setAdapter(null);
             } else {
               mFeedsSearchAdapter = new FeedsSearchAdapter(response.object.posts.lists);
               mAlvFeeds.setAdapter(mFeedsSearchAdapter);
@@ -145,6 +147,7 @@ public class FeedsSearchActivity extends BaseActivity {
         mPageInfo = response.object.posts.page;
 
         hideProgressBar();
+        mAlvFeeds.stopLoadMore();
       }
     }, FeedsResponse.class, mSearchContent, null, mCurrent, page);
   }

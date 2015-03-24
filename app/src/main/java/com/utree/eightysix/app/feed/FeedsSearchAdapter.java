@@ -49,6 +49,8 @@ public class FeedsSearchAdapter extends BaseAdapter {
     for (int i = 0, size = feeds.size() >> 1; i < size; i += 2) {
       mFeeds.add(new BaseItem[]{feeds.get(i), feeds.get(i + 1)});
     }
+
+    notifyDataSetChanged();
   }
 
   @Override
@@ -137,6 +139,7 @@ public class FeedsSearchAdapter extends BaseAdapter {
       Post left = (Post) posts[0];
 
       if (left != null) {
+        mFlLeft.setVisibility(View.VISIBLE);
         if (TextUtils.isEmpty(left.bgUrl)) {
           mAivBgLeft.setVisibility(View.INVISIBLE);
           mFlLeft.setBackgroundColor(ColorUtil.strToColor(left.bgColor));
@@ -151,11 +154,14 @@ public class FeedsSearchAdapter extends BaseAdapter {
         mTvSourceLeft.setText(left.shortName);
         mTvReplyLeft.setText(String.valueOf(left.comments));
         mTvPraiseLeft.setText(String.valueOf(left.praise));
+      } else {
+        mFlLeft.setVisibility(View.INVISIBLE);
       }
 
       Post right = (Post) posts[1];
 
       if (right != null) {
+        mFlRight.setVisibility(View.VISIBLE);
         if (TextUtils.isEmpty(right.bgUrl)) {
           mAivBgRight.setVisibility(View.INVISIBLE);
           mFlRight.setBackgroundColor(ColorUtil.strToColor(right.bgColor));
@@ -170,6 +176,8 @@ public class FeedsSearchAdapter extends BaseAdapter {
         mTvSourceRight.setText(right.shortName);
         mTvReplyRight.setText(String.valueOf(right.comments));
         mTvPraiseRight.setText(String.valueOf(right.praise));
+      } else {
+        mFlRight.setVisibility(View.INVISIBLE);
       }
     }
 

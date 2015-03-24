@@ -23,6 +23,7 @@ import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.app.region.event.CircleResponseEvent;
 import com.utree.eightysix.app.region.event.RegionResponseEvent;
+import com.utree.eightysix.app.snapshot.SnapshotActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Feeds;
 import com.utree.eightysix.data.Paginate;
@@ -34,7 +35,9 @@ import com.utree.eightysix.response.FeedsResponse;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.view.SwipeRefreshLayout;
-import com.utree.eightysix.widget.*;
+import com.utree.eightysix.widget.AdvancedListView;
+import com.utree.eightysix.widget.LoadMoreCallback;
+import com.utree.eightysix.widget.RandomSceneTextView;
 
 /**
  * @author simon
@@ -261,9 +264,40 @@ public abstract class AbsRegionFragment extends BaseFragment {
   }
 
   public void updateTitleBar() {
-    if (mRegionType == 0) {
+    if (mMode == MODE_FEED) {
+      getTopBar().setTitleTabSelected(0);
       getTopBar().setSubTitle(String.format("%s | %s", mCircle.shortName, mSubInfo == null ? "" : mSubInfo));
-    } else {
+      getTopBar().setTitleTabText(0, "关注");
+
+      if (mCircle.snapshot == 1) {
+        getTopBar().getAbRight().setText(getString(R.string.snapshot));
+        getTopBar().getAbRight().setOnClickListener(
+            new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                SnapshotActivity.start(getActivity(), mCircle);
+              }
+            }
+        );
+      }
+    } else if (mRegionType == 0) {
+      getTopBar().setTitleTabSelected(0);
+      getTopBar().setSubTitle(String.format("%s | %s", mCircle.shortName, mSubInfo == null ? "" : mSubInfo));
+      getTopBar().setTitleTabText(0, "在职");
+
+      if (mCircle.snapshot == 1) {
+        getTopBar().getAbRight().setText(getString(R.string.snapshot));
+        getTopBar().getAbRight().setOnClickListener(
+            new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                SnapshotActivity.start(getActivity(), mCircle);
+              }
+            }
+        );
+      }
+    } else if (mRegionType == 4 || mRegionType == 3) {
+      getTopBar().setTitleTabSelected(1);
       getTopBar().setSubTitle(mSubInfo == null ? "" : mSubInfo);
     }
   }
@@ -293,11 +327,9 @@ public abstract class AbsRegionFragment extends BaseFragment {
         mRegionType = response.object.regionType;
         if (mRegionType == 4) {
           mDistance = response.object.regionRadius;
-        } else if (mRegionType == 0) {
-          getBaseActivity().getTopBar().setTitleTabText(0, "在职");
         }
 
-        U.getBus().post(new RegionResponseEvent(getRegionType(), mDistance));
+        U.getBus().post(new RegionResponseEvent(mRegionType, mDistance));
       } else if (mFeedAdapter != null) {
         mFeedAdapter.add(response.object.posts.lists);
       }

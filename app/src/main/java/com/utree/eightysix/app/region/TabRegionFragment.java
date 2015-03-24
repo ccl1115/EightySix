@@ -32,7 +32,6 @@ import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
 import com.utree.eightysix.app.region.event.CircleResponseEvent;
 import com.utree.eightysix.app.region.event.RegionResponseEvent;
-import com.utree.eightysix.app.snapshot.SnapshotActivity;
 import com.utree.eightysix.data.FollowCircle;
 import com.utree.eightysix.event.CurrentCircleResponseEvent;
 import com.utree.eightysix.response.FollowCircleListResponse;
@@ -128,7 +127,12 @@ public class TabRegionFragment extends BaseFragment {
     mFeedFragment.mDistance = mSbDistance.getProgress();
     mHotFeedFragment.mDistance = mSbDistance.getProgress();
     mFriendsFeedFragment.mDistance = mSbDistance.getProgress();
-    setRegionType(4);
+    float value = mSbDistance.getProgress() / 1000f + 1;
+    if (value == 10) {
+      setRegionType(3);
+    } else {
+      setRegionType(4);
+    }
   }
 
   private void showNoPermDialog() {
@@ -313,15 +317,6 @@ public class TabRegionFragment extends BaseFragment {
           }
         });
 
-    getTopBar().getAbRight().setText(getString(R.string.snapshot));
-    getTopBar().getAbRight().setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-            SnapshotActivity.start(getActivity(), mFeedFragment.getCircle());
-          }
-        }
-    );
 
     getTopBar().setTitleAdapter(new TopBar.TitleAdapter() {
       @Override
@@ -355,11 +350,10 @@ public class TabRegionFragment extends BaseFragment {
 
   @Override
   public void onHiddenChanged(boolean hidden) {
+    setTopBarTitle();
     if (!hidden) {
       mFeedFragment.onHiddenChanged(false);
     }
-
-    setTopBarTitle();
   }
 
   @Subscribe
@@ -397,11 +391,15 @@ public class TabRegionFragment extends BaseFragment {
 
   @Subscribe
   public void onRegionResponseEvent(RegionResponseEvent event) {
-    if (event.getRegion() == 0) {
-      getTopBar().setTitleTabSelected(0);
-    } else  {
-      getTopBar().setTitleTabSelected(1);
+    if (event.getRegion() == 3) {
+      mSbDistance.setProgress(9000);
+    } else if (event.getRegion() == 4) {
+      mSbDistance.setProgress(event.getDistance());
     }
+  }
+
+  @Subscribe
+  public void onCircleResponseEvent(CircleResponseEvent event) {
   }
 
   @Subscribe
@@ -426,13 +424,6 @@ public class TabRegionFragment extends BaseFragment {
       });
     }
   }
-
-  @Subscribe
-  public void onCircleResponseEvent(CircleResponseEvent event) {
-    getTopBar().setTitleTabSelected(0);
-    getTopBar().setTitleTabText(0, "关注");
-  }
-
 
   public boolean canPublish() {
     return mFeedFragment != null && mFeedFragment.canPublish();
