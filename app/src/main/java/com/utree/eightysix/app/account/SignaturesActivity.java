@@ -23,9 +23,11 @@ import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.response.UserSignaturesResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.TimeUtil;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.RandomSceneTextView;
+import com.utree.eightysix.widget.ThemedDialog;
 
 import java.util.List;
 
@@ -40,6 +42,7 @@ public class SignaturesActivity extends BaseActivity {
 
   @InjectView(R.id.rstv_empty)
   public RandomSceneTextView mRstvEmpty;
+  private SignaturesAdapter mAdapter;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,12 @@ public class SignaturesActivity extends BaseActivity {
     mRstvEmpty.setDrawable(R.drawable.scene_4);
     mRstvEmpty.setText("还没有签名");
 
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+
     showProgressBar(true);
     U.request("user_signatures", new OnResponse2<UserSignaturesResponse>() {
       @Override
@@ -73,7 +82,8 @@ public class SignaturesActivity extends BaseActivity {
             mRstvEmpty.setVisibility(View.VISIBLE);
           } else {
             mRstvEmpty.setVisibility(View.GONE);
-            mAlvSignatures.setAdapter(new SignaturesAdapter(response.object));
+            mAdapter = new SignaturesAdapter(response.object);
+            mAlvSignatures.setAdapter(mAdapter);
           }
         }
       }
@@ -91,7 +101,45 @@ public class SignaturesActivity extends BaseActivity {
     finish();
   }
 
-  public static class SignaturesAdapter extends BaseAdapter {
+  private void showDeleteConfirmDialog(final UserSignaturesResponse.Signature signature) {
+    final ThemedDialog dialog = new ThemedDialog(this);
+
+    dialog.setTitle("确认删除此条签名？");
+
+    dialog.setPositive(R.string.okay, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        dialog.dismiss();
+        showProgressBar(true);
+        U.request("user_signature_del", new OnResponse2<Response>() {
+          @Override
+          public void onResponseError(Throwable e) {
+            hideProgressBar();
+          }
+
+          @Override
+          public void onResponse(Response response) {
+            if (RESTRequester.responseOk(response)) {
+              mAdapter.remove(signature);
+            }
+
+            hideProgressBar();
+          }
+        }, Response.class, signature.id);
+      }
+    });
+
+    dialog.setRbNegative(R.string.cancel, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        dialog.dismiss();
+      }
+    });
+
+    dialog.show();
+  }
+
+  public class SignaturesAdapter extends BaseAdapter {
 
     private List<UserSignaturesResponse.Signature> mSignatures;
 
@@ -129,26 +177,32 @@ public class SignaturesActivity extends BaseActivity {
 
       return convertView;
     }
+
+    public void remove(UserSignaturesResponse.Signature signature) {
+      mSignatures.remove(signature);
+      notifyDataSetChanged();
+    }
   }
 
-  public static class ViewHolder {
+  public class ViewHolder {
 
     @InjectView(R.id.tv_content)
     public TextView mTvContent;
 
     @InjectView(R.id.tv_timestamp)
     public TextView mTvTimestamp;
+
     private UserSignaturesResponse.Signature mSignature;
 
     @OnClick(R.id.tv_delete)
     public void onTvDeleteClicked() {
-
+      showDeleteConfirmDialog(mSignature);
     }
 
     public void setData(UserSignaturesResponse.Signature signature) {
       mSignature = signature;
       mTvContent.setText(mSignature.signature);
-      mTvTimestamp.setText(TimeUtil.getDate(mSignature.timestamp));
+      mTvTimestamp.setText(TimeUtil.getElapsed(mSignature.timestamp));
     }
 
     public ViewHolder(View view) {

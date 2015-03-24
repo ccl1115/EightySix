@@ -279,7 +279,20 @@
         <id>user_signatures</id>
         <name>用户签名</name>
         <path>/user/signature</path>
+        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
+    </request>
+
+    <request>
+        <id>user_signature_del</id>
+        <name>删除签名</name>
+        <path>/commit/user/signature/delete</path>
+        <host>http://192.168.0.118:8000</host>
+        <sign/>
+        <token/>
+        <params>
+            <param>id</param>
+        </params>
     </request>
 </api>

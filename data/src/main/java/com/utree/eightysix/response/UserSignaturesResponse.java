@@ -18,6 +18,9 @@ public class UserSignaturesResponse extends Response {
 
   public static class Signature {
 
+    @SerializedName("id")
+    public String id;
+
     @SerializedName("signature")
     public String signature;
 
