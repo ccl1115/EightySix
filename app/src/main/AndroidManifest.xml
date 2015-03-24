@@ -275,6 +275,9 @@
         <activity
                 android:name=".app.feed.FeedsSearchActivity"
                 android:label="帖子搜索"/>
+        <activity
+                android:name=".app.account.SignaturesActivity"
+                android:label="用户签名"/>
 
         <!-- 【必须】 信鸽service -->
         <service android:exported="true" android:name="com.tencent.android.tpush.service.XGPushService" android:persistent="true" android:process=":xg_service_v2" tools:ignore="ExportedService"/>

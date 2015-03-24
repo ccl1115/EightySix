@@ -135,6 +135,11 @@ public class ProfileFragment extends HolderFragment {
     startActivity(new Intent(getActivity(), AvatarViewerActivity.class));
   }
 
+  @OnClick(R.id.ll_signature)
+  public void onLlSignatureClicked() {
+    startActivity(new Intent(getActivity(), SignaturesActivity.class));
+  }
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     return inflater.inflate(R.layout.fragment_profile, container, false);

@@ -274,4 +274,12 @@
             <param>viewId</param>
         </params>
     </request>
+
+    <request>
+        <id>user_signatures</id>
+        <name>用户签名</name>
+        <path>/user/signature</path>
+        <sign/>
+        <token/>
+    </request>
 </api>

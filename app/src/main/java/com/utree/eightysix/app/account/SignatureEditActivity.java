@@ -27,7 +27,7 @@ import com.utree.eightysix.widget.ThemedDialog;
 
 /**
  */
-@Layout(R.layout.activity_signature)
+@Layout(R.layout.activity_signature_edit)
 public class SignatureEditActivity extends BaseActivity {
 
   private boolean mTextChanged;
