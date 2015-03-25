@@ -88,8 +88,8 @@ public class ProfileFragment extends HolderFragment {
   @InjectView(R.id.tv_title_signature)
   public TextView mTvTitleSignature;
 
-  @InjectView(R.id.tv_title_my_posts)
-  public TextView mTvTitleMyPosts;
+  @InjectView(R.id.tv_my_posts)
+  public TextView mTvMyPosts;
 
   @InjectView(R.id.tv_exp)
   public TextView mTvExp;
@@ -140,6 +140,11 @@ public class ProfileFragment extends HolderFragment {
     startActivity(new Intent(getActivity(), SignaturesActivity.class));
   }
 
+  @OnClick(R.id.tv_my_posts)
+  public void onMyPostsClicked() {
+    startActivity(new Intent(getActivity(), MyPostsActivity.class));
+  }
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     return inflater.inflate(R.layout.fragment_profile, container, false);
@@ -171,7 +176,7 @@ public class ProfileFragment extends HolderFragment {
       mTvSettings.setVisibility(View.GONE);
       mTvMyCircles.setVisibility(View.GONE);
       mTvMyFriends.setVisibility(View.GONE);
-      mTvTitleMyPosts.setText("他的帖子");
+      mTvMyPosts.setText("他的帖子");
       mTvTitleSignature.setText("他的签名");
     }
 
@@ -220,13 +225,13 @@ public class ProfileFragment extends HolderFragment {
 
           if (mIsVisitor) {
             if ("男".equals(response.object.sex)) {
-              mTvTitleMyPosts.setText("他的帖子");
+              mTvMyPosts.setText("他的帖子");
               mTvTitleSignature.setText("他的签名");
             } else if ("女".equals(response.object.sex)) {
-              mTvTitleMyPosts.setText("她的帖子");
+              mTvMyPosts.setText("她的帖子");
               mTvTitleSignature.setText("她的签名");
             } else {
-              mTvTitleMyPosts.setText("Ta的帖子");
+              mTvMyPosts.setText("Ta的帖子");
               mTvTitleSignature.setText("Ta的签名");
             }
           }

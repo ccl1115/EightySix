@@ -295,4 +295,19 @@
             <param>id</param>
         </params>
     </request>
+
+    <request>
+        <id>user_posts</id>
+        <name>我的帖子</name>
+        <path>/userpost/mine</path>
+        <host>http://192.168.0.118:8000</host>
+        <sign/>
+        <token/>
+        <params>
+            <param>viewId</param>
+            <param>realName</param>
+            <param>page</param>
+            <param>limit</param>
+        </params>
+    </request>
 </api>
