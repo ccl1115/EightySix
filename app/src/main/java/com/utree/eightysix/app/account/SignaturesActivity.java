@@ -4,6 +4,9 @@
 
 package com.utree.eightysix.app.account;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +22,6 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.response.UserSignaturesResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
@@ -34,28 +36,50 @@ import java.util.List;
 /**
  */
 @Layout(R.layout.activity_signatures)
-@TopTitle(R.string.my_signatures)
 public class SignaturesActivity extends BaseActivity {
+
+  public static void start(Context context, boolean isVisitor)   {
+    Intent intent = new Intent(context, SignaturesActivity.class);
+
+    intent.putExtra("isVisitor", isVisitor);
+
+    if (!(context instanceof Activity)) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    context.startActivity(intent);
+  }
 
   @InjectView(R.id.alv_signatures)
   public AdvancedListView mAlvSignatures;
 
   @InjectView(R.id.rstv_empty)
   public RandomSceneTextView mRstvEmpty;
+
   private SignaturesAdapter mAdapter;
+
+  private boolean mIsVisitor;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    mIsVisitor = getIntent().getBooleanExtra("isVisitor", false);
+
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
-    getTopBar().getAbRight().setText("新增");
-    getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        SignatureEditActivity.start(SignaturesActivity.this, "");
-      }
-    });
+
+    if (mIsVisitor) {
+      setTopTitle("他的签名");
+    } else {
+      setTopTitle("我的签名");
+      getTopBar().getAbRight().setText("新增");
+      getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          SignatureEditActivity.start(SignaturesActivity.this, "");
+        }
+      });
+    }
 
     mRstvEmpty.setDrawable(R.drawable.scene_4);
     mRstvEmpty.setText("还没有签名");
@@ -192,6 +216,9 @@ public class SignaturesActivity extends BaseActivity {
     @InjectView(R.id.tv_timestamp)
     public TextView mTvTimestamp;
 
+    @InjectView(R.id.tv_delete)
+    public TextView mTvDelete;
+
     private UserSignaturesResponse.Signature mSignature;
 
     @OnClick(R.id.tv_delete)
@@ -207,6 +234,12 @@ public class SignaturesActivity extends BaseActivity {
 
     public ViewHolder(View view) {
       ButterKnife.inject(this, view);
+
+      if (mIsVisitor) {
+        mTvDelete.setVisibility(View.GONE);
+      } else {
+        mTvDelete.setVisibility(View.VISIBLE);
+      }
     }
   }
 }

@@ -50,14 +50,6 @@ public abstract class BasePostsFragment extends BaseFragment {
   public void onViewCreated(View view, Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
 
-    getTopBar().getAbRight().setText("开关");
-    getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-
-      }
-    });
-
     mRefreshLayout.setColorSchemeResources(
         R.color.apptheme_primary_light_color,
         R.color.apptheme_primary_light_color_pressed,

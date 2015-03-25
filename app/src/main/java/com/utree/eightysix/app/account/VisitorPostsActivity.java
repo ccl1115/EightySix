@@ -66,6 +66,8 @@ public class VisitorPostsActivity extends BaseActivity {
 
     setTopSubTitle("非匿名贴");
 
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+
     mRefreshLayout.setColorSchemeResources(
         R.color.apptheme_primary_light_color,
         R.color.apptheme_primary_light_color_pressed,

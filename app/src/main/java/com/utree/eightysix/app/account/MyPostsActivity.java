@@ -8,13 +8,19 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 import butterknife.InjectView;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.response.UserSetupResponse;
+import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.TitleTab;
 
 /**
@@ -37,6 +43,39 @@ public class MyPostsActivity extends BaseActivity {
     super.onCreate(savedInstanceState);
 
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+    getTopBar().getAbRight().setText("开关");
+    getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        v.setSelected(!v.isSelected());
+
+        U.request("user_setup_replace", new OnResponse2<Response>() {
+          @Override
+          public void onResponseError(Throwable e) {
+
+          }
+
+          @Override
+          public void onResponse(Response response) {
+
+          }
+        }, Response.class, "postPrivacy", v.isSelected() ? "on" : "off");
+      }
+    });
+
+    U.request("user_setup", new OnResponse2<UserSetupResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
+      @Override
+      public void onResponse(UserSetupResponse response) {
+        if (RESTRequester.responseOk(response)) {
+          getTopBar().getAbRight().setSelected("on".equals(response.object.status));
+        }
+      }
+    }, UserSetupResponse.class, "postPrivacy");
 
     mVpTab.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
       @Override

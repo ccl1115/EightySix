@@ -137,7 +137,7 @@ public class ProfileFragment extends HolderFragment {
 
   @OnClick(R.id.ll_signature)
   public void onLlSignatureClicked() {
-    startActivity(new Intent(getActivity(), SignaturesActivity.class));
+    SignaturesActivity.start(getActivity(), mIsVisitor);
   }
 
   @OnClick(R.id.tv_my_posts)
@@ -163,6 +163,16 @@ public class ProfileFragment extends HolderFragment {
       mViewId = getArguments().getInt("viewId");
       getBaseActivity().getTopBar().setTitle(getArguments().getString("userName"));
       getBaseActivity().getTopBar().getAbRight().hide();
+    }
+
+    if (mIsVisitor) {
+      getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+      getTopBar().getAbLeft().setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          getBaseActivity().finish();
+        }
+      });
     }
 
     mCameraUtil = new CameraUtil(this, new CameraUtil.Callback() {
@@ -358,6 +368,7 @@ public class ProfileFragment extends HolderFragment {
 
   @Override
   protected void onActionLeftClicked() {
+    getActivity().finish();
   }
 
   @Override

@@ -3,6 +3,7 @@
         <id>get_chat_info</id>
         <name>获取chatId</name>
         <path>/im/chat/chatInfo</path>
+        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -15,6 +16,7 @@
         <id>chat_send</id>
         <name>发私聊</name>
         <path>/commit/im/send/privateChat</path>
+        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -308,6 +310,31 @@
             <param>realName</param>
             <param>page</param>
             <param>limit</param>
+        </params>
+    </request>
+
+    <request>
+        <id>user_setup_replace</id>
+        <name>用户开关设置</name>
+        <path>/commit/user/setup/replace</path>
+        <host>http://192.168.0.118:8000</host>
+        <sign/>
+        <token/>
+        <params>
+            <param>type</param>
+            <param>status</param>
+        </params>
+    </request>
+
+    <request>
+        <id>user_setup</id>
+        <name>用户开关</name>
+        <path>/user/setup</path>
+        <host>http://192.168.0.118:8000</host>
+        <sign/>
+        <token/>
+        <params>
+            <param>type</param>
         </params>
     </request>
 </api>
