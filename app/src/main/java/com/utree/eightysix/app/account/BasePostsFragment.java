@@ -24,7 +24,7 @@ import com.utree.eightysix.widget.RandomSceneTextView;
  */
 public abstract class BasePostsFragment extends BaseFragment {
 
-  protected static final int PAGE_SIZE = 10;
+  protected static final int PAGE_SIZE = 20;
 
   @InjectView(R.id.alv_posts)
   public AdvancedListView mAlvPosts;
@@ -136,9 +136,8 @@ public abstract class BasePostsFragment extends BaseFragment {
       } else {
         mAdapter.add(response.object);
       }
-      if (response.object.size() < PAGE_SIZE) {
-        mHasMore = false;
-      }
+
+      mHasMore = response.object.size() >= PAGE_SIZE;
     }
 
     mAlvPosts.stopLoadMore();

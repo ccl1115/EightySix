@@ -142,7 +142,11 @@ public class ProfileFragment extends HolderFragment {
 
   @OnClick(R.id.tv_my_posts)
   public void onMyPostsClicked() {
-    startActivity(new Intent(getActivity(), MyPostsActivity.class));
+    if (mIsVisitor) {
+      VisitorPostsActivity.start(getActivity(), mViewId);
+    } else {
+      startActivity(new Intent(getActivity(), MyPostsActivity.class));
+    }
   }
 
   @Override
