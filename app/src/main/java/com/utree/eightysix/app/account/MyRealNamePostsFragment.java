@@ -23,6 +23,7 @@ public class MyRealNamePostsFragment extends BasePostsFragment {
       public void onResponseError(Throwable e) {
         mAlvPosts.stopLoadMore();
         mRefreshLayout.setRefreshing(false);
+        getBaseActivity().hideRefreshIndicator();
       }
 
       @Override

@@ -24,7 +24,7 @@ import com.utree.eightysix.widget.RandomSceneTextView;
  */
 public abstract class BasePostsFragment extends BaseFragment {
 
-  protected static final int PAGE_SIZE = 20;
+  protected static final int PAGE_SIZE = 10;
 
   @InjectView(R.id.alv_posts)
   public AdvancedListView mAlvPosts;
@@ -35,7 +35,8 @@ public abstract class BasePostsFragment extends BaseFragment {
   @InjectView(R.id.rstv_empty)
   public RandomSceneTextView mRstvEmpty;
 
-  protected int mPage;
+  protected int mPage = 1;
+
   private boolean mHasMore;
 
   private BasePostsAdapter mAdapter;
@@ -48,6 +49,14 @@ public abstract class BasePostsFragment extends BaseFragment {
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
+
+    getTopBar().getAbRight().setText("开关");
+    getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+
+      }
+    });
 
     mRefreshLayout.setColorSchemeResources(
         R.color.apptheme_primary_light_color,
@@ -65,7 +74,7 @@ public abstract class BasePostsFragment extends BaseFragment {
 
       @Override
       public void onDrag() {
-        getBaseActivity().showRefreshIndicator();
+        getBaseActivity().showRefreshIndicator(false);
       }
 
       @Override
@@ -113,6 +122,9 @@ public abstract class BasePostsFragment extends BaseFragment {
   protected abstract void requestPosts();
 
   protected void responseForPosts(MyPostsResponse response) {
+    mRefreshLayout.setRefreshing(true);
+    getBaseActivity().showRefreshIndicator(true);
+
     if (RESTRequester.responseOk(response)) {
       if (mPage == 1) {
         if (response.object.size() == 0) {
@@ -131,5 +143,6 @@ public abstract class BasePostsFragment extends BaseFragment {
 
     mAlvPosts.stopLoadMore();
     mRefreshLayout.setRefreshing(false);
+    getBaseActivity().hideRefreshIndicator();
   }
 }

@@ -14,7 +14,9 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.utree.eightysix.R;
+import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.widget.AsyncImageView;
@@ -133,9 +135,26 @@ public class BasePostsAdapter extends BaseAdapter {
 
     @InjectView(R.id.fl_right)
     public FrameLayout mFlRight;
+    private Post[] mPosts;
+
+    @OnClick(R.id.fl_left)
+    public void onFlLeftClicked(View v) {
+      if (mPosts[0] != null) {
+        PostActivity.start(v.getContext(), mPosts[0]);
+      }
+    }
+
+    @OnClick(R.id.fl_right)
+    public void onFlRightClicked(View v) {
+      if (mPosts[1] != null) {
+        PostActivity.start(v.getContext(), mPosts[1]);
+      }
+    }
 
     public void setData(Post[] posts) {
-      Post left = posts[0];
+      mPosts = posts;
+
+      Post left = mPosts[0];
 
       if (left != null) {
         mFlLeft.setVisibility(View.VISIBLE);
