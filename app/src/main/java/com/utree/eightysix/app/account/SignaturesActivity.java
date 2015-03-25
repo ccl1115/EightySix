@@ -38,10 +38,11 @@ import java.util.List;
 @Layout(R.layout.activity_signatures)
 public class SignaturesActivity extends BaseActivity {
 
-  public static void start(Context context, boolean isVisitor)   {
+  public static void start(Context context, boolean isVisitor, int viewId)   {
     Intent intent = new Intent(context, SignaturesActivity.class);
 
     intent.putExtra("isVisitor", isVisitor);
+    intent.putExtra("viewId", viewId);
 
     if (!(context instanceof Activity)) {
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -59,12 +60,14 @@ public class SignaturesActivity extends BaseActivity {
   private SignaturesAdapter mAdapter;
 
   private boolean mIsVisitor;
+  private int mViewId;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     mIsVisitor = getIntent().getBooleanExtra("isVisitor", false);
+    mViewId = getIntent().getIntExtra("viewId", -1);
 
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
@@ -111,7 +114,7 @@ public class SignaturesActivity extends BaseActivity {
           }
         }
       }
-    }, UserSignaturesResponse.class);
+    }, UserSignaturesResponse.class, mIsVisitor ? mViewId : null);
   }
 
   @Override

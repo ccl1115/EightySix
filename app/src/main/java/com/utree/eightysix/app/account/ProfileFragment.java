@@ -137,7 +137,7 @@ public class ProfileFragment extends HolderFragment {
 
   @OnClick(R.id.ll_signature)
   public void onLlSignatureClicked() {
-    SignaturesActivity.start(getActivity(), mIsVisitor);
+    SignaturesActivity.start(getActivity(), mIsVisitor, mViewId);
   }
 
   @OnClick(R.id.tv_my_posts)
