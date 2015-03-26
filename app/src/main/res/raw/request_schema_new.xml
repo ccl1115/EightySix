@@ -119,12 +119,12 @@
         <token/>
     </request>
 
-    <reqeust>
+    <request>
         <id>tags_and_keywords</id>
         <name>标签和关键字</name>
         <path>/feed/getTagsAndKeyWord.do</path>
         <token/>
-    </reqeust>
+    </request>
 
     <request>
         <id>feeds_search</id>
@@ -139,4 +139,22 @@
         </params>
     </request>
 
+    <request>
+        <id>daily_picks</id>
+        <name>每日精选</name>
+        <path>/feed/listWithGoodTag.do</path>
+        <token/>
+        <params>
+            <param>tagId</param>
+            <param>currPage</param>
+        </params>
+    </request>
+
+
+    <request>
+        <id>daily_picks_tags</id>
+        <name>每日精选标签</name>
+        <path>/feed/goodTags.do</path>
+        <token/>
+    </request>
 </api>

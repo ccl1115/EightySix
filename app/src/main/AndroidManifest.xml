@@ -191,6 +191,24 @@
 
         <activity android:name=".app.account.AvatarViewerActivity" android:label="查看头像大图" android:launchMode="singleTask" android:screenOrientation="portrait"/>
 
+        <activity android:name=".app.friends.FriendListActivity" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.friends.RequestListActivity" android:label="好友请求" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.circle.FollowCircleListActivity" android:label="我关注的圈子" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.friends.RequestDetailActivity" android:label="朋友请求详情" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.feed.FeedsSearchActivity" android:label="帖子搜索" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.account.SignaturesActivity" android:label="用户签名" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.account.MyPostsActivity" android:label="我的帖子" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.account.VisitorPostsActivity" android:label="他的帖子" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.dp.DailyPicksActivity" android:screenOrientation="portrait"/>
+
         <service android:enabled="true" android:name=".contact.ContactsSyncService"/>
         <service android:enabled="true" android:name=".app.msg.FetchNotificationService"/>
         <service android:enabled="true" android:name=".app.SyncService"/>
@@ -262,28 +280,6 @@
                 <action android:name=""/>
             </intent-filter>
         </activity>
-        <activity android:name=".app.friends.FriendListActivity"/>
-        <activity
-                android:name=".app.friends.RequestListActivity"
-                android:label="好友请求"/>
-        <activity
-                android:name=".app.circle.FollowCircleListActivity"
-                android:label="我关注的圈子"/>
-        <activity
-                android:name=".app.friends.RequestDetailActivity"
-                android:label="朋友请求详情"/>
-        <activity
-                android:name=".app.feed.FeedsSearchActivity"
-                android:label="帖子搜索"/>
-        <activity
-                android:name=".app.account.SignaturesActivity"
-                android:label="用户签名"/>
-        <activity
-                android:name=".app.account.MyPostsActivity"
-                android:label="我的帖子"/>
-        <activity
-                android:name=".app.account.VisitorPostsActivity"
-                android:label="他的帖子"/>
 
         <!-- 【必须】 信鸽service -->
         <service android:exported="true" android:name="com.tencent.android.tpush.service.XGPushService" android:persistent="true" android:process=":xg_service_v2" tools:ignore="ExportedService"/>
