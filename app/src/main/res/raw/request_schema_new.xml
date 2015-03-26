@@ -121,7 +121,7 @@
 
     <request>
         <id>tags_and_keywords</id>
-        <name>标签和关键字</name>
+        <name>推荐标签和关键字</name>
         <path>/feed/getTagsAndKeyWord.do</path>
         <token/>
     </request>
