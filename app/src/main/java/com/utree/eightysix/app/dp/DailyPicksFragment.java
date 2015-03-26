@@ -134,9 +134,6 @@ public abstract class DailyPicksFragment extends BaseFragment {
           if (page == 1) {
             mFeedAdapter = new FeedAdapter(response.object.posts.lists);
             mAlvFeed.setAdapter(mFeedAdapter);
-
-            getBaseActivity().setTopTitle(response.object.circle.shortName);
-            getBaseActivity().setTopSubTitle(response.object.circle.info);
           } else {
             mFeedAdapter.add(response.object.posts.lists);
           }

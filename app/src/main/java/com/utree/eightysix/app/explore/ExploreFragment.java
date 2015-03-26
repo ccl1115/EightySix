@@ -132,13 +132,24 @@ public class ExploreFragment extends BaseFragment {
           if (size == 0) {
             setTagsEmpty();
           } else {
+            final int padding = U.dp2px(2);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
             for (int i = 0; i < size; i++) {
               RoundedButton roundedButton = new RoundedButton(getActivity());
+              if (i != 0)  {
+                roundedButton.setBackgroundColor(0xfffd9e16);
+              }
               roundedButton.setText(response.object.tags.get(i).content);
+              roundedButton.setTextSize(14);
+              params.rightMargin = U.dp2px(13);
+              roundedButton.setLayoutParams(params);
+              roundedButton.setPadding(padding << 2, padding, padding << 2, padding);
+              final int finalI = i;
               roundedButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                  startActivity(new Intent(getActivity(), DailyPicksActivity.class));
+                  DailyPicksActivity.start(getActivity(), finalI);
                 }
               });
 
