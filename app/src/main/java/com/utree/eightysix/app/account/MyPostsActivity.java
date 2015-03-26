@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.TextView;
 import butterknife.InjectView;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
@@ -21,6 +22,7 @@ import com.utree.eightysix.response.UserSetupResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TitleTab;
 
 /**
@@ -47,19 +49,25 @@ public class MyPostsActivity extends BaseActivity {
     getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        v.setSelected(!v.isSelected());
+        if (v.isSelected()) {
+          getTopBar().getAbRight().setSelected(false);
+          U.request("user_setup_replace", new OnResponse2<Response>() {
+            @Override
+            public void onResponseError(Throwable e) {
 
-        U.request("user_setup_replace", new OnResponse2<Response>() {
-          @Override
-          public void onResponseError(Throwable e) {
+            }
 
-          }
+            @Override
+            public void onResponse(Response response) {
+              if (!RESTRequester.responseOk(response)) {
+                getTopBar().getAbRight().setSelected(true);
+              }
+            }
+          }, Response.class, "postPrivacy", "off");
+        } else {
+          showTurnOnPrivacyDialog();
+        }
 
-          @Override
-          public void onResponse(Response response) {
-
-          }
-        }, Response.class, "postPrivacy", v.isSelected() ? "on" : "off");
       }
     });
 
@@ -147,5 +155,42 @@ public class MyPostsActivity extends BaseActivity {
   @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();
+  }
+
+  private void showTurnOnPrivacyDialog() {
+    final ThemedDialog dialog = new ThemedDialog(this);
+
+    dialog.setTitle("隐私开关");
+
+    TextView view = new TextView(this);
+    view.setText("此开关开启时，其他人访问你的用户中心时，将隐藏你发表的所有帖子；开关关闭时，将只隐藏你的匿名帖！");
+    view.setEms(15);
+    final int px = U.dp2px(16);
+    view.setPadding(px, px, px, px);
+
+    dialog.setContent(view);
+
+    dialog.setPositive("开启", new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        getTopBar().getAbRight().setSelected(true);
+        dialog.dismiss();
+        U.request("user_setup_replace", new OnResponse2<Response>() {
+          @Override
+          public void onResponseError(Throwable e) {
+
+          }
+
+          @Override
+          public void onResponse(Response response) {
+            if (!RESTRequester.responseOk(response)) {
+              getTopBar().getAbRight().setSelected(false);
+            }
+          }
+        }, Response.class, "postPrivacy", "on");
+      }
+    });
+
+    dialog.show();
   }
 }
