@@ -4,10 +4,24 @@
   ~ Copyright (c) 2015. All rights reserved by utree.cn
   -->
 
-<com.utree.eightysix.view.PinnedHeaderListView
+<FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"
-        />
+        android:layout_height="match_parent">
+
+    <com.utree.eightysix.view.PinnedHeaderListView
+            android:id="@+id/plv_friends"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            />
+
+    <com.utree.eightysix.widget.RandomSceneTextView
+            android:id="@+id/rstv_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            />
+</FrameLayout>
 
