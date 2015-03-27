@@ -34,6 +34,7 @@
 
         <item name="android:listViewStyle">@style/Widget.ListView.Apptheme</item>
 
+        <item name="android:dropDownSpinnerStyle">@style/Widget.Spinner.Apptheme</item>
         <item name="android:spinnerDropDownItemStyle">@style/Widget.Spinner.DropdownItem.Apptheme</item>
         <item name="android:spinnerItemStyle">@style/Widget.Spinner.Item.Apptheme</item>
     </style>

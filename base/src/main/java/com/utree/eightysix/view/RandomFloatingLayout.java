@@ -87,6 +87,8 @@ public class RandomFloatingLayout extends AdapterView<Adapter> {
       final int width = right - left;
       final int height = bottom - top;
 
+      removeAllViewsInLayout();
+
       for (int i = 0; i < min; i++) {
         float[] position = POSITIONS[i];
         int vw = (int) (width * position[0]);
