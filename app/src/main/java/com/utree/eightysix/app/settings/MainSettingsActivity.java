@@ -111,6 +111,8 @@ public class MainSettingsActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+
     Sync sync = U.getSyncClient().getSync();
     if (sync != null && sync.upgrade != null) {
       int v = 0;

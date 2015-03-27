@@ -69,6 +69,8 @@ public class MsgActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+
     mRvMsg.setColorSchemeResources(R.color.apptheme_primary_light_color,
         R.color.apptheme_primary_light_color_pressed,
         R.color.apptheme_primary_light_color,

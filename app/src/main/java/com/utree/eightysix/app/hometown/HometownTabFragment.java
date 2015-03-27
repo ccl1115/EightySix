@@ -58,6 +58,14 @@ public class HometownTabFragment extends HolderFragment {
     getBaseActivity().setTopSubTitle("");
     getBaseActivity().getTopBar().setTitleClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
 
+    getBaseActivity().getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+    getBaseActivity().getTopBar().getAbLeft().setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        getBaseActivity().finish();
+      }
+    });
+
     mVpHometown.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
 
       @Override
@@ -177,7 +185,7 @@ public class HometownTabFragment extends HolderFragment {
 
   @Override
   protected void onActionLeftClicked() {
-
+    getActivity().finish();
   }
 
   @Override

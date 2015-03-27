@@ -317,6 +317,8 @@ public class TabRegionFragment extends BaseFragment {
           }
         });
 
+    getTopBar().getAbRight().hide();
+
 
     getTopBar().setTitleAdapter(new TopBar.TitleAdapter() {
       @Override
