@@ -279,7 +279,7 @@ public class BaseCirclesActivity extends BaseActivity {
     });
 
     if (mMode != MODE_SELECT || mCancelable) {
-      getTopBar().getAbLeft().setDrawable(getDrawable(R.drawable.top_bar_return));
+      getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
     }
   }
 

@@ -91,7 +91,7 @@ public class FollowCircleListActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    getTopBar().getAbLeft().setDrawable(getDrawable(R.drawable.top_bar_return));
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
     getTopBar().getAbRight().setText("编辑");
     getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {

@@ -129,7 +129,7 @@ public class DailyPicksActivity extends BaseActivity {
             if (index == 0) {
               mDailyPicksFragments.get(0).setActive(true);
             } else {
-              mVpTab.setCurrentItem(Math.min(mVpTab.getChildCount() - 1, index));
+              mVpTab.setCurrentItem(Math.min(mVpTab.getAdapter().getCount() - 1, index));
             }
           }
         }, 500);

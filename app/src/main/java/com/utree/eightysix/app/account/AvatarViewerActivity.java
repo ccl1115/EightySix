@@ -63,7 +63,7 @@ public class AvatarViewerActivity extends BaseActivity {
         startActivity(new Intent(AvatarViewerActivity.this, AvatarsActivity.class));
       }
     });
-    getTopBar().getAbLeft().setDrawable(getDrawable(R.drawable.top_bar_return));
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
     requestAvatars();
 

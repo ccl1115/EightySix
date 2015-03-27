@@ -78,7 +78,7 @@ public class NameEditActivity extends BaseActivity {
       }
     });
 
-    getTopBar().getAbLeft().setDrawable(getDrawable(R.drawable.top_bar_return));
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
   }
 
   @Override

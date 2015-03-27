@@ -87,7 +87,7 @@ public class BirthdayEditActivity extends BaseActivity {
 
     mDpBirthday.setMaxDate(Calendar.getInstance().getTimeInMillis());
 
-    getTopBar().getAbLeft().setDrawable(getDrawable(R.drawable.top_bar_return));
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
     getTopBar().getAbRight().setText(getString(R.string.submit));
     getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
       @Override
