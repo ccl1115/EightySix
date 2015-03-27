@@ -279,6 +279,8 @@ public abstract class AbsRegionFragment extends BaseFragment {
               }
             }
         );
+      } else {
+        getTopBar().getAbRight().hide();
       }
     } else if (mRegionType == 0) {
       getTopBar().setTitleTabSelected(0);
@@ -295,10 +297,13 @@ public abstract class AbsRegionFragment extends BaseFragment {
               }
             }
         );
+      } else {
+        getTopBar().getAbRight().hide();
       }
     } else if (mRegionType == 4 || mRegionType == 3) {
       getTopBar().setTitleTabSelected(1);
       getTopBar().setSubTitle(mSubInfo == null ? "" : mSubInfo);
+      getTopBar().getAbRight().hide();
     }
   }
 
