@@ -206,7 +206,7 @@ public class HomeActivity extends BaseActivity {
 
     ContactsSyncService.start(this, false);
 
-    setActionLeftDrawable(getResources().getDrawable(R.drawable.ic_drawer));
+    setActionLeftDrawable(getResources().getDrawable(R.drawable.tb_drawer));
 
     mMenuViewHolder = new MenuViewHolder(mFlRight);
 

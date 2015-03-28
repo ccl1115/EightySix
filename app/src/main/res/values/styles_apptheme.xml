@@ -25,8 +25,8 @@
     <style name="Widget.TopBar.AppTheme">
         <item name="android:background">@color/apptheme_top_bar_bg_color</item>
         <item name="titleColor">#fff7f7f7</item>
-        <item name="topLineColor">@color/apptheme_top_bar_bg_color</item>
-        <item name="botLineColor">@color/apptheme_top_bar_bg_color</item>
+        <item name="topLineColor">#ffa64af3</item>
+        <item name="botLineColor">#ff6b24a8</item>
     </style>
 
     <style name="Widget.RefreshIndicator"/>

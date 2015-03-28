@@ -265,6 +265,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
 
   public void updateTitleBar() {
     if (mMode == MODE_FEED) {
+      getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_drawer));
       getTopBar().setTitleTabSelected(0);
       getTopBar().setSubTitle(String.format("%s | %s", mCircle.shortName, mSubInfo == null ? "" : mSubInfo));
       getTopBar().setTitleTabText(0, "关注");
@@ -283,6 +284,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
         getTopBar().getAbRight().hide();
       }
     } else if (mRegionType == 0) {
+      getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_drawer));
       getTopBar().setTitleTabSelected(0);
       getTopBar().setSubTitle(String.format("%s | %s", mCircle.shortName, mSubInfo == null ? "" : mSubInfo));
       getTopBar().setTitleTabText(0, "在职");
@@ -301,6 +303,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
         getTopBar().getAbRight().hide();
       }
     } else if (mRegionType == 4 || mRegionType == 3) {
+      getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_distance));
       getTopBar().setTitleTabSelected(1);
       getTopBar().setSubTitle(mSubInfo == null ? "" : mSubInfo);
       getTopBar().getAbRight().hide();

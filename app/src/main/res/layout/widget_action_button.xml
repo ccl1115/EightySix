@@ -10,6 +10,35 @@
              android:layout_height="match_parent"
         >
 
+    <ImageView
+            android:id="@+id/iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_gravity="center"
+            android:scaleType="center"
+            android:visibility="gone"
+            />
+
+    <TextView
+            android:id="@+id/tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:textColor="@color/apptheme_primary_text_light"
+            android:textSize="12sp"
+            android:background="@drawable/tb_title_center"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            />
+
+
     <com.utree.eightysix.widget.CounterView
             android:id="@+id/cv"
             android:layout_width="wrap_content"
@@ -29,29 +58,4 @@
             app:radius="8dp"
             app:background="@color/apptheme_secondary_light_color"
             />
-
-    <TextView
-            android:id="@+id/tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            android:textColor="@color/apptheme_primary_text_light"
-            android:background="@drawable/tb_title_center"
-            android:padding="4dp"
-            />
-
-    <ImageView
-            android:id="@+id/iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_gravity="center"
-            android:scaleType="centerCrop"
-            android:visibility="gone"
-            />
-
 </FrameLayout>

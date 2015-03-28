@@ -52,20 +52,21 @@ public class ActionButton extends FrameLayout {
 
   public void setDrawable(Drawable drawable) {
     if (drawable != null) {
-      mIv.setVisibility(VISIBLE);
       mTv.setVisibility(GONE);
+      mIv.setVisibility(VISIBLE);
       mIv.setImageDrawable(drawable);
+      setBackgroundResource(R.drawable.apptheme_transparent_bg);
     } else {
       mIv.setVisibility(GONE);
     }
   }
 
   public void setText(CharSequence text) {
-    setBackgroundResource(0);
     if (!TextUtils.isEmpty(text)) {
+      mIv.setVisibility(GONE);
       mTv.setVisibility(VISIBLE);
       mTv.setText(text);
-      mIv.setVisibility(GONE);
+      setBackgroundResource(0);
     } else {
       mTv.setVisibility(GONE);
     }

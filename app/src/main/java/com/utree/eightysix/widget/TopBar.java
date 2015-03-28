@@ -16,11 +16,10 @@ import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import de.akquinet.android.androlog.Log;
 
 /**
  */
-public class TopBar extends ViewGroup implements View.OnClickListener {
+public class TopBar extends RelativeLayout implements View.OnClickListener {
 
   public static final int TITLE_CLICK_MODE_ONE = 1;
   private int mTitleClickMode = TITLE_CLICK_MODE_ONE;
@@ -216,7 +215,6 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     for (int i = 0; i < count; i++) {
       TextView t = new TextView(getContext());
       t.setTextColor(getResources().getColorStateList(R.color.apptheme_primary_text_light));
-      t.setPadding(4 * p, p, 4 * p, p);
       t.setText(mTitleAdapter.getTitle(i));
 
       if (i == 0) {
@@ -226,6 +224,8 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
       } else {
         t.setBackgroundResource(R.drawable.tb_title_center);
       }
+
+      t.setPadding(4 * p, p, 4 * p, p);
 
       final int finalI = i;
       t.setOnClickListener(new OnClickListener() {
@@ -291,73 +291,8 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
   }
 
   @Override
-  protected void onLayout(boolean changed, int l, int t, int r, int b) {
-
-    final int height = b - t;
-    final int width = r - l;
-
-    mAbLeft.layout(0, 0, mAbLeft.getMeasuredWidth(), b);
-
-    mAbRight.layout(r - mAbRight.getMeasuredWidth(), 0, r, b);
-
-    mLlTitle.layout((width - mLlTitle.getMeasuredWidth()) >> 1,
-        (height - mLlTitle.getMeasuredHeight()) >> 1,
-        (width + mLlTitle.getMeasuredWidth()) >> 1,
-        (height + mLlTitle.getMeasuredHeight()) >> 1);
-
-    mLlSearch.layout(mAbLeft.getRight(), 0, mAbLeft.getRight() + mLlSearch.getMeasuredWidth(), b);
-
-    mRefreshIndicator.layout(0, 0, r - l, b - t);
-  }
-
-  @Override
-  public LayoutParams generateLayoutParams(AttributeSet attrs) {
-    Log.d("TopBar", "generateLayoutParams from attrs");
-    return new LayoutParams(getContext(), attrs);
-  }
-
-  @Override
-  protected LayoutParams generateLayoutParams(ViewGroup.LayoutParams p) {
-    Log.d("TopBar", "generateLayoutParams from source");
-    return new LayoutParams(p);
-  }
-
-  @Override
-  protected LayoutParams generateDefaultLayoutParams() {
-    Log.d("TopBar", "generateDefaultLayoutParams");
-    return new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-  }
-
-  @Override
   public boolean shouldDelayChildPressedState() {
     return false;
-  }
-
-  @SuppressWarnings("SuspiciousNameCombination")
-  @Override
-  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
-    final int heightSize = heightMeasureSpec & ~(0x3 << 30);
-
-    final int widthSize = widthMeasureSpec & ~(0x3 << 30);
-
-    int widthLeft = widthSize;
-
-    measureChild(mAbRight, widthLeft + MeasureSpec.AT_MOST, heightSize + MeasureSpec.EXACTLY);
-
-    widthLeft -= mAbRight.getMeasuredWidth();
-
-    measureChild(mAbLeft, widthLeft + MeasureSpec.AT_MOST, heightSize + MeasureSpec.EXACTLY);
-
-    widthLeft -= mAbLeft.getMeasuredWidth();
-
-    measureChild(mLlTitle, widthLeft + MeasureSpec.AT_MOST, heightSize + MeasureSpec.EXACTLY);
-
-    measureChild(mLlSearch, widthSize - mAbLeft.getRight() + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
-
-    measureChild(mRefreshIndicator, widthSize + MeasureSpec.EXACTLY, heightSize + MeasureSpec.EXACTLY);
-
-    setMeasuredDimension(widthSize, heightSize);
   }
 
   public ActionButton getAbRight() {
@@ -414,18 +349,4 @@ public class TopBar extends ViewGroup implements View.OnClickListener {
     void onIconClicked();
   }
 
-  public static class LayoutParams extends MarginLayoutParams {
-
-    public LayoutParams(Context c, AttributeSet attrs) {
-      super(c, attrs);
-    }
-
-    public LayoutParams(int width, int height) {
-      super(width, height);
-    }
-
-    public LayoutParams(ViewGroup.LayoutParams source) {
-      super(source);
-    }
-  }
 }

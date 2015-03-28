@@ -302,7 +302,11 @@ public class TabRegionFragment extends BaseFragment {
   }
 
   private void setTopBarTitle() {
-    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.ic_drawer));
+    if (mFeedFragment.getRegionType() == 4 || mFeedFragment.getRegionType() == 3) {
+      getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_distance));
+    } else {
+      getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_drawer));
+    }
     getTopBar().getAbLeft().setOnClickListener(
         new View.OnClickListener() {
           @Override

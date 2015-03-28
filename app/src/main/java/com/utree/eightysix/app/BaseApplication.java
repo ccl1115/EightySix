@@ -67,7 +67,9 @@ public class BaseApplication extends Application {
       U.getPushHelper().startWork();
 
       // 域名检查
-      startService(new Intent(this, PingService.class));
+      if (!BuildConfig.DEBUG) {
+        startService(new Intent(this, PingService.class));
+      }
 
       // 环信聊天初始化
       EMChat.getInstance().init(this);
