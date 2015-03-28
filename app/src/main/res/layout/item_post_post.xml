@@ -11,12 +11,12 @@
     <LinearLayout
             android:id="@+id/ll_top"
             android:layout_width="match_parent"
-            android:layout_height="53dp"
-            android:background="@color/apptheme_primary_grey_color_200"
+            android:layout_height="46dp"
+            android:background="@android:color/white"
             android:orientation="horizontal"
             android:visibility="gone"
-            android:paddingLeft="53dp"
-            android:paddingRight="53dp"
+            android:paddingLeft="46dp"
+            android:paddingRight="46dp"
             >
 
         <com.utree.eightysix.widget.AsyncImageViewWithRoundCorner
@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:textSize="16sp"
-                android:textColor="@android:color/white"
+                android:textColor="#ffabaeb3"
                 />
 
         <com.utree.eightysix.widget.AsyncImageView

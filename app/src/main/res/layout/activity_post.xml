@@ -38,13 +38,13 @@
     <FrameLayout
             android:id="@+id/fl_banner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="46dp"
             >
 
         <ImageView
                 android:id="@+id/iv_close"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="46dp"
+                android:layout_height="46dp"
                 android:layout_gravity="start|top"
                 android:background="@drawable/apptheme_transparent_bg"
                 android:src="@drawable/ic_action_post_close"
