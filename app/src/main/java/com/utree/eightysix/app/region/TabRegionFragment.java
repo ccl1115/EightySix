@@ -345,9 +345,13 @@ public class TabRegionFragment extends BaseFragment {
         mLlDistanceSelector.setVisibility(View.GONE);
         if (position == 0) {
           setRegionType(0);
+          getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_drawer));
+          getTopBar().getAbRight().hide();
         } else if (position == 1) {
           clearFollowCircleViews();
           setRegionType(4);
+          getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_distance));
+          getTopBar().getAbRight().hide();
         }
       }
 
