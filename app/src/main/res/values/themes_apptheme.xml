@@ -37,6 +37,7 @@
         <item name="android:dropDownSpinnerStyle">@style/Widget.Spinner.Apptheme</item>
         <item name="android:spinnerDropDownItemStyle">@style/Widget.Spinner.DropdownItem.Apptheme</item>
         <item name="android:spinnerItemStyle">@style/Widget.Spinner.Item.Apptheme</item>
+        <item name="android:seekBarStyle">@style/Widget.SeekBar.Apptheme</item>
     </style>
 
     <style name="AppTheme.Dialog" parent="AppTheme">

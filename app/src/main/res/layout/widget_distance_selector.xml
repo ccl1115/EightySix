@@ -27,18 +27,21 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="滑动变更距离"
+                android:textColor="#ff7e7e7e"
                 />
 
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="当前距离: "
+                android:textColor="#ff7e7e7e"
                 />
 
         <TextView
                 android:id="@+id/tv_distance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/apptheme_primary_light_color"
                 />
     </LinearLayout>
 
