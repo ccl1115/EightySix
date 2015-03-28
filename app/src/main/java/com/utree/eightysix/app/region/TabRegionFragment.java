@@ -1,18 +1,19 @@
 package com.utree.eightysix.app.region;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -53,6 +54,9 @@ public class TabRegionFragment extends BaseFragment {
 
   @InjectView(R.id.tt_tab)
   public TitleTab mTtTab;
+
+  @InjectView(R.id.fl_follow_circles)
+  public FrameLayout mFlFollowCircles;
 
   @InjectView(R.id.ll_follow_circles)
   public LinearLayout mLlFollowCircles;
@@ -101,9 +105,9 @@ public class TabRegionFragment extends BaseFragment {
     }
   }
 
-  @OnClick(R.id.ll_follow_circles)
-  public void onLlFollowCirclesClicked() {
-    mLlFollowCircles.setVisibility(View.GONE);
+  @OnClick(R.id.fl_follow_circles)
+  public void onFlFollowCirclesClicked() {
+    mFlFollowCircles.setVisibility(View.GONE);
   }
 
   @OnClick(R.id.tv_set_current)
@@ -312,8 +316,8 @@ public class TabRegionFragment extends BaseFragment {
           @Override
           public void onClick(View v) {
             if (getTopBar().getTitleBarSelectedIndex() == 0) {
-              mLlFollowCircles.setVisibility(
-                  mLlFollowCircles.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+              mFlFollowCircles.setVisibility(
+                  mFlFollowCircles.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             } else if (getTopBar().getTitleBarSelectedIndex() == 1) {
               mLlDistanceSelector.setVisibility(
                   mLlDistanceSelector.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
@@ -337,7 +341,7 @@ public class TabRegionFragment extends BaseFragment {
 
       @Override
       public void onSelected(View view, int position) {
-        mLlFollowCircles.setVisibility(View.GONE);
+        mFlFollowCircles.setVisibility(View.GONE);
         mLlDistanceSelector.setVisibility(View.GONE);
         if (position == 0) {
           setRegionType(0);
@@ -421,7 +425,7 @@ public class TabRegionFragment extends BaseFragment {
             clearFollowCircleViews();
             v.setSelected(true);
             setRegionType(0);
-            mLlFollowCircles.setVisibility(View.GONE);
+            mFlFollowCircles.setVisibility(View.GONE);
             getTopBar().setTitleTabSelected(0);
             getTopBar().setTitleTabText(0, "在职");
             getTopBar().setSubTitle("");
@@ -528,13 +532,18 @@ public class TabRegionFragment extends BaseFragment {
           mLlAddFollow.setVisibility(View.GONE);
         }
 
-        if (response.object.size() / 2 == 1) {
+        if (response.object.size() % 3 == 1) {
+          response.object.add(null);
+          response.object.add(null);
+        } else if (response.object.size() % 3 == 2) {
           response.object.add(null);
         }
+
         for (int i = 0, size = response.object.size(); i < size; i += 2) {
           buildFollowCircleRow(new FollowCircle[]{
               response.object.get(i),
-              response.object.get(i + 1)
+              response.object.get(i + 1),
+              response.object.get(i + 2)
           });
         }
       }
@@ -544,17 +553,19 @@ public class TabRegionFragment extends BaseFragment {
   private void buildFollowCircleRow(final FollowCircle[] circles) {
     LinearLayout linearLayout = new LinearLayout(getActivity());
     linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-    linearLayout.setBackgroundColor(Color.WHITE);
 
     int p = U.dp2px(8);
     if (circles[0] != null) {
       TextView textView = new TextView(getActivity());
+      textView.setSingleLine();
+      textView.setLines(1);
+      textView.setEllipsize(TextUtils.TruncateAt.END);
       textView.setText(circles[0].factoryName);
       textView.setTag(circles[0]);
       textView.setGravity(Gravity.CENTER);
 
       LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
-      params.setMargins(p, p, p, p);
+      params.setMargins(0, p, p, 0);
       textView.setLayoutParams(params);
 
       textView.setBackgroundResource(R.drawable.border_outline_secondary_dark_color_btn);
@@ -570,7 +581,7 @@ public class TabRegionFragment extends BaseFragment {
             getTopBar().setTitleTabText(0, "关注");
             getTopBar().setTitleTabSelected(0);
             getTopBar().setSubTitle("");
-            mLlFollowCircles.setVisibility(View.GONE);
+            mFlFollowCircles.setVisibility(View.GONE);
           }
         }
       });
@@ -580,12 +591,15 @@ public class TabRegionFragment extends BaseFragment {
     }
     if (circles[1] != null) {
       TextView textView = new TextView(getActivity());
+      textView.setSingleLine();
+      textView.setLines(1);
+      textView.setEllipsize(TextUtils.TruncateAt.END);
       textView.setText(circles[1].factoryName);
       textView.setTag(circles[1]);
       textView.setGravity(Gravity.CENTER);
 
       LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
-      params.setMargins(p, p, p, p);
+      params.setMargins(p, p, p, 0);
       textView.setLayoutParams(params);
 
       textView.setBackgroundResource(R.drawable.border_outline_secondary_dark_color_btn);
@@ -601,7 +615,46 @@ public class TabRegionFragment extends BaseFragment {
             getTopBar().setTitleTabText(0, "关注");
             getTopBar().setTitleTabSelected(0);
             getTopBar().setSubTitle("");
-            mLlFollowCircles.setVisibility(View.GONE);
+            mFlFollowCircles.setVisibility(View.GONE);
+          }
+        }
+      });
+
+      mFollowCircleViews.add(textView);
+      linearLayout.addView(textView);
+    } else {
+      View view = new View(getActivity());
+      view.setLayoutParams(new LinearLayout.LayoutParams(0, 1, 1));
+      linearLayout.addView(view);
+    }
+
+    if (circles[2] != null) {
+      TextView textView = new TextView(getActivity());
+      textView.setSingleLine();
+      textView.setLines(1);
+      textView.setEllipsize(TextUtils.TruncateAt.END);
+      textView.setText(circles[2].factoryName);
+      textView.setTag(circles[2]);
+      textView.setGravity(Gravity.CENTER);
+
+      LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+      params.setMargins(p, p, 0, 0);
+      textView.setLayoutParams(params);
+
+      textView.setBackgroundResource(R.drawable.border_outline_secondary_dark_color_btn);
+      textView.setTextColor(getResources().getColorStateList(R.color.border_outline_secondary_dark_color_btn_text));
+
+      textView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          if (!v.isSelected()) {
+            clearFollowCircleViews();
+            v.setSelected(true);
+            setCircleId(circles[2].factoryId);
+            getTopBar().setTitleTabText(0, "关注");
+            getTopBar().setTitleTabSelected(0);
+            getTopBar().setSubTitle("");
+            mFlFollowCircles.setVisibility(View.GONE);
           }
         }
       });
