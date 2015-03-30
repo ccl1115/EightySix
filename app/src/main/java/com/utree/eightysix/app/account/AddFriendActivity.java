@@ -2,28 +2,39 @@ package com.utree.eightysix.app.account;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.google.gson.annotations.SerializedName;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.friends.UserSearchActivity;
+import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.qrcode.QRCodeScanEvent;
 import com.utree.eightysix.qrcode.QRCodeScanFragment;
+import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.AdvancedListView;
+import com.utree.eightysix.widget.ThemedDialog;
 
 /**
  * @author simon
@@ -33,6 +44,14 @@ import com.utree.eightysix.widget.AdvancedListView;
 public class AddFriendActivity extends BaseActivity {
 
   private QRCodeScanFragment mQRCodeScanFragment;
+
+  @Keep
+  public static class GetInviteCodeResponse extends Response {
+
+
+    @SerializedName("object")
+    public HomeActivity.GetInviteCode object;
+  }
 
 
   public class HeadViewHolder {
@@ -60,21 +79,53 @@ public class AddFriendActivity extends BaseActivity {
       showProgressBar(true);
     }
 
-    @OnClick(R.id.ll_qq)
+    @OnClick(R.id.ll_invite_code)
     public void onLlQqClicked() {
-      Circle currentCircle = Account.inst().getCurrentCircle();
-      if (currentCircle != null) {
-        U.getShareManager().shareAppToQQ(AddFriendActivity.this, currentCircle);
-      } else {
-        U.showToast("请先设置在职工厂");
-      }
+      showProgressBar(true);
+
+      U.request("get_invite_code", new OnResponse2<GetInviteCodeResponse>() {
+        @Override
+        public void onResponseError(Throwable e) {
+          hideProgressBar();
+        }
+
+        @Override
+        public void onResponse(GetInviteCodeResponse response) {
+          hideProgressBar();
+          final ThemedDialog dialog = new ThemedDialog(AddFriendActivity.this);
+          dialog.setTitle("你的专属邀请码");
+
+          TextView textView = new TextView(AddFriendActivity.this);
+          SpannableStringBuilder builder = new SpannableStringBuilder();
+          builder.append(response.object.msg).append("\n\n").append("你的专属邀请码是：\n");
+          SpannableString color = new SpannableString(response.object.inviteCode);
+          color.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.apptheme_primary_light_color)), 0, color.length(), 0);
+          builder.append(color);
+          builder.append("\n\n").append("你已经邀请了").append(String.valueOf(response.object.newCount)).append("个人\n");
+
+          textView.setText(builder);
+          textView.setGravity(Gravity.CENTER);
+          textView.setEms(12);
+          textView.setPadding(dp2px(16), dp2px(8), dp2px(16), dp2px(8));
+          textView.setTextSize(16);
+          dialog.setContent(textView);
+          dialog.setPositive("知道啦", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+              dialog.dismiss();
+            }
+          });
+
+          dialog.show();
+        }
+      }, GetInviteCodeResponse.class, null, null);
     }
 
-    @OnClick(R.id.ll_qzone)
+    @OnClick(R.id.ll_invite)
     public void onLlQzoneClicked() {
       Circle currentCircle = Account.inst().getCurrentCircle();
       if (currentCircle != null) {
-        U.getShareManager().shareAppToQzone(AddFriendActivity.this, currentCircle);
+        U.getShareManager().shareAppDialog(AddFriendActivity.this, currentCircle).show();
       } else {
         U.showToast("请先设置在职工厂");
       }

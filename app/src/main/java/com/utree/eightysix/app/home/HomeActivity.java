@@ -831,54 +831,8 @@ public class HomeActivity extends BaseActivity {
     @OnClick(R.id.rl_invite_code)
     void onRlInviteCodeClicked() {
 
-      showProgressBar(true);
-
-      U.request("get_invite_code", new OnResponse2<GetInviteCodeResponse>() {
-        @Override
-        public void onResponseError(Throwable e) {
-          hideProgressBar();
-        }
-
-        @Override
-        public void onResponse(GetInviteCodeResponse response) {
-          hideProgressBar();
-          final ThemedDialog dialog = new ThemedDialog(HomeActivity.this);
-          dialog.setTitle("你的专属邀请码");
-
-          TextView textView = new TextView(HomeActivity.this);
-          SpannableStringBuilder builder = new SpannableStringBuilder();
-          builder.append(response.object.msg).append("\n\n").append("你的专属邀请码是：\n");
-          SpannableString color = new SpannableString(response.object.inviteCode);
-          color.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.apptheme_primary_light_color)), 0, color.length(), 0);
-          builder.append(color);
-          builder.append("\n\n").append("你已经邀请了").append(String.valueOf(response.object.newCount)).append("个人\n");
-
-          textView.setText(builder);
-          textView.setGravity(Gravity.CENTER);
-          textView.setEms(12);
-          textView.setPadding(dp2px(16), dp2px(8), dp2px(16), dp2px(8));
-          textView.setTextSize(16);
-          dialog.setContent(textView);
-          dialog.setPositive("知道啦", new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-              dialog.dismiss();
-            }
-          });
-
-          dialog.show();
-        }
-      }, GetInviteCodeResponse.class, null, null);
 
     }
-  }
-
-  @Keep
-  public static class GetInviteCodeResponse extends Response {
-
-
-    @SerializedName("object")
-    public GetInviteCode object;
   }
 
   @Keep

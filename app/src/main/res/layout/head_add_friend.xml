@@ -125,7 +125,7 @@
     <include layout="@layout/widget_primary_divider"/>
 
     <LinearLayout
-            android:id="@+id/ll_qq"
+            android:id="@+id/ll_invite_code"
             android:layout_width="match_parent"
             android:layout_height="72dp"
             android:paddingLeft="16dp"
@@ -146,7 +146,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="邀请QQ好友"
+                    android:text="专属邀请码"
                     />
 
             <TextView
@@ -154,7 +154,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
                     android:textColor="@color/apptheme_primary_dark_color"
-                    android:text="邀请你的QQ好友加入蓝莓"
+                    android:text="注册填写邀请码，与好友共获福利"
                     />
         </LinearLayout>
 
@@ -170,7 +170,7 @@
     <include layout="@layout/widget_primary_divider"/>
 
     <LinearLayout
-            android:id="@+id/ll_qzone"
+            android:id="@+id/ll_invite"
             android:layout_width="match_parent"
             android:layout_height="72dp"
             android:paddingLeft="17dp"
@@ -191,7 +191,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="推广蓝莓"
+                    android:text="邀请厂里好友加入蓝莓"
                     />
 
             <TextView
@@ -199,7 +199,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
                     android:textColor="@color/apptheme_primary_dark_color"
-                    android:text="分享应用到QQ空间"
+                    android:text="通过QQ、空间、短信邀请好友"
                     />
         </LinearLayout>
 
