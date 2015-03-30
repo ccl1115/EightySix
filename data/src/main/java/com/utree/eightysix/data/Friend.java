@@ -37,5 +37,7 @@ public class Friend {
   @SerializedName("workinFactory")
   public String workinFactory;
 
+  @SerializedName("relation")
+  public String relation;
 }
 

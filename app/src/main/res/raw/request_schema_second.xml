@@ -278,6 +278,18 @@
     </request>
 
     <request>
+        <id>user_search</id>
+        <name>搜索用户</name>
+        <path>/user/search</path>
+        <host>http://192.168.0.118:8000</host>
+        <sign/>
+        <token/>
+        <params>
+            <param>keyword</param>
+        </params>
+    </request>
+
+    <request>
         <id>user_signatures</id>
         <name>用户签名</name>
         <path>/user/signature</path>

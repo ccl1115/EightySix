@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="#ffd8dbdb"
+        >
+
+    <include layout="@layout/widget_search"/>
+
+    <TextView
+            android:id="@+id/tv_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+    <LinearLayout
+            android:id="@+id/ll_scan"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_marginTop="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:orientation="horizontal"
+            android:background="@drawable/apptheme_primary_list_selector"
+            >
+
+        <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginRight="8dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_qrcode"
+                />
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical"
+                >
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="扫一扫"
+                    />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/apptheme_primary_dark_color"
+                    android:text="扫描朋友的二维码"
+                    />
+        </LinearLayout>
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_forward"
+                />
+
+    </LinearLayout>
+
+
+    <include layout="@layout/widget_primary_divider"/>
+
+
+    <LinearLayout
+            android:id="@+id/ll_upload_contacts"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:orientation="horizontal"
+            android:background="@drawable/apptheme_primary_list_selector"
+            >
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_contacts"
+                />
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical"
+                >
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="添加手机联系人"
+                    />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/apptheme_primary_dark_color"
+                    android:text="添加联系人里玩蓝莓的好友"
+                    />
+        </LinearLayout>
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_forward"
+                />
+
+    </LinearLayout>
+
+    <include layout="@layout/widget_primary_divider"/>
+
+    <LinearLayout
+            android:id="@+id/ll_qq"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:orientation="horizontal"
+            android:background="@drawable/apptheme_primary_list_selector"
+            >
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical"
+                >
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="邀请QQ好友"
+                    />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/apptheme_primary_dark_color"
+                    android:text="邀请你的QQ好友加入蓝莓"
+                    />
+        </LinearLayout>
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_forward"
+                />
+
+    </LinearLayout>
+
+    <include layout="@layout/widget_primary_divider"/>
+
+    <LinearLayout
+            android:id="@+id/ll_qzone"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:paddingLeft="17dp"
+            android:paddingRight="17dp"
+            android:orientation="horizontal"
+            android:background="@drawable/apptheme_primary_list_selector"
+            >
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical"
+                >
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="推广蓝莓"
+                    />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/apptheme_primary_dark_color"
+                    android:text="分享应用到QQ空间"
+                    />
+        </LinearLayout>
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_forward"
+                />
+
+    </LinearLayout>
+
+    <include layout="@layout/widget_primary_divider"/>
+</LinearLayout>

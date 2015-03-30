@@ -283,6 +283,9 @@
         <activity
                 android:name=".app.tag.AllTagsActivity"
                 android:label="全部标签"/>
+        <activity
+                android:name=".app.friends.UserSearchActivity"
+                android:label="搜索朋友"/>
 
         <!-- 【必须】 信鸽service -->
         <service android:exported="true" android:name="com.tencent.android.tpush.service.XGPushService" android:persistent="true" android:process=":xg_service_v2" tools:ignore="ExportedService"/>
