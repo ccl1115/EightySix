@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.RadioGroup;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -86,28 +86,49 @@ public class ProfileEditActivity extends BaseActivity {
     dialog.setTitle("修改性别");
 
     View view = LayoutInflater.from(this).inflate(R.layout.widget_select_gender, null);
-    dialog.setContent(view);
 
-    ((RadioGroup) view).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+    RadioButton male = (RadioButton) view.findViewById(R.id.rb_male);
+    RadioButton female = (RadioButton) view.findViewById(R.id.rb_female);
+    if ("男".equals(mTvGender.getText())) {
+      male.setChecked(true);
+    } else if ("女".equals(mTvGender.getText())) {
+      female.setChecked(true);
+    }
+    female.setOnClickListener(new View.OnClickListener() {
       @Override
-      public void onCheckedChanged(RadioGroup group, int checkedId) {
-        String gender = null;
-        if (checkedId == R.id.rb_male) {
-          gender = "男";
-        } else if (checkedId == R.id.rb_female) {
-          gender = "女";
-        }
-
+      public void onClick(View v) {
         dialog.dismiss();
 
-        final String finalGender = gender;
-        Utils.updateProfile(null, null, gender, null, null, null, null, null,
+        Utils.updateProfile(null, null, "女", null, null, null, null, null,
             new OnResponse2<Response>() {
               @Override
               public void onResponse(Response response) {
                 if (RESTRequester.responseOk(response)) {
-                  mTvGender.setText(finalGender);
-                  U.getBus().post(new GenderUpdatedEvent(finalGender));
+                  mTvGender.setText("女");
+                  U.getBus().post(new GenderUpdatedEvent("女"));
+                }
+              }
+
+              @Override
+              public void onResponseError(Throwable e) {
+
+              }
+            });
+
+      }
+    });
+    male.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        dialog.dismiss();
+
+        Utils.updateProfile(null, null, "男", null, null, null, null, null,
+            new OnResponse2<Response>() {
+              @Override
+              public void onResponse(Response response) {
+                if (RESTRequester.responseOk(response)) {
+                  mTvGender.setText("男");
+                  U.getBus().post(new GenderUpdatedEvent("男"));
                 }
               }
 
@@ -118,6 +139,8 @@ public class ProfileEditActivity extends BaseActivity {
             });
       }
     });
+
+    dialog.setContent(view);
 
     dialog.show();
   }
