@@ -6,6 +6,7 @@
 
 <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,9 +27,31 @@
             android:visibility="gone"
             />
 
-    <com.utree.eightysix.view.RandomFloatingLayout
-            android:id="@+id/rfl_tags"
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            />
+            android:orientation="vertical"
+            >
+
+        <com.utree.eightysix.view.RandomFloatingLayout
+                android:id="@+id/rfl_tags"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                />
+
+        <com.utree.eightysix.widget.RoundedButton
+                android:id="@+id/rb_all_tags"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="64dp"
+                android:layout_gravity="center_horizontal"
+                app:background="#ffe6e6e6"
+                android:text="查看全部标签"
+                android:textColor="#ff313233"
+                />
+    </LinearLayout>
 </FrameLayout>

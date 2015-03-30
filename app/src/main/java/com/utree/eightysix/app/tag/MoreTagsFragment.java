@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.tag;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -9,7 +10,7 @@ import android.widget.ListView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.utree.eightysix.R;
-import com.utree.eightysix.app.BaseFragment;
+import com.utree.eightysix.app.HolderFragment;
 import com.utree.eightysix.request.TagsByTypeRequest;
 import com.utree.eightysix.response.TagsByTypeResponse;
 import com.utree.eightysix.rest.OnResponse2;
@@ -17,7 +18,7 @@ import com.utree.eightysix.rest.RESTRequester;
 
 /**
  */
-public class MoreTagFragment extends BaseFragment {
+public class MoreTagsFragment extends HolderFragment {
 
   @InjectView (R.id.lv_tags)
   public ListView mLvTags;
@@ -32,6 +33,15 @@ public class MoreTagFragment extends BaseFragment {
   @Override
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
+  }
+
+  @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
+
+    if (isActive()) {
+      requireTagsByType();
+    }
   }
 
   @Override
@@ -58,5 +68,25 @@ public class MoreTagFragment extends BaseFragment {
         getBaseActivity().hideProgressBar();
       }
     }, TagsByTypeResponse.class);
+  }
+
+  @Override
+  protected void onTitleClicked() {
+
+  }
+
+  @Override
+  protected void onActionLeftClicked() {
+    getActivity().finish();
+  }
+
+  @Override
+  protected void onActionOverflowClicked() {
+
+  }
+
+  @Override
+  protected String getTitle() {
+    return "全部标签";
   }
 }

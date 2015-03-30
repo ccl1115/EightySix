@@ -19,7 +19,7 @@ import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
-import com.utree.eightysix.app.tag.MoreTagFragment;
+import com.utree.eightysix.app.tag.MoreTagsFragment;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.widget.TitleTab;
 
@@ -56,7 +56,7 @@ public class TabFragment extends BaseFragment {
     if (mMode == MODE_HAS_FRIENDS) {
       mThirdFragment = new FriendsFeedFragment();
     } else {
-      mThirdFragment = new MoreTagFragment();
+      mThirdFragment = new MoreTagsFragment();
     }
 
     Circle circle = getArguments().getParcelable("circle");

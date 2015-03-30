@@ -54,6 +54,9 @@ public class FragmentHolder extends BaseActivity {
 
     try {
       mFragment = (HolderFragment) clz.newInstance();
+      mFragment.setActive(true);
+      setTopTitle(mFragment.getTitle());
+      setTopSubTitle(mFragment.getSubTitle());
 
       if (args != null) {
         mFragment.setArguments(args);

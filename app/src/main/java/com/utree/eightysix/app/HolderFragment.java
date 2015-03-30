@@ -13,4 +13,13 @@ public abstract class HolderFragment extends BaseFragment {
   protected abstract void onActionLeftClicked();
 
   protected abstract void onActionOverflowClicked();
+
+  protected String getTitle() {
+    return "";
+  }
+
+  protected String getSubTitle() {
+    return "";
+  }
+
 }

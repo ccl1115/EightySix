@@ -4,6 +4,7 @@
 
 package com.utree.eightysix.app.feed;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +13,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.tag.AllTagsActivity;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.response.FeedsResponse;
@@ -54,6 +57,12 @@ public class FeedsSearchActivity extends BaseActivity {
   private Paginate.Page mPageInfo;
 
   private String mSearchContent;
+
+  @OnClick(R.id.rb_all_tags)
+  public void onRbAllTagsClicked() {
+    startActivity(new Intent(this, AllTagsActivity.class));
+  }
+
 
   @Override
   public void onCreate(Bundle savedInstanceState) {

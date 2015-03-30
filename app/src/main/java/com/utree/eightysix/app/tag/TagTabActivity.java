@@ -36,7 +36,7 @@ public class TagTabActivity extends BaseActivity {
 
   private FactoryTagFragment mFactoryTagFragment;
   private HotTagFragment mHotTagFragment;
-  private MoreTagFragment mMoreTagFragment;
+  private MoreTagsFragment mMoreTagsFragment;
   private Tag mTag;
 
   private Circle mCurrentCircle;
@@ -82,7 +82,7 @@ public class TagTabActivity extends BaseActivity {
 
     mFactoryTagFragment = new FactoryTagFragment();
     mHotTagFragment = new HotTagFragment();
-    mMoreTagFragment = new MoreTagFragment();
+    mMoreTagsFragment = new MoreTagsFragment();
 
     showRefreshIndicator();
 
@@ -98,7 +98,7 @@ public class TagTabActivity extends BaseActivity {
           case 1:
             return mFactoryTagFragment;
           case 2:
-            return mMoreTagFragment;
+            return mMoreTagsFragment;
         }
         return null;
       }
@@ -140,7 +140,7 @@ public class TagTabActivity extends BaseActivity {
             mFactoryTagFragment.setActive(true);
             break;
           case 2:
-            mMoreTagFragment.setActive(true);
+            mMoreTagsFragment.setActive(true);
             break;
         }
 
