@@ -199,7 +199,7 @@
 
         <activity android:name=".app.friends.RequestDetailActivity" android:label="朋友请求详情" android:screenOrientation="portrait"/>
 
-        <activity android:name=".app.feed.FeedsSearchActivity" android:label="帖子搜索" android:screenOrientation="portrait"/>
+        <activity android:name=".app.feed.FeedsSearchActivity" android:launchMode="singleTask" android:label="帖子搜索" android:screenOrientation="portrait"/>
 
         <activity android:name=".app.account.SignaturesActivity" android:label="用户签名" android:screenOrientation="portrait"/>
 

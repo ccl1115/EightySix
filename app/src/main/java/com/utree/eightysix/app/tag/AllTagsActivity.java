@@ -11,6 +11,7 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.request.TagsRequest;
 import com.utree.eightysix.response.TagsResponse;
 import com.utree.eightysix.rest.OnResponse2;
@@ -21,6 +22,7 @@ import com.utree.eightysix.widget.AdvancedListView;
 /**
  */
 @Layout(R.layout.activity_all_tags)
+@TopTitle(R.string.all_tags)
 public class AllTagsActivity extends BaseActivity {
 
   @InjectView(R.id.content)
@@ -34,6 +36,13 @@ public class AllTagsActivity extends BaseActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+
+    mRefreshLayout.setColorSchemeResources(R.color.apptheme_primary_light_color,
+        R.color.apptheme_primary_light_color_pressed,
+        R.color.apptheme_primary_light_color,
+        R.color.apptheme_primary_light_color_pressed);
 
     mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override

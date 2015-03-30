@@ -4,6 +4,8 @@
 
 package com.utree.eightysix.app.feed;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
@@ -27,6 +30,7 @@ import com.utree.eightysix.response.FeedsResponse;
 import com.utree.eightysix.response.TagsResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.view.RandomFloatingLayout;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
@@ -41,6 +45,18 @@ import java.util.Random;
 @Layout(R.layout.activity_feeds_search)
 public class FeedsSearchActivity extends BaseActivity {
 
+  public static void start(Context context, String tag) {
+    Intent intent = new Intent(context, FeedsSearchActivity.class);
+
+    intent.putExtra("tag", tag);
+
+    if (!(context instanceof Activity)) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    context.startActivity(intent);
+  }
+
   @InjectView(R.id.alv_feeds)
   public AdvancedListView mAlvFeeds;
 
@@ -49,6 +65,9 @@ public class FeedsSearchActivity extends BaseActivity {
 
   @InjectView(R.id.rfl_tags)
   public RandomFloatingLayout mRflTags;
+
+  @InjectView(R.id.ll_tags)
+  public LinearLayout mLlTags;
 
   private FeedsSearchAdapter mFeedsSearchAdapter;
 
@@ -121,6 +140,15 @@ public class FeedsSearchActivity extends BaseActivity {
   }
 
   @Override
+  protected void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+
+    mSearchContent = "#" + intent.getStringExtra("tag");
+    getTopBar().mEtSearch.setText(mSearchContent);
+    requestFeedsSearch(1);
+  }
+
+  @Override
   public void onActionLeftClicked() {
     finish();
   }
@@ -136,6 +164,17 @@ public class FeedsSearchActivity extends BaseActivity {
     hideSoftKeyboard(mAlvFeeds);
     mSearchContent = cs.toString();
     requestFeedsSearch(1);
+  }
+
+  @Override
+  public void onSearchTextChanged(CharSequence cs) {
+    if (cs.length() > 0) {
+      mLlTags.setVisibility(View.GONE);
+    } else {
+      mLlTags.setVisibility(View.VISIBLE);
+      mRstvEmpty.setVisibility(View.GONE);
+      mAlvFeeds.setAdapter(null);
+    }
   }
 
   private void requestFeedsSearch(final int page) {
@@ -164,6 +203,7 @@ public class FeedsSearchActivity extends BaseActivity {
         }
         mPageInfo = response.object.posts.page;
 
+        mLlTags.setVisibility(View.GONE);
         hideProgressBar();
         mAlvFeeds.stopLoadMore();
       }
@@ -214,12 +254,22 @@ public class FeedsSearchActivity extends BaseActivity {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
       RoundedButton btn = new RoundedButton(parent.getContext());
 
-      btn.setText(mTags.get(position).content);
+      final String content = mTags.get(position).content;
+      int padding = U.dp2px(4);
+      btn.setText(content);
       btn.setTextSize(10 + mRandom.nextInt(10));
-      btn.setBackgroundColor(0xff000000 | mRandom.nextInt());
+      btn.setBackgroundColor(ColorUtil.getRandomColor());
+      btn.setPadding(padding << 2, padding, padding << 2, padding);
+
+      btn.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          FeedsSearchActivity.start(v.getContext(), content);
+        }
+      });
 
       return btn;
     }

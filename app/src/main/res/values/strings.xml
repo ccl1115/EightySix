@@ -290,4 +290,5 @@
     <string name="my_posts">我的帖子</string>
     <string name="his_posts">他的帖子</string>
     <string name="daily_picks">每日精选</string>
+    <string name="all_tags">所有标签</string>
 </resources>

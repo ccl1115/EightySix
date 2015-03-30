@@ -18,6 +18,7 @@
             android:layout_height="1px"
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
+            android:background="#ffb7b6b6"
             />
 
     <TextView
@@ -26,6 +27,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
+            android:textColor="#ffb7b6b6"
             />
 
     <View
@@ -33,5 +35,6 @@
             android:layout_height="1px"
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
+            android:background="#ffb7b6b6"
             />
 </LinearLayout>

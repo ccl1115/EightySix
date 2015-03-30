@@ -13,6 +13,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.feed.FeedsSearchActivity;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.widget.RoundedButton;
@@ -88,7 +89,7 @@ public class AllTagsAdapter extends BaseAdapter {
       convertView = new TableLayout(parent.getContext());
     }
 
-    List<Tag> tags = mTags.get(mKeys.get((position - 1) >> 1));
+    final List<Tag> tags = mTags.get(mKeys.get((position - 1) >> 1));
 
     if (tags.size() % 3 == 1) {
       tags.add(null);
@@ -121,6 +122,13 @@ public class AllTagsAdapter extends BaseAdapter {
         roundedButton.setRadius(U.dp2px(8));
         roundedButton.setLayoutParams(lp);
         roundedButton.setBackgroundColor(ColorUtil.getRandomColor());
+        final int finalI = i;
+        roundedButton.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            FeedsSearchActivity.start(v.getContext(), tags.get(finalI).content);
+          }
+        });
         row.addView(roundedButton);
       }
 
@@ -143,6 +151,13 @@ public class AllTagsAdapter extends BaseAdapter {
         roundedButton.setRadius(U.dp2px(8));
         roundedButton.setBackgroundColor(ColorUtil.getRandomColor());
         roundedButton.setLayoutParams(lp);
+        final int finalI = i;
+        roundedButton.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            FeedsSearchActivity.start(v.getContext(), tags.get(finalI + 1).content);
+          }
+        });
         row.addView(roundedButton);
       }
 
@@ -163,6 +178,13 @@ public class AllTagsAdapter extends BaseAdapter {
         roundedButton.setRadius(U.dp2px(8));
         roundedButton.setBackgroundColor(ColorUtil.getRandomColor());
         roundedButton.setLayoutParams(lp);
+        final int finalI = i;
+        roundedButton.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            FeedsSearchActivity.start(v.getContext(), tags.get(finalI + 2).content);
+          }
+        });
         row.addView(roundedButton);
       }
 
