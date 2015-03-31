@@ -65,6 +65,8 @@ public class MyQRCodeActivity extends BaseActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+
     final String id = getIntent().getStringExtra("id");
 
     if (id == null) {

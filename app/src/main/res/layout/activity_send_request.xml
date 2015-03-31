@@ -31,5 +31,6 @@
             android:text="你好，我是XXX，添加我为蓝莓朋友吧"
             android:maxLength="80"
             android:inputType="textMultiLine"
+            android:gravity="bottom"
             />
 </LinearLayout>

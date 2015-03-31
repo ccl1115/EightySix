@@ -60,6 +60,9 @@ public class AddFriendActivity extends BaseActivity {
     @InjectView(R.id.tv_search_hint)
     public EditText mEtSearchHint;
 
+    @InjectView(R.id.tv_id)
+    public TextView mTvId;
+
     @OnClick(R.id.ll_scan)
     public void onLlScanClicked() {
       if (mQRCodeScanFragment == null) {
@@ -155,7 +158,7 @@ public class AddFriendActivity extends BaseActivity {
 
     View view = getLayoutInflater().inflate(R.layout.head_add_friend, mAlvRecommended, false);
 
-    HeadViewHolder headViewHolder = new HeadViewHolder(view);
+    final HeadViewHolder headViewHolder = new HeadViewHolder(view);
 
     mAlvRecommended.addHeaderView(view);
 
@@ -166,9 +169,16 @@ public class AddFriendActivity extends BaseActivity {
       }
 
       @Override
-      public void onResponse(FriendListResponse response) {
+      public void onResponse(final FriendListResponse response) {
         if (RESTRequester.responseOk(response)) {
           mAlvRecommended.setAdapter(new FriendRecommendAdapter(response.object));
+          headViewHolder.mTvId.setText("我的蓝莓ID：" + response.extra.viewId);
+          headViewHolder.mTvId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              MyQRCodeActivity.start(AddFriendActivity.this, response.extra.viewId);
+            }
+          });
         }
       }
     }, FriendListResponse.class);

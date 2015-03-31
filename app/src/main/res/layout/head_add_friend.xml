@@ -13,6 +13,13 @@
             android:id="@+id/tv_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:drawableRight="@drawable/ic_sample_qrcode"
+            android:drawableEnd="@drawable/ic_sample_qrcode"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical"
             />
 
     <LinearLayout
