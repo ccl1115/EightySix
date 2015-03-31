@@ -21,6 +21,7 @@ import com.utree.eightysix.app.HolderFragment;
 import com.utree.eightysix.app.account.event.*;
 import com.utree.eightysix.app.circle.FollowCircleListActivity;
 import com.utree.eightysix.app.friends.FriendListActivity;
+import com.utree.eightysix.app.friends.SendRequestActivity;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
 import com.utree.eightysix.response.ProfileResponse;
 import com.utree.eightysix.rest.OnResponse2;
@@ -99,6 +100,9 @@ public class ProfileFragment extends HolderFragment {
 
   @InjectView(R.id.aiv_level_icon)
   public AsyncImageView mAivLevelIcon;
+
+  @InjectView(R.id.tv_action)
+  public TextView mTvAction;
 
   private CameraUtil mCameraUtil;
   private boolean mIsVisitor;
@@ -192,6 +196,7 @@ public class ProfileFragment extends HolderFragment {
       mTvMyFriends.setVisibility(View.GONE);
       mTvMyPosts.setText("他的帖子");
       mTvTitleSignature.setText("他的签名");
+      mTvAction.setVisibility(View.VISIBLE);
     }
 
     requestProfile(mIsVisitor ? mViewId : null);
@@ -206,7 +211,7 @@ public class ProfileFragment extends HolderFragment {
       }
 
       @Override
-      public void onResponse(ProfileResponse response) {
+      public void onResponse(final ProfileResponse response) {
         getBaseActivity().hideRefreshIndicator();
         if (RESTRequester.responseOk(response)) {
 
@@ -247,6 +252,18 @@ public class ProfileFragment extends HolderFragment {
             } else {
               mTvMyPosts.setText("Ta的帖子");
               mTvTitleSignature.setText("Ta的签名");
+            }
+
+            if (response.object.isFriend == 1) {
+              mTvAction.setText("发起聊天");
+            } else {
+              mTvAction.setText("添加朋友");
+              mTvAction.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                  SendRequestActivity.start(v.getContext(), mViewId);
+                }
+              });
             }
           }
 

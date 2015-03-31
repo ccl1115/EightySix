@@ -342,6 +342,14 @@
     </request>
 
     <request>
+        <id>user_friend_contacts</id>
+        <name>手机联系人列表</name>
+        <path>/user/friend/contact</path>
+        <sign/>
+        <token/>
+    </request>
+
+    <request>
         <id>user_setup</id>
         <name>用户开关</name>
         <path>/user/setup</path>

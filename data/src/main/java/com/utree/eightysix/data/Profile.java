@@ -10,9 +10,6 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Profile {
 
-  @SerializedName("id")
-  public String id;
-
   @SerializedName("avatar")
   public String avatar;
 
@@ -60,4 +57,7 @@ public class Profile {
 
   @SerializedName("hometown")
   public String hometown;
+
+  @SerializedName("isFriend")
+  public int isFriend;
 }

@@ -411,5 +411,18 @@
                     />
         </LinearLayout>
     </FrameLayout>
+
+    <TextView
+            android:id="@+id/tv_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/apptheme_primary_light_color"
+            android:textColor="@color/apptheme_primary_text_light"
+            android:padding="16dp"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:visibility="gone"
+            />
 </FrameLayout>
 
