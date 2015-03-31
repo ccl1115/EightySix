@@ -13,6 +13,9 @@ public class Friend {
   @SerializedName("userName")
   public String userName;
 
+  @SerializedName("name")
+  public String name;
+
   @SerializedName("avatar")
   public String avatar;
 
@@ -39,5 +42,11 @@ public class Friend {
 
   @SerializedName("relation")
   public String relation;
+
+  @SerializedName("type")
+  public String type;
+
+  @SerializedName("source")
+  public String source;
 }
 

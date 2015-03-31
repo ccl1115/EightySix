@@ -24,6 +24,7 @@ import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.app.friends.FriendContactListActivity;
 import com.utree.eightysix.app.friends.UserSearchActivity;
 import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.contact.ContactsSyncEvent;
@@ -122,7 +123,7 @@ public class AddFriendActivity extends BaseActivity {
     }
 
     @OnClick(R.id.ll_invite)
-    public void onLlQzoneClicked() {
+    public void onLlInviteClicked() {
       Circle currentCircle = Account.inst().getCurrentCircle();
       if (currentCircle != null) {
         U.getShareManager().shareAppDialog(AddFriendActivity.this, currentCircle).show();
@@ -198,6 +199,7 @@ public class AddFriendActivity extends BaseActivity {
     } else {
       showToast("更新通讯录失败");
     }
+    startActivity(new Intent(this, FriendContactListActivity.class));
     hideProgressBar();
   }
 

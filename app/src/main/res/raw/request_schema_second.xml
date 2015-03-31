@@ -345,6 +345,7 @@
         <id>user_friend_contacts</id>
         <name>手机联系人列表</name>
         <path>/user/friend/contact</path>
+        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
     </request>
