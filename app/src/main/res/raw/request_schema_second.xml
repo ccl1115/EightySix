@@ -351,6 +351,15 @@
     </request>
 
     <request>
+        <id>user_friend_recommend</id>
+        <name>好友推荐</name>
+        <path>/user/friend/recommend</path>
+        <host>http://192.168.0.118:8000</host>
+        <sign/>
+        <token/>
+    </request>
+
+    <request>
         <id>user_setup</id>
         <name>用户开关</name>
         <path>/user/setup</path>

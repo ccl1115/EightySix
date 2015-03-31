@@ -7,8 +7,6 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -32,7 +30,9 @@ import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.qrcode.QRCodeScanEvent;
 import com.utree.eightysix.qrcode.QRCodeScanFragment;
+import com.utree.eightysix.response.FriendListResponse;
 import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.ThemedDialog;
@@ -159,27 +159,19 @@ public class AddFriendActivity extends BaseActivity {
 
     mAlvRecommended.addHeaderView(view);
 
-    mAlvRecommended.setAdapter(new BaseAdapter() {
+    U.request("user_friend_recommend", new OnResponse2<FriendListResponse>() {
       @Override
-      public int getCount() {
-        return 0;
+      public void onResponseError(Throwable e) {
+
       }
 
       @Override
-      public Object getItem(int position) {
-        return null;
+      public void onResponse(FriendListResponse response) {
+        if (RESTRequester.responseOk(response)) {
+          mAlvRecommended.setAdapter(new FriendRecommendAdapter(response.object));
+        }
       }
-
-      @Override
-      public long getItemId(int position) {
-        return 0;
-      }
-
-      @Override
-      public View getView(int position, View convertView, ViewGroup parent) {
-        return null;
-      }
-    });
+    }, FriendListResponse.class);
   }
 
   @Override

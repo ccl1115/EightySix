@@ -2,7 +2,7 @@
  * Copyright (c) 2015. All rights reserved by utree.cn
  */
 
-package com.utree.eightysix.app.friends;
+package com.utree.eightysix.app.account;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +13,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.utree.eightysix.R;
+import com.utree.eightysix.app.friends.SendRequestActivity;
 import com.utree.eightysix.data.Friend;
 import com.utree.eightysix.widget.RoundedButton;
 
@@ -20,11 +21,11 @@ import java.util.List;
 
 /**
  */
-public class FriendContactListAdapter extends BaseAdapter {
+public class FriendRecommendAdapter extends BaseAdapter {
 
   private List<Friend> mFriends;
 
-  public FriendContactListAdapter(List<Friend> friends) {
+  public FriendRecommendAdapter(List<Friend> friends) {
     mFriends = friends;
   }
 
@@ -83,7 +84,7 @@ public class FriendContactListAdapter extends BaseAdapter {
       mFriend = friend;
 
       mTvName.setText(mFriend.name);
-      mTvSource.setText(mFriend.workinFactory);
+      mTvSource.setText(mFriend.workinFactory + " " + mFriend.source);
 
       if ("added".equals(mFriend.type)) {
         mTvResult.setText("请求已发送");
