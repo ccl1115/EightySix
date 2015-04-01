@@ -3,29 +3,17 @@ package com.utree.eightysix.app.msg;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import butterknife.InjectView;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
-import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
-import com.utree.eightysix.app.feed.event.PostDeleteEvent;
-import com.utree.eightysix.data.Paginate;
-import com.utree.eightysix.data.Post;
-import com.utree.eightysix.request.MsgsRequest;
-import com.utree.eightysix.response.MsgsResponse;
-import com.utree.eightysix.rest.OnResponse2;
-import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.view.SwipeRefreshLayout;
-import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.LoadMoreCallback;
-import com.utree.eightysix.widget.RandomSceneTextView;
+import com.utree.eightysix.widget.TitleTab;
 
 /**
  * @author simon
@@ -34,24 +22,25 @@ import com.utree.eightysix.widget.RandomSceneTextView;
 @TopTitle (R.string.messages)
 public class MsgActivity extends BaseActivity {
 
-  private static final int MSG_ANIMATE = 0x1;
+  @InjectView(R.id.tt_tab)
+  public TitleTab mTtTab;
 
-  @InjectView (R.id.refresh_view)
-  public SwipeRefreshLayout mRvMsg;
+  @InjectView(R.id.vp_tab)
+  public ViewPager mVpTab;
 
-  @InjectView (R.id.tv_no_new_msg)
-  public TextView mTvNoNewMsg;
+  private BaseMsgFragment mMyPostMsgFragment = new BaseMsgFragment() {
+    @Override
+    protected int getCreateType() {
+      return 1;
+    }
+  };
 
-  @InjectView (R.id.tv_empty_text)
-  public RandomSceneTextView mRstvEmpty;
-
-  @InjectView (R.id.alv_refresh)
-  public AdvancedListView mAlvMsg;
-
-  private MsgAdapter mMsgAdapter;
-  private Paginate.Page mPageInfo;
-
-  private boolean mRefreshed = true;
+  private BaseMsgFragment mOtherMsgFragment = new BaseMsgFragment() {
+    @Override
+    protected int getCreateType() {
+      return 0;
+    }
+  };
 
   public static void start(Context context, boolean refresh) {
     Intent intent = new Intent(context, MsgActivity.class);
@@ -71,73 +60,63 @@ public class MsgActivity extends BaseActivity {
 
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
-    mRvMsg.setColorSchemeResources(R.color.apptheme_primary_light_color,
-        R.color.apptheme_primary_light_color_pressed,
-        R.color.apptheme_primary_light_color,
-        R.color.apptheme_primary_light_color_pressed);
-
-    if (mRefreshed) {
-      requestMsgs(1);
-    } else {
-      cacheOutMsg(1);
-    }
-
-    mAlvMsg.setLoadMoreCallback(new LoadMoreCallback() {
+    mVpTab.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
       @Override
-      public View getLoadMoreView(ViewGroup parent) {
-        return LayoutInflater.from(parent.getContext()).inflate(R.layout.footer_load_more, parent, false);
-      }
-
-      @Override
-      public boolean hasMore() {
-        return mPageInfo != null && (mPageInfo.currPage < mPageInfo.countPage);
-      }
-
-      @Override
-      public boolean onLoadMoreStart() {
-        if (mRefreshed) {
-          requestMsgs(mPageInfo.currPage + 1);
-        } else {
-          cacheOutMsg(mPageInfo.currPage + 1);
+      public Fragment getItem(int position) {
+        if (position == 0) {
+          return mMyPostMsgFragment;
+        } else if (position == 1) {
+          return mOtherMsgFragment;
         }
-        return true;
+        return null;
+      }
+
+      @Override
+      public int getCount() {
+        return 2;
+      }
+
+      @Override
+      public CharSequence getPageTitle(int position) {
+        if (position == 0) {
+          return "我发表的";
+        } else if (position == 1) {
+          return "我关注的";
+        }
+        return null;
       }
     });
 
-    mRvMsg.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+    mTtTab.setViewPager(mVpTab);
+
+
+    mTtTab.setOnPageChangedListener(new ViewPager.OnPageChangeListener() {
       @Override
-      public void onRefresh() {
-        showRefreshIndicator(true);
-        mRefreshed = true;
-        requestMsgs(1);
+      public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
       }
 
       @Override
-      public void onDrag() {
-        showRefreshIndicator(false);
+      public void onPageSelected(int position) {
+        if (position == 0) {
+          mMyPostMsgFragment.setActive(true);
+        } else if (position == 1) {
+          mOtherMsgFragment.setActive(true);
+        }
       }
 
       @Override
-      public void onCancel() {
-        hideRefreshIndicator();
+      public void onPageScrollStateChanged(int state) {
+
       }
     });
 
-    M.getRegisterHelper().register(mAlvMsg);
-
-    mRstvEmpty.setText(R.string.not_found_msg);
-    mRstvEmpty.setSubText(R.string.not_found_msg_tip);
-    mRstvEmpty.setDrawable(R.drawable.scene_3);
-
-    // clear account msg new count
-    Account.inst().setNewCommentCount(0);
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-
-    M.getRegisterHelper().unregister(mAlvMsg);
+    getHandler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        mMyPostMsgFragment.setActive(true);
+      }
+    }, 500);
   }
 
   @Override
@@ -151,130 +130,4 @@ public class MsgActivity extends BaseActivity {
     finish();
   }
 
-  @Subscribe
-  public void onPostDeleteEvent(PostDeleteEvent event) {
-    if (mMsgAdapter != null) {
-      mMsgAdapter.remove(event.getPost());
-    }
-  }
-
-  @Subscribe
-  public void onPostEvent(Post post) {
-    if (mMsgAdapter.contains(post)) {
-      mMsgAdapter.notifyDataSetChanged();
-    }
-  }
-
-  private void requestMsgs(final int page) {
-    if (page == 1) {
-      mRvMsg.setRefreshing(true);
-      showRefreshIndicator(true);
-      ReadMsgStore.inst().clearRead();
-    }
-    request(new MsgsRequest(page), new OnResponse2<MsgsResponse>() {
-      @Override
-      public void onResponse(MsgsResponse response) {
-        if (RESTRequester.responseOk(response)) {
-          if (page == 1) {
-            mMsgAdapter = new MsgAdapter<CommentMsgItemView>(response.object.posts.lists) {
-              @Override
-              protected CommentMsgItemView newView(Context context) {
-                return new CommentMsgItemView(context);
-              }
-            };
-            mAlvMsg.setAdapter(mMsgAdapter);
-
-            mTvNoNewMsg.setVisibility(View.VISIBLE);
-
-            if (response.object.posts.lists.size() == 0) {
-              mRstvEmpty.setVisibility(View.VISIBLE);
-              mTvNoNewMsg.setVisibility(View.GONE);
-            } else {
-              mRstvEmpty.setVisibility(View.GONE);
-            }
-
-            for (Post post : response.object.posts.lists) {
-              if (post.read == 0) {
-                mTvNoNewMsg.setVisibility(View.GONE);
-                break;
-              }
-            }
-          } else {
-            mMsgAdapter.add(response.object.posts.lists);
-          }
-          mPageInfo = response.object.posts.page;
-        } else {
-          cacheOutMsg(page);
-        }
-        hideProgressBar();
-        hideRefreshIndicator();
-        mAlvMsg.stopLoadMore();
-        mRvMsg.setRefreshing(false);
-      }
-
-      @Override
-      public void onResponseError(Throwable e) {
-        mRstvEmpty.setVisibility(View.VISIBLE);
-        hideProgressBar();
-        hideRefreshIndicator();
-        mAlvMsg.stopLoadMore();
-        mRvMsg.setRefreshing(false);
-      }
-    }, MsgsResponse.class);
-  }
-
-  private void cacheOutMsg(final int page) {
-    cacheOut(new MsgsRequest(page), new OnResponse2<MsgsResponse>() {
-      @Override
-      public void onResponse(MsgsResponse response) {
-        if (RESTRequester.responseOk(response)) {
-          if (page == 1) {
-            mMsgAdapter = new MsgAdapter<CommentMsgItemView>(response.object.posts.lists) {
-              @Override
-              protected CommentMsgItemView newView(Context context) {
-                return new CommentMsgItemView(context);
-              }
-            };
-            mAlvMsg.setAdapter(mMsgAdapter);
-
-            mTvNoNewMsg.setVisibility(View.VISIBLE);
-
-            if (response.object.posts.lists.size() == 0) {
-              mRstvEmpty.setVisibility(View.VISIBLE);
-              mTvNoNewMsg.setVisibility(View.GONE);
-            } else {
-              mRstvEmpty.setVisibility(View.GONE);
-            }
-
-            for (Post post : response.object.posts.lists) {
-              if (post.read == 0) {
-                mTvNoNewMsg.setVisibility(View.GONE);
-                break;
-              }
-            }
-          } else {
-            mMsgAdapter.add(response.object.posts.lists);
-          }
-          mPageInfo = response.object.posts.page;
-          hideProgressBar();
-          mAlvMsg.stopLoadMore();
-          mRvMsg.setRefreshing(false);
-        } else {
-          if (mMsgAdapter == null || mMsgAdapter.getCount() == 0) {
-            mRstvEmpty.setVisibility(View.VISIBLE);
-            mTvNoNewMsg.setVisibility(View.GONE);
-          }
-        }
-      }
-
-      @Override
-      public void onResponseError(Throwable e) {
-        mRstvEmpty.setVisibility(View.VISIBLE);
-        mTvNoNewMsg.setVisibility(View.GONE);
-        hideProgressBar();
-        mAlvMsg.stopLoadMore();
-        mRvMsg.setRefreshing(false);
-      }
-    }, MsgsResponse.class);
-  }
 }

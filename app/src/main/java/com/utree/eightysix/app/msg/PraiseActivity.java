@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import butterknife.InjectView;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
@@ -36,9 +35,6 @@ public class PraiseActivity extends BaseActivity {
 
   @InjectView (R.id.refresh_view)
   public SwipeRefreshLayout mRvMsg;
-
-  @InjectView (R.id.tv_no_new_msg)
-  public TextView mTvNoNewMsg;
 
   @InjectView (R.id.alv_refresh)
   public AdvancedListView mAlvMsg;
@@ -118,8 +114,6 @@ public class PraiseActivity extends BaseActivity {
     mRstvEmpty.setSubText(R.string.not_found_praise_tip);
     mRstvEmpty.setDrawable(R.drawable.scene_5);
 
-    mTvNoNewMsg.setText(R.string.no_new_praise);
-
     // clear account new praise
     Account.inst().setHasNewPraise(false);
   }
@@ -177,18 +171,15 @@ public class PraiseActivity extends BaseActivity {
             mMsgAdapter.add(response.object.posts.lists);
           }
 
-          mTvNoNewMsg.setVisibility(View.VISIBLE);
 
           if (response.object.posts.lists.size() == 0) {
             mRstvEmpty.setVisibility(View.VISIBLE);
-            mTvNoNewMsg.setVisibility(View.GONE);
           } else {
             mRstvEmpty.setVisibility(View.GONE);
           }
 
           for (Post post : response.object.posts.lists) {
             if (post.read == 1) {
-              mTvNoNewMsg.setVisibility(View.GONE);
               break;
             }
           }
@@ -197,7 +188,6 @@ public class PraiseActivity extends BaseActivity {
         } else {
           if (mMsgAdapter == null || mMsgAdapter.getCount() == 0) {
             mRstvEmpty.setVisibility(View.VISIBLE);
-            mTvNoNewMsg.setVisibility(View.GONE);
           }
         }
         hideProgressBar();
@@ -213,7 +203,6 @@ public class PraiseActivity extends BaseActivity {
         mAlvMsg.stopLoadMore();
         mRvMsg.setRefreshing(false);
         mRstvEmpty.setVisibility(View.VISIBLE);
-        mTvNoNewMsg.setVisibility(View.GONE);
       }
 
     }, MsgsResponse.class);
@@ -240,18 +229,15 @@ public class PraiseActivity extends BaseActivity {
             setTopSubTitle(getString(R.string.praise_count_rank,
                 response.object.rank, response.object.topPraiseCount));
 
-            mTvNoNewMsg.setVisibility(View.VISIBLE);
 
             if (response.object.posts.lists.size() == 0) {
               mRstvEmpty.setVisibility(View.VISIBLE);
-              mTvNoNewMsg.setVisibility(View.GONE);
             } else {
               mRstvEmpty.setVisibility(View.GONE);
             }
 
             for (Post post : response.object.posts.lists) {
               if (post.read == 1) {
-                mTvNoNewMsg.setVisibility(View.GONE);
                 break;
               }
             }
@@ -274,7 +260,6 @@ public class PraiseActivity extends BaseActivity {
         mAlvMsg.stopLoadMore();
         mRvMsg.setRefreshing(false);
         mRstvEmpty.setVisibility(View.VISIBLE);
-        mTvNoNewMsg.setVisibility(View.GONE);
       }
 
     }, MsgsResponse.class);
