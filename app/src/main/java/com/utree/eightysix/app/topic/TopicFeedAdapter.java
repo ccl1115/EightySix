@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.topic;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.utree.eightysix.data.Post;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.data.Topic;
 import com.utree.eightysix.utils.ColorUtil;
+import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.RandomSceneTextView;
 
 import java.util.ArrayList;
@@ -190,24 +192,7 @@ public class TopicFeedAdapter extends BaseAdapter {
 
     final Topic topic = (Topic) getItem(position);
 
-    if (topic != null) {
-      mTopicViewHolder.mTvFeedCount.setText(topic.postCount + "条内容");
-      mTopicViewHolder.mTvText.setText(topic.content);
-      mTopicViewHolder.mLlTop.setBackgroundColor(ColorUtil.strToColor(topic.bgColor));
-
-      List<Tag> tags = topic.tags;
-      for (int i = 0; i < tags.size(); i++) {
-        Tag g = tags.get(i);
-        switch (i) {
-          case 0:
-            mTopicViewHolder.mTvTag1.setText("#" + g.content);
-            break;
-          case 1:
-            mTopicViewHolder.mTvTag2.setText("#" + g.content);
-            break;
-        }
-      }
-    }
+    mTopicViewHolder.setData(topic);
 
     return convertView;
   }
@@ -277,6 +262,9 @@ public class TopicFeedAdapter extends BaseAdapter {
     @InjectView (R.id.tv_tab_left)
     public TextView mTvTabLeft;
 
+    @InjectView(R.id.tv_title)
+    public TextView mTvTitle;
+
     @InjectView (R.id.v_tab_left)
     public View mVTabLeft;
 
@@ -289,8 +277,51 @@ public class TopicFeedAdapter extends BaseAdapter {
     @InjectView (R.id.ll_top)
     public LinearLayout mLlTop;
 
+    @InjectView(R.id.aiv_bg)
+    public AsyncImageView mAivBg;
+
+    private Topic mTopic;
+
     TopicViewHolder(View view) {
       ButterKnife.inject(this, view);
+    }
+
+    public void setData(Topic topic) {
+      mTopic = topic;
+
+
+      if (topic != null) {
+        mTopicViewHolder.mTvFeedCount.setText(topic.postCount + "条内容");
+        mTopicViewHolder.mTvText.setText(topic.content);
+        mTopicViewHolder.mTvTitle.setText(topic.title);
+
+        if (TextUtils.isEmpty(topic.bgUrl)) {
+          mTopicViewHolder.mAivBg.setUrl(topic.bgUrl);
+          mTopicViewHolder.mLlTop.setBackgroundColor(0);
+        } else {
+          mTopicViewHolder.mAivBg.setUrl(null);
+          mTopicViewHolder.mLlTop.setBackgroundColor(ColorUtil.strToColor(topic.bgColor));
+        }
+
+        List<Tag> tags = topic.tags;
+        for (int i = 0; i < tags.size(); i++) {
+          Tag g = tags.get(i);
+          switch (i) {
+            case 0:
+              mTopicViewHolder.mTvTag1.setText("#" + g.content);
+              break;
+            case 1:
+              mTopicViewHolder.mTvTag2.setText("#" + g.content);
+              break;
+          }
+        }
+      }
+
+    }
+
+    @OnClick(R.id.rb_more)
+    public void onRbMoreClicked(View v) {
+      TopicDetailActivity.start(v.getContext(), mTopic);
     }
 
     @OnClick (R.id.tv_tab_left)

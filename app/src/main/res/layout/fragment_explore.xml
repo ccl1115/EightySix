@@ -16,6 +16,19 @@
 
         <include
                 layout="@layout/item_head"
+                android:id="@+id/fl_topic"
+                />
+
+        <android.support.v4.view.ViewPager
+                android:id="@+id/vp_topics"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_height="105dp"
+                />
+
+        <include
+                layout="@layout/item_head"
                 android:id="@+id/fl_daily_picks"
                 />
 

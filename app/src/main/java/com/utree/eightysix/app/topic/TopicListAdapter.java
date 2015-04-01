@@ -123,6 +123,7 @@ public class TopicListAdapter extends BaseAdapter {
 
     holder.mTvMore.setText(String.format("%d条内容", topic.postCount));
     holder.mTvText.setText(topic.content);
+    holder.mTvTitle.setText(topic.title);
     holder.mLlParent.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(4), ColorUtil.strToColor(topic.bgColor)));
 
     holder.mTvTag1.setText("");
@@ -146,19 +147,22 @@ public class TopicListAdapter extends BaseAdapter {
 
   public static class TopicViewHolder {
 
-    @InjectView (R.id.tv_tag_1)
+    @InjectView(R.id.tv_tag_1)
     public TextView mTvTag1;
 
-    @InjectView (R.id.tv_tag_2)
+    @InjectView(R.id.tv_tag_2)
     public TextView mTvTag2;
 
-    @InjectView (R.id.tv_text)
+    @InjectView(R.id.tv_text)
     public TextView mTvText;
 
-    @InjectView (R.id.tv_more)
+    @InjectView(R.id.tv_title)
+    public TextView mTvTitle;
+
+    @InjectView(R.id.tv_more)
     public TextView mTvMore;
 
-    @InjectView (R.id.ll_parent)
+    @InjectView(R.id.ll_parent)
     public LinearLayout mLlParent;
 
     public TopicViewHolder(View view) {

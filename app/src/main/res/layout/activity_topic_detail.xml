@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Copyright (c) 2015. All rights reserved by utree.cn
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:padding="24dp"
+        >
+
+    <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textSize="18sp"
+            android:textColor="#ff5a4029"
+            />
+
+    <View
+            android:layout_width="wrap_content"
+            android:layout_height="1px"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="#ffb8a98f"
+            />
+
+    <com.utree.eightysix.widget.RoundedButton
+            android:id="@+id/rb_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:textSize="16sp"
+            android:textColor="#ff33302c"
+            app:background="#fff2ddbb"
+            app:radius="14dp"
+            />
+</LinearLayout>

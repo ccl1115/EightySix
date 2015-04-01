@@ -3,7 +3,7 @@ package com.utree.eightysix.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
-import java.util.ArrayList;
+
 import java.util.List;
 
 /**
@@ -12,6 +12,9 @@ public class Topic implements Parcelable {
 
   @SerializedName("id")
   public int id;
+
+  @SerializedName("title")
+  public String title;
 
   @SerializedName("content")
   public String content;
@@ -39,6 +42,7 @@ public class Topic implements Parcelable {
   @Override
   public void writeToParcel(Parcel dest, int flags) {
     dest.writeInt(this.id);
+    dest.writeString(this.title);
     dest.writeString(this.content);
     dest.writeTypedList(tags);
     dest.writeInt(this.postCount);
@@ -47,8 +51,8 @@ public class Topic implements Parcelable {
   }
 
   private Topic(Parcel in) {
-    tags = new ArrayList<Tag>();
     this.id = in.readInt();
+    this.title = in.readString();
     this.content = in.readString();
     in.readTypedList(tags, Tag.CREATOR);
     this.postCount = in.readInt();

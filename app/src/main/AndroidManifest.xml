@@ -292,6 +292,9 @@
         <activity
                 android:name=".app.friends.FriendContactListActivity"
                 android:label="手机联系人"/>
+        <activity
+                android:name=".app.topic.TopicDetailActivity"
+                android:label="话题详情"/>
 
         <!-- 【必须】 信鸽service -->
         <service android:exported="true" android:name="com.tencent.android.tpush.service.XGPushService" android:persistent="true" android:process=":xg_service_v2" tools:ignore="ExportedService"/>
