@@ -9,6 +9,7 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.view.ViewGroup;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.utree.eightysix.R;
@@ -110,31 +111,35 @@ public class AsyncImageViewWithRoundCorner extends AsyncImageView {
 
   private void setBitmap(Bitmap bitmap) {
     int width, height;
-    if (bitmap.getWidth() < sImageMinWidth) {
-      width = sImageMinWidth;
-      height = Math.min(sImageMaxHeight,
-          (int) (((float) width / bitmap.getWidth()) * bitmap.getHeight()));
-    } else if (bitmap.getWidth() > sImageMaxWidth) {
-      width = sImageMaxWidth;
-      height = Math.max(sImageMinHeight,
-          (int) (((float) width / bitmap.getWidth()) * bitmap.getHeight()));
-    } else if (bitmap.getHeight() < sImageMinHeight) {
-      height = sImageMinHeight;
-      width = Math.max(sImageMaxWidth,
-          (int) (((float) height / bitmap.getHeight()) * bitmap.getWidth()));
-    } else if (bitmap.getHeight() > sImageMaxHeight) {
-      height = sImageMaxHeight;
-      width = Math.min(sImageMinWidth,
-          (int) (((float) height / bitmap.getHeight()) * bitmap.getWidth()));
-    } else {
-      width = bitmap.getWidth();
-      height = bitmap.getHeight();
+
+    if (getLayoutParams().width != ViewGroup.LayoutParams.MATCH_PARENT &&
+        getLayoutParams().height != ViewGroup.LayoutParams.MATCH_PARENT) {
+      if (bitmap.getWidth() < sImageMinWidth) {
+        width = sImageMinWidth;
+        height = Math.min(sImageMaxHeight,
+            (int) (((float) width / bitmap.getWidth()) * bitmap.getHeight()));
+      } else if (bitmap.getWidth() > sImageMaxWidth) {
+        width = sImageMaxWidth;
+        height = Math.max(sImageMinHeight,
+            (int) (((float) width / bitmap.getWidth()) * bitmap.getHeight()));
+      } else if (bitmap.getHeight() < sImageMinHeight) {
+        height = sImageMinHeight;
+        width = Math.max(sImageMaxWidth,
+            (int) (((float) height / bitmap.getHeight()) * bitmap.getWidth()));
+      } else if (bitmap.getHeight() > sImageMaxHeight) {
+        height = sImageMaxHeight;
+        width = Math.min(sImageMinWidth,
+            (int) (((float) height / bitmap.getHeight()) * bitmap.getWidth()));
+      } else {
+        width = bitmap.getWidth();
+        height = bitmap.getHeight();
+      }
+
+      getLayoutParams().width = mImageWidth != -1 ? mImageWidth : width;
+      getLayoutParams().height = mImageHeight != -1 ? mImageHeight : height;
+
+      setLayoutParams(getLayoutParams());
     }
-
-    getLayoutParams().width = mImageWidth != -1 ? mImageWidth : width;
-    getLayoutParams().height = mImageHeight != -1 ? mImageHeight : height;
-
-    setLayoutParams(getLayoutParams());
 
     setImageDrawable(new RoundRectDrawable(mRadius, bitmap));
   }

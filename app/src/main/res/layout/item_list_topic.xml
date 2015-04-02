@@ -8,6 +8,13 @@
              android:paddingRight="8dp"
              android:paddingBottom="8dp">
 
+    <com.utree.eightysix.widget.AsyncImageViewWithRoundCorner
+            android:id="@+id/aiv_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            />
+
     <LinearLayout
             android:id="@+id/ll_parent"
             android:layout_width="match_parent"

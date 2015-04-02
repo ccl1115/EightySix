@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.topic;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.utree.eightysix.data.Topic;
 import com.utree.eightysix.data.Topics;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.utils.ColorUtil;
+import com.utree.eightysix.widget.AsyncImageViewWithRoundCorner;
 
 import java.util.List;
 
@@ -124,7 +126,13 @@ public class TopicListAdapter extends BaseAdapter {
     holder.mTvMore.setText(String.format("%d条内容", topic.postCount));
     holder.mTvText.setText(topic.content);
     holder.mTvTitle.setText(topic.title);
-    holder.mLlParent.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(4), ColorUtil.strToColor(topic.bgColor)));
+    if (TextUtils.isEmpty(topic.bgUrl)) {
+      holder.mAivBg.setUrl(null);
+      holder.mLlParent.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(4), ColorUtil.strToColor(topic.bgColor)));
+    } else {
+      holder.mAivBg.setUrl(topic.bgUrl);
+      holder.mLlParent.setBackgroundDrawable(null);
+    }
 
     holder.mTvTag1.setText("");
     holder.mTvTag2.setText("");
@@ -164,6 +172,9 @@ public class TopicListAdapter extends BaseAdapter {
 
     @InjectView(R.id.ll_parent)
     public LinearLayout mLlParent;
+
+    @InjectView(R.id.aiv_bg)
+    public AsyncImageViewWithRoundCorner mAivBg;
 
     public TopicViewHolder(View view) {
       ButterKnife.inject(this, view);

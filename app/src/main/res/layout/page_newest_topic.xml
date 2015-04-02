@@ -18,6 +18,7 @@
             android:id="@+id/aiv_bg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scaleType="centerCrop"
             app:radius="8dp"
             />
 

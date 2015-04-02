@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/apptheme_primary_grey_color"
@@ -19,11 +20,29 @@
                 android:id="@+id/fl_topic"
                 />
 
-        <android.support.v4.view.ViewPager
-                android:id="@+id/vp_topics"
+        <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="105dp"
-                />
+                >
+
+            <android.support.v4.view.ViewPager
+                    android:id="@+id/vp_topics"
+                    android:layout_width="match_parent"
+                    android:layout_height="105dp"
+                    />
+
+            <com.utree.eightysix.widget.IndicatorView
+                    android:id="@+id/in_topics"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_gravity="center_horizontal|bottom"
+                    app:selector="@drawable/indicator_dot_selected"
+                    app:drawable="@drawable/indicator_dot"
+                    app:spacing="8dp"
+                    />
+
+        </FrameLayout>
 
         <include
                 layout="@layout/item_head"

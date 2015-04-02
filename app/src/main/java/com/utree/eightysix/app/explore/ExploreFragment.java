@@ -30,6 +30,7 @@ import com.utree.eightysix.app.dp.DailyPicksActivity;
 import com.utree.eightysix.app.feed.FeedsSearchActivity;
 import com.utree.eightysix.app.hometown.HometownTabFragment;
 import com.utree.eightysix.app.topic.TopicActivity;
+import com.utree.eightysix.app.topic.TopicListActivity;
 import com.utree.eightysix.app.web.BaseWebActivity;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.data.Topic;
@@ -39,6 +40,7 @@ import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.widget.AsyncImageViewWithRoundCorner;
+import com.utree.eightysix.widget.IndicatorView;
 import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.TagView;
 
@@ -54,6 +56,9 @@ public class ExploreFragment extends BaseFragment {
 
   @InjectView(R.id.fl_topic)
   public FrameLayout mFlTopicsHead;
+
+  @InjectView(R.id.in_topics)
+  public IndicatorView mInTopics;
 
   @InjectView(R.id.vp_topics)
   public ViewPager mVpTopics;
@@ -111,6 +116,12 @@ public class ExploreFragment extends BaseFragment {
     TextView viewById = ((TextView) mFlTopicsHead.findViewById(R.id.tv_right));
     viewById.setVisibility(View.VISIBLE);
     viewById.setText("更多");
+    viewById.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        TopicListActivity.start(v.getContext());
+      }
+    });
 
     requestTags();
     requestNewestTopics();
@@ -242,6 +253,25 @@ public class ExploreFragment extends BaseFragment {
       @Override
       public boolean isViewFromObject(View view, Object object) {
         return object.equals(view);
+      }
+    });
+
+    mInTopics.setCount(3);
+
+    mVpTopics.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+      @Override
+      public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        mInTopics.setPosition(position + positionOffset);
+      }
+
+      @Override
+      public void onPageSelected(int position) {
+
+      }
+
+      @Override
+      public void onPageScrollStateChanged(int state) {
+
       }
     });
   }
