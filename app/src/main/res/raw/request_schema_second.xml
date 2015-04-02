@@ -124,6 +124,7 @@
         <id>share_callback</id>
         <name>分享成功之后调用</name>
         <path>/commit/share/callback</path>
+        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
     </request>
@@ -371,6 +372,30 @@
         <token/>
         <params>
             <param>type</param>
+        </params>
+    </request>
+
+    <request>
+        <id>user_shield</id>
+        <name>屏蔽用户</name>
+        <path>/commit/user/shield/replace</path>
+        <host>http://192.168.0.118:8000</host>
+        <sign/>
+        <token/>
+        <params>
+            <param>viewId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>user_unshield</id>
+        <name>屏蔽用户</name>
+        <path>/commit/user/shield/delete</path>
+        <host>http://192.168.0.118:8000</host>
+        <sign/>
+        <token/>
+        <params>
+            <param>viewId</param>
         </params>
     </request>
 </api>

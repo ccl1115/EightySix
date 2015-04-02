@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -54,6 +55,7 @@ public class Topic implements Parcelable {
     this.id = in.readInt();
     this.title = in.readString();
     this.content = in.readString();
+    tags = new ArrayList<Tag>();
     in.readTypedList(tags, Tag.CREATOR);
     this.postCount = in.readInt();
     this.bgUrl = in.readString();

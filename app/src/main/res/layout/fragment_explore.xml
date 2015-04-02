@@ -10,7 +10,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="16dp"
+            android:paddingTop="8dp"
             android:paddingBottom="16dp"
             >
 
@@ -22,8 +22,6 @@
         <android.support.v4.view.ViewPager
                 android:id="@+id/vp_topics"
                 android:layout_width="match_parent"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_height="105dp"
                 />
 

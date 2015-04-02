@@ -15,12 +15,14 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.data.Topic;
 import com.utree.eightysix.widget.RoundedButton;
 
 /**
  */
 @Layout(R.layout.activity_topic_detail)
+@TopTitle(R.string.topic_desc)
 public class TopicDetailActivity extends BaseActivity {
 
 
@@ -45,6 +47,8 @@ public class TopicDetailActivity extends BaseActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
     Topic topic = getIntent().getParcelableExtra("topic");
 

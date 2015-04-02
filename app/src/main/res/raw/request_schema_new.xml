@@ -155,6 +155,18 @@
         <id>daily_picks_tags</id>
         <name>每日精选标签</name>
         <path>/feed/goodTags.do</path>
+        <sign/>
         <token/>
+    </request>
+
+    <request>
+        <id>newest_topics</id>
+        <name>最新话题</name>
+        <path>/topic/listNew.do</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>currPage</param>
+        </params>
     </request>
 </api>

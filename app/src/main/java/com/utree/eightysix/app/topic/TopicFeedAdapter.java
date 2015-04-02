@@ -296,11 +296,11 @@ public class TopicFeedAdapter extends BaseAdapter {
         mTopicViewHolder.mTvTitle.setText(topic.title);
 
         if (TextUtils.isEmpty(topic.bgUrl)) {
-          mTopicViewHolder.mAivBg.setUrl(topic.bgUrl);
-          mTopicViewHolder.mLlTop.setBackgroundColor(0);
-        } else {
           mTopicViewHolder.mAivBg.setUrl(null);
           mTopicViewHolder.mLlTop.setBackgroundColor(ColorUtil.strToColor(topic.bgColor));
+        } else {
+          mTopicViewHolder.mAivBg.setUrl(topic.bgUrl);
+          mTopicViewHolder.mLlTop.setBackgroundColor(0);
         }
 
         List<Tag> tags = topic.tags;
