@@ -11,7 +11,7 @@
               android:background="@android:color/white"
         >
 
-    <EditText
+    <com.rockerhieu.emojicon.EmojiconEditText
             android:id="@+id/et_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
