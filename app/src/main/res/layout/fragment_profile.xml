@@ -14,349 +14,357 @@
         android:background="@color/apptheme_primary_grey_color"
         >
 
-    <ScrollView
+    <com.utree.eightysix.view.SwipeRefreshLayout
+            android:id="@+id/refresh_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             >
 
-        <LinearLayout
+        <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_height="match_parent"
                 >
 
-            <FrameLayout
+            <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="250dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     >
 
-                <com.utree.eightysix.widget.AsyncImageView
-                        android:id="@+id/aiv_bg"
+                <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="168dp"
-                        android:scaleType="centerCrop"
-                        />
-
-                <View
-                        android:layout_width="match_parent"
-                        android:layout_height="168dp"
-                        android:background="#33000000"
-                        />
-
-                <com.utree.eightysix.widget.RoundedButton
-                        android:id="@+id/rb_change_bg"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:text="更换个性背景"
-                        android:textSize="12sp"
-                        android:textColor="#88ffffff"
-                        android:padding="4dp"
-                        app:background="@color/apptheme_transparent_bg"
-                        />
-
-                <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:padding="16dp"
+                        android:layout_height="250dp"
                         >
 
-                    <FrameLayout
-                            android:id="@+id/fl_portrait"
+                    <com.utree.eightysix.widget.AsyncImageView
+                            android:id="@+id/aiv_bg"
+                            android:layout_width="match_parent"
+                            android:layout_height="168dp"
+                            android:scaleType="centerCrop"
+                            />
+
+                    <View
+                            android:layout_width="match_parent"
+                            android:layout_height="168dp"
+                            android:background="#33000000"
+                            />
+
+                    <com.utree.eightysix.widget.RoundedButton
+                            android:id="@+id/rb_change_bg"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            >
-
-                        <com.utree.eightysix.widget.RoundedButton
-                                android:layout_width="68dp"
-                                android:layout_height="68dp"
-                                android:layout_gravity="center"
-                                app:radius="10dp"
-                                app:background="#88ffffff"
-                                />
-
-                        <com.utree.eightysix.widget.AsyncImageViewWithRoundCorner
-                                android:id="@+id/aiv_portrait"
-                                android:layout_width="64dp"
-                                android:layout_height="64dp"
-                                android:layout_gravity="center"
-                                app:radius="10dp"
-                                app:width="64dp"
-                                app:height="64dp"
-                                />
-
-                    </FrameLayout>
+                            android:layout_margin="16dp"
+                            android:text="更换个性背景"
+                            android:textSize="12sp"
+                            android:textColor="#88ffffff"
+                            android:padding="4dp"
+                            app:background="@color/apptheme_transparent_bg"
+                            />
 
                     <RelativeLayout
-                            android:layout_width="105dp"
-                            android:layout_height="25dp"
-                            android:layout_alignParentRight="true"
-                            android:layout_alignParentEnd="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:padding="16dp"
                             >
 
-                        <com.utree.eightysix.widget.RoundedButton
-                                android:layout_width="105dp"
-                                android:layout_height="25dp"
-                                app:radius="4dp"
-                                app:background="@color/apptheme_transparent_bg"
-                                />
-
-                        <com.utree.eightysix.widget.AsyncImageView
-                                android:id="@+id/aiv_level_icon"
-                                android:layout_width="18dp"
-                                android:layout_height="18dp"
-                                android:layout_marginLeft="5dp"
-                                android:layout_marginStart="5dp"
-                                android:layout_marginRight="4dp"
-                                android:layout_marginEnd="4dp"
-                                android:layout_centerVertical="true"
-                                />
-
-                        <LinearLayout
+                        <FrameLayout
+                                android:id="@+id/fl_portrait"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_toRightOf="@+id/aiv_level_icon"
-                                android:layout_toEndOf="@+id/aiv_level_icon"
-                                android:layout_centerVertical="true"
-                                android:orientation="vertical"
-                                android:gravity="center_horizontal"
                                 >
 
-                            <TextView
-                                    android:id="@+id/tv_exp"
+                            <com.utree.eightysix.widget.RoundedButton
+                                    android:layout_width="68dp"
+                                    android:layout_height="68dp"
+                                    android:layout_gravity="center"
+                                    app:radius="10dp"
+                                    app:background="#88ffffff"
+                                    />
+
+                            <com.utree.eightysix.widget.AsyncImageViewWithRoundCorner
+                                    android:id="@+id/aiv_portrait"
+                                    android:layout_width="64dp"
+                                    android:layout_height="64dp"
+                                    android:layout_gravity="center"
+                                    app:radius="10dp"
+                                    app:width="64dp"
+                                    app:height="64dp"
+                                    />
+
+                        </FrameLayout>
+
+                        <RelativeLayout
+                                android:layout_width="105dp"
+                                android:layout_height="25dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_alignParentEnd="true"
+                                >
+
+                            <com.utree.eightysix.widget.RoundedButton
+                                    android:layout_width="105dp"
+                                    android:layout_height="25dp"
+                                    app:radius="4dp"
+                                    app:background="@color/apptheme_transparent_bg"
+                                    />
+
+                            <com.utree.eightysix.widget.AsyncImageView
+                                    android:id="@+id/aiv_level_icon"
+                                    android:layout_width="18dp"
+                                    android:layout_height="18dp"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_marginStart="5dp"
+                                    android:layout_marginRight="4dp"
+                                    android:layout_marginEnd="4dp"
+                                    android:layout_centerVertical="true"
+                                    />
+
+                            <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textSize="9sp"
-                                    android:textColor="@android:color/white"
-                                    tools:ignore="SmallSp"
-                                    />
+                                    android:layout_toRightOf="@+id/aiv_level_icon"
+                                    android:layout_toEndOf="@+id/aiv_level_icon"
+                                    android:layout_centerVertical="true"
+                                    android:orientation="vertical"
+                                    android:gravity="center_horizontal"
+                                    >
 
-                            <ProgressBar
-                                    style="@android:style/Widget.ProgressBar.Horizontal"
-                                    android:id="@+id/pb_exp"
-                                    android:layout_width="70dp"
-                                    android:layout_height="7dp"
-                                    />
+                                <TextView
+                                        android:id="@+id/tv_exp"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="9sp"
+                                        android:textColor="@android:color/white"
+                                        tools:ignore="SmallSp"
+                                        />
+
+                                <ProgressBar
+                                        style="@android:style/Widget.ProgressBar.Horizontal"
+                                        android:id="@+id/pb_exp"
+                                        android:layout_width="70dp"
+                                        android:layout_height="7dp"
+                                        />
 
 
-                        </LinearLayout>
+                            </LinearLayout>
+                        </RelativeLayout>
+
+                        <TextView
+                                android:id="@+id/tv_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@+id/fl_portrait"
+                                android:layout_toEndOf="@+id/fl_portrait"
+                                android:paddingLeft="10dp"
+                                android:paddingBottom="2dp"
+                                android:paddingRight="4dp"
+                                android:textSize="16sp"
+                                android:textColor="@android:color/white"
+                                />
+
+                        <TextView
+                                android:id="@+id/tv_circle_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:layout_toRightOf="@+id/fl_portrait"
+                                android:layout_toEndOf="@+id/fl_portrait"
+                                android:layout_below="@+id/tv_name"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:textSize="14sp"
+                                android:textColor="@color/apptheme_primary_grey_color_200"
+                                />
+
+                        <TextView
+                                android:id="@+id/tv_gender"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@+id/fl_portrait"
+                                android:layout_toEndOf="@+id/fl_portrait"
+                                android:layout_below="@+id/tv_circle_name"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="4dp"
+                                android:textSize="14sp"
+                                android:textColor="@color/apptheme_primary_grey_color_200"
+                                />
+
+                        <TextView
+                                android:id="@+id/tv_age"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@+id/tv_gender"
+                                android:layout_toEndOf="@+id/tv_gender"
+                                android:layout_below="@+id/tv_circle_name"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="10dp"
+                                android:textSize="14sp"
+                                android:textColor="@color/apptheme_primary_grey_color_200"
+                                />
+
+                        <TextView
+                                android:id="@+id/tv_birthday"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@+id/tv_age"
+                                android:layout_toEndOf="@+id/tv_age"
+                                android:layout_below="@+id/tv_circle_name"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="4dp"
+                                android:textSize="14sp"
+                                android:textColor="@color/apptheme_primary_grey_color_200"
+                                />
+
+                        <TextView
+                                android:id="@+id/tv_constellation"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@+id/tv_birthday"
+                                android:layout_toEndOf="@+id/tv_birthday"
+                                android:layout_below="@+id/tv_circle_name"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="4dp"
+                                android:textSize="14sp"
+                                android:textColor="@color/apptheme_primary_grey_color_200"
+                                />
+
+                        <TextView
+                                android:id="@+id/tv_hometown"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@+id/fl_portrait"
+                                android:layout_toEndOf="@+id/fl_portrait"
+                                android:layout_below="@+id/tv_constellation"
+                                android:paddingTop="2dp"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:textSize="14sp"
+                                android:textColor="@color/apptheme_primary_grey_color_200"
+                                />
                     </RelativeLayout>
 
+                </FrameLayout>
+
+                <LinearLayout
+                        android:id="@+id/ll_signature"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:background="@drawable/apptheme_primary_list_selector"
+                        >
+
                     <TextView
-                            android:id="@+id/tv_name"
+                            android:id="@+id/tv_title_signature"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_toRightOf="@+id/fl_portrait"
-                            android:layout_toEndOf="@+id/fl_portrait"
-                            android:paddingLeft="10dp"
-                            android:paddingBottom="2dp"
-                            android:paddingRight="4dp"
-                            android:textSize="16sp"
-                            android:textColor="@android:color/white"
+                            android:drawableLeft="@drawable/ic_item_signature"
+                            android:drawableStart="@drawable/ic_item_signature"
+                            android:drawablePadding="15dp"
+                            android:gravity="center_vertical"
+                            android:text="我的签名"
                             />
 
                     <TextView
-                            android:id="@+id/tv_circle_name"
+                            android:id="@+id/tv_signature"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:layout_toRightOf="@+id/fl_portrait"
-                            android:layout_toEndOf="@+id/fl_portrait"
-                            android:layout_below="@+id/tv_name"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="2dp"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="10dp"
+                            android:layout_marginLeft="45dp"
+                            android:layout_marginStart="45dp"
+                            android:layout_marginTop="5dp"
                             android:textSize="14sp"
                             android:textColor="@color/apptheme_primary_grey_color_200"
                             />
-
-                    <TextView
-                            android:id="@+id/tv_gender"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_toRightOf="@+id/fl_portrait"
-                            android:layout_toEndOf="@+id/fl_portrait"
-                            android:layout_below="@+id/tv_circle_name"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="2dp"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="4dp"
-                            android:textSize="14sp"
-                            android:textColor="@color/apptheme_primary_grey_color_200"
-                            />
-
-                    <TextView
-                            android:id="@+id/tv_age"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_toRightOf="@+id/tv_gender"
-                            android:layout_toEndOf="@+id/tv_gender"
-                            android:layout_below="@+id/tv_circle_name"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="2dp"
-                            android:paddingLeft="4dp"
-                            android:paddingRight="10dp"
-                            android:textSize="14sp"
-                            android:textColor="@color/apptheme_primary_grey_color_200"
-                            />
-
-                    <TextView
-                            android:id="@+id/tv_birthday"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_toRightOf="@+id/tv_age"
-                            android:layout_toEndOf="@+id/tv_age"
-                            android:layout_below="@+id/tv_circle_name"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="2dp"
-                            android:paddingLeft="4dp"
-                            android:paddingRight="4dp"
-                            android:textSize="14sp"
-                            android:textColor="@color/apptheme_primary_grey_color_200"
-                            />
-
-                    <TextView
-                            android:id="@+id/tv_constellation"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_toRightOf="@+id/tv_birthday"
-                            android:layout_toEndOf="@+id/tv_birthday"
-                            android:layout_below="@+id/tv_circle_name"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="2dp"
-                            android:paddingLeft="4dp"
-                            android:paddingRight="4dp"
-                            android:textSize="14sp"
-                            android:textColor="@color/apptheme_primary_grey_color_200"
-                            />
-
-                    <TextView
-                            android:id="@+id/tv_hometown"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_toRightOf="@+id/fl_portrait"
-                            android:layout_toEndOf="@+id/fl_portrait"
-                            android:layout_below="@+id/tv_constellation"
-                            android:paddingTop="2dp"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="10dp"
-                            android:textSize="14sp"
-                            android:textColor="@color/apptheme_primary_grey_color_200"
-                            />
-                </RelativeLayout>
-
-            </FrameLayout>
-
-            <LinearLayout
-                    android:id="@+id/ll_signature"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:orientation="vertical"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:background="@drawable/apptheme_primary_list_selector"
-                    >
+                </LinearLayout>
 
                 <TextView
-                        android:id="@+id/tv_title_signature"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tv_my_posts"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_item_signature"
-                        android:drawableStart="@drawable/ic_item_signature"
-                        android:drawablePadding="15dp"
+                        android:layout_marginTop="16dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:text="我的帖子"
+                        android:background="@drawable/apptheme_primary_list_selector"
                         android:gravity="center_vertical"
-                        android:text="我的签名"
+                        android:drawableLeft="@drawable/ic_item_my_posts"
+                        android:drawableStart="@drawable/ic_item_my_posts"
+                        android:drawablePadding="15dp"
                         />
 
                 <TextView
-                        android:id="@+id/tv_signature"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tv_my_circles"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="45dp"
-                        android:layout_marginStart="45dp"
-                        android:layout_marginTop="5dp"
-                        android:textSize="14sp"
-                        android:textColor="@color/apptheme_primary_grey_color_200"
+                        android:layout_marginTop="1px"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:text="我关注的圈子"
+                        android:background="@drawable/apptheme_primary_list_selector"
+                        android:gravity="center_vertical"
+                        android:drawableLeft="@drawable/ic_item_my_circles"
+                        android:drawableStart="@drawable/ic_item_my_circles"
+                        android:drawablePadding="15dp"
                         />
+
+                <TextView
+                        android:id="@+id/tv_my_friends"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:text="我的朋友"
+                        android:background="@drawable/apptheme_primary_list_selector"
+                        android:gravity="center_vertical"
+                        android:drawableLeft="@drawable/ic_item_my_friends"
+                        android:drawableStart="@drawable/ic_item_my_friends"
+                        android:drawablePadding="15dp"
+                        />
+
+                <TextView
+                        android:id="@+id/tv_settings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:text="设置"
+                        android:background="@drawable/apptheme_primary_list_selector"
+                        android:gravity="center_vertical"
+                        android:drawableLeft="@drawable/ic_item_settings"
+                        android:drawableStart="@drawable/ic_item_settings"
+                        android:drawablePadding="15dp"
+                        />
+
             </LinearLayout>
 
-            <TextView
-                    android:id="@+id/tv_my_posts"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:text="我的帖子"
-                    android:background="@drawable/apptheme_primary_list_selector"
-                    android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/ic_item_my_posts"
-                    android:drawableStart="@drawable/ic_item_my_posts"
-                    android:drawablePadding="15dp"
-                    />
+        </ScrollView>
 
-            <TextView
-                    android:id="@+id/tv_my_circles"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="1px"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:text="我关注的圈子"
-                    android:background="@drawable/apptheme_primary_list_selector"
-                    android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/ic_item_my_circles"
-                    android:drawableStart="@drawable/ic_item_my_circles"
-                    android:drawablePadding="15dp"
-                    />
-
-            <TextView
-                    android:id="@+id/tv_my_friends"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:text="我的朋友"
-                    android:background="@drawable/apptheme_primary_list_selector"
-                    android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/ic_item_my_friends"
-                    android:drawableStart="@drawable/ic_item_my_friends"
-                    android:drawablePadding="15dp"
-                    />
-
-            <TextView
-                    android:id="@+id/tv_settings"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:text="设置"
-                    android:background="@drawable/apptheme_primary_list_selector"
-                    android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/ic_item_settings"
-                    android:drawableStart="@drawable/ic_item_settings"
-                    android:drawablePadding="15dp"
-                    />
-
-        </LinearLayout>
-
-    </ScrollView>
+    </com.utree.eightysix.view.SwipeRefreshLayout>
 
     <FrameLayout
             android:id="@+id/fl_guide"

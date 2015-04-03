@@ -30,6 +30,7 @@ import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.utils.TimeUtil;
+import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.AsyncImageViewWithRoundCorner;
 import com.utree.eightysix.widget.RoundedButton;
@@ -104,6 +105,9 @@ public class ProfileFragment extends HolderFragment {
   @InjectView(R.id.tv_action)
   public TextView mTvAction;
 
+  @InjectView(R.id.refresh_view)
+  public SwipeRefreshLayout mRefreshLayout;
+
   private CameraUtil mCameraUtil;
   private boolean mIsVisitor;
   private int mViewId;
@@ -162,6 +166,26 @@ public class ProfileFragment extends HolderFragment {
   public void onViewCreated(View view, Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
 
+    mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+      @Override
+      public void onRefresh() {
+        requestProfile(mIsVisitor ? mViewId : null);
+      }
+
+      @Override
+      public void onDrag() {
+
+      }
+
+      @Override
+      public void onCancel() {
+
+      }
+    });
+
+    mRefreshLayout.setColorSchemeResources(R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed,
+        R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed);
+
     if (getArguments() != null) {
       mIsVisitor = getArguments().getBoolean("isVisitor", false);
       mViewId = getArguments().getInt("viewId");
@@ -208,11 +232,13 @@ public class ProfileFragment extends HolderFragment {
       @Override
       public void onResponseError(Throwable e) {
         getBaseActivity().hideRefreshIndicator();
+        mRefreshLayout.setRefreshing(false);
       }
 
       @Override
       public void onResponse(final ProfileResponse response) {
         getBaseActivity().hideRefreshIndicator();
+        mRefreshLayout.setRefreshing(false);
         if (RESTRequester.responseOk(response)) {
 
           if (TextUtils.isEmpty(response.object.userName)) {
@@ -352,6 +378,13 @@ public class ProfileFragment extends HolderFragment {
   @Subscribe
   public void onSignatureUpdateEvent(SignatureUpdatedEvent event) {
     mTvSignature.setText(event.getText());
+  }
+
+  @Subscribe
+  public void onProfileFilledEvent(ProfileFilledEvent event) {
+    if (!mIsVisitor) {
+      requestProfile(null);
+    }
   }
 
   private void updateTopTitle() {

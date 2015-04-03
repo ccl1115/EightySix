@@ -14,13 +14,16 @@ import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.CameraUtil;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.app.account.event.ProfileFilledEvent;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
@@ -74,6 +77,15 @@ public class ProfileFillActivity extends BaseActivity {
     mCameraUtil.showCameraDialog();
   }
 
+  @OnTextChanged(R.id.et_nickname)
+  public void onEtNicknameTextChanged(CharSequence cs) {
+    if (cs.length() == 0) {
+      mRbSubmit.setEnabled(false);
+    } else {
+      mRbSubmit.setEnabled(true);
+    }
+  }
+
   @OnClick(R.id.rb_submit)
   public void onRbSubmit() {
     mRbSubmit.setEnabled(false);
@@ -101,6 +113,7 @@ public class ProfileFillActivity extends BaseActivity {
               if (mFromRegister) {
                 BaseCirclesActivity.startSelect(ProfileFillActivity.this, false);
               } else {
+                U.getBus().post(new ProfileFilledEvent());
                 finish();
               }
             }
