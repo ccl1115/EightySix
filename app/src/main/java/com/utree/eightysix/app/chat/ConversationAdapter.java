@@ -225,7 +225,7 @@ public class ConversationAdapter extends BaseAdapter {
         break;
       }
       case ChatEvent.EVENT_CONVERSATIONS_RELOAD: {
-        mConversations = ChatUtils.ConversationUtil.getConversations();
+        mConversations = ConversationUtil.getConversations();
         notifyDataSetChanged();
         break;
       }

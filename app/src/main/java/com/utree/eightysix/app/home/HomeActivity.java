@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.view.*;
 import android.widget.FrameLayout;
@@ -29,8 +28,8 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.AccountActivity;
 import com.utree.eightysix.app.account.AddFriendActivity;
-import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.app.chat.ConversationActivity;
+import com.utree.eightysix.app.chat.ConversationUtil;
 import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
 import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
@@ -54,8 +53,6 @@ import com.utree.eightysix.data.Sync;
 import com.utree.eightysix.event.CurrentCircleResponseEvent;
 import com.utree.eightysix.event.HasNewPraiseEvent;
 import com.utree.eightysix.event.NewCommentCountEvent;
-import com.utree.eightysix.rest.OnResponse2;
-import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.ThemedDialog;
@@ -334,7 +331,7 @@ public class HomeActivity extends BaseActivity {
     (new AsyncTask<Void, Void, Long>() {
       @Override
       protected Long doInBackground(Void... voids) {
-        return ChatUtils.ConversationUtil.getUnreadConversationCount();
+        return ConversationUtil.getUnreadConversationCount();
       }
 
       @Override

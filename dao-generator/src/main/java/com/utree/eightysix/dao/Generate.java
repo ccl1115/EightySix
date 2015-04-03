@@ -15,10 +15,13 @@ import java.io.File;
 public class Generate {
 
   public Generate() {
-    Schema schema = new Schema(27, "com.utree.eightysix.dao");
+    Schema schema = new Schema(28, "com.utree.eightysix.dao");
 
     generateConversation(schema);
     generateMessage(schema);
+
+    generateFriendConversation(schema);
+    generateFriendMessage(schema);
 
     try {
       String path = "data/src/main/java";
@@ -77,6 +80,37 @@ public class Generate {
     message.addIntProperty("status");
     message.addBooleanProperty("read");
     message.addIntProperty("direction");
+  }
+
+  private void generateFriendConversation(Schema schema) {
+    Entity friendConversation = schema.addEntity("FriendConversation");
+    friendConversation.addIdProperty();
+    friendConversation.addStringProperty("userId").index();
+    friendConversation.addStringProperty("chatId").notNull().unique();
+    friendConversation.addIntProperty("viewId");
+    friendConversation.addStringProperty("targetName");
+    friendConversation.addStringProperty("targetAvatar");
+    friendConversation.addStringProperty("myName");
+    friendConversation.addStringProperty("myAvatar");
+    friendConversation.addStringProperty("source");
+    friendConversation.addStringProperty("lastMsg");
+    friendConversation.addLongProperty("timestamp").indexDesc(null, false);
+    friendConversation.addLongProperty("unreadCount");
+  }
+
+  private void generateFriendMessage(Schema schema) {
+    Entity friendMessage = schema.addEntity("FriendMessage");
+    friendMessage.addIdProperty();
+    friendMessage.addStringProperty("userId").index();
+    friendMessage.addStringProperty("chatId").notNull();
+    friendMessage.addStringProperty("msgId");
+    friendMessage.addLongProperty("timestamp").indexDesc(null, false);
+    friendMessage.addStringProperty("from");
+    friendMessage.addStringProperty("content");
+    friendMessage.addIntProperty("type");
+    friendMessage.addIntProperty("status");
+    friendMessage.addBooleanProperty("read");
+    friendMessage.addIntProperty("direction");
   }
 
   public static void main(String[] args) {

@@ -115,7 +115,7 @@ public class ConversationActivity extends BaseActivity {
 
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
-    List<Conversation> conversations = ChatUtils.ConversationUtil.getConversations(0, PAGE_SIZE);
+    List<Conversation> conversations = ConversationUtil.getConversations(0, PAGE_SIZE);
     mConversationAdapter = new ConversationAdapter(conversations);
     mAlvConversation.setAdapter(mConversationAdapter);
     requestOnline(conversations);
@@ -134,7 +134,7 @@ public class ConversationActivity extends BaseActivity {
 
       @Override
       public boolean hasMore() {
-        return mPage < ChatUtils.ConversationUtil.getPage(PAGE_SIZE);
+        return mPage < ConversationUtil.getPage(PAGE_SIZE);
       }
 
       @Override
@@ -142,7 +142,7 @@ public class ConversationActivity extends BaseActivity {
         getHandler().postDelayed(new Runnable() {
           @Override
           public void run() {
-            List<Conversation> conversations = ChatUtils.ConversationUtil.getConversations(mPage, PAGE_SIZE);
+            List<Conversation> conversations = ConversationUtil.getConversations(mPage, PAGE_SIZE);
             mConversationAdapter.add(conversations);
             requestOnline(conversations);
             mAlvConversation.stopLoadMore();
@@ -232,7 +232,7 @@ public class ConversationActivity extends BaseActivity {
               public void onResponse(Response response) {
                 if (RESTRequester.responseOk(response)) {
                   showToast(R.string.report_success);
-                  ChatUtils.ConversationUtil.deleteConversation(conversation);
+                  ConversationUtil.deleteConversation(conversation);
                   mConversationAdapter.remove(conversation);
                 }
                 dialogInterface.dismiss();
@@ -272,7 +272,7 @@ public class ConversationActivity extends BaseActivity {
                 }
               }, Response.class, conversation.getChatId(), conversation.getPostId(), conversation.getCommentId());
             }
-            ChatUtils.ConversationUtil.deleteConversation(conversation);
+            ConversationUtil.deleteConversation(conversation);
             mConversationAdapter.remove(conversation);
           }
         })
@@ -339,7 +339,7 @@ public class ConversationActivity extends BaseActivity {
         .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialogInterface, int i) {
-            ChatUtils.MessageUtil.setAllRead();
+            MessageUtil.setAllRead();
           }
         })
         .setPositiveButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -356,7 +356,7 @@ public class ConversationActivity extends BaseActivity {
         .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialogInterface, int i) {
-            ChatUtils.ConversationUtil.deleteAllConversation();
+            ConversationUtil.deleteAllConversation();
           }
         })
         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -383,7 +383,7 @@ public class ConversationActivity extends BaseActivity {
             if (conversation != null) {
               conversation.setFavorite(true);
             } else {
-              conversation = ChatUtils.ConversationUtil.createByChatFav(fav);
+              conversation = ConversationUtil.createByChatFav(fav);
               conversations.add(conversation);
             }
           }

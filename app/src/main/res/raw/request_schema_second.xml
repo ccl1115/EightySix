@@ -13,6 +13,19 @@
     </request>
 
     <request>
+        <id>get_friend_chat_info</id>
+        <name>获取friendChatId</name>
+        <path>/im/chat/chatInfo</path>
+        <host>http://192.168.0.118:8000</host>
+        <sign/>
+        <token/>
+        <params>
+            <param>chatType</param>
+            <param>viewId</param>
+        </params>
+    </request>
+
+    <request>
         <id>chat_send</id>
         <name>发私聊</name>
         <path>/commit/im/send/privateChat</path>

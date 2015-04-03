@@ -20,11 +20,18 @@ public class NewMessageBroadcastReceiver extends BroadcastReceiver {
     Log.d(C.TAG.CH, "onReceiveMessage");
     Log.d(C.TAG.CH, message.toString());
 
-    final Message m = ChatUtils.convert(message);
+    String chatType = message.getStringAttribute("chatType", null);
 
-    if (m != null) {
-      new NewMessageWorker(m, message).execute();
+    if ("friend".equals(chatType)) {
+    } else {
+      final Message m = ChatUtils.toMessage(message);
+
+      if (m != null) {
+        new NewMessageWorker(m, message).execute();
+      }
     }
+
+
 
     abortBroadcast();
   }

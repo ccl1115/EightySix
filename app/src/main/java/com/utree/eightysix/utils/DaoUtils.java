@@ -8,10 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.U;
-import com.utree.eightysix.dao.ConversationDao;
-import com.utree.eightysix.dao.DaoMaster;
-import com.utree.eightysix.dao.DaoSession;
-import com.utree.eightysix.dao.MessageDao;
+import com.utree.eightysix.dao.*;
 
 /**
  */
@@ -26,7 +23,7 @@ public class DaoUtils {
         new DaoMaster(new DaoMaster.OpenHelper(U.getContext(), "com.utree.eightysix.db." + Account.inst().getUserId(), null) {
           @Override
           public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            if (oldVersion == 26 && newVersion == 27) {
+            if (oldVersion == 26 && newVersion >= 27) {
               // Alter conversation table
               db.execSQL("ALTER TABLE CONVERSATION ADD COLUMN 'USER_ID' TEXT NOT NULL;" +
                   "CREATE INDEX IF NOT EXISTS 'USER_ID' ON CONVERSATION ('USER_ID' ASC);");
@@ -54,5 +51,21 @@ public class DaoUtils {
     }
 
     return mDaoSession.getMessageDao();
+  }
+
+  public static FriendConversationDao getFriendConversationDao() {
+    if (sDaoMaster == null) {
+      init();
+    }
+
+    return mDaoSession.getFriendConversationDao();
+  }
+
+  public static FriendMessageDao getFriendMessageDao() {
+    if (sDaoMaster == null) {
+      init();
+    }
+
+    return mDaoSession.getFriendMessageDao();
   }
 }

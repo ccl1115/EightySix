@@ -218,7 +218,7 @@ public class ChatActivity extends BaseActivity implements
           break;
         }
         case ChatEvent.EVENT_SENT_MSG_SUCCESS: {
-          Conversation conversation = ChatUtils.ConversationUtil.setLastMessage((Message) event.getObj());
+          Conversation conversation = ConversationUtil.setLastMessage((Message) event.getObj());
           U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_INSERT_OR_UPDATE, conversation));
           mChatAdapter.notifyDataSetChanged();
           break;
@@ -352,7 +352,7 @@ public class ChatActivity extends BaseActivity implements
 
     mAlvChats.setAdapter(mChatAdapter);
 
-    mChatAdapter.add(ChatUtils.MessageUtil.getConversation(mChatId, 0));
+    mChatAdapter.add(MessageUtil.getConversation(mChatId, 0));
     mAlvChats.setSelection(Integer.MAX_VALUE);
 
     U.getChatBus().register(this);
@@ -370,7 +370,7 @@ public class ChatActivity extends BaseActivity implements
       public void onRefresh() {
         if (has) {
           page++;
-          List<Message> conversation = ChatUtils.MessageUtil.getConversation(mChatId, page);
+          List<Message> conversation = MessageUtil.getConversation(mChatId, page);
           if (conversation.size() == 0) {
             has = false;
             Message message = ChatUtils.infoMsg(mChatId, getString(R.string.no_more_history));
@@ -511,10 +511,10 @@ public class ChatActivity extends BaseActivity implements
 
       @Override
       protected Void doInBackground(Void... voids) {
-        mConversation = ChatUtils.MessageUtil.setRead(mChatId);
+        mConversation = MessageUtil.setRead(mChatId);
         publishProgress(1);
 
-        mUnreadConversationCount = ChatUtils.ConversationUtil.getUnreadConversationCount();
+        mUnreadConversationCount = ConversationUtil.getUnreadConversationCount();
         publishProgress(2);
         return null;
       }
@@ -633,7 +633,7 @@ public class ChatActivity extends BaseActivity implements
           @Override
           public void onClick(DialogInterface dialogInterface, int i) {
             requestFavDel();
-            ChatUtils.ConversationUtil.deleteConversation(mChatId);
+            ConversationUtil.deleteConversation(mChatId);
             U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_REMOVE, mChatId));
             finish();
           }
@@ -699,7 +699,7 @@ public class ChatActivity extends BaseActivity implements
   }
 
   private void addPostSummaryInfo() {
-    Message message = ChatUtils.MessageUtil.addPostSummaryInfo(mChatId,
+    Message message = MessageUtil.addPostSummaryInfo(mChatId,
         System.currentTimeMillis(),
         mConversation.getPostId(),
         mConversation.getPostContent());
@@ -707,7 +707,7 @@ public class ChatActivity extends BaseActivity implements
   }
 
   private void addCommentSummaryInfo() {
-    Message message = ChatUtils.MessageUtil.addCommentSummaryInfo(mChatId,
+    Message message = MessageUtil.addCommentSummaryInfo(mChatId,
         System.currentTimeMillis(),
         mConversation.getPostId(),
         mConversation.getPostContent(),
