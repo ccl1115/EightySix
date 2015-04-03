@@ -484,7 +484,7 @@ public class ImageUtils {
         public void onResponse(UploadImageResponse response) {
           if (RESTRequester.responseOk(response)) {
             cacheImage(mFileHash, mFile);
-            U.getBus().post(new ImageUploadedEvent(mFileHash, response.imageUrl));
+            U.getBus().post(new ImageUploadedEvent(mFileHash, response.object.imageUrl));
           } else {
             U.getBus().post(new ImageUploadedEvent(null, null));
           }

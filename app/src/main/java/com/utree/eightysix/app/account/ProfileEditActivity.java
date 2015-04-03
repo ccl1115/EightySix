@@ -234,7 +234,7 @@ public class ProfileEditActivity extends BaseActivity {
 
   @Subscribe
   public void onImageUploadEvent(final ImageUtils.ImageUploadedEvent event) {
-    if (event.getHash().equals(mFileHash)) {
+    if (mFileHash.equals(event.getHash())) {
       mAivPortrait.setUrl(event.getUrl());
       Utils.updateProfile(event.getUrl(), null, null, null, null, null, null, null,
           new OnResponse2<Response>() {

@@ -129,7 +129,6 @@ public class ChatUtils {
         m.setStatus(MessageConst.STATUS_IN_PROGRESS);
         ImageMessageBody body = (ImageMessageBody) message.getBody();
 
-
         // notice
         //环信在下载图片缩略图的时候，会在加载的文件名前加字符串"th"，会导致和EMMessage指定的本地目录不一致
         String local = body.getLocalUrl().substring(0, body.getLocalUrl().lastIndexOf('/') + 1)

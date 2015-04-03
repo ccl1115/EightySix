@@ -11,6 +11,11 @@ import com.utree.eightysix.rest.Response;
  */
 public class UploadImageResponse extends Response {
 
-  @SerializedName("image_url")
-  public String imageUrl;
+  @SerializedName("object")
+  public ImageUrl object;
+
+  public static class ImageUrl {
+    @SerializedName("image_url")
+    public String imageUrl;
+  }
 }

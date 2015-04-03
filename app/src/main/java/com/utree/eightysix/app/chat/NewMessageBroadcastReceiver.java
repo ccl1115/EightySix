@@ -6,6 +6,7 @@ import android.content.Intent;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.utree.eightysix.C;
+import com.utree.eightysix.dao.FriendMessage;
 import com.utree.eightysix.dao.Message;
 import de.akquinet.android.androlog.Log;
 
@@ -23,6 +24,11 @@ public class NewMessageBroadcastReceiver extends BroadcastReceiver {
     String chatType = message.getStringAttribute("chatType", null);
 
     if ("friend".equals(chatType)) {
+      final FriendMessage fm = ChatUtils.toFriendMessage(message);
+
+      if (fm != null) {
+        new NewFriendMessageWorker(fm, message).execute();
+      }
     } else {
       final Message m = ChatUtils.toMessage(message);
 
@@ -30,8 +36,6 @@ public class NewMessageBroadcastReceiver extends BroadcastReceiver {
         new NewMessageWorker(m, message).execute();
       }
     }
-
-
 
     abortBroadcast();
   }
