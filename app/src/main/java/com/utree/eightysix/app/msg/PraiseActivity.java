@@ -14,6 +14,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
 import com.utree.eightysix.data.Paginate;
@@ -30,7 +31,8 @@ import com.utree.eightysix.widget.RandomSceneTextView;
 /**
  * @author simon
  */
-@Layout (R.layout.activity_msg)
+@Layout (R.layout.fragment_base_msg)
+@TopTitle(R.string.praise_count)
 public class PraiseActivity extends BaseActivity {
 
   @InjectView (R.id.refresh_view)
@@ -39,7 +41,7 @@ public class PraiseActivity extends BaseActivity {
   @InjectView (R.id.alv_refresh)
   public AdvancedListView mAlvMsg;
 
-  @InjectView(R.id.tv_empty_text)
+  @InjectView(R.id.rstv_empty)
   public RandomSceneTextView mRstvEmpty;
 
   private MsgAdapter mMsgAdapter;
@@ -56,6 +58,8 @@ public class PraiseActivity extends BaseActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
     mRvMsg.setColorScheme(R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed,
         R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed);

@@ -26,14 +26,6 @@ import java.util.Map;
  */
 public class FriendListAdapter extends SectionedBaseAdapter {
 
-  private static String[] INITIALS = {
-      "a", "b", "c", "d", "e", "f",
-      "g", "h", "i", "j", "k", "l",
-      "m", "n", "o", "p", "q", "r",
-      "s", "t", "u", "v", "w", "x",
-      "y", "z"
-  };
-
   private List<Friend> mFriends;
 
   private Map<String, List<Friend>> mSections = new HashMap<String, List<Friend>>(26);
