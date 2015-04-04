@@ -108,6 +108,12 @@ public class FeedPostView extends LinearLayout {
 
   private final Runnable mTagAnimation;
 
+  private View mTipSource;
+  private View mTipPraise;
+  private View mTipRepost;
+  private View mTipTempName;
+  private View mTipTags;
+
   @OnClick(R.id.tv_tag_1)
   public void onTvTag1Clicked() {
     TagTabActivity.start(getContext(), mPost.tags.get(0));
@@ -182,12 +188,6 @@ public class FeedPostView extends LinearLayout {
               }
             }).create().show();
   }
-
-  private View mTipSource;
-  private View mTipPraise;
-  private View mTipRepost;
-  private View mTipTempName;
-  private View mTipTags;
 
   public FeedPostView(Context context) {
     this(context, null);

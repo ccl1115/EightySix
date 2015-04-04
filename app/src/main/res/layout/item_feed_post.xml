@@ -42,13 +42,11 @@
 
         <com.utree.eightysix.widget.AsyncImageView
                 android:id="@+id/aiv_level_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                app:width="16dp"
-                app:height="16dp"
                 />
 
     </LinearLayout>

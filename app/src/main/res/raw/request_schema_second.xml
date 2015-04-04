@@ -169,7 +169,7 @@
         <sign/>
         <token/>
         <params>
-            <param>hisUserId</param>
+            <param>viewId</param>
         </params>
     </request>
 
