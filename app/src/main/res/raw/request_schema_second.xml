@@ -411,4 +411,13 @@
             <param>viewId</param>
         </params>
     </request>
+
+    <request>
+        <id>copywriting</id>
+        <name>文案</name>
+        <path>/system/copywriting</path>
+        <host>http://192.168.0.118:8000</host>
+        <sign/>
+        <token/>
+    </request>
 </api>

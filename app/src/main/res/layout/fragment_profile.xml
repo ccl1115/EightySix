@@ -102,6 +102,7 @@
                                 >
 
                             <com.utree.eightysix.widget.RoundedButton
+                                    android:id="@+id/rb_exp"
                                     android:layout_width="105dp"
                                     android:layout_height="25dp"
                                     app:radius="4dp"

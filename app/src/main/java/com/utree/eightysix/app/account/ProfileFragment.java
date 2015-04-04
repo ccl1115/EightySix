@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.utree.eightysix.app.circle.FollowCircleListActivity;
 import com.utree.eightysix.app.friends.FriendListActivity;
 import com.utree.eightysix.app.friends.SendRequestActivity;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
+import com.utree.eightysix.response.CopywritingResponse;
 import com.utree.eightysix.response.ProfileResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
@@ -34,6 +36,7 @@ import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.AsyncImageViewWithRoundCorner;
 import com.utree.eightysix.widget.RoundedButton;
+import com.utree.eightysix.widget.ThemedDialog;
 
 import java.io.File;
 import java.util.Calendar;
@@ -155,6 +158,58 @@ public class ProfileFragment extends HolderFragment {
     } else {
       startActivity(new Intent(getActivity(), MyPostsActivity.class));
     }
+  }
+
+  @OnClick(R.id.rb_exp)
+  public void onRbExpClicked() {
+
+    getBaseActivity().showProgressBar(true);
+
+    U.request("copywriting", new OnResponse2<CopywritingResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        getBaseActivity().hideProgressBar();
+      }
+
+      @Override
+      public void onResponse(CopywritingResponse response) {
+        if (RESTRequester.responseOk(response)) {
+          final ThemedDialog dialog = new ThemedDialog(getBaseActivity());
+
+          dialog.setTitle("等级帮助");
+
+          TextView textView = new TextView(getBaseActivity());
+
+          int px = U.dp2px(16);
+          textView.setPadding(px, px, px, px);
+
+          String format = String.format("%s\n\n%s\n\n%s",
+              "等级是随着经验值增长的,即不同的经验值对应不同的等级。\n" +
+              " \n" +
+              "如何获取经验值？", response.object.howToGetExperience.content, "等级对应的经验值，可在帮助中查看");
+
+          textView.setText(format);
+          textView.setEms(16);
+          textView.setGravity(Gravity.CENTER_HORIZONTAL);
+
+          dialog.setContent(textView);
+
+          dialog.setPositive(R.string.got_it, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              dialog.dismiss();
+            }
+          });
+          dialog.show();
+        }
+
+        getBaseActivity().hideProgressBar();
+      }
+    }, CopywritingResponse.class);
+
+    ThemedDialog dialog = new ThemedDialog(getActivity());
+
+    dialog.setTitle("等级帮助");
   }
 
   @Override
