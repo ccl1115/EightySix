@@ -6,6 +6,7 @@
 
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -24,12 +25,17 @@
                 android:id="@+id/aiv_portrait"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                app:width="48dp"
+                app:height="48dp"
+                app:radius="4dp"
                 />
 
         <TextView
                 android:id="@+id/tv_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_weight="1"
                 />
 
@@ -42,12 +48,14 @@
 
     <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="1px"
             android:background="@color/apptheme_primary_grey_color"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             />
 
     <TextView
-            android:id="@+id/info"
+            android:id="@+id/tv_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
@@ -66,7 +74,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:padding="8dp"
+                android:padding="6dp"
+                android:text="接受"
+                android:textSize="14sp"
+                android:textColor="@android:color/white"
                 />
 
         <TextView
@@ -74,7 +85,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:padding="8dp"
+                android:background="@drawable/border_outline_secondary_dark_color_btn"
+                android:padding="7dp"
+                android:text="忽略"
+                android:textSize="14sp"
+                android:textColor="@color/border_outline_secondary_dark_color_btn_text"
                 />
 
         <TextView
@@ -82,7 +97,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:padding="8dp"
+                android:textColor="@color/apptheme_primary_grey_color_200"
+                android:visibility="gone"
                 />
     </LinearLayout>
 </LinearLayout>

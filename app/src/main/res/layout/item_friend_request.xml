@@ -6,6 +6,7 @@
 
 <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,6 +18,10 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_margin="16dp"
+            android:layout_centerVertical="true"
+            app:width="48dp"
+            app:height="48dp"
+            app:radius="4dp"
             />
 
     <TextView
@@ -25,6 +30,8 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/aiv_portrait"
             android:layout_toEndOf="@+id/aiv_portrait"
+            android:layout_marginTop="8dp"
+            android:textSize="18sp"
             />
 
     <TextView
@@ -34,6 +41,11 @@
             android:layout_toRightOf="@+id/aiv_portrait"
             android:layout_toEndOf="@+id/aiv_portrait"
             android:layout_below="@+id/tv_name"
+            android:ems="10"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textSize="12sp"
+            android:textColor="@color/apptheme_primary_grey_color_200"
             />
 
     <TextView
@@ -53,7 +65,9 @@
             android:layout_toStartOf="@+id/tv_ignore"
             android:layout_centerVertical="true"
             android:layout_margin="8dp"
+            android:padding="6dp"
             android:text="接受"
+            android:textSize="14sp"
             android:textColor="@android:color/white"
             />
 
@@ -66,7 +80,9 @@
             android:layout_centerVertical="true"
             android:layout_margin="8dp"
             android:background="@drawable/border_outline_secondary_dark_color_btn"
+            android:padding="7dp"
             android:text="忽略"
+            android:textSize="14sp"
             android:textColor="@color/border_outline_secondary_dark_color_btn_text"
             />
 
@@ -76,6 +92,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:layout_margin="8dp"
             android:textColor="@color/apptheme_primary_grey_color_200"
             android:visibility="gone"

@@ -177,6 +177,7 @@
         <id>login</id>
         <name>登录接口</name>
         <path>/passport/login</path>
+        <host>http://192.168.0.118:8000</host>
         <sign/>
         <params>
             <param>phone</param>

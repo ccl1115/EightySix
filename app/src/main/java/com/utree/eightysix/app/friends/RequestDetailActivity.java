@@ -18,6 +18,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.account.ProfileFillDialog;
 import com.utree.eightysix.data.FriendRequest;
 import com.utree.eightysix.rest.OnResponse2;
@@ -29,7 +30,10 @@ import com.utree.eightysix.widget.AsyncImageViewWithRoundCorner;
 /**
  */
 @Layout(R.layout.activity_request_detail)
+@TopTitle(R.string.friend_request)
 public class RequestDetailActivity extends BaseActivity {
+
+  private FriendRequest mRequest;
 
   public static void start(Context context, FriendRequest request) {
     Intent intent = new Intent(context, RequestDetailActivity.class);
@@ -67,16 +71,16 @@ public class RequestDetailActivity extends BaseActivity {
   public void onRbAcceptClicked(final View view) {
 
     mTvResult.setVisibility(View.VISIBLE);
-    mRbAccept.setVisibility(View.INVISIBLE);
-    mTvIgnore.setVisibility(View.INVISIBLE);
+    mRbAccept.setVisibility(View.GONE);
+    mTvIgnore.setVisibility(View.GONE);
     mTvResult.setText("已同意");
 
-    U.request("user_friend_accepted", new OnResponse2<Response>() {
+    U.request("user_friend_accept", new OnResponse2<Response>() {
       @Override
       public void onResponseError(Throwable e) {
         mRbAccept.setVisibility(View.VISIBLE);
         mTvIgnore.setVisibility(View.VISIBLE);
-        mTvResult.setVisibility(View.INVISIBLE);
+        mTvResult.setVisibility(View.GONE);
       }
 
       @Override
@@ -87,17 +91,17 @@ public class RequestDetailActivity extends BaseActivity {
           }
           mRbAccept.setVisibility(View.VISIBLE);
           mTvIgnore.setVisibility(View.VISIBLE);
-          mTvResult.setVisibility(View.INVISIBLE);
+          mTvResult.setVisibility(View.GONE);
         }
       }
-    }, Response.class);
+    }, Response.class, mRequest.viewId);
   }
 
   @OnClick(R.id.tv_ignore)
   public void onTvIgnoreClicked() {
 
-    mRbAccept.setVisibility(View.INVISIBLE);
-    mTvIgnore.setVisibility(View.INVISIBLE);
+    mRbAccept.setVisibility(View.GONE);
+    mTvIgnore.setVisibility(View.GONE);
     mTvResult.setText("已忽略");
 
     U.request("user_friend_ignore", new OnResponse2<Response>() {
@@ -105,7 +109,7 @@ public class RequestDetailActivity extends BaseActivity {
       public void onResponseError(Throwable e) {
         mRbAccept.setVisibility(View.VISIBLE);
         mTvIgnore.setVisibility(View.VISIBLE);
-        mTvResult.setVisibility(View.INVISIBLE);
+        mTvResult.setVisibility(View.GONE);
       }
 
       @Override
@@ -113,10 +117,10 @@ public class RequestDetailActivity extends BaseActivity {
         if (!RESTRequester.responseOk(response)) {
           mRbAccept.setVisibility(View.VISIBLE);
           mTvIgnore.setVisibility(View.VISIBLE);
-          mTvResult.setVisibility(View.INVISIBLE);
+          mTvResult.setVisibility(View.GONE);
         }
       }
-    }, Response.class);
+    }, Response.class, mRequest.viewId);
   }
 
 
@@ -124,25 +128,27 @@ public class RequestDetailActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    FriendRequest request = (FriendRequest) getIntent().getSerializableExtra("request");
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
-    mAivPortrait.setUrl(request.avatar);
-    mTvName.setText(request.userName);
-    mTvInfo.setText("附加信息：" + request.content);
-    mTvTimestamp.setText(TimeUtil.getElapsed(request.timestamp));
-    if ("added".equals(request.type)) {
+    mRequest = getIntent().getParcelableExtra("request");
+
+    mAivPortrait.setUrl(mRequest.avatar);
+    mTvName.setText(mRequest.userName);
+    mTvInfo.setText("附加信息：" + mRequest.content);
+    mTvTimestamp.setText(TimeUtil.getElapsed(mRequest.timestamp));
+    if ("added".equals(mRequest.type)) {
       mRbAccept.setVisibility(View.VISIBLE);
       mTvIgnore.setVisibility(View.VISIBLE);
-      mTvResult.setVisibility(View.INVISIBLE);
-    } else if ("ignored".equals(request.type)) {
+      mTvResult.setVisibility(View.GONE);
+    } else if ("ignored".equals(mRequest.type)) {
       mTvResult.setVisibility(View.VISIBLE);
-      mRbAccept.setVisibility(View.INVISIBLE);
-      mTvIgnore.setVisibility(View.INVISIBLE);
+      mRbAccept.setVisibility(View.GONE);
+      mTvIgnore.setVisibility(View.GONE);
       mTvResult.setText("已忽略");
-    } else if ("passed".equals(request.type)) {
+    } else if ("passed".equals(mRequest.type)) {
       mTvResult.setVisibility(View.VISIBLE);
-      mRbAccept.setVisibility(View.INVISIBLE);
-      mTvIgnore.setVisibility(View.INVISIBLE);
+      mRbAccept.setVisibility(View.GONE);
+      mTvIgnore.setVisibility(View.GONE);
       mTvResult.setText("已同意");
     }
   }
