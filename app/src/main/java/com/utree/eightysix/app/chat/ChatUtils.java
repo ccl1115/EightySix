@@ -34,6 +34,7 @@ import com.utree.eightysix.response.FriendChatResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import de.akquinet.android.androlog.Log;
+import org.jivesoftware.smack.packet.Packet;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -191,8 +192,27 @@ public class ChatUtils {
     }
   }
 
+  static String uniqueMsgId() {
+    String var0 = Long.toHexString(System.currentTimeMillis());
+    var0 = var0.substring(6);
+    return Packet.nextID() + "-" + var0;
+  }
+
   public static Message infoMsg(String chatId, String msg) {
     Message m = new Message();
+
+    m.setTimestamp(System.currentTimeMillis());
+    m.setType(MessageConst.TYPE_INFO);
+    m.setContent(msg);
+    m.setChatId(chatId);
+    m.setDirection(MessageConst.DIRECTION_NON);
+    m.setStatus(MessageConst.STATUS_CREATE);
+
+    return m;
+  }
+
+  public static FriendMessage infoFriendMsg(String chatId, String msg) {
+    FriendMessage m = new FriendMessage();
 
     m.setTimestamp(System.currentTimeMillis());
     m.setType(MessageConst.TYPE_INFO);
@@ -275,6 +295,7 @@ public class ChatUtils {
 
     if (chatId != null) {
       // #TODO start friend chat activity;
+      FChatActivity.start(context, chatId);
       return;
     }
 
@@ -288,7 +309,7 @@ public class ChatUtils {
       public void onResponse(FriendChatResponse response) {
         if (RESTRequester.responseOk(response)) {
           FConversationUtil.createIfNotExist(response.object, viewId);
-          // #TODO start friend chat activity;
+          FChatActivity.start(context, response.object.chatId);
         }
         context.hideProgressBar();
       }

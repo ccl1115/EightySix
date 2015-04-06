@@ -13,6 +13,8 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.utree.eightysix.R;
+import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.data.Friend;
 import com.utree.eightysix.view.SectionedBaseAdapter;
 import com.utree.eightysix.widget.AsyncImageView;
@@ -115,7 +117,8 @@ public class FriendListAdapter extends SectionedBaseAdapter {
     private Friend mFriend;
 
     @OnClick(R.id.iv_chat)
-    public void onIvChatClicked() {
+    public void onIvChatClicked(View v) {
+      ChatUtils.startFriendChat((BaseActivity) v.getContext(), mFriend.viewId);
     }
 
     public void setData(Friend friend) {

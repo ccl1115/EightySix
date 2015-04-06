@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014. All rights reserved by utree.cn
+ * Copyright (c) 2015. All rights reserved by utree.cn
  */
 
 package com.utree.eightysix.app.chat;
@@ -7,7 +7,8 @@ package com.utree.eightysix.app.chat;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.chat.content.ImageContent;
 import com.utree.eightysix.app.chat.event.ChatEvent;
-import com.utree.eightysix.dao.Message;
+import com.utree.eightysix.app.chat.event.FriendChatEvent;
+import com.utree.eightysix.dao.FriendMessage;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.DaoUtils;
@@ -16,11 +17,11 @@ import com.utree.eightysix.utils.IOUtils;
 import java.io.*;
 
 /**
- * Note this only use for send text, image and voice message.
  */
-public class SenderImpl implements Sender {
+public class FriendSenderImpl implements FriendSender {
   @Override
-  public void send(final Message message) {
+  public void send(final FriendMessage message) {
+
 
     if (message == null) {
       return;
@@ -37,8 +38,8 @@ public class SenderImpl implements Sender {
           @Override
           public void onResponseError(Throwable e) {
             message.setStatus(MessageConst.STATUS_FAILED);
-            DaoUtils.getMessageDao().insertOrReplace(message);
-            U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_SENT_MSG_ERROR, message));
+            DaoUtils.getFriendMessageDao().insertOrReplace(message);
+            U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_SENT_MSG_ERROR, message));
           }
 
           @Override
@@ -47,16 +48,16 @@ public class SenderImpl implements Sender {
               U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_MSG_REMOVE, message));
             } else {
               message.setStatus(MessageConst.STATUS_SUCCESS);
-              DaoUtils.getMessageDao().insertOrReplace(message);
-              U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_SENT_MSG_SUCCESS, message));
+              DaoUtils.getFriendMessageDao().insertOrReplace(message);
+              U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_SENT_MSG_SUCCESS, message));
             }
           }
         }, Response.class,
             message.getChatId(),
             "txt",
             message.getContent(),
-            message.getPostId(),
-            message.getCommentId(),
+            null,
+            null,
             null);
 
         break;
@@ -88,19 +89,19 @@ public class SenderImpl implements Sender {
           @Override
           public void onResponseError(Throwable e) {
             message.setStatus(MessageConst.STATUS_FAILED);
-            DaoUtils.getMessageDao().insertOrReplace(message);
-            U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_SENT_MSG_SUCCESS, message));
+            DaoUtils.getFriendMessageDao().insertOrReplace(message);
+            U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_SENT_MSG_SUCCESS, message));
             tmpFile.delete();
           }
 
           @Override
           public void onResponse(Response response) {
             if (response.code != 0) {
-              U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_MSG_REMOVE, message));
+              U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_MSG_REMOVE, message));
             } else {
               message.setStatus(MessageConst.STATUS_SUCCESS);
-              DaoUtils.getMessageDao().insertOrReplace(message);
-              U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_SENT_MSG_SUCCESS, message));
+              DaoUtils.getFriendMessageDao().insertOrReplace(message);
+              U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_SENT_MSG_SUCCESS, message));
             }
             tmpFile.delete();
           }
@@ -108,28 +109,25 @@ public class SenderImpl implements Sender {
             message.getChatId(),
             "img",
             null,
-            message.getPostId(),
-            message.getCommentId(),
+            null,
+            null,
             tmpFile);
         break;
     }
 
 
-    DaoUtils.getMessageDao().insertOrReplace(message);
+    DaoUtils.getFriendMessageDao().insertOrReplace(message);
     message.setStatus(MessageConst.STATUS_IN_PROGRESS);
-    U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_SENDING_MSG, message));
-
+    U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_SENDING_MSG, message));
   }
 
   @Override
-  public Message txt(String chatId, String postId, String commentId, String txt) {
-    Message m = new Message();
+  public FriendMessage txt(String chatId, String txt) {
+    FriendMessage m = new FriendMessage();
 
     m.setMsgId(ChatUtils.uniqueMsgId());
 
     m.setChatId(chatId);
-    m.setPostId(postId);
-    m.setCommentId(commentId);
     m.setContent(txt);
     m.setType(MessageConst.TYPE_TXT);
     m.setDirection(MessageConst.DIRECTION_SEND);
@@ -142,25 +140,18 @@ public class SenderImpl implements Sender {
   }
 
   @Override
-  public Message voice(String chatId, String postId, String commentId, File f) {
+  public FriendMessage voice(String chatId, File f) {
     return null;
   }
 
   @Override
-  public Message voice(String chatId, String postId, String commentId, InputStream is) {
-    return null;
-  }
-
-  @Override
-  public Message photo(String chatId, String postId, String commentId, File f) {
+  public FriendMessage photo(String chatId, File f) {
     if (!f.exists()) return null;
-    Message m = new Message();
+    FriendMessage m = new FriendMessage();
 
     m.setMsgId(ChatUtils.uniqueMsgId());
 
     m.setChatId(chatId);
-    m.setPostId(postId);
-    m.setCommentId(commentId);
     m.setContent(U.getGson().toJson(new ImageContent(f.getAbsolutePath(), null, null, null, null)));
     m.setType(MessageConst.TYPE_IMAGE);
     m.setDirection(MessageConst.DIRECTION_SEND);
@@ -170,11 +161,6 @@ public class SenderImpl implements Sender {
     send(m);
 
     return m;
-  }
-
-  @Override
-  public Message photo(String chatId, String postId, String commentId, InputStream is) {
-    return null;
   }
 
 }

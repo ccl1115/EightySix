@@ -15,7 +15,7 @@
     <request>
         <id>get_friend_chat_info</id>
         <name>获取friendChatId</name>
-        <path>/im/chat/chatInfo</path>
+        <path>/im/chat/chatinfo</path>
         <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>

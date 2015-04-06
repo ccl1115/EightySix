@@ -17,7 +17,6 @@ import com.utree.eightysix.utils.DaoUtils;
 import java.util.List;
 
 /**
-* Created by Administrator on 2015/4/3 0003.
 */
 public class MessageUtil {
 
@@ -28,7 +27,7 @@ public class MessageUtil {
    * @param page   页数
    * @return the messages in this page
    */
-  public static List<Message> getConversation(String chatId, int page) {
+  public static List<Message> getMessages(String chatId, int page) {
     return DaoUtils.getMessageDao().queryBuilder()
         .where(MessageDao.Properties.ChatId.eq(chatId))
         .orderDesc(MessageDao.Properties.Timestamp)

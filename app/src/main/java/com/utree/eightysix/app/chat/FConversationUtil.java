@@ -7,8 +7,11 @@ package com.utree.eightysix.app.chat;
 import android.text.TextUtils;
 import com.easemob.chat.EMMessage;
 import com.easemob.exceptions.EaseMobException;
+import com.utree.eightysix.U;
+import com.utree.eightysix.app.chat.event.FriendChatEvent;
 import com.utree.eightysix.dao.FriendConversation;
 import com.utree.eightysix.dao.FriendConversationDao;
+import com.utree.eightysix.dao.FriendMessage;
 import com.utree.eightysix.response.FriendChatResponse;
 import com.utree.eightysix.utils.DaoUtils;
 
@@ -16,13 +19,9 @@ import java.util.List;
 
 /**
 */
-public class FConversationUtil {
+class FConversationUtil {
 
-  public static void startChat(int viewId) {
-
-  }
-
-  public static void createOrUpdateFConversation(EMMessage emMessage) throws EaseMobException {
+  static void createOrUpdateFConversation(EMMessage emMessage) throws EaseMobException {
     String chatId = emMessage.getStringAttribute("chatId", null);
     if (TextUtils.isEmpty(chatId) || "0".equals(chatId)) {
       throw new EaseMobException("chatId is empty or equals 0");
@@ -42,27 +41,35 @@ public class FConversationUtil {
     DaoUtils.getFriendConversationDao().insertOrReplace(conversation);
   }
 
-  public static FriendConversation getByChatId(String chatId) {
+  static FriendConversation getByChatId(String chatId) {
     return DaoUtils.getFriendConversationDao().queryBuilder()
         .where(FriendConversationDao.Properties.ChatId.eq(chatId))
         .unique();
   }
 
-  public static List<FriendConversation> getConversations() {
+  static List<FriendConversation> getConversations() {
     return DaoUtils.getFriendConversationDao().queryBuilder()
         .orderDesc(FriendConversationDao.Properties.Timestamp)
         .list();
   }
 
+  static List<FriendConversation> getConversations(int page, int size) {
+    return DaoUtils.getFriendConversationDao().queryBuilder()
+        .orderDesc(FriendConversationDao.Properties.Timestamp)
+        .offset(page * size)
+        .limit(size)
+        .list();
+  }
 
-  public static String getChatIdByViewId(int viewId) {
+
+  static String getChatIdByViewId(int viewId) {
     FriendConversation friendConversation = DaoUtils.getFriendConversationDao().queryBuilder()
         .where(FriendConversationDao.Properties.ViewId.eq(viewId))
         .unique();
     return friendConversation == null ? null : friendConversation.getChatId();
   }
 
-  public static void createIfNotExist(FriendChatResponse.FriendChat chat, int viewId) {
+  static void createIfNotExist(FriendChatResponse.FriendChat chat, int viewId) {
     FriendConversation conversation = DaoUtils.getFriendConversationDao().queryBuilder()
         .where(FriendConversationDao.Properties.ChatId.eq(chat.chatId))
         .unique();
@@ -81,5 +88,36 @@ public class FConversationUtil {
       conversation.setSource(chat.factoryName);
       DaoUtils.getFriendConversationDao().insert(conversation);
     }
+  }
+
+
+  static void deleteAllConversation() {
+    DaoUtils.getFriendConversationDao().deleteAll();
+    U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_CONVERSATIONS_RELOAD, null));
+  }
+
+  static FriendConversation setLastMessage(FriendMessage message) {
+    FriendConversation conversation = DaoUtils.getFriendConversationDao().queryBuilder()
+        .where(FriendConversationDao.Properties.ChatId.eq(message.getChatId()))
+        .unique();
+
+    if (conversation != null) {
+      if (message.getType() == MessageConst.TYPE_IMAGE) {
+        conversation.setLastMsg("[图片]");
+      } else {
+        conversation.setLastMsg(message.getContent());
+      }
+      conversation.setTimestamp(message.getTimestamp());
+      DaoUtils.getFriendConversationDao().update(conversation);
+      return conversation;
+    } else {
+      return null;
+    }
+  }
+
+  static long getUnreadConversationCount() {
+    return DaoUtils.getFriendConversationDao().queryBuilder()
+        .where(FriendConversationDao.Properties.UnreadCount.gt(0))
+        .count();
   }
 }

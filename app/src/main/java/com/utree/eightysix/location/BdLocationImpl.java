@@ -7,10 +7,8 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
-import com.utree.eightysix.R;
-import com.utree.eightysix.U;
 import com.utree.eightysix.utils.Env;
-import de.akquinet.android.androlog.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 

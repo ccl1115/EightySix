@@ -19,6 +19,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.chat.ConversationActivity;
 import com.utree.eightysix.app.chat.ConversationUtil;
+import com.utree.eightysix.app.chat.FConversationActivity;
 import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.app.friends.RequestListActivity;
 import com.utree.eightysix.event.HasNewPraiseEvent;
@@ -56,6 +57,11 @@ public class MsgCenterFragment extends BaseFragment {
   @OnClick(R.id.ll_request)
   public void onLlFriendRequestClicked() {
     startActivity(new Intent(getActivity(), RequestListActivity.class));
+  }
+
+  @OnClick(R.id.ll_fchat)
+  public void onLlFChatClicked() {
+    FConversationActivity.start(getActivity());
   }
 
   @Override

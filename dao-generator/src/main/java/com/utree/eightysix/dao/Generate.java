@@ -15,7 +15,7 @@ import java.io.File;
 public class Generate {
 
   public Generate() {
-    Schema schema = new Schema(28, "com.utree.eightysix.dao");
+    Schema schema = new Schema(29, "com.utree.eightysix.dao");
 
     generateConversation(schema);
     generateMessage(schema);
@@ -96,6 +96,7 @@ public class Generate {
     friendConversation.addStringProperty("lastMsg");
     friendConversation.addLongProperty("timestamp").indexDesc(null, false);
     friendConversation.addLongProperty("unreadCount");
+    friendConversation.addBooleanProperty("banned");
   }
 
   private void generateFriendMessage(Schema schema) {

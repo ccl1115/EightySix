@@ -205,7 +205,7 @@ public class ConversationUtil {
   public static Conversation setLastMessage(Message message) {
     Conversation conversation = DaoUtils.getConversationDao().queryBuilder()
         .where(ConversationDao.Properties.ChatId.eq(message.getChatId()))
-        .limit(1).unique();
+        .unique();
 
     if (conversation != null) {
       if (message.getType() == MessageConst.TYPE_IMAGE) {

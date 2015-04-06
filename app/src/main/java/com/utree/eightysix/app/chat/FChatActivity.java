@@ -1,10 +1,13 @@
+/*
+ * Copyright (c) 2015. All rights reserved by utree.cn
+ */
+
 package com.utree.eightysix.app.chat;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Instrumentation;
 import android.content.*;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,12 +30,12 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.CameraUtil;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.chat.event.ChatEvent;
+import com.utree.eightysix.app.chat.event.FriendChatEvent;
 import com.utree.eightysix.app.publish.EmojiFragment;
 import com.utree.eightysix.app.publish.EmojiViewPager;
-import com.utree.eightysix.dao.Conversation;
-import com.utree.eightysix.dao.ConversationDao;
-import com.utree.eightysix.dao.Message;
+import com.utree.eightysix.dao.FriendConversation;
+import com.utree.eightysix.dao.FriendConversationDao;
+import com.utree.eightysix.dao.FriendMessage;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
@@ -41,22 +44,30 @@ import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.ImageActionButton;
 import com.utree.eightysix.widget.ThemedDialog;
-import com.utree.eightysix.widget.TopBar;
 
 import java.io.File;
 import java.util.List;
 
 /**
- * @author simon
  */
-@Layout(R.layout.activity_chat)
-public class ChatActivity extends BaseActivity implements
-    EmojiconsFragment.OnEmojiconBackspaceClickedListener,
-    EmojiconGridFragment.OnEmojiconClickedListener {
+@Layout(R.layout.activity_fchat)
+public class FChatActivity extends BaseActivity implements
+  EmojiconsFragment.OnEmojiconBackspaceClickedListener,
+  EmojiconGridFragment.OnEmojiconClickedListener {
 
-  private static String sCurrentChatId;
+  public static void start(Context context, String chatId) {
+    Intent intent = new Intent(context, FChatActivity.class);
+    intent.putExtra("chatId", chatId);
+
+    if (!(context instanceof Activity)) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    context.startActivity(intent);
+  }
+
+  private static String sCurrentFChatId;
 
   @InjectView(R.id.fl_send)
   public FrameLayout mFlSend;
@@ -85,11 +96,11 @@ public class ChatActivity extends BaseActivity implements
   @InjectView(R.id.iv_emotion)
   public ImageView mIvEmotion;
 
-  private ChatAdapter mChatAdapter;
+  private FChatAdapter mChatAdapter;
 
   private String mChatId;
 
-  private Conversation mConversation;
+  private FriendConversation mConversation;
 
   private CameraUtil mCameraUtil;
 
@@ -97,30 +108,9 @@ public class ChatActivity extends BaseActivity implements
 
   private Instrumentation mInstrumentation = new Instrumentation();
 
-  static void start(Context context, String chatId) {
-    context.startActivity(getIntent(context, chatId));
-  }
-
-  static Intent getIntent(Context context, String chatId) {
-
-    Intent intent = new Intent(context, ChatActivity.class);
-    intent.putExtra("chatId", chatId);
-
-    if (!(context instanceof Activity)) {
-      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    }
-
-    return intent;
-  }
-
-  public static String getCurrentChatId() {
-    return sCurrentChatId;
-  }
-
   @OnClick(R.id.iv_post)
   public void onRbPostClicked() {
-    ChatAccount.inst().getSender()
-        .txt(mChatId, mConversation.getPostId(), mConversation.getCommentId(), mEtPostContent.getText().toString());
+    ChatAccount.inst().getFriendSender().txt(mChatId, mEtPostContent.getText().toString());
     mEtPostContent.setText("");
   }
 
@@ -182,7 +172,7 @@ public class ChatActivity extends BaseActivity implements
 
   @OnItemClick(R.id.alv_chats)
   public void onAlvChatsItemClicked(int position) {
-    Message m = mChatAdapter.getItem(position);
+    FriendMessage m = mChatAdapter.getItem(position);
     if (m != null) {
       if (m.getStatus() == MessageConst.STATUS_FAILED) {
         resendConfirm(m);
@@ -192,7 +182,7 @@ public class ChatActivity extends BaseActivity implements
 
   @OnItemLongClick(R.id.alv_chats)
   public boolean onAlvChatsItemLongClicked(int position) {
-    Message m = mChatAdapter.getItem(position);
+    FriendMessage m = mChatAdapter.getItem(position);
     if (m != null) {
       if (m.getType() == MessageConst.TYPE_TXT) {
         showMessageDialog(m);
@@ -202,60 +192,48 @@ public class ChatActivity extends BaseActivity implements
   }
 
   @Subscribe
-  public void onChatEvent(ChatEvent event) {
-    if (event.getObj() instanceof Message) {
-      if (!mChatId.equals(((Message) event.getObj()).getChatId())) {
+  public void onFriendChatEvent(FriendChatEvent event) {
+    if (event.getObj() instanceof FriendMessage) {
+      if (!mChatId.equals(((FriendMessage) event.getObj()).getChatId())) {
         return;
       }
       switch (event.getStatus()) {
-        case ChatEvent.EVENT_RECEIVE_MSG: {
-          mChatAdapter.add((Message) event.getObj());
+        case FriendChatEvent.EVENT_RECEIVE_MSG: {
+          mChatAdapter.add((FriendMessage) event.getObj());
           mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
           break;
         }
-        case ChatEvent.EVENT_UPDATE_MSG: {
+        case FriendChatEvent.EVENT_UPDATE_MSG: {
           mChatAdapter.notifyDataSetChanged();
           break;
         }
-        case ChatEvent.EVENT_SENT_MSG_SUCCESS: {
-          Conversation conversation = ConversationUtil.setLastMessage((Message) event.getObj());
-          U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_INSERT_OR_UPDATE, conversation));
+        case FriendChatEvent.EVENT_SENT_MSG_SUCCESS: {
+          FriendConversation conversation = FConversationUtil.setLastMessage((FriendMessage) event.getObj());
+          U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_CONVERSATION_INSERT_OR_UPDATE, conversation));
           mChatAdapter.notifyDataSetChanged();
           break;
         }
-        case ChatEvent.EVENT_SENT_MSG_ERROR: {
+        case FriendChatEvent.EVENT_SENT_MSG_ERROR: {
           mChatAdapter.notifyDataSetChanged();
           mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
           break;
         }
-        case ChatEvent.EVENT_SENDING_MSG: {
-          mChatAdapter.add((Message) event.getObj());
+        case FriendChatEvent.EVENT_SENDING_MSG: {
+          mChatAdapter.add((FriendMessage) event.getObj());
           mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
           break;
         }
-        case ChatEvent.EVENT_MSG_REMOVE: {
-          Message message = (Message) event.getObj();
+        case FriendChatEvent.EVENT_MSG_REMOVE: {
+          FriendMessage message = (FriendMessage) event.getObj();
           mChatAdapter.remove(message);
           if (message.getType() == MessageConst.TYPE_TXT) {
             mEtPostContent.setText(message.getContent());
             mEtPostContent.setSelection(message.getContent().length());
           }
-          DaoUtils.getMessageDao().delete(message);
+          DaoUtils.getFriendMessageDao().delete(message);
         }
       }
     }
-  }
-
-  @Override
-  @Subscribe
-  public void onLogout(Account.LogoutEvent event) {
-    finish();
-  }
-
-  @Override
-  public void onActionLeftClicked() {
-    hideSoftKeyboard(mEtPostContent);
-    finish();
   }
 
   @Override
@@ -286,7 +264,7 @@ public class ChatActivity extends BaseActivity implements
       @Subscribe
       public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
         if (event.getHash().equals(mLastHash) && event.getWidth() == U.dp2px(48) && event.getHeight() == U.dp2px(48)) {
-          ChatAccount.inst().getSender().photo(mChatId, mConversation.getPostId(), mConversation.getCommentId(), event.getFile());
+          ChatAccount.inst().getFriendSender().photo(mChatId, event.getFile());
           M.getRegisterHelper().unregister(this);
         }
       }
@@ -336,22 +314,22 @@ public class ChatActivity extends BaseActivity implements
 
     mChatId = getIntent().getStringExtra("chatId");
 
-    mConversation = DaoUtils.getConversationDao()
+    mConversation = DaoUtils.getFriendConversationDao()
         .queryBuilder()
-        .where(ConversationDao.Properties.ChatId.eq(mChatId))
+        .where(FriendConversationDao.Properties.ChatId.eq(mChatId))
         .unique();
 
-    setTopTitle("悄悄话");
+    setTopTitle(mConversation.getTargetName());
 
     if (mChatId == null) {
       finish();
     }
 
-    mChatAdapter = new ChatAdapter(mConversation);
+    mChatAdapter = new FChatAdapter(mConversation);
 
     mAlvChats.setAdapter(mChatAdapter);
 
-    mChatAdapter.add(MessageUtil.getMessages(mChatId, 0));
+    mChatAdapter.add(FMessageUtil.getMessages(mChatId, 0));
     mAlvChats.setSelection(Integer.MAX_VALUE);
 
     U.getChatBus().register(this);
@@ -369,10 +347,10 @@ public class ChatActivity extends BaseActivity implements
       public void onRefresh() {
         if (has) {
           page++;
-          List<Message> conversation = MessageUtil.getMessages(mChatId, page);
+          List<FriendMessage> conversation = FMessageUtil.getMessages(mChatId, page);
           if (conversation.size() == 0) {
             has = false;
-            Message message = ChatUtils.infoMsg(mChatId, getString(R.string.no_more_history));
+            FriendMessage message = ChatUtils.infoFriendMsg(mChatId, getString(R.string.no_more_history));
             message.setTimestamp(mChatAdapter.getItem(0).getTimestamp() - 1);
             mChatAdapter.add(message);
           } else {
@@ -394,54 +372,6 @@ public class ChatActivity extends BaseActivity implements
       }
     });
 
-    if (mConversation.getCommentId() == null || "0".equals(mConversation.getCommentId())) {
-      addPostSummaryInfo();
-    } else {
-      addCommentSummaryInfo();
-    }
-
-    getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
-      @Override
-      public String getTitle(int position) {
-        return null;
-      }
-
-      @Override
-      public Drawable getIcon(int position) {
-        return mConversation.getFavorite() ?
-            getResources().getDrawable(R.drawable.ic_favorite_selected) :
-            getResources().getDrawable(R.drawable.ic_favorite_outline);
-      }
-
-      @Override
-      public Drawable getBackgroundDrawable(int position) {
-        return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
-      }
-
-      @Override
-      public void onClick(View view, int position) {
-        if (mConversation.getFavorite()) {
-          ((ImageActionButton) getTopBar().getActionView(0))
-              .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_outline));
-          requestFavDel();
-        } else {
-          ((ImageActionButton) getTopBar().getActionView(0))
-              .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
-          requestFavAdd();
-        }
-      }
-
-      @Override
-      public int getCount() {
-        return 1;
-      }
-
-      @Override
-      public TopBar.LayoutParams getLayoutParams(int position) {
-        return null;
-      }
-    });
-
     addBannedInfoMsg();
 
     getSupportFragmentManager()
@@ -450,67 +380,23 @@ public class ChatActivity extends BaseActivity implements
         .commitAllowingStateLoss();
 
     mFlEmotion.setFragmentManager(getSupportFragmentManager());
-  }
 
-  public void requestFavAdd() {
-    U.request("chat_fav_add", new OnResponse2<Response>() {
-      @Override
-      public void onResponseError(Throwable e) {
-        ((ImageActionButton) getTopBar().getActionView(0))
-            .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_outline));
-      }
-
-      @Override
-      public void onResponse(Response response) {
-        if (RESTRequester.responseOk(response)) {
-          mConversation.setFavorite(true);
-          DaoUtils.getConversationDao().update(mConversation);
-          U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_INSERT_OR_UPDATE, mConversation));
-        } else {
-          ((ImageActionButton) getTopBar().getActionView(0))
-              .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_outline));
-        }
-      }
-    }, Response.class, mChatId, mConversation.getPostId(), mConversation.getCommentId());
-  }
-
-  private void requestFavDel() {
-    if (mConversation.getFavorite() != null && mConversation.getFavorite()) {
-      U.request("chat_fav_del", new OnResponse2<Response>() {
-        @Override
-        public void onResponseError(Throwable e) {
-          ((ImageActionButton) getTopBar().getActionView(0))
-              .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
-        }
-
-        @Override
-        public void onResponse(Response response) {
-          if (RESTRequester.responseOk(response)) {
-            mConversation.setFavorite(false);
-            DaoUtils.getConversationDao().update(mConversation);
-            U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, mConversation));
-          } else {
-            ((ImageActionButton) getTopBar().getActionView(0))
-                .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
-          }
-        }
-      }, Response.class, mChatId, mConversation.getPostId(), mConversation.getCommentId());
-    }
   }
 
   @Override
   protected void onResume() {
     super.onResume();
-    sCurrentChatId = mChatId;
+
+    sCurrentFChatId = mChatId;
 
     (new AsyncTask<Void, Integer, Void>() {
 
       private Long mUnreadConversationCount;
-      private Conversation mConversation;
+      private FriendConversation mConversation;
 
       @Override
       protected Void doInBackground(Void... voids) {
-        mConversation = MessageUtil.setRead(mChatId);
+        mConversation = FMessageUtil.setRead(mChatId);
         publishProgress(1);
 
         mUnreadConversationCount = ConversationUtil.getUnreadConversationCount();
@@ -522,31 +408,14 @@ public class ChatActivity extends BaseActivity implements
       protected void onProgressUpdate(Integer... values) {
         switch (values[0]) {
           case 1:
-            U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_INSERT_OR_UPDATE, mConversation));
+            U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_CONVERSATION_INSERT_OR_UPDATE, mConversation));
             break;
           case 2:
-            U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT, mUnreadConversationCount));
+            U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT, mUnreadConversationCount));
             break;
         }
       }
     }).execute();
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    sCurrentChatId = null;
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    U.getChatBus().unregister(this);
-  }
-
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    mCameraUtil.onActivityResult(requestCode, resultCode, data);
   }
 
   @Override
@@ -561,6 +430,41 @@ public class ChatActivity extends BaseActivity implements
       mIvCamera.setSelected(false);
     } else {
       super.onBackPressed();
+    }
+  }
+
+  @Override
+  public void onActionLeftClicked() {
+    finish();
+  }
+
+  @Override
+  @Subscribe
+  public void onLogout(Account.LogoutEvent event) {
+    finish();
+  }
+
+  @Override
+  public void onEmojiconBackspaceClicked(View view) {
+
+  }
+
+  @Override
+  public void onEmojiconClicked(Emojicon emojicon) {
+    if ("\u274c".equals(emojicon.getEmoji())) {
+      (new Thread() {
+        @Override
+        public void run() {
+          mInstrumentation.sendKeyDownUpSync(KeyEvent.KEYCODE_DEL);
+        }
+      }).start();
+    } else {
+      String text = mEtPostContent.getText().toString();
+      String before = text.substring(0, mEtPostContent.getSelectionStart());
+      String after = text.substring(mEtPostContent.getSelectionEnd());
+
+      mEtPostContent.setText(before + emojicon.getEmoji() + after);
+      mEtPostContent.setSelection(before.length() + emojicon.getEmoji().length());
     }
   }
 
@@ -631,9 +535,8 @@ public class ChatActivity extends BaseActivity implements
         .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialogInterface, int i) {
-            requestFavDel();
             ConversationUtil.deleteConversation(mChatId);
-            U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_REMOVE, mChatId));
+            U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_CONVERSATION_REMOVE, mChatId));
             finish();
           }
         })
@@ -659,8 +562,8 @@ public class ChatActivity extends BaseActivity implements
               public void onResponse(Response response) {
                 showToast(getString(R.string.shield_succeed));
                 mConversation.setBanned(true);
-                DaoUtils.getConversationDao().update(mConversation);
-                U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATIONS_RELOAD, null));
+                DaoUtils.getFriendConversationDao().update(mConversation);
+                U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_CONVERSATIONS_RELOAD, null));
                 addBannedInfoMsg();
               }
             }, Response.class, mChatId);
@@ -677,7 +580,7 @@ public class ChatActivity extends BaseActivity implements
         .show();
   }
 
-  private void showMessageDialog(final Message m) {
+  private void showMessageDialog(final FriendMessage m) {
     new AlertDialog.Builder(this).setTitle("操作")
         .setItems(new String[]{getString(R.string.copy_to_clipboard)}, new DialogInterface.OnClickListener() {
           @Override
@@ -697,50 +600,7 @@ public class ChatActivity extends BaseActivity implements
         .show();
   }
 
-  private void addPostSummaryInfo() {
-    Message message = MessageUtil.addPostSummaryInfo(mChatId,
-        System.currentTimeMillis(),
-        mConversation.getPostId(),
-        mConversation.getPostContent());
-    mChatAdapter.add(message);
-  }
-
-  private void addCommentSummaryInfo() {
-    Message message = MessageUtil.addCommentSummaryInfo(mChatId,
-        System.currentTimeMillis(),
-        mConversation.getPostId(),
-        mConversation.getPostContent(),
-        mConversation.getCommentId(),
-        mConversation.getCommentContent());
-    mChatAdapter.add(message);
-  }
-
-  @Override
-  public void onEmojiconBackspaceClicked(View view) {
-
-  }
-
-  @Override
-  public void onEmojiconClicked(Emojicon emojicon) {
-    if ("\u274c".equals(emojicon.getEmoji())) {
-      (new Thread() {
-        @Override
-        public void run() {
-          mInstrumentation.sendKeyDownUpSync(KeyEvent.KEYCODE_DEL);
-        }
-      }).start();
-    } else {
-      String text = mEtPostContent.getText().toString();
-      String before = text.substring(0, mEtPostContent.getSelectionStart());
-      String after = text.substring(mEtPostContent.getSelectionEnd());
-
-      mEtPostContent.setText(before + emojicon.getEmoji() + after);
-      mEtPostContent.setSelection(before.length() + emojicon.getEmoji().length());
-    }
-  }
-
-
-  private void resendConfirm(final Message message) {
+  private void resendConfirm(final FriendMessage message) {
     final ThemedDialog dialog = new ThemedDialog(this);
     dialog.setTitle("是否重新发送此消息？");
     dialog.setPositive(R.string.okay, new View.OnClickListener() {
@@ -748,7 +608,7 @@ public class ChatActivity extends BaseActivity implements
       public void onClick(View view) {
         if (message.getStatus() == MessageConst.STATUS_FAILED) {
           showToast(R.string.resending);
-          ChatAccount.inst().getSender().send(message);
+          ChatAccount.inst().getFriendSender().send(message);
         }
         dialog.dismiss();
       }
@@ -765,7 +625,7 @@ public class ChatActivity extends BaseActivity implements
 
   private void addBannedInfoMsg() {
     if (mConversation.getBanned() != null && mConversation.getBanned()) {
-      mChatAdapter.add(ChatUtils.infoMsg(mChatId, "你已将对方拉黑，不会再收到对方发来的消息"));
+      mChatAdapter.add(ChatUtils.infoFriendMsg(mChatId, "你已将对方拉黑，不会再收到对方发来的消息"));
     }
   }
 }

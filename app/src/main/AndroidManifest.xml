@@ -209,6 +209,20 @@
 
         <activity android:name=".app.dp.DailyPicksActivity" android:screenOrientation="portrait"/>
 
+        <activity android:name=".app.tag.AllTagsActivity" android:label="全部标签" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.friends.UserSearchActivity" android:label="搜索朋友" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.friends.SendRequestActivity" android:label="发送朋友请求" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.friends.FriendContactListActivity" android:label="手机联系人" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.topic.TopicDetailActivity" android:label="话题详情" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.chat.FConversationActivity" android:label="好友会话列表" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.chat.FChatActivity" android:label="朋友聊天" android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize"/>
+
         <service android:enabled="true" android:name=".contact.ContactsSyncService"/>
         <service android:enabled="true" android:name=".app.msg.FetchNotificationService"/>
         <service android:enabled="true" android:name=".app.SyncService"/>
@@ -280,21 +294,6 @@
                 <action android:name=""/>
             </intent-filter>
         </activity>
-        <activity
-                android:name=".app.tag.AllTagsActivity"
-                android:label="全部标签"/>
-        <activity
-                android:name=".app.friends.UserSearchActivity"
-                android:label="搜索朋友"/>
-        <activity
-                android:name=".app.friends.SendRequestActivity"
-                android:label="发送朋友请求"/>
-        <activity
-                android:name=".app.friends.FriendContactListActivity"
-                android:label="手机联系人"/>
-        <activity
-                android:name=".app.topic.TopicDetailActivity"
-                android:label="话题详情"/>
 
         <!-- 【必须】 信鸽service -->
         <service android:exported="true" android:name="com.tencent.android.tpush.service.XGPushService" android:persistent="true" android:process=":xg_service_v2" tools:ignore="ExportedService"/>

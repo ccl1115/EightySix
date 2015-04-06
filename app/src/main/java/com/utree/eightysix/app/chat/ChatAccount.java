@@ -24,11 +24,15 @@ public class ChatAccount {
 
   private static ChatAccount sChatAccount;
   private NewMessageBroadcastReceiver mNewMessageBroadcastReceiver;
+
   private Sender mSender;
+  private FriendSender mFriendSender;
+
   private boolean mIsLogin;
 
   private ChatAccount() {
     mSender = new SenderImpl();
+    mFriendSender = new FriendSenderImpl();
   }
 
   public static ChatAccount inst() {
@@ -45,6 +49,10 @@ public class ChatAccount {
 
   public Sender getSender() {
     return mSender;
+  }
+
+  public FriendSender getFriendSender() {
+    return mFriendSender;
   }
 
   public void login() {

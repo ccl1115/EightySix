@@ -24,6 +24,7 @@ public class CounterView extends RoundedButton {
   }
 
   public void setCount(int count) {
+    setVisibility(count == 0 ? VISIBLE : GONE);
     setText(String.valueOf(count));
   }
 }
