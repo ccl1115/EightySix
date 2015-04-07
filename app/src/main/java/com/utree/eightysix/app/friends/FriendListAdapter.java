@@ -4,6 +4,7 @@
 
 package com.utree.eightysix.app.friends;
 
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,8 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.app.FragmentHolder;
+import com.utree.eightysix.app.account.ProfileFragment;
 import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.data.Friend;
 import com.utree.eightysix.view.SectionedBaseAdapter;
@@ -86,7 +89,19 @@ public class FriendListAdapter extends SectionedBaseAdapter {
       holder = (FriendViewHolder) convertView.getTag();
     }
 
-    holder.setData(mSections.get(mSectionKeys[section]).get(position));
+    final Friend friend = mSections.get(mSectionKeys[section]).get(position);
+    holder.setData(friend);
+
+    convertView.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Bundle args = new Bundle();
+        args.putInt("viewId", friend.viewId);
+        args.putBoolean("isVisitor", true);
+        args.putString("userName", friend.userName);
+        FragmentHolder.start(v.getContext(), ProfileFragment.class, args);
+      }
+    });
 
     return convertView;
   }

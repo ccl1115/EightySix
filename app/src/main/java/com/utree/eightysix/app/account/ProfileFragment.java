@@ -20,6 +20,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.CameraUtil;
 import com.utree.eightysix.app.HolderFragment;
 import com.utree.eightysix.app.account.event.*;
+import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.app.circle.FollowCircleListActivity;
 import com.utree.eightysix.app.friends.FriendListActivity;
 import com.utree.eightysix.app.friends.SendRequestActivity;
@@ -337,6 +338,12 @@ public class ProfileFragment extends HolderFragment {
 
             if (response.object.isFriend == 1) {
               mTvAction.setText("发起聊天");
+              mTvAction.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                  ChatUtils.startFriendChat(getBaseActivity(), mViewId);
+                }
+              });
             } else {
               mTvAction.setText("添加朋友");
               mTvAction.setOnClickListener(new View.OnClickListener() {
