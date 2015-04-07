@@ -107,6 +107,10 @@ public class FChatActivity extends BaseActivity implements
 
   private Instrumentation mInstrumentation = new Instrumentation();
 
+  public static String getCurrentFChatId() {
+    return sCurrentFChatId;
+  }
+
   @OnClick(R.id.iv_post)
   public void onRbPostClicked() {
     ChatAccount.inst().getFriendSender().txt(mChatId, mEtPostContent.getText().toString());
@@ -419,6 +423,12 @@ public class FChatActivity extends BaseActivity implements
         }
       }
     }).execute();
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    sCurrentFChatId = null;
   }
 
   @Override

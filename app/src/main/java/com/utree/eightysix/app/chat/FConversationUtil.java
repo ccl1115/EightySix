@@ -36,6 +36,11 @@ class FConversationUtil {
       conversation.setUnreadCount(0l);
     }
 
+    conversation.setViewId(Integer.valueOf(emMessage.getStringAttribute("viewId")));
+    conversation.setMyAvatar(emMessage.getStringAttribute("myUserAvatar"));
+    conversation.setTargetAvatar(emMessage.getStringAttribute("targetUserAvatar"));
+    conversation.setTargetName(emMessage.getStringAttribute("targetUserName"));
+
     conversation.setTimestamp(System.currentTimeMillis());
 
     DaoUtils.getFriendConversationDao().insertOrReplace(conversation);
@@ -119,5 +124,10 @@ class FConversationUtil {
     return DaoUtils.getFriendConversationDao().queryBuilder()
         .where(FriendConversationDao.Properties.UnreadCount.gt(0))
         .count();
+  }
+
+  public static FriendConversation updateUnreadCount(String chatId) {
+
+    return null;
   }
 }

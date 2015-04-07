@@ -364,8 +364,8 @@ public class TabRegionFragment extends BaseFragment {
 
   @Override
   public void onHiddenChanged(boolean hidden) {
-    setTopBarTitle();
     if (!hidden) {
+      setTopBarTitle();
       mFeedFragment.onHiddenChanged(false);
     }
   }

@@ -352,6 +352,56 @@ public class ChatUtils {
       }
 
       NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+          .setContentTitle("聊天")
+          .setContentText(String.format("你收到了%d条聊天消息", count))
+          .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher))
+          .setSmallIcon(R.drawable.ic_launcher)
+          .setLights(Color.GREEN, 500, 2000)
+          .setAutoCancel(true);
+
+      if (Account.inst().getSilentMode()) {
+        builder.setSound(null);
+      } else {
+        builder.setDefaults(Notification.DEFAULT_SOUND);
+      }
+
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        builder.setContentIntent(PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT));
+      } else {
+        builder.setContentIntent(PendingIntent.getActivity(context, 0,
+            ChatActivity.getIntent(context, message.getChatId()),
+            PendingIntent.FLAG_UPDATE_CURRENT));
+      }
+
+      Notification build = builder.build();
+
+      manager.notify(ID_MESSAGE, build);
+
+    }
+    public static void notifyNewMessage(FriendMessage message) {
+
+      long count = MessageUtil.getUnreadCount();
+      if (count == 0) {
+        return;
+      }
+      Context context = U.getContext();
+      NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+      Intent[] intents;
+      if (count == 1) {
+        intents = new Intent[]{
+            HomeActivity.getIntent(context, 0, 0),
+            ConversationActivity.getIntent(context),
+            ChatActivity.getIntent(context, message.getChatId())
+        };
+      } else {
+        intents = new Intent[]{
+            HomeActivity.getIntent(context, 0, 0),
+            ConversationActivity.getIntent(context)
+        };
+      }
+
+      NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
           .setContentTitle("匿名聊天")
           .setContentText(String.format("你收到了%d条聊天消息", count))
           .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher))

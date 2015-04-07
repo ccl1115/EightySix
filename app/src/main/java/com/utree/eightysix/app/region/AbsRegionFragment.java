@@ -264,6 +264,10 @@ public abstract class AbsRegionFragment extends BaseFragment {
   }
 
   public void updateTitleBar() {
+    if (isHidden()) {
+      return;
+    }
+
     if (mMode == MODE_FEED) {
       getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_drawer));
       getTopBar().setTitleTabSelected(0);
