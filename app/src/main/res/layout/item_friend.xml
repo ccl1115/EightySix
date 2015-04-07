@@ -15,11 +15,11 @@
 
     <com.utree.eightysix.widget.AsyncImageViewWithRoundCorner
             android:id="@+id/aiv_portrait"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_margin="16dp"
-            app:width="48dp"
-            app:height="48dp"
+            app:width="40dp"
+            app:height="40dp"
             app:radius="4dp"
             />
 
@@ -29,6 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/aiv_portrait"
             android:layout_toEndOf="@+id/aiv_portrait"
+            android:layout_marginTop="8dp"
             />
 
     <TextView

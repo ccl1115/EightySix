@@ -24,7 +24,7 @@
             app:radius="4dp"
             />
 
-    <TextView
+    <com.rockerhieu.emojicon.EmojiconTextView
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
             android:layout_toEndOf="@+id/tv_name"
             />
 
-    <TextView
+    <com.rockerhieu.emojicon.EmojiconTextView
             android:id="@+id/tv_last"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

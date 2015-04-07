@@ -93,7 +93,7 @@ public class FConversationAdapter extends BaseAdapter {
       mTvName.setText(mConversation.getTargetName());
       mTvLastMsg.setText(mConversation.getLastMsg());
       mTvTimestamp.setText(TimeUtil.getElapsed(mConversation.getTimestamp()));
-      mCvNew.setText(String.valueOf(mConversation.getUnreadCount()));
+      mCvNew.setCount(mConversation.getUnreadCount().intValue());
     }
 
     ViewHolder(View view) {

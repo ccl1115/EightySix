@@ -29,16 +29,15 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.CameraUtil;
+import com.utree.eightysix.app.FragmentHolder;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.account.ProfileFragment;
 import com.utree.eightysix.app.chat.event.FriendChatEvent;
 import com.utree.eightysix.app.publish.EmojiFragment;
 import com.utree.eightysix.app.publish.EmojiViewPager;
 import com.utree.eightysix.dao.FriendConversation;
 import com.utree.eightysix.dao.FriendConversationDao;
 import com.utree.eightysix.dao.FriendMessage;
-import com.utree.eightysix.rest.OnResponse2;
-import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.DaoUtils;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
@@ -242,11 +241,15 @@ public class FChatActivity extends BaseActivity implements
 
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
-    getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_action_overflow));
+    getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_action_profile));
     getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        showMoreDialog();
+        Bundle args = new Bundle();
+        args.putInt("viewId", mConversation.getViewId());
+        args.putBoolean("isVisitor", true);
+        args.putString("userName", mConversation.getTargetName());
+        FragmentHolder.start(FChatActivity.this, ProfileFragment.class, args);
       }
     });
 
@@ -466,118 +469,6 @@ public class FChatActivity extends BaseActivity implements
       mEtPostContent.setText(before + emojicon.getEmoji() + after);
       mEtPostContent.setSelection(before.length() + emojicon.getEmoji().length());
     }
-  }
-
-  private void showMoreDialog() {
-    new AlertDialog.Builder(this).setTitle(getString(R.string.chat_actions))
-        .setItems(
-            new String[]{getString(R.string.report),
-                getString(R.string.delete),
-                (mConversation.getBanned() != null && mConversation.getBanned()) ? getString(R.string.shielded) : getString(R.string.shield)},
-            new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialogInterface, int i) {
-                switch (i) {
-                  case 0: {
-                    showReportConfirmDialog();
-                    break;
-                  }
-                  case 1: {
-                    showDeleteConfirmDialog();
-                    break;
-                  }
-                  case 2: {
-                    if (mConversation.getBanned() == null || !mConversation.getBanned()) {
-                      showShieldConfirmDialog();
-                    }
-                    break;
-                  }
-                }
-              }
-            }).show();
-  }
-
-  private void showReportConfirmDialog() {
-    new AlertDialog.Builder(this).setTitle(getString(R.string.confirm_report_chat))
-        .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(final DialogInterface dialogInterface, int i) {
-            U.request("chat_report", new OnResponse2<Response>() {
-
-              @Override
-              public void onResponse(Response response) {
-                if (RESTRequester.responseOk(response)) {
-                  showToast(getString(R.string.report_success));
-                }
-              }
-
-              @Override
-              public void onResponseError(Throwable e) {
-                dialogInterface.dismiss();
-              }
-            }, Response.class, mChatId);
-
-            dialogInterface.dismiss();
-          }
-        })
-        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialogInterface, int i) {
-            dialogInterface.dismiss();
-          }
-        })
-        .show();
-  }
-
-  private void showDeleteConfirmDialog() {
-    new AlertDialog.Builder(this).setTitle(getString(R.string.confirm_delete_chat))
-        .setMessage(getString(R.string.delete_chat_info))
-        .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialogInterface, int i) {
-            ConversationUtil.deleteConversation(mChatId);
-            U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_CONVERSATION_REMOVE, mChatId));
-            finish();
-          }
-        })
-        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialogInterface, int i) {
-            dialogInterface.dismiss();
-          }
-        }).show();
-  }
-
-  private void showShieldConfirmDialog() {
-    new AlertDialog.Builder(this).setTitle(getString(R.string.confirm_shield_chat))
-        .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
-            U.request("chat_shield", new OnResponse2<Response>() {
-              @Override
-              public void onResponseError(Throwable e) {
-              }
-
-              @Override
-              public void onResponse(Response response) {
-                showToast(getString(R.string.shield_succeed));
-                mConversation.setBanned(true);
-                DaoUtils.getFriendConversationDao().update(mConversation);
-                U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_CONVERSATIONS_RELOAD, null));
-                addBannedInfoMsg();
-              }
-            }, Response.class, mChatId);
-
-            dialog.dismiss();
-          }
-        })
-        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
-            dialog.dismiss();
-          }
-        })
-        .show();
   }
 
   private void showMessageDialog(final FriendMessage m) {
