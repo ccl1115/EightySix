@@ -294,7 +294,6 @@ public class ChatUtils {
     String chatId = FConversationUtil.getChatIdByViewId(viewId);
 
     if (chatId != null) {
-      // #TODO start friend chat activity;
       FChatActivity.start(context, chatId);
       return;
     }

@@ -18,6 +18,7 @@ import butterknife.OnItemClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
@@ -109,6 +110,15 @@ public class FConversationActivity extends BaseActivity {
         return true;
       }
     });
+
+    U.getChatBus().register(mAdapter);
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+
+    U.getChatBus().unregister(mAdapter);
   }
 
   @Override

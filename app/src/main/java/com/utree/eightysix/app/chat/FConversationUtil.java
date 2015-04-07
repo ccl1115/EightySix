@@ -12,6 +12,7 @@ import com.utree.eightysix.app.chat.event.FriendChatEvent;
 import com.utree.eightysix.dao.FriendConversation;
 import com.utree.eightysix.dao.FriendConversationDao;
 import com.utree.eightysix.dao.FriendMessage;
+import com.utree.eightysix.dao.FriendMessageDao;
 import com.utree.eightysix.response.FriendChatResponse;
 import com.utree.eightysix.utils.DaoUtils;
 
@@ -127,7 +128,18 @@ class FConversationUtil {
   }
 
   public static FriendConversation updateUnreadCount(String chatId) {
+    FriendConversation conversation = getByChatId(chatId);
 
-    return null;
+    if (conversation != null) {
+      final long count = DaoUtils.getFriendMessageDao().queryBuilder()
+          .where(FriendMessageDao.Properties.ChatId.eq(chatId), FriendMessageDao.Properties.Read.eq(false))
+          .count();
+      conversation.setUnreadCount(count);
+
+      DaoUtils.getFriendConversationDao().update(conversation);
+      return conversation;
+    } else {
+      return null;
+    }
   }
 }

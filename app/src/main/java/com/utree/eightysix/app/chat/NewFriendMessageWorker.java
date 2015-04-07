@@ -29,7 +29,6 @@ public class NewFriendMessageWorker extends AsyncTask<Void, Integer, Void> {
   private static final int PROGRESS_INSERT_MESSAGE = 5;
   private static final int PROGRESS_UNREAD_CONVERSATION_COUNT = 2;
   private static final int PROGRESS_UPDATE_CONVERSATION = 3;
-  private static final int PROGRESS_INFO_MESSAGE = 6;
   private static final int PROGRESS_MESSAGE_DOWNLOADED = 7;
   private static final int PROGRESS_MESSAGE_ACK = 8;
 

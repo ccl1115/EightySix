@@ -20,7 +20,6 @@ public interface FriendSender {
 
   FriendMessage voice(String chatId, File f);
 
-
   FriendMessage photo(String chatId, File f);
 
 }
