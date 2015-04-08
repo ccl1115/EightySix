@@ -99,6 +99,7 @@ class FConversationUtil {
 
   static void deleteAllConversation() {
     DaoUtils.getFriendConversationDao().deleteAll();
+    DaoUtils.getFriendMessageDao().deleteAll();
     U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_CONVERSATIONS_RELOAD, null));
   }
 

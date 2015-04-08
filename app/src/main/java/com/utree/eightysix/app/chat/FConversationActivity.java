@@ -35,6 +35,8 @@ import java.util.List;
 @TopTitle(R.string.chat)
 public class FConversationActivity extends BaseActivity {
 
+  public static final int PAGE_SIZE = 20;
+
   public static void start(Context context) {
     Intent intent = new Intent(context, FConversationActivity.class);
 
@@ -45,7 +47,6 @@ public class FConversationActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
-  public static final int PAGE_SIZE = 20;
   @InjectView(R.id.alv_conversation)
   public AdvancedListView mAlvConversation;
 
@@ -78,17 +79,16 @@ public class FConversationActivity extends BaseActivity {
       }
     });
 
+    mAlvConversation.setEmptyView(mRstvEmpty);
+
     final List<FriendConversation> conversations = FConversationUtil.getConversations(mPage, PAGE_SIZE);
 
-    if (conversations.size() == 0) {
-      mRstvEmpty.setVisibility(View.VISIBLE);
-    } else {
-      mRstvEmpty.setVisibility(View.GONE);
-      mAdapter = new FConversationAdapter(conversations);
-      mAlvConversation.setAdapter(mAdapter);
+    mRstvEmpty.setVisibility(View.GONE);
+    mAdapter = new FConversationAdapter(conversations);
+    mAlvConversation.setAdapter(mAdapter);
+    U.getChatBus().register(mAdapter);
 
-      mHasMore = conversations.size() == PAGE_SIZE;
-    }
+    mHasMore = conversations.size() == PAGE_SIZE;
 
     mAlvConversation.setLoadMoreCallback(new LoadMoreCallback() {
       @Override
@@ -111,14 +111,15 @@ public class FConversationActivity extends BaseActivity {
       }
     });
 
-    U.getChatBus().register(mAdapter);
   }
 
   @Override
   protected void onDestroy() {
     super.onDestroy();
 
-    U.getChatBus().unregister(mAdapter);
+    if (mAdapter != null) {
+      U.getChatBus().unregister(mAdapter);
+    }
   }
 
   @Override
@@ -141,8 +142,10 @@ public class FConversationActivity extends BaseActivity {
           public void onClick(DialogInterface dialog, int which) {
             switch (which) {
               case 0:
+                FMessageUtil.setAllRead();
                 break;
               case 1:
+                FConversationUtil.deleteAllConversation();
                 break;
             }
           }

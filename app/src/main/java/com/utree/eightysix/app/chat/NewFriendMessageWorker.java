@@ -36,6 +36,7 @@ public class NewFriendMessageWorker extends AsyncTask<Void, Integer, Void> {
   private final EMMessage mEmMessage;
 
   private FriendConversation mConversation;
+  private long mUnreadConversationCount;
 
   public NewFriendMessageWorker(FriendMessage message, EMMessage emMessage) {
     mMessage = message;
@@ -73,6 +74,9 @@ public class NewFriendMessageWorker extends AsyncTask<Void, Integer, Void> {
     if (!foreground) {
       // 收到的消息，对应的聊天页面不在前台，则更新对话未读数
       mConversation = FConversationUtil.updateUnreadCount(mMessage.getChatId());
+      publishProgress(PROGRESS_UPDATE_CONVERSATION);
+
+      mUnreadConversationCount = FConversationUtil.getUnreadConversationCount();
       publishProgress(PROGRESS_UNREAD_CONVERSATION_COUNT);
     }
 
@@ -114,7 +118,7 @@ public class NewFriendMessageWorker extends AsyncTask<Void, Integer, Void> {
         break;
       case PROGRESS_UNREAD_CONVERSATION_COUNT:
         U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT,
-            mConversation.getUnreadCount()));
+            mUnreadConversationCount));
         break;
       case PROGRESS_UPDATE_CONVERSATION:
         U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_CONVERSATION_INSERT_OR_UPDATE, mConversation));

@@ -21,9 +21,11 @@ import com.utree.eightysix.app.chat.ConversationActivity;
 import com.utree.eightysix.app.chat.ConversationUtil;
 import com.utree.eightysix.app.chat.FConversationActivity;
 import com.utree.eightysix.app.chat.event.ChatEvent;
+import com.utree.eightysix.app.chat.event.FriendChatEvent;
 import com.utree.eightysix.app.friends.RequestListActivity;
 import com.utree.eightysix.event.HasNewPraiseEvent;
 import com.utree.eightysix.event.NewCommentCountEvent;
+import com.utree.eightysix.widget.CounterView;
 import com.utree.eightysix.widget.RoundedButton;
 
 /**
@@ -34,7 +36,10 @@ public class MsgCenterFragment extends BaseFragment {
   public RoundedButton mRbCountMsg;
 
   @InjectView(R.id.rb_count_chat)
-  public RoundedButton mRbCountChat;
+  public CounterView mRbCountChat;
+
+  @InjectView(R.id.rb_count_fchat)
+  public CounterView mRbCountFChat;
 
   @InjectView(R.id.rb_praise)
   public RoundedButton mRbPraise;
@@ -80,6 +85,8 @@ public class MsgCenterFragment extends BaseFragment {
       mRbCountChat.setVisibility(View.VISIBLE);
     }
     mRbCountChat.setText(String.valueOf(unreadConversationCount));
+
+    U.getChatBus().register(this);
   }
 
   @Subscribe
@@ -105,12 +112,14 @@ public class MsgCenterFragment extends BaseFragment {
   @Subscribe
   public void onChatEvent(ChatEvent event) {
     if (event.getStatus() == ChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT) {
-      if (((Long) event.getObj()) == 0) {
-        mRbCountChat.setVisibility(View.INVISIBLE);
-      } else {
-        mRbCountChat.setVisibility(View.VISIBLE);
-      }
-      mRbCountChat.setText(String.valueOf(event.getObj()));
+      mRbCountChat.setCount(((Long) event.getObj()).intValue());
+    }
+  }
+
+  @Subscribe
+  public void onFriendChatEvent(FriendChatEvent event) {
+    if (event.getStatus() == FriendChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT) {
+      mRbCountFChat.setCount(((Long) event.getObj()).intValue());
     }
   }
 
@@ -146,4 +155,12 @@ public class MsgCenterFragment extends BaseFragment {
       getBaseActivity().getTopBar().getAbRight().hide();
     }
   }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+
+    U.getChatBus().unregister(this);
+  }
+
 }
