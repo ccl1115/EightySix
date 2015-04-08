@@ -58,6 +58,8 @@ public class FriendChatEvent {
    */
   public static final int EVENT_UPDATE_UNREAD_CONVERSATION_COUNT = 36;
 
+  public static final int EVENT_NEW_ASSISTANT_MESSAGE = 40;
+
   private int mStatus;
 
   private Object mObj;

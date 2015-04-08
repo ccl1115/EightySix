@@ -243,20 +243,6 @@ public class FChatActivity extends BaseActivity implements
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
-
-    getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_action_profile));
-    getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        Bundle args = new Bundle();
-        args.putInt("viewId", mConversation.getViewId());
-        args.putBoolean("isVisitor", true);
-        args.putString("userName", mConversation.getTargetName());
-        FragmentHolder.start(FChatActivity.this, ProfileFragment.class, args);
-      }
-    });
-
     mCameraUtil = new CameraUtil(this, new CameraUtil.Callback() {
       private File mFile;
       private String mLastHash;
@@ -327,6 +313,23 @@ public class FChatActivity extends BaseActivity implements
         .unique();
 
     setTopTitle(mConversation.getTargetName());
+
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+
+    if (mConversation.getChatType().equals("friend")) {
+      getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_action_profile));
+      getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          Bundle args = new Bundle();
+          args.putInt("viewId", mConversation.getViewId());
+          args.putBoolean("isVisitor", true);
+          args.putString("userName", mConversation.getTargetName());
+          FragmentHolder.start(FChatActivity.this, ProfileFragment.class, args);
+        }
+      });
+    }
+
 
     if (mChatId == null) {
       finish();
@@ -408,6 +411,10 @@ public class FChatActivity extends BaseActivity implements
 
         mUnreadConversationCount = ConversationUtil.getUnreadConversationCount();
         publishProgress(2);
+
+        if (mConversation.getChatType().equals("assistant")) {
+          publishProgress(3);
+        }
         return null;
       }
 
@@ -419,6 +426,9 @@ public class FChatActivity extends BaseActivity implements
             break;
           case 2:
             U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT, mUnreadConversationCount));
+            break;
+          case 3:
+            U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_NEW_ASSISTANT_MESSAGE, 0l));
             break;
         }
       }

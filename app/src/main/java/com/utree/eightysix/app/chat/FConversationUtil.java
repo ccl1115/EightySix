@@ -41,6 +41,7 @@ class FConversationUtil {
     conversation.setMyAvatar(emMessage.getStringAttribute("myUserAvatar"));
     conversation.setTargetAvatar(emMessage.getStringAttribute("targetUserAvatar"));
     conversation.setTargetName(emMessage.getStringAttribute("targetUserName"));
+    conversation.setChatType(emMessage.getStringAttribute("chatType"));
 
     conversation.setTimestamp(System.currentTimeMillis());
 
@@ -55,12 +56,14 @@ class FConversationUtil {
 
   static List<FriendConversation> getConversations() {
     return DaoUtils.getFriendConversationDao().queryBuilder()
+        .where(FriendConversationDao.Properties.ChatType.eq("friend"))
         .orderDesc(FriendConversationDao.Properties.Timestamp)
         .list();
   }
 
   static List<FriendConversation> getConversations(int page, int size) {
     return DaoUtils.getFriendConversationDao().queryBuilder()
+        .where(FriendConversationDao.Properties.ChatType.eq("friend"))
         .orderDesc(FriendConversationDao.Properties.Timestamp)
         .offset(page * size)
         .limit(size)
@@ -75,7 +78,7 @@ class FConversationUtil {
     return friendConversation == null ? null : friendConversation.getChatId();
   }
 
-  static void createIfNotExist(FriendChatResponse.FriendChat chat, int viewId) {
+  static void createIfNotExist(FriendChatResponse.FriendChat chat, int viewId, String chatType) {
     FriendConversation conversation = DaoUtils.getFriendConversationDao().queryBuilder()
         .where(FriendConversationDao.Properties.ChatId.eq(chat.chatId))
         .unique();
@@ -92,6 +95,7 @@ class FConversationUtil {
       conversation.setTargetName(chat.targetName);
       conversation.setTargetAvatar(chat.targetAvatar);
       conversation.setSource(chat.factoryName);
+      conversation.setChatType(chatType);
       DaoUtils.getFriendConversationDao().insert(conversation);
     }
   }
@@ -125,10 +129,11 @@ class FConversationUtil {
   static long getUnreadConversationCount() {
     return DaoUtils.getFriendConversationDao().queryBuilder()
         .where(FriendConversationDao.Properties.UnreadCount.gt(0))
+        .where(FriendConversationDao.Properties.ChatType.eq("friend"))
         .count();
   }
 
-  public static FriendConversation updateUnreadCount(String chatId) {
+  static FriendConversation updateUnreadCount(String chatId) {
     FriendConversation conversation = getByChatId(chatId);
 
     if (conversation != null) {
@@ -142,5 +147,13 @@ class FConversationUtil {
     } else {
       return null;
     }
+  }
+
+  static String getAssistantChatId() {
+    FriendConversation assistant = DaoUtils.getFriendConversationDao().queryBuilder()
+        .where(FriendConversationDao.Properties.ChatType.eq("assistant"))
+        .limit(1)
+        .unique();
+    return assistant == null ? null : assistant.getChatId();
   }
 }

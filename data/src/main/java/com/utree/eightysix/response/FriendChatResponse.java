@@ -19,6 +19,9 @@ public class FriendChatResponse extends Response {
     @SerializedName("chatId")
     public String chatId;
 
+    @SerializedName("viewId")
+    public int viewId;
+
     @SerializedName("myAvatar")
     public String myAvatar;
 

@@ -23,13 +23,11 @@ public class NewMessageBroadcastReceiver extends BroadcastReceiver {
 
     String chatType = message.getStringAttribute("chatType", null);
 
-    if ("friend".equals(chatType)) {
+    if ("friend".equals(chatType) || "assistant".equals(chatType)) {
       final FriendMessage fm = ChatUtils.toFriendMessage(message);
       if (fm != null) {
         new NewFriendMessageWorker(fm, message).execute();
       }
-    } else if ("assistant".equals(chatType)) {
-
     } else {
       final Message m = ChatUtils.toMessage(message);
       if (m != null) {

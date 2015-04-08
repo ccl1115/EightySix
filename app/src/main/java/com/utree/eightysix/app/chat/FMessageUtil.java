@@ -80,7 +80,7 @@ public class FMessageUtil {
   }
 
   public static long getUnreadCount() {
-    return DaoUtils.getMessageDao().queryBuilder()
-        .where(MessageDao.Properties.Read.eq(false)).count();
+    return DaoUtils.getFriendMessageDao().queryBuilder()
+        .where(FriendMessageDao.Properties.Read.eq(false)).count();
   }
 }

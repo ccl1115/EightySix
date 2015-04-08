@@ -17,6 +17,7 @@ import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
+import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.app.chat.ConversationActivity;
 import com.utree.eightysix.app.chat.ConversationUtil;
 import com.utree.eightysix.app.chat.FConversationActivity;
@@ -40,6 +41,9 @@ public class MsgCenterFragment extends BaseFragment {
 
   @InjectView(R.id.rb_count_fchat)
   public CounterView mRbCountFChat;
+
+  @InjectView(R.id.rb_count_assist)
+  public CounterView mRbCountAssist;
 
   @InjectView(R.id.rb_praise)
   public RoundedButton mRbPraise;
@@ -67,6 +71,11 @@ public class MsgCenterFragment extends BaseFragment {
   @OnClick(R.id.ll_fchat)
   public void onLlFChatClicked() {
     FConversationActivity.start(getActivity());
+  }
+
+  @OnClick(R.id.ll_assist)
+  public void onLlAssistClicked() {
+    ChatUtils.startAssistantChat(getBaseActivity());
   }
 
   @Override
@@ -120,6 +129,8 @@ public class MsgCenterFragment extends BaseFragment {
   public void onFriendChatEvent(FriendChatEvent event) {
     if (event.getStatus() == FriendChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT) {
       mRbCountFChat.setCount(((Long) event.getObj()).intValue());
+    } else if (event.getStatus() == FriendChatEvent.EVENT_NEW_ASSISTANT_MESSAGE) {
+      mRbCountAssist.setCount(((Long) event.getObj()).intValue());
     }
   }
 

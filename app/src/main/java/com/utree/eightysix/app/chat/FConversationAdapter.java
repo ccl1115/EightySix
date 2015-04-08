@@ -20,6 +20,7 @@ import com.utree.eightysix.dao.FriendConversation;
 import com.utree.eightysix.widget.AsyncImageViewWithRoundCorner;
 import com.utree.eightysix.widget.CounterView;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -89,14 +90,14 @@ public class FConversationAdapter extends BaseAdapter {
           FriendConversation conversation = mConversations.get(i);
           if (conversation.getId().equals(obj.getId())) {
             mConversations.set(i, obj);
-            //Collections.sort(mConversations, sComparator);
+            Collections.sort(mConversations, sComparator);
             notifyDataSetChanged();
             return;
           }
         }
 
         mConversations.add(obj);
-        //Collections.sort(mConversations, sComparator);
+        Collections.sort(mConversations, sComparator);
         notifyDataSetChanged();
         break;
       }

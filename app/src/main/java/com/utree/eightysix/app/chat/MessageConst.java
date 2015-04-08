@@ -17,6 +17,9 @@ public class MessageConst {
   public static final int STATUS_FAILED = 0x1002;
   public static final int STATUS_SUCCESS = 0x1003;
 
+  public static final int CHAT_TYPE_FRIEND = 0x1;
+
+  public static final int CHAT_TYPE_ASSIST = 0x2;
 
   /**
    * 文本

@@ -31,6 +31,7 @@ public class NewFriendMessageWorker extends AsyncTask<Void, Integer, Void> {
   private static final int PROGRESS_UPDATE_CONVERSATION = 3;
   private static final int PROGRESS_MESSAGE_DOWNLOADED = 7;
   private static final int PROGRESS_MESSAGE_ACK = 8;
+  private static final int PROGRESS_NEW_ASSISTANT_MESSAGE = 9;
 
   private final FriendMessage mMessage;
   private final EMMessage mEmMessage;
@@ -78,6 +79,10 @@ public class NewFriendMessageWorker extends AsyncTask<Void, Integer, Void> {
 
       mUnreadConversationCount = FConversationUtil.getUnreadConversationCount();
       publishProgress(PROGRESS_UNREAD_CONVERSATION_COUNT);
+
+      if ("assistant".equals(mMessage.getChatType())) {
+        publishProgress(PROGRESS_NEW_ASSISTANT_MESSAGE);
+      }
     }
 
     if (mMessage.getType() == MessageConst.TYPE_IMAGE) {
@@ -127,6 +132,9 @@ public class NewFriendMessageWorker extends AsyncTask<Void, Integer, Void> {
         U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_RECEIVE_MSG, mMessage));
         break;
       case PROGRESS_MESSAGE_DOWNLOADED:
+        break;
+      case PROGRESS_NEW_ASSISTANT_MESSAGE:
+        U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_NEW_ASSISTANT_MESSAGE, mConversation.getUnreadCount()));
         break;
       case PROGRESS_MESSAGE_ACK:
         U.request("chat_ack", new OnResponse2<Response>() {
