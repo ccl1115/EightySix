@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Target;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -76,8 +77,8 @@ public class AsyncImageViewWithRoundCorner extends AsyncImageView {
 
     mRadius = (int) ta.getDimension(R.styleable.AsyncImageViewWithRoundCorner_radius, U.dp2px(14));
 
-    mImageWidth = (int) ta.getDimension(R.styleable.AsyncImageViewWithRoundCorner_width, U.dp2px(300));
-    mImageHeight = (int) ta.getDimension(R.styleable.AsyncImageViewWithRoundCorner_height, U.dp2px(300));
+    mImageWidth = (int) ta.getDimension(R.styleable.AsyncImageViewWithRoundCorner_width, -1);
+    mImageHeight = (int) ta.getDimension(R.styleable.AsyncImageViewWithRoundCorner_height, -1);
   }
 
   @Override
@@ -89,9 +90,17 @@ public class AsyncImageViewWithRoundCorner extends AsyncImageView {
 
     if (url.startsWith("/")) {
       File file = new File(url);
-      Picasso.with(getContext()).load(file).resize(mImageWidth, mImageHeight).into(mTarget);
+      RequestCreator load = Picasso.with(getContext()).load(file);
+      if (mImageHeight != -1 && mImageWidth != -1) {
+        load.resize(mImageWidth, mImageHeight);
+      }
+      load.into(mTarget);
     } else {
-      Picasso.with(getContext()).load(url).resize(mImageWidth, mImageHeight).into(mTarget);
+      RequestCreator load = Picasso.with(getContext()).load(url);
+      if (mImageHeight != -1 && mImageWidth != -1) {
+        load.resize(mImageWidth, mImageHeight);
+      }
+      load.into(mTarget);
     }
   }
 

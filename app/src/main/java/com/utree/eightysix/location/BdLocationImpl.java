@@ -86,10 +86,12 @@ public class BdLocationImpl implements Location, BDLocationListener {
         result.latitude = bdLocation.getLatitude();
         result.longitude = bdLocation.getLongitude();
         result.poi = bdLocation.getPoi();
+        result.district = bdLocation.getDistrict();
 
         Env.setLastLatitude(result.latitude);
         Env.setLastLongitude(result.longitude);
         Env.setLastCity(result.city);
+        Env.setLastDistrict(result.district);
       } else {
         result = null;
       }

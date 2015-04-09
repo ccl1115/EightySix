@@ -106,6 +106,14 @@ public class Env {
     return getSharedPreferences().getString("location_last_city", "");
   }
 
+  public static void setLastDistrict(String district) {
+    getSharedPreferences().edit().putString("location_last_district", district).apply();
+  }
+
+  public static String getLastDistrict() {
+    return getSharedPreferences().getString("location_last_district", "");
+  }
+
   public static long getUpgradeCanceledTimestamp() {
     return getSharedPreferences().getLong(String.format("upgrade_canceled_time_%d", C.VERSION), 0);
   }

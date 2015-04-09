@@ -4,21 +4,55 @@
 
 package com.utree.eightysix.app.chat;
 
+import android.text.SpannableStringBuilder;
+import android.text.style.ClickableSpan;
+import android.view.View;
+import android.widget.TextView;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.chat.event.ChatEvent;
-import com.utree.eightysix.dao.Conversation;
-import com.utree.eightysix.dao.ConversationDao;
-import com.utree.eightysix.dao.Message;
-import com.utree.eightysix.dao.MessageDao;
+import com.utree.eightysix.dao.*;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
+import com.utree.eightysix.utils.CmdHandler;
 import com.utree.eightysix.utils.DaoUtils;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
 */
 public class MessageUtil {
+
+  private static Pattern sCmdPattern = Pattern.compile("<cmd\\s*(.+=\".+\")*\\s*>(.*)</cmd>");
+
+  public static void setText(TextView textView, FriendMessage message) {
+    String content = message.getContent();
+    if ("assistant".equals(message.getChatType())) {
+      SpannableStringBuilder builder = new SpannableStringBuilder(content);
+      Matcher matcher = sCmdPattern.matcher(content);
+      while(matcher.find()) {
+        final int start = matcher.start();
+        final int end = matcher.end();
+        final String params = matcher.group(1);
+        final String cmd = matcher.group(2);
+
+        ClickableSpan span = new ClickableSpan() {
+          @Override
+          public void onClick(View widget) {
+            CmdHandler.inst().handle(widget.getContext(), cmd);
+          }
+        };
+
+        builder.setSpan(span, start, end, 0);
+        builder.replace(start, end, params.split("=")[1]);
+      }
+
+      textView.setText(builder);
+    } else {
+      textView.setText(content);
+    }
+  }
 
   /**
    * 分页获取一个对话的消息

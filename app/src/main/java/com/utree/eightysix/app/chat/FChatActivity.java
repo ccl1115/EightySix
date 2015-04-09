@@ -442,6 +442,12 @@ public class FChatActivity extends BaseActivity implements
   }
 
   @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    U.getChatBus().unregister(this);
+  }
+
+  @Override
   public void onBackPressed() {
     if (mFlEmotion.getVisibility() == View.VISIBLE) {
       mFlEmotion.setVisibility(View.GONE);
@@ -454,6 +460,11 @@ public class FChatActivity extends BaseActivity implements
     } else {
       super.onBackPressed();
     }
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    mCameraUtil.onActivityResult(requestCode, resultCode, data);
   }
 
   @Override

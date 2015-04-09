@@ -213,7 +213,7 @@ public class FChatAdapter extends BaseAdapter {
 
     FriendMessage message = getItem(position);
 
-    holder.mTvText.setText(message.getContent());
+    MessageUtil.setText(holder.mTvText, message);
     holder.mPbLoading.setVisibility(message.getStatus() == MessageConst.STATUS_IN_PROGRESS ? View.VISIBLE : View.GONE);
     holder.mIvError.setVisibility(message.getStatus() == MessageConst.STATUS_FAILED ? View.VISIBLE : View.GONE);
 

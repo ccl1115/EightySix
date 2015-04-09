@@ -47,6 +47,7 @@ public interface Location {
         public String poi;
         public double longitude;
         public double latitude;
+        public String district;
 
         @Override
         public int describeContents() {
@@ -58,6 +59,7 @@ public interface Location {
             dest.writeString(address);
             dest.writeString(city);
             dest.writeString(poi);
+            dest.writeString(district);
             dest.writeDouble(longitude);
             dest.writeDouble(latitude);
         }
@@ -69,6 +71,7 @@ public interface Location {
                 result.address = source.readString();
                 result.city = source.readString();
                 result.poi = source.readString();
+                result.district = source.readString();
                 result.longitude = source.readDouble();
                 result.latitude = source.readInt();
                 return result;

@@ -175,6 +175,7 @@ public class RESTRequester implements IRESTRequester {
     params.add("lat", Env.getLastLatitude());
     params.add("lon", Env.getLastLongitude());
     params.add("cityName", Env.getLastCity());
+    params.add("district", Env.getLastDistrict());
 
     params.add("cuid", CommonParam.getCUID(U.getContext()));
 
