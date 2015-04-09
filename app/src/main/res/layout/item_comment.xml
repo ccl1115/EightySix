@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         >
 
     <com.utree.eightysix.widget.FontPortraitView
@@ -16,19 +17,44 @@
             android:gravity="center"
             />
 
-        <com.rockerhieu.emojicon.EmojiconTextView
+    <com.rockerhieu.emojicon.EmojiconTextView
             android:id="@+id/tv_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_toRightOf="@+id/fpv_portrait"
             android:layout_toEndOf="@+id/fpv_portrait"
             android:layout_toLeftOf="@+id/iv_chat"
             android:layout_toStartOf="@+id/iv_chat"
             android:textSize="14sp"
             app:emojiconSize="24dp"
-                />
+            />
+
+    <com.rockerhieu.emojicon.EmojiconTextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_below="@+id/tv_comment"
+            android:layout_toRightOf="@+id/fpv_portrait"
+            android:layout_toEndOf="@+id/fpv_portrait"
+            android:textSize="16sp"
+            android:textColor="#ff3668b2"
+            />
+
+    <com.utree.eightysix.widget.AsyncImageView
+            android:id="@+id/aiv_level_icon"
+            android:layout_width="22sp"
+            android:layout_height="22sp"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_below="@+id/tv_comment"
+            android:layout_toRightOf="@+id/tv_name"
+            android:layout_toEndOf="@+id/tv_name"
+            />
 
     <LinearLayout
             android:id="@+id/ll_info"
@@ -38,7 +64,7 @@
             android:layout_alignStart="@+id/tv_comment"
             android:layout_toLeftOf="@+id/iv_chat"
             android:layout_toStartOf="@id/iv_chat"
-            android:layout_below="@+id/tv_comment"
+            android:layout_below="@+id/tv_name"
             android:paddingBottom="12dp"
             android:orientation="horizontal"
             >

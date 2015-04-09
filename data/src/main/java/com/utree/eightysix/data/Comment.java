@@ -53,6 +53,9 @@ public class Comment implements Parcelable {
   @SerializedName("userViewId")
   public String viewId;
 
+  @SerializedName("levelIcon")
+  public String levelIcon;
+
   /**
    * 1 deleted
    * 0 not deleted

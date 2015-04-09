@@ -3,12 +3,7 @@ package com.utree.eightysix.app.post;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.TextPaint;
 import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
@@ -28,6 +24,7 @@ import com.utree.eightysix.app.feed.event.ReloadCommentEvent;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.utils.ColorUtil;
+import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.FontPortraitView;
 import com.utree.eightysix.widget.RandomSceneTextView;
 
@@ -164,75 +161,8 @@ class PostCommentsAdapter extends BaseAdapter {
       holder = (CommentViewHolder) convertView.getTag();
     }
 
-    final Comment comment = (Comment) getItem(position);
-    Resources resources = parent.getContext().getResources();
+    holder.setData(position, (Comment) getItem(position), parent.getResources());
 
-    holder.mIvChat.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        ChatUtils.startChat(((BaseActivity) v.getContext()), mPost, comment);
-      }
-    });
-    String floor;
-    if (comment.owner == 1) {
-      floor = "楼主";
-      holder.mFpvPortrait.setEmotion(' ');
-      holder.mFpvPortrait.setBackgroundResource(R.drawable.ic_host_portrait);
-    } else {
-      floor = comment.floor + "楼";
-      if (comment.avatar != null && comment.avatar.length() == 1) {
-        holder.mFpvPortrait.setEmotion(comment.avatar.charAt(0));
-      }
-      if (comment.avatarColor != null) {
-        holder.mFpvPortrait.setEmotionColor(ColorUtil.strToColor(comment.avatarColor));
-      }
-    }
-
-    if (position == 1) {
-      floor = "沙发";
-    } else if (position == 2) {
-      floor = "板凳";
-    }
-
-    holder.mTvInfo.setText(String.format("%s | %s | ", floor, comment.time));
-
-    holder.mTvDistance.setText(comment.distance + " | ");
-    holder.mTvPraise.setText(String.valueOf(comment.praise));
-
-    if (comment.delete == 1) {
-      holder.mTvComment.setText(comment.content);
-      holder.mTvComment.setTextColor(resources.getColor(R.color.apptheme_primary_grey_color));
-    } else {
-      if (TextUtils.isEmpty(comment.name)) {
-        holder.mTvComment.setText(comment.content);
-      } else {
-        ClickableSpan span = new ClickableSpan() {
-          @Override
-          public void onClick(View widget) {
-            Bundle args = new Bundle();
-            args.putInt("viewId", Integer.valueOf(comment.viewId));
-            args.putBoolean("isVisitor", true);
-            args.putString("userName", comment.name);
-            FragmentHolder.start(widget.getContext(), ProfileFragment.class, args);
-          }
-
-          @Override
-          public void updateDrawState(TextPaint ds) {
-            ds.setColor(ds.linkColor);
-          }
-        };
-        SpannableString spannable = new SpannableString(comment.content + " -- " + comment.name);
-        spannable.setSpan(span, comment.content.length() + 4, spannable.length(), Spanned.SPAN_INTERMEDIATE);
-        holder.mTvComment.setText(spannable);
-      }
-      if (comment.owner == 1) {
-        holder.mTvComment.setTextColor(resources.getColor(R.color.apptheme_primary_light_color_200));
-      } else if (comment.self == 1) {
-        holder.mTvComment.setTextColor(resources.getColor(R.color.apptheme_light_green));
-      } else {
-        holder.mTvComment.setTextColor(resources.getColor(android.R.color.black));
-      }
-    }
     return convertView;
   }
 
@@ -279,18 +209,18 @@ class PostCommentsAdapter extends BaseAdapter {
   }
 
   @Keep
-  public static class CommentViewHolder {
+  public class CommentViewHolder {
 
-    @InjectView (R.id.fpv_portrait)
+    @InjectView(R.id.fpv_portrait)
     public FontPortraitView mFpvPortrait;
 
-    @InjectView (R.id.tv_comment)
+    @InjectView(R.id.tv_comment)
     public TextView mTvComment;
 
-    @InjectView (R.id.tv_info)
+    @InjectView(R.id.tv_info)
     public TextView mTvInfo;
 
-    @InjectView (R.id.iv_chat)
+    @InjectView(R.id.iv_chat)
     public ImageView mIvChat;
 
     @InjectView(R.id.tv_distance)
@@ -299,10 +229,82 @@ class PostCommentsAdapter extends BaseAdapter {
     @InjectView(R.id.tv_praise)
     public TextView mTvPraise;
 
+    @InjectView(R.id.tv_name)
+    public TextView mTvName;
+
+    @InjectView(R.id.aiv_level_icon)
+    public AsyncImageView mAivLevelIcon;
+
+    private Comment mComment;
+
+    @OnClick(R.id.tv_name)
+    public void onTvNameClicked(View v) {
+      Bundle args = new Bundle();
+      args.putInt("viewId", Integer.valueOf(mComment.viewId));
+      args.putBoolean("isVisitor", true);
+      args.putString("userName", mComment.name);
+      FragmentHolder.start(v.getContext(), ProfileFragment.class, args);
+    }
+
+    @OnClick(R.id.iv_chat)
+    public void onIvChatClicked(View v) {
+      ChatUtils.startChat(((BaseActivity) v.getContext()), mPost, mComment);
+    }
+
+    public void setData(int position, final Comment comment, Resources resources) {
+      mComment = comment;
+      String floor;
+      if (comment.owner == 1) {
+        floor = "楼主";
+        mFpvPortrait.setEmotion(' ');
+        mFpvPortrait.setBackgroundResource(R.drawable.ic_host_portrait);
+      } else {
+        floor = comment.floor + "楼";
+        if (comment.avatar != null && comment.avatar.length() == 1) {
+          mFpvPortrait.setEmotion(comment.avatar.charAt(0));
+        }
+        if (comment.avatarColor != null) {
+          mFpvPortrait.setEmotionColor(ColorUtil.strToColor(comment.avatarColor));
+        }
+      }
+
+      if (position == 1) {
+        floor = "沙发";
+      } else if (position == 2) {
+        floor = "板凳";
+      }
+
+      mTvInfo.setText(String.format("%s | %s | ", floor, comment.time));
+
+      mTvDistance.setText(comment.distance + " | ");
+      mTvPraise.setText(String.valueOf(comment.praise));
+
+      if (comment.delete == 1) {
+        mTvComment.setText(comment.content);
+        mTvComment.setTextColor(resources.getColor(R.color.apptheme_primary_grey_color));
+      } else {
+        mTvComment.setText(comment.content);
+        if (TextUtils.isEmpty(comment.name)) {
+          mTvName.setVisibility(View.GONE);
+          mAivLevelIcon.setVisibility(View.GONE);
+        } else {
+          mTvName.setVisibility(View.VISIBLE);
+          mAivLevelIcon.setVisibility(View.VISIBLE);
+          mTvName.setText(comment.name);
+          mAivLevelIcon.setUrl(comment.levelIcon);
+        }
+        if (comment.owner == 1) {
+          mTvComment.setTextColor(resources.getColor(R.color.apptheme_primary_light_color_200));
+        } else if (comment.self == 1) {
+          mTvComment.setTextColor(resources.getColor(R.color.apptheme_light_green));
+        } else {
+          mTvComment.setTextColor(resources.getColor(android.R.color.black));
+        }
+      }
+    }
+
     public CommentViewHolder(View view) {
       ButterKnife.inject(this, view);
-
-      mTvComment.setMovementMethod(LinkMovementMethod.getInstance());
     }
   }
 }
