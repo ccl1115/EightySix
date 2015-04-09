@@ -59,6 +59,7 @@
             android:layout_below="@+id/tv_name"
             android:singleLine="true"
             android:ellipsize="end"
+            android:maxLength="15"
             android:textSize="13sp"
             android:textColor="#ffabaeb3"
             />
