@@ -13,8 +13,6 @@ import com.utree.eightysix.M;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseApplication;
 import com.utree.eightysix.app.chat.event.ChatEvent;
-import com.utree.eightysix.rest.OnResponse2;
-import com.utree.eightysix.rest.Response;
 import de.akquinet.android.androlog.Log;
 
 /**
@@ -116,16 +114,6 @@ public class ChatAccount {
                   U.getContext().getApplicationContext().registerReceiver(mNewMessageBroadcastReceiver, filter);
 
                   EMChat.getInstance().setAppInited();
-
-                  U.request("chat_online", new OnResponse2<Response>() {
-                    @Override
-                    public void onResponseError(Throwable e) {
-                    }
-
-                    @Override
-                    public void onResponse(Response response) {
-                    }
-                  }, Response.class, null, null);
                 }
               });
             }

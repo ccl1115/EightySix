@@ -3,7 +3,6 @@
         <id>get_chat_info</id>
         <name>获取chatId</name>
         <path>/im/chat/chatInfo</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -16,7 +15,6 @@
         <id>get_friend_chat_info</id>
         <name>获取friendChatId</name>
         <path>/im/chat/chatinfo</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -29,7 +27,6 @@
         <id>chat_send</id>
         <name>发私聊</name>
         <path>/commit/im/send/privateChat</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -46,7 +43,6 @@
         <id>chat_ack</id>
         <name>收到消息确认</name>
         <path>/commit/im/send/privateChatAck</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -80,7 +76,6 @@
         <id>chat_fav_add</id>
         <name>收藏聊天会话</name>
         <path>/commit/im/favorite/chat/create</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -94,7 +89,6 @@
         <id>chat_fav_del</id>
         <name>取消收藏聊天会话</name>
         <path>/commit/im/favorite/chat/delete</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -114,30 +108,9 @@
     </request>
 
     <request>
-        <id>chat_ol_list</id>
-        <name>聊天会话在线列表</name>
-        <path>/im/chat/onlineStatus</path>
-        <sign/>
-        <token/>
-        <params>
-            <param>chatIds</param>
-        </params>
-        <responseClz>ChatOnlineListResponse</responseClz>
-    </request>
-
-    <request>
-        <id>chat_online</id>
-        <name>登陆聊天服务</name>
-        <path>/commit/im/online</path>
-        <sign/>
-        <token/>
-    </request>
-
-    <request>
         <id>share_callback</id>
         <name>分享成功之后调用</name>
         <path>/commit/share/callback</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
     </request>
@@ -146,7 +119,6 @@
         <id>profile_fill</id>
         <name>完善个人资料</name>
         <path>/commit/user/profile/replace</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -165,7 +137,6 @@
         <id>profile</id>
         <name>个人资料</name>
         <path>/user/info</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -177,7 +148,6 @@
         <id>login</id>
         <name>登录接口</name>
         <path>/passport/login</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <params>
             <param>phone</param>
@@ -190,7 +160,6 @@
         <id>follow_circle_add</id>
         <name>添加关注圈子</name>
         <path>/commit/userfactory/like/create</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -202,7 +171,6 @@
         <id>follow_circle_del</id>
         <name>删除关注圈子</name>
         <path>/commit/userfactory/like/delete</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -214,7 +182,6 @@
         <id>follow_circle_list</id>
         <name>关注圈子列表</name>
         <path>/userfactory/like</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
     </request>
@@ -223,7 +190,6 @@
         <id>user_avatars</id>
         <name>头像列表</name>
         <path>/user/avatar</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -235,7 +201,6 @@
         <id>user_avatars_del</id>
         <name>删除头像</name>
         <path>/commit/user/avatar/delete</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -247,7 +212,6 @@
         <id>user_friend_list</id>
         <name>朋友列表</name>
         <path>/user/friend/mine</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
     </request>
@@ -256,7 +220,6 @@
         <id>user_friend_request</id>
         <name>添加好友</name>
         <path>/commit/user/friend/create</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -269,7 +232,6 @@
         <id>user_friend_accept</id>
         <name>通过请求</name>
         <path>/commit/user/friend/pass</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -281,7 +243,6 @@
         <id>user_friend_requests</id>
         <name>好友请求</name>
         <path>/user/friend/created</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
     </request>
@@ -290,7 +251,6 @@
         <id>user_friend_ignore</id>
         <name>忽略请求</name>
         <path>/commit/user/friend/ignore</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -302,7 +262,6 @@
         <id>user_search</id>
         <name>搜索用户</name>
         <path>/user/search</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -314,7 +273,6 @@
         <id>user_signatures</id>
         <name>用户签名</name>
         <path>/user/signature</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -326,7 +284,6 @@
         <id>user_signature_del</id>
         <name>删除签名</name>
         <path>/commit/user/signature/delete</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -338,7 +295,6 @@
         <id>user_posts</id>
         <name>我的帖子</name>
         <path>/userpost/mine</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -353,7 +309,6 @@
         <id>user_setup_replace</id>
         <name>用户开关设置</name>
         <path>/commit/user/setup/replace</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -366,7 +321,6 @@
         <id>user_friend_contacts</id>
         <name>手机联系人列表</name>
         <path>/user/friend/contact</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
     </request>
@@ -375,7 +329,6 @@
         <id>user_friend_recommend</id>
         <name>好友推荐</name>
         <path>/user/friend/recommend</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
     </request>
@@ -384,7 +337,6 @@
         <id>user_setup</id>
         <name>用户开关</name>
         <path>/user/setup</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -396,7 +348,6 @@
         <id>user_shield</id>
         <name>屏蔽用户</name>
         <path>/commit/user/shield/replace</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -408,7 +359,6 @@
         <id>user_unshield</id>
         <name>屏蔽用户</name>
         <path>/commit/user/shield/delete</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
         <params>
@@ -420,7 +370,6 @@
         <id>copywriting</id>
         <name>文案</name>
         <path>/system/copywriting</path>
-        <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
     </request>

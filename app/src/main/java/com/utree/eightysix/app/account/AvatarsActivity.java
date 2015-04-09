@@ -118,7 +118,7 @@ public class AvatarsActivity extends BaseActivity {
           }
         }
       }
-    }, UserAvatarsResponse.class);
+    }, UserAvatarsResponse.class, (Integer) null);
   }
 
   @Override

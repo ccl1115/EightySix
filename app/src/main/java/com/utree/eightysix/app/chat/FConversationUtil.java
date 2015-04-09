@@ -51,6 +51,7 @@ class FConversationUtil {
   static FriendConversation getByChatId(String chatId) {
     return DaoUtils.getFriendConversationDao().queryBuilder()
         .where(FriendConversationDao.Properties.ChatId.eq(chatId))
+        .limit(1)
         .unique();
   }
 
@@ -74,6 +75,7 @@ class FConversationUtil {
   static String getChatIdByViewId(int viewId) {
     FriendConversation friendConversation = DaoUtils.getFriendConversationDao().queryBuilder()
         .where(FriendConversationDao.Properties.ViewId.eq(viewId))
+        .limit(1)
         .unique();
     return friendConversation == null ? null : friendConversation.getChatId();
   }
@@ -81,6 +83,7 @@ class FConversationUtil {
   static void createIfNotExist(FriendChatResponse.FriendChat chat, int viewId, String chatType) {
     FriendConversation conversation = DaoUtils.getFriendConversationDao().queryBuilder()
         .where(FriendConversationDao.Properties.ChatId.eq(chat.chatId))
+        .limit(1)
         .unique();
 
     if (conversation == null) {
@@ -110,6 +113,7 @@ class FConversationUtil {
   static FriendConversation setLastMessage(FriendMessage message) {
     FriendConversation conversation = DaoUtils.getFriendConversationDao().queryBuilder()
         .where(FriendConversationDao.Properties.ChatId.eq(message.getChatId()))
+        .limit(1)
         .unique();
 
     if (conversation != null) {

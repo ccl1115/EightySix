@@ -25,13 +25,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-* Created by Administrator on 2015/4/3 0003.
-*/
+ */
 public class ConversationUtil {
   public static String getChatIdByPost(Post post) {
     Conversation conversation = DaoUtils.getConversationDao().queryBuilder()
         .where(ConversationDao.Properties.PostId.eq(post.id),
             ConversationDao.Properties.CommentId.isNull())
+        .limit(1)
         .unique();
 
     return conversation != null ? conversation.getChatId() : null;
@@ -41,6 +41,7 @@ public class ConversationUtil {
     Conversation conversation = DaoUtils.getConversationDao().queryBuilder()
         .where(ConversationDao.Properties.PostId.eq(post.id),
             ConversationDao.Properties.CommentId.eq(comment.id))
+        .limit(1)
         .unique();
 
     return conversation != null ? conversation.getChatId() : null;
@@ -72,6 +73,7 @@ public class ConversationUtil {
   public static void createIfNotExist(ChatInfoResponse.ChatInfo chatInfo, Post post) {
     Conversation conversation = DaoUtils.getConversationDao().queryBuilder()
         .where(ConversationDao.Properties.ChatId.eq(chatInfo.chatId))
+        .limit(1)
         .unique();
     if (conversation == null) {
       conversation = new Conversation();
@@ -104,6 +106,7 @@ public class ConversationUtil {
   public static void createIfNotExist(ChatInfoResponse.ChatInfo chatInfo, Post post, Comment comment) {
     Conversation conversation = DaoUtils.getConversationDao().queryBuilder()
         .where(ConversationDao.Properties.ChatId.eq(chatInfo.chatId))
+        .limit(1)
         .unique();
     if (conversation == null) {
       conversation = new Conversation();
@@ -205,6 +208,7 @@ public class ConversationUtil {
   public static Conversation setLastMessage(Message message) {
     Conversation conversation = DaoUtils.getConversationDao().queryBuilder()
         .where(ConversationDao.Properties.ChatId.eq(message.getChatId()))
+        .limit(1)
         .unique();
 
     if (conversation != null) {
@@ -253,7 +257,9 @@ public class ConversationUtil {
    */
   public static Conversation getByChatId(String chatId) {
     return DaoUtils.getConversationDao().queryBuilder()
-        .where(ConversationDao.Properties.ChatId.eq(chatId)).unique();
+        .where(ConversationDao.Properties.ChatId.eq(chatId))
+        .limit(1)
+        .unique();
   }
 
   public static void createOrUpdateConversation(EMMessage emMessage) throws EaseMobException {
