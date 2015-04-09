@@ -5,6 +5,7 @@
 package com.utree.eightysix.app.chat;
 
 import android.text.SpannableStringBuilder;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ public class MessageUtil {
   private static Pattern sCmdPattern = Pattern.compile("<cmd\\s*(.+=\".+\")*\\s*>(.*)</cmd>");
 
   public static void setText(TextView textView, FriendMessage message) {
+    textView.setMovementMethod(LinkMovementMethod.getInstance());
     String content = message.getContent();
     if ("assistant".equals(message.getChatType())) {
       SpannableStringBuilder builder = new SpannableStringBuilder(content);
@@ -45,7 +47,8 @@ public class MessageUtil {
         };
 
         builder.setSpan(span, start, end, 0);
-        builder.replace(start, end, params.split("=")[1]);
+        String value = params.split("=")[1];
+        builder.replace(start, end, value.substring(1, value.length() - 1));
       }
 
       textView.setText(builder);

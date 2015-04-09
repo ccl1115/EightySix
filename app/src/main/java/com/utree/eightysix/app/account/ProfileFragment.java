@@ -144,7 +144,11 @@ public class ProfileFragment extends HolderFragment {
 
   @OnClick(R.id.aiv_portrait)
   public void onAivPortraitClicked() {
-    startActivity(new Intent(getActivity(), AvatarViewerActivity.class));
+    if (mIsVisitor) {
+      AvatarViewerActivity.start(getActivity(), 0, mViewId);
+    } else {
+      AvatarViewerActivity.start(getActivity(), 0, -1);
+    }
   }
 
   @OnClick(R.id.ll_signature)

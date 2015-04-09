@@ -127,7 +127,7 @@
 
         </LinearLayout>
 
-        <TextView
+        <com.rockerhieu.emojicon.EmojiconTextView
                 style="@style/TextView.PostStyle"
                 android:id="@+id/tv_content"
                 android:layout_width="match_parent"

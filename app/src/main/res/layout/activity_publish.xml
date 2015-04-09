@@ -66,7 +66,7 @@
                 android:text="@string/post_anonymously"
                 />
 
-        <EditText
+        <com.rockerhieu.emojicon.EmojiconEditText
                 android:id="@+id/et_post_content"
                 android:layout_gravity="center"
                 android:layout_width="match_parent"
@@ -195,6 +195,14 @@
                 android:text="@string/who_will_see_this_secret"
                 />
     </LinearLayout>
+
+    <com.utree.eightysix.app.publish.EmojiViewPager
+            android:id="@+id/fl_emotion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:visibility="gone"
+            />
 
     <FrameLayout
             android:id="@+id/fl_grid_panel"

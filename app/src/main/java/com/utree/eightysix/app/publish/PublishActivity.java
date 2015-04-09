@@ -3,6 +3,7 @@ package com.utree.eightysix.app.publish;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.Instrumentation;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,6 +29,9 @@ import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ArgbEvaluator;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.ValueAnimator;
+import com.rockerhieu.emojicon.EmojiconGridFragment;
+import com.rockerhieu.emojicon.EmojiconsFragment;
+import com.rockerhieu.emojicon.emoji.Emojicon;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
@@ -60,8 +64,10 @@ import java.util.Random;
 
 /**
  */
-@TopTitle (R.string.publish_content)
-public class PublishActivity extends BaseActivity {
+@TopTitle(R.string.publish_content)
+public class PublishActivity extends BaseActivity implements
+    EmojiconGridFragment.OnEmojiconClickedListener,
+    EmojiconsFragment.OnEmojiconBackspaceClickedListener {
 
   private static final String FIRST_RUN_KEY = "post_activity";
 
@@ -69,38 +75,41 @@ public class PublishActivity extends BaseActivity {
   private static final int REQUEST_CODE_ALBUM = 0x2;
   private static final int REQUEST_CODE_CROP = 0x4;
 
-  @InjectView (R.id.et_post_content)
+  @InjectView(R.id.et_post_content)
   public EditText mPostEditText;
 
-  @InjectView (R.id.tv_bottom)
+  @InjectView(R.id.tv_bottom)
   public TextView mTvBottom;
 
-  @InjectView (R.id.aiv_post_bg)
+  @InjectView(R.id.aiv_post_bg)
   public AsyncImageView mAivPostBg;
 
-  @InjectView (R.id.tv_post_tip)
+  @InjectView(R.id.tv_post_tip)
   public TextView mTvPostTip;
 
-  @InjectView (R.id.gp_panel)
+  @InjectView(R.id.gp_panel)
   public GridPanel mGpPanel;
 
-  @InjectView (R.id.in_panel)
+  @InjectView(R.id.in_panel)
   public IndicatorView mInPanel;
 
-  @InjectView (R.id.tv_tag_1)
+  @InjectView(R.id.tv_tag_1)
   public TagView mTvTag1;
 
-  @InjectView (R.id.tv_tag_2)
+  @InjectView(R.id.tv_tag_2)
   public TagView mTvTag2;
 
   @InjectView(R.id.rb_tag)
   public RoundedButton mRbTag;
 
-  @InjectView (R.id.tl_tags)
+  @InjectView(R.id.tl_tags)
   public TagsLayout mTagsLayout;
 
   @InjectView(R.id.cb_check)
   public CheckBox mCbAnonymous;
+
+  @InjectView(R.id.fl_emotion)
+  public EmojiViewPager mFlEmotion;
 
   protected PublishLayout mPublishLayout;
 
@@ -121,6 +130,7 @@ public class PublishActivity extends BaseActivity {
   private int mSendType;
 
   private CameraUtil mCameraUtil;
+  private Instrumentation mInstrumentation;
 
   public static void start(Context context, int factoryId, List<Tag> tags) {
     Intent intent = new Intent(context, PublishActivity.class);
@@ -161,12 +171,12 @@ public class PublishActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
-  @OnClick (R.id.ll_bottom)
+  @OnClick(R.id.ll_bottom)
   public void onLlBottomClicked() {
     showDescriptionDialog();
   }
 
-  @OnClick (R.id.iv_shuffle)
+  @OnClick(R.id.iv_shuffle)
   public void onIvShuffleClicked() {
     if (mIsOpened) {
       hideSoftKeyboard(mPostEditText);
@@ -175,6 +185,18 @@ public class PublishActivity extends BaseActivity {
       mPublishLayout.switchToPanel(PublishLayout.PANEL_INFO);
     } else {
       mPublishLayout.switchToPanel(PublishLayout.PANEL_COLOR);
+    }
+  }
+
+  @OnClick(R.id.iv_emotion)
+  public void onIvEmotionClicked() {
+    if (mIsOpened) {
+      hideSoftKeyboard(mPostEditText);
+      mPublishLayout.switchToPanel(PublishLayout.PANEL_EMOTION);
+    } else if (mPublishLayout.getCurrentPanel() == PublishLayout.PANEL_EMOTION) {
+      mPublishLayout.switchToPanel(PublishLayout.PANEL_INFO);
+    } else {
+      mPublishLayout.switchToPanel(PublishLayout.PANEL_EMOTION);
     }
   }
 
@@ -202,12 +224,12 @@ public class PublishActivity extends BaseActivity {
   }
 
 
-  @OnClick (R.id.iv_camera)
+  @OnClick(R.id.iv_camera)
   public void onIvCameraClicked() {
     mCameraUtil.showCameraDialog();
   }
 
-  @OnFocusChange (R.id.et_post_content)
+  @OnFocusChange(R.id.et_post_content)
   public void onPostEditTextFocusChanged(boolean focused) {
     if (focused) {
       mPostEditText.setHintTextColor(0x88ffffff);
@@ -322,6 +344,7 @@ public class PublishActivity extends BaseActivity {
     mPostEditText.addTextChangedListener(new TextWatcher() {
 
       private CharSequence mBefore;
+
       @Override
       public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         mBefore = s;
@@ -411,6 +434,8 @@ public class PublishActivity extends BaseActivity {
 
       }
     });
+
+    mFlEmotion.setFragmentManager(getSupportFragmentManager());
   }
 
   protected void setSelectedTags(List<Tag> tags) {
@@ -423,7 +448,7 @@ public class PublishActivity extends BaseActivity {
     mTvTag2.setText("");
     for (int i = 0; i < tags.size(); i++) {
       Tag g = tags.get(i);
-      switch(i) {
+      switch (i) {
         case 0:
           mTvTag1.setText("#" + g.content);
           break;
@@ -770,4 +795,27 @@ public class PublishActivity extends BaseActivity {
     }, TagsResponse.class);
   }
 
+  @Override
+  public void onEmojiconBackspaceClicked(View v) {
+
+  }
+
+  @Override
+  public void onEmojiconClicked(Emojicon emojicon) {
+    if ("\u274c".equals(emojicon.getEmoji())) {
+      (new Thread() {
+        @Override
+        public void run() {
+          mInstrumentation.sendKeyDownUpSync(KeyEvent.KEYCODE_DEL);
+        }
+      }).start();
+    } else {
+      String text = mPostEditText.getText().toString();
+      String before = text.substring(0, mPostEditText.getSelectionStart());
+      String after = text.substring(mPostEditText.getSelectionEnd());
+
+      mPostEditText.setText(before + emojicon.getEmoji() + after);
+      mPostEditText.setSelection(before.length() + emojicon.getEmoji().length());
+    }
+  }
 }

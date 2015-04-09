@@ -226,6 +226,9 @@
         <host>http://192.168.0.118:8000</host>
         <sign/>
         <token/>
+        <params>
+            <param>viewId</param>
+        </params>
     </request>
 
     <request>

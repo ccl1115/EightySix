@@ -34,9 +34,10 @@ import com.utree.eightysix.widget.AsyncImageView;
 @TopTitle(R.string.avatar_viewer)
 public class AvatarViewerActivity extends BaseActivity {
 
-  public static void start(Context context, int index) {
+  public static void start(Context context, int index, int viewId) {
     Intent intent = new Intent(context, AvatarViewerActivity.class);
     intent.putExtra("index", index);
+    intent.putExtra("viewId", viewId);
 
     if (!(context instanceof Activity)) {
       intent.putExtra("index", index);
@@ -65,7 +66,13 @@ public class AvatarViewerActivity extends BaseActivity {
     });
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
-    requestAvatars();
+    final int viewId = getIntent().getIntExtra("viewId", -1);
+
+    if (viewId == -1) {
+      requestAvatars(null);
+    } else {
+      requestAvatars(viewId);
+    }
 
     mVpAvatars.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
       @Override
@@ -87,7 +94,7 @@ public class AvatarViewerActivity extends BaseActivity {
     onNewIntent(getIntent());
   }
 
-  public void requestAvatars() {
+  public void requestAvatars(Integer viewId) {
     U.request("user_avatars", new OnResponse2<UserAvatarsResponse>() {
       @Override
       public void onResponseError(Throwable e) {
@@ -128,7 +135,7 @@ public class AvatarViewerActivity extends BaseActivity {
           mTvCount.setText(String.format("%d/%d", 1, response.object.size()));
         }
       }
-    }, UserAvatarsResponse.class);
+    }, UserAvatarsResponse.class, viewId);
   }
 
   @Override
@@ -149,6 +156,6 @@ public class AvatarViewerActivity extends BaseActivity {
 
   @Subscribe
   public void onPortraitUpdatedEvent(PortraitUpdatedEvent event) {
-    requestAvatars();
+    requestAvatars(null);
   }
 }

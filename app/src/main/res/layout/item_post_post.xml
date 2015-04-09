@@ -70,7 +70,7 @@
                 android:background="#44000000"
                 />
 
-        <TextView
+        <com.rockerhieu.emojicon.EmojiconTextView
                 android:id="@+id/tv_content"
                 style="@style/TextView.PostStyle"
                 android:layout_width="match_parent"
