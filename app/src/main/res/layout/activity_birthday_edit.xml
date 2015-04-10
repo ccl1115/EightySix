@@ -53,11 +53,10 @@
                 android:text="星座"
                 />
 
-        <TextView
-                android:id="@+id/tv_constellation"
+        <Spinner
+                android:id="@+id/sp_constellation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/apptheme_primary_grey_color_200"
                 />
     </LinearLayout>
 

@@ -43,33 +43,50 @@ class Utils {
       }
     }
 
-    static String get(Calendar calendar) {
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+
+      Constellation that = (Constellation) o;
+
+      if (!name.equals(that.name)) return false;
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return name.hashCode();
+    }
+
+    static Constellation get(Calendar calendar) {
       if (ARIES.is(calendar)) {
-        return ARIES.name;
+        return ARIES;
       } else if (TAURUS.is(calendar)) {
-        return TAURUS.name;
+        return TAURUS;
       } else if (GEMINI.is(calendar)) {
-        return GEMINI.name;
+        return GEMINI;
       } else if (CANCER.is(calendar)) {
-        return CANCER.name;
+        return CANCER;
       } else if (LEO.is(calendar)) {
-        return LEO.name;
+        return LEO;
       } else if (VIRGO.is(calendar)) {
-        return VIRGO.name;
+        return VIRGO;
       } else if (LIBRA.is(calendar)) {
-        return LIBRA.name;
+        return LIBRA;
       } else if (SCORPIO.is(calendar)) {
-        return SCORPIO.name;
+        return SCORPIO;
       } else if (SAGITTARIUS.is(calendar)) {
-        return SAGITTARIUS.name;
+        return SAGITTARIUS;
       } else if (CAPRICORN.is(calendar)) {
-        return CAPRICORN.name;
+        return CAPRICORN;
       } else if (AQUARIUS.is(calendar)) {
-        return AQUARIUS.name;
+        return AQUARIUS;
       } else if (PISCES.is(calendar)) {
-        return PISCES.name;
+        return PISCES;
       } else {
-        return "";
+        return null;
       }
     }
 

@@ -11,13 +11,19 @@ import java.util.Calendar;
 public class BirthdayUpdatedEvent {
 
   private Calendar mCalendar;
+  private String mConstellation;
 
-  public BirthdayUpdatedEvent(Calendar calendar) {
+  public BirthdayUpdatedEvent(Calendar calendar, String constellation) {
 
     mCalendar = calendar;
+    mConstellation = constellation;
   }
 
   public Calendar getCalendar() {
     return mCalendar;
+  }
+
+  public String getConstellation() {
+    return mConstellation;
   }
 }

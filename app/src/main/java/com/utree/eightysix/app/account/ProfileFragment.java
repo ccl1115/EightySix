@@ -428,7 +428,7 @@ public class ProfileFragment extends HolderFragment {
   public void onBirthdayUpdatedEvent(BirthdayUpdatedEvent event) {
     mTvBirthday.setText(TimeUtil.getDate(event.getCalendar()));
     mTvAge.setText(String.valueOf(Utils.computeAge(Calendar.getInstance(), event.getCalendar())) + "岁");
-    mTvConstellation.setText(Utils.Constellation.get(event.getCalendar()));
+    mTvConstellation.setText(event.getConstellation());
   }
 
   @Subscribe

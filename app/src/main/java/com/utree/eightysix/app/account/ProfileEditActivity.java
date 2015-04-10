@@ -61,6 +61,7 @@ public class ProfileEditActivity extends BaseActivity {
   public TextView mTvSignature;
 
   private Calendar mCalendar;
+
   private String mSignature;
 
   @OnClick(R.id.ll_portrait)
@@ -190,7 +191,7 @@ public class ProfileEditActivity extends BaseActivity {
           mTvBirthday.setText(String.format("%d岁 %s %s",
               Utils.computeAge(Calendar.getInstance(), mCalendar),
               TimeUtil.getDate(mCalendar),
-              Utils.Constellation.get(mCalendar)));
+              response.object.constellation));
 
         }
         mTvCurrent.setText(response.object.workinFactoryName);
@@ -228,7 +229,7 @@ public class ProfileEditActivity extends BaseActivity {
     mTvBirthday.setText(String.format("%d岁 %s %s",
         Utils.computeAge(Calendar.getInstance(), calendar),
         TimeUtil.getDate(calendar),
-        Utils.Constellation.get(calendar)));
+        event.getConstellation()));
   }
 
   @Subscribe
