@@ -172,6 +172,8 @@ public class BaseCirclesActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+
     setContentView(R.layout.activity_base_circles);
 
     mRbSearchHint.setHint(R.string.search_circles);

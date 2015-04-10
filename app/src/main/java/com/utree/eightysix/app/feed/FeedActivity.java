@@ -156,7 +156,7 @@ public class FeedActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    ContactsSyncService.start(this, false);
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
     Circle circle = getIntent().getParcelableExtra("circle");
     int id = getIntent().getIntExtra("id", -1);
