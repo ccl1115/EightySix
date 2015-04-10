@@ -29,7 +29,6 @@ import com.utree.eightysix.data.ChatFav;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.response.ChatFavListResponse;
-import com.utree.eightysix.response.ChatOnlineListResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
@@ -118,7 +117,6 @@ public class ConversationActivity extends BaseActivity {
     List<Conversation> conversations = ConversationUtil.getConversations(0, PAGE_SIZE);
     mConversationAdapter = new ConversationAdapter(conversations);
     mAlvConversation.setAdapter(mConversationAdapter);
-    requestOnline(conversations);
 
     mRstvEmpty.setDrawable(R.drawable.scene_1);
     mRstvEmpty.setText("你还没有聊天");
@@ -144,7 +142,6 @@ public class ConversationActivity extends BaseActivity {
           public void run() {
             List<Conversation> conversations = ConversationUtil.getConversations(mPage, PAGE_SIZE);
             mConversationAdapter.add(conversations);
-            requestOnline(conversations);
             mAlvConversation.stopLoadMore();
             mPage += 1;
           }
@@ -392,27 +389,5 @@ public class ConversationActivity extends BaseActivity {
         }
       }
     }, ChatFavListResponse.class, null, null);
-  }
-
-  private void requestOnline(List<Conversation> conversations) {
-    List<String> chatIds = new ArrayList<String>();
-
-    for (Conversation conversation : conversations) {
-      chatIds.add(conversation.getChatId());
-    }
-
-    U.request("chat_ol_list", new OnResponse2<ChatOnlineListResponse>() {
-      @Override
-      public void onResponseError(Throwable e) {
-
-      }
-
-      @Override
-      public void onResponse(ChatOnlineListResponse response) {
-        if (response.object.list != null) {
-          mConversationAdapter.updateOnline(response.object.list);
-        }
-      }
-    }, ChatOnlineListResponse.class, chatIds);
   }
 }

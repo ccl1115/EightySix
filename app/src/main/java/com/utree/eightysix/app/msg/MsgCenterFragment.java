@@ -15,15 +15,10 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
-import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
-import com.utree.eightysix.app.chat.ChatUtils;
-import com.utree.eightysix.app.chat.ConversationActivity;
-import com.utree.eightysix.app.chat.ConversationUtil;
-import com.utree.eightysix.app.chat.FConversationActivity;
-import com.utree.eightysix.app.chat.event.ChatEvent;
-import com.utree.eightysix.app.chat.event.FriendChatEvent;
+import com.utree.eightysix.app.chat.*;
 import com.utree.eightysix.app.friends.RequestListActivity;
+import com.utree.eightysix.app.home.HomeTabActivity;
 import com.utree.eightysix.event.HasNewPraiseEvent;
 import com.utree.eightysix.event.NewCommentCountEvent;
 import com.utree.eightysix.widget.CounterView;
@@ -87,15 +82,9 @@ public class MsgCenterFragment extends BaseFragment {
   public void onViewCreated(View view, Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
 
-    long unreadConversationCount = ConversationUtil.getUnreadConversationCount();
-    if (unreadConversationCount == 0) {
-      mRbCountChat.setVisibility(View.INVISIBLE);
-    } else {
-      mRbCountChat.setVisibility(View.VISIBLE);
-    }
-    mRbCountChat.setText(String.valueOf(unreadConversationCount));
-
-    U.getChatBus().register(this);
+    mRbCountChat.setCount((int) ConversationUtil.getUnreadConversationCount());
+    mRbCountFChat.setCount((int) FConversationUtil.getUnreadConversationCount());
+    mRbCountAssist.setCount((int) FMessageUtil.getAssistUnreadCount());
   }
 
   @Subscribe
@@ -119,18 +108,17 @@ public class MsgCenterFragment extends BaseFragment {
   }
 
   @Subscribe
-  public void onChatEvent(ChatEvent event) {
-    if (event.getStatus() == ChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT) {
-      mRbCountChat.setCount(((Long) event.getObj()).intValue());
-    }
-  }
-
-  @Subscribe
-  public void onFriendChatEvent(FriendChatEvent event) {
-    if (event.getStatus() == FriendChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT) {
-      mRbCountFChat.setCount(((Long) event.getObj()).intValue());
-    } else if (event.getStatus() == FriendChatEvent.EVENT_NEW_ASSISTANT_MESSAGE) {
-      mRbCountAssist.setCount(((Long) event.getObj()).intValue());
+  public void onMsgCountEvent(HomeTabActivity.MsgCountEvent event) {
+    switch (event.getType()) {
+      case HomeTabActivity.MsgCountEvent.TYPE_ASSIST_MESSAGE_COUNT:
+        mRbCountAssist.setCount(event.getCount());
+        break;
+      case HomeTabActivity.MsgCountEvent.TYPE_UNREAD_CONVERSATION_COUNT:
+        mRbCountChat.setCount(event.getCount());
+        break;
+      case HomeTabActivity.MsgCountEvent.TYPE_UNREAD_FCONVERSATION_COUNT:
+        mRbCountFChat.setCount(event.getCount());
+        break;
     }
   }
 
@@ -138,7 +126,6 @@ public class MsgCenterFragment extends BaseFragment {
   public void onAttach(Activity activity) {
     super.onAttach(activity);
 
-    U.getChatBus().register(this);
 
     getBaseActivity().setTopTitle("消息");
     getBaseActivity().setTopSubTitle("");
@@ -151,7 +138,6 @@ public class MsgCenterFragment extends BaseFragment {
   public void onDetach() {
     super.onDetach();
 
-    U.getChatBus().unregister(this);
   }
 
   @Override
@@ -165,13 +151,6 @@ public class MsgCenterFragment extends BaseFragment {
       getBaseActivity().getTopBar().getAbLeft().hide();
       getBaseActivity().getTopBar().getAbRight().hide();
     }
-  }
-
-  @Override
-  public void onDestroyView() {
-    super.onDestroyView();
-
-    U.getChatBus().unregister(this);
   }
 
 }

@@ -543,7 +543,7 @@ public class TabRegionFragment extends BaseFragment {
           response.object.add(null);
         }
 
-        for (int i = 0, size = response.object.size(); i < size; i += 2) {
+        for (int i = 0, size = response.object.size(); i < size; i += 3) {
           buildFollowCircleRow(new FollowCircle[]{
               response.object.get(i),
               response.object.get(i + 1),

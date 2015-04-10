@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
 */
-class FConversationUtil {
+public class FConversationUtil {
 
   static void createOrUpdateFConversation(EMMessage emMessage) throws EaseMobException {
     String chatId = emMessage.getStringAttribute("chatId", null);
@@ -130,7 +130,7 @@ class FConversationUtil {
     }
   }
 
-  static long getUnreadConversationCount() {
+  public static long getUnreadConversationCount() {
     return DaoUtils.getFriendConversationDao().queryBuilder()
         .where(FriendConversationDao.Properties.UnreadCount.gt(0))
         .where(FriendConversationDao.Properties.ChatType.eq("friend"))

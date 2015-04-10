@@ -17,16 +17,21 @@ import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.ProfileFragment;
+import com.utree.eightysix.app.chat.ConversationUtil;
+import com.utree.eightysix.app.chat.FConversationUtil;
+import com.utree.eightysix.app.chat.FMessageUtil;
+import com.utree.eightysix.app.chat.event.ChatEvent;
+import com.utree.eightysix.app.chat.event.FriendChatEvent;
 import com.utree.eightysix.app.explore.ExploreFragment;
-import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.MsgCenterFragment;
 import com.utree.eightysix.app.region.TabRegionFragment;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.utils.Env;
-import com.utree.eightysix.widget.RoundedButton;
+import com.utree.eightysix.widget.CounterView;
 
 /**
  */
@@ -51,7 +56,7 @@ public class HomeTabActivity extends BaseActivity {
   public FrameLayout mFlMore;
 
   @InjectView(R.id.rb_msg_count)
-  public RoundedButton mRbMsgCount;
+  public CounterView mRbMsgCount;
 
   public TabRegionFragment mTabRegionFragment;
   public MsgCenterFragment mMsgCenterFragment;
@@ -61,6 +66,11 @@ public class HomeTabActivity extends BaseActivity {
   public Fragment mCurrentFragment;
 
   private boolean mShouldExit;
+
+  private int mUnreadConversationCount;
+  private int mUnreadFConversationCount;
+  private int mRequestCount;
+  private int mAssistMessageUnreadCount;
 
   public static void start(Context context) {
     Intent i = new Intent(context, HomeTabActivity.class);
@@ -150,6 +160,8 @@ public class HomeTabActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    U.getChatBus().register(this);
+
     ContactsSyncService.start(this, false);
 
     setActionLeftDrawable(null);
@@ -164,24 +176,20 @@ public class HomeTabActivity extends BaseActivity {
     sIsRunning = true;
 
     onNewIntent(getIntent());
-  }
 
-  @Override
-  protected void onStart() {
-    super.onStart();
-    startService(new Intent(this, FetchNotificationService.class));
-  }
+    mUnreadConversationCount = (int) ConversationUtil.getUnreadConversationCount();
+    mUnreadFConversationCount = (int) FConversationUtil.getUnreadConversationCount();
+    mAssistMessageUnreadCount = (int) FMessageUtil.getAssistUnreadCount();
 
-  @Override
-  protected void onStop() {
-    super.onStop();
-    stopService(new Intent(this, FetchNotificationService.class));
+    mRbMsgCount.setCount(mUnreadConversationCount + mUnreadFConversationCount + mAssistMessageUnreadCount);
   }
 
   @Override
   protected void onDestroy() {
     sIsRunning = false;
     Env.setFirstRun(FIRST_RUN_KEY, false);
+    U.getChatBus().unregister(this);
+
     super.onDestroy();
   }
 
@@ -202,13 +210,28 @@ public class HomeTabActivity extends BaseActivity {
 
   @Subscribe
   public void onMsgCountEvent(MsgCountEvent event) {
-    if (event.getCount() == 0) {
-      mRbMsgCount.setVisibility(View.INVISIBLE);
-    } else {
-      mRbMsgCount.setVisibility(View.VISIBLE);
-    }
+    mRbMsgCount.setCount(event.getCount());
+  }
 
-    mRbMsgCount.setText(String.valueOf(event.getCount()));
+  @Subscribe
+  public void onChatEvent(ChatEvent event) {
+    if (event.getStatus() == ChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT) {
+      mUnreadConversationCount = ((Long) event.getObj()).intValue();
+      mRbMsgCount.setCount(mUnreadConversationCount + mUnreadFConversationCount + mAssistMessageUnreadCount);
+      U.getBus().post(new MsgCountEvent(MsgCountEvent.TYPE_UNREAD_CONVERSATION_COUNT, mUnreadConversationCount));
+    }
+  }
+
+  @Subscribe
+  public void onFriendChatEvent(FriendChatEvent event) {
+    if (event.getStatus() == FriendChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT) {
+      mUnreadFConversationCount = ((Long) event.getObj()).intValue();
+      U.getBus().post(new MsgCountEvent(MsgCountEvent.TYPE_UNREAD_FCONVERSATION_COUNT, mUnreadFConversationCount));
+    } else if (event.getStatus() == FriendChatEvent.EVENT_NEW_ASSISTANT_MESSAGE) {
+      mAssistMessageUnreadCount = ((Long) event.getObj()).intValue();
+      U.getBus().post(new MsgCountEvent(MsgCountEvent.TYPE_ASSIST_MESSAGE_COUNT, mAssistMessageUnreadCount));
+    }
+    mRbMsgCount.setCount(mUnreadConversationCount + mUnreadFConversationCount + mAssistMessageUnreadCount);
   }
 
   private void clearSelected() {
@@ -219,14 +242,25 @@ public class HomeTabActivity extends BaseActivity {
   }
 
   public static class MsgCountEvent {
-    private int count;
 
-    public MsgCountEvent(int count) {
+    public static final int TYPE_UNREAD_CONVERSATION_COUNT = 0x1;
+    public static final int TYPE_UNREAD_FCONVERSATION_COUNT = 0x2;
+    public static final int TYPE_ASSIST_MESSAGE_COUNT = 0x3;
+
+    private int count;
+    private int type;
+
+    public MsgCountEvent(int type, int count) {
       this.count = count;
+      this.type = type;
     }
 
     public int getCount() {
       return count;
+    }
+
+    public int getType() {
+      return type;
     }
   }
 }

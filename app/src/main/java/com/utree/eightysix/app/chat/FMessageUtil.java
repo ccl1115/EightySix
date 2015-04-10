@@ -83,4 +83,11 @@ public class FMessageUtil {
     return DaoUtils.getFriendMessageDao().queryBuilder()
         .where(FriendMessageDao.Properties.Read.eq(false)).count();
   }
+
+  public static long getAssistUnreadCount() {
+    return DaoUtils.getFriendMessageDao().queryBuilder()
+        .where(FriendMessageDao.Properties.ChatType.eq("assistant"))
+        .where(FriendMessageDao.Properties.Read.eq(false))
+        .count();
+  }
 }
