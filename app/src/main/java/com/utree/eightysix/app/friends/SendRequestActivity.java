@@ -18,6 +18,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.response.ProfileResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
@@ -49,7 +50,19 @@ public class SendRequestActivity extends BaseActivity {
 
     final int viewId = getIntent().getIntExtra("viewId", 0);
 
-    mEtContent.setSelection(mEtContent.getText().length());
+    U.request("profile", new OnResponse2<ProfileResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
+      @Override
+      public void onResponse(ProfileResponse response) {
+        mEtContent.setText("你好，我是" + response.object.userName + "，添加我为蓝莓好友吧");
+        mEtContent.setSelection(mEtContent.getText().length());
+      }
+    }, ProfileResponse.class, (Integer) null);
+
 
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
