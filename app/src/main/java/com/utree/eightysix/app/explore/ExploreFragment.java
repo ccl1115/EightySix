@@ -84,7 +84,8 @@ public class ExploreFragment extends BaseFragment {
   @OnClick(R.id.tv_blue_star)
   public void onTvBlueStarClicked() {
     BaseWebActivity.start(getBaseActivity(), "蓝星商城",
-        String.format("http://c.lanmeiquan.com/activity/blueStar.do?userid=%s&token=%s",
+        String.format("%s/activity/blueStar.do?userid=%s&token=%s",
+            U.getConfig("api.host"),
             Account.inst().getUserId(),
             Account.inst().getToken()));
   }
