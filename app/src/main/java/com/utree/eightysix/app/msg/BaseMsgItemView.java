@@ -1,6 +1,8 @@
 package com.utree.eightysix.app.msg;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -8,6 +10,7 @@ import android.view.View;
 import android.widget.*;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -92,6 +95,24 @@ public class BaseMsgItemView extends LinearLayout {
     ((BaseAdapter) ((ListView) getParent()).getAdapter()).notifyDataSetChanged();
     PostActivity.start(view.getContext(), mPosts[1], true);
     ReadMsgStore.inst().addRead(mPosts[1].id);
+  }
+
+  @OnLongClick(R.id.fl_left)
+  public boolean onFlLeftLongClicked(View v) {
+    if (mPosts[0] != null) {
+      showMenuDialog(v.getContext(), mPosts[0]);
+      return true;
+    }
+    return false;
+  }
+
+  @OnLongClick(R.id.fl_right)
+  public boolean onFlRightLongClicked(View v) {
+    if (mPosts[1] != null) {
+      showMenuDialog(v.getContext(), mPosts[1]);
+      return true;
+    }
+    return false;
   }
 
   protected Post[] mPosts;
@@ -207,5 +228,30 @@ public class BaseMsgItemView extends LinearLayout {
     });
 
     dialog.show();
+  }
+
+  public void showMenuDialog(Context context, final Post post) {
+    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+    builder.setItems(
+        new String[]{
+            "删除此条记录",
+            "屏蔽此贴信息"
+        },
+        new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            switch (which) {
+              case 0:
+                break;
+              case 1:
+                showUnfollowDialog(post);
+                break;
+            }
+          }
+        }
+    );
+
+    builder.show();
   }
 }

@@ -82,6 +82,18 @@ public class HomeTabActivity extends BaseActivity {
     context.startActivity(i);
   }
 
+  public static void start(Context context, int regionType) {
+    Intent i = new Intent(context, HomeTabActivity.class);
+    i.putExtra("regionType", regionType);
+
+    if (!(context instanceof Activity)) {
+      i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    context.startActivity(i);
+  }
+
+
   @OnClick({R.id.fl_feed, R.id.fl_explore, R.id.fl_message, R.id.fl_more})
   public void onTabItemClicked(View v) {
     clearSelected();
@@ -196,6 +208,17 @@ public class HomeTabActivity extends BaseActivity {
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
+  }
+
+  @Override
+  protected void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+
+    int regionType = intent.getIntExtra("regionType", -1);
+
+    if (regionType != -1 && regionType != mTabRegionFragment.getRegionType()) {
+      mTabRegionFragment.setRegionType(regionType);
+    }
   }
 
   @Override
