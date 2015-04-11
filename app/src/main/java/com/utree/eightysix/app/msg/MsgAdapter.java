@@ -74,4 +74,18 @@ abstract class MsgAdapter<T extends BaseMsgItemView> extends BaseAdapter {
   }
 
   protected abstract T newView(Context context);
+
+  public static class MsgDeleteEvent {
+
+    private Post mPost;
+
+    public MsgDeleteEvent(Post post) {
+
+      mPost = post;
+    }
+
+    public Post getPost() {
+      return mPost;
+    }
+  }
 }

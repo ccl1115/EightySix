@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
@@ -126,6 +127,13 @@ public abstract class BaseMsgFragment extends BaseFragment {
     }
   }
 
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+
+    M.getRegisterHelper().unregister(mMsgAdapter);
+  }
+
   protected abstract int getCreateType();
 
   private void requestMsgs(final int page) {
@@ -139,12 +147,19 @@ public abstract class BaseMsgFragment extends BaseFragment {
       public void onResponse(MsgsResponse response) {
         if (RESTRequester.responseOk(response)) {
           if (page == 1) {
+            M.getRegisterHelper().unregister(mMsgAdapter);
             mMsgAdapter = new MsgAdapter<CommentMsgItemView>(response.object.posts.lists) {
               @Override
               protected CommentMsgItemView newView(Context context) {
                 return new CommentMsgItemView(context);
               }
+
+              @Subscribe
+              public void onMsgDeleteEvent(MsgDeleteEvent event) {
+                remove(event.getPost());
+              }
             };
+            M.getRegisterHelper().register(mMsgAdapter);
             mAlvRefresh.setAdapter(mMsgAdapter);
 
             mAlvRefresh.setVisibility(View.VISIBLE);
@@ -191,12 +206,19 @@ public abstract class BaseMsgFragment extends BaseFragment {
       public void onResponse(MsgsResponse response) {
         if (RESTRequester.responseOk(response)) {
           if (page == 1) {
+            M.getRegisterHelper().unregister(mMsgAdapter);
             mMsgAdapter = new MsgAdapter<CommentMsgItemView>(response.object.posts.lists) {
               @Override
               protected CommentMsgItemView newView(Context context) {
                 return new CommentMsgItemView(context);
               }
+
+              @Subscribe
+              public void onMsgDeleteEvent(MsgDeleteEvent event) {
+                remove(event.getPost());
+              }
             };
+            M.getRegisterHelper().register(mMsgAdapter);
             mAlvRefresh.setAdapter(mMsgAdapter);
 
 

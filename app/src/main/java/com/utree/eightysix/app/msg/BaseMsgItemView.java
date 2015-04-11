@@ -29,28 +29,28 @@ import com.utree.eightysix.widget.ThemedDialog;
  */
 public class BaseMsgItemView extends LinearLayout {
 
-  @InjectView (R.id.fl_left)
+  @InjectView(R.id.fl_left)
   public FrameLayout mFlLeft;
 
-  @InjectView (R.id.fl_right)
+  @InjectView(R.id.fl_right)
   public FrameLayout mFlRight;
 
-  @InjectView (R.id.tv_content_left)
+  @InjectView(R.id.tv_content_left)
   public TextView mTvContentLeft;
 
-  @InjectView (R.id.tv_content_right)
+  @InjectView(R.id.tv_content_right)
   public TextView mTvContentRight;
 
-  @InjectView (R.id.aiv_bg_left)
+  @InjectView(R.id.aiv_bg_left)
   public AsyncImageView mAivBgLeft;
 
-  @InjectView (R.id.aiv_bg_right)
+  @InjectView(R.id.aiv_bg_right)
   public AsyncImageView mAivBgRight;
 
-  @InjectView (R.id.v_mask_left)
+  @InjectView(R.id.v_mask_left)
   public View mVMaskLeft;
 
-  @InjectView (R.id.v_mask_right)
+  @InjectView(R.id.v_mask_right)
   public View mVMaskRight;
 
   @InjectView(R.id.tv_count_left)
@@ -79,7 +79,7 @@ public class BaseMsgItemView extends LinearLayout {
     }
   }
 
-  @OnClick (R.id.fl_left)
+  @OnClick(R.id.fl_left)
   public void onFlLeftClicked(View view) {
     mPosts[0].read = 1;
     mPosts[0].comments = 0;
@@ -230,6 +230,42 @@ public class BaseMsgItemView extends LinearLayout {
     dialog.show();
   }
 
+  public void showDeleteDialog(final Post post) {
+    final ThemedDialog dialog = new ThemedDialog(getContext());
+
+    dialog.setTitle("delete?");
+
+    dialog.setPositive(R.string.okay, new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        dialog.dismiss();
+        U.getRESTRequester().request(new CancelNoticeRequest(post.id, CancelNoticeRequest.TYPE_DELETE),
+            new OnResponse2<Response>() {
+              @Override
+              public void onResponseError(Throwable e) {
+
+              }
+
+              @Override
+              public void onResponse(Response response) {
+                if (RESTRequester.responseOk(response)) {
+                  U.getBus().post(new MsgAdapter.MsgDeleteEvent(post));
+                }
+              }
+            }, Response.class);
+      }
+    });
+
+    dialog.setRbNegative(R.string.cancel, new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        dialog.dismiss();
+      }
+    });
+
+    dialog.show();
+  }
+
   public void showMenuDialog(Context context, final Post post) {
     AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
@@ -237,21 +273,21 @@ public class BaseMsgItemView extends LinearLayout {
         new String[]{
             "删除此条记录",
             "屏蔽此贴信息"
-        },
-        new DialogInterface.OnClickListener() {
+        }, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
             switch (which) {
               case 0:
+                showDeleteDialog(post);
                 break;
               case 1:
                 showUnfollowDialog(post);
                 break;
             }
           }
-        }
-    );
+        })
+        .setTitle("Operation")
+        .show();
 
-    builder.show();
   }
 }
