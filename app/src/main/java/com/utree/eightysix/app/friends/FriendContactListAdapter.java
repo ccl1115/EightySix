@@ -59,6 +59,16 @@ public class FriendContactListAdapter extends BaseAdapter {
     return convertView;
   }
 
+  public void setSentRequest(int viewId) {
+    for (Friend friend : mFriends) {
+      if (friend.viewId == viewId) {
+        friend.type = "added";
+        notifyDataSetChanged();
+        break;
+      }
+    }
+  }
+
   public static class ViewHolder {
 
     @InjectView(R.id.tv_name)

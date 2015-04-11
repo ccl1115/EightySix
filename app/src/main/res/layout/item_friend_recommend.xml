@@ -24,6 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_name"
+            android:layout_marginTop="2dp"
             android:textSize="14sp"
             android:textColor="@color/apptheme_primary_grey_color_200"
             />
@@ -35,6 +36,8 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
+            android:text="添加"
+            android:textSize="14sp"
             />
 
     <TextView

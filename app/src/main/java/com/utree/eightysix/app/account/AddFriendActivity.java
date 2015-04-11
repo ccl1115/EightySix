@@ -23,6 +23,7 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.friends.FriendContactListActivity;
+import com.utree.eightysix.app.friends.SendRequestActivity;
 import com.utree.eightysix.app.friends.UserSearchActivity;
 import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.contact.ContactsSyncEvent;
@@ -45,6 +46,7 @@ import com.utree.eightysix.widget.ThemedDialog;
 public class AddFriendActivity extends BaseActivity {
 
   private QRCodeScanFragment mQRCodeScanFragment;
+  private FriendRecommendAdapter mFriendRecommendAdapter;
 
   @Keep
   public static class GetInviteCodeResponse extends Response {
@@ -62,6 +64,9 @@ public class AddFriendActivity extends BaseActivity {
 
     @InjectView(R.id.tv_id)
     public TextView mTvId;
+
+    @InjectView(R.id.tv_head)
+    public TextView mTvHead;
 
     @OnClick(R.id.ll_scan)
     public void onLlScanClicked() {
@@ -144,6 +149,7 @@ public class AddFriendActivity extends BaseActivity {
       ButterKnife.inject(this, view);
 
       mEtSearchHint.setHint("输入蓝莓ID或者昵称");
+      mTvHead.setText("朋友推荐");
     }
   }
 
@@ -171,7 +177,8 @@ public class AddFriendActivity extends BaseActivity {
       @Override
       public void onResponse(final FriendListResponse response) {
         if (RESTRequester.responseOk(response)) {
-          mAlvRecommended.setAdapter(new FriendRecommendAdapter(response.object));
+          mFriendRecommendAdapter = new FriendRecommendAdapter(response.object);
+          mAlvRecommended.setAdapter(mFriendRecommendAdapter);
           headViewHolder.mTvId.setText("我的蓝莓ID：" + response.extra.viewId);
           headViewHolder.mTvId.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -223,6 +230,11 @@ public class AddFriendActivity extends BaseActivity {
     if (U.getQRCodeActionDispatcher().dispatch(event.getText())) {
       startActivity(new Intent(this, ScanFriendsActivity.class));
     }
+  }
+
+  @Subscribe
+  public void onSentRequestEvent(SendRequestActivity.SentRequestEvent event) {
+    mFriendRecommendAdapter.setSentRequest(event.getViewId());
   }
 
   @Override

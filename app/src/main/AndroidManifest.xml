@@ -179,7 +179,7 @@
 
         <activity android:name=".app.account.ProfileFillActivity" android:label="完善资料" android:screenOrientation="portrait"/>
 
-        <activity android:name=".app.account.ProfileEditActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".app.account.ProfileEditActivity" android:theme="@style/AppTheme.Light" android:screenOrientation="portrait"/>
 
         <activity android:name=".app.account.NameEditActivity" android:screenOrientation="portrait"/>
 

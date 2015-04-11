@@ -80,6 +80,7 @@ public class SendRequestActivity extends BaseActivity {
           public void onResponse(Response response) {
             if (RESTRequester.responseOk(response)) {
               showToast("发送成功", false);
+              U.getBus().post(new SentRequestEvent(viewId));
               finish();
             }
           }
@@ -97,5 +98,19 @@ public class SendRequestActivity extends BaseActivity {
   @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();
+  }
+
+  public static class SentRequestEvent {
+
+    private int mViewId;
+
+    public SentRequestEvent(int viewId) {
+
+      mViewId = viewId;
+    }
+
+    public int getViewId() {
+      return mViewId;
+    }
   }
 }

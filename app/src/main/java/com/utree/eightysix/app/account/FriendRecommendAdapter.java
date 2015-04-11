@@ -60,7 +60,17 @@ public class FriendRecommendAdapter extends BaseAdapter {
     return convertView;
   }
 
-  public static class ViewHolder {
+  public void setSentRequest(int viewId) {
+    for (Friend friend : mFriends) {
+      if (friend.viewId == viewId) {
+        friend.type = "added";
+        notifyDataSetChanged();
+        break;
+      }
+    }
+  }
+
+  public class ViewHolder {
 
     @InjectView(R.id.tv_name)
     public TextView mTvName;
@@ -73,6 +83,7 @@ public class FriendRecommendAdapter extends BaseAdapter {
 
     @InjectView(R.id.tv_result)
     public TextView mTvResult;
+
     private Friend mFriend;
 
     @OnClick(R.id.rb_add)
@@ -83,7 +94,7 @@ public class FriendRecommendAdapter extends BaseAdapter {
     public void setData(Friend friend) {
       mFriend = friend;
 
-      mTvName.setText(mFriend.name);
+      mTvName.setText(mFriend.userName);
       mTvSource.setText(mFriend.workinFactory + " " + mFriend.source);
 
       if ("added".equals(mFriend.type)) {

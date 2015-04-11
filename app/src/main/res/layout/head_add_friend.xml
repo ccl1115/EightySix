@@ -219,5 +219,5 @@
 
     </LinearLayout>
 
-    <include layout="@layout/widget_primary_divider"/>
+    <include layout="@layout/item_head"/>
 </LinearLayout>

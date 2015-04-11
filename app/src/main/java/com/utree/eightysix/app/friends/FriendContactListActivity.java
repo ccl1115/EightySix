@@ -28,6 +28,7 @@ public class FriendContactListActivity extends BaseActivity {
 
   @InjectView(R.id.rstv_empty)
   public RandomSceneTextView mRstvEmpty;
+
   private FriendContactListAdapter mAdapter;
 
 
@@ -58,6 +59,11 @@ public class FriendContactListActivity extends BaseActivity {
         hideProgressBar();
       }
     }, FriendListResponse.class);
+  }
+
+  @Subscribe
+  public void onSentRequestEvent(SendRequestActivity.SentRequestEvent event) {
+    mAdapter.setSentRequest(event.getViewId());
   }
 
   @Override
