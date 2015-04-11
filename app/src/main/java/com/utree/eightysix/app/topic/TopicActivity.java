@@ -75,6 +75,8 @@ public class TopicActivity extends BaseActivity {
     super.onCreate(savedInstanceState);
     setTopTitle("话题");
 
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+
     mTopic = getIntent().getParcelableExtra("topic");
 
     if (mTopic != null) {
