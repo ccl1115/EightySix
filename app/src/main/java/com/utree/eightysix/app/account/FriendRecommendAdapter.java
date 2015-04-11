@@ -15,6 +15,7 @@ import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.friends.SendRequestActivity;
 import com.utree.eightysix.data.Friend;
+import com.utree.eightysix.widget.AsyncImageViewWithRoundCorner;
 import com.utree.eightysix.widget.RoundedButton;
 
 import java.util.List;
@@ -72,6 +73,9 @@ public class FriendRecommendAdapter extends BaseAdapter {
 
   public class ViewHolder {
 
+    @InjectView(R.id.aiv_portrait)
+    public AsyncImageViewWithRoundCorner mAivPortrait;
+
     @InjectView(R.id.tv_name)
     public TextView mTvName;
 
@@ -94,6 +98,7 @@ public class FriendRecommendAdapter extends BaseAdapter {
     public void setData(Friend friend) {
       mFriend = friend;
 
+      mAivPortrait.setUrl(mFriend.avatar);
       mTvName.setText(mFriend.userName);
       mTvSource.setText(mFriend.workinFactory + " " + mFriend.source);
 
