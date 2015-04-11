@@ -224,6 +224,11 @@ public class ProfileEditActivity extends BaseActivity {
   }
 
   @Subscribe
+  public void onPortraitUpdatedEvent(PortraitUpdatedEvent event) {
+    mAivPortrait.setUrl(event.getUrl());
+  }
+
+  @Subscribe
   public void onBirdayUpdatedEvent(BirthdayUpdatedEvent event) {
     Calendar calendar = event.getCalendar();
     mTvBirthday.setText(String.format("%d岁 %s %s",

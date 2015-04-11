@@ -4,6 +4,8 @@
 
 package com.utree.eightysix.app.account;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -96,7 +98,7 @@ public class AvatarsActivity extends BaseActivity {
               mAivAvatars[i].setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                  showSelectConfirmDialog(avatar);
+                  showMenuDialog(avatar);
                   return true;
                 }
               });
@@ -192,6 +194,58 @@ public class AvatarsActivity extends BaseActivity {
       @Override
       public void onClick(View v) {
         dialog.dismiss();
+      }
+    });
+
+    dialog.show();
+  }
+
+  private void showMenuDialog(final String avatar) {
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+    builder.setItems(
+        new String[]{
+            "设置为当前头像",
+            "删除此头像"
+        },
+        new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            switch(which) {
+              case 0:
+                showSelectConfirmDialog(avatar);
+                break;
+              case 1:
+                showDeleteDialog(avatar);
+                break;
+            }
+          }
+        });
+
+    builder.show();
+  }
+
+  private void showDeleteDialog(final String avatar) {
+    final ThemedDialog dialog = new ThemedDialog(this);
+
+    dialog.setTitle("确认删除此头像");
+
+    dialog.setPositive(R.string.okay, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        U.request("user_avatar_del", new OnResponse2<Response>() {
+          @Override
+          public void onResponseError(Throwable e) {
+
+          }
+
+          @Override
+          public void onResponse(Response response) {
+            if (RESTRequester.responseOk(response)) {
+              requestAvatars();
+            }
+          }
+        }, Response.class, avatar);
       }
     });
 

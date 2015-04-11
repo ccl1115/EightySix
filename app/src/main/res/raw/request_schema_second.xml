@@ -198,7 +198,7 @@
     </request>
 
     <request>
-        <id>user_avatars_del</id>
+        <id>user_avatar_del</id>
         <name>删除头像</name>
         <path>/commit/user/avatar/delete</path>
         <sign/>
