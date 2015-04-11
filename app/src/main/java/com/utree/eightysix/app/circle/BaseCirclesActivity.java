@@ -36,6 +36,7 @@ import com.utree.eightysix.request.CircleSetRequest;
 import com.utree.eightysix.request.FactoryRegionRequest;
 import com.utree.eightysix.request.MyCirclesRequest;
 import com.utree.eightysix.request.SelectCirclesRequest;
+import com.utree.eightysix.response.CircleIsFollowResponse;
 import com.utree.eightysix.response.CirclesResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.OnResponse2;
@@ -299,36 +300,66 @@ public class BaseCirclesActivity extends BaseActivity {
   }
 
   protected void showCircleDialog(final Circle circle) {
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setTitle("操作");
-    builder.setItems(new String[]{
-        "设置在职",
-        "关注"
-    }, new DialogInterface.OnClickListener() {
+    showProgressBar(true);
+    U.request("follow_circle_followed", new OnResponse2<CircleIsFollowResponse>() {
       @Override
-      public void onClick(DialogInterface dialog, int which) {
-        switch (which) {
-          case 0:
-            showCircleSetDialog(circle);
-            break;
-          case 1:
-            U.request("follow_circle_add", new OnResponse2<Response>() {
-              @Override
-              public void onResponseError(Throwable e) {
+      public void onResponseError(Throwable e) {
+        hideProgressBar();
+      }
 
-              }
-
+      @Override
+      public void onResponse(final CircleIsFollowResponse response) {
+        hideProgressBar();
+        AlertDialog.Builder builder = new AlertDialog.Builder(BaseCirclesActivity.this);
+        builder.setTitle("操作");
+        builder.setItems(
+            new String[]{
+                "设置在职",
+                response.object.followed == 1 ? "Cancel关注" : "关注"
+            },
+            new DialogInterface.OnClickListener() {
               @Override
-              public void onResponse(Response response) {
-                if (RESTRequester.responseOk(response)) {
-                  showToast("成功关注");
+              public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                  case 0:
+                    showCircleSetDialog(circle);
+                    break;
+                  case 1:
+                    if (response.object.followed == 1) {
+                      U.request("follow_circle_del", new OnResponse2<Response>() {
+                        @Override
+                        public void onResponseError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onResponse(Response response) {
+                          if (RESTRequester.responseOk(response)) {
+                            showToast("成功Cancel关注");
+                          }
+                        }
+                      }, Response.class, circle.id);
+                    } else {
+                      U.request("follow_circle_add", new OnResponse2<Response>() {
+                        @Override
+                        public void onResponseError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onResponse(Response response) {
+                          if (RESTRequester.responseOk(response)) {
+                            showToast("成功关注");
+                          }
+                        }
+                      }, Response.class, circle.id);
+                    }
+                    break;
                 }
               }
-            }, Response.class, circle.id);
-            break;
-        }
+            }).show();
       }
-    }).show();
+    }, CircleIsFollowResponse.class, circle.id);
   }
 
   protected void showCircleSetDialog(final Circle circle) {

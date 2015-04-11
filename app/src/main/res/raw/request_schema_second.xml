@@ -168,6 +168,17 @@
     </request>
 
     <request>
+        <id>follow_circle_followed</id>
+        <name>if followed or not</name>
+        <path>/userfactory/whetherlike</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>factoryId</param>
+        </params>
+    </request>
+
+    <request>
         <id>follow_circle_del</id>
         <name>删除关注圈子</name>
         <path>/commit/userfactory/like/delete</path>

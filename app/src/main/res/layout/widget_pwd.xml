@@ -26,6 +26,7 @@
             android:id="@+id/et_pwd"
             android:layout_gravity="center_horizontal"
             android:selectAllOnFocus="true"
+            android:hint="6到16个字符"
             android:imeOptions="actionGo"
             android:imeActionLabel="@string/login"/>
 </LinearLayout>
