@@ -25,6 +25,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.event.CurrentCircleNameUpdatedEvent;
+import com.utree.eightysix.app.circle.event.CircleFollowsChangedEvent;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.app.home.HomeTabActivity;
@@ -350,6 +351,7 @@ public class BaseCirclesActivity extends BaseActivity {
                         public void onResponse(Response response) {
                           if (RESTRequester.responseOk(response)) {
                             showToast("成功关注");
+                            U.getBus().post(new CircleFollowsChangedEvent());
                           }
                         }
                       }, Response.class, circle.id);

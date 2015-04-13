@@ -26,6 +26,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
+import com.utree.eightysix.app.circle.event.CircleFollowsChangedEvent;
 import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
@@ -516,6 +517,11 @@ public class TabRegionFragment extends BaseFragment {
     mVpTab.setCurrentItem(0);
   }
 
+  @Subscribe
+  public void onCircleFollowsChangedEvent(CircleFollowsChangedEvent event) {
+    requestFollowCircles();
+  }
+
   private void clearActive() {
     if (mFeedFragment != null) mFeedFragment.setActive(false);
     if (mHotFeedFragment != null) mHotFeedFragment.setActive(false);
@@ -628,7 +634,9 @@ public class TabRegionFragment extends BaseFragment {
       linearLayout.addView(textView);
     } else {
       View view = new View(getActivity());
-      view.setLayoutParams(new LinearLayout.LayoutParams(0, 1, 1));
+      LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, 1, 1);
+      params.setMargins(p, p, p, 0);
+      view.setLayoutParams(params);
       linearLayout.addView(view);
     }
 
@@ -667,7 +675,9 @@ public class TabRegionFragment extends BaseFragment {
       linearLayout.addView(textView);
     } else {
       View view = new View(getActivity());
-      view.setLayoutParams(new LinearLayout.LayoutParams(0, 1, 1));
+      LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, 1, 1);
+      params.setMargins(p, p, 0, 0);
+      view.setLayoutParams(params);
       linearLayout.addView(view);
     }
 
