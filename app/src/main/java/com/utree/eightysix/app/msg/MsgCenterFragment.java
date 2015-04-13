@@ -125,13 +125,7 @@ public class MsgCenterFragment extends BaseFragment {
   @Override
   public void onAttach(Activity activity) {
     super.onAttach(activity);
-
-
-    getBaseActivity().setTopTitle("消息");
-    getBaseActivity().setTopSubTitle("");
-
-    getBaseActivity().getTopBar().getAbLeft().hide();
-    getBaseActivity().getTopBar().getAbRight().hide();
+    updateTopBar();
   }
 
   @Override
@@ -145,12 +139,16 @@ public class MsgCenterFragment extends BaseFragment {
     super.onHiddenChanged(hidden);
 
     if (!hidden) {
-      getBaseActivity().setTopTitle("消息");
-      getBaseActivity().setTopSubTitle("");
-
-      getBaseActivity().getTopBar().getAbLeft().hide();
-      getBaseActivity().getTopBar().getAbRight().hide();
+      updateTopBar();
     }
   }
 
+  private void updateTopBar() {
+    getBaseActivity().setTopTitle("消息");
+    getBaseActivity().setTopSubTitle("");
+
+    getBaseActivity().getTopBar().getAbLeft().hide();
+    getBaseActivity().getTopBar().getAbRight().hide();
+    getBaseActivity().showTopBar(true);
+  }
 }

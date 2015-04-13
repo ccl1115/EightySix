@@ -131,6 +131,17 @@ public class ExploreFragment extends BaseFragment {
   @Override
   public void onAttach(Activity activity) {
     super.onAttach(activity);
+    updateTopBar();
+  }
+
+  @Override
+  public void onHiddenChanged(boolean hidden) {
+    if (!hidden) {
+      updateTopBar();
+    }
+  }
+
+  private void updateTopBar() {
     getBaseActivity().setTopTitle("发现");
     getBaseActivity().setTopSubTitle("");
     getBaseActivity().getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_add));
@@ -142,24 +153,9 @@ public class ExploreFragment extends BaseFragment {
       }
     });
     getBaseActivity().getTopBar().getAbLeft().hide();
+    getBaseActivity().showTopBar(true);
   }
 
-  @Override
-  public void onHiddenChanged(boolean hidden) {
-    if (!hidden) {
-      getBaseActivity().setTopTitle("发现");
-      getBaseActivity().setTopSubTitle("");
-      getBaseActivity().getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_add));
-      getBaseActivity().getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          Intent intent = new Intent(getActivity(), AddFriendActivity.class);
-          getActivity().startActivity(intent);
-        }
-      });
-      getBaseActivity().getTopBar().getAbLeft().hide();
-    }
-  }
 
   private void requestTags() {
     U.request("daily_picks_tags", new OnResponse2<TagsResponse>() {

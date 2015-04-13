@@ -20,6 +20,8 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -48,7 +50,7 @@ import java.util.List;
 /**
  * @author simon
  */
-public class TabRegionFragment extends BaseFragment {
+public class TabRegionFragment extends BaseFragment implements AbsRegionFragment.OnScrollListener {
 
   @InjectView(R.id.vp_tab)
   public ViewPager mVpTab;
@@ -91,10 +93,18 @@ public class TabRegionFragment extends BaseFragment {
 
   private List<View> mFollowCircleViews = new ArrayList<View>();
 
+  private ObjectAnimator mHideTtTabAnimator;
+  private ObjectAnimator mShowTtTabAnimator;
+  private boolean mTtTabHidden;
+
   public TabRegionFragment() {
     mFeedFragment = new FeedRegionFragment();
     mHotFeedFragment = new HotFeedRegionFragment();
     mFriendsFeedFragment = new FriendsFeedRegionFragment();
+
+    mFeedFragment.setOnScrollListener(this);
+    mHotFeedFragment.setOnScrollListener(this);
+    mFriendsFeedFragment.setOnScrollListener(this);
   }
 
   @OnClick(R.id.ib_send)
@@ -140,6 +150,80 @@ public class TabRegionFragment extends BaseFragment {
     }
   }
 
+  public final void hideTtTab() {
+    if (mTtTabHidden) return;
+    if (mHideTtTabAnimator.isRunning()) {
+      return;
+    }
+    if (mShowTtTabAnimator.isRunning()) {
+      mShowTtTabAnimator.cancel();
+    }
+    mHideTtTabAnimator.start();
+  }
+
+  public final void showTtTab() {
+    if (!mTtTabHidden) return;
+    if (mShowTtTabAnimator.isRunning()) {
+      return;
+    }
+    if (mHideTtTabAnimator.isRunning()) {
+      mHideTtTabAnimator.cancel();
+    }
+    mShowTtTabAnimator.start();
+  }
+
+  private void initAnimator() {
+    mHideTtTabAnimator = ObjectAnimator.ofFloat(mTtTab, "translationY", 0,
+        -getResources().getDimensionPixelSize(R.dimen.activity_top_bar_height));
+    mHideTtTabAnimator.setDuration(150);
+    mHideTtTabAnimator.addListener(new Animator.AnimatorListener() {
+      @Override
+      public void onAnimationStart(Animator animation) {
+
+      }
+
+      @Override
+      public void onAnimationEnd(Animator animation) {
+        mTtTabHidden = true;
+      }
+
+      @Override
+      public void onAnimationCancel(Animator animation) {
+
+      }
+
+      @Override
+      public void onAnimationRepeat(Animator animation) {
+
+      }
+    });
+
+    mShowTtTabAnimator = ObjectAnimator.ofFloat(mTtTab, "translationY",
+        -getResources().getDimensionPixelSize(R.dimen.activity_top_bar_height), 0f);
+    mShowTtTabAnimator.setDuration(150);
+    mShowTtTabAnimator.addListener(new Animator.AnimatorListener() {
+      @Override
+      public void onAnimationStart(Animator animation) {
+
+      }
+
+      @Override
+      public void onAnimationEnd(Animator animation) {
+        mTtTabHidden = false;
+      }
+
+      @Override
+      public void onAnimationCancel(Animator animation) {
+
+      }
+
+      @Override
+      public void onAnimationRepeat(Animator animation) {
+
+      }
+    });
+  }
+
   private void showNoPermDialog() {
     if (mNoPermDialog == null) {
       mNoPermDialog = new ThemedDialog(getActivity());
@@ -176,6 +260,8 @@ public class TabRegionFragment extends BaseFragment {
   @Override
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
+
+    initAnimator();
 
     mSbDistance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
       @Override
@@ -418,7 +504,7 @@ public class TabRegionFragment extends BaseFragment {
   }
 
   @Subscribe
-  public void onCurrentCircleResponseEvent(CurrentCircleResponseEvent event)  {
+  public void onCurrentCircleResponseEvent(CurrentCircleResponseEvent event) {
     if (event.getCircle() != null) {
       mLlSetCurrent.setVisibility(View.GONE);
       mLlCurrent.setVisibility(View.VISIBLE);
@@ -686,9 +772,19 @@ public class TabRegionFragment extends BaseFragment {
 
   private void clearFollowCircleViews() {
     mTvCurrent.setSelected(false);
-    for(View view : mFollowCircleViews) {
+    for (View view : mFollowCircleViews) {
       view.setSelected(false);
     }
+  }
+
+  @Override
+  public void onShowTopBar() {
+    showTtTab();
+  }
+
+  @Override
+  public void onHideTopBar() {
+    hideTtTab();
   }
 
   @Keep

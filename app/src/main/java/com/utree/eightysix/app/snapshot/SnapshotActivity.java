@@ -78,6 +78,8 @@ public class SnapshotActivity extends BaseActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+
     mCircle = getIntent().getParcelableExtra("circle");
 
     if (mCircle == null) {

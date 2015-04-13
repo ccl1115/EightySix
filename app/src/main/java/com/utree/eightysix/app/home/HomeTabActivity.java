@@ -172,6 +172,8 @@ public class HomeTabActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    setFillContent(true);
+
     U.getChatBus().register(this);
 
     ContactsSyncService.start(this, false);
@@ -223,6 +225,11 @@ public class HomeTabActivity extends BaseActivity {
 
   @Override
   public void onActionLeftClicked() {
+  }
+
+  @Override
+  protected void onTopBarShown() {
+    mTabRegionFragment.showTtTab();
   }
 
   @Override

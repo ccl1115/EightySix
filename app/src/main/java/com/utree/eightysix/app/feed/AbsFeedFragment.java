@@ -1,6 +1,8 @@
 package com.utree.eightysix.app.feed;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,19 +16,24 @@ import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
+import com.utree.eightysix.app.circle.event.CircleFollowsChangedEvent;
 import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
 import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.app.post.PostActivity;
+import com.utree.eightysix.app.snapshot.SnapshotActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Feeds;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.event.ListViewScrollStateIdledEvent;
+import com.utree.eightysix.response.CircleIsFollowResponse;
 import com.utree.eightysix.response.FeedsResponse;
+import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
@@ -37,13 +44,13 @@ import com.utree.eightysix.widget.RandomSceneTextView;
  * @author simon
  */
 public abstract class AbsFeedFragment extends BaseFragment {
-  @InjectView (R.id.lv_feed)
+  @InjectView(R.id.lv_feed)
   public AdvancedListView mLvFeed;
 
-  @InjectView (R.id.refresh_view)
+  @InjectView(R.id.refresh_view)
   public SwipeRefreshLayout mRefresherView;
 
-  @InjectView (R.id.tv_empty_text)
+  @InjectView(R.id.tv_empty_text)
   public RandomSceneTextView mRstvEmpty;
 
   protected FeedAdapter mFeedAdapter;
@@ -52,7 +59,7 @@ public abstract class AbsFeedFragment extends BaseFragment {
 
   protected boolean mPostPraiseRequesting;
 
-  @OnItemClick (R.id.lv_feed)
+  @OnItemClick(R.id.lv_feed)
   public void onLvFeedItemClicked(int position, View view) {
     Object item = mLvFeed.getAdapter().getItem(position);
     if (item == null || !(item instanceof Post)) return;
@@ -279,9 +286,7 @@ public abstract class AbsFeedFragment extends BaseFragment {
       ((FeedActivity) getBaseActivity()).mSend.setImageResource(response.object.lock != 1 || response.object.current == 1 ?
           R.drawable.ic_post_pen : R.drawable.ic_post_pen_disabled);
 
-      if (mCircle.snapshot == 1) {
-        ((FeedActivity) getBaseActivity()).setAdapter();
-      }
+      updateTopBar();
 
       if (response.object.fetch != null) {
         int count = 0;
@@ -314,6 +319,21 @@ public abstract class AbsFeedFragment extends BaseFragment {
     mLvFeed.stopLoadMore();
     getBaseActivity().hideProgressBar();
     getBaseActivity().hideRefreshIndicator();
+  }
+
+  private void updateTopBar() {
+    getBaseActivity().getTopBar().getAbRight()
+        .setDrawable(getResources().getDrawable(R.drawable.ic_action_overflow));
+
+    getBaseActivity().getTopBar().getAbRight()
+        .setOnClickListener(
+            new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                showMenuDialog();
+              }
+            }
+        );
   }
 
   protected abstract void cacheOutFeeds(final int id, final int page);
@@ -373,5 +393,95 @@ public abstract class AbsFeedFragment extends BaseFragment {
     return false;
   }
 
+  private void showMenuDialog() {
+    getBaseActivity().showProgressBar(true);
+
+    U.request("follow_circle_followed", new OnResponse2<CircleIsFollowResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        getBaseActivity().hideProgressBar();
+      }
+
+      @Override
+      public void onResponse(final CircleIsFollowResponse response) {
+        if (RESTRequester.responseOk(response)) {
+          String follow = response.object.followed == 1 ? "取消关注" : "关注";
+
+          AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+          builder.setTitle("操作");
+
+          if (mCircle.snapshot == 1) {
+            builder.setItems(
+                new String[]{
+                    "快照",
+                    follow
+                },
+                new DialogInterface.OnClickListener() {
+                  @Override
+                  public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                      case 0:
+                        SnapshotActivity.start(getBaseActivity(), mCircle);
+                        break;
+                      case 1:
+                        followCircleItem(response);
+                        break;
+                    }
+                  }
+                });
+          } else {
+            builder.setItems(
+                new String[]{
+                    follow
+                },
+                new DialogInterface.OnClickListener() {
+                  @Override
+                  public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                      case 0:
+                        followCircleItem(response);
+                        break;
+                    }
+                  }
+                });
+
+          }
+          builder.show();
+        }
+        getBaseActivity().hideProgressBar();
+      }
+    }, CircleIsFollowResponse.class, mCircle.id);
+  }
+
+  public void followCircleItem(CircleIsFollowResponse response) {
+    if (response.object.followed == 1) {
+      U.request("follow_circle_del", new OnResponse2<Response>() {
+        @Override
+        public void onResponseError(Throwable e) {
+
+        }
+
+        @Override
+        public void onResponse(Response response) {
+          U.getBus().post(new CircleFollowsChangedEvent());
+        }
+      }, Response.class, mCircle.id);
+    } else if (response.object.followed == 0) {
+      U.request("follow_circle_add", new OnResponse2<Response>() {
+        @Override
+        public void onResponseError(Throwable e) {
+
+        }
+
+        @Override
+        public void onResponse(Response response) {
+          if (RESTRequester.responseOk(response)) {
+            U.getBus().post(new CircleFollowsChangedEvent());
+          }
+        }
+      }, Response.class, mCircle.id);
+    }
+  }
 
 }

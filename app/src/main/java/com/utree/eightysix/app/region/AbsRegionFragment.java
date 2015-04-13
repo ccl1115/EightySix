@@ -71,6 +71,8 @@ public abstract class AbsRegionFragment extends BaseFragment {
 
   protected boolean mPostPraiseRequesting;
   private String mSubInfo;
+  private int mLastFirstVisibleItem;
+  private OnScrollListener mOnScrollListener;
 
   public void requestRegion(int regionType) {
     mMode = MODE_REGION;
@@ -214,7 +216,25 @@ public abstract class AbsRegionFragment extends BaseFragment {
 
       @Override
       public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
+        if (firstVisibleItem > 2) {
+          if (firstVisibleItem > mLastFirstVisibleItem) {
+            getBaseActivity().hideTopBar(true);
+            if (mOnScrollListener != null) {
+              mOnScrollListener.onHideTopBar();
+            }
+          } else if (firstVisibleItem < mLastFirstVisibleItem) {
+            getBaseActivity().showTopBar(true);
+            if (mOnScrollListener != null) {
+              mOnScrollListener.onShowTopBar();
+            }
+          }
+        } else {
+          getBaseActivity().showTopBar(true);
+          if (mOnScrollListener != null) {
+            mOnScrollListener.onShowTopBar();
+          }
+        }
+        mLastFirstVisibleItem = firstVisibleItem;
       }
     });
 
@@ -559,8 +579,18 @@ public abstract class AbsRegionFragment extends BaseFragment {
     return false;
   }
 
-
   public int getRegionType() {
     return mRegionType;
+  }
+
+  public void setOnScrollListener(OnScrollListener listener) {
+    mOnScrollListener = listener;
+  }
+
+  public interface OnScrollListener {
+
+    public void onShowTopBar();
+
+    public void onHideTopBar();
   }
 }

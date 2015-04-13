@@ -18,6 +18,7 @@
             android:id="@+id/refresh_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/activity_top_bar_height"
             >
 
         <ScrollView
@@ -371,6 +372,7 @@
             android:id="@+id/fl_guide"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/activity_top_bar_height"
             android:background="@color/translucent"
             android:clickable="true"
             android:visibility="gone"

@@ -226,6 +226,8 @@ public class ProfileFragment extends HolderFragment {
   public void onViewCreated(View view, Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
 
+    getBaseActivity().setFillContent(true);
+
     mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override
       public void onRefresh() {
@@ -458,6 +460,7 @@ public class ProfileFragment extends HolderFragment {
     getBaseActivity().setTopSubTitle("");
     getBaseActivity().getTopBar().getAbRight().hide();
     getBaseActivity().getTopBar().getAbLeft().hide();
+    getBaseActivity().showTopBar(true);
     if (mIsVisitor) {
       getBaseActivity().getTopBar().getAbRight().setText("拉黑");
       getBaseActivity().getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {

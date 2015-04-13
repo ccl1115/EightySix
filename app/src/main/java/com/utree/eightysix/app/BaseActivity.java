@@ -320,7 +320,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     return mFillContent;
   }
 
-  protected final  void setFillContent(boolean fillContent) {
+  public final  void setFillContent(boolean fillContent) {
     if (mFillContent == fillContent) return;
     mFillContent = fillContent;
     FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mBaseView.findViewById(R.id.content).getLayoutParams();
@@ -459,32 +459,40 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     sBackground = false;
   }
 
-  protected final void hideTopBar(boolean animate) {
+  public final void hideTopBar(boolean animate) {
     if (!topBarShown()) return;
+    if (mHideTopBarAnimator.isRunning()) {
+      return;
+    }
     ((FrameLayout.LayoutParams) findViewById(R.id.content).getLayoutParams()).topMargin = 0;
     mBaseView.requestLayout();
     if (animate) {
-      if (mShowTopBarAnimator != null && mShowTopBarAnimator.isRunning()) {
+      if (mShowTopBarAnimator.isRunning()) {
         mShowTopBarAnimator.cancel();
       }
       mHideTopBarAnimator.start();
     } else {
       mTopBar.setVisibility(View.INVISIBLE);
+      onTopBarHidden();
     }
   }
 
-  protected final void showTopBar(boolean animate) {
+  public final void showTopBar(boolean animate) {
     if (topBarShown()) return;
+    if (mShowTopBarAnimator.isRunning()) {
+      return;
+    }
     ((FrameLayout.LayoutParams) findViewById(R.id.content).getLayoutParams()).topMargin
         = mFillContent ? 0 : getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
     mBaseView.requestLayout();
     if (animate) {
-      if (mHideTopBarAnimator != null && mHideTopBarAnimator.isRunning()) {
+      if (mHideTopBarAnimator.isRunning()) {
         mHideTopBarAnimator.cancel();
       }
       mShowTopBarAnimator.start();
     } else {
       mTopBar.setVisibility(View.VISIBLE);
+      onTopBarShown();
     }
   }
 
@@ -530,6 +538,13 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     new CacheInWorker(RESTRequester.genCacheKey(data.getApi(), data.getParams()), string).execute();
   }
 
+  protected void onTopBarShown() {
+
+  }
+
+  protected void onTopBarHidden() {
+
+  }
 
   protected final void cancelAll() {
   }
@@ -580,6 +595,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
       @Override
       public void onAnimationEnd(Animator animation) {
         mTopBar.setVisibility(View.INVISIBLE);
+        onTopBarHidden();
       }
 
       @Override
@@ -600,6 +616,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
       @Override
       public void onAnimationStart(Animator animation) {
         mTopBar.setVisibility(View.VISIBLE);
+        onTopBarShown();
       }
 
       @Override

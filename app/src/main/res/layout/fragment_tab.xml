@@ -5,26 +5,25 @@
              android:layout_height="match_parent"
         >
 
-    <LinearLayout
+    <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             >
 
+        <android.support.v4.view.ViewPager
+                android:id="@+id/vp_tab"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+
         <com.utree.eightysix.widget.TitleTab
                 android:id="@+id/tt_tab"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_top_bar_height"
                 />
-
-
-        <android.support.v4.view.ViewPager
-                android:id="@+id/vp_tab"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                />
-    </LinearLayout>
+    </FrameLayout>
 
     <ImageButton
             android:id="@+id/ib_send"
@@ -38,7 +37,17 @@
             android:background="@drawable/btn_post"
             />
 
-    <include layout="@layout/widget_follow_circles" />
+    <include
+            layout="@layout/widget_follow_circles"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/activity_top_bar_height"
+            />
 
-    <include layout="@layout/widget_distance_selector" />
+    <include
+            layout="@layout/widget_distance_selector"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/activity_top_bar_height"
+            />
 </FrameLayout>
