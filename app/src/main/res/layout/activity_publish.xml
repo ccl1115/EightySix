@@ -97,6 +97,34 @@
                 android:textSize="14sp"
                 />
 
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_gravity="bottom"
+                android:orientation="horizontal"
+                >
+
+            <ImageView
+                    android:id="@+id/iv_temp_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_temp_name"
+                    />
+
+            <EditText
+                    android:id="@+id/et_temp_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:hint="填个临时名字"
+                    android:textColor="@android:color/white"
+                    android:maxLength="6"
+                    />
+        </LinearLayout>
+
         <CheckBox
                 android:id="@+id/cb_check"
                 android:layout_width="wrap_content"
@@ -104,6 +132,7 @@
                 android:layout_margin="8dp"
                 android:layout_gravity="end|bottom"
                 android:text="匿名发表"
+                android:textColor="@android:color/white"
                 android:checked="true"
                 />
     </FrameLayout>

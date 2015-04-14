@@ -21,10 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.*;
-import butterknife.InjectView;
-import butterknife.OnCheckedChanged;
-import butterknife.OnClick;
-import butterknife.OnFocusChange;
+import butterknife.*;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ArgbEvaluator;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -111,17 +108,26 @@ public class PublishActivity extends BaseActivity implements
   @InjectView(R.id.fl_emotion)
   public EmojiViewPager mFlEmotion;
 
+  @InjectView(R.id.et_temp_name)
+  public EditText mEtTempName;
+
+  @InjectView(R.id.iv_temp_name)
+  public ImageView mIvTempName;
+
   protected PublishLayout mPublishLayout;
 
   protected int mFactoryId;
   protected int mTopicId;
+
+  private String mImageUploadUrl;
 
   private Dialog mDescriptionDialog;
   private boolean mIsOpened;
   private boolean mRequestStarted;
   private boolean mImageUploadFinished;
   private boolean mUseColor = true;
-  private String mImageUploadUrl;
+
+
   private int mBgColor = Color.WHITE;
 
   private ThemedDialog mQuitConfirmDialog;
@@ -130,7 +136,7 @@ public class PublishActivity extends BaseActivity implements
   private int mSendType;
 
   private CameraUtil mCameraUtil;
-  private Instrumentation mInstrumentation;
+  private Instrumentation mInstrumentation = new Instrumentation();
 
   public static void start(Context context, int factoryId, List<Tag> tags) {
     Intent intent = new Intent(context, PublishActivity.class);
@@ -169,6 +175,18 @@ public class PublishActivity extends BaseActivity implements
     }
 
     context.startActivity(intent);
+  }
+
+  @OnClick(R.id.iv_temp_name)
+  public void onIvTempNameClicked(View v) {
+    mIvTempName.setSelected(!v.isSelected());
+  }
+
+  @OnTextChanged(R.id.et_temp_name)
+  public void onEtTempNameTextChanged(CharSequence cs) {
+    if (cs.length() > 0) {
+      mIvTempName.setSelected(true);
+    }
   }
 
   @OnClick(R.id.ll_bottom)
@@ -247,6 +265,14 @@ public class PublishActivity extends BaseActivity implements
     }
 
     Account.inst().setPostAnonymous(checked);
+
+    if (checked) {
+      mEtTempName.setVisibility(View.VISIBLE);
+      mIvTempName.setVisibility(View.VISIBLE);
+    } else {
+      mEtTempName.setVisibility(View.INVISIBLE);
+      mIvTempName.setVisibility(View.INVISIBLE);
+    }
   }
 
   @Override
@@ -714,8 +740,6 @@ public class PublishActivity extends BaseActivity implements
 
       builder.sendType(mSendType);
 
-      builder.realName(0);
-
       String tags = "";
       for (Tag t : mTagsLayout.getSelectedTags()) {
         tags = tags.concat(String.valueOf(t.id)).concat(",");
@@ -727,6 +751,12 @@ public class PublishActivity extends BaseActivity implements
       }
 
       builder.realName(mCbAnonymous.isChecked() ? 0 : 1);
+
+      if (mCbAnonymous.isChecked()) {
+        if (!TextUtils.isEmpty(mEtTempName.getText()) && mIvTempName.isSelected()) {
+          builder.tempName(mEtTempName.getText().toString());
+        }
+      }
 
       disablePublishButton();
 
@@ -770,6 +800,7 @@ public class PublishActivity extends BaseActivity implements
         if (RESTRequester.responseOk(response)) {
           mTags = response.object.tags;
 
+          mEtTempName.setText(response.object.lastTempName);
           mTagsLayout.setTag(mTags);
         }
         requestTags();
@@ -789,6 +820,7 @@ public class PublishActivity extends BaseActivity implements
         if (RESTRequester.responseOk(response)) {
           mTags = response.object.tags;
 
+          mEtTempName.setText(response.object.lastTempName);
           mTagsLayout.setTag(mTags);
         }
       }
