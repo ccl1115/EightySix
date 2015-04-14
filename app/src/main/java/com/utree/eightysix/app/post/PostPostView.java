@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -21,8 +20,6 @@ import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
-import com.utree.eightysix.app.FragmentHolder;
-import com.utree.eightysix.app.account.ProfileFragment;
 import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
@@ -33,7 +30,6 @@ import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.request.PostDeleteRequest;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.widget.AsyncImageView;
-import com.utree.eightysix.widget.AsyncImageViewWithRoundCorner;
 import com.utree.eightysix.widget.TagView;
 
 import java.util.List;
@@ -69,18 +65,6 @@ public class PostPostView extends LinearLayout {
   @InjectView (R.id.tv_tag_2)
   public TagView mTvTag2;
 
-  @InjectView(R.id.ll_top)
-  public LinearLayout mLlTop;
-
-  @InjectView(R.id.tv_name)
-  public TextView mTvName;
-
-  @InjectView(R.id.aiv_portrait)
-  public AsyncImageViewWithRoundCorner mAivPortrait;
-
-  @InjectView(R.id.aiv_level_icon)
-  public AsyncImageView mAivLevelIcon;
-
   private Post mPost;
 
   public PostPostView(Context context) {
@@ -114,17 +98,6 @@ public class PostPostView extends LinearLayout {
       } else {
         FeedActivity.start(getContext(), mPost.factoryId);
       }
-    }
-  }
-
-  @OnClick(R.id.ll_top)
-  public void onLlTopClicked() {
-    if (!TextUtils.isEmpty(mPost.viewUserId)) {
-      Bundle args = new Bundle();
-      args.putInt("viewId", Integer.valueOf(mPost.viewUserId));
-      args.putBoolean("isVisitor", true);
-      args.putString("userName", mPost.userName);
-      FragmentHolder.start(getContext(), ProfileFragment.class, args);
     }
   }
 
@@ -238,14 +211,6 @@ public class PostPostView extends LinearLayout {
       }
     }
 
-    if (!TextUtils.isEmpty(mPost.userName)) {
-      mLlTop.setVisibility(VISIBLE);
-      mTvName.setText(mPost.userName);
-      mAivPortrait.setUrl(mPost.avatar);
-      mAivLevelIcon.setUrl(mPost.levelIcon);
-    } else {
-      mLlTop.setVisibility(GONE);
-    }
   }
 
   @OnClick (R.id.tv_praise)

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
              android:orientation="vertical"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
@@ -35,8 +36,8 @@
                 />
     </LinearLayout>
 
-    <FrameLayout
-            android:id="@+id/fl_banner"
+    <LinearLayout
+            android:id="@+id/ll_banner"
             android:layout_width="match_parent"
             android:layout_height="46dp"
             >
@@ -50,5 +51,35 @@
                 android:src="@drawable/ic_action_post_close"
                 />
 
-    </FrameLayout>
+
+        <com.utree.eightysix.widget.AsyncImageViewWithRoundCorner
+                android:id="@+id/aiv_portrait"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                app:radius="4dp"
+                app:width="30dp"
+                app:height="30dp"
+                />
+
+        <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:textSize="16sp"
+                android:textColor="#ffabaeb3"
+                />
+
+        <com.utree.eightysix.widget.AsyncImageView
+                android:id="@+id/aiv_level_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                />
+    </LinearLayout>
 </FrameLayout>

@@ -6,6 +6,7 @@ import android.app.Instrumentation;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -26,8 +27,10 @@ import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.app.FragmentHolder;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.OverlayTipUtil;
+import com.utree.eightysix.app.account.ProfileFragment;
 import com.utree.eightysix.app.bs.BlueStarFragment;
 import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.app.feed.event.*;
@@ -46,6 +49,8 @@ import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
+import com.utree.eightysix.widget.AsyncImageView;
+import com.utree.eightysix.widget.AsyncImageViewWithRoundCorner;
 import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.guide.Guide;
 import de.akquinet.android.androlog.Log;
@@ -69,8 +74,8 @@ public class PostActivity extends BaseActivity
   @InjectView(R.id.iv_post)
   public ImageView mIvPost;
 
-  @InjectView(R.id.fl_banner)
-  public FrameLayout mFlBanner;
+  @InjectView(R.id.ll_banner)
+  public LinearLayout mLlBanner;
 
   @InjectView(R.id.fl_post_comment)
   public FrameLayout mFlPostComment;
@@ -84,6 +89,14 @@ public class PostActivity extends BaseActivity
   @InjectView(R.id.iv_anonymous)
   public ImageView mIvAnonymous;
 
+  @InjectView(R.id.aiv_portrait)
+  public AsyncImageViewWithRoundCorner mAivPortrait;
+
+  @InjectView(R.id.tv_name)
+  public TextView mTvName;
+
+  @InjectView(R.id.aiv_level_icon)
+  public AsyncImageView mAivLevelIcon;
 
   private Post mPost;
 
@@ -147,9 +160,17 @@ public class PostActivity extends BaseActivity
     }
   }
 
-  @OnClick(R.id.fl_banner)
-  public void onFlBannerClicked() {
-    mLvComments.setSelection(0);
+  @OnClick(R.id.ll_banner)
+  public void onLlBannerClicked() {
+    if (!TextUtils.isEmpty(mPost.viewUserId)) {
+      Bundle args = new Bundle();
+      args.putInt("viewId", Integer.valueOf(mPost.viewUserId));
+      args.putBoolean("isVisitor", true);
+      args.putString("userName", mPost.userName);
+      FragmentHolder.start(this, ProfileFragment.class, args);
+    } else {
+      mLvComments.setSelection(0);
+    }
   }
 
   @OnClick(R.id.iv_close)
@@ -335,18 +356,13 @@ public class PostActivity extends BaseActivity
 
       @Override
       public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (mPostCommentsAdapter != null) {
+        if (mPost != null && TextUtils.isEmpty(mPost.viewUserId) && mPostCommentsAdapter != null) {
           PostPostView postPostView = mPostCommentsAdapter.getPostPostView();
           if (postPostView.getParent() != null) {
-            int top = postPostView.getTop();
-            if (top <= 0 && top >= -40) {
-              mFlBanner.setClickable(false);
-            } else {
-              mFlBanner.setClickable(true);
-            }
-            mFlBanner.setBackgroundColor((int) (0x88 * ((-top) / (float) postPostView.getMeasuredHeight())) << 24);
+            mLlBanner.setBackgroundColor(
+                (int) (0x88 * ((-postPostView.getTop()) / (float) postPostView.getMeasuredHeight())) << 24);
           } else {
-            mFlBanner.setBackgroundColor(0x88000000);
+            mLlBanner.setBackgroundColor(0x88000000);
           }
         }
       }
@@ -403,6 +419,18 @@ public class PostActivity extends BaseActivity
     } else {
       mPostCommentsAdapter = new PostCommentsAdapter(this, mPost, null);
       mLvComments.setAdapter(mPostCommentsAdapter);
+      if (mPost != null) {
+        if (!TextUtils.isEmpty(mPost.userName)) {
+          mTvName.setText(mPost.userName);
+          mAivPortrait.setUrl(mPost.avatar);
+          mAivLevelIcon.setUrl(mPost.levelIcon);
+          mLlBanner.setBackgroundColor(Color.WHITE);
+        } else {
+          mTvName.setVisibility(View.GONE);
+          mAivPortrait.setVisibility(View.GONE);
+          mAivLevelIcon.setVisibility(View.GONE);
+        }
+      }
     }
 
     cacheOutComments(1, mGotoBottom);
@@ -585,6 +613,16 @@ public class PostActivity extends BaseActivity
           mPost = response.object.post;
           mPostCommentsAdapter.setNeedReload(false);
 
+          if (!TextUtils.isEmpty(mPost.userName)) {
+            mTvName.setText(mPost.userName);
+            mAivPortrait.setUrl(mPost.avatar);
+            mAivLevelIcon.setUrl(mPost.levelIcon);
+            mLlBanner.setBackgroundColor(Color.WHITE);
+          } else {
+            mTvName.setVisibility(View.GONE);
+            mAivPortrait.setVisibility(View.GONE);
+            mAivLevelIcon.setVisibility(View.GONE);
+          }
 
           if (response.object.blueStar == 1) {
             showBlueStarFragment(response.object.blueStarType, response.object.starToken);
@@ -599,7 +637,7 @@ public class PostActivity extends BaseActivity
 
         if (bottom) {
           mLvComments.setSelection(Integer.MAX_VALUE);
-          mFlBanner.setClickable(true);
+          mLlBanner.setClickable(true);
         }
 
         hideProgressBar();
