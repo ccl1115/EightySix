@@ -154,4 +154,12 @@ public class Env {
   private static SharedPreferences getSharedPreferences() {
     return U.getContext().getSharedPreferences("env", Context.MODE_PRIVATE);
   }
+
+  public static void setLastLocationTimestamp(long currentTimeMillis) {
+    getSharedPreferences().edit().putLong("last_location_timestamp", currentTimeMillis).apply();
+  }
+
+  public static long getLastLocationTimestamp() {
+    return getSharedPreferences().getLong("last_location_timestamp", System.currentTimeMillis());
+  }
 }

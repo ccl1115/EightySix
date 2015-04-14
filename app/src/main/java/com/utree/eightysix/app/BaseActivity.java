@@ -457,6 +457,11 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     mResumed = true;
 
     sBackground = false;
+
+    if (System.currentTimeMillis() - Env.getLastLocationTimestamp() > 3600000) {
+      M.getLocation().requestLocation();
+      Env.setLastLocationTimestamp(System.currentTimeMillis());
+    }
   }
 
   public final void hideTopBar(boolean animate) {
