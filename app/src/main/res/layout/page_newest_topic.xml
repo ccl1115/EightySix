@@ -19,14 +19,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:radius="8dp"
+            app:radius="4dp"
+            />
+
+    <com.utree.eightysix.widget.RoundedButton
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:radius="4dp"
+            app:background="#44000000"
             />
 
     <com.utree.eightysix.widget.RoundedButton
             android:id="@+id/rb_bg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:radius="8dp"
+            app:radius="4dp"
             android:clickable="false"
             />
 
