@@ -20,7 +20,6 @@ import com.utree.eightysix.app.chat.*;
 import com.utree.eightysix.app.friends.RequestListActivity;
 import com.utree.eightysix.app.home.HomeTabActivity;
 import com.utree.eightysix.event.HasNewPraiseEvent;
-import com.utree.eightysix.event.NewCommentCountEvent;
 import com.utree.eightysix.widget.CounterView;
 import com.utree.eightysix.widget.RoundedButton;
 
@@ -88,17 +87,6 @@ public class MsgCenterFragment extends BaseFragment {
   }
 
   @Subscribe
-  public void onNewCommentCountEvent(NewCommentCountEvent event) {
-    if (event.getCount() == 0) {
-      mRbCountMsg.setVisibility(View.INVISIBLE);
-    } else {
-      mRbCountMsg.setVisibility(View.VISIBLE);
-    }
-
-    mRbCountMsg.setText(String.valueOf(event.getCount()));
-  }
-
-  @Subscribe
   public void onHasNewPraiseEvent(HasNewPraiseEvent event) {
     if (event.has()) {
       mRbPraise.setVisibility(View.VISIBLE);
@@ -118,6 +106,9 @@ public class MsgCenterFragment extends BaseFragment {
         break;
       case HomeTabActivity.MsgCountEvent.TYPE_UNREAD_FCONVERSATION_COUNT:
         mRbCountFChat.setCount(event.getCount());
+        break;
+      case HomeTabActivity.MsgCountEvent.TYPE_NEW_COMMENT_COUNT:
+        mRbCountChat.setCount(event.getCount());
         break;
     }
   }

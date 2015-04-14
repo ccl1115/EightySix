@@ -30,6 +30,7 @@ import com.utree.eightysix.app.explore.ExploreFragment;
 import com.utree.eightysix.app.msg.MsgCenterFragment;
 import com.utree.eightysix.app.region.TabRegionFragment;
 import com.utree.eightysix.contact.ContactsSyncService;
+import com.utree.eightysix.event.NewCommentCountEvent;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.CounterView;
 
@@ -67,6 +68,7 @@ public class HomeTabActivity extends BaseActivity {
 
   private boolean mShouldExit;
 
+  private int mNewCommentCount;
   private int mUnreadConversationCount;
   private int mUnreadFConversationCount;
   private int mRequestCount;
@@ -250,6 +252,8 @@ public class HomeTabActivity extends BaseActivity {
       mRbMsgCount.setCount(mUnreadConversationCount + mUnreadFConversationCount + mAssistMessageUnreadCount);
       U.getBus().post(new MsgCountEvent(MsgCountEvent.TYPE_UNREAD_CONVERSATION_COUNT, mUnreadConversationCount));
     }
+    mRbMsgCount.setCount(mNewCommentCount + mUnreadConversationCount
+        + mUnreadFConversationCount + mAssistMessageUnreadCount);
   }
 
   @Subscribe
@@ -261,7 +265,16 @@ public class HomeTabActivity extends BaseActivity {
       mAssistMessageUnreadCount = ((Long) event.getObj()).intValue();
       U.getBus().post(new MsgCountEvent(MsgCountEvent.TYPE_ASSIST_MESSAGE_COUNT, mAssistMessageUnreadCount));
     }
-    mRbMsgCount.setCount(mUnreadConversationCount + mUnreadFConversationCount + mAssistMessageUnreadCount);
+    mRbMsgCount.setCount(mNewCommentCount + mUnreadConversationCount
+        + mUnreadFConversationCount + mAssistMessageUnreadCount);
+  }
+
+  @Subscribe
+  public void onNewCommentCountEvent(NewCommentCountEvent event) {
+    mNewCommentCount = event.getCount();
+    U.getBus().post(new MsgCountEvent(MsgCountEvent.TYPE_NEW_COMMENT_COUNT, mNewCommentCount));
+    mRbMsgCount.setCount(mNewCommentCount + mUnreadFConversationCount
+        + mUnreadConversationCount + mAssistMessageUnreadCount);
   }
 
   private void clearSelected() {
@@ -276,6 +289,8 @@ public class HomeTabActivity extends BaseActivity {
     public static final int TYPE_UNREAD_CONVERSATION_COUNT = 0x1;
     public static final int TYPE_UNREAD_FCONVERSATION_COUNT = 0x2;
     public static final int TYPE_ASSIST_MESSAGE_COUNT = 0x3;
+    public static final int TYPE_NEW_COMMENT_COUNT = 0x4;
+    public static final int TYPE_NEW_PRAISE = 0x5;
 
     private int count;
     private int type;
