@@ -24,9 +24,9 @@ public class FeedByRegionRequest extends Paginate {
   @Optional
   public int tabType;
 
-  @Param("regionDistance")
+  @Param("regionRadius")
   @Optional
-  public int regionDistance;
+  public int regionRadius;
 
   public FeedByRegionRequest(int currPage) {
     super(currPage);
@@ -38,10 +38,10 @@ public class FeedByRegionRequest extends Paginate {
     this.tabType = tabType;
   }
 
-  public FeedByRegionRequest(int currPage, int regionType, int tabType, int regionDistance) {
+  public FeedByRegionRequest(int currPage, int regionType, int tabType, int regionRadius) {
     super(currPage);
     this.regionType = regionType;
     this.tabType = tabType;
-    this.regionDistance = regionDistance;
+    this.regionRadius = regionRadius;
   }
 }

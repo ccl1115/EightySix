@@ -14,6 +14,7 @@ import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
+import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.FeedAdapter;
 import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
 import com.utree.eightysix.app.msg.FetchNotificationService;
@@ -73,6 +74,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
   private String mSubInfo;
   private int mLastFirstVisibleItem;
   private OnScrollListener mOnScrollListener;
+  private boolean mHidden;
 
   public void requestRegion(int regionType) {
     mMode = MODE_REGION;
@@ -278,13 +280,14 @@ public abstract class AbsRegionFragment extends BaseFragment {
 
   @Override
   public void onHiddenChanged(boolean hidden) {
-    if (!hidden) {
+    mHidden = hidden;
+    if (!mHidden) {
       updateTitleBar();
     }
   }
 
   public void updateTitleBar() {
-    if (isHidden()) {
+    if (mHidden) {
       return;
     }
 
@@ -330,7 +333,13 @@ public abstract class AbsRegionFragment extends BaseFragment {
       getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_distance));
       getTopBar().setTitleTabSelected(1);
       getTopBar().setSubTitle(mSubInfo == null ? "" : mSubInfo);
-      getTopBar().getAbRight().hide();
+      getTopBar().getAbRight().setText("看厂");
+      getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          BaseCirclesActivity.startMyCircles(getActivity());
+        }
+      });
     }
   }
 
@@ -493,11 +502,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
         mLvFeed.setAdapter(mFeedAdapter);
 
         mRegionType = response.object.regionType;
-        if (mRegionType == 4) {
-          mDistance = response.object.regionRadius;
-        } else if (mRegionType == 0) {
-          getBaseActivity().getTopBar().setTitleTabText(0, "在职");
-        }
+        updateTitleBar();
 
         U.getBus().post(new RegionResponseEvent(getRegionType(), mDistance));
       } else if (mFeedAdapter != null) {
@@ -513,10 +518,6 @@ public abstract class AbsRegionFragment extends BaseFragment {
       if (mFeedAdapter != null && mFeedAdapter.getCount() == 0) {
         mRstvEmpty.setVisibility(View.VISIBLE);
       }
-      if (mCircle != null) {
-        getBaseActivity().setTopTitle(mCircle.shortName);
-      }
-
       mPageInfo = null;
     }
     mRefresherView.setRefreshing(false);

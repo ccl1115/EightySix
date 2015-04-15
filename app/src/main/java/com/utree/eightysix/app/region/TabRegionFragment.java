@@ -453,8 +453,10 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
   public void onHiddenChanged(boolean hidden) {
     if (!hidden) {
       setTopBarTitle();
-      mFeedFragment.onHiddenChanged(false);
     }
+    mFeedFragment.onHiddenChanged(hidden);
+    mFriendsFeedFragment.onHiddenChanged(hidden);
+    mHotFeedFragment.onHiddenChanged(hidden);
   }
 
   @Subscribe
