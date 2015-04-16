@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -195,7 +194,6 @@ public class ProfileFragment extends HolderFragment {
 
           textView.setText(format);
           textView.setEms(16);
-          textView.setGravity(Gravity.CENTER_HORIZONTAL);
 
           dialog.setContent(textView);
 
