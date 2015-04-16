@@ -241,6 +241,16 @@ public class PublishActivity extends BaseActivity implements
     }
   }
 
+  @OnClick(R.id.tv_tag_1)
+  public void onTvTag1Clicked() {
+    mPublishLayout.switchToPanel(PublishLayout.PANEL_TAGS);
+  }
+
+  @OnClick(R.id.tv_tag_2)
+  public void onTvTag2Clicked() {
+    mPublishLayout.switchToPanel(PublishLayout.PANEL_TAGS);
+  }
+
 
   @OnClick(R.id.iv_camera)
   public void onIvCameraClicked() {

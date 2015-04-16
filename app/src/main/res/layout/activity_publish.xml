@@ -29,31 +29,6 @@
                 android:background="#44000000"
                 />
 
-        <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_gravity="center_horizontal"
-                android:orientation="horizontal"
-                >
-
-            <com.utree.eightysix.widget.TagView
-                    android:id="@+id/tv_tag_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"
-                    android:layout_marginEnd="4dp"
-                    />
-
-            <com.utree.eightysix.widget.TagView
-                    android:id="@+id/tv_tag_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"
-                    android:layout_marginEnd="4dp"
-                    />
-
-        </LinearLayout>
 
         <TextView
                 android:id="@+id/tv_post_tip"
@@ -84,6 +59,29 @@
                 android:gravity="center"
                 />
 
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                >
+
+            <com.utree.eightysix.widget.TagView
+                    android:id="@+id/tv_tag_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginEnd="4dp"
+                    />
+
+            <com.utree.eightysix.widget.TagView
+                    android:id="@+id/tv_tag_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+        </LinearLayout>
 
         <com.utree.eightysix.widget.RoundedButton
                 android:id="@+id/rb_tag"
