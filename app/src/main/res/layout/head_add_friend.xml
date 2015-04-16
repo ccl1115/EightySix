@@ -20,6 +20,7 @@
             android:drawableEnd="@drawable/ic_sample_qrcode"
             android:drawablePadding="8dp"
             android:gravity="center_vertical"
+            android:textColor="#ff313233"
             />
 
     <LinearLayout
@@ -36,9 +37,10 @@
         <ImageView
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_qrcode"
+                android:src="@drawable/ic_item_scan"
                 />
 
         <LinearLayout
@@ -53,6 +55,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
+                    android:textColor="#ff313233"
                     android:text="扫一扫"
                     />
 
@@ -60,7 +63,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="@color/apptheme_primary_dark_color"
+                    android:textColor="#ffabaeb3"
                     android:text="扫描朋友的二维码"
                     />
         </LinearLayout>
@@ -91,9 +94,10 @@
         <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_contacts"
+                android:src="@drawable/ic_item_contacts"
                 />
 
         <LinearLayout
@@ -108,6 +112,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
+                    android:textColor="#ff313233"
                     android:text="添加手机联系人"
                     />
 
@@ -115,7 +120,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="@color/apptheme_primary_dark_color"
+                    android:textColor="#ffabaeb3"
                     android:text="添加联系人里玩蓝莓的好友"
                     />
         </LinearLayout>
@@ -141,6 +146,15 @@
             android:background="@drawable/apptheme_primary_list_selector"
             >
 
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_item_scan"
+                />
+
         <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -153,6 +167,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
+                    android:textColor="#ff313233"
                     android:text="专属邀请码"
                     />
 
@@ -160,7 +175,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="@color/apptheme_primary_dark_color"
+                    android:textColor="#ffabaeb3"
                     android:text="注册填写邀请码，与好友共获福利"
                     />
         </LinearLayout>
@@ -186,6 +201,15 @@
             android:background="@drawable/apptheme_primary_list_selector"
             >
 
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_item_invite"
+                />
+
         <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -198,6 +222,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
+                    android:textColor="#ff313233"
                     android:text="邀请厂里好友加入蓝莓"
                     />
 
@@ -205,7 +230,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="@color/apptheme_primary_dark_color"
+                    android:textColor="#ffabaeb3"
                     android:text="通过QQ、空间、短信邀请好友"
                     />
         </LinearLayout>
@@ -219,5 +244,10 @@
 
     </LinearLayout>
 
-    <include layout="@layout/item_head"/>
+    <include
+            layout="@layout/item_head"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            />
 </LinearLayout>
