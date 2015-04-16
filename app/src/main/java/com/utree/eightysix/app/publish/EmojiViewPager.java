@@ -63,6 +63,27 @@ public class EmojiViewPager extends LinearLayout {
       0x274c,
   };
 
+  private static final int[] PAGE3 = new int[] {
+      0x1f44a,
+      0x1f44b,
+      0x1f44c,
+      0x1f44d,
+      0x1f44e,
+      0x1f44f,
+      0x1f4a9,
+      0x1f4aa,
+      0x1f4a6,
+      0x1f4a2,
+      0x1f426,
+      0x1f417,
+      0x1f418,
+      0x1f419,
+      0x1f414,
+      0x1f412,
+      0x1f3ae,
+      0x274c,
+  };
+
 
   @InjectView(R.id.vp_tab)
   public ViewPager mVpTab;
@@ -92,13 +113,15 @@ public class EmojiViewPager extends LinearLayout {
           return EmojiFragment.newInstance(PAGE1);
         } else if (position == 1) {
           return EmojiFragment.newInstance(PAGE2);
+        } else if (position == 2) {
+          return EmojiFragment.newInstance(PAGE3);
         }
         return null;
       }
 
       @Override
       public int getCount() {
-        return 2;
+        return 3;
       }
     });
 
