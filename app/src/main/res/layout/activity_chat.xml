@@ -23,7 +23,7 @@
     </com.utree.eightysix.view.SwipeRefreshLayout>
 
     <include
-            layout="@layout/widget_post_comment"
+            layout="@layout/widget_post_chat"
             android:id="@+id/fl_send"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
