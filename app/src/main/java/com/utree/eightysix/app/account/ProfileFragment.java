@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -193,8 +196,8 @@ public class ProfileFragment extends HolderFragment {
 
           String format = String.format("%s\n\n%s\n\n%s",
               "等级是随着经验值增长的,即不同的经验值对应不同的等级。\n" +
-              " \n" +
-              "如何获取经验值？", response.object.howToGetExperience.content, "等级对应的经验值，可在帮助中查看");
+                  " \n" +
+                  "如何获取经验值？", response.object.howToGetExperience.content, "等级对应的经验值，可在帮助中查看");
 
           textView.setText(format);
           textView.setEms(16);
@@ -312,6 +315,7 @@ public class ProfileFragment extends HolderFragment {
     mScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
 
       private int mScrollY;
+
       @Override
       public void onScrollChanged() {
         mScrollY = -mScrollView.getScrollY();
@@ -391,6 +395,37 @@ public class ProfileFragment extends HolderFragment {
                 @Override
                 public void onClick(View v) {
                   SendRequestActivity.start(v.getContext(), mViewId);
+                }
+              });
+            }
+
+            if (response.object.isShielded == 1) {
+              getTopBar().getAbRight().setText("取消屏蔽");
+              getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                  U.request("user_unshield", new OnResponse2<Response>() {
+                    @Override
+                    public void onResponseError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Response response) {
+                      if (RESTRequester.responseOk(response)) {
+                        requestProfile(mViewId);
+                      }
+                    }
+                  }, Response.class, mViewId);
+                }
+              });
+            } else {
+              getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_action_ban));
+              getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                  showBanConfirmDialog();
                 }
               });
             }
@@ -528,5 +563,48 @@ public class ProfileFragment extends HolderFragment {
   @Override
   protected void onActionOverflowClicked() {
 
+  }
+
+  private void showBanConfirmDialog() {
+    final ThemedDialog dialog = new ThemedDialog(getActivity());
+
+    dialog.setTitle("确认拉黑此用户？");
+
+    TextView text = new TextView(getActivity());
+
+    text.setText("拉黑将不再接收此用户的聊天、悄悄话、好友请求等信息");
+    int px = U.dp2px(24);
+    text.setPadding(px, px, px, px);
+
+    dialog.setContent(text);
+
+    dialog.setRbNegative(R.string.cancel, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        dialog.dismiss();
+      }
+    });
+
+    dialog.setPositive(R.string.okay, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        dialog.dismiss();
+        U.request("user_shield", new OnResponse2<Response>() {
+          @Override
+          public void onResponseError(Throwable e) {
+
+          }
+
+          @Override
+          public void onResponse(Response response) {
+            if (RESTRequester.responseOk(response)) {
+              requestProfile(mViewId);
+            }
+          }
+        }, Response.class, mViewId);
+      }
+    });
+
+    dialog.show();
   }
 }

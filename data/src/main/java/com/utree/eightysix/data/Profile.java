@@ -60,4 +60,7 @@ public class Profile {
 
   @SerializedName("isFriend")
   public int isFriend;
+
+  @SerializedName("isShielded")
+  public int isShielded;
 }
