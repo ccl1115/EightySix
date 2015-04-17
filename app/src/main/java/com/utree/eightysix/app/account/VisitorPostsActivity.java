@@ -88,7 +88,7 @@ public class VisitorPostsActivity extends BaseActivity {
       }
 
       @Override
-      public void onDrag() {
+      public void onDrag(int value) {
         showRefreshIndicator(false);
       }
 

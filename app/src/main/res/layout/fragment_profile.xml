@@ -18,7 +18,6 @@
             android:id="@+id/aiv_bg"
             android:layout_width="match_parent"
             android:layout_height="360dp"
-            android:layout_marginTop="@dimen/activity_top_bar_height"
             android:scaleType="centerCrop"
             />
 
@@ -36,6 +35,7 @@
             >
 
         <ScrollView
+                android:id="@+id/scroll_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 >
@@ -56,18 +56,6 @@
                             android:layout_height="84dp"
                             android:layout_gravity="bottom"
                             android:background="@color/apptheme_primary_grey_color"
-                            />
-
-                    <com.utree.eightysix.widget.RoundedButton
-                            android:id="@+id/rb_change_bg"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="16dp"
-                            android:text="更换个性背景"
-                            android:textSize="12sp"
-                            android:textColor="#88ffffff"
-                            android:padding="4dp"
-                            app:background="@color/apptheme_transparent_bg"
                             />
 
                     <RelativeLayout
@@ -384,6 +372,20 @@
         </ScrollView>
 
     </com.utree.eightysix.view.SwipeRefreshLayout>
+
+    <com.utree.eightysix.widget.RoundedButton
+            android:id="@+id/rb_change_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="72dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:text="更换个性背景"
+            android:textSize="12sp"
+            android:textColor="#88ffffff"
+            android:padding="4dp"
+            app:background="@color/apptheme_transparent_bg"
+            />
 
     <FrameLayout
             android:id="@+id/fl_guide"

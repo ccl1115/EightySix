@@ -384,7 +384,7 @@ public class ChatActivity extends BaseActivity implements
       }
 
       @Override
-      public void onDrag() {
+      public void onDrag(int value) {
 
       }
 

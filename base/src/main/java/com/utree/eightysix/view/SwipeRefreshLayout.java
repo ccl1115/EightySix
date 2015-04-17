@@ -426,7 +426,7 @@ public class SwipeRefreshLayout extends ViewGroup {
         if (yDiff > mTouchSlop) {
           mLastMotionY = y;
           mIsBeingDragged = true;
-          mListener.onDrag();
+          mListener.onDrag((int) yDiff);
         }
         break;
 
@@ -484,10 +484,10 @@ public class SwipeRefreshLayout extends ViewGroup {
 
         if (!mIsBeingDragged && yDiff > mTouchSlop) {
           mIsBeingDragged = true;
-          mListener.onDrag();
         }
 
         if (mIsBeingDragged) {
+          mListener.onDrag((int) yDiff);
           // User velocity passed min velocity; trigger a refresh
           if (yDiff > mDistanceToTriggerSync) {
             // User movement passed distance; trigger a refresh
@@ -580,7 +580,7 @@ public class SwipeRefreshLayout extends ViewGroup {
   public interface OnRefreshListener {
     public void onRefresh();
 
-    public void onDrag();
+    public void onDrag(int value);
 
     public void onCancel();
   }

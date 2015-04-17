@@ -65,7 +65,7 @@ public abstract class BasePostsFragment extends BaseFragment {
       }
 
       @Override
-      public void onDrag() {
+      public void onDrag(int value) {
         getBaseActivity().showRefreshIndicator(false);
       }
 

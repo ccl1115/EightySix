@@ -4,15 +4,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.nineoldandroids.animation.AnimatorSet;
+import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -107,6 +108,9 @@ public class ProfileFragment extends HolderFragment {
 
   @InjectView(R.id.tv_action)
   public TextView mTvAction;
+
+  @InjectView(R.id.scroll_view)
+  public ScrollView mScrollView;
 
   @InjectView(R.id.refresh_view)
   public SwipeRefreshLayout mRefreshLayout;
@@ -229,17 +233,33 @@ public class ProfileFragment extends HolderFragment {
     mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override
       public void onRefresh() {
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(
+            ObjectAnimator.ofFloat(mAivBg, "scaleX", mAivBg.getScaleX(), 1f),
+            ObjectAnimator.ofFloat(mAivBg, "scaleY", mAivBg.getScaleY(), 1f)
+
+        );
+        set.setDuration(200);
+        set.start();
         requestProfile(mIsVisitor ? mViewId : null);
       }
 
       @Override
-      public void onDrag() {
-
+      public void onDrag(int value) {
+        mAivBg.setScaleX(1f + (value / (float) U.dp2px(500)));
+        mAivBg.setScaleY(1f + (value / (float) U.dp2px(500)));
       }
 
       @Override
       public void onCancel() {
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(
+            ObjectAnimator.ofFloat(mAivBg, "scaleX", mAivBg.getScaleX(), 1f),
+            ObjectAnimator.ofFloat(mAivBg, "scaleY", mAivBg.getScaleY(), 1f)
 
+        );
+        set.setDuration(200);
+        set.start();
       }
     });
 
@@ -281,7 +301,24 @@ public class ProfileFragment extends HolderFragment {
       mTvMyPosts.setText("他的帖子");
       mTvTitleSignature.setText("他的签名");
       mTvAction.setVisibility(View.VISIBLE);
+    } else {
+      mRbChangeBg.setVisibility(View.VISIBLE);
+      mTvSettings.setVisibility(View.VISIBLE);
+      mTvMyCircles.setVisibility(View.VISIBLE);
+      mTvMyFriends.setVisibility(View.VISIBLE);
+      mTvAction.setVisibility(View.GONE);
     }
+
+    mScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+
+      private int mScrollY;
+      @Override
+      public void onScrollChanged() {
+        mScrollY = -mScrollView.getScrollY();
+        mRbChangeBg.setTranslationY(mScrollY);
+        mAivBg.setTranslationY(mScrollY);
+      }
+    });
 
     requestProfile(mIsVisitor ? mViewId : null);
   }
