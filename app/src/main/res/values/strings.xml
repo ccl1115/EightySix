@@ -128,7 +128,7 @@
     <!-- BaseCirclesActivity -->
     <string name="select_circle">你在哪里工作？</string>
     <string name="search_circles">请输入你的企业名称查找</string>
-    <string name="my_circles">我的打工圈</string>
+    <string name="my_circles">打工圈</string>
     <string name="no_circles">没有找到打工圈</string>
     <string name="factory">工</string>
     <string name="business">商</string>
@@ -267,7 +267,7 @@
 
     <string name="publish_anonymous">参与话题</string>
     <string name="all_topic">全部话题</string>
-    <string name="change">更改</string>
+    <string name="change">更改在职</string>
     <string name="dev_mode">开发者模式</string>
     <string name="unfollow">取消关注</string>
     <string name="clear_cache">清楚图片和数据缓存</string>

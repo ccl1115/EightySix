@@ -114,8 +114,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
                 >
 
             <EditText
@@ -152,21 +152,13 @@
 
         </FrameLayout>
 
-        <com.utree.eightysix.widget.RoundedButton
-                android:id="@+id/tb_rb_search"
+        <com.utree.eightysix.widget.ActionButton
+                android:id="@+id/tb_ab_search"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="8dp"
-                android:layout_marginEnd="8dp"
-                android:minHeight="0dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="6dp"
-                android:paddingBottom="6dp"
-                android:text="@string/search"
-                android:textSize="14sp"
                 />
+
     </LinearLayout>
 
     <com.utree.eightysix.widget.RefreshIndicator

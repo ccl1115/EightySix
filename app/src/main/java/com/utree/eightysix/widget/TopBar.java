@@ -46,8 +46,8 @@ public class TopBar extends RelativeLayout implements View.OnClickListener {
   @InjectView(R.id.tb_et_search)
   public EditText mEtSearch;
 
-  @InjectView(R.id.tb_rb_search)
-  public RoundedButton mRbSearch;
+  @InjectView(R.id.tb_ab_search)
+  public ActionButton mAbSearch;
 
   @InjectView(R.id.tb_ll_search)
   public LinearLayout mLlSearch;
@@ -100,7 +100,8 @@ public class TopBar extends RelativeLayout implements View.OnClickListener {
 
     setOnClickListener(this);
 
-    mRbSearch.setEnabled(false);
+    mAbSearch.setEnabled(false);
+    mAbSearch.setText("搜索");
 
     setTitleClickMode(TITLE_CLICK_MODE_ONE);
   }
@@ -177,8 +178,8 @@ public class TopBar extends RelativeLayout implements View.OnClickListener {
     if (mCallback != null) mCallback.onActionOverflowClicked();
   }
 
-  @OnClick(R.id.tb_rb_search)
-  public void onRbSearchClicked() {
+  @OnClick(R.id.tb_ab_search)
+  public void onAbSearchClicked() {
     if (mCallback != null) mCallback.onActionSearchClicked(mEtSearch.getText());
   }
 
@@ -186,9 +187,9 @@ public class TopBar extends RelativeLayout implements View.OnClickListener {
   public void onEtSearchTextChanged(CharSequence cs) {
     if (cs.length() == 0) {
       mIvSearchClose.setVisibility(INVISIBLE);
-      mRbSearch.setEnabled(false);
+      mAbSearch.setEnabled(false);
     } else {
-      mRbSearch.setEnabled(true);
+      mAbSearch.setEnabled(true);
       mIvSearchClose.setVisibility(VISIBLE);
     }
     if (mCallback != null) mCallback.onSearchTextChanged(cs);
