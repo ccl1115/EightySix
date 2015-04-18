@@ -628,6 +628,8 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
 
         if (response.object.size() > 0) {
           mLlAddFollow.setVisibility(View.GONE);
+        } else {
+          mLlAddFollow.setVisibility(View.VISIBLE);
         }
 
         if (response.object.size() % 3 == 1) {
@@ -636,6 +638,8 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
         } else if (response.object.size() % 3 == 2) {
           response.object.add(null);
         }
+
+        mLlFollowCircles.removeAllViews();
 
         for (int i = 0, size = response.object.size(); i < size; i += 3) {
           buildFollowCircleRow(new FollowCircle[]{
@@ -649,6 +653,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
   }
 
   private void buildFollowCircleRow(final FollowCircle[] circles) {
+
     LinearLayout linearLayout = new LinearLayout(getActivity());
     linearLayout.setOrientation(LinearLayout.HORIZONTAL);
 

@@ -297,7 +297,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
       getTopBar().setSubTitle(String.format("%s | %s", mCircle.shortName, mSubInfo == null ? "" : mSubInfo));
       getTopBar().setTitleTabText(0, "关注");
 
-      if (mCircle.snapshot == 1) {
+      if (mCircle != null && mCircle.snapshot == 1) {
         getTopBar().getAbRight().setText(getString(R.string.snapshot));
         getTopBar().getAbRight().setOnClickListener(
             new View.OnClickListener() {
@@ -313,7 +313,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
     } else if (mRegionType == 0) {
       getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_drawer));
       getTopBar().setTitleTabSelected(0);
-      getTopBar().setSubTitle(String.format("%s | %s", mCircle.shortName, mSubInfo == null ? "" : mSubInfo));
+      getTopBar().setSubTitle(String.format("%s | %s", mCircle == null ? "" : mCircle.shortName, mSubInfo == null ? "" : mSubInfo));
       getTopBar().setTitleTabText(0, "在职");
 
       if (mCircle.snapshot == 1) {

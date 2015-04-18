@@ -151,6 +151,8 @@ public class FeedActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    setFillContent(true);
+
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
     getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_action_overflow));

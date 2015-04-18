@@ -68,10 +68,6 @@ public class PublishActivity extends BaseActivity implements
 
   private static final String FIRST_RUN_KEY = "post_activity";
 
-  private static final int REQUEST_CODE_CAMERA = 0x1;
-  private static final int REQUEST_CODE_ALBUM = 0x2;
-  private static final int REQUEST_CODE_CROP = 0x4;
-
   @InjectView(R.id.et_post_content)
   public EditText mPostEditText;
 
