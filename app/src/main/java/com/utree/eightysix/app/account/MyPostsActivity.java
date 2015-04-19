@@ -106,9 +106,9 @@ public class MyPostsActivity extends BaseActivity {
       public CharSequence getPageTitle(int position) {
         switch (position) {
           case 0:
-            return "匿名贴";
+            return "匿名帖";
           case 1:
-            return "非匿名贴";
+            return "非匿名帖";
         }
         return null;
       }
