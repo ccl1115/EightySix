@@ -761,6 +761,7 @@ public class PublishActivity extends BaseActivity implements
       if (mCbAnonymous.isChecked()) {
         if (!TextUtils.isEmpty(mEtTempName.getText()) && mIvTempName.isSelected()) {
           builder.tempName(mEtTempName.getText().toString());
+          builder.sourceType(2);
         }
       }
 
