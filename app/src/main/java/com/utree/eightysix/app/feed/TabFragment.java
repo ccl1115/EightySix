@@ -19,7 +19,6 @@ import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
-import com.utree.eightysix.app.tag.MoreTagsFragment;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.widget.TitleTab;
 
@@ -55,8 +54,6 @@ public class TabFragment extends BaseFragment {
     mMode = getArguments().getInt("mode");
     if (mMode == MODE_HAS_FRIENDS) {
       mThirdFragment = new FriendsFeedFragment();
-    } else {
-      mThirdFragment = new MoreTagsFragment();
     }
 
     Circle circle = getArguments().getParcelable("circle");
@@ -97,7 +94,11 @@ public class TabFragment extends BaseFragment {
 
       @Override
       public int getCount() {
-        return 3;
+        if (mMode == MODE_HAS_FRIENDS) {
+          return 3;
+        } else {
+          return 2;
+        }
       }
 
       @Override
@@ -110,8 +111,6 @@ public class TabFragment extends BaseFragment {
           case 2:
             if (mMode == MODE_HAS_FRIENDS) {
               return "与我相关";
-            } else if (mMode == MODE_MORE) {
-              return "更多";
             }
         }
         return "";
