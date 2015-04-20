@@ -401,7 +401,7 @@ public class FeedRegionAdapter extends BaseAdapter {
       convertView.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, U.dp2px(48)));
     } else {
       convertView.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-          parent.getResources().getDimensionPixelSize(R.dimen.activity_top_bar_height) + U.dp2px(28)));
+          parent.getResources().getDimensionPixelSize(R.dimen.activity_top_bar_height) + U.dp2px(36)));
     }
     return convertView;
   }
