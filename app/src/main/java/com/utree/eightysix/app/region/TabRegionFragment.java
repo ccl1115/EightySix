@@ -392,63 +392,6 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
     requestFollowCircles();
   }
 
-  private void setTopBarTitle() {
-    if (mFeedFragment.getRegionType() == 4 || mFeedFragment.getRegionType() == 3) {
-      getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_distance));
-    } else {
-      getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_drawer));
-    }
-    getTopBar().getAbLeft().setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-            if (getTopBar().getTitleBarSelectedIndex() == 0) {
-              mFlFollowCircles.setVisibility(
-                  mFlFollowCircles.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-            } else if (getTopBar().getTitleBarSelectedIndex() == 1) {
-              mLlDistanceSelector.setVisibility(
-                  mLlDistanceSelector.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-            }
-          }
-        });
-
-    getTopBar().getAbRight().hide();
-
-
-    getTopBar().setTitleAdapter(new TopBar.TitleAdapter() {
-      @Override
-      public String getTitle(int position) {
-        if (position == 0) {
-          return "在职";
-        } else if (position == 1) {
-          return "附近";
-        }
-        return null;
-      }
-
-      @Override
-      public void onSelected(View view, int position) {
-        mFlFollowCircles.setVisibility(View.GONE);
-        mLlDistanceSelector.setVisibility(View.GONE);
-        if (position == 0) {
-          setRegionType(0);
-          getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_drawer));
-          getTopBar().getAbRight().hide();
-        } else if (position == 1) {
-          clearFollowCircleViews();
-          setRegionType(4);
-          getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_distance));
-          getTopBar().getAbRight().hide();
-        }
-      }
-
-      @Override
-      public int getCount() {
-        return 2;
-      }
-    });
-  }
-
   @Override
   public void onHiddenChanged(boolean hidden) {
     if (!hidden) {
@@ -615,6 +558,64 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
     if (mHotFeedFragment != null) mHotFeedFragment.setActive(false);
     if (mFriendsFeedFragment != null) mFriendsFeedFragment.setActive(false);
   }
+
+  private void setTopBarTitle() {
+    if (mFeedFragment.getRegionType() == 4 || mFeedFragment.getRegionType() == 3) {
+      getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_distance));
+    } else {
+      getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_drawer));
+    }
+    getTopBar().getAbLeft().setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            if (getTopBar().getTitleBarSelectedIndex() == 0) {
+              mFlFollowCircles.setVisibility(
+                  mFlFollowCircles.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+            } else if (getTopBar().getTitleBarSelectedIndex() == 1) {
+              mLlDistanceSelector.setVisibility(
+                  mLlDistanceSelector.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+            }
+          }
+        });
+
+    getTopBar().getAbRight().hide();
+
+
+    getTopBar().setTitleAdapter(new TopBar.TitleAdapter() {
+      @Override
+      public String getTitle(int position) {
+        if (position == 0) {
+          return "在职";
+        } else if (position == 1) {
+          return "附近";
+        }
+        return null;
+      }
+
+      @Override
+      public void onSelected(View view, int position) {
+        mFlFollowCircles.setVisibility(View.GONE);
+        mLlDistanceSelector.setVisibility(View.GONE);
+        if (position == 0) {
+          setRegionType(0);
+          getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_drawer));
+          getTopBar().getAbRight().hide();
+        } else if (position == 1) {
+          clearFollowCircleViews();
+          setRegionType(4);
+          getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_distance));
+          getTopBar().getAbRight().hide();
+        }
+      }
+
+      @Override
+      public int getCount() {
+        return 2;
+      }
+    });
+  }
+
 
   private void requestFollowCircles() {
     U.request("follow_circle_list", new OnResponse2<FollowCircleListResponse>() {

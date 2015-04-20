@@ -333,7 +333,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
       getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_distance));
       getTopBar().setTitleTabSelected(1);
       getTopBar().setSubTitle(mSubInfo == null ? "" : mSubInfo);
-      getTopBar().getAbRight().setText("看厂");
+      getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_action_factories));
       getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
