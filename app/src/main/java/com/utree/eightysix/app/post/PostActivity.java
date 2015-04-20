@@ -8,9 +8,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.view.MotionEventCompat;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
 import butterknife.InjectView;
@@ -368,6 +370,34 @@ public class PostActivity extends BaseActivity
       }
     });
 
+    mLvComments.setOnTouchListener(new View.OnTouchListener() {
+      private float lastY;
+      private float y;
+      @Override
+      public boolean onTouch(View v, MotionEvent event) {
+
+        if (mPostCommentsAdapter.getPostPostView().getTop() == 0) {
+          switch (MotionEventCompat.getActionMasked(event)) {
+            case MotionEvent.ACTION_DOWN:
+              lastY = MotionEventCompat.getY(event, 0);
+            case MotionEvent.ACTION_MOVE:
+              y = MotionEventCompat.getY(event, 0);
+
+              if (y > lastY) {
+                mPostCommentsAdapter.getPostPostView()
+                    .mTvContent.setAlpha(Math.max(0f, 1f - ((y - lastY) / U.dp2px(80))));
+              }
+              break;
+            case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_UP:
+              mPostCommentsAdapter.getPostPostView().mTvContent.setAlpha(1f);
+              break;
+          }
+        }
+        return false;
+      }
+    });
+
     mIvPost.setEnabled(false);
 
     getSupportFragmentManager()
@@ -376,6 +406,7 @@ public class PostActivity extends BaseActivity
         .commitAllowingStateLoss();
 
     mFlEmotion.setFragmentManager(getSupportFragmentManager());
+
 
     onNewIntent(getIntent());
   }
