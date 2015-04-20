@@ -13,13 +13,14 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.data.Post;
 import com.utree.eightysix.widget.TitleTab;
 
 /**
  * @author simon
  */
-@Layout (R.layout.activity_msg)
-@TopTitle (R.string.messages)
+@Layout(R.layout.activity_msg)
+@TopTitle(R.string.messages)
 public class MsgActivity extends BaseActivity {
 
   @InjectView(R.id.tt_tab)
@@ -33,12 +34,22 @@ public class MsgActivity extends BaseActivity {
     protected int getCreateType() {
       return 1;
     }
+
+    @Subscribe
+    public void onPostEvent(Post post) {
+      mMsgAdapter.notifyDataSetChanged();
+    }
   };
 
   private BaseMsgFragment mOtherMsgFragment = new BaseMsgFragment() {
     @Override
     protected int getCreateType() {
       return 0;
+    }
+
+    @Subscribe
+    public void onPostEvent(Post post) {
+      mMsgAdapter.notifyDataSetChanged();
     }
   };
 

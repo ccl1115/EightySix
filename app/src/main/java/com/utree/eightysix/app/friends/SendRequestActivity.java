@@ -58,7 +58,7 @@ public class SendRequestActivity extends BaseActivity {
 
       @Override
       public void onResponse(ProfileResponse response) {
-        mEtContent.setText("你好，我是" + response.object.userName + "，添加我为蓝莓好友吧");
+        mEtContent.setText("你好，我是" + response.object.userName + "，添加我为蓝莓朋友吧");
         mEtContent.setSelection(mEtContent.getText().length());
       }
     }, ProfileResponse.class, (Integer) null);

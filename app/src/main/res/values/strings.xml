@@ -188,7 +188,7 @@
     <string name="praise_no_praise">你还没有收到赞</string>
 
     <!-- MsgActivity -->
-    <string name="messages">消息</string>
+    <string name="messages">评论消息</string>
     <string name="no_new_msg">没有新消息</string>
     <string name="no_msg">没有消息</string>
 

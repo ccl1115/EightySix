@@ -199,7 +199,7 @@ public class BaseMsgItemView extends LinearLayout {
 
     dialog.setTitle("确认不再接收此帖回复消息？");
 
-    dialog.setPositive("确认", new OnClickListener() {
+    dialog.setPositive(R.string.okay, new OnClickListener() {
       @Override
       public void onClick(View view) {
         U.getRESTRequester().request(new CancelNoticeRequest(post.id), new OnResponse2<Response>() {
@@ -220,7 +220,7 @@ public class BaseMsgItemView extends LinearLayout {
       }
     });
 
-    dialog.setRbNegative("取消", new OnClickListener() {
+    dialog.setRbNegative(R.string.cancel, new OnClickListener() {
       @Override
       public void onClick(View view) {
         dialog.dismiss();
@@ -233,7 +233,7 @@ public class BaseMsgItemView extends LinearLayout {
   public void showDeleteDialog(final Post post) {
     final ThemedDialog dialog = new ThemedDialog(getContext());
 
-    dialog.setTitle("delete?");
+    dialog.setTitle("确认删除？");
 
     dialog.setPositive(R.string.okay, new OnClickListener() {
       @Override
@@ -272,7 +272,7 @@ public class BaseMsgItemView extends LinearLayout {
     builder.setItems(
         new String[]{
             "删除此条记录",
-            "屏蔽此贴信息"
+            "屏蔽此帖信息"
         }, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
@@ -286,7 +286,7 @@ public class BaseMsgItemView extends LinearLayout {
             }
           }
         })
-        .setTitle("Operation")
+        .setTitle("操作")
         .show();
 
   }

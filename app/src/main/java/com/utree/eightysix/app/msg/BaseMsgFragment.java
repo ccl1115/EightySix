@@ -41,7 +41,8 @@ public abstract class BaseMsgFragment extends BaseFragment {
   @InjectView(R.id.rstv_empty)
   public RandomSceneTextView mRstvEmpty;
 
-  private MsgAdapter mMsgAdapter;
+  protected MsgAdapter mMsgAdapter;
+
   private Paginate.Page mPageInfo;
 
   private boolean mRefreshed = true;
