@@ -29,6 +29,7 @@ import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.dp.DailyPicksActivity;
 import com.utree.eightysix.app.feed.FeedsSearchActivity;
 import com.utree.eightysix.app.hometown.HometownTabFragment;
+import com.utree.eightysix.app.tag.TagTabActivity;
 import com.utree.eightysix.app.topic.TopicActivity;
 import com.utree.eightysix.app.topic.TopicListActivity;
 import com.utree.eightysix.app.web.BaseWebActivity;
@@ -235,10 +236,11 @@ public class ExploreFragment extends BaseFragment {
 
       @Override
       public Object instantiateItem(ViewGroup container, final int position) {
-        View view = LayoutInflater.from(container.getContext()).inflate(R.layout.page_newest_topic, container, false);
+        View view = LayoutInflater.from(container.getContext())
+            .inflate(R.layout.page_newest_topic, container, false);
+        container.addView(view);
         ViewHolder holder = new ViewHolder(view);
         holder.setData(topics.get(position));
-        container.addView(view);
         return view;
       }
 
@@ -300,7 +302,7 @@ public class ExploreFragment extends BaseFragment {
 
     public ViewHolder(View view) {
       ButterKnife.inject(this, view);
-      view.setOnClickListener(new View.OnClickListener() {
+      mRbBg.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
           TopicActivity.start(v.getContext(), mTopic);
@@ -324,13 +326,25 @@ public class ExploreFragment extends BaseFragment {
 
       List<Tag> tags = topic.tags;
       for (int i = 0; i < tags.size(); i++) {
-        Tag tag = tags.get(i);
+        final Tag tag = tags.get(i);
         switch (i) {
           case 0:
             mTvTag1.setText("#" + tag.content);
+            mTvTag1.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                TagTabActivity.start(v.getContext(), tag);
+              }
+            });
             break;
           case 1:
             mTvTag2.setText("#" + tag.content);
+            mTvTag2.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                TagTabActivity.start(v.getContext(), tag);
+              }
+            });
             break;
         }
       }

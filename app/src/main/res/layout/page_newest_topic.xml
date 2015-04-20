@@ -4,14 +4,15 @@
   ~ Copyright (c) 2015. All rights reserved by utree.cn
   -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:orientation="vertical"
-             android:layout_width="match_parent"
-             android:layout_height="105dp"
-             android:paddingLeft="16dp"
-             android:paddingRight="16dp"
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="105dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         >
 
     <com.utree.eightysix.widget.AsyncImageViewWithRoundCorner
