@@ -35,6 +35,10 @@ public class HometownTabFragment extends HolderFragment {
 
   private NewHometownFeedsFragment mNewHometownFeedsFragment;
 
+  private SetHometownFragment mSetHometownFragment;
+
+  private HometownInfoFragment mHometownInfoFragment;
+
   public HometownTabFragment() {
     mNewHometownFeedsFragment = new NewHometownFeedsFragment();
     mHotHometownFeedsFragment = new HotHometownFeedsFragment();
@@ -54,6 +58,8 @@ public class HometownTabFragment extends HolderFragment {
   public void onViewCreated(View view, Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
 
+    getBaseActivity().setFillContent(true);
+
     getBaseActivity().setTopTitle(getString(R.string.hometown_feed));
     getBaseActivity().setTopSubTitle("");
     getBaseActivity().getTopBar().setTitleClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
@@ -63,6 +69,23 @@ public class HometownTabFragment extends HolderFragment {
       @Override
       public void onClick(View v) {
         getBaseActivity().finish();
+      }
+    });
+
+    getBaseActivity().getTopBar().getAbRight().setText("设置");
+    getBaseActivity().getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if (mSetHometownFragment == null) {
+          mSetHometownFragment = new SetHometownFragment();
+          getFragmentManager().beginTransaction()
+              .add(R.id.content, mSetHometownFragment)
+              .commit();
+        } else if (mSetHometownFragment.isDetached()) {
+          getFragmentManager().beginTransaction()
+              .attach(mSetHometownFragment)
+              .commit();
+        }
       }
     });
 
@@ -180,7 +203,22 @@ public class HometownTabFragment extends HolderFragment {
 
   @Override
   public void onTitleClicked() {
-
+    if (mHometownInfoFragment == null) {
+      mHometownInfoFragment = new HometownInfoFragment();
+      mHometownInfoFragment.setCallback(new HometownInfoFragment.Callback() {
+        @Override
+        public void onHometownClicked(int hometownId, int hometownType, String hometownName) {
+          setHometown(hometownId, hometownType, hometownName);
+        }
+      });
+      getFragmentManager().beginTransaction()
+          .add(R.id.content, mHometownInfoFragment)
+          .commit();
+    } else if (mHometownInfoFragment.isDetached()) {
+      getFragmentManager().beginTransaction()
+          .attach(mHometownInfoFragment)
+          .commit();
+    }
   }
 
   @Override

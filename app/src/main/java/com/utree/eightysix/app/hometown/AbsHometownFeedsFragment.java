@@ -168,11 +168,11 @@ public class AbsHometownFeedsFragment extends BaseFragment {
             mLvFeed.setAdapter(mFeedAdapter);
 
             if (TextUtils.isEmpty(response.object.hometownName)) {
-              getBaseActivity().setTopTitle("老乡动态");
+              getBaseActivity().setTopSubTitle(response.object.subInfo);
             } else {
-              getBaseActivity().setTopTitle(String.format("老乡动态(%s)", response.object.hometownName));
+              getBaseActivity().setTopSubTitle(
+                  String.format("%s | %s", response.object.hometownName, response.object.subInfo));
             }
-            getBaseActivity().setTopSubTitle(response.object.subInfo);
             getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
 
             mHometownId = response.object.hometownId;

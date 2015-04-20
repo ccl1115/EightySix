@@ -44,8 +44,27 @@ public class FragmentHolder extends BaseActivity {
     context.startActivity(i);
   }
 
+  public static <T extends HolderFragment> void start(Context context, int theme, Class<T> clz, Bundle args) {
+    Intent i = new Intent(context, FragmentHolder.class);
+
+    i.putExtra("fragmentClass", clz);
+    i.putExtra("args", args);
+    i.putExtra("theme", theme);
+
+    if (!(context instanceof Activity)) {
+      i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    context.startActivity(i);
+  }
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
+    int theme = getIntent().getIntExtra("theme", -1);
+    if (theme != -1) {
+      setTheme(theme);
+    }
+
     super.onCreate(savedInstanceState);
 
     Class clz = (Class) getIntent().getSerializableExtra("fragmentClass");

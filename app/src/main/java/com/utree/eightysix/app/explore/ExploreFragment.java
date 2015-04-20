@@ -73,7 +73,7 @@ public class ExploreFragment extends BaseFragment {
 
   @OnClick(R.id.tv_hometown)
   public void onTvHometownClicked() {
-    FragmentHolder.start(getActivity(), HometownTabFragment.class);
+    FragmentHolder.start(getActivity(), R.style.AppTheme_Light, HometownTabFragment.class, null);
   }
 
   @OnClick(R.id.tv_snapshot)
