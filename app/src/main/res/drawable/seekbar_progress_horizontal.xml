@@ -6,15 +6,15 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@android:id/progress">
-        <inset>
+        <clip>
             <nine-patch android:src="@drawable/seekbar_progress_primary"/>
-        </inset>
+        </clip>
     </item>
 
     <item android:id="@android:id/background">
-        <clip>
+        <inset>
             <nine-patch android:src="@drawable/seekbar_progress_background"/>
-        </clip>
+        </inset>
     </item>
 
 </layer-list>
