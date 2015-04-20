@@ -1,6 +1,8 @@
 package com.utree.eightysix.app.account;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -28,6 +30,7 @@ import com.utree.eightysix.app.circle.FollowCircleListActivity;
 import com.utree.eightysix.app.friends.FriendListActivity;
 import com.utree.eightysix.app.friends.SendRequestActivity;
 import com.utree.eightysix.app.settings.MainSettingsActivity;
+import com.utree.eightysix.data.Profile;
 import com.utree.eightysix.response.CopywritingResponse;
 import com.utree.eightysix.response.ProfileResponse;
 import com.utree.eightysix.rest.OnResponse2;
@@ -122,6 +125,7 @@ public class ProfileFragment extends HolderFragment {
   private boolean mIsVisitor;
   private int mViewId;
   private String mFileHash;
+  private Profile mProfile;
 
   @OnClick(R.id.rb_edit)
   public void onRbEditClicked() {
@@ -342,38 +346,39 @@ public class ProfileFragment extends HolderFragment {
         mRefreshLayout.setRefreshing(false);
         if (RESTRequester.responseOk(response)) {
 
-          if (TextUtils.isEmpty(response.object.userName)) {
+          mProfile = response.object;
+          if (TextUtils.isEmpty(mProfile.userName)) {
             mFlGuide.setVisibility(View.VISIBLE);
             return;
           } else {
             mFlGuide.setVisibility(View.GONE);
           }
 
-          mTvName.setText(response.object.userName);
-          mTvAge.setText(String.valueOf(response.object.age) + "岁");
-          if (response.object.birthday == -1) {
+          mTvName.setText(mProfile.userName);
+          mTvAge.setText(String.valueOf(mProfile.age) + "岁");
+          if (mProfile.birthday == -1) {
             mTvBirthday.setVisibility(View.GONE);
           } else {
             mTvBirthday.setVisibility(View.VISIBLE);
-            mTvBirthday.setText(TimeUtil.getDate(response.object.birthday));
+            mTvBirthday.setText(TimeUtil.getDate(mProfile.birthday));
           }
-          mTvGender.setText(response.object.sex);
-          mTvConstellation.setText(response.object.constellation);
-          mAivBg.setUrl(response.object.background);
-          mAivPortrait.setUrl(response.object.avatar);
-          if (TextUtils.isEmpty(response.object.signature)) {
+          mTvGender.setText(mProfile.sex);
+          mTvConstellation.setText(mProfile.constellation);
+          mAivBg.setUrl(mProfile.background);
+          mAivPortrait.setUrl(mProfile.avatar);
+          if (TextUtils.isEmpty(mProfile.signature)) {
             mTvSignature.setText("还没有设置签名");
           } else {
-            mTvSignature.setText(response.object.signature);
+            mTvSignature.setText(mProfile.signature);
           }
-          mTvCircleName.setText(response.object.workinFactoryName);
-          mTvHometown.setText(response.object.hometown);
+          mTvCircleName.setText(mProfile.workinFactoryName);
+          mTvHometown.setText(mProfile.hometown);
 
           if (mIsVisitor) {
-            if ("男".equals(response.object.sex)) {
+            if ("男".equals(mProfile.sex)) {
               mTvMyPosts.setText("他的帖子");
               mTvTitleSignature.setText("他的签名");
-            } else if ("女".equals(response.object.sex)) {
+            } else if ("女".equals(mProfile.sex)) {
               mTvMyPosts.setText("她的帖子");
               mTvTitleSignature.setText("她的签名");
             } else {
@@ -381,7 +386,7 @@ public class ProfileFragment extends HolderFragment {
               mTvTitleSignature.setText("Ta的签名");
             }
 
-            if (response.object.isFriend == 1) {
+            if (mProfile.isFriend == 1) {
               mTvAction.setText("发起聊天");
               mTvAction.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -399,42 +404,23 @@ public class ProfileFragment extends HolderFragment {
               });
             }
 
-            if (response.object.isShielded == 1) {
-              getTopBar().getAbRight().setText("取消屏蔽");
-              getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                  U.request("user_unshield", new OnResponse2<Response>() {
-                    @Override
-                    public void onResponseError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onResponse(Response response) {
-                      if (RESTRequester.responseOk(response)) {
-                        requestProfile(mViewId);
-                      }
-                    }
-                  }, Response.class, mViewId);
-                }
-              });
-            } else {
+            if (mProfile.isFriend == 1) {
               getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_action_ban));
               getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                  showBanConfirmDialog();
+                  showMenuDialog();
                 }
               });
+            } else {
+              getTopBar().getAbRight().hide();
             }
           }
 
-          mAivLevelIcon.setUrl(response.object.levelIcon);
-          mTvExp.setText(String.format("%d/%d", response.object.experience, response.object.nextExperience));
-          mPbExp.setMax(response.object.nextExperience);
-          mPbExp.setProgress(response.object.experience);
+          mAivLevelIcon.setUrl(mProfile.levelIcon);
+          mTvExp.setText(String.format("%d/%d", mProfile.experience, mProfile.nextExperience));
+          mPbExp.setMax(mProfile.nextExperience);
+          mPbExp.setProgress(mProfile.experience);
         }
       }
     }, ProfileResponse.class, userId);
@@ -565,6 +551,82 @@ public class ProfileFragment extends HolderFragment {
 
   }
 
+  private void showMenuDialog() {
+    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+    if (mProfile.isFriend == 1) {
+      if (mProfile.isShielded == 1) {
+        builder.setItems(
+            new String[]{
+                "取消屏蔽此朋友",
+                "解除朋友关系",
+            }, new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                  case 0:
+                    requestUnshield();
+                    break;
+                  case 1:
+                    showDeleteConfirmDialog();
+                    break;
+                }
+              }
+            });
+      } else {
+        builder.setItems(
+            new String[]{
+                "屏蔽此朋友",
+                "解除朋友关系",
+            }, new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                  case 0:
+                    showBanConfirmDialog();
+                    break;
+                  case 1:
+                    showDeleteConfirmDialog();
+                    break;
+                }
+              }
+            });
+      }
+    }
+    builder.show();
+  }
+
+  private void requestUnshield() {
+    U.request("user_unshield", new OnResponse2<Response>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
+      @Override
+      public void onResponse(Response response) {
+        if (RESTRequester.responseOk(response)) {
+          requestProfile(mViewId);
+        }
+      }
+    }, Response.class, mViewId);
+  }
+
+  private void requestDelete() {
+    U.request("user_friend_del", new OnResponse2<Response>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
+      @Override
+      public void onResponse(Response response) {
+        if (RESTRequester.responseOk(response)) {
+          requestProfile(mViewId);
+        }
+      }
+    }, Response.class, mViewId);
+  }
+
   private void showBanConfirmDialog() {
     final ThemedDialog dialog = new ThemedDialog(getActivity());
 
@@ -605,6 +667,26 @@ public class ProfileFragment extends HolderFragment {
       }
     });
 
+    dialog.show();
+  }
+
+  private void showDeleteConfirmDialog() {
+    final ThemedDialog dialog = new ThemedDialog(getActivity());
+
+    dialog.setTitle("确认解除朋友关系？");
+    dialog.setPositive(R.string.okay, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        requestDelete();
+        dialog.dismiss();
+      }
+    });
+    dialog.setRbNegative(R.string.cancel, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        dialog.dismiss();
+      }
+    });
     dialog.show();
   }
 }

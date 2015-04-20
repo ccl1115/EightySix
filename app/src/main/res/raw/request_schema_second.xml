@@ -270,6 +270,17 @@
     </request>
 
     <request>
+        <id>user_friend_del</id>
+        <name>删除好友</name>
+        <path>/commit/user/friend/delete</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>viewId</param>
+        </params>
+    </request>
+
+    <request>
         <id>user_search</id>
         <name>搜索用户</name>
         <path>/user/search</path>
