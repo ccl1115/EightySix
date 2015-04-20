@@ -239,6 +239,10 @@ public class Account {
     return getAccountSharedPreferences().getBoolean("cancel_comment_anonymous", true);
   }
 
+  public boolean hasCancelCommentAnonymousSet() {
+    return getAccountSharedPreferences().contains("cancel_comment_anonymous");
+  }
+
   private SharedPreferences getSharedPreferences() {
     return U.getContext().getSharedPreferences("account", Context.MODE_PRIVATE);
   }

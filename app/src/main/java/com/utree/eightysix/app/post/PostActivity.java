@@ -635,6 +635,12 @@ public class PostActivity extends BaseActivity
           }
         }
 
+        if (!Account.inst().hasCancelCommentAnonymousSet()) {
+          if (!TextUtils.isEmpty(mPost.userName)) {
+            mIvAnonymous.setSelected(false);
+          }
+        }
+
         if (bottom) {
           mLvComments.setSelection(Integer.MAX_VALUE);
           mLlBanner.setClickable(true);
