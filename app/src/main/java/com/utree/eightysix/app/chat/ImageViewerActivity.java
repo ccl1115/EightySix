@@ -68,6 +68,8 @@ public class ImageViewerActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+
     final String local = getIntent().getStringExtra("local");
     final String remote = getIntent().getStringExtra("remote");
     final String secret = getIntent().getStringExtra("secret");
