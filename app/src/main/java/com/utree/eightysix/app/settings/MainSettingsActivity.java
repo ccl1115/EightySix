@@ -5,10 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.TextView;
 import butterknife.InjectView;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.tencent.tauth.Tencent;
@@ -31,11 +29,10 @@ public class MainSettingsActivity extends BaseActivity {
   @InjectView (R.id.rb_upgrade_dot)
   public RoundedButton mRbUpgradeDot;
 
-  @InjectView(R.id.cb_silent_mode)
-  public CheckBox mCbSilentMode;
-
   @InjectView(R.id.tv_dev)
   public TextView mTvDev;
+
+  private MsgSettingsFragment mMsgSettingsFragment;
 
   @OnClick (R.id.tv_logout)
   public void onRbLogoutClicked() {
@@ -82,9 +79,16 @@ public class MainSettingsActivity extends BaseActivity {
     startActivity(new Intent(this, DevModeActivity.class));
   }
 
-  @OnCheckedChanged(R.id.cb_silent_mode)
-  public void onCbSilentModeChecked(boolean checked){
-    Account.inst().setSilentMode(checked);
+  @OnClick(R.id.tv_msg_settings)
+  public void onLlMsgSettingsClicked() {
+    if (mMsgSettingsFragment == null) {
+      mMsgSettingsFragment = new MsgSettingsFragment();
+    }
+    getSupportFragmentManager().beginTransaction()
+        .setCustomAnimations(R.anim.enter_from_top, R.anim.exit_to_bottom, R.anim.enter_from_top, R.anim.exit_to_bottom)
+        .add(R.id.content, mMsgSettingsFragment)
+        .addToBackStack(null)
+        .commit();
   }
 
   @OnClick(R.id.tv_help)
@@ -130,8 +134,6 @@ public class MainSettingsActivity extends BaseActivity {
     if (BuildConfig.DEBUG) {
       mTvDev.setVisibility(View.VISIBLE);
     }
-
-    mCbSilentMode.setChecked(Account.inst().getSilentMode());
   }
 
   @Override
@@ -140,4 +142,11 @@ public class MainSettingsActivity extends BaseActivity {
     finish();
   }
 
+
+  @Override
+  public void onBackPressed() {
+    super.onBackPressed();
+
+    setTopTitle(getString(R.string.settings));
+  }
 }

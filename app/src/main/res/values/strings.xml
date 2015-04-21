@@ -294,4 +294,5 @@
     <string name="all_tags">所有标签</string>
     <string name="topic_desc">话题描述</string>
     <string name="assistant">蓝莓小助手</string>
+    <string name="settings_msg">消息设置</string>
 </resources>

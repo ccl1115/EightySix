@@ -17,5 +17,8 @@ public class UserSetupResponse extends Response {
   public static class Status {
     @SerializedName("status")
     public String status;
+
+    @SerializedName("praiseNotRemind")
+    public int praiseNotRemind;
   }
 }

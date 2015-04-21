@@ -169,4 +169,23 @@
             <param>currPage</param>
         </params>
     </request>
+
+    <request>
+        <id>user_config</id>
+        <name>提交用户设置</name>
+        <path>/user/setup.do</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>praiseNotRemind</param>
+        </params>
+    </request>
+
+    <request>
+        <id>user_get_config</id>
+        <name>获取用户配置</name>
+        <path>/user/getSetup.do</path>
+        <sign/>
+        <token/>
+    </request>
 </api>

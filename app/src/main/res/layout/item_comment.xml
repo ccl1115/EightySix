@@ -28,7 +28,7 @@
             android:layout_toEndOf="@+id/fpv_portrait"
             android:layout_toLeftOf="@+id/iv_chat"
             android:layout_toStartOf="@+id/iv_chat"
-            android:textSize="14sp"
+            android:textSize="16sp"
             app:emojiconSize="24dp"
             />
 
@@ -40,7 +40,7 @@
             android:layout_below="@+id/tv_comment"
             android:layout_toLeftOf="@+id/aiv_level_icon"
             android:layout_toStartOf="@+id/aiv_level_icon"
-            android:textSize="14sp"
+            android:textSize="13sp"
             android:textColor="#ff3668b2"
             />
 
@@ -48,7 +48,7 @@
             android:id="@+id/aiv_level_icon"
             android:layout_width="16sp"
             android:layout_height="16sp"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="4dp"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:layout_below="@+id/tv_comment"
