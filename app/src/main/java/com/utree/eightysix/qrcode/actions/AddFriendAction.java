@@ -3,8 +3,9 @@ package com.utree.eightysix.qrcode.actions;
 import android.net.Uri;
 import com.utree.eightysix.U;
 import com.utree.eightysix.qrcode.Action;
-import com.utree.eightysix.request.AddFriendRequest;
-import com.utree.eightysix.rest.*;
+import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.Response;
 import de.akquinet.android.androlog.Log;
 
 import java.util.List;
@@ -32,8 +33,6 @@ public class AddFriendAction implements Action {
     Log.d(TAG, "fragment = " + uri.getFragment());
     if ("eightysix".equals(uri.getScheme())) {
       List<String> paths = uri.getPathSegments();
-      Log.d(TAG, "path1 = " + paths.get(0));
-      Log.d(TAG, "path2 = " + paths.get(1));
       if ("friend".equals(uri.getAuthority()) && paths.size() == 2 && "add".equals(paths.get(0))) {
         mId = paths.get(1);
         return true;
@@ -44,11 +43,10 @@ public class AddFriendAction implements Action {
 
   @Override
   public void act(Uri uri) {
-    RequestData data = new RequestData(new AddFriendRequest(mId, 1));
-    U.getRESTRequester().request(data, new HandlerWrapper<Response>(data, new OnResponse2<Response>() {
+    U.request("user_friend_request", new OnResponse2<Response>() {
       @Override
       public void onResponseError(Throwable e) {
-        U.showToast("添加好友失败，请重新扫描");
+
       }
 
       @Override
@@ -57,6 +55,6 @@ public class AddFriendAction implements Action {
           U.showToast("添加好友成功");
         }
       }
-    }, Response.class));
+    }, Response.class, mId);
   }
 }
