@@ -2,6 +2,7 @@ package com.utree.eightysix.app.account;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.CameraUtil;
+import com.utree.eightysix.app.FragmentHolder;
 import com.utree.eightysix.app.HolderFragment;
 import com.utree.eightysix.app.account.event.*;
 import com.utree.eightysix.app.chat.ChatUtils;
@@ -51,6 +53,15 @@ import java.util.Calendar;
 /**
  */
 public class ProfileFragment extends HolderFragment {
+
+  public static void start(Context context, int viewId, String userName) {
+    Bundle args = new Bundle();
+    args.putBoolean("isVisitor", true);
+    args.putInt("viewId", viewId);
+    args.putString("userName", userName);
+
+    FragmentHolder.start(context, ProfileFragment.class, args);
+  }
 
   @InjectView(R.id.tv_name)
   public TextView mTvName;

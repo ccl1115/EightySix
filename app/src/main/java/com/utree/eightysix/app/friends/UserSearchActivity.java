@@ -7,12 +7,15 @@ package com.utree.eightysix.app.friends;
 import android.os.Bundle;
 import android.view.View;
 import butterknife.InjectView;
+import butterknife.OnItemClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.account.ProfileFragment;
+import com.utree.eightysix.data.Friend;
 import com.utree.eightysix.response.FriendListResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
@@ -31,6 +34,12 @@ public class UserSearchActivity extends BaseActivity {
   public RandomSceneTextView mRstvEmpty;
 
   private UserSearchAdapter mUserSearchAdapter;
+
+  @OnItemClick(R.id.alv_users)
+  public void onAlvUsersItemClicked(int position) {
+    Friend item = mUserSearchAdapter.getItem(position);
+    ProfileFragment.start(this, item.viewId, item.userName);
+  }
 
   @Override
   public void onActionSearchClicked(CharSequence cs) {

@@ -14,7 +14,9 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.utree.eightysix.R;
+import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.utils.ColorUtil;
@@ -134,9 +136,22 @@ public class FeedsSearchAdapter extends BaseAdapter {
 
     @InjectView(R.id.fl_right)
     public FrameLayout mFlRight;
+    private BaseItem[] mPosts;
+
+    @OnClick(R.id.fl_left)
+    public void onFlLeftClicked(View v) {
+      PostActivity.start(v.getContext(), (Post) mPosts[0]);
+    }
+
+    @OnClick(R.id.fl_right)
+    public void onFlRightClicked(View v) {
+      PostActivity.start(v.getContext(), (Post) mPosts[1]);
+    }
 
     public void setData(BaseItem[] posts) {
-      Post left = (Post) posts[0];
+      mPosts = posts;
+
+      Post left = (Post) mPosts[0];
 
       if (left != null) {
         mFlLeft.setVisibility(View.VISIBLE);
