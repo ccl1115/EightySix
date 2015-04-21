@@ -160,6 +160,12 @@ public class PostPostView extends LinearLayout {
       return;
     }
 
+    if (!TextUtils.isEmpty(mPost.userName)) {
+      setPadding(0, U.dp2px(46), 0, 0);
+    } else {
+      setPadding(0, 0, 0, 0);
+    }
+
     mTvContent.setText(mPost.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content);
     if (mPost.comments > 0) {
       mTvComment.setText(String.valueOf(post.comments));
