@@ -57,16 +57,16 @@ public class AvatarViewerActivity extends BaseActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_avatar_viewer);
 
+    final int viewId = getIntent().getIntExtra("viewId", -1);
+
     getTopBar().getAbRight().setText("相册");
     getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        startActivity(new Intent(AvatarViewerActivity.this, AvatarsActivity.class));
+        AvatarsActivity.start(v.getContext(), viewId);
       }
     });
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
-
-    final int viewId = getIntent().getIntExtra("viewId", -1);
 
     if (viewId == -1) {
       requestAvatars(null);

@@ -4,7 +4,9 @@
 
 package com.utree.eightysix.app.account;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,6 +40,17 @@ import java.io.File;
 @TopTitle(R.string.avatars)
 public class AvatarsActivity extends BaseActivity {
 
+  public static void start(Context context, int viewId) {
+    Intent intent = new Intent(context, AvatarsActivity.class);
+    intent.putExtra("viewId", viewId);
+
+    if (!(context instanceof Activity)) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    context.startActivity(intent);
+  }
+
   @InjectViews({
       R.id.aiv_portrait_1,
       R.id.aiv_portrait_2,
@@ -53,6 +66,7 @@ public class AvatarsActivity extends BaseActivity {
 
   private CameraUtil mCameraUtil;
   private String mFileHash;
+  private Integer mViewId;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -68,6 +82,9 @@ public class AvatarsActivity extends BaseActivity {
     });
 
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+
+    int viewId = getIntent().getIntExtra("viewId", -1);
+    mViewId = viewId == -1 ? null : viewId;
 
     requestAvatars();
   }
@@ -106,13 +123,17 @@ public class AvatarsActivity extends BaseActivity {
           }
 
           if (size < 9) {
-            mAivAvatars[size].setImageResource(R.drawable.ic_add);
-            mAivAvatars[size].setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                mCameraUtil.showCameraDialog();
-              }
-            });
+            if (mViewId == null) {
+              mAivAvatars[size].setImageResource(R.drawable.ic_add);
+              mAivAvatars[size].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                  mCameraUtil.showCameraDialog();
+                }
+              });
+            } else {
+              mAivAvatars[size].setImageResource(0);
+            }
 
             for (int i = size + 1; i < 9; i++) {
               mAivAvatars[i].setImageResource(0);
@@ -120,7 +141,7 @@ public class AvatarsActivity extends BaseActivity {
           }
         }
       }
-    }, UserAvatarsResponse.class, (Integer) null);
+    }, UserAvatarsResponse.class, mViewId);
   }
 
   @Override
