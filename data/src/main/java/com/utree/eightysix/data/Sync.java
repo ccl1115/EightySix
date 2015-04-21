@@ -26,6 +26,9 @@ public class Sync {
   @SerializedName("ip")
   public String ip;
 
+  @SerializedName("qqGroup")
+  public String qqGroup;
+
   /**
    * Default is 15
    */

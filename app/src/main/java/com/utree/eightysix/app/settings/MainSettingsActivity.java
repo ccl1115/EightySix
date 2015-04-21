@@ -3,6 +3,7 @@ package com.utree.eightysix.app.settings;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -31,6 +32,9 @@ public class MainSettingsActivity extends BaseActivity {
 
   @InjectView(R.id.tv_dev)
   public TextView mTvDev;
+
+  @InjectView(R.id.tv_version)
+  public TextView mTvVersion;
 
   private MsgSettingsFragment mMsgSettingsFragment;
 
@@ -103,7 +107,7 @@ public class MainSettingsActivity extends BaseActivity {
 
   @OnClick(R.id.tv_join_qq)
   public void onTvJoinQQClicked() {
-    Tencent.createInstance(U.getConfig("qq.app_id"), this).joinQQGroup(this, "Q2hi2FH3Mjq27D0jd3s8Vi3zOWl13UHe");
+    Tencent.createInstance(U.getConfig("qq.app_id"), this).joinQQGroup(this, U.getSyncClient().getSync().qqGroup);
   }
 
   @Override
@@ -116,6 +120,11 @@ public class MainSettingsActivity extends BaseActivity {
     super.onCreate(savedInstanceState);
 
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+
+    try {
+      mTvVersion.setText(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
+    } catch (PackageManager.NameNotFoundException ignored) {
+    }
 
     Sync sync = U.getSyncClient().getSync();
     if (sync != null && sync.upgrade != null) {
