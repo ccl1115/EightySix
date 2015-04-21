@@ -4,6 +4,7 @@
 
 package com.utree.eightysix.app.friends;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import butterknife.InjectView;
@@ -14,6 +15,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.app.account.AddFriendActivity;
 import com.utree.eightysix.response.FriendListResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
@@ -39,6 +41,13 @@ public class FriendListActivity extends BaseActivity {
     super.onCreate(savedInstanceState);
 
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+    getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_add));
+    getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        startActivity(new Intent(FriendListActivity.this, AddFriendActivity.class));
+      }
+    });
 
     mRstvEmpty.setDrawable(R.drawable.scene_4);
     mRstvEmpty.setText("你还没有朋友");
