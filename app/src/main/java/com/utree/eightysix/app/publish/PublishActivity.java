@@ -50,7 +50,6 @@ import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.ImageUtils;
-import com.utree.eightysix.utils.InputValidator;
 import com.utree.eightysix.widget.*;
 import com.utree.eightysix.widget.panel.GridPanel;
 import com.utree.eightysix.widget.panel.Item;
@@ -384,10 +383,6 @@ public class PublishActivity extends BaseActivity implements
 
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count) {
-      }
-
-      @Override
-      public void afterTextChanged(Editable s) {
         if (s.length() == 0) {
           mTvPostTip.setVisibility(View.VISIBLE);
           disablePublishButton();
@@ -401,14 +396,15 @@ public class PublishActivity extends BaseActivity implements
           mPostEditText.setText(mBefore);
           mPostEditText.setSelection(mBefore.length());
         } else if (mPostEditText.getLineCount() > 7) {
-          mPostEditText.setText(mBefore);
-          mPostEditText.setSelection(mBefore.length());
-        }
-
-        if (!InputValidator.post(s)) {
-          showToast(U.gfs(R.string.post_over_length, length));
+          mPostEditText.setText(mBefore.subSequence(0, mBefore.length() - 1));
+          mPostEditText.setSelection(mBefore.length() - 1);
         }
       }
+
+      @Override
+      public void afterTextChanged(Editable s) {
+      }
+
     });
 
     mPostEditText.setOnKeyListener(new View.OnKeyListener() {

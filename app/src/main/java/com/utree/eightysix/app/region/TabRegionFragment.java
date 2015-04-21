@@ -1,6 +1,5 @@
 package com.utree.eightysix.app.region;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -373,23 +372,19 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
         }
       }
     }, 500);
-  }
 
-  @Override
-  public void onDestroyView() {
-    super.onDestroyView();
-    clearActive();
-  }
-
-  @Override
-  public void onAttach(Activity activity) {
-    super.onAttach(activity);
     getBaseActivity().setTopTitle("");
     getBaseActivity().setTopSubTitle("");
 
     setTopBarTitle();
 
     requestFollowCircles();
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    clearActive();
   }
 
   @Override
