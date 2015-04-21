@@ -452,6 +452,9 @@ public class PostActivity extends BaseActivity
       mLvComments.setAdapter(mPostCommentsAdapter);
       if (mPost != null) {
         if (!TextUtils.isEmpty(mPost.userName)) {
+          mTvName.setVisibility(View.VISIBLE);
+          mAivPortrait.setVisibility(View.VISIBLE);
+          mAivLevelIcon.setVisibility(View.VISIBLE);
           mTvName.setText(mPost.userName);
           mAivPortrait.setUrl(mPost.avatar);
           mAivLevelIcon.setUrl(mPost.levelIcon);
@@ -645,6 +648,9 @@ public class PostActivity extends BaseActivity
           mPostCommentsAdapter.setNeedReload(false);
 
           if (!TextUtils.isEmpty(mPost.userName)) {
+            mTvName.setVisibility(View.VISIBLE);
+            mAivPortrait.setVisibility(View.VISIBLE);
+            mAivLevelIcon.setVisibility(View.VISIBLE);
             mTvName.setText(mPost.userName);
             mAivPortrait.setUrl(mPost.avatar);
             mAivLevelIcon.setUrl(mPost.levelIcon);
@@ -653,6 +659,7 @@ public class PostActivity extends BaseActivity
             mTvName.setVisibility(View.GONE);
             mAivPortrait.setVisibility(View.GONE);
             mAivLevelIcon.setVisibility(View.GONE);
+            mLlBanner.setBackgroundColor(Color.TRANSPARENT);
           }
 
           if (response.object.blueStar == 1) {
