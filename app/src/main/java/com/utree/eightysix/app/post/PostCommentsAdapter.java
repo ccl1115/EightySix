@@ -282,6 +282,8 @@ class PostCommentsAdapter extends BaseAdapter {
       if (comment.delete == 1) {
         mTvComment.setText(comment.content);
         mTvComment.setTextColor(resources.getColor(R.color.apptheme_primary_grey_color));
+        mTvName.setVisibility(View.GONE);
+        mAivLevelIcon.setVisibility(View.GONE);
       } else {
         mTvComment.setText(comment.content);
         if (TextUtils.isEmpty(comment.name)) {
