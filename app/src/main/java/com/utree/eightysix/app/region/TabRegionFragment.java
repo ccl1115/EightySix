@@ -28,6 +28,9 @@ import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.circle.event.CircleFollowsChangedEvent;
+import com.utree.eightysix.app.feed.event.InviteClickedEvent;
+import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
+import com.utree.eightysix.app.feed.event.UploadClickedEvent;
 import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
@@ -35,6 +38,7 @@ import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
 import com.utree.eightysix.app.region.event.CircleResponseEvent;
 import com.utree.eightysix.app.region.event.RegionResponseEvent;
+import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.FollowCircle;
 import com.utree.eightysix.event.CurrentCircleResponseEvent;
 import com.utree.eightysix.response.FollowCircleListResponse;
@@ -89,6 +93,8 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
   private FriendsFeedRegionFragment mFriendsFeedFragment;
 
   private ThemedDialog mNoPermDialog;
+  private ThemedDialog mUnlockDialog;
+  private ThemedDialog mInviteDialog;
 
   private List<View> mFollowCircleViews = new ArrayList<View>();
 
@@ -398,6 +404,29 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
   }
 
   @Subscribe
+  public void onUploadClicked(UploadClickedEvent event) {
+    if (getBaseActivity() != null) {
+      ContactsSyncService.start(getBaseActivity(), true);
+      getBaseActivity().showProgressBar(true);
+    }
+  }
+
+  @Subscribe
+  public void onUnlockClicked(UnlockClickedEvent event) {
+    if (getBaseActivity() != null) {
+      showUnlockDialog();
+      ContactsSyncService.start(getBaseActivity(), true);
+    }
+  }
+
+  @Subscribe
+  public void onInviteClicked(InviteClickedEvent event) {
+    if (getBaseActivity() != null) {
+      showInviteDialog();
+    }
+  }
+
+  @Subscribe
   public void onNewAllPostCountEvent(NewAllPostCountEvent event) {
     FeedRegionAdapter feedAdapter = mFeedFragment.getFeedAdapter();
     if (feedAdapter != null && feedAdapter.getFeeds().circle != null
@@ -552,6 +581,43 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
     if (mFeedFragment != null) mFeedFragment.setActive(false);
     if (mHotFeedFragment != null) mHotFeedFragment.setActive(false);
     if (mFriendsFeedFragment != null) mFriendsFeedFragment.setActive(false);
+  }
+
+  private void showUnlockDialog() {
+    if (mUnlockDialog == null) {
+      mUnlockDialog = new ThemedDialog(getBaseActivity());
+      View view = LayoutInflater.from(getBaseActivity()).inflate(R.layout.dialog_unlock, null);
+      TextView tipView = (TextView) view.findViewById(R.id.tv_unlock_tip);
+      String tip = getString(R.string.unlock_tip, U.getSyncClient().getSync().unlockFriends, U.getSyncClient().getSync().unlockFriends);
+      int index = tip.indexOf("解锁条件");
+      ForegroundColorSpan span = new ForegroundColorSpan(
+          getResources().getColor(R.color.apptheme_primary_light_color));
+      SpannableString spannableString = new SpannableString(tip);
+      spannableString.setSpan(span, index, index + 4, 0);
+      tipView.setText(spannableString);
+      mUnlockDialog.setContent(view);
+      mUnlockDialog.setPositive(R.string.invite_people, new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          mUnlockDialog.dismiss();
+          showInviteDialog();
+        }
+      });
+      mUnlockDialog.setTitle("秘密为什么会隐藏");
+    }
+
+    if (!mUnlockDialog.isShowing()) {
+      mUnlockDialog.show();
+    }
+  }
+
+  private void showInviteDialog() {
+    if (mInviteDialog == null) {
+      mInviteDialog = U.getShareManager().shareAppDialog(getBaseActivity(), mFeedFragment.getCircle());
+    }
+    if (!mInviteDialog.isShowing()) {
+      mInviteDialog.show();
+    }
   }
 
   private void setTopBarTitle() {
