@@ -14,7 +14,6 @@ import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
-import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.FeedAdapter;
 import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
 import com.utree.eightysix.app.msg.FetchNotificationService;
@@ -337,7 +336,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
       getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-          BaseCirclesActivity.startMyCircles(getActivity());
+          FactoryRegionActivity.start(getActivity(), 4, mDistance);
         }
       });
     }

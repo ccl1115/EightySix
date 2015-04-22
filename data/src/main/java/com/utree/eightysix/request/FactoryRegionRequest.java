@@ -16,8 +16,17 @@ public class FactoryRegionRequest extends Paginate {
   @Param("regionType")
   public int regionType;
 
+  @Param("regionRadius")
+  public int regionRadius;
+
   public FactoryRegionRequest(int regionType, int currPage) {
     super(currPage);
     this.regionType = regionType;
+  }
+
+  public FactoryRegionRequest(int regionType, int regionRadius, int currPage) {
+    super(currPage);
+    this.regionType = regionType;
+    this.regionRadius = regionRadius;
   }
 }

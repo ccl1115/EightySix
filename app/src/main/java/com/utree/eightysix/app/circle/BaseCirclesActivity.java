@@ -58,6 +58,7 @@ public class BaseCirclesActivity extends BaseActivity {
   public static final int MODE_SELECT = 1;
   public static final int MODE_MY = 2;
   public static final int MODE_SNAPSHOT = 3;
+  public static final int MODE_REGION = 4;
 
   @InjectView(R.id.alv_refresh)
   public AdvancedListView mLvCircles;
@@ -106,6 +107,11 @@ public class BaseCirclesActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
+  public static void startRegion(Context context) {
+    Intent intent = new Intent(context, BaseCirclesActivity.class);
+    intent.putExtra("mode", MODE_REGION);
+  }
+
   @OnClick({R.id.fl_search, R.id.tv_search_hint})
   public void onFlSearchClicked() {
     if (mMode == MODE_MY) {
@@ -116,6 +122,9 @@ public class BaseCirclesActivity extends BaseActivity {
       CircleSearchActivity.start(this, true);
     } else if (mMode == MODE_SNAPSHOT) {
       U.getAnalyser().trackEvent(this, "circle_search", "snapshot");
+      CircleSearchActivity.start(this, false);
+    } else if (mMode == MODE_REGION) {
+      U.getAnalyser().trackEvent(this, "circle_search", "region");
       CircleSearchActivity.start(this, false);
     }
   }
@@ -541,8 +550,8 @@ public class BaseCirclesActivity extends BaseActivity {
     }, Response.class);
   }
 
-  private void requestRegionCircles(final int regionType, final int page) {
-    request(new FactoryRegionRequest(regionType, page), new OnResponse2<CirclesResponse>() {
+  private void requestRegionCircles(final int regionType, final int regionRadius, final int page) {
+    request(new FactoryRegionRequest(regionType, regionRadius, page), new OnResponse2<CirclesResponse>() {
       @Override
       public void onResponseError(Throwable e) {
         mLvCircles.stopLoadMore();

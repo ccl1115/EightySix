@@ -39,7 +39,7 @@ public class FactoryRegionFragment extends BaseFragment {
 
   @OnClick (R.id.tv_more)
   public void onTvMoreClicked() {
-    FactoryRegionActivity.start(getActivity(), mRegionType);
+    FactoryRegionActivity.start(getActivity(), mRegionType, 0);
     detachSelf();
   }
 

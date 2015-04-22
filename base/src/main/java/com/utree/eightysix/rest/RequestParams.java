@@ -4,6 +4,7 @@
 
 package com.utree.eightysix.rest;
 
+import android.util.Log;
 import com.utree.eightysix.utils.MD5Util;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -30,6 +31,9 @@ public class RequestParams extends com.loopj.android.http.RequestParams {
     }
 
     result.append("lanmei!!!");
-    add("sign", MD5Util.getMD5String(result.toString().getBytes()));
+    Log.d("[EIG]sign", result.toString());
+    String md5String = MD5Util.getMD5String(result.toString().getBytes());
+    Log.d("[EIG]sign", md5String);
+    add("sign", md5String);
   }
 }
