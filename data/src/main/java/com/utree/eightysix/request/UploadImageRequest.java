@@ -14,7 +14,6 @@ import java.io.File;
 @Api(C.COMMIT_UPLOADIMAGE)
 @Token
 @Sign
-@Host("http://192.168.0.118:8000")
 public class UploadImageRequest {
 
   @Param("image")

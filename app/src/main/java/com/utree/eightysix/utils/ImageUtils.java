@@ -16,6 +16,7 @@ import com.utree.eightysix.request.UploadImageRequest;
 import com.utree.eightysix.response.UploadImageResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.RequestData;
 import de.akquinet.android.androlog.Log;
 import org.apache.http.Header;
 
@@ -474,7 +475,9 @@ public class ImageUtils {
 
     @Override
     protected void onPostExecute(Void aVoid) {
-      U.getRESTRequester().request(new UploadImageRequest(mFile), new OnResponse2<UploadImageResponse>() {
+      RequestData<UploadImageResponse> data = new RequestData<UploadImageResponse>(new UploadImageRequest(mFile));
+      data.setHost(U.getConfig("api.host.second"));
+      U.getRESTRequester().request(data, new OnResponse2<UploadImageResponse>() {
         @Override
         public void onResponseError(Throwable e) {
           U.getBus().post(new ImageUploadedEvent(null, null));
