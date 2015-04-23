@@ -55,6 +55,6 @@ public class AddFriendAction implements Action {
           U.showToast("添加好友成功");
         }
       }
-    }, Response.class, mId);
+    }, Response.class, mId, "来自扫一扫");
   }
 }

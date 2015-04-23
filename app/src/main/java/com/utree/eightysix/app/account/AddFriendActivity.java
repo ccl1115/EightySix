@@ -228,9 +228,7 @@ public class AddFriendActivity extends BaseActivity {
       showToast("scanned: " + event.getText());
     }
 
-    if (U.getQRCodeActionDispatcher().dispatch(event.getText())) {
-      startActivity(new Intent(this, ScanFriendsActivity.class));
-    }
+    U.getQRCodeActionDispatcher().dispatch(event.getText());
   }
 
   @Subscribe
