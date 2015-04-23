@@ -25,10 +25,8 @@ import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.dao.Conversation;
-import com.utree.eightysix.data.ChatFav;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
-import com.utree.eightysix.response.ChatFavListResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
@@ -37,7 +35,6 @@ import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RandomSceneTextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -151,8 +148,6 @@ public class ConversationActivity extends BaseActivity {
     });
 
     U.getChatBus().register(mConversationAdapter);
-
-    requestFavorites();
   }
 
   @Override
@@ -364,30 +359,4 @@ public class ConversationActivity extends BaseActivity {
         }).show();
   }
 
-  private void requestFavorites() {
-    U.request("chat_fav_list", new OnResponse2<ChatFavListResponse>() {
-      @Override
-      public void onResponseError(Throwable e) {
-
-      }
-
-      @Override
-      public void onResponse(ChatFavListResponse response) {
-        if (RESTRequester.responseOk(response)) {
-          List<Conversation> conversations = new ArrayList<Conversation>();
-          for (ChatFav fav : response.object.list) {
-            Conversation conversation = mConversationAdapter.getByChatId(fav.chatId);
-            if (conversation != null) {
-              conversation.setFavorite(true);
-            } else {
-              conversation = ConversationUtil.createByChatFav(fav);
-              conversations.add(conversation);
-            }
-          }
-          DaoUtils.getConversationDao().updateInTx(conversations);
-          U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATIONS_RELOAD, null));
-        }
-      }
-    }, ChatFavListResponse.class, null, null);
-  }
 }

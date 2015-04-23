@@ -148,6 +148,7 @@ public class AddFriendActivity extends BaseActivity {
     HeadViewHolder(View view) {
       ButterKnife.inject(this, view);
 
+      mEtSearchHint.setFocusable(false);
       mEtSearchHint.setHint("输入蓝莓ID或者昵称");
       mTvHead.setText("朋友推荐");
     }
