@@ -18,6 +18,7 @@
             android:layout_margin="16dp"
             android:lines="4"
             android:maxLength="70"
+            android:gravity="bottom"
             />
 
     <TextView
