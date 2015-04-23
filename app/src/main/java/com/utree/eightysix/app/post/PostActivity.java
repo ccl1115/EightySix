@@ -363,6 +363,11 @@ public class PostActivity extends BaseActivity
           if (postPostView.getParent() != null) {
             mLlBanner.setBackgroundColor(
                 (int) (0x88 * ((-postPostView.getTop()) / (float) postPostView.getMeasuredHeight())) << 24);
+            if (postPostView.getTop() < -40) {
+              mLlBanner.setClickable(true);
+            } else {
+              mLlBanner.setClickable(false);
+            }
           } else {
             mLlBanner.setBackgroundColor(0x88000000);
           }
