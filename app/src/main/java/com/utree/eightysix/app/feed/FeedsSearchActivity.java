@@ -178,11 +178,9 @@ public class FeedsSearchActivity extends BaseActivity {
   }
 
   private void requestFeedsSearch(final int page) {
-    showProgressBar(true);
     U.request("feeds_search", new OnResponse2<FeedsResponse>() {
       @Override
       public void onResponseError(Throwable e) {
-        hideProgressBar();
       }
 
       @Override
@@ -204,7 +202,6 @@ public class FeedsSearchActivity extends BaseActivity {
         mPageInfo = response.object.posts.page;
 
         mLlTags.setVisibility(View.GONE);
-        hideProgressBar();
         mAlvFeeds.stopLoadMore();
       }
     }, FeedsResponse.class, mSearchContent, null, mCurrent, page);

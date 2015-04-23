@@ -84,24 +84,24 @@
                     />
 
             <TextView
-                    android:id="@+id/tv_left_reply"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:drawableLeft="@drawable/ic_reply"
-                    android:drawableStart="@drawable/ic_reply"
-                    android:textSize="12sp"
-                    android:textColor="@android:color/white"
-                    android:gravity="center_vertical"
-                    />
-
-            <TextView
                     android:id="@+id/tv_left_praise"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
                     android:drawableLeft="@drawable/ic_heart_white_normal"
                     android:drawableStart="@drawable/ic_heart_white_normal"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white"
+                    android:gravity="center_vertical"
+                    />
+
+            <TextView
+                    android:id="@+id/tv_left_reply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:drawableLeft="@drawable/ic_reply"
+                    android:drawableStart="@drawable/ic_reply"
                     android:textSize="12sp"
                     android:textColor="@android:color/white"
                     android:gravity="center_vertical"
@@ -182,24 +182,24 @@
                     />
 
             <TextView
-                    android:id="@+id/tv_right_reply"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:drawableLeft="@drawable/ic_reply"
-                    android:drawableStart="@drawable/ic_reply"
-                    android:textSize="12sp"
-                    android:textColor="@android:color/white"
-                    android:gravity="center_vertical"
-                    />
-
-            <TextView
                     android:id="@+id/tv_right_praise"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
                     android:drawableLeft="@drawable/ic_heart_white_normal"
                     android:drawableStart="@drawable/ic_heart_white_normal"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white"
+                    android:gravity="center_vertical"
+                    />
+
+            <TextView
+                    android:id="@+id/tv_right_reply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:drawableLeft="@drawable/ic_reply"
+                    android:drawableStart="@drawable/ic_reply"
                     android:textSize="12sp"
                     android:textColor="@android:color/white"
                     android:gravity="center_vertical"
