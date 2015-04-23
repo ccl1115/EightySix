@@ -10,9 +10,7 @@
             android:id="@+id/ll_parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/item_gradient_bg"
-            android:padding="8dp">
+            android:orientation="vertical">
 
         <FrameLayout
                 android:layout_width="match_parent"
@@ -34,7 +32,7 @@
                     android:id="@+id/tv_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|right"
+                    android:layout_gravity="center_vertical|end"
                     android:padding="4dp"
                     android:text="更多"
                     android:textColor="@color/apptheme_primary_text_light"/>
@@ -61,6 +59,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="4dp"
+                    android:layout_marginEnd="4dp"
                     android:textColor="@color/apptheme_primary_text_light"/>
 
             <com.utree.eightysix.widget.TagView
@@ -68,6 +67,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="4dp"
+                    android:layout_marginEnd="4dp"
                     android:textColor="@color/apptheme_primary_text_light"/>
 
 
@@ -83,6 +83,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginRight="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:minHeight="48dp"
                     android:textColor="@color/apptheme_primary_text_dark"
                     app:background="@color/apptheme_primary_list_selector"/>
 
@@ -91,6 +93,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:minHeight="48dp"
                     android:text="@string/publish_anonymous"
                     android:textColor="@color/apptheme_primary_light_color"
                     app:background="@color/apptheme_primary_list_selector"/>

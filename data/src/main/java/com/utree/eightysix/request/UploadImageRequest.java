@@ -13,6 +13,7 @@ import java.io.File;
  */
 @Api(C.COMMIT_UPLOADIMAGE)
 @Token
+@Method(Method.POST)
 @Sign
 public class UploadImageRequest {
 
