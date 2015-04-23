@@ -7,6 +7,7 @@ package com.utree.eightysix.app.explore;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -66,6 +67,23 @@ public class ExploreFragment extends BaseFragment {
 
   @InjectView(R.id.ll_tags)
   public LinearLayout mLlTags;
+
+  private Handler mHandler = new Handler();
+
+  private Runnable mCarousel = new Runnable() {
+
+    @Override
+    public void run() {
+      int currentItem = mVpTopics.getCurrentItem();
+      if (currentItem == mVpTopics.getAdapter().getCount() - 1) {
+        mVpTopics.setCurrentItem(0);
+      } else {
+        mVpTopics.setCurrentItem(currentItem + 1);
+      }
+
+      mHandler.postDelayed(mCarousel, 3000);
+    }
+  };
 
   @OnClick(R.id.tv_circles)
   public void onTvCirclesClicked() {
@@ -127,12 +145,14 @@ public class ExploreFragment extends BaseFragment {
 
     requestTags();
     requestNewestTopics();
+
+    updateTopBar();
+    startCarousel();
   }
 
   @Override
   public void onAttach(Activity activity) {
     super.onAttach(activity);
-    updateTopBar();
   }
 
   @Override
@@ -225,6 +245,14 @@ public class ExploreFragment extends BaseFragment {
     textView.setText("没有精选");
     textView.setTextColor(getResources().getColor(R.color.apptheme_primary_grey_color_200));
     mLlTags.addView(textView);
+  }
+
+  private void stopCarousel() {
+    mHandler.removeCallbacks(mCarousel);
+  }
+
+  private void startCarousel() {
+    mHandler.postDelayed(mCarousel, 3000);
   }
 
   private void buildNewestTopics(final List<Topic> topics) {
