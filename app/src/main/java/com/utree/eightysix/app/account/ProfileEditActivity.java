@@ -184,6 +184,7 @@ public class ProfileEditActivity extends BaseActivity {
         mTvName.setText(response.object.userName);
         mTvGender.setText(response.object.sex);
         mCalendar = Calendar.getInstance();
+        mCalendar.set(1995, Calendar.JANUARY, 1);
         if (response.object.birthday == -1) {
           mTvBirthday.setText("未设置");
         } else {
