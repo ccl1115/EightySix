@@ -67,6 +67,15 @@ public class PostPostView extends LinearLayout {
 
   private Post mPost;
 
+  private boolean mClicked = false;
+
+  private Runnable mCancel = new Runnable() {
+    @Override
+    public void run() {
+      mClicked = false;
+    }
+  };
+
   public PostPostView(Context context) {
     this(context, null);
   }
@@ -98,6 +107,18 @@ public class PostPostView extends LinearLayout {
       } else {
         FeedActivity.start(getContext(), mPost.factoryId);
       }
+    }
+  }
+
+  @OnClick(R.id.aiv_bg)
+  public void onAivBgClicked() {
+    if (mClicked) {
+      mClicked = false;
+      mTvContent.setVisibility(mTvContent.getVisibility() == VISIBLE ? INVISIBLE : VISIBLE);
+      removeCallbacks(mCancel);
+    } else {
+      mClicked = true;
+      postDelayed(mCancel, 1000);
     }
   }
 
@@ -243,8 +264,15 @@ public class PostPostView extends LinearLayout {
   }
 
   @Override
+  protected void onAttachedToWindow() {
+    super.onAttachedToWindow();
+    removeCallbacks(mCancel);
+  }
+
+  @Override
   protected void onDetachedFromWindow() {
     M.getRegisterHelper().unregister(this);
+    removeCallbacks(mCancel);
     super.onDetachedFromWindow();
   }
 }

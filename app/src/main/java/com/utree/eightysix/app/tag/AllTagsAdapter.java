@@ -104,6 +104,7 @@ public class AllTagsAdapter extends BaseAdapter {
     final int margin = U.dp2px(18);
     for (int i = 0, size = tags.size(); i < size; i += 3) {
       TableRow row = new TableRow(parent.getContext());
+      row.setPadding(0, margin, 0, 0);
 
       if (tags.get(i) == null) {
         TableRow.LayoutParams lp = new TableRow.LayoutParams(0, length, 1);

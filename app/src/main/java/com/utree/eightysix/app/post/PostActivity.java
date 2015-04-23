@@ -367,6 +367,9 @@ public class PostActivity extends BaseActivity
             mLlBanner.setBackgroundColor(0x88000000);
           }
         }
+        if (mPostCommentsAdapter != null) {
+          mPostCommentsAdapter.getPostPostView().mTvContent.setAlpha(1f);
+        }
       }
     });
 
