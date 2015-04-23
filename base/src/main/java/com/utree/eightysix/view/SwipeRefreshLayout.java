@@ -61,7 +61,7 @@ import android.widget.AbsListView;
 public class SwipeRefreshLayout extends ViewGroup {
   private static final String LOG_TAG = SwipeRefreshLayout.class.getSimpleName();
 
-  private static final long RETURN_TO_ORIGINAL_POSITION_TIMEOUT = 300;
+  private static final long RETURN_TO_ORIGINAL_POSITION_TIMEOUT = 0;
   private static final float ACCELERATE_INTERPOLATION_FACTOR = 1.5f;
   private static final float DECELERATE_INTERPOLATION_FACTOR = 2f;
   private static final float PROGRESS_BAR_HEIGHT = 4;
@@ -498,14 +498,14 @@ public class SwipeRefreshLayout extends ViewGroup {
                 mAccelerateInterpolator.getInterpolation(
                     yDiff / mDistanceToTriggerSync));
             updateContentOffsetTop((int) (yDiff));
-            if (mLastMotionY > y && mTarget.getTop() == getPaddingTop()) {
-              // If the user puts the view back at the top, we
-              // don't need to. This shouldn't be considered
-              // cancelling the gesture as the user can restart from the top.
-              removeCallbacks(mCancel);
-            } else {
-              updatePositionTimeout();
-            }
+//            if (mLastMotionY > y && mTarget.getTop() == getPaddingTop()) {
+//              // If the user puts the view back at the top, we
+//              // don't need to. This shouldn't be considered
+//              // cancelling the gesture as the user can restart from the top.
+//              removeCallbacks(mCancel);
+//            } else {
+//              updatePositionTimeout();
+//            }
           }
           mLastMotionY = y;
         }
@@ -528,6 +528,7 @@ public class SwipeRefreshLayout extends ViewGroup {
         mCurrPercentage = 0;
         mActivePointerId = INVALID_POINTER;
         mListener.onCancel();
+        updatePositionTimeout();
         return false;
     }
 
