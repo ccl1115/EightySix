@@ -805,6 +805,7 @@ public class PublishActivity extends BaseActivity implements
 
           mEtTempName.setText(response.object.lastTempName);
           mTagsLayout.setTag(mTags);
+          mIvTempName.setSelected(false);
         }
         requestTags();
       }
@@ -825,6 +826,7 @@ public class PublishActivity extends BaseActivity implements
 
           mEtTempName.setText(response.object.lastTempName);
           mTagsLayout.setTag(mTags);
+          mIvTempName.setSelected(false);
         }
       }
     }, TagsResponse.class);
