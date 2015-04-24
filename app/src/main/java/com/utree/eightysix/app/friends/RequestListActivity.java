@@ -35,6 +35,7 @@ public class RequestListActivity extends BaseActivity {
 
   @InjectView(R.id.rstv_empty)
   public RandomSceneTextView mRstvEmpty;
+  private RequestListAdapter mRequestListAdapter;
 
   @OnItemClick(R.id.alv_requests)
   public void onAlvRequestsClicked(int position) {
@@ -67,11 +68,20 @@ public class RequestListActivity extends BaseActivity {
             mRstvEmpty.setVisibility(View.VISIBLE);
           } else {
             mRstvEmpty.setVisibility(View.GONE);
-            mAlvRequests.setAdapter(new RequestListAdapter(object));
+            mRequestListAdapter = new RequestListAdapter(object);
+            mAlvRequests.setAdapter(mRequestListAdapter);
           }
         }
       }
     }, FriendRequestResponse.class);
+  }
+
+
+  @Subscribe
+  public void onFriendRequestEvent(FriendRequest request) {
+    if (mRequestListAdapter != null) {
+      mRequestListAdapter.update(request);
+    }
   }
 
   @Override

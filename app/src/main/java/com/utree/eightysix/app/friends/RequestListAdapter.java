@@ -70,6 +70,15 @@ public class RequestListAdapter extends BaseAdapter {
     return convertView;
   }
 
+  public void update(FriendRequest request) {
+    for (int i = 0; i < mRequest.size(); i++) {
+      FriendRequest r = mRequest.get(i);
+      if (r.equals(request)) {
+        mRequest.set(i, request);
+      }
+    }
+  }
+
   @Keep
   public static class RequestViewHolder {
 
@@ -108,6 +117,7 @@ public class RequestListAdapter extends BaseAdapter {
     @OnClick(R.id.rb_accept)
     public void onRbAcceptClicked(final View view) {
 
+      mRequest.type = "passed";
       mTvResult.setVisibility(View.VISIBLE);
       mRbAccept.setVisibility(View.GONE);
       mTvIgnore.setVisibility(View.GONE);
@@ -119,6 +129,8 @@ public class RequestListAdapter extends BaseAdapter {
           mRbAccept.setVisibility(View.VISIBLE);
           mTvIgnore.setVisibility(View.VISIBLE);
           mTvResult.setVisibility(View.GONE);
+          mRequest.type = "added";
+          U.getBus().post(mRequest);
         }
 
         @Override
@@ -130,7 +142,9 @@ public class RequestListAdapter extends BaseAdapter {
             mRbAccept.setVisibility(View.VISIBLE);
             mTvIgnore.setVisibility(View.VISIBLE);
             mTvResult.setVisibility(View.GONE);
+            mRequest.type = "added";
           }
+          U.getBus().post(mRequest);
         }
       }, Response.class, mRequest.viewId);
     }
@@ -138,6 +152,7 @@ public class RequestListAdapter extends BaseAdapter {
     @OnClick(R.id.tv_ignore)
     public void onTvIgnoreClicked() {
 
+      mRequest.type = "ignored";
       mRbAccept.setVisibility(View.GONE);
       mTvIgnore.setVisibility(View.GONE);
       mTvResult.setText("已忽略");
@@ -148,6 +163,8 @@ public class RequestListAdapter extends BaseAdapter {
           mRbAccept.setVisibility(View.VISIBLE);
           mTvIgnore.setVisibility(View.VISIBLE);
           mTvResult.setVisibility(View.GONE);
+          mRequest.type = "added";
+          U.getBus().post(mRequest);
         }
 
         @Override
@@ -156,7 +173,9 @@ public class RequestListAdapter extends BaseAdapter {
             mRbAccept.setVisibility(View.VISIBLE);
             mTvIgnore.setVisibility(View.VISIBLE);
             mTvResult.setVisibility(View.GONE);
+            mRequest.type = "added";
           }
+          U.getBus().post(mRequest);
         }
       }, Response.class, mRequest.viewId);
     }

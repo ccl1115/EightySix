@@ -46,6 +46,23 @@ public class FriendRequest implements Parcelable {
   public long timestamp;
 
   @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    FriendRequest request = (FriendRequest) o;
+
+    if (viewId != request.viewId) return false;
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return viewId;
+  }
+
+  @Override
   public int describeContents() {
     return 0;
   }
