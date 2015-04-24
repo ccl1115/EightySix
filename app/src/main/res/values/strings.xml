@@ -254,7 +254,7 @@
 
     <!-- AccountActivity -->
     <string name="my_friends">我的朋友</string>
-    <string name="add_new_friend">添加新朋友</string>
+    <string name="add_new_friend">添加朋友</string>
     <string name="my_id">我的蓝莓ID：%1$s</string>
     <string name="scan_to_be_friend">让小伙伴扫一扫，即可加为蓝莓朋友</string>
     <string name="people_know_you_count">* %1$d个认识你的人会收到你发的秘密</string>
