@@ -292,7 +292,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
   }
 
   public void updateTitleBar() {
-    if (mHidden) {
+    if (mHidden || !isActive()) {
       return;
     }
 
@@ -381,6 +381,8 @@ public abstract class AbsRegionFragment extends BaseFragment {
         mFeedAdapter.add(response.object.posts.lists);
       }
 
+      mMode = MODE_REGION;
+
       mPageInfo = response.object.posts.page;
       mSubInfo = response.object.subInfo;
       updateTitleBar();
@@ -445,6 +447,8 @@ public abstract class AbsRegionFragment extends BaseFragment {
       } else if (mFeedAdapter != null) {
         mFeedAdapter.add(response.object.posts.lists);
       }
+
+      mMode = MODE_FEED;
 
       mPageInfo = response.object.posts.page;
       mSubInfo = response.object.subInfo;
@@ -561,9 +565,6 @@ public abstract class AbsRegionFragment extends BaseFragment {
     } else {
       if (mFeedAdapter != null && mFeedAdapter.getCount() == 0) {
         mRstvEmpty.setVisibility(View.VISIBLE);
-      }
-      if (mCircle != null) {
-        getBaseActivity().setTopTitle(mCircle.shortName);
       }
 
       mPageInfo = null;
