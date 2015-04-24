@@ -104,8 +104,12 @@ public class AvatarViewerActivity extends BaseActivity {
       @Override
       public void onResponse(final UserAvatarsResponse response) {
         if (RESTRequester.responseOk(response)) {
-          if (response.object.size() == 0 && viewId != null) {
-            showToast("他还没上传头像呃", false);
+          if (response.object.size() == 0) {
+            if (viewId != null) {
+              showToast("他还没上传头像呃", false);
+            } else {
+              AvatarsActivity.start(AvatarViewerActivity.this, -1);
+            }
             finish();
             return;
           }

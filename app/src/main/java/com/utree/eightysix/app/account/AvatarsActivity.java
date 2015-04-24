@@ -101,6 +101,11 @@ public class AvatarsActivity extends BaseActivity {
 
         if (RESTRequester.responseOk(response)) {
           int size = response.object.size();
+
+          if (mViewId == null && size == 0) {
+            mCameraUtil.showCameraDialog();
+          }
+
           for (int i = 0; i < size; i++) {
             final String avatar = response.object.get(i).avatar;
             if (!TextUtils.isEmpty(avatar)) {
