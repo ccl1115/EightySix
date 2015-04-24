@@ -267,6 +267,14 @@ public class AvatarsActivity extends BaseActivity {
             }
           }
         }, Response.class, avatar);
+        dialog.dismiss();
+      }
+    });
+
+    dialog.setRbNegative(R.string.cancel, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        dialog.dismiss();
       }
     });
 

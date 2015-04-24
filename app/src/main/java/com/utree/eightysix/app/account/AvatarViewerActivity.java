@@ -94,7 +94,7 @@ public class AvatarViewerActivity extends BaseActivity {
     onNewIntent(getIntent());
   }
 
-  public void requestAvatars(Integer viewId) {
+  public void requestAvatars(final Integer viewId) {
     U.request("user_avatars", new OnResponse2<UserAvatarsResponse>() {
       @Override
       public void onResponseError(Throwable e) {
@@ -104,6 +104,11 @@ public class AvatarViewerActivity extends BaseActivity {
       @Override
       public void onResponse(final UserAvatarsResponse response) {
         if (RESTRequester.responseOk(response)) {
+          if (response.object.size() == 0 && viewId != null) {
+            showToast("他还没上传头像呃", false);
+            finish();
+            return;
+          }
           mVpAvatars.setAdapter(new PagerAdapter() {
             @Override
             public int getCount() {
