@@ -4,17 +4,34 @@
        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
        android:orientation="vertical"
        android:layout_width="match_parent"
-       android:layout_height="wrap_content">
+       android:layout_height="wrap_content"
+        >
+
+    <com.utree.eightysix.widget.AsyncImageView
+            android:id="@+id/aiv_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            />
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#44000000"
+            />
 
     <LinearLayout
             android:id="@+id/ll_parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="16dp"
+            >
 
         <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                >
 
             <TextView
                     android:id="@+id/tv_head"
@@ -26,7 +43,8 @@
                     android:paddingTop="2dp"
                     android:paddingBottom="2dp"
                     android:background="@drawable/round_border_normal"
-                    android:textColor="@android:color/white"/>
+                    android:textColor="@android:color/white"
+                    />
 
             <TextView
                     android:id="@+id/tv_more"
@@ -35,7 +53,8 @@
                     android:layout_gravity="center_vertical|end"
                     android:padding="4dp"
                     android:text="更多"
-                    android:textColor="@color/apptheme_primary_text_light"/>
+                    android:textColor="@color/apptheme_primary_text_light"
+                    />
         </FrameLayout>
 
         <TextView
@@ -44,15 +63,17 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="24dp"
                 android:layout_gravity="center"
-                android:textSize="28sp"
-                android:textColor="@android:color/white"/>
+                android:textSize="24sp"
+                android:textColor="@android:color/white"
+                />
 
         <LinearLayout
                 android:id="@+id/ll_tags"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="16dp">
+                android:paddingBottom="16dp"
+                >
 
             <com.utree.eightysix.widget.TagView
                     android:id="@+id/tv_tag_1"
@@ -60,7 +81,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="4dp"
                     android:layout_marginEnd="4dp"
-                    android:textColor="@color/apptheme_primary_text_light"/>
+                    android:textColor="@color/apptheme_primary_text_light"
+                    />
 
             <com.utree.eightysix.widget.TagView
                     android:id="@+id/tv_tag_2"
@@ -68,14 +90,16 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="4dp"
                     android:layout_marginEnd="4dp"
-                    android:textColor="@color/apptheme_primary_text_light"/>
+                    android:textColor="@color/apptheme_primary_text_light"
+                    />
 
 
         </LinearLayout>
 
         <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                >
 
             <com.utree.eightysix.widget.RoundedButton
                     android:id="@+id/rb_more"
@@ -84,19 +108,21 @@
                     android:layout_weight="1"
                     android:layout_marginRight="8dp"
                     android:layout_marginEnd="8dp"
-                    android:minHeight="48dp"
+                    android:minHeight="40dp"
                     android:textColor="@color/apptheme_primary_text_dark"
-                    app:background="@color/apptheme_primary_list_selector"/>
+                    app:background="@color/apptheme_primary_list_selector"
+                    />
 
             <com.utree.eightysix.widget.RoundedButton
                     android:id="@+id/rb_publish"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:minHeight="48dp"
+                    android:minHeight="40dp"
                     android:text="@string/publish_anonymous"
                     android:textColor="@color/apptheme_primary_light_color"
-                    app:background="@color/apptheme_primary_list_selector"/>
+                    app:background="@color/apptheme_primary_list_selector"
+                    />
 
         </LinearLayout>
     </LinearLayout>

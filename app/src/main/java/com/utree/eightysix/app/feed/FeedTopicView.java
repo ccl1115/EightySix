@@ -1,6 +1,8 @@
 package com.utree.eightysix.app.feed;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.text.TextUtils;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,33 +20,38 @@ import com.utree.eightysix.data.PostTopic;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.data.Topic;
 import com.utree.eightysix.utils.ColorUtil;
+import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.RoundedButton;
+
 import java.util.List;
 
 /**
  */
 public class FeedTopicView extends FrameLayout {
 
-  @InjectView (R.id.tv_head)
+  @InjectView(R.id.tv_head)
   public TextView mTvHead;
 
-  @InjectView (R.id.tv_more)
+  @InjectView(R.id.tv_more)
   public TextView mTvMore;
 
-  @InjectView (R.id.tv_content)
+  @InjectView(R.id.tv_content)
   public TextView mTvContent;
 
-  @InjectView (R.id.tv_tag_1)
+  @InjectView(R.id.tv_tag_1)
   public TextView mTvTag1;
 
-  @InjectView (R.id.tv_tag_2)
+  @InjectView(R.id.tv_tag_2)
   public TextView mTvTag2;
 
-  @InjectView (R.id.rb_more)
+  @InjectView(R.id.rb_more)
   public RoundedButton mRbMoreFeeds;
 
-  @InjectView (R.id.ll_parent)
+  @InjectView(R.id.ll_parent)
   public LinearLayout mLlParent;
+
+  @InjectView(R.id.aiv_bg)
+  public AsyncImageView mAivBg;
 
   private PostTopic mTopic;
 
@@ -53,10 +60,10 @@ public class FeedTopicView extends FrameLayout {
     inflate(context, R.layout.item_feed_topic, this);
     ButterKnife.inject(this, this);
 
-    setPadding(U.dp2px(8), U.dp2px(8), U.dp2px(8), 0);
+    setPadding(0, U.dp2px(3), 0, 0);
   }
 
-  @OnClick (R.id.rb_more)
+  @OnClick(R.id.rb_more)
   public void onRbMoreClicked() {
     U.getAnalyser().trackEndEvent(getContext(), "feed_topic_view", "feed_topic_view");
 
@@ -72,7 +79,7 @@ public class FeedTopicView extends FrameLayout {
     TopicActivity.start(getContext(), getTopic());
   }
 
-  @OnClick (R.id.rb_publish)
+  @OnClick(R.id.rb_publish)
   public void onRbPublishClicked() {
     U.getAnalyser().trackEvent(getContext(), "feed_topic_publish", "feed_topic_publish");
 
@@ -85,18 +92,18 @@ public class FeedTopicView extends FrameLayout {
     }
   }
 
-  @OnClick (R.id.tv_more)
+  @OnClick(R.id.tv_more)
   public void onTvMoreClicked() {
     U.getAnalyser().trackEvent(getContext(), "feed_topic_more", "feed_topic_more");
     TopicListActivity.start(getContext());
   }
 
-  @OnClick (R.id.tv_tag_1)
+  @OnClick(R.id.tv_tag_1)
   public void onTvTag1Clicked() {
     TagTabActivity.start(getContext(), mTopic.tags.get(0));
   }
 
-  @OnClick (R.id.tv_tag_2)
+  @OnClick(R.id.tv_tag_2)
   public void onTvTag2Clicked() {
     TagTabActivity.start(getContext(), mTopic.tags.get(1));
   }
@@ -109,7 +116,13 @@ public class FeedTopicView extends FrameLayout {
     mTvHead.setText(topic.headTitle);
     mTvContent.setText(topic.content);
 
-    mLlParent.setBackgroundColor(ColorUtil.strToColor(topic.bgColor));
+    if (TextUtils.isEmpty(mTopic.bgUrl)) {
+      mAivBg.setUrl(null);
+      mLlParent.setBackgroundColor(ColorUtil.strToColor(topic.bgColor));
+    } else {
+      mAivBg.setUrl(mTopic.bgUrl);
+      mLlParent.setBackgroundColor(Color.TRANSPARENT);
+    }
 
     if (topic.postCount > 999) {
       mRbMoreFeeds.setText(getContext().getString(R.string.display_more_feeds, "999+"));
