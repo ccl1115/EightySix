@@ -141,5 +141,7 @@ public class MsgCenterFragment extends BaseFragment {
     getBaseActivity().getTopBar().getAbLeft().hide();
     getBaseActivity().getTopBar().getAbRight().hide();
     getBaseActivity().showTopBar(true);
+
+    getBaseActivity().hideRefreshIndicator();
   }
 }

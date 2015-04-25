@@ -175,6 +175,7 @@ public class ExploreFragment extends BaseFragment {
     });
     getBaseActivity().getTopBar().getAbLeft().hide();
     getBaseActivity().showTopBar(true);
+    getBaseActivity().hideRefreshIndicator();
   }
 
 
