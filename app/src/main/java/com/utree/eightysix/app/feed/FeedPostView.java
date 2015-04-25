@@ -151,14 +151,14 @@ public class FeedPostView extends LinearLayout {
     String[] items;
     if (mPost.owner == 1) {
       items = new String[]{
-          getResources().getString(R.string.start_chat),
+          getResources().getString(R.string.chat_anonymous),
           getResources().getString(R.string.share),
           getResources().getString(R.string.report),
           getResources().getString(R.string.delete),
       };
     } else {
       items = new String[]{
-          getResources().getString(R.string.start_chat),
+          getResources().getString(R.string.chat_anonymous),
           getResources().getString(R.string.share),
           getResources().getString(R.string.report),
       };

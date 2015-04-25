@@ -129,16 +129,17 @@ public class PostPostView extends LinearLayout {
     U.getAnalyser().trackEvent(U.getContext(), "post_more", "post_more");
     String[] items;
     if (mPost.owner == 1) {
-      items = new String[]{U.gs(R.string.share),
-          getResources().getString(R.string.start_chat),
+      items = new String[]{
+          getResources().getString(R.string.chat_anonymous),
+          getResources().getString(R.string.share),
           getResources().getString(R.string.report),
-          getResources().getString(R.string.like),
           getResources().getString(R.string.delete)};
     } else {
-      items = new String[]{U.gs(R.string.share),
-          getResources().getString(R.string.start_chat),
+      items = new String[]{
+          getResources().getString(R.string.chat_anonymous),
+          getResources().getString(R.string.share),
           getResources().getString(R.string.report),
-          getResources().getString(R.string.like)};
+      };
     }
     new AlertDialog.Builder(getContext()).setTitle(U.gs(R.string.post_action))
         .setItems(items,
@@ -147,24 +148,17 @@ public class PostPostView extends LinearLayout {
               public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                   case 0:
-                    U.getAnalyser().trackEvent(U.getContext(), "post_more_share", "post_more_share");
-                    U.getShareManager().sharePostDialog(((BaseActivity) getContext()), mPost).show();
+                    ChatUtils.startChat(((BaseActivity) getContext()), mPost);
                     break;
                   case 1:
-                    ChatUtils.startChat(((BaseActivity) getContext()), mPost);
+                    U.getAnalyser().trackEvent(U.getContext(), "post_more_share", "post_more_share");
+                    U.getShareManager().sharePostDialog(((BaseActivity) getContext()), mPost).show();
                     break;
                   case 2:
                     U.getAnalyser().trackEvent(U.getContext(), "post_more_report", "post_more_report");
                     new ReportDialog(getContext(), mPost.id).show();
                     break;
                   case 3:
-                    if (mPost == null) return;
-                    if (mPost.praised != 1) {
-                      U.getAnalyser().trackEvent(U.getContext(), "post_more_praise", "praise");
-                      doPraise();
-                    }
-                    break;
-                  case 4:
                     U.getAnalyser().trackEvent(U.getContext(), "post_more_delete", "post_more_delete");
                     U.getBus().post(new PostDeleteRequest(mPost.id));
                     break;
