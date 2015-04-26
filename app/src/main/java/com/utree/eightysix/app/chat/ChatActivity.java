@@ -213,6 +213,11 @@ public class ChatActivity extends BaseActivity implements
           mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
           break;
         }
+        case ChatEvent.EVENT_NOTIFY_MSG_RECEIVE: {
+          mChatAdapter.add((Message) event.getObj());
+          mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
+          break;
+        }
         case ChatEvent.EVENT_UPDATE_MSG: {
           mChatAdapter.notifyDataSetChanged();
           break;
