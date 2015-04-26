@@ -23,12 +23,10 @@ public class RandomFloatingLayout extends AdapterView<Adapter> {
       {0.35f, 0.4f},
       {0.7f, 0.24f},
       {0.8f, 0.6f},
-      {0.65f, 0.65f},
-      {0.45f, 0.9f},
-      {0.28f, 0.9f},
-      {0.20f, 0.68f},
-      {0.10f, 0.67f},
-      {0.42f, 0.31f}
+      {0.65f, 0.75f},
+      {0.75f, 0.9f},
+      {0.28f, 0.8f},
+      {0.20f, 0.68f}
   };
 
   public RandomFloatingLayout(Context context) {
@@ -82,7 +80,7 @@ public class RandomFloatingLayout extends AdapterView<Adapter> {
     if (mAdapter != null) {
       final Adapter adapter = mAdapter;
 
-      int min = Math.min(10, adapter.getCount());
+      int min = Math.min(8, adapter.getCount());
 
       final int width = right - left;
       final int height = bottom - top;
