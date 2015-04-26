@@ -165,13 +165,6 @@ public abstract class BaseMsgFragment extends BaseFragment {
 
             mAlvRefresh.setVisibility(View.VISIBLE);
 
-            if (response.object.posts.lists.size() == 0) {
-              mRstvEmpty.setVisibility(View.VISIBLE);
-              mAlvRefresh.setVisibility(View.GONE);
-            } else {
-              mRstvEmpty.setVisibility(View.GONE);
-            }
-
             for (Post post : response.object.posts.lists) {
               if (post.read == 0) {
                 break;
@@ -180,6 +173,15 @@ public abstract class BaseMsgFragment extends BaseFragment {
           } else {
             mMsgAdapter.add(response.object.posts.lists);
           }
+
+          if (response.object.posts.page.countPage == 0) {
+            mRstvEmpty.setVisibility(View.VISIBLE);
+            mAlvRefresh.setVisibility(View.GONE);
+          } else {
+            mRstvEmpty.setVisibility(View.GONE);
+            mAlvRefresh.setVisibility(View.VISIBLE);
+          }
+
           mPageInfo = response.object.posts.page;
         } else {
           cacheOutMsg(page);
