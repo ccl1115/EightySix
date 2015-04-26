@@ -169,10 +169,11 @@ public class AddFriendActivity extends BaseActivity {
 
     mAlvRecommended.addHeaderView(view);
 
+    showProgressBar(true);
     U.request("user_friend_recommend", new OnResponse2<FriendListResponse>() {
       @Override
       public void onResponseError(Throwable e) {
-
+        hideProgressBar();
       }
 
       @Override
@@ -188,6 +189,7 @@ public class AddFriendActivity extends BaseActivity {
             }
           });
         }
+        hideProgressBar();
       }
     }, FriendListResponse.class);
   }

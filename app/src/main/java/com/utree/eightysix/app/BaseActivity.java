@@ -143,8 +143,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
       mShowProgressBarAnimator.playTogether(
           ObjectAnimator.ofFloat(mLlLoadingWrapper,
               "translationY",
-              (getTranslationY(mLlLoadingWrapper) == 0) ?
-                  mLlLoadingWrapper.getMeasuredHeight() : getTranslationY(mLlLoadingWrapper),
+              mLlLoadingWrapper.getMeasuredHeight(),
               0),
           ObjectAnimator.ofFloat(mLlLoadingWrapper, "alpha", 0f, 1f)
       );
@@ -158,13 +157,12 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     if (mHideProgressBarAnimator == null) {
       mHideProgressBarAnimator = new AnimatorSet();
       mHideProgressBarAnimator.playTogether(
-          ObjectAnimator.ofFloat(mLlLoadingWrapper,
-              "translationY",
-              getTranslationY(mLlLoadingWrapper),
+          ObjectAnimator.ofFloat(mLlLoadingWrapper, "translationY", 0,
               mLlLoadingWrapper.getMeasuredHeight()),
           ObjectAnimator.ofFloat(mLlLoadingWrapper, "alpha", 1f, 0f)
       );
       mHideProgressBarAnimator.setDuration(500);
+      mHideProgressBarAnimator.setStartDelay(1000);
       mHideProgressBarAnimator.addListener(new Animator.AnimatorListener() {
         @Override
         public void onAnimationStart(Animator animation) {
