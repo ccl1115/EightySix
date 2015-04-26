@@ -1,79 +1,42 @@
 package com.utree.eightysix.app.intro;
 
-import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.LinearInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import com.nineoldandroids.animation.ArgbEvaluator;
-import com.nineoldandroids.animation.ValueAnimator;
-import com.nineoldandroids.view.ViewHelper;
+import com.nineoldandroids.animation.AnimatorSet;
+import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.account.ForgetPwdActivity;
 import com.utree.eightysix.app.account.LoginActivity;
 import com.utree.eightysix.app.account.RegisterActivity;
-import com.utree.eightysix.app.post.PostPostView;
-import com.utree.eightysix.data.Post;
-import com.utree.eightysix.widget.IndicatorView;
-
-import java.util.Random;
 
 /**
  */
 @Layout (R.layout.activity_guide)
 public class GuideActivity extends BaseActivity {
 
-  private static final Post LOCAL_POST = new Post();
-
-  static {
-    LOCAL_POST.source = "仁宝电脑";
-    LOCAL_POST.comments = 165;
-    LOCAL_POST.praise = 391;
-    LOCAL_POST.content = "以前换厂找工作，总顾虑听到的跟进厂后实际看到的不一样，进去了就想出来。蓝莓厂区快照，汇集了昆山百个大厂的真实信息，麻麻再也不用担心我被忽悠咯！";
-  }
-
-
-  private static final int PAGE_1_BACKGROUND_COLOR = 0xff699de6;
-  private static final int PAGE_2_BACKGROUND_COLOR = 0xffff8474;
-  private static final int PAGE_2_1_BACKGROUND_COLOR = 0xff864bfd;
-  private static final int PAGE_3_BACKGROUND_COLOR = 0xff55b5c3;
-  private ValueAnimator mPageColorAnimator =
-      ValueAnimator.ofObject(new ArgbEvaluator(), PAGE_1_BACKGROUND_COLOR,
-          PAGE_2_BACKGROUND_COLOR,
-          PAGE_2_1_BACKGROUND_COLOR,
-          PAGE_3_BACKGROUND_COLOR);
-
-  private static final int[] RANDOM_BACKGROUND = {
-      R.drawable.guide_post_bg,
-  };
 
   @InjectView (R.id.vp_guide)
   public ViewPager mVpGuide;
-  @InjectView (R.id.iv_bottom_wave)
-  public ImageView mIvWave;
-  @InjectView (R.id.in_guide)
-  public IndicatorView mInGuide;
-  private int mRandomBg;
-
-  {
-    mPageColorAnimator.setDuration(3000);
-    mPageColorAnimator.setInterpolator(new LinearInterpolator());
-    mRandomBg = RANDOM_BACKGROUND[new Random().nextInt(RANDOM_BACKGROUND.length)];
-  }
-
+  private Page1ViewHolder mPage1ViewHolder;
+  private Page2ViewHolder mPage2ViewHolder;
   private Page3ViewHolder mPage3ViewHolder;
+  private View mPage1View;
+  private View mPage2View;
+  private View mPage3View;
+
 
   @Override
   public void onActionLeftClicked() {
@@ -87,41 +50,40 @@ public class GuideActivity extends BaseActivity {
 
     WindowManager.LayoutParams attributes = getWindow().getAttributes();
     attributes.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+      attributes.flags |= WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
+    }
     getWindow().setAttributes(attributes);
+
+    mPage1View = getLayoutInflater().inflate(R.layout.page_guide_1, mVpGuide, false);
+    mPage1ViewHolder = new Page1ViewHolder(mPage1View);
+
+    mPage2View = getLayoutInflater().inflate(R.layout.page_guide_2_1, mVpGuide, false);
+    mPage2ViewHolder = new Page2ViewHolder(mPage2View);
+
+    mPage3View = getLayoutInflater().inflate(R.layout.page_guide_2, mVpGuide, false);
+    mPage3ViewHolder = new Page3ViewHolder(mPage3View);
 
     mVpGuide.setAdapter(new PagerAdapter() {
       @Override
       public int getCount() {
-        return 4;
+        return 3;
       }
 
       @Override
       public Object instantiateItem(ViewGroup container, int position) {
-        LayoutInflater inflater = LayoutInflater.from(GuideActivity.this);
         switch (position) {
           case 0: {
-            View inflate = inflater.inflate(R.layout.page_guide_1, container, false);
-            container.addView(inflate);
-            return inflate;
+            container.addView(mPage1View);
+            return mPage1View;
           }
           case 1: {
-            View inflate = inflater.inflate(R.layout.page_guide_2_1, container, false);
-            container.addView(inflate);
-            return inflate;
+            container.addView(mPage2View);
+            return mPage2View;
           }
           case 2: {
-            View inflate = inflater.inflate(R.layout.page_guide_2, container, false);
-            container.addView(inflate);
-            return inflate;
-          }
-          case 3: {
-            View inflate = inflater.inflate(R.layout.page_guide_3, container, false);
-            mPage3ViewHolder = new Page3ViewHolder(inflate);
-            container.addView(inflate);
-            mPage3ViewHolder.mPostPostView.mTvPraise.setOnClickListener(null);
-            mPage3ViewHolder.mPostPostView.setData(LOCAL_POST);
-            mPage3ViewHolder.mPostPostView.mAivBg.setImageResource(mRandomBg);
-            return inflate;
+            container.addView(mPage3View);
+            return mPage3View;
           }
         }
         return null;
@@ -138,34 +100,61 @@ public class GuideActivity extends BaseActivity {
       }
     });
 
-    mVpGuide.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+    final ViewPager.OnPageChangeListener listener = new ViewPager.OnPageChangeListener() {
+      private int previous = -1;
+
       @Override
       public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        mPageColorAnimator.setCurrentPlayTime((long) (1000 * (position + positionOffset)));
-        mVpGuide.setBackgroundColor((Integer) mPageColorAnimator.getAnimatedValue());
-        mInGuide.setPosition(position + positionOffset);
-
-        if (position == 2 && positionOffset > 0f) {
-          ViewHelper.setTranslationY(mIvWave, 40 * positionOffset);
-          ViewHelper.setAlpha(mPage3ViewHolder.mPostPostView, positionOffset);
-          ViewHelper.setAlpha(mInGuide, 1 - positionOffset);
-        } else if (position == 3 && positionOffset < 0f) {
-          ViewHelper.setTranslationY(mIvWave, 40 + (40 * positionOffset));
-          ViewHelper.setAlpha(mPage3ViewHolder.mPostPostView, 1 + positionOffset);
-          ViewHelper.setAlpha(mInGuide, -positionOffset);
-        }
       }
 
       @Override
       public void onPageSelected(int position) {
-
       }
 
       @Override
       public void onPageScrollStateChanged(int state) {
-
+        int currentItem = mVpGuide.getCurrentItem();
+        if (state == ViewPager.SCROLL_STATE_DRAGGING) {
+          switch (currentItem) {
+            case 0:
+              mPage2ViewHolder.hide();
+              mPage3ViewHolder.hide();
+              break;
+            case 1:
+              mPage1ViewHolder.hide();
+              mPage3ViewHolder.hide();
+              break;
+            case 2:
+              mPage1ViewHolder.hide();
+              mPage2ViewHolder.hide();
+              break;
+          }
+        } else if (state == ViewPager.SCROLL_STATE_IDLE) {
+          if (currentItem != previous) {
+            switch (currentItem) {
+              case 0:
+                mPage1ViewHolder.animate();
+                break;
+              case 1:
+                mPage2ViewHolder.animate();
+                break;
+              case 2:
+                mPage3ViewHolder.animate();
+                break;
+            }
+            previous = currentItem;
+          }
+        }
       }
-    });
+    };
+    mVpGuide.setOnPageChangeListener(listener);
+
+    getHandler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        listener.onPageScrollStateChanged(ViewPager.SCROLL_STATE_IDLE);
+      }
+    }, 1000);
   }
 
   @Override
@@ -194,27 +183,188 @@ public class GuideActivity extends BaseActivity {
     finish();
   }
 
-  public class Page3ViewHolder {
-    @InjectView (R.id.post_post_view)
-    public PostPostView mPostPostView;
+  public static class Page1ViewHolder {
+
+    @InjectView(R.id.iv_hearts)
+    public ImageView mIvHearts;
+
+    @InjectView(R.id.iv_big_heart)
+    public ImageView mIvBigHeart;
+
+    @InjectView(R.id.iv_circle)
+    public ImageView mIvCircle;
+
+    public Page1ViewHolder(View view) {
+      ButterKnife.inject(this, view);
+    }
+
+    public void animate() {
+      mIvHearts.setVisibility(View.VISIBLE);
+      mIvBigHeart.setVisibility(View.VISIBLE);
+      mIvCircle.setVisibility(View.VISIBLE);
+
+      AnimatorSet circle = new AnimatorSet();
+
+      circle.playTogether(
+          ObjectAnimator.ofFloat(mIvCircle, "alpha", 0f, 1f),
+          ObjectAnimator.ofFloat(mIvCircle, "scaleX", 0.3f, 1f),
+          ObjectAnimator.ofFloat(mIvCircle, "scaleY", 0.6f, 1f)
+      );
+      circle.setDuration(500);
+      circle.setInterpolator(new OvershootInterpolator(4f));
+
+      AnimatorSet heart = new AnimatorSet();
+
+      heart.playTogether(
+          ObjectAnimator.ofFloat(mIvBigHeart, "alpha", 0f, 0f, 1f),
+          ObjectAnimator.ofFloat(mIvBigHeart, "translationY", 300f, 300f, 0f)
+      );
+      heart.setDuration(1300);
+
+      AnimatorSet hearts = new AnimatorSet();
+
+      hearts.playTogether(
+          ObjectAnimator.ofFloat(mIvHearts, "alpha", 0f, 1f),
+          ObjectAnimator.ofFloat(mIvHearts, "translationY", -100f, 0f)
+      );
+      hearts.setDuration(700);
+
+      AnimatorSet set = new AnimatorSet();
+      set.playTogether(circle, hearts, heart);
+      set.start();
+    }
+
+    public void hide() {
+      mIvCircle.setVisibility(View.INVISIBLE);
+      mIvBigHeart.setVisibility(View.INVISIBLE);
+      mIvHearts.setVisibility(View.INVISIBLE);
+    }
+  }
+
+  public static class Page2ViewHolder {
+
+    @InjectView(R.id.iv_circle)
+    public ImageView mIvCircle;
+
+    @InjectView(R.id.iv_locations)
+    public ImageView mIvLocations;
+
+    @InjectView(R.id.iv_cards)
+    public ImageView mIvCards;
+
+    public Page2ViewHolder(View view) {
+      ButterKnife.inject(this, view);
+    }
+
+    public void animate() {
+      mIvCards.setVisibility(View.VISIBLE);
+      mIvCircle.setVisibility(View.VISIBLE);
+      mIvLocations.setVisibility(View.VISIBLE);
+
+
+      AnimatorSet circle = new AnimatorSet();
+
+      circle.playTogether(
+          ObjectAnimator.ofFloat(mIvCircle, "alpha", 0f, 1f),
+          ObjectAnimator.ofFloat(mIvCircle, "scaleX", 0.8f, 1f),
+          ObjectAnimator.ofFloat(mIvCircle, "scaleY", 0.2f, 1f)
+      );
+      circle.setDuration(500);
+      circle.setInterpolator(new OvershootInterpolator(4f));
+
+      AnimatorSet location = new AnimatorSet();
+
+      location.playTogether(
+          ObjectAnimator.ofFloat(mIvLocations, "alpha", 0f, 0f, 1f),
+          ObjectAnimator.ofFloat(mIvLocations, "translationY", 200f, 200f, 0f)
+      );
+      location.setDuration(1000);
+
+      AnimatorSet card = new AnimatorSet();
+
+      card.playTogether(
+          ObjectAnimator.ofFloat(mIvCards, "alpha", 0f, 0f, 1f),
+          ObjectAnimator.ofFloat(mIvCards, "translationY", -300f, -300f, 0f)
+      );
+      card.setDuration(1300);
+
+      AnimatorSet set = new AnimatorSet();
+      set.playTogether(circle, location, card);
+      set.start();
+    }
+
+    public void hide() {
+      mIvCircle.setVisibility(View.INVISIBLE);
+      mIvCards.setVisibility(View.INVISIBLE);
+      mIvLocations.setVisibility(View.INVISIBLE);
+    }
+  }
+
+  public static class Page3ViewHolder {
+
+    @InjectView(R.id.iv_circle)
+    public ImageView mIvCircle;
+
+    @InjectView(R.id.iv_boy)
+    public ImageView mIvBoy;
+
+    @InjectView(R.id.iv_girl)
+    public ImageView mIvGirl;
+
+    @OnClick(R.id.tv_register)
+    public void onTvRegisterClicked(View view) {
+      RegisterActivity.start(view.getContext(), "");
+    }
+
+    @OnClick(R.id.tv_login)
+    public void onTvLoginClicked(View view) {
+      LoginActivity.start(view.getContext(), "");
+    }
 
     public Page3ViewHolder(View view) {
       ButterKnife.inject(this, view);
     }
 
-    @OnClick (R.id.tv_login)
-    public void onTvLoginClicked() {
-      startActivity(new Intent(GuideActivity.this, LoginActivity.class));
+    public void animate() {
+      mIvCircle.setVisibility(View.VISIBLE);
+      mIvBoy.setVisibility(View.VISIBLE);
+      mIvGirl.setVisibility(View.VISIBLE);
+
+      AnimatorSet circle = new AnimatorSet();
+
+      circle.playTogether(
+          ObjectAnimator.ofFloat(mIvCircle, "alpha", 0f, 1f),
+          ObjectAnimator.ofFloat(mIvCircle, "scaleX", 0.8f, 1f),
+          ObjectAnimator.ofFloat(mIvCircle, "scaleY", 0.2f, 1f)
+      );
+      circle.setDuration(500);
+      circle.setInterpolator(new OvershootInterpolator(4f));
+
+      AnimatorSet boy = new AnimatorSet();
+      boy.playTogether(
+          ObjectAnimator.ofFloat(mIvBoy, "alpha", 0f, 0f, 1f),
+          ObjectAnimator.ofFloat(mIvBoy, "translationX", -500f, -500f, 0)
+      );
+      boy.setDuration(1300);
+      boy.setInterpolator(new OvershootInterpolator(2f));
+
+      AnimatorSet girl = new AnimatorSet();
+      girl.playTogether(
+          ObjectAnimator.ofFloat(mIvGirl, "alpha", 0f, 0f, 1f),
+          ObjectAnimator.ofFloat(mIvGirl, "translationX", 500f, 500f, 0f)
+      );
+      girl.setDuration(1300);
+      girl.setInterpolator(new OvershootInterpolator(2f));
+
+      AnimatorSet set = new AnimatorSet();
+      set.playTogether(circle, boy, girl);
+      set.start();
     }
 
-    @OnClick (R.id.tv_join)
-    public void onTvJoinClicked() {
-      startActivity(new Intent(GuideActivity.this, RegisterActivity.class));
-    }
-
-    @OnClick (R.id.tv_forget_pwd)
-    public void onTvForgetPwdClicked() {
-      startActivity(new Intent(GuideActivity.this, ForgetPwdActivity.class));
+    public void hide() {
+      mIvCircle.setVisibility(View.INVISIBLE);
+      mIvBoy.setVisibility(View.INVISIBLE);
+      mIvGirl.setVisibility(View.INVISIBLE);
     }
   }
 }

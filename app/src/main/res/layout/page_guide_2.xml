@@ -1,28 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-
-    <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/page_guide_margin_top"
-            android:layout_marginBottom="60dp"
-            android:layout_centerHorizontal="true"
-            android:layout_above="@+id/tv_tip"
-            android:src="@drawable/guide_2"/>
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+        >
 
     <TextView
             android:id="@+id/tv_tip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
+            android:layout_marginTop="50dp"
             android:layout_centerHorizontal="true"
-            android:layout_above="@+id/tv_sub_tip"
-            android:text="带上面具，畅所欲言"
-            android:textSize="26sp"
-            android:textColor="@android:color/black"/>
+            android:textSize="23sp"
+            android:textColor="@android:color/white"
+            android:text="相遇相知相系，变得如此容易"
+            android:shadowDx="0"
+            android:shadowDy="6"
+            android:shadowRadius="2"
+            android:shadowColor="#44000000"
+            />
 
     <TextView
             android:id="@+id/tv_sub_tip"
@@ -30,12 +26,89 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:layout_marginBottom="100dp"
+            android:layout_marginTop="12dp"
             android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:gravity="center"
-            android:textSize="16sp"
-            android:textColor="@android:color/black"
-            android:text="没名字，没头像，没资料，严格隐藏真实身份。无所谓你是谁，只关注你想说什么"/>
+            android:layout_below="@+id/tv_tip"
+            android:textSize="15sp"
+            android:textColor="@android:color/white"
+            android:text="同厂、同乡的我和TA，心生好感，渴望相识，却开不了口。是蓝莓，消逝彼此的距离，加个朋友，这是一切的开始"
+            android:shadowDx="0"
+            android:shadowDy="4"
+            android:shadowRadius="2"
+            android:shadowColor="#44000000"
+            />
 
+    <ImageView
+            android:id="@+id/iv_circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="200dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/guide_3_component_circle"
+            />
+
+    <ImageView
+            android:id="@+id/iv_girl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="205dp"
+            android:layout_marginLeft="120dp"
+            android:layout_marginStart="120dp"
+            android:layout_alignLeft="@+id/iv_circle"
+            android:layout_alignStart="@+id/iv_circle"
+            android:src="@drawable/guide_3_component_girl"
+            />
+
+    <ImageView
+            android:id="@+id/iv_boy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="230dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_alignLeft="@+id/iv_circle"
+            android:layout_alignStart="@+id/iv_circle"
+            android:src="@drawable/guide_3_component_boy"
+            />
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="64dp"
+            android:fitsSystemWindows="true"
+            >
+
+            <TextView
+                    android:id="@+id/tv_register"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/register"
+                    android:textSize="18sp"
+                    android:textColor="#ff9a00ff"
+                    android:gravity="center"
+                    android:background="@drawable/rounded_rect_white"
+                    />
+
+            <TextView
+                    android:id="@+id/tv_login"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginRight="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:text="@string/login"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/white"
+                    android:gravity="center"
+                    android:background="@drawable/round_border"
+                    />
+    </LinearLayout>
 </RelativeLayout>

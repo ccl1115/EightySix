@@ -2,40 +2,70 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-    <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/page_guide_margin_top"
-            android:layout_marginBottom="60dp"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/guide_3"
-            android:layout_above="@+id/tv_tip"/>
+                android:layout_height="match_parent"
+        >
 
     <TextView
             android:id="@+id/tv_tip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
+            android:layout_marginTop="50dp"
             android:layout_centerHorizontal="true"
-            android:layout_above="@+id/tv_sub_tip"
-            android:text="分享心事，获得共鸣"
-            android:textSize="26sp"
-            android:textColor="@android:color/black"/>
+            android:text="汇聚厂里最关心的人和事"
+            android:textSize="23sp"
+            android:textColor="@android:color/white"
+            android:shadowDx="0"
+            android:shadowDy="6"
+            android:shadowRadius="2"
+            android:shadowColor="#44000000"
+            />
 
     <TextView
             android:id="@+id/tv_sub_tip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginBottom="100dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="12dp"
             android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:gravity="center"
-            android:textSize="16sp"
-            android:textColor="@android:color/black"
-            android:text="每当你觉得孤单，烦恼，心酸，想找个地方说说话时，最懂你的人就在身边"/>
+            android:layout_below="@+id/tv_tip"
+            android:textSize="15sp"
+            android:textColor="@android:color/white"
+            android:text="在蓝莓，我们一起爆照、吐槽、说心事、寻求帮助，我要的抚慰与共鸣都在身边，近在咫尺"
+            android:shadowDx="0"
+            android:shadowDy="4"
+            android:shadowRadius="2"
+            android:shadowColor="#44000000"
+            />
+
+    <ImageView
+            android:id="@+id/iv_circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="200dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/guide_2_component_circle"
+            android:visibility="invisible"
+            />
+
+    <ImageView
+            android:id="@+id/iv_locations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="265dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/guide_2_component_locations"
+            android:visibility="invisible"
+            />
+
+    <ImageView
+            android:id="@+id/iv_cards"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="190dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/guide_2_component_cards"
+            android:visibility="invisible"
+            />
 
 </RelativeLayout>

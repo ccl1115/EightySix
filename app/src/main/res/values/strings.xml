@@ -83,7 +83,7 @@
 
     <!-- RegisterActivity -->
     <string name="register_phone_intro">手机号仅用来验证你的打工者身份\n并识别出你在蓝莓里认识的人</string>
-    <string name="register">注册</string>
+    <string name="register">注册加入</string>
     <string name="register_success">注册成功</string>
     <string name="optional">（可不填）</string>
     <string name="invite">邀请码</string>
