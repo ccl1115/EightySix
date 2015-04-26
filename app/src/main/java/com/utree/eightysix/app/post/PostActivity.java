@@ -247,9 +247,9 @@ public class PostActivity extends BaseActivity
 
     String[] items;
     if (comment.self == 1 || mPost.owner == 1) {
-      items = new String[]{getString(R.string.start_chat), getString(R.string.like), getString(R.string.share), getString(R.string.report), getString(R.string.delete)};
+      items = new String[]{getString(R.string.chat_anonymous), getString(R.string.like), getString(R.string.share), getString(R.string.report), getString(R.string.delete)};
     } else {
-      items = new String[]{getString(R.string.start_chat), getString(R.string.like), getString(R.string.share), getString(R.string.report)};
+      items = new String[]{getString(R.string.chat_anonymous), getString(R.string.like), getString(R.string.share), getString(R.string.report)};
     }
 
     mCommentContextDialog = new AlertDialog.Builder(this).setTitle(getString(R.string.comment_action))
