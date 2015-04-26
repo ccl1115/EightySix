@@ -161,7 +161,6 @@ public class HometownTabFragment extends HolderFragment {
     mHotHometownFeedsFragment.setHometown(hometownId, hometownType);
 
     if (getBaseActivity() != null) {
-      getBaseActivity().setTopTitle(hometownName);
       getBaseActivity().setTopSubTitle("");
     }
 
