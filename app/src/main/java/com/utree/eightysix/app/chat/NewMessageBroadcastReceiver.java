@@ -16,6 +16,8 @@ public class NewMessageBroadcastReceiver extends BroadcastReceiver {
 
   @Override
   public void onReceive(Context context, Intent intent) {
+    abortBroadcast();
+
     EMMessage message = EMChatManager.getInstance().getMessage(intent.getStringExtra("msgid"));
 
     Log.d(C.TAG.CH, "onReceiveMessage");
@@ -34,7 +36,5 @@ public class NewMessageBroadcastReceiver extends BroadcastReceiver {
         new NewMessageWorker(m, message).execute();
       }
     }
-
-    abortBroadcast();
   }
 }

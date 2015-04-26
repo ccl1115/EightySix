@@ -21,16 +21,20 @@ import de.akquinet.android.androlog.Log;
 public class ChatAccount {
 
   private static ChatAccount sChatAccount;
+
   private NewMessageBroadcastReceiver mNewMessageBroadcastReceiver;
+  private NewCmdMessageBroadcastReceiver mNewCmdMessageBroadcastReceiver;
 
   private Sender mSender;
   private FriendSender mFriendSender;
+  private MessageCmdHandler mMessageCmdHandler;
 
   private boolean mIsLogin;
 
   private ChatAccount() {
     mSender = new SenderImpl();
     mFriendSender = new FriendSenderImpl();
+    mMessageCmdHandler = new MessageCmdHandler();
   }
 
   public static ChatAccount inst() {
@@ -43,6 +47,10 @@ public class ChatAccount {
       sChatAccount.login();
     }
     return sChatAccount;
+  }
+
+  public MessageCmdHandler getMessageCmdHandler() {
+    return mMessageCmdHandler;
   }
 
   public Sender getSender() {
@@ -113,6 +121,11 @@ public class ChatAccount {
                   filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY - 1);
                   U.getContext().getApplicationContext().registerReceiver(mNewMessageBroadcastReceiver, filter);
 
+                  mNewCmdMessageBroadcastReceiver = new NewCmdMessageBroadcastReceiver();
+                  IntentFilter filter1 = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
+                  filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY - 1);
+                  U.getContext().getApplicationContext().registerReceiver(mNewCmdMessageBroadcastReceiver, filter1);
+
                   EMChat.getInstance().setAppInited();
                 }
               });
@@ -159,6 +172,10 @@ public class ChatAccount {
   public void unregisterReceiver() {
     if (mNewMessageBroadcastReceiver != null) {
       U.getContext().getApplicationContext().unregisterReceiver(mNewMessageBroadcastReceiver);
+    }
+
+    if (mNewCmdMessageBroadcastReceiver != null) {
+      U.getContext().getApplicationContext().unregisterReceiver(mNewCmdMessageBroadcastReceiver);
     }
   }
 

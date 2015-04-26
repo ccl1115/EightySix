@@ -56,6 +56,11 @@ public class FChatActivity extends BaseActivity implements
   EmojiconGridFragment.OnEmojiconClickedListener {
 
   public static void start(Context context, String chatId) {
+    context.startActivity(getIntent(context, chatId));
+  }
+
+  public static Intent getIntent(Context context, String chatId) {
+
     Intent intent = new Intent(context, FChatActivity.class);
     intent.putExtra("chatId", chatId);
 
@@ -63,7 +68,7 @@ public class FChatActivity extends BaseActivity implements
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     }
 
-    context.startActivity(intent);
+    return intent;
   }
 
   private static String sCurrentFChatId;

@@ -72,7 +72,7 @@ public class FConversationUtil {
   }
 
 
-  static String getChatIdByViewId(int viewId) {
+  public static String getChatIdByViewId(int viewId) {
     FriendConversation friendConversation = DaoUtils.getFriendConversationDao().queryBuilder()
         .where(FriendConversationDao.Properties.ViewId.eq(viewId))
         .limit(1)
@@ -80,7 +80,7 @@ public class FConversationUtil {
     return friendConversation == null ? null : friendConversation.getChatId();
   }
 
-  static void createIfNotExist(FriendChatResponse.FriendChat chat, int viewId, String chatType) {
+  public static void createIfNotExist(FriendChatResponse.FriendChat chat, int viewId, String chatType) {
     FriendConversation conversation = DaoUtils.getFriendConversationDao().queryBuilder()
         .where(FriendConversationDao.Properties.ChatId.eq(chat.chatId))
         .limit(1)

@@ -395,4 +395,12 @@
         <sign/>
         <token/>
     </request>
+
+    <request>
+        <id>message_unread</id>
+        <name>未读消息</name>
+        <path>/message/unread</path>
+        <sign/>
+        <token/>
+    </request>
 </api>
