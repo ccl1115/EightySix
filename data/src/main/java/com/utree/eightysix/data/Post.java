@@ -95,6 +95,9 @@ public class Post extends BaseItem implements Parcelable {
   @SerializedName("levelIcon")
   public String levelIcon;
 
+  @SerializedName("viewerName")
+  public String viewerName;
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
