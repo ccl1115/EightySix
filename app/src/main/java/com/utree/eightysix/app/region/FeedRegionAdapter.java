@@ -52,14 +52,13 @@ public class FeedRegionAdapter extends BaseAdapter {
   public static final int TYPE_FEED_INTENT = 12;
   public static final int TYPE_BAINIAN = 13;
 
-  private FeedsByRegion mFeeds;
+  protected Feeds mFeeds;
 
   protected int mTipSourcePosition = TNS;
   protected int mTipPraisePosition = TNS;
   protected int mTipRepostPosition = TNS;
   protected int mTipTempNamePosition = TNS;
   protected int mTipTagsPosition = TNS;
-
 
   public FeedRegionAdapter(FeedsByRegion feeds) {
     mFeeds = feeds;
