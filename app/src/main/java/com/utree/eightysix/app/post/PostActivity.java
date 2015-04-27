@@ -192,7 +192,7 @@ public class PostActivity extends BaseActivity
     }
 
     mIvAnonymous.setSelected(!selected);
-
+    mEtPostContent.setHint(!selected ? "匿名发表评论" : "发表评论");
     Account.inst().setCommentAnonymous(!selected);
   }
 
@@ -328,6 +328,7 @@ public class PostActivity extends BaseActivity
 
     mIvAnonymous.setVisibility(View.VISIBLE);
     mIvAnonymous.setSelected(Account.inst().getCommentAnonymous());
+    mEtPostContent.setHint(mIvAnonymous.isSelected() ? "匿名发表评论" : "发表评论");
 
     mLvComments.setOnScrollListener(new AbsListView.OnScrollListener() {
       @Override
@@ -682,7 +683,7 @@ public class PostActivity extends BaseActivity
         }
 
         if (!Account.inst().hasCancelCommentAnonymousSet()) {
-          if (!TextUtils.isEmpty(mPost.userName)) {
+          if (!TextUtils.isEmpty(mPost.userName) && mPost.owner == 1) {
             mIvAnonymous.setSelected(false);
           }
         }
