@@ -229,6 +229,13 @@ public class PostActivity extends BaseActivity
       }
     });
 
+    dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+      @Override
+      public void onCancel(DialogInterface dialog) {
+        mIvAnonymous.setSelected(true);
+      }
+    });
+
     dialog.show();
   }
 

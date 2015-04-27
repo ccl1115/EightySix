@@ -704,6 +704,13 @@ public class PublishActivity extends BaseActivity implements
       }
     });
 
+    dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+      @Override
+      public void onCancel(DialogInterface dialog) {
+        mCbAnonymous.setChecked(true);
+      }
+    });
+
     dialog.show();
   }
 
