@@ -102,10 +102,14 @@ public class TopicListAdapter extends BaseAdapter {
       convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_head, parent, false);
     }
 
+    TextView textView = (TextView) convertView.findViewById(R.id.tv_head);
+    textView.setCompoundDrawablePadding(U.dp2px(8));
     if (position == 0) {
-      ((TextView) convertView.findViewById(R.id.tv_head)).setText(mTopics.newTopic.headTitle);
+      textView.setText(mTopics.newTopic.headTitle);
+      textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_head_newest_topic, 0, 0, 0);
     } else {
-      ((TextView) convertView.findViewById(R.id.tv_head)).setText(mTopics.hotTopic.headTitle);
+      textView.setText(mTopics.hotTopic.headTitle);
+      textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_head_daily_picks, 0, 0, 0);
     }
 
     return convertView;
