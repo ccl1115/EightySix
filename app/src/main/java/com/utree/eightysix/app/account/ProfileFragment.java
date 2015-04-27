@@ -392,6 +392,12 @@ public class ProfileFragment extends HolderFragment {
               mTvMyFriends.setVisibility(View.GONE);
               getBaseActivity().getTopBar().setTitle(getArguments().getString("userName"));
 
+              if (response.object.postPrivacy.equals("on")) {
+                mTvMyPosts.setVisibility(View.GONE);
+              } else if (response.object.postPrivacy.equals("off")) {
+                mTvMyPosts.setVisibility(View.VISIBLE);
+              }
+
               mTvAction.setVisibility(View.VISIBLE);
               if ("男".equals(mProfile.sex)) {
                 mTvMyPosts.setText("他的帖子");

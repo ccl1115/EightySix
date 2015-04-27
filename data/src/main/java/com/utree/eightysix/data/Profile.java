@@ -66,4 +66,7 @@ public class Profile {
 
   @SerializedName("isMyself")
   public int isMyself;
+
+  @SerializedName("postPrivacy")
+  public String postPrivacy;
 }
