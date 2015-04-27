@@ -74,6 +74,7 @@ public class ExploreFragment extends BaseFragment {
 
     @Override
     public void run() {
+      if (mVpTopics == null || mVpTopics.getAdapter() == null) return;
       int currentItem = mVpTopics.getCurrentItem();
       if (currentItem == mVpTopics.getAdapter().getCount() - 1) {
         mVpTopics.setCurrentItem(0);
