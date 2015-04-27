@@ -72,8 +72,6 @@ public class CircleSearchActivity extends BaseActivity {
 
   private boolean mSelectMode;
 
-  private boolean mLocatingFinished;
-  private boolean mRequestSearchStarted;
   private ThemedDialog mCircleSetDialog;
 
   public static void start(Context context, boolean select) {
@@ -286,7 +284,6 @@ public class CircleSearchActivity extends BaseActivity {
   }
 
   private void requestSearch(final int page, final String keyword) {
-    mRequestSearchStarted = true;
     request(new SearchCircleRequest(page, keyword), new OnResponse<CirclesResponse>() {
       @Override
       public void onResponse(CirclesResponse response) {
