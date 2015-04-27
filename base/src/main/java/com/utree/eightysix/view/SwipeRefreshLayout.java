@@ -20,7 +20,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
@@ -69,7 +68,6 @@ public class SwipeRefreshLayout extends ViewGroup {
   private static final int REFRESH_TRIGGER_DISTANCE = 120;
   private static final int INVALID_POINTER = -1;
 
-  private SwipeProgressBar mProgressBar; //the thing that shows progress is going
   private View mTarget; //the content that gets pulled down
   private int mOriginalOffsetTop;
   private OnRefreshListener mListener;
@@ -116,8 +114,6 @@ public class SwipeRefreshLayout extends ViewGroup {
   private Animation mShrinkTrigger = new Animation() {
     @Override
     public void applyTransformation(float interpolatedTime, Transformation t) {
-      float percent = mFromPercentage + ((0 - mFromPercentage) * interpolatedTime);
-      mProgressBar.setTriggerPercentage(percent);
     }
   };
 
@@ -156,14 +152,6 @@ public class SwipeRefreshLayout extends ViewGroup {
       mReturningToStart = true;
       // Timeout fired since the user last moved their finger; animate the
       // trigger to 0 and put the target back at its original position
-      if (mProgressBar != null) {
-        mFromPercentage = mCurrPercentage;
-        mShrinkTrigger.setDuration(mMediumAnimationDuration);
-        mShrinkTrigger.setAnimationListener(mShrinkAnimationListener);
-        mShrinkTrigger.reset();
-        mShrinkTrigger.setInterpolator(mDecelerateInterpolator);
-        startAnimation(mShrinkTrigger);
-      }
       animateOffsetToStartPosition(mCurrentTargetOffsetTop + getPaddingTop(),
           mReturnToStartPositionListener);
       mListener.onCancel();
@@ -196,7 +184,6 @@ public class SwipeRefreshLayout extends ViewGroup {
         android.R.integer.config_mediumAnimTime);
 
     setWillNotDraw(false);
-    mProgressBar = new SwipeProgressBar(this);
     final DisplayMetrics metrics = getResources().getDisplayMetrics();
     mProgressBarHeight = (int) (metrics.density * PROGRESS_BAR_HEIGHT);
     mDecelerateInterpolator = new DecelerateInterpolator(DECELERATE_INTERPOLATION_FACTOR);
@@ -246,7 +233,6 @@ public class SwipeRefreshLayout extends ViewGroup {
       return;
     }
     mCurrPercentage = percent;
-    mProgressBar.setTriggerPercentage(percent);
   }
 
   /**
@@ -260,11 +246,6 @@ public class SwipeRefreshLayout extends ViewGroup {
       ensureTarget();
       mCurrPercentage = 0;
       mRefreshing = refreshing;
-      if (mRefreshing) {
-        mProgressBar.start();
-      } else {
-        mProgressBar.stop();
-      }
     }
   }
 
@@ -295,7 +276,6 @@ public class SwipeRefreshLayout extends ViewGroup {
    */
   public void setColorSchemeColors(int color1, int color2, int color3, int color4) {
     ensureTarget();
-    mProgressBar.setColorScheme(color1, color2, color3, color4);
   }
 
   /**
@@ -328,16 +308,9 @@ public class SwipeRefreshLayout extends ViewGroup {
   }
 
   @Override
-  public void draw(Canvas canvas) {
-    super.draw(canvas);
-    mProgressBar.draw(canvas);
-  }
-
-  @Override
   protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
     final int width = getMeasuredWidth();
     final int height = getMeasuredHeight();
-    mProgressBar.setBounds(0, 0, width, mProgressBarHeight);
     if (getChildCount() == 0) {
       return;
     }
