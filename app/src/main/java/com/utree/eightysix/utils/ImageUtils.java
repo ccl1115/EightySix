@@ -14,6 +14,7 @@ import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.U;
 import com.utree.eightysix.request.UploadImageRequest;
 import com.utree.eightysix.response.UploadImageResponse;
+import com.utree.eightysix.rest.HandlerWrapper;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.RequestData;
@@ -159,7 +160,7 @@ public class ImageUtils {
    * @param file the bitmap file
    * @return bitmap or null if error occurred
    */
-  @SuppressWarnings ("SuspiciousNameCombination")
+  @SuppressWarnings("SuspiciousNameCombination")
   public static Bitmap safeDecodeBitmap(File file) {
     int widthPixels = (int) (U.getContext().getResources().getDisplayMetrics().widthPixels * 0.75);
     try {
@@ -193,7 +194,7 @@ public class ImageUtils {
    * @param hash the bitmap snapshot
    * @return bitmap or null if error occurred
    */
-  @SuppressWarnings ("SuspiciousNameCombination")
+  @SuppressWarnings("SuspiciousNameCombination")
   public static Bitmap safeDecodeBitmap(String hash) {
     int widthPixels = 600;
     try {
@@ -221,7 +222,7 @@ public class ImageUtils {
     }
   }
 
-  @SuppressWarnings ("SuspiciousNameCombination")
+  @SuppressWarnings("SuspiciousNameCombination")
   public static Bitmap safeDecodeBitmap(int resId) {
     int widthPixels = 600;
     try {
@@ -477,22 +478,23 @@ public class ImageUtils {
     protected void onPostExecute(Void aVoid) {
       RequestData<UploadImageResponse> data = new RequestData<UploadImageResponse>(new UploadImageRequest(mFile));
       data.setHost(U.getConfig("api.host.second"));
-      U.getRESTRequester().request(data, new OnResponse2<UploadImageResponse>() {
-        @Override
-        public void onResponseError(Throwable e) {
-          U.getBus().post(new ImageUploadedEvent(null, null));
-        }
+      U.getRESTRequester().request(data,
+          new HandlerWrapper<UploadImageResponse>(data, new OnResponse2<UploadImageResponse>() {
+            @Override
+            public void onResponseError(Throwable e) {
+              U.getBus().post(new ImageUploadedEvent(null, null));
+            }
 
-        @Override
-        public void onResponse(UploadImageResponse response) {
-          if (RESTRequester.responseOk(response)) {
-            cacheImage(mFileHash, mFile);
-            U.getBus().post(new ImageUploadedEvent(mFileHash, response.object.imageUrl));
-          } else {
-            U.getBus().post(new ImageUploadedEvent(null, null));
-          }
-        }
-      }, UploadImageResponse.class);
+            @Override
+            public void onResponse(UploadImageResponse response) {
+              if (RESTRequester.responseOk(response)) {
+                cacheImage(mFileHash, mFile);
+                U.getBus().post(new ImageUploadedEvent(mFileHash, response.object.imageUrl));
+              } else {
+                U.getBus().post(new ImageUploadedEvent(null, null));
+              }
+            }
+          }, UploadImageResponse.class));
     }
   }
 
