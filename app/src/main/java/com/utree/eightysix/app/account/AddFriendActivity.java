@@ -1,6 +1,7 @@
 package com.utree.eightysix.app.account;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -29,6 +30,7 @@ import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.Circle;
+import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.qrcode.QRCodeScanEvent;
 import com.utree.eightysix.qrcode.QRCodeScanFragment;
 import com.utree.eightysix.response.FriendListResponse;
@@ -150,7 +152,9 @@ public class AddFriendActivity extends BaseActivity {
 
       mEtSearchHint.setFocusable(false);
       mEtSearchHint.setHint("输入蓝莓ID或者昵称");
+      mEtSearchHint.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(2), Color.WHITE));
       mTvHead.setText("朋友推荐");
+
     }
   }
 
