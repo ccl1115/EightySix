@@ -64,7 +64,7 @@ public class VisitorPostsActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    setTopSubTitle("非匿名贴");
+    setTopSubTitle("非匿名帖");
 
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
