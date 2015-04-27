@@ -28,7 +28,7 @@ import com.utree.eightysix.widget.RoundedButton;
 public class MsgCenterFragment extends BaseFragment {
 
   @InjectView(R.id.rb_count_msg)
-  public RoundedButton mRbCountMsg;
+  public CounterView mRbCountMsg;
 
   @InjectView(R.id.rb_count_chat)
   public CounterView mRbCountChat;
@@ -108,7 +108,7 @@ public class MsgCenterFragment extends BaseFragment {
         mRbCountFChat.setCount(event.getCount());
         break;
       case HomeTabActivity.MsgCountEvent.TYPE_NEW_COMMENT_COUNT:
-        mRbCountChat.setCount(event.getCount());
+        mRbCountMsg.setCount(event.getCount());
         break;
     }
   }
