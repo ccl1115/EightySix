@@ -347,9 +347,9 @@ public class ProfileFragment extends HolderFragment {
 
           mTvName.setText(mProfile.userName);
           if (mProfile.birthday == -1) {
-            mTvBirthday.setVisibility(View.GONE);
-            mTvAge.setVisibility(View.GONE);
-            mTvConstellation.setVisibility(View.GONE);
+            mTvBirthday.setVisibility(View.INVISIBLE);
+            mTvAge.setVisibility(View.INVISIBLE);
+            mTvConstellation.setVisibility(View.INVISIBLE);
           } else {
             mTvBirthday.setVisibility(View.VISIBLE);
             mTvBirthday.setText(TimeUtil.getDate(mProfile.birthday));
@@ -374,7 +374,9 @@ public class ProfileFragment extends HolderFragment {
             getTopBar().getAbLeft().setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View v) {
-                getBaseActivity().finish();
+                if (getBaseActivity() instanceof FragmentHolder) {
+                  getBaseActivity().finish();
+                }
               }
             });
 
@@ -383,7 +385,7 @@ public class ProfileFragment extends HolderFragment {
               mTvSettings.setVisibility(View.VISIBLE);
               mTvMyCircles.setVisibility(View.VISIBLE);
               mTvMyFriends.setVisibility(View.VISIBLE);
-              mTvAction.setVisibility(View.GONE);
+              mTvAction.setVisibility(View.INVISIBLE);
               getBaseActivity().getTopBar().setTitle("我");
             } else {
               mRbChangeBg.setVisibility(View.GONE);
@@ -455,7 +457,9 @@ public class ProfileFragment extends HolderFragment {
           mPbExp.setProgress(mProfile.experience);
 
         } else {
-          getBaseActivity().finish();
+          if (getBaseActivity() instanceof FragmentHolder) {
+            getBaseActivity().finish();
+          }
         }
       }
     }, ProfileResponse.class, userId);
