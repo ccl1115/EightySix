@@ -75,6 +75,11 @@ public abstract class AbsRegionFragment extends BaseFragment {
   private OnScrollListener mOnScrollListener;
   private boolean mHidden;
 
+  /**
+   * 是否设置了在职
+   */
+  private boolean mCircleSelected;
+
   {
     if (mDistance != 0) {
       mRegionType = 4;
@@ -318,7 +323,11 @@ public abstract class AbsRegionFragment extends BaseFragment {
     } else if (mRegionType == 0) {
       getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_drawer));
       getTopBar().setTitleTabSelected(0);
-      getTopBar().setSubTitle(String.format("%s | %s", mCircle == null ? "" : mCircle.shortName, mSubInfo == null ? "" : mSubInfo));
+      if (mCircleSelected) {
+        getTopBar().setSubTitle(String.format("%s | %s", mCircle == null ? "" : mCircle.shortName, mSubInfo == null ? "" : mSubInfo));
+      } else {
+        getTopBar().setSubTitle("");
+      }
       getTopBar().setTitleTabText(0, "在职");
 
       if (mCircle != null && mCircle.snapshot == 1) {
@@ -385,6 +394,8 @@ public abstract class AbsRegionFragment extends BaseFragment {
 
       mPageInfo = response.object.posts.page;
       mSubInfo = response.object.subInfo;
+      mCircleSelected = response.object.selectFactory == 1;
+
       updateTitleBar();
 
       if (response.object.fetch != null) {
@@ -434,7 +445,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
         U.getBus().post(new CircleResponseEvent(mCircle));
 
         M.getRegisterHelper().unregister(mFeedAdapter);
-        mFeedAdapter = new FeedRegionAdapter(response.object);
+        mFeedAdapter = new FeedAdapter(response.object);
         M.getRegisterHelper().register(mFeedAdapter);
         mLvFeed.setAdapter(mFeedAdapter);
 
@@ -452,6 +463,8 @@ public abstract class AbsRegionFragment extends BaseFragment {
 
       mPageInfo = response.object.posts.page;
       mSubInfo = response.object.subInfo;
+      mCircleSelected = response.object.selectFactory == 1;
+
       updateTitleBar();
 
       if (response.object.fetch != null) {
@@ -512,6 +525,8 @@ public abstract class AbsRegionFragment extends BaseFragment {
         mLvFeed.setAdapter(mFeedAdapter);
 
         mRegionType = response.object.regionType;
+        mCircleSelected = response.object.selectFactory == 1;
+
         updateTitleBar();
 
         U.getBus().post(new RegionResponseEvent(getRegionType(), mDistance));
@@ -550,7 +565,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
         }
 
         M.getRegisterHelper().unregister(mFeedAdapter);
-        mFeedAdapter = new FeedRegionAdapter(response.object);
+        mFeedAdapter = new FeedAdapter(response.object);
         M.getRegisterHelper().register(mFeedAdapter);
         mLvFeed.setAdapter(mFeedAdapter);
 

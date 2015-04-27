@@ -13,6 +13,8 @@ import java.util.List;
  */
 public class FeedAdapter extends FeedRegionAdapter {
 
+  private Feeds mFeeds;
+
   public FeedAdapter(Feeds feeds) {
     mFeeds = feeds;
 

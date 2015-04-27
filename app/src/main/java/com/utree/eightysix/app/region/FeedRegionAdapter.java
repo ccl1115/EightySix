@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.region;
 
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +17,9 @@ import com.squareup.picasso.Picasso;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
+import com.utree.eightysix.app.account.AddFriendActivity;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.*;
-import com.utree.eightysix.app.feed.event.InviteClickedEvent;
-import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
 import com.utree.eightysix.app.feed.event.UploadClickedEvent;
 import com.utree.eightysix.data.*;
 import com.utree.eightysix.utils.CmdHandler;
@@ -52,7 +52,7 @@ public class FeedRegionAdapter extends BaseAdapter {
   public static final int TYPE_FEED_INTENT = 12;
   public static final int TYPE_BAINIAN = 13;
 
-  protected Feeds mFeeds;
+  private FeedsByRegion mFeeds;
 
   protected int mTipSourcePosition = TNS;
   protected int mTipPraisePosition = TNS;
@@ -61,7 +61,7 @@ public class FeedRegionAdapter extends BaseAdapter {
   protected int mTipTagsPosition = TNS;
 
 
-  public FeedRegionAdapter(Feeds feeds) {
+  public FeedRegionAdapter(FeedsByRegion feeds) {
     mFeeds = feeds;
 
     if (mFeeds.selectFactory != 1) {
@@ -433,7 +433,7 @@ public class FeedRegionAdapter extends BaseAdapter {
       @Override
       public void onClick(View v) {
         U.getAnalyser().trackEvent(U.getContext(), "feed_unlock", "feed_unlock");
-        U.getBus().post(new UnlockClickedEvent());
+        v.getContext().startActivity(new Intent(v.getContext(), AddFriendActivity.class));
       }
     });
 
@@ -552,9 +552,9 @@ public class FeedRegionAdapter extends BaseAdapter {
 
   static class InviteFriendViewHolder {
     @OnClick(R.id.rb_invite)
-    public void onRbInviteClicked() {
-      U.getAnalyser().trackEvent(U.getContext(), "feed_invite_friend", "feed_invite_friend");
-      U.getBus().post(new InviteClickedEvent());
+    public void onRbInviteClicked(View v) {
+      U.getAnalyser().trackEvent(v.getContext(), "feed_invite_friend", "feed_invite_friend");
+      v.getContext().startActivity(new Intent(v.getContext(), AddFriendActivity.class));
     }
 
     public InviteFriendViewHolder(View view) {
@@ -564,9 +564,9 @@ public class FeedRegionAdapter extends BaseAdapter {
 
   static class InviteFactoryViewHolder {
     @OnClick(R.id.rb_invite)
-    public void onRbInviteClicked() {
+    public void onRbInviteClicked(View v) {
       U.getAnalyser().trackEvent(U.getContext(), "feed_invite_factory", "feed_invite_factory");
-      U.getBus().post(new InviteClickedEvent());
+      v.getContext().startActivity(new Intent(v.getContext(), AddFriendActivity.class));
     }
 
     public InviteFactoryViewHolder(View view) {
