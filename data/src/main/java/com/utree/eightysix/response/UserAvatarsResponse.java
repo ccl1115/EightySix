@@ -20,5 +20,8 @@ public class UserAvatarsResponse extends Response {
 
     @SerializedName("avatar")
     public String avatar;
+
+    @SerializedName("beUsed")
+    public int beUsed;
   }
 }

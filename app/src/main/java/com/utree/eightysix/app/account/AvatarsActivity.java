@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import butterknife.InjectViews;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
@@ -64,6 +65,19 @@ public class AvatarsActivity extends BaseActivity {
   })
   public AsyncImageView[] mAivAvatars;
 
+  @InjectViews({
+      R.id.iv_selected_1,
+      R.id.iv_selected_2,
+      R.id.iv_selected_3,
+      R.id.iv_selected_4,
+      R.id.iv_selected_5,
+      R.id.iv_selected_6,
+      R.id.iv_selected_7,
+      R.id.iv_selected_8,
+      R.id.iv_selected_9
+  })
+  public ImageView[] mIvSelected;
+
   private CameraUtil mCameraUtil;
   private String mFileHash;
   private Integer mViewId;
@@ -109,6 +123,11 @@ public class AvatarsActivity extends BaseActivity {
           for (int i = 0; i < size; i++) {
             final String avatar = response.object.get(i).avatar;
             if (!TextUtils.isEmpty(avatar)) {
+              if (response.object.get(i).beUsed == 1) {
+                mIvSelected[i].setVisibility(View.VISIBLE);
+              } else {
+                mIvSelected[i].setVisibility(View.GONE);
+              }
               mAivAvatars[i].setUrl(avatar);
               final int finalI = i;
               mAivAvatars[i].setOnClickListener(new View.OnClickListener() {
@@ -129,7 +148,7 @@ public class AvatarsActivity extends BaseActivity {
 
           if (size < 9) {
             if (mViewId == null) {
-              mAivAvatars[size].setImageResource(R.drawable.ic_add);
+              mAivAvatars[size].setImageResource(R.drawable.ic_avatar_add);
               mAivAvatars[size].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
