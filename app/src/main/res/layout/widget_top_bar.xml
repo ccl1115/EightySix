@@ -119,6 +119,7 @@
                 >
 
             <EditText
+                    style="@style/Widget.EditText.AppTheme.Dark"
                     android:id="@+id/tb_et_search"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

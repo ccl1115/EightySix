@@ -12,6 +12,10 @@
         <item name="android:textColorHint">#FFd8d8d8</item>
     </style>
 
+    <style name="Widget.EditText.AppTheme.Dark" parent="Widget.EditText.AppTheme">
+        <item name="android:background">@drawable/apptheme_edit_text_holo_dark</item>
+    </style>
+
     <style name="Widget.CheckBox.AppTheme" parent="android:Widget.CompoundButton.CheckBox">
         <item name="android:button">@drawable/apptheme_btn_check_holo_light</item>
     </style>
