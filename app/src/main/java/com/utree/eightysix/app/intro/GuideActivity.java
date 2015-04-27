@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -311,6 +312,9 @@ public class GuideActivity extends BaseActivity {
     @InjectView(R.id.iv_girl)
     public ImageView mIvGirl;
 
+    @InjectView(R.id.ll_bottom)
+    public LinearLayout mLlBottom;
+
     @OnClick(R.id.tv_register)
     public void onTvRegisterClicked(View view) {
       RegisterActivity.start(view.getContext(), "");
@@ -329,13 +333,15 @@ public class GuideActivity extends BaseActivity {
       mIvCircle.setVisibility(View.VISIBLE);
       mIvBoy.setVisibility(View.VISIBLE);
       mIvGirl.setVisibility(View.VISIBLE);
+      mLlBottom.setVisibility(View.VISIBLE);
 
       AnimatorSet circle = new AnimatorSet();
 
       circle.playTogether(
           ObjectAnimator.ofFloat(mIvCircle, "alpha", 0f, 1f),
           ObjectAnimator.ofFloat(mIvCircle, "scaleX", 0.8f, 1f),
-          ObjectAnimator.ofFloat(mIvCircle, "scaleY", 0.2f, 1f)
+          ObjectAnimator.ofFloat(mIvCircle, "scaleY", 0.2f, 1f),
+          ObjectAnimator.ofFloat(mLlBottom, "translationY", 300f, 0f)
       );
       circle.setDuration(500);
       circle.setInterpolator(new OvershootInterpolator(4f));
@@ -365,6 +371,7 @@ public class GuideActivity extends BaseActivity {
       mIvCircle.setVisibility(View.INVISIBLE);
       mIvBoy.setVisibility(View.INVISIBLE);
       mIvGirl.setVisibility(View.INVISIBLE);
+      mLlBottom.setVisibility(View.INVISIBLE);
     }
   }
 }
