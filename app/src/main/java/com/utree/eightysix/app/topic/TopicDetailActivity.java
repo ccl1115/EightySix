@@ -17,7 +17,6 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.data.Topic;
-import com.utree.eightysix.widget.RoundedButton;
 
 /**
  */
@@ -29,8 +28,8 @@ public class TopicDetailActivity extends BaseActivity {
   @InjectView(R.id.tv_title)
   public TextView mTvTitle;
 
-  @InjectView(R.id.rb_text)
-  public RoundedButton mRbText;
+  @InjectView(R.id.tv_text)
+  public TextView mTvText;
 
   public static void start(Context context, Topic topic) {
     Intent intent = new Intent(context, TopicDetailActivity.class);
@@ -53,7 +52,7 @@ public class TopicDetailActivity extends BaseActivity {
     Topic topic = getIntent().getParcelableExtra("topic");
 
     mTvTitle.setText(topic.title);
-    mRbText.setText(topic.content);
+    mTvText.setText(topic.content);
   }
 
   @Override
