@@ -677,17 +677,16 @@ public class PublishActivity extends BaseActivity implements
   private void showCancelAnonymousDialog() {
     final ThemedDialog dialog = new ThemedDialog(this);
 
+    dialog.setTitle("确认取消匿名么？");
+
     View view = LayoutInflater.from(this).inflate(R.layout.dialog_cancel_post_anonymouse, null, false);
-
     dialog.setContent(view);
-
     ((CheckBox) view.findViewById(R.id.cb_check)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
       @Override
       public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         Account.inst().setCancelPostAnonymousDialog(!isChecked);
       }
     });
-
     dialog.setPositive(R.string.okay, new View.OnClickListener() {
       @Override
       public void onClick(View v) {
