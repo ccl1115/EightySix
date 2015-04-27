@@ -266,6 +266,7 @@ public class ProfileFragment extends HolderFragment {
 
       @Override
       public void onDrag(int value) {
+        getBaseActivity().showRefreshIndicator(false);
         mAivBg.setScaleX(1f + (value / (float) U.dp2px(500)));
         mAivBg.setScaleY(1f + (value / (float) U.dp2px(500)));
       }
@@ -339,6 +340,13 @@ public class ProfileFragment extends HolderFragment {
 
           mProfile = response.object;
           if (TextUtils.isEmpty(mProfile.userName)) {
+            getTopBar().getAbRight().setText(getString(R.string.settings));
+            getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                v.getContext().startActivity(new Intent(v.getContext(), MainSettingsActivity.class));
+              }
+            });
             mFlGuide.setVisibility(View.VISIBLE);
             return;
           } else {
