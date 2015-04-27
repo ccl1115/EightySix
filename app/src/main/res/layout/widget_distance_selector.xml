@@ -26,14 +26,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="滑动变更距离"
+                android:text="滑动变更看帖范围"
                 android:textColor="#ff7e7e7e"
                 />
 
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="当前距离: "
+                android:text="当前范围: "
                 android:textColor="#ff7e7e7e"
                 />
 
