@@ -63,4 +63,7 @@ public class Profile {
 
   @SerializedName("isShielded")
   public int isShielded;
+
+  @SerializedName("isMyself")
+  public int isMyself;
 }

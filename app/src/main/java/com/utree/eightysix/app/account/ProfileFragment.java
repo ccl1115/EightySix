@@ -138,6 +138,8 @@ public class ProfileFragment extends HolderFragment {
   private String mFileHash;
   private Profile mProfile;
 
+  private boolean mIsMyself;
+
   @OnClick(R.id.rb_edit)
   public void onRbEditClicked() {
     ProfileFillActivity.start(getActivity(), false);
@@ -165,7 +167,7 @@ public class ProfileFragment extends HolderFragment {
 
   @OnClick(R.id.aiv_portrait)
   public void onAivPortraitClicked() {
-    if (mIsVisitor) {
+    if (mIsVisitor && !isSelf()) {
       AvatarViewerActivity.start(getActivity(), 0, mViewId);
     } else {
       AvatarViewerActivity.start(getActivity(), 0, -1);
@@ -179,7 +181,7 @@ public class ProfileFragment extends HolderFragment {
 
   @OnClick(R.id.tv_my_posts)
   public void onMyPostsClicked() {
-    if (mIsVisitor) {
+    if (mIsVisitor && !isSelf()) {
       VisitorPostsActivity.start(getActivity(), mViewId);
     } else {
       startActivity(new Intent(getActivity(), MyPostsActivity.class));
@@ -259,7 +261,7 @@ public class ProfileFragment extends HolderFragment {
         );
         set.setDuration(200);
         set.start();
-        requestProfile(mIsVisitor ? mViewId : null);
+        requestProfile(mIsVisitor && !isSelf() ? mViewId : null);
       }
 
       @Override
@@ -287,19 +289,8 @@ public class ProfileFragment extends HolderFragment {
     if (getArguments() != null) {
       mIsVisitor = getArguments().getBoolean("isVisitor", false);
       mViewId = getArguments().getInt("viewId");
-      getBaseActivity().getTopBar().setTitle(getArguments().getString("userName"));
-      getBaseActivity().getTopBar().getAbRight().hide();
     }
 
-    if (mIsVisitor) {
-      getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
-      getTopBar().getAbLeft().setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          getBaseActivity().finish();
-        }
-      });
-    }
 
     mCameraUtil = new CameraUtil(this, new CameraUtil.Callback() {
       @Override
@@ -310,22 +301,6 @@ public class ProfileFragment extends HolderFragment {
       }
     });
 
-
-    if (mIsVisitor) {
-      mRbChangeBg.setVisibility(View.GONE);
-      mTvSettings.setVisibility(View.GONE);
-      mTvMyCircles.setVisibility(View.GONE);
-      mTvMyFriends.setVisibility(View.GONE);
-      mTvMyPosts.setText("他的帖子");
-      mTvTitleSignature.setText("他的签名");
-      mTvAction.setVisibility(View.VISIBLE);
-    } else {
-      mRbChangeBg.setVisibility(View.VISIBLE);
-      mTvSettings.setVisibility(View.VISIBLE);
-      mTvMyCircles.setVisibility(View.VISIBLE);
-      mTvMyFriends.setVisibility(View.VISIBLE);
-      mTvAction.setVisibility(View.GONE);
-    }
 
     mScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
 
@@ -339,7 +314,11 @@ public class ProfileFragment extends HolderFragment {
       }
     });
 
-    requestProfile(mIsVisitor ? mViewId : null);
+    requestProfile(mIsVisitor && !isSelf() ? mViewId : null);
+  }
+
+  private boolean isSelf() {
+    return mProfile != null && mProfile.isMyself == 1;
   }
 
   public void requestProfile(Integer userId) {
@@ -349,6 +328,7 @@ public class ProfileFragment extends HolderFragment {
       public void onResponseError(Throwable e) {
         getBaseActivity().hideRefreshIndicator();
         mRefreshLayout.setRefreshing(false);
+        getBaseActivity().finish();
       }
 
       @Override
@@ -386,52 +366,86 @@ public class ProfileFragment extends HolderFragment {
           mTvHometown.setText(mProfile.hometown);
 
           if (mIsVisitor) {
-            if ("男".equals(mProfile.sex)) {
-              mTvMyPosts.setText("他的帖子");
-              mTvTitleSignature.setText("他的签名");
-            } else if ("女".equals(mProfile.sex)) {
-              mTvMyPosts.setText("她的帖子");
-              mTvTitleSignature.setText("她的签名");
-            } else {
-              mTvMyPosts.setText("Ta的帖子");
-              mTvTitleSignature.setText("Ta的签名");
-            }
+            getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+            getTopBar().getAbLeft().setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                getBaseActivity().finish();
+              }
+            });
 
-            if (mProfile.isFriend == 1) {
-              mTvAction.setText("发起聊天");
-              mTvAction.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                  ChatUtils.startFriendChat(getBaseActivity(), mViewId);
-                }
-              });
+            if (isSelf()) {
+              mRbChangeBg.setVisibility(View.VISIBLE);
+              mTvSettings.setVisibility(View.VISIBLE);
+              mTvMyCircles.setVisibility(View.VISIBLE);
+              mTvMyFriends.setVisibility(View.VISIBLE);
+              mTvAction.setVisibility(View.GONE);
+              getBaseActivity().getTopBar().setTitle("我");
             } else {
-              mTvAction.setText("添加朋友");
-              mTvAction.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                  SendRequestActivity.start(v.getContext(), mViewId);
-                }
-              });
-            }
+              mRbChangeBg.setVisibility(View.GONE);
+              mTvSettings.setVisibility(View.GONE);
+              mTvMyCircles.setVisibility(View.GONE);
+              mTvMyFriends.setVisibility(View.GONE);
+              getBaseActivity().getTopBar().setTitle(getArguments().getString("userName"));
 
-            if (mProfile.isFriend == 1) {
-              getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_action_ban));
-              getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                  showMenuDialog();
-                }
-              });
-            } else {
-              getTopBar().getAbRight().hide();
+              mTvAction.setVisibility(View.VISIBLE);
+              if ("男".equals(mProfile.sex)) {
+                mTvMyPosts.setText("他的帖子");
+                mTvTitleSignature.setText("他的签名");
+              } else if ("女".equals(mProfile.sex)) {
+                mTvMyPosts.setText("她的帖子");
+                mTvTitleSignature.setText("她的签名");
+              } else {
+                mTvMyPosts.setText("Ta的帖子");
+                mTvTitleSignature.setText("Ta的签名");
+              }
+
+              if (mProfile.isFriend == 1) {
+                mTvAction.setText("发起聊天");
+                mTvAction.setOnClickListener(new View.OnClickListener() {
+                  @Override
+                  public void onClick(View v) {
+                    ChatUtils.startFriendChat(getBaseActivity(), mViewId);
+                  }
+                });
+              } else {
+                mTvAction.setText("添加朋友");
+                mTvAction.setOnClickListener(new View.OnClickListener() {
+                  @Override
+                  public void onClick(View v) {
+                    SendRequestActivity.start(v.getContext(), mViewId);
+                  }
+                });
+              }
+
+              if (mProfile.isFriend == 1) {
+                getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_action_ban));
+                getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+                  @Override
+                  public void onClick(View v) {
+                    showMenuDialog();
+                  }
+                });
+              } else {
+                getTopBar().getAbRight().hide();
+              }
+
             }
+          } else {
+            mRbChangeBg.setVisibility(View.VISIBLE);
+            mTvSettings.setVisibility(View.VISIBLE);
+            mTvMyCircles.setVisibility(View.VISIBLE);
+            mTvMyFriends.setVisibility(View.VISIBLE);
+            mTvAction.setVisibility(View.GONE);
           }
 
           mAivLevelIcon.setUrl(mProfile.levelIcon);
           mTvExp.setText(String.format("%d/%d", mProfile.experience, mProfile.nextExperience));
           mPbExp.setMax(mProfile.nextExperience);
           mPbExp.setProgress(mProfile.experience);
+
+        } else {
+          getBaseActivity().finish();
         }
       }
     }, ProfileResponse.class, userId);
@@ -528,7 +542,7 @@ public class ProfileFragment extends HolderFragment {
     getBaseActivity().getTopBar().getAbLeft().hide();
     getBaseActivity().showTopBar(true);
     getBaseActivity().hideRefreshIndicator();
-    if (mIsVisitor) {
+    if (mIsVisitor && !isSelf()) {
       getBaseActivity().getTopBar().getAbRight().setText("拉黑");
       getBaseActivity().getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
         @Override
