@@ -346,15 +346,19 @@ public class ProfileFragment extends HolderFragment {
           }
 
           mTvName.setText(mProfile.userName);
-          mTvAge.setText(String.valueOf(mProfile.age) + "岁");
           if (mProfile.birthday == -1) {
             mTvBirthday.setVisibility(View.GONE);
+            mTvAge.setVisibility(View.GONE);
+            mTvConstellation.setVisibility(View.GONE);
           } else {
             mTvBirthday.setVisibility(View.VISIBLE);
             mTvBirthday.setText(TimeUtil.getDate(mProfile.birthday));
+            mTvAge.setVisibility(View.VISIBLE);
+            mTvAge.setText(String.valueOf(mProfile.age) + "岁");
+            mTvConstellation.setVisibility(View.VISIBLE);
+            mTvConstellation.setText(mProfile.constellation);
           }
           mTvGender.setText(mProfile.sex);
-          mTvConstellation.setText(mProfile.constellation);
           mAivBg.setUrl(mProfile.background);
           mAivPortrait.setUrl(mProfile.avatar);
           if (TextUtils.isEmpty(mProfile.signature)) {
