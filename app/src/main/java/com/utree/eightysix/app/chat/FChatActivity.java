@@ -11,6 +11,7 @@ import android.content.*;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -317,7 +318,11 @@ public class FChatActivity extends BaseActivity implements
         .where(FriendConversationDao.Properties.ChatId.eq(mChatId))
         .unique();
 
-    setTopTitle(mConversation.getTargetName());
+    if (TextUtils.isEmpty(mConversation.getTargetName())) {
+      setTopTitle("未命名");
+    } else {
+      setTopTitle(mConversation.getTargetName());
+    }
 
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
