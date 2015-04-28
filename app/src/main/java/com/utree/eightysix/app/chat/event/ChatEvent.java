@@ -57,7 +57,7 @@ public class ChatEvent {
    */
   public static final int EVENT_UPDATE_UNREAD_CONVERSATION_COUNT = 36;
 
-  public static final int EVENT_NOTIFY_MSG_RECEIVE = 40;
+  public static final int EVENT_WARNING_MSG_RECEIVE = 40;
 
   private int mStatus;
 

@@ -50,9 +50,9 @@ public class MessageCmdHandler {
     String content = message.getStringAttribute("content", null);
 
     if (chatId != null && content != null) {
-      Message infoMessage = ChatUtils.infoMsg(chatId, content);
-      DaoUtils.getMessageDao().insertOrReplace(infoMessage);
-      U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_NOTIFY_MSG_RECEIVE, infoMessage));
+      Message warning = ChatUtils.warningMsg(chatId, content);
+      DaoUtils.getMessageDao().insertOrReplace(warning);
+      U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_WARNING_MSG_RECEIVE, warning));
     }
   }
 }

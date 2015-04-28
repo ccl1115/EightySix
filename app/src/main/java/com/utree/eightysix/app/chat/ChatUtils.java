@@ -212,6 +212,19 @@ public class ChatUtils {
     return m;
   }
 
+  public static Message warningMsg(String chatId, String msg) {
+    Message m = new Message();
+
+    m.setTimestamp(System.currentTimeMillis());
+    m.setType(MessageConst.TYPE_WARNING);
+    m.setContent(msg);
+    m.setChatId(chatId);
+    m.setDirection(MessageConst.DIRECTION_NON);
+    m.setStatus(MessageConst.STATUS_CREATE);
+
+    return m;
+  }
+
   public static FriendMessage infoFriendMsg(String chatId, String msg) {
     FriendMessage m = new FriendMessage();
 

@@ -4,16 +4,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Instrumentation;
 import android.content.*;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.*;
 import butterknife.*;
 import com.rockerhieu.emojicon.EmojiconEditText;
 import com.rockerhieu.emojicon.EmojiconGridFragment;
@@ -33,6 +30,7 @@ import com.utree.eightysix.app.publish.EmojiViewPager;
 import com.utree.eightysix.dao.Conversation;
 import com.utree.eightysix.dao.ConversationDao;
 import com.utree.eightysix.dao.Message;
+import com.utree.eightysix.dao.MessageDao;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
@@ -43,7 +41,6 @@ import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.ImageActionButton;
 import com.utree.eightysix.widget.ThemedDialog;
-import com.utree.eightysix.widget.TopBar;
 
 import java.io.File;
 import java.util.List;
@@ -84,6 +81,12 @@ public class ChatActivity extends BaseActivity implements
 
   @InjectView(R.id.iv_emotion)
   public ImageView mIvEmotion;
+
+  @InjectView(R.id.ll_notice)
+  public LinearLayout mLlNotice;
+
+  @InjectView(R.id.tv_text)
+  public TextView mTvText;
 
   private ChatAdapter mChatAdapter;
 
@@ -211,11 +214,12 @@ public class ChatActivity extends BaseActivity implements
         case ChatEvent.EVENT_RECEIVE_MSG: {
           mChatAdapter.add((Message) event.getObj());
           mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
+          mLlNotice.setVisibility(View.GONE);
           break;
         }
-        case ChatEvent.EVENT_NOTIFY_MSG_RECEIVE: {
-          mChatAdapter.add((Message) event.getObj());
-          mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
+        case ChatEvent.EVENT_WARNING_MSG_RECEIVE: {
+          mTvText.setText(((Message) event.getObj()).getContent());
+          mLlNotice.setVisibility(View.VISIBLE);
           break;
         }
         case ChatEvent.EVENT_UPDATE_MSG: {
@@ -405,49 +409,9 @@ public class ChatActivity extends BaseActivity implements
       addCommentSummaryInfo();
     }
 
-    getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
-      @Override
-      public String getTitle(int position) {
-        return null;
-      }
-
-      @Override
-      public Drawable getIcon(int position) {
-        return mConversation.getFavorite() ?
-            getResources().getDrawable(R.drawable.ic_favorite_selected) :
-            getResources().getDrawable(R.drawable.ic_favorite_outline);
-      }
-
-      @Override
-      public Drawable getBackgroundDrawable(int position) {
-        return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
-      }
-
-      @Override
-      public void onClick(View view, int position) {
-        if (mConversation.getFavorite()) {
-          ((ImageActionButton) getTopBar().getActionView(0))
-              .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_outline));
-          requestFavDel();
-        } else {
-          ((ImageActionButton) getTopBar().getActionView(0))
-              .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
-          requestFavAdd();
-        }
-      }
-
-      @Override
-      public int getCount() {
-        return 1;
-      }
-
-      @Override
-      public TopBar.LayoutParams getLayoutParams(int position) {
-        return null;
-      }
-    });
-
     addBannedInfoMsg();
+
+    addWarningMsg();
 
     getSupportFragmentManager()
         .beginTransaction()
@@ -771,6 +735,24 @@ public class ChatActivity extends BaseActivity implements
   private void addBannedInfoMsg() {
     if (mConversation.getBanned() != null && mConversation.getBanned()) {
       mChatAdapter.add(ChatUtils.infoMsg(mChatId, "你已将对方拉黑，不会再收到对方发来的消息"));
+    }
+  }
+
+  private void addWarningMsg() {
+    long count = DaoUtils.getMessageDao().queryBuilder()
+        .where(MessageDao.Properties.ChatId.eq(mChatId),
+            MessageDao.Properties.Type.eq(MessageConst.TYPE_TXT),
+            MessageDao.Properties.Direction.eq(MessageConst.DIRECTION_SEND))
+        .count();
+
+    if (count == 0) {
+      Message unique = DaoUtils.getMessageDao().queryBuilder()
+          .where(MessageDao.Properties.ChatId.eq(mChatId),
+              MessageDao.Properties.Type.eq(MessageConst.TYPE_WARNING))
+          .limit(1)
+          .unique();
+      mTvText.setText(unique.getContent());
+      mLlNotice.setVisibility(View.VISIBLE);
     }
   }
 }
