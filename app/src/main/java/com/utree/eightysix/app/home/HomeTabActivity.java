@@ -249,7 +249,6 @@ public class HomeTabActivity extends BaseActivity {
   public void onChatEvent(ChatEvent event) {
     if (event.getStatus() == ChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT) {
       mUnreadConversationCount = ((Long) event.getObj()).intValue();
-      mRbMsgCount.setCount(mUnreadConversationCount + mUnreadFConversationCount + mAssistMessageUnreadCount);
       U.getBus().post(new MsgCountEvent(MsgCountEvent.TYPE_UNREAD_CONVERSATION_COUNT, mUnreadConversationCount));
     }
     mRbMsgCount.setCount(mNewCommentCount + mUnreadConversationCount
