@@ -7,13 +7,13 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/apptheme_primary_grey_color"
         >
 
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/white"
             tools:ignore="UselessParent"
             >
 
@@ -30,10 +30,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:paddingLeft="10dp"
-                    android:paddingStart="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingEnd="10dp"
+                    android:paddingLeft="15dp"
+                    android:paddingStart="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingEnd="15dp"
                     android:orientation="vertical"
                     >
 
@@ -41,7 +41,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:textSize="16sp"
                         android:text="@string/check_update"
                         />
 
@@ -76,10 +75,9 @@
                 android:id="@+id/tv_dev"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
                 android:gravity="center_vertical"
-                android:textSize="16sp"
                 android:text="@string/dev_mode"
                 android:background="@drawable/apptheme_primary_list_selector"
                 android:visibility="gone"
@@ -91,10 +89,9 @@
                 android:id="@+id/tv_feedback"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
                 android:gravity="center_vertical"
-                android:textSize="16sp"
                 android:text="@string/feedback"
                 android:background="@drawable/apptheme_primary_list_selector"
                 />
@@ -105,10 +102,9 @@
                 android:id="@+id/tv_help"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
                 android:gravity="center_vertical"
-                android:textSize="16sp"
                 android:text="@string/help"
                 android:background="@drawable/apptheme_primary_list_selector"
                 />
@@ -119,40 +115,33 @@
                 android:id="@+id/tv_join_qq"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
                 android:gravity="center_vertical"
-                android:textSize="16sp"
                 android:text="@string/join_qq_group"
                 android:background="@drawable/apptheme_primary_list_selector"
                 />
-
-        <include layout="@layout/widget_primary_divider"/>
-
 
         <TextView
                 android:id="@+id/tv_msg_settings"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:layout_marginTop="16dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
                 android:gravity="center_vertical"
-                android:textSize="16sp"
                 android:text="@string/settings_msg"
+                android:background="@drawable/apptheme_primary_list_selector"
                 />
-
-
-        <include layout="@layout/widget_primary_divider"/>
-
 
         <TextView
                 android:id="@+id/tv_logout"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:layout_marginTop="16dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
                 android:gravity="center_vertical"
-                android:textSize="16sp"
                 android:text="@string/logout"
                 android:background="@drawable/apptheme_primary_list_selector"
                 />
