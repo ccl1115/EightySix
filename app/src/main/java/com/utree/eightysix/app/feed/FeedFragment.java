@@ -134,16 +134,18 @@ public class FeedFragment extends AbsFeedFragment {
 
   @Subscribe
   public void onContactsSyncEvent(ContactsSyncEvent event) {
-    if (mFeedAdapter != null && mFeedAdapter.getFeeds().upContact == 0) {
-      if (event.isSucceed()) {
-        U.showToast("上传通讯录成功");
-      } else {
-        U.showToast("上传通讯录失败");
+    if (isResumed()) {
+      if (mFeedAdapter != null && mFeedAdapter.getFeeds().upContact == 0) {
+        if (event.isSucceed()) {
+          U.showToast("上传通讯录成功");
+        } else {
+          U.showToast("上传通讯录失败");
+        }
       }
-    }
 
-    refresh();
-    getBaseActivity().hideProgressBar();
+      refresh();
+      getBaseActivity().hideProgressBar();
+    }
   }
 
   @Subscribe
