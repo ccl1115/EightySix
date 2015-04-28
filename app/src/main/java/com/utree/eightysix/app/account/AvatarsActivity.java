@@ -114,7 +114,7 @@ public class AvatarsActivity extends BaseActivity {
       public void onResponse(UserAvatarsResponse response) {
 
         if (RESTRequester.responseOk(response)) {
-          int size = response.object.size();
+          final int size = response.object == null ? 0 : response.object.size();
 
           if (mViewId == null && size == 0) {
             mCameraUtil.showCameraDialog();
