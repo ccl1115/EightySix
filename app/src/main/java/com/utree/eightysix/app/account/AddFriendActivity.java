@@ -9,6 +9,7 @@ import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -66,6 +67,9 @@ public class AddFriendActivity extends BaseActivity {
 
     @InjectView(R.id.tv_id)
     public TextView mTvId;
+
+    @InjectView(R.id.fl_head)
+    public FrameLayout mFlHead;
 
     @InjectView(R.id.tv_head)
     public TextView mTvHead;
@@ -185,6 +189,11 @@ public class AddFriendActivity extends BaseActivity {
         if (RESTRequester.responseOk(response)) {
           mFriendRecommendAdapter = new FriendRecommendAdapter(response.object);
           mAlvRecommended.setAdapter(mFriendRecommendAdapter);
+
+          if (response.object.size() == 0) {
+            headViewHolder.mFlHead.setVisibility(View.GONE);
+          }
+
           headViewHolder.mTvId.setText("我的蓝莓ID：" + response.extra.viewId);
           headViewHolder.mTvId.setOnClickListener(new View.OnClickListener() {
             @Override
