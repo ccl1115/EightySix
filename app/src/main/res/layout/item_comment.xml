@@ -28,7 +28,7 @@
             android:layout_toEndOf="@+id/fpv_portrait"
             android:layout_toLeftOf="@+id/iv_chat"
             android:layout_toStartOf="@+id/iv_chat"
-            android:textSize="16sp"
+            android:textSize="14sp"
             app:emojiconSize="24dp"
             />
 
