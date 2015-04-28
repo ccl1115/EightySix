@@ -97,6 +97,9 @@ public class PostActivity extends BaseActivity
   @InjectView(R.id.tv_name)
   public TextView mTvName;
 
+  @InjectView(R.id.iv_close)
+  public ImageView mIvClose;
+
   @InjectView(R.id.aiv_level_icon)
   public AsyncImageView mAivLevelIcon;
 
@@ -671,11 +674,13 @@ public class PostActivity extends BaseActivity
             mAivPortrait.setUrl(mPost.avatar);
             mAivLevelIcon.setUrl(mPost.levelIcon);
             mLlBanner.setBackgroundColor(Color.WHITE);
+            mIvClose.setImageResource(R.drawable.ic_action_post_close);
           } else {
             mTvName.setVisibility(View.GONE);
             mAivPortrait.setVisibility(View.GONE);
             mAivLevelIcon.setVisibility(View.GONE);
             mLlBanner.setBackgroundColor(Color.TRANSPARENT);
+            mIvClose.setImageResource(R.drawable.ic_action_post_close_white);
           }
 
           if (response.object.blueStar == 1) {
