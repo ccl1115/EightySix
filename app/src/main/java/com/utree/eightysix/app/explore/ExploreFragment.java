@@ -82,7 +82,7 @@ public class ExploreFragment extends BaseFragment {
         mVpTopics.setCurrentItem(currentItem + 1);
       }
 
-      mHandler.postDelayed(mCarousel, 3000);
+      mHandler.postDelayed(mCarousel, 5000);
     }
   };
 
@@ -254,7 +254,7 @@ public class ExploreFragment extends BaseFragment {
   }
 
   private void startCarousel() {
-    mHandler.postDelayed(mCarousel, 3000);
+    mHandler.postDelayed(mCarousel, 5000);
   }
 
   private void buildNewestTopics(final List<Topic> topics) {
@@ -295,7 +295,8 @@ public class ExploreFragment extends BaseFragment {
 
       @Override
       public void onPageSelected(int position) {
-
+        stopCarousel();
+        startCarousel();
       }
 
       @Override
