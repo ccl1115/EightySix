@@ -105,7 +105,11 @@ class Utils {
 
     @Override
     public String toString() {
-      return String.format("%s (%d.%d - %d.%d)", name, start.get(Calendar.MONTH), start.get(Calendar.DAY_OF_MONTH), end.get(Calendar.MONTH), end.get(Calendar.DAY_OF_MONTH));
+      return String.format("%s (%d.%d - %d.%d)", name,
+          start.get(Calendar.MONTH) + 1,
+          start.get(Calendar.DAY_OF_MONTH),
+          end.get(Calendar.MONTH) + 1,
+          end.get(Calendar.DAY_OF_MONTH));
     }
   }
 

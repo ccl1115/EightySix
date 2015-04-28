@@ -97,10 +97,22 @@ public class BirthdayEditActivity extends BaseActivity {
 
           }
         });
+
+        mConstellation = Utils.Constellation.get(calendar);
+        for (int i = 0; i < list.size(); i++) {
+          Utils.Constellation c = list.get(i);
+          if (c.equals(mConstellation)) {
+            mSpConstellation.setSelection(i);
+            break;
+          }
+        }
+
       }
     }, 500);
 
-    mDpBirthday.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),
+    mDpBirthday.init(calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DAY_OF_MONTH),
         new DatePicker.OnDateChangedListener() {
           @Override
           public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
