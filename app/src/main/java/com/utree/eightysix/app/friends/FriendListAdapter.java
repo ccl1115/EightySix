@@ -22,21 +22,18 @@ import com.utree.eightysix.data.Friend;
 import com.utree.eightysix.view.SectionedBaseAdapter;
 import com.utree.eightysix.widget.AsyncImageView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  */
 public class FriendListAdapter extends SectionedBaseAdapter {
 
-  private Map<String, List<Friend>> mSections = new HashMap<String, List<Friend>>(26);
+  private SortedMap<String, List<Friend>> mSections = new TreeMap<String, List<Friend>>();
 
   private String[] mSectionKeys;
+  private int[] mSectionPositions;
 
   public FriendListAdapter(List<Friend> friends) {
-
     for (Friend friend : friends) {
       String initial = friend.initial;
 
@@ -52,6 +49,17 @@ public class FriendListAdapter extends SectionedBaseAdapter {
 
     mSectionKeys = new String[mSections.keySet().size()];
     mSections.keySet().toArray(mSectionKeys);
+    mSectionPositions = new int[mSections.keySet().size()];
+
+    int index = 0;
+    int size = 0;
+    mSectionPositions[index] = 0;
+    for (Map.Entry<String, List<Friend>> entry : mSections.entrySet()) {
+      index += 1;
+      if (index >= mSectionPositions.length) break;
+      size = size + (entry.getValue().size() + 1);
+      mSectionPositions[index] = size;
+    }
   }
 
   @Override
@@ -109,6 +117,10 @@ public class FriendListAdapter extends SectionedBaseAdapter {
     }
     ((TextView) convertView.findViewById(R.id.tv_head)).setText(mSectionKeys[section]);
     return convertView;
+  }
+
+  public int getSectionIndex(int index) {
+    return mSectionPositions[index];
   }
 
   public static class FriendViewHolder {

@@ -6,7 +6,10 @@ package com.utree.eightysix.app.friends;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import butterknife.InjectView;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
@@ -16,11 +19,15 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.account.AddFriendActivity;
+import com.utree.eightysix.data.Friend;
 import com.utree.eightysix.response.FriendListResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.view.PinnedHeaderListView;
 import com.utree.eightysix.widget.RandomSceneTextView;
+
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  */
@@ -34,7 +41,12 @@ public class FriendListActivity extends BaseActivity {
   @InjectView(R.id.rstv_empty)
   public RandomSceneTextView mRstvEmpty;
 
+  @InjectView(R.id.ll_index)
+  public LinearLayout mLlIndex;
+
   private FriendListAdapter mFriendListAdapter;
+
+  private SortedSet<String> mIndex = new TreeSet<String>();
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -68,6 +80,27 @@ public class FriendListActivity extends BaseActivity {
             mRstvEmpty.setVisibility(View.GONE);
             mFriendListAdapter = new FriendListAdapter(response.object);
             mAdvFriends.setAdapter(mFriendListAdapter);
+
+            for (Friend f : response.object) {
+              mIndex.add(f.initial);
+            }
+
+            int index = 0;
+            for (String s : mIndex) {
+              TextView textView = new TextView(FriendListActivity.this);
+              textView.setText(s);
+              textView.setPadding(8, 8, 8, 8);
+              textView.setGravity(Gravity.CENTER);
+              final int finalIndex = index;
+              textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                  mAdvFriends.setSelection(mFriendListAdapter.getSectionIndex(finalIndex));
+                }
+              });
+              mLlIndex.addView(textView);
+              index += 1;
+            }
           }
         }
         hideProgressBar();
