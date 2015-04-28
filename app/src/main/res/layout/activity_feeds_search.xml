@@ -43,13 +43,14 @@
 
         <com.utree.eightysix.widget.RoundedButton
                 android:id="@+id/rb_all_tags"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="64dp"
                 android:layout_gravity="center_horizontal"
+                android:gravity="center"
                 app:background="#ffe6e6e6"
                 android:text="查看全部标签"
                 android:textColor="#ff313233"
