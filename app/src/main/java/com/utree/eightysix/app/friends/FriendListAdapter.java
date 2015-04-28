@@ -31,17 +31,13 @@ import java.util.Map;
  */
 public class FriendListAdapter extends SectionedBaseAdapter {
 
-  private List<Friend> mFriends;
-
   private Map<String, List<Friend>> mSections = new HashMap<String, List<Friend>>(26);
 
   private String[] mSectionKeys;
 
   public FriendListAdapter(List<Friend> friends) {
 
-    mFriends = friends;
-
-    for (Friend friend : mFriends) {
+    for (Friend friend : friends) {
       String initial = friend.initial;
 
       List<Friend> section = mSections.get(initial);

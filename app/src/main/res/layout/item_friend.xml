@@ -59,10 +59,10 @@
             android:id="@+id/iv_chat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:padding="16dp"
             android:src="@drawable/ic_chat_grey_normal"
             />
 
