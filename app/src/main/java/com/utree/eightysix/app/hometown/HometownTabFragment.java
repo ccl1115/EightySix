@@ -78,6 +78,14 @@ public class HometownTabFragment extends HolderFragment {
       public void onClick(View v) {
         if (mSetHometownFragment == null) {
           mSetHometownFragment = new SetHometownFragment();
+          mSetHometownFragment.setCallback(new SetHometownFragment.Callback() {
+            @Override
+            public void onHometownSet(int hometownId) {
+              mHotHometownFeedsFragment.setHometown(0, -1);
+              mNewHometownFeedsFragment.setHometown(0, -1);
+              refresh();
+            }
+          });
           getFragmentManager().beginTransaction()
               .add(R.id.content, mSetHometownFragment)
               .commit();
