@@ -11,10 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
-import android.widget.ProgressBar;
-import android.widget.ScrollView;
-import android.widget.TextView;
+import android.widget.*;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -71,8 +68,8 @@ public class ProfileFragment extends HolderFragment {
   @InjectView(R.id.tv_signature)
   public TextView mTvSignature;
 
-  @InjectView(R.id.tv_gender)
-  public TextView mTvGender;
+  @InjectView(R.id.iv_gender)
+  public ImageView mIvGender;
 
   @InjectView(R.id.tv_birthday)
   public TextView mTvBirthday;
@@ -374,7 +371,8 @@ public class ProfileFragment extends HolderFragment {
             mTvConstellation.setVisibility(View.VISIBLE);
             mTvConstellation.setText(mProfile.constellation);
           }
-          mTvGender.setText(mProfile.sex);
+          mIvGender.setImageResource("男".equals(mProfile.sex) ?
+              R.drawable.ic_profile_male : R.drawable.ic_profile_female);
           mAivBg.setUrl(mProfile.background);
           mAivPortrait.setUrl(mProfile.avatar);
           if (TextUtils.isEmpty(mProfile.signature)) {
@@ -542,7 +540,8 @@ public class ProfileFragment extends HolderFragment {
 
   @Subscribe
   public void onGenderUpdatedEvent(GenderUpdatedEvent event) {
-    mTvGender.setText(event.getGender());
+    mIvGender.setImageResource("男".equals(mProfile.sex) ?
+        R.drawable.ic_profile_male : R.drawable.ic_profile_female);
   }
 
   @Subscribe
