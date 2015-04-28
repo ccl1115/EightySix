@@ -23,7 +23,6 @@ import com.utree.eightysix.app.FragmentHolder;
 import com.utree.eightysix.app.account.ProfileFragment;
 import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
-import com.utree.eightysix.app.home.HomeTabActivity;
 import com.utree.eightysix.app.post.ReportDialog;
 import com.utree.eightysix.app.region.FeedRegionAdapter;
 import com.utree.eightysix.app.tag.TagTabActivity;
@@ -126,13 +125,12 @@ public class FeedPostView extends LinearLayout {
 
   @OnClick(R.id.tv_source)
   public void onTvSourceClicked() {
-    if (mPost.viewType == 8 || (mPost.sourceType == 0 && (mPost.viewType == 3 || mPost.viewType == 4))) {
-      if (mPost.userCurrFactoryId == mPost.factoryId) {
-        HomeTabActivity.start(getContext(), 0);
-      } else {
-        FeedActivity.start(getContext(), mPost.factoryId);
-      }
-    }
+//    #FIXME temporarily removed
+//    if (mPost.viewType == 8 || (mPost.sourceType == 0 && (mPost.viewType == 3 || mPost.viewType == 4))) {
+//      if (!mPost.shortName.equals(mPost.source)) {
+//        FeedActivity.start(getContext(), mPost.factoryId);
+//      }
+//    }
   }
 
   @OnClick(R.id.ll_top)
