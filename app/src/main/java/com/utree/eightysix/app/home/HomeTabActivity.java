@@ -241,11 +241,6 @@ public class HomeTabActivity extends BaseActivity {
   }
 
   @Subscribe
-  public void onMsgCountEvent(MsgCountEvent event) {
-    mRbMsgCount.setCount(event.getCount());
-  }
-
-  @Subscribe
   public void onChatEvent(ChatEvent event) {
     if (event.getStatus() == ChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT) {
       mUnreadConversationCount = ((Long) event.getObj()).intValue();

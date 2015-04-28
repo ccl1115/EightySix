@@ -8,6 +8,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.TextView;
 import butterknife.InjectView;
 import com.squareup.otto.Subscribe;
@@ -31,6 +33,9 @@ public class TopicDetailActivity extends BaseActivity {
   @InjectView(R.id.tv_text)
   public TextView mTvText;
 
+  @InjectView(R.id.v_line)
+  public View mVLine;
+
   public static void start(Context context, Topic topic) {
     Intent intent = new Intent(context, TopicDetailActivity.class);
 
@@ -51,6 +56,13 @@ public class TopicDetailActivity extends BaseActivity {
 
     Topic topic = getIntent().getParcelableExtra("topic");
 
+    if (TextUtils.isEmpty(topic.title)) {
+      mTvTitle.setVisibility(View.GONE);
+      mVLine.setVisibility(View.GONE);
+    } else {
+      mTvTitle.setVisibility(View.VISIBLE);
+      mVLine.setVisibility(View.VISIBLE);
+    }
     mTvTitle.setText(topic.title);
     mTvText.setText(topic.content);
   }
