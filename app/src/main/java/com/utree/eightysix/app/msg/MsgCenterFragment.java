@@ -14,6 +14,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.chat.*;
@@ -84,6 +85,8 @@ public class MsgCenterFragment extends BaseFragment {
     mRbCountChat.setCount((int) ConversationUtil.getUnreadConversationCount());
     mRbCountFChat.setCount((int) FConversationUtil.getUnreadConversationCount());
     mRbCountAssist.setCount((int) FMessageUtil.getAssistUnreadCount());
+    mRbCountMsg.setCount(Account.inst().getNewCommentCount());
+    mRbPraise.setVisibility(Account.inst().getHasNewPraise() ? View.VISIBLE : View.GONE);
   }
 
   @Subscribe

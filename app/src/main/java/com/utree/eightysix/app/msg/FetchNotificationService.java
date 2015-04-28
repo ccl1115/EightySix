@@ -36,7 +36,7 @@ import java.util.List;
 public class FetchNotificationService extends Service {
 
   public static final String TAG = "FetchNotificationService";
-  private static final int FETCH_INTERVAL = 60000;
+  private static final int FETCH_INTERVAL = 60000 * 2;
   private static final int MSG_FETCH = 0x1;
 
   private static int sCircleId;
@@ -60,7 +60,7 @@ public class FetchNotificationService extends Service {
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
     mShowCommentNotify = intent.getBooleanExtra("showCommentNotify", false);
-    if (intent.getBooleanExtra("loop", true) && !BuildConfig.DEBUG) {
+    if (intent.getBooleanExtra("loop", true) && U.getConfig("fetch.notice").equals("on")) {
       mHandler.sendEmptyMessageDelayed(MSG_FETCH, 1000);
     } else {
       requestFetch();

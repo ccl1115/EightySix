@@ -102,6 +102,7 @@ public class LoginActivity extends BaseActivity {
 
     setTopTitle(getString(R.string.login) + getString(R.string.app_name));
 
+    mEtPwd.setHint("");
 
     mBtnFixture.setVisibility(View.GONE);
 

@@ -84,3 +84,6 @@ activity.find_pwd.captcha.countdown = 120000
 
 # 后台返回前台的刷新时间间隔 20分钟
 activity.background.refresh.time = 1200000
+
+# 后台拉消息 [on|off]
+fetch.notice = on

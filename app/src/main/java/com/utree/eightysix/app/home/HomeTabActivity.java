@@ -27,6 +27,7 @@ import com.utree.eightysix.app.chat.FMessageUtil;
 import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.app.chat.event.FriendChatEvent;
 import com.utree.eightysix.app.explore.ExploreFragment;
+import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.MsgCenterFragment;
 import com.utree.eightysix.app.region.TabRegionFragment;
 import com.utree.eightysix.contact.ContactsSyncService;
@@ -196,8 +197,24 @@ public class HomeTabActivity extends BaseActivity {
     mUnreadConversationCount = (int) ConversationUtil.getUnreadConversationCount();
     mUnreadFConversationCount = (int) FConversationUtil.getUnreadConversationCount();
     mAssistMessageUnreadCount = (int) FMessageUtil.getAssistUnreadCount();
+    mNewCommentCount = Account.inst().getNewCommentCount();
+
 
     mRbMsgCount.setCount(mUnreadConversationCount + mUnreadFConversationCount + mAssistMessageUnreadCount);
+  }
+
+  @Override
+  protected void onStart() {
+    super.onStart();
+
+    startService(new Intent(this, FetchNotificationService.class));
+  }
+
+  @Override
+  protected void onStop() {
+    super.onStop();
+
+    stopService(new Intent(this, FetchNotificationService.class));
   }
 
   @Override
