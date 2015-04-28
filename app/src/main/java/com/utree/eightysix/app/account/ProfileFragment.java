@@ -54,6 +54,8 @@ import java.util.Calendar;
  */
 public class ProfileFragment extends HolderFragment {
 
+  private static final long REFRESH_INTERVAL = 60000 * 30;
+
   public static void start(Context context, int viewId, String userName) {
     Bundle args = new Bundle();
     args.putBoolean("isVisitor", true);
@@ -138,7 +140,8 @@ public class ProfileFragment extends HolderFragment {
   private String mFileHash;
   private Profile mProfile;
 
-  private boolean mIsMyself;
+  private long mLastRefreshTimestamp;
+
 
   @OnClick(R.id.rb_edit)
   public void onRbEditClicked() {
@@ -262,7 +265,7 @@ public class ProfileFragment extends HolderFragment {
         );
         set.setDuration(200);
         set.start();
-        requestProfile(mIsVisitor && !isSelf() ? mViewId : null);
+        requestProfile();
       }
 
       @Override
@@ -314,7 +317,13 @@ public class ProfileFragment extends HolderFragment {
       }
     });
 
+    requestProfile();
+    mLastRefreshTimestamp = System.currentTimeMillis();
+  }
+
+  private void requestProfile() {
     requestProfile(mIsVisitor && !isSelf() ? mViewId : null);
+    mLastRefreshTimestamp = System.currentTimeMillis();
   }
 
   private boolean isSelf() {
@@ -483,6 +492,19 @@ public class ProfileFragment extends HolderFragment {
   public void onHiddenChanged(boolean hidden) {
     if (!hidden) {
       updateTopTitle();
+
+      if (System.currentTimeMillis() - mLastRefreshTimestamp > REFRESH_INTERVAL) {
+        requestProfile();
+      }
+    }
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+
+    if (System.currentTimeMillis() - mLastRefreshTimestamp > REFRESH_INTERVAL) {
+      requestProfile();
     }
   }
 
@@ -651,7 +673,7 @@ public class ProfileFragment extends HolderFragment {
       @Override
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
-          requestProfile(mViewId);
+          requestProfile();
         }
       }
     }, Response.class, mViewId);
@@ -667,7 +689,7 @@ public class ProfileFragment extends HolderFragment {
       @Override
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
-          requestProfile(mViewId);
+          requestProfile();
         }
       }
     }, Response.class, mViewId);
@@ -706,7 +728,7 @@ public class ProfileFragment extends HolderFragment {
           @Override
           public void onResponse(Response response) {
             if (RESTRequester.responseOk(response)) {
-              requestProfile(mViewId);
+              requestProfile();
             }
           }
         }, Response.class, mViewId);

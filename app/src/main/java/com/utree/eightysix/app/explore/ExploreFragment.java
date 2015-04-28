@@ -52,6 +52,7 @@ import java.util.List;
  */
 public class ExploreFragment extends BaseFragment {
 
+  private static final long REFRESH_INTERNAL = 60000 * 30;
 
   @InjectView(R.id.fl_daily_picks)
   public FrameLayout mFlDailyPicksHead;
@@ -69,6 +70,8 @@ public class ExploreFragment extends BaseFragment {
   public LinearLayout mLlTags;
 
   private Handler mHandler = new Handler();
+
+  private long mLastRefreshTimestamp;
 
   private Runnable mCarousel = new Runnable() {
 
@@ -146,6 +149,7 @@ public class ExploreFragment extends BaseFragment {
 
     requestTags();
     requestNewestTopics();
+    mLastRefreshTimestamp = System.currentTimeMillis();
 
     updateTopBar();
     startCarousel();
@@ -159,7 +163,24 @@ public class ExploreFragment extends BaseFragment {
   @Override
   public void onHiddenChanged(boolean hidden) {
     if (!hidden) {
+      if (System.currentTimeMillis() - mLastRefreshTimestamp > REFRESH_INTERNAL) {
+        requestTags();
+        requestNewestTopics();
+      }
+
       updateTopBar();
+    }
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+
+    if (!isHidden()) {
+      if (System.currentTimeMillis() - mLastRefreshTimestamp > REFRESH_INTERNAL) {
+        requestTags();
+        requestNewestTopics();
+      }
     }
   }
 
