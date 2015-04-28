@@ -65,7 +65,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
   private int mCircleId;
 
   protected int mRegionType = -1;
-  protected int mDistance = Account.inst().getLastRegionRadius();
+  protected int mDistance = 0;
 
   protected int mMode = MODE_REGION;
 
@@ -79,12 +79,6 @@ public abstract class AbsRegionFragment extends BaseFragment {
    * 是否设置了在职
    */
   private boolean mCircleSelected;
-
-  {
-    if (mDistance != 0) {
-      mRegionType = 4;
-    }
-  }
 
   public void requestRegion(int regionType) {
     mMode = MODE_REGION;
@@ -382,7 +376,6 @@ public abstract class AbsRegionFragment extends BaseFragment {
         mRegionType = response.object.regionType;
         if (mRegionType == 4) {
           mDistance = response.object.regionRadius;
-          Account.inst().setLastRegionRadius(mDistance);
         }
 
         U.getBus().post(new RegionResponseEvent(mRegionType, mDistance));
