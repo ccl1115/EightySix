@@ -102,7 +102,7 @@
             android:id="@+id/iv_chat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_chat_grey_normal"
+            android:src="@drawable/ic_fchat_grey_normal"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:paddingTop="16dp"
