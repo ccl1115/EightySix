@@ -42,7 +42,7 @@
             android:layout_marginTop="48dp"
             android:layout_below="@+id/tv_app_name"
             android:textColor="@android:color/white"
-            android:textSize="26sp"
+            android:textSize="24sp"
             android:text="让漂泊的心 有个家"
             android:shadowDx="0"
             android:shadowDy="4"
