@@ -69,7 +69,6 @@
 
         </LinearLayout>
 
-        <include layout="@layout/widget_primary_divider"/>
 
         <TextView
                 android:id="@+id/tv_dev"
@@ -83,12 +82,12 @@
                 android:visibility="gone"
                 />
 
-        <include layout="@layout/widget_primary_divider"/>
 
         <TextView
                 android:id="@+id/tv_feedback"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:layout_marginTop="16dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:gravity="center_vertical"
