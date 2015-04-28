@@ -37,11 +37,6 @@ public class MessageConst {
   public static final int TYPE_INFO = 0x1002;
 
   /**
-   * 提示消息
-   */
-  public static final int TYPE_WARNING = 0x1003;
-
-  /**
    * 帖子内容摘要
    */
   public static final int TYPE_POST = 0x1003;
@@ -56,5 +51,10 @@ public class MessageConst {
    * 时间戳
    */
   public static final int TYPE_TIMESTAMP = 0x1005;
+
+  /**
+   * 提示消息
+   */
+  public static final int TYPE_WARNING = 0x1006;
 }
 

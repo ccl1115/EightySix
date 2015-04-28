@@ -240,6 +240,7 @@ public class ChatActivity extends BaseActivity implements
         case ChatEvent.EVENT_SENDING_MSG: {
           mChatAdapter.add((Message) event.getObj());
           mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
+          mLlNotice.setVisibility(View.GONE);
           break;
         }
         case ChatEvent.EVENT_MSG_REMOVE: {
@@ -751,8 +752,10 @@ public class ChatActivity extends BaseActivity implements
               MessageDao.Properties.Type.eq(MessageConst.TYPE_WARNING))
           .limit(1)
           .unique();
-      mTvText.setText(unique.getContent());
-      mLlNotice.setVisibility(View.VISIBLE);
+      if (unique != null) {
+        mTvText.setText(unique.getContent());
+        mLlNotice.setVisibility(View.VISIBLE);
+      }
     }
   }
 }
