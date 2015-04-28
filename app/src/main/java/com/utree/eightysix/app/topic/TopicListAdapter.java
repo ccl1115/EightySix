@@ -157,6 +157,11 @@ public class TopicListAdapter extends BaseAdapter {
 
       mTvMore.setText(String.format("%d条内容", topic.postCount));
       mTvText.setText(topic.content);
+      if (TextUtils.isEmpty(topic.title)) {
+        mTvTitle.setVisibility(View.GONE);
+      } else {
+        mTvTitle.setVisibility(View.VISIBLE);
+      }
       mTvTitle.setText(topic.title);
       if (TextUtils.isEmpty(topic.bgUrl)) {
         mAivBg.setUrl(null);
