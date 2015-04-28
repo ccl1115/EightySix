@@ -295,6 +295,12 @@ public class TopicFeedAdapter extends BaseAdapter {
         mTopicViewHolder.mTvText.setText(topic.content);
         mTopicViewHolder.mTvTitle.setText(topic.title);
 
+        if (TextUtils.isEmpty(topic.title)) {
+          mTvText.setTextSize(18);
+        } else {
+          mTvText.setTextSize(14);
+        }
+
         if (TextUtils.isEmpty(topic.bgUrl)) {
           mTopicViewHolder.mAivBg.setUrl(null);
           mTopicViewHolder.mLlTop.setBackgroundColor(ColorUtil.strToColor(topic.bgColor));
