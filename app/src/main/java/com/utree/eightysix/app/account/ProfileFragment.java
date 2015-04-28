@@ -251,12 +251,13 @@ public class ProfileFragment extends HolderFragment {
     getBaseActivity().setFillContent(true);
 
     mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+      private final int MAX_HEIGHT = U.dp2px(48);
+
       @Override
       public void onRefresh() {
         AnimatorSet set = new AnimatorSet();
         set.playTogether(
-            ObjectAnimator.ofFloat(mAivBg, "scaleX", mAivBg.getScaleX(), 1f),
-            ObjectAnimator.ofFloat(mAivBg, "scaleY", mAivBg.getScaleY(), 1f)
+            ObjectAnimator.ofFloat(mAivBg, "translationY", mAivBg.getTranslationY(), 0)
 
         );
         set.setDuration(200);
@@ -267,17 +268,15 @@ public class ProfileFragment extends HolderFragment {
       @Override
       public void onDrag(int value) {
         getBaseActivity().showRefreshIndicator(false);
-        mAivBg.setScaleX(1f + (value / (float) U.dp2px(500)));
-        mAivBg.setScaleY(1f + (value / (float) U.dp2px(500)));
+        mAivBg.setTranslationY(Math.max(Math.min(MAX_HEIGHT, value), 0));
       }
 
       @Override
       public void onCancel() {
+        getBaseActivity().hideRefreshIndicator();
         AnimatorSet set = new AnimatorSet();
         set.playTogether(
-            ObjectAnimator.ofFloat(mAivBg, "scaleX", mAivBg.getScaleX(), 1f),
-            ObjectAnimator.ofFloat(mAivBg, "scaleY", mAivBg.getScaleY(), 1f)
-
+            ObjectAnimator.ofFloat(mAivBg, "translationY", mAivBg.getTranslationY(), 0)
         );
         set.setDuration(200);
         set.start();
