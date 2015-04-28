@@ -25,7 +25,6 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.chat.content.ImageContent;
 import com.utree.eightysix.app.home.HomeActivity;
-import com.utree.eightysix.dao.AssistantMessage;
 import com.utree.eightysix.dao.FriendMessage;
 import com.utree.eightysix.dao.Message;
 import com.utree.eightysix.data.Comment;
@@ -117,41 +116,6 @@ public class ChatUtils {
     m.setChatType(message.getStringAttribute("chatType", ""));
     m.setDirection(message.direct == EMMessage.Direct.RECEIVE ? MessageConst.DIRECTION_RECEIVE : MessageConst.DIRECTION_SEND);
     m.setFrom(message.getFrom());
-    m.setMsgId(message.getMsgId());
-    m.setRead(false);
-    m.setTimestamp(message.getMsgTime());
-    switch (message.getType()) {
-      case TXT:
-        m.setType(MessageConst.TYPE_TXT);
-        m.setStatus(MessageConst.STATUS_SUCCESS);
-        m.setContent(((TextMessageBody) message.getBody()).getMessage());
-        Log.d(C.TAG.CH, "receive post content: " + m.getContent());
-        break;
-      case IMAGE:
-        m.setType(MessageConst.TYPE_IMAGE);
-        m.setStatus(MessageConst.STATUS_IN_PROGRESS);
-        ImageMessageBody body = (ImageMessageBody) message.getBody();
-
-        // notice
-        //环信在下载图片缩略图的时候，会在加载的文件名前加字符串"th"，会导致和EMMessage指定的本地目录不一致
-        String local = body.getLocalUrl().substring(0, body.getLocalUrl().lastIndexOf('/') + 1)
-            .concat("th")
-            .concat(body.getLocalUrl().substring(body.getLocalUrl().lastIndexOf('/') + 1));
-        // end
-
-        ImageContent content = new ImageContent(body.getLocalUrl(), body.getRemoteUrl(), body.getSecret(), local, body.getThumbnailUrl());
-        m.setContent(U.getGson().toJson(content));
-        Log.d(C.TAG.CH, "receive post content: " + m.getContent());
-        break;
-    }
-
-    return m;
-  }
-
-  static AssistantMessage toAssistantMessage(EMMessage message) {
-    AssistantMessage m = new AssistantMessage();
-
-    m.setDirection(message.direct == EMMessage.Direct.RECEIVE ? MessageConst.DIRECTION_RECEIVE : MessageConst.DIRECTION_SEND);
     m.setMsgId(message.getMsgId());
     m.setRead(false);
     m.setTimestamp(message.getMsgTime());

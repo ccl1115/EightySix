@@ -338,6 +338,7 @@ public class ChatAdapter extends BaseAdapter {
 
     final Message message = getItem(position);
     EmojiconTextView textView = (EmojiconTextView) convertView.findViewById(R.id.rb_info);
+    textView.setBackgroundResource(R.drawable.bg_chat_comment_info);
     textView.setText(message.getContent());
     textView.setOnClickListener(new View.OnClickListener() {
       @Override
