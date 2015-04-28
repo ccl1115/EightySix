@@ -20,6 +20,16 @@
             android:background="#44000000"
             />
 
+    <TextView
+            android:id="@+id/tv_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_gravity="end"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            />
+
     <com.rockerhieu.emojicon.EmojiconTextView
             android:id="@+id/tv_content"
             style="@style/TextView.PostStyle"

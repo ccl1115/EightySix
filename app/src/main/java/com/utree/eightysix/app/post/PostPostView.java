@@ -44,25 +44,28 @@ public class PostPostView extends LinearLayout {
 
   private static int sPostLength = U.getConfigInt("post.length");
 
-  @InjectView (R.id.aiv_bg)
+  @InjectView(R.id.aiv_bg)
   public AsyncImageView mAivBg;
 
-  @InjectView (R.id.tv_content)
+  @InjectView(R.id.tv_content)
   public TextView mTvContent;
 
-  @InjectView (R.id.tv_source)
+  @InjectView(R.id.tv_source)
   public TextView mTvSource;
 
-  @InjectView (R.id.tv_comment)
+  @InjectView(R.id.tv_comment)
   public TextView mTvComment;
 
-  @InjectView (R.id.tv_praise)
+  @InjectView(R.id.tv_praise)
   public TextView mTvPraise;
 
-  @InjectView (R.id.tv_tag_1)
+  @InjectView(R.id.tv_distance)
+  public TextView mTvDistance;
+
+  @InjectView(R.id.tv_tag_1)
   public TagView mTvTag1;
 
-  @InjectView (R.id.tv_tag_2)
+  @InjectView(R.id.tv_tag_2)
   public TagView mTvTag2;
 
   private Post mPost;
@@ -89,12 +92,12 @@ public class PostPostView extends LinearLayout {
     M.getRegisterHelper().register(this);
   }
 
-  @OnClick (R.id.tv_tag_1)
+  @OnClick(R.id.tv_tag_1)
   public void onTvTag1Clicked() {
     TagTabActivity.start(getContext(), mPost.tags.get(0));
   }
 
-  @OnClick (R.id.tv_tag_2)
+  @OnClick(R.id.tv_tag_2)
   public void onTvTag2Clicked() {
     TagTabActivity.start(getContext(), mPost.tags.get(1));
   }
@@ -125,7 +128,7 @@ public class PostPostView extends LinearLayout {
   @OnClick(R.id.iv_more)
   public void onIvMoreClicked() {
     if (mPost == null) return;
-    
+
     U.getAnalyser().trackEvent(U.getContext(), "post_more", "post_more");
     String[] items;
     if (mPost.owner == 1) {
@@ -203,6 +206,8 @@ public class PostPostView extends LinearLayout {
       mAivBg.setBackgroundColor(ColorUtil.strToColor(mPost.bgColor));
     }
 
+    mTvDistance.setText(mPost.distance);
+
     mTvComment.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_reply, 0, 0, 0);
 
     if (mPost.praised == 1) {
@@ -234,7 +239,7 @@ public class PostPostView extends LinearLayout {
 
   }
 
-  @OnClick (R.id.tv_praise)
+  @OnClick(R.id.tv_praise)
   public void onTvPraiseClicked() {
     if (mPost == null) return;
     if (mPost.praised != 1) {
