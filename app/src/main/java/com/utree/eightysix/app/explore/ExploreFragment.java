@@ -211,6 +211,7 @@ public class ExploreFragment extends BaseFragment {
       @Override
       public void onResponse(TagsResponse response) {
         if (RESTRequester.responseOk(response)) {
+          mLlTags.removeAllViews();
           int size = response.object.tags.size();
           if (size == 0) {
             setTagsEmpty();
@@ -237,6 +238,11 @@ public class ExploreFragment extends BaseFragment {
               });
 
               mLlTags.addView(roundedButton);
+
+              if (roundedButton.getRight() > mLlTags.getRight()) {
+                mLlTags.removeView(roundedButton);
+                break;
+              }
             }
           }
 
