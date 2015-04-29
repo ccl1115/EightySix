@@ -219,6 +219,8 @@ public class PostActivity extends BaseActivity
       @Override
       public void onClick(View v) {
         mIvAnonymous.setSelected(false);
+        Account.inst().setCommentAnonymous(false);
+        mEtPostContent.setHint("发表评论");
         dialog.dismiss();
       }
     });
@@ -227,6 +229,8 @@ public class PostActivity extends BaseActivity
       @Override
       public void onClick(View v) {
         mIvAnonymous.setSelected(true);
+        Account.inst().setCommentAnonymous(true);
+        mEtPostContent.setHint("匿名发表评论");
         dialog.dismiss();
       }
     });
@@ -235,6 +239,8 @@ public class PostActivity extends BaseActivity
       @Override
       public void onCancel(DialogInterface dialog) {
         mIvAnonymous.setSelected(true);
+        Account.inst().setCommentAnonymous(true);
+        mEtPostContent.setHint("匿名发表评论");
       }
     });
 
