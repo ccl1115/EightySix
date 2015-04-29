@@ -24,7 +24,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="gone"
-            app:text="没有玩蓝莓的手机联系人"
+            app:text="没有可添加的手机联系人好友"
+            app:subText="邀请朋友加入蓝莓吧，朋友多乐趣更多哦"
             app:drawable="@drawable/scene_4"
             />
 </FrameLayout>

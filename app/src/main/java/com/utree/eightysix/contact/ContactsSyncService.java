@@ -120,7 +120,7 @@ public class ContactsSyncService extends IntentService {
           public void onResponse(ContactsSyncResponse response) {
             if (RESTRequester.responseOk(response)) {
               Env.setTimestamp(TIMESTAMP_KEY);
-              U.getBus().post(new ContactsSyncEvent(true, response.object.friendCount));
+              U.getBus().post(new ContactsSyncEvent(true, response.object == null ? 0 : response.object.friendCount));
             } else {
               cacheContacts(new ArrayList<Contact>());
               U.getBus().post(new ContactsSyncEvent(false, 0));

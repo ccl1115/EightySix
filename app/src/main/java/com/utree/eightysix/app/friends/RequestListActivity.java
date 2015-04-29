@@ -49,7 +49,8 @@ public class RequestListActivity extends BaseActivity {
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
     mRstvEmpty.setDrawable(R.drawable.scene_1);
-    mRstvEmpty.setText("没有收到好友请求");
+    mRstvEmpty.setText("还没有朋友请求");
+    mRstvEmpty.setSubText("快去加朋友，与大家互动吧");
 
     showProgressBar(true);
 

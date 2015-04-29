@@ -88,7 +88,7 @@ public class FeedsSearchActivity extends BaseActivity {
     super.onCreate(savedInstanceState);
 
     mRstvEmpty.setDrawable(R.drawable.scene_5);
-    mRstvEmpty.setText("没有搜索结果");
+    mRstvEmpty.setText("没有相关的帖子");
 
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
     getTopBar().enterSearch();

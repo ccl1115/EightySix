@@ -4,6 +4,9 @@
 
 package com.utree.eightysix.app.account;
 
+import android.os.Bundle;
+import android.view.View;
+import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.response.MyPostsResponse;
 import com.utree.eightysix.rest.OnResponse2;
@@ -14,6 +17,15 @@ public class MyAnonymousPostsFragment extends BasePostsFragment {
 
   public static MyAnonymousPostsFragment getInstance() {
     return new MyAnonymousPostsFragment();
+  }
+
+  @Override
+  public void onViewCreated(View view, Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+
+    mRstvEmpty.setDrawable(R.drawable.scene_2);
+    mRstvEmpty.setText("还没有匿名帖");
+    mRstvEmpty.setSubText("快去发帖，分享你的小秘密吧");
   }
 
   @Override

@@ -74,11 +74,10 @@ public class SignaturesActivity extends BaseActivity {
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
     if (mIsVisitor) {
-      if (getIntent().getStringExtra("gender").equals("男")) {
-        setTopTitle("他的签名");
-      } else {
-        setTopTitle("她的签名");
-      }
+      boolean equals = getIntent().getStringExtra("gender").equals("男");
+      String gender = equals ? "他" : "她";
+      setTopTitle(gender + "的签名");
+      mRstvEmpty.setText(gender + "很懒，还没有签名呃");
     } else {
       setTopTitle("我的签名");
       getTopBar().getAbRight().setText("新增");
@@ -88,10 +87,9 @@ public class SignaturesActivity extends BaseActivity {
           SignatureEditActivity.start(SignaturesActivity.this, "");
         }
       });
+      mRstvEmpty.setText("还没有签名");
+      mRstvEmpty.setSubText("介绍一下自己，或说说你的小心情吧");
     }
-
-    mRstvEmpty.setDrawable(R.drawable.scene_4);
-    mRstvEmpty.setText("还没有签名");
 
   }
 

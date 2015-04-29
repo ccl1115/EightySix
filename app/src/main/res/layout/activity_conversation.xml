@@ -6,6 +6,7 @@
 
 <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white"
@@ -23,6 +24,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                app:drawable="@drawable/scene_1"
+                app:text="还没有悄悄话"
+                app:subText="快去帖子和评论中发起悄悄话吧"
                 />
 
 </FrameLayout>

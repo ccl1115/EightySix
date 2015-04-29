@@ -104,7 +104,8 @@ public class FollowCircleListActivity extends BaseActivity {
     });
 
     mRstvEmpty.setDrawable(R.drawable.scene_3);
-    mRstvEmpty.setText("你还没有关注任何圈子");
+    mRstvEmpty.setText("还没关注的圈子");
+    mRstvEmpty.setSubText("关注圈子，好帖不再错过");
 
     showProgressBar(true);
     U.request("follow_circle_list", new OnResponse2<FollowCircleListResponse>() {

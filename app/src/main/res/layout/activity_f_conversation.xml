@@ -23,7 +23,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:visibility="gone"
             app:drawable="@drawable/scene_4"
-            app:text="没有聊天会话"
+            app:text="还没有聊天"
+            app:subText="常跟朋友联系，聊聊近况吧"
             />
 </FrameLayout>

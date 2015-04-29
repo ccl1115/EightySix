@@ -83,7 +83,6 @@ public class FConversationActivity extends BaseActivity {
 
     final List<FriendConversation> conversations = FConversationUtil.getConversations(mPage, PAGE_SIZE);
 
-    mRstvEmpty.setVisibility(View.GONE);
     mAdapter = new FConversationAdapter(conversations);
     mAlvConversation.setAdapter(mAdapter);
     U.getChatBus().register(mAdapter);

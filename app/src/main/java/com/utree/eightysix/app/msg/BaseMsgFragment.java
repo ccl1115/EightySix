@@ -56,11 +56,6 @@ public abstract class BaseMsgFragment extends BaseFragment {
   public void onViewCreated(View view, Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
 
-    mRefreshLayout.setColorSchemeResources(R.color.apptheme_primary_light_color,
-        R.color.apptheme_primary_light_color_pressed,
-        R.color.apptheme_primary_light_color,
-        R.color.apptheme_primary_light_color_pressed);
-
     mAlvRefresh.setLoadMoreCallback(new LoadMoreCallback() {
       @Override
       public View getLoadMoreView(ViewGroup parent) {

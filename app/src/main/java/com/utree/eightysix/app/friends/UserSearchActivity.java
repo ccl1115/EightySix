@@ -73,7 +73,7 @@ public class UserSearchActivity extends BaseActivity {
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
     getTopBar().enterSearch();
 
-    mRstvEmpty.setText("没有搜索结果");
+    mRstvEmpty.setText("没有相关的蓝莓用户");
     mRstvEmpty.setDrawable(R.drawable.scene_2);
   }
 

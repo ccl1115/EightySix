@@ -63,13 +63,11 @@ public class VisitorPostsActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    if (getIntent().getStringExtra("gender").equals("男")) {
-      setTopTitle("他的帖子");
-    } else {
-      setTopTitle("她的帖子");
-    }
-
     setTopSubTitle("非匿名帖");
+
+    String gender = getIntent().getStringExtra("gender").equals("男") ? "他" : "她";
+    setTopTitle(gender + "的帖子");
+    mRstvEmpty.setText(gender + "很懒，还没有帖子呃");
 
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
@@ -78,9 +76,6 @@ public class VisitorPostsActivity extends BaseActivity {
         R.color.apptheme_primary_light_color_pressed,
         R.color.apptheme_primary_light_color,
         R.color.apptheme_primary_light_color_pressed);
-
-    mRstvEmpty.setDrawable(R.drawable.scene_4);
-    mRstvEmpty.setText("他没有帖子");
 
     mViewId = getIntent().getIntExtra("viewId", -1);
 

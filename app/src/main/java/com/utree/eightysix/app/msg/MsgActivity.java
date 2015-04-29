@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 import butterknife.InjectView;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
@@ -35,6 +36,15 @@ public class MsgActivity extends BaseActivity {
       return 1;
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+      super.onViewCreated(view, savedInstanceState);
+
+      mRstvEmpty.setText("还没有新消息哦");
+      mRstvEmpty.setSubText("快去与大家发帖互动吧");
+      mRstvEmpty.setDrawable(R.drawable.scene_3);
+    }
+
     @Subscribe
     public void onPostEvent(Post post) {
       if (mMsgAdapter != null) {
@@ -47,6 +57,15 @@ public class MsgActivity extends BaseActivity {
     @Override
     protected int getCreateType() {
       return 0;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+      super.onViewCreated(view, savedInstanceState);
+
+      mRstvEmpty.setText(R.string.not_found_msg);
+      mRstvEmpty.setSubText(R.string.not_found_msg_tip);
+      mRstvEmpty.setDrawable(R.drawable.scene_3);
     }
 
     @Subscribe

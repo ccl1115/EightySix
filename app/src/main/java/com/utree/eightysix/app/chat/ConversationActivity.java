@@ -115,10 +115,6 @@ public class ConversationActivity extends BaseActivity {
     mConversationAdapter = new ConversationAdapter(conversations);
     mAlvConversation.setAdapter(mConversationAdapter);
 
-    mRstvEmpty.setDrawable(R.drawable.scene_1);
-    mRstvEmpty.setText("你还没有聊天");
-    mRstvEmpty.setSubText("快去帖子和评论中发起匿名聊天");
-
     mAlvConversation.setEmptyView(mRstvEmpty);
 
     mAlvConversation.setLoadMoreCallback(new LoadMoreCallback() {
