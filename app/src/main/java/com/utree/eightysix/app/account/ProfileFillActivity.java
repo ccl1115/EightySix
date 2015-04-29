@@ -138,9 +138,9 @@ public class ProfileFillActivity extends BaseActivity {
       });
     } else {
       getTopBar().getAbRight().hide();
+      getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
     }
 
-    getTopBar().getAbLeft().hide();
 
     mCameraUtil = new CameraUtil(this, new CameraUtil.Callback() {
       @Override
@@ -160,6 +160,9 @@ public class ProfileFillActivity extends BaseActivity {
 
   @Override
   public void onActionLeftClicked() {
+    if (!mFromRegister) {
+      finish();
+    }
   }
 
   @Override
