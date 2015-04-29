@@ -92,9 +92,8 @@
             android:layout_marginBottom="80dp"
             android:layout_gravity="center_horizontal|bottom"
             android:orientation="vertical"
-            android:background="@drawable/rounded_rect_grep_800"
+            android:background="#ffe6e6e6"
             android:padding="16dp"
-            android:visibility="gone"
             >
 
         <TextView
@@ -102,7 +101,6 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:text="温馨提示："
-                android:textColor="@android:color/white"
                 />
 
         <TextView
@@ -111,7 +109,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:textSize="14sp"
-                android:textColor="@android:color/white"
                 />
     </LinearLayout>
 </FrameLayout>
