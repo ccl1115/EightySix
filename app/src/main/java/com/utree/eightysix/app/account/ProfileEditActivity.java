@@ -36,7 +36,7 @@ import java.util.Calendar;
 /**
  */
 @Layout(R.layout.activity_profile_edit)
-@TopTitle(R.string.profile)
+@TopTitle(R.string.profile_edit)
 public class ProfileEditActivity extends BaseActivity {
 
   @InjectView(R.id.aiv_portrait)
