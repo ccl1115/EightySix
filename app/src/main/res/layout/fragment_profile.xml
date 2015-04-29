@@ -190,7 +190,7 @@
                                 android:layout_below="@+id/tv_circle_name"
                                 android:paddingTop="2dp"
                                 android:paddingBottom="2dp"
-                                android:paddingLeft="4dp"
+                                android:paddingLeft="10dp"
                                 android:paddingRight="10dp"
                                 android:textSize="14sp"
                                 android:textColor="@color/apptheme_primary_grey_color_200"
