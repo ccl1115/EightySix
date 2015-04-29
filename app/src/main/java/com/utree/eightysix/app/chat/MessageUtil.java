@@ -27,6 +27,12 @@ public class MessageUtil {
 
   private static Pattern sCmdPattern = Pattern.compile("<cmd\\s*(.+=\".+\")*\\s*>(.*)</cmd>");
 
+  /**
+   *
+   * <b>Note this will cause the item in ListView not responsible for OnItemClickListener</b>
+   * @param textView the text view
+   * @param message the message to be set
+   */
   public static void setText(TextView textView, FriendMessage message) {
     textView.setMovementMethod(LinkMovementMethod.getInstance());
     String content = message.getContent();

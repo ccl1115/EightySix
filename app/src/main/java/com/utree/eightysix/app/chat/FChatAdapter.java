@@ -188,20 +188,27 @@ public class FChatAdapter extends BaseAdapter {
   }
 
   private View getTextFromView(int position, View convertView, ViewGroup parent) {
-    View textView = getTextView(R.layout.item_friend_chat_text_from, position, convertView, parent);
+    FriendMessage message = getItem(position);
+
+    View textView = getTextView(R.layout.item_friend_chat_text_from, convertView, parent, message);
     TextItemViewHolder holder = (TextItemViewHolder) textView.getTag();
     holder.mAivPortrait.setUrl(mTargetPortraitUrl);
+
+    MessageUtil.setText(holder.mTvText, message);
     return textView;
   }
 
   private View getTextToView(int position, View convertView, ViewGroup parent) {
-    View textView = getTextView(R.layout.item_friend_chat_text_to, position, convertView, parent);
+    FriendMessage message = getItem(position);
+
+    View textView = getTextView(R.layout.item_friend_chat_text_to, convertView, parent, message);
     TextItemViewHolder holder = (TextItemViewHolder) textView.getTag();
     holder.mAivPortrait.setUrl(mMyPortraitUrl);
+    holder.mTvText.setText(message.getContent());
     return textView;
   }
 
-  private View getTextView(int layout, int position, View convertView, ViewGroup parent) {
+  private View getTextView(int layout, View convertView, ViewGroup parent, FriendMessage message) {
     TextItemViewHolder holder;
     if (convertView == null) {
       convertView = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
@@ -211,9 +218,6 @@ public class FChatAdapter extends BaseAdapter {
       holder = (TextItemViewHolder) convertView.getTag();
     }
 
-    FriendMessage message = getItem(position);
-
-    MessageUtil.setText(holder.mTvText, message);
     holder.mPbLoading.setVisibility(message.getStatus() == MessageConst.STATUS_IN_PROGRESS ? View.VISIBLE : View.GONE);
     holder.mIvError.setVisibility(message.getStatus() == MessageConst.STATUS_FAILED ? View.VISIBLE : View.GONE);
 
@@ -353,19 +357,4 @@ public class FChatAdapter extends BaseAdapter {
     }
   }
 
-  class PostItemViewHolder {
-
-    @InjectView(R.id.fl_post)
-    FrameLayout mFlPost;
-
-    @InjectView(R.id.tv_content)
-    TextView mTvContent;
-
-    @InjectView(R.id.aiv_post_bg)
-    AsyncImageView mAivBg;
-
-    PostItemViewHolder(View view) {
-      ButterKnife.inject(this, view);
-    }
-  }
 }
