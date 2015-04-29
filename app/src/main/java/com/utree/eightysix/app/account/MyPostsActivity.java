@@ -39,18 +39,19 @@ public class MyPostsActivity extends BaseActivity {
 
   private MyAnonymousPostsFragment mMyAnonymousPostsFragment = MyAnonymousPostsFragment.getInstance();
   private MyRealNamePostsFragment mMyRealNamePostsFragment = MyRealNamePostsFragment.getInstance();
+  private String mStatus;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
-    getTopBar().getAbRight().setText("开关");
     getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        if (v.isSelected()) {
-          getTopBar().getAbRight().setSelected(false);
+        if ("on".equals(mStatus)) {
+          getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_privacy_off));
+          mStatus = "off";
           U.request("user_setup_replace", new OnResponse2<Response>() {
             @Override
             public void onResponseError(Throwable e) {
@@ -60,7 +61,7 @@ public class MyPostsActivity extends BaseActivity {
             @Override
             public void onResponse(Response response) {
               if (!RESTRequester.responseOk(response)) {
-                getTopBar().getAbRight().setSelected(true);
+                getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_privacy_on));
               }
             }
           }, Response.class, "postPrivacy", "off");
@@ -80,7 +81,12 @@ public class MyPostsActivity extends BaseActivity {
       @Override
       public void onResponse(UserSetupResponse response) {
         if (RESTRequester.responseOk(response)) {
-          getTopBar().getAbRight().setSelected("on".equals(response.object.status));
+          mStatus = response.object.status;
+          if ("on".equals(mStatus)) {
+            getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_privacy_on));
+          } else {
+            getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_privacy_off));
+          }
         }
       }
     }, UserSetupResponse.class, "postPrivacy");
@@ -173,7 +179,8 @@ public class MyPostsActivity extends BaseActivity {
     dialog.setPositive("开启", new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        getTopBar().getAbRight().setSelected(true);
+        getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_privacy_on));
+        mStatus = "on";
         dialog.dismiss();
         U.request("user_setup_replace", new OnResponse2<Response>() {
           @Override
@@ -184,7 +191,7 @@ public class MyPostsActivity extends BaseActivity {
           @Override
           public void onResponse(Response response) {
             if (!RESTRequester.responseOk(response)) {
-              getTopBar().getAbRight().setSelected(false);
+              getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_privacy_off));
             }
           }
         }, Response.class, "postPrivacy", "on");
