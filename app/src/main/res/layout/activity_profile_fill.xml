@@ -19,7 +19,7 @@
             android:layout_width="128dp"
             android:layout_height="128dp"
             android:layout_marginTop="24dp"
-            android:background="@drawable/round_border_pressed"
+            android:background="@color/apptheme_primary_grey_color"
             >
 
         <TextView
