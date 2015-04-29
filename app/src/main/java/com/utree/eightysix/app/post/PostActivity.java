@@ -466,9 +466,11 @@ public class PostActivity extends BaseActivity
     mPostId = intent.getStringExtra("id");
     mGotoBottom = intent.getBooleanExtra("bottom", false);
 
-    if (mPost == null && TextUtils.isEmpty(mPostId)) {
-      showToast(getString(R.string.post_not_found), false);
-      finish();
+    if (mPost == null) {
+      if (TextUtils.isEmpty(mPostId)) {
+        showToast(getString(R.string.post_not_found), false);
+        finish();
+      }
     } else {
       mPostCommentsAdapter = new PostCommentsAdapter(this, mPost, null);
       mLvComments.setAdapter(mPostCommentsAdapter);
