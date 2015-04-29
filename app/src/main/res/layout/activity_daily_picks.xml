@@ -12,7 +12,7 @@
         android:background="@android:color/white"
         >
 
-    <com.utree.eightysix.widget.TitleTab
+    <com.utree.eightysix.widget.ScrollableTitleTab
             android:id="@+id/tt_tab"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

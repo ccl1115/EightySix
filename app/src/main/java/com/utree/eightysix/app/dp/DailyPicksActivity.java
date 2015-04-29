@@ -18,7 +18,7 @@ import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.response.TagsResponse;
 import com.utree.eightysix.rest.OnResponse2;
-import com.utree.eightysix.widget.TitleTab;
+import com.utree.eightysix.widget.ScrollableTitleTab;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,7 @@ public class DailyPicksActivity extends BaseActivity {
   }
 
   @InjectView(R.id.tt_tab)
-  public TitleTab mTtTab;
+  public ScrollableTitleTab mTtTab;
 
   @InjectView(R.id.vp_tab)
   public ViewPager mVpTab;

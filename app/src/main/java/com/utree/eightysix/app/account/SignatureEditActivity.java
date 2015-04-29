@@ -19,6 +19,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.account.event.SignatureUpdatedEvent;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
@@ -28,6 +29,7 @@ import com.utree.eightysix.widget.ThemedDialog;
 /**
  */
 @Layout(R.layout.activity_signature_edit)
+@TopTitle(R.string.signature_edit)
 public class SignatureEditActivity extends BaseActivity {
 
   private boolean mTextChanged;
