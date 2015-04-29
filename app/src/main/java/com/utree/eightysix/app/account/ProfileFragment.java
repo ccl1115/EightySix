@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -216,12 +217,14 @@ public class ProfileFragment extends HolderFragment {
           int px = U.dp2px(16);
           textView.setPadding(px, px, px, px);
 
-          String format = String.format("%s\n\n%s\n\n%s",
-              "等级是随着经验值增长的,即不同的经验值对应不同的等级。\n" +
-                  " \n" +
-                  "如何获取经验值？", response.object.howToGetExperience.content, "等级对应的经验值，可在帮助中查看");
+          SpannableStringBuilder builder = new SpannableStringBuilder();
+          builder.append("等级是随着经验值增长的,即不同的经验值对应不同的等级。\n\n");
+          builder.append("如何获取经验值？\n\n",
+              new ForegroundColorSpan(getResources().getColor(R.color.apptheme_primary_light_color)), 0);
+          builder.append(response.object.howToGetExperience.content);
+          builder.append("\n\n等级对应的经验值，可在帮助中查看");
 
-          textView.setText(format);
+          textView.setText(builder);
           textView.setEms(16);
 
           dialog.setContent(textView);
