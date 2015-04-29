@@ -43,6 +43,7 @@
                     android:paddingTop="2dp"
                     android:paddingBottom="2dp"
                     android:textColor="@android:color/white"
+                    android:background="@drawable/round_border_white"
                     />
 
             <TextView
