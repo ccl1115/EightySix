@@ -48,5 +48,8 @@ public class Friend {
 
   @SerializedName("source")
   public String source;
+
+  @SerializedName("isFriend")
+  public int isFriend;
 }
 

@@ -77,6 +77,9 @@ public class UserSearchAdapter extends BaseAdapter {
     public TextView mTvRelation;
 
     public void setData(Friend friend) {
+      if (friend.isFriend == 1) {
+        friend.userName += " (朋友)";
+      }
       mTvUsername.setText(friend.userName);
       mTvSource.setText(friend.workinFactory);
       mTvRelation.setText(friend.relation);
