@@ -33,7 +33,10 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/aiv_portrait"
             android:layout_toEndOf="@+id/aiv_portrait"
+            android:layout_toLeftOf="@+id/iv_chat"
+            android:layout_toStartOf="@+id/iv_chat"
             android:layout_marginTop="12dp"
+            android:ellipsize="end"
             />
 
     <TextView
@@ -42,6 +45,8 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/aiv_portrait"
             android:layout_toEndOf="@+id/aiv_portrait"
+            android:layout_toLeftOf="@+id/iv_chat"
+            android:layout_toStartOf="@+id/iv_chat"
             android:layout_below="@+id/tv_name"
             />
 
@@ -51,6 +56,8 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/aiv_portrait"
             android:layout_toEndOf="@+id/aiv_portrait"
+            android:layout_toLeftOf="@+id/iv_chat"
+            android:layout_toStartOf="@+id/iv_chat"
             android:layout_below="@id/tv_signature"
             android:layout_marginBottom="16dp"
             />
@@ -73,6 +80,7 @@
             android:layout_height="1px"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
+            android:layout_alignParentBottom="true"
             android:background="@color/apptheme_primary_grey_color"
             />
 
