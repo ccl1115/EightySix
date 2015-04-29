@@ -94,6 +94,7 @@
                         </FrameLayout>
 
                         <RelativeLayout
+                                android:id="@+id/rl_exp"
                                 android:layout_width="105dp"
                                 android:layout_height="25dp"
                                 android:layout_alignParentRight="true"
@@ -155,24 +156,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_toRightOf="@+id/fl_portrait"
                                 android:layout_toEndOf="@+id/fl_portrait"
+                                android:layout_toLeftOf="@+id/rl_exp"
+                                android:layout_toStartOf="@+id/rl_exp"
                                 android:paddingLeft="10dp"
                                 android:paddingBottom="2dp"
                                 android:paddingRight="4dp"
                                 android:textSize="16sp"
                                 android:textColor="@android:color/white"
-                                />
-
-                        <ImageView
-                                android:id="@+id/iv_gender"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_toRightOf="@+id/tv_name"
-                                android:layout_toEndOf="@+id/tv_name"
-                                android:layout_marginLeft="4dp"
-                                android:layout_marginRight="4dp"
-                                android:layout_marginTop="4dp"
-                                android:textSize="14sp"
-                                android:textColor="@color/apptheme_primary_grey_color_200"
                                 />
 
                         <TextView
@@ -195,8 +185,8 @@
                                 android:id="@+id/tv_age"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_toRightOf="@+id/tv_gender"
-                                android:layout_toEndOf="@+id/tv_gender"
+                                android:layout_toRightOf="@+id/fl_portrait"
+                                android:layout_toEndOf="@+id/fl_portrait"
                                 android:layout_below="@+id/tv_circle_name"
                                 android:paddingTop="2dp"
                                 android:paddingBottom="2dp"

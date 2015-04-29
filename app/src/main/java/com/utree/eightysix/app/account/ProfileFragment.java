@@ -6,12 +6,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.*;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -67,9 +72,6 @@ public class ProfileFragment extends HolderFragment {
 
   @InjectView(R.id.tv_signature)
   public TextView mTvSignature;
-
-  @InjectView(R.id.iv_gender)
-  public ImageView mIvGender;
 
   @InjectView(R.id.tv_birthday)
   public TextView mTvBirthday;
@@ -361,7 +363,13 @@ public class ProfileFragment extends HolderFragment {
             mFlGuide.setVisibility(View.GONE);
           }
 
-          mTvName.setText(mProfile.userName);
+          SpannableStringBuilder builder = new SpannableStringBuilder(mProfile.userName);
+          ImageSpan span = new ImageSpan(getActivity(),
+              mProfile.sex.equals("男") ? R.drawable.ic_profile_male : R.drawable.ic_profile_female);
+          builder.append("    ");
+          builder.setSpan(span, builder.length() - 1, builder.length(), 0);
+
+          mTvName.setText(builder);
           if (mProfile.birthday == -1) {
             mTvBirthday.setVisibility(View.INVISIBLE);
             mTvAge.setVisibility(View.INVISIBLE);
@@ -374,8 +382,6 @@ public class ProfileFragment extends HolderFragment {
             mTvConstellation.setVisibility(View.VISIBLE);
             mTvConstellation.setText(mProfile.constellation);
           }
-          mIvGender.setImageResource("男".equals(mProfile.sex) ?
-              R.drawable.ic_profile_male : R.drawable.ic_profile_female);
           mAivBg.setUrl(mProfile.background);
           mAivPortrait.setUrl(mProfile.avatar);
           if (TextUtils.isEmpty(mProfile.signature)) {
@@ -543,8 +549,13 @@ public class ProfileFragment extends HolderFragment {
 
   @Subscribe
   public void onGenderUpdatedEvent(GenderUpdatedEvent event) {
-    mIvGender.setImageResource("男".equals(mProfile.sex) ?
-        R.drawable.ic_profile_male : R.drawable.ic_profile_female);
+    SpannableStringBuilder builder = new SpannableStringBuilder(mProfile.userName);
+    ImageSpan span = new ImageSpan(getActivity(),
+        event.getGender().equals("男") ? R.drawable.ic_profile_male : R.drawable.ic_profile_female);
+    builder.append("    ");
+    builder.setSpan(span, builder.length() - 1, builder.length(), 0);
+
+    mTvName.setText(builder);
   }
 
   @Subscribe
