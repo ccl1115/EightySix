@@ -111,7 +111,7 @@ public class AvatarsActivity extends BaseActivity {
       }
 
       @Override
-      public void onResponse(UserAvatarsResponse response) {
+      public void onResponse(final UserAvatarsResponse response) {
 
         if (RESTRequester.responseOk(response)) {
           final int size = response.object == null ? 0 : response.object.size();
@@ -121,14 +121,14 @@ public class AvatarsActivity extends BaseActivity {
           }
 
           for (int i = 0; i < size; i++) {
-            final String avatar = response.object.get(i).avatar;
-            if (!TextUtils.isEmpty(avatar)) {
-              if (response.object.get(i).beUsed == 1) {
+            final UserAvatarsResponse.Avatar avatar = response.object.get(i);
+            if (!TextUtils.isEmpty(avatar.avatar)) {
+              if (avatar.beUsed == 1) {
                 mIvSelected[i].setVisibility(View.VISIBLE);
               } else {
                 mIvSelected[i].setVisibility(View.GONE);
               }
-              mAivAvatars[i].setUrl(avatar);
+              mAivAvatars[i].setUrl(avatar.avatar);
               final int finalI = i;
               mAivAvatars[i].setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -139,8 +139,12 @@ public class AvatarsActivity extends BaseActivity {
               mAivAvatars[i].setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                  showMenuDialog(avatar);
-                  return true;
+                  if (avatar.beUsed == 1) {
+                    return false;
+                  } else {
+                    showMenuDialog(avatar.avatar);
+                    return true;
+                  }
                 }
               });
             }
