@@ -149,46 +149,11 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
       );
       mShowProgressBarAnimator.setDuration(500);
     }
-    if (mHideProgressBarAnimator != null) mHideProgressBarAnimator.cancel();
     mShowProgressBarAnimator.start();
   }
 
   public final void hideProgressBar() {
-    if (mHideProgressBarAnimator == null) {
-      mHideProgressBarAnimator = new AnimatorSet();
-      mHideProgressBarAnimator.playTogether(
-          ObjectAnimator.ofFloat(mLlLoadingWrapper, "translationY", 0,
-              mLlLoadingWrapper.getMeasuredHeight()),
-          ObjectAnimator.ofFloat(mLlLoadingWrapper, "alpha", 1f, 0f)
-      );
-      mHideProgressBarAnimator.setDuration(500);
-      mHideProgressBarAnimator.setStartDelay(1000);
-      mHideProgressBarAnimator.addListener(new Animator.AnimatorListener() {
-        @Override
-        public void onAnimationStart(Animator animation) {
-
-        }
-
-        @Override
-        public void onAnimationEnd(Animator animation) {
-          mProgressBar.setVisibility(View.INVISIBLE);
-          ViewHelper.setTranslationY(mLlLoadingWrapper, 0);
-        }
-
-        @Override
-        public void onAnimationCancel(Animator animation) {
-
-        }
-
-        @Override
-        public void onAnimationRepeat(Animator animation) {
-
-        }
-      });
-    }
-    if (mShowProgressBarAnimator != null) mShowProgressBarAnimator.cancel();
-    mHideProgressBarAnimator.start();
-
+    mProgressBar.setVisibility(View.INVISIBLE);
     hideProgressMask();
   }
 

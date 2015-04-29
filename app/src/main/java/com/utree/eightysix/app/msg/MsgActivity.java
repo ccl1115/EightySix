@@ -37,7 +37,9 @@ public class MsgActivity extends BaseActivity {
 
     @Subscribe
     public void onPostEvent(Post post) {
-      mMsgAdapter.notifyDataSetChanged();
+      if (mMsgAdapter != null) {
+        mMsgAdapter.notifyDataSetChanged();
+      }
     }
   };
 
@@ -49,7 +51,9 @@ public class MsgActivity extends BaseActivity {
 
     @Subscribe
     public void onPostEvent(Post post) {
-      mMsgAdapter.notifyDataSetChanged();
+      if (mMsgAdapter != null) {
+        mMsgAdapter.notifyDataSetChanged();
+      }
     }
   };
 
