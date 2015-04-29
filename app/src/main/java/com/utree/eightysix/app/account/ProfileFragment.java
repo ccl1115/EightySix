@@ -241,10 +241,6 @@ public class ProfileFragment extends HolderFragment {
         getBaseActivity().hideProgressBar();
       }
     }, CopywritingResponse.class);
-
-    ThemedDialog dialog = new ThemedDialog(getActivity());
-
-    dialog.setTitle("等级帮助");
   }
 
   @Override
@@ -307,7 +303,7 @@ public class ProfileFragment extends HolderFragment {
         mFileHash = IOUtils.fileHash(file);
         ImageUtils.asyncUpload(file);
       }
-    });
+    }, "上传背景图片");
 
 
     mScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {

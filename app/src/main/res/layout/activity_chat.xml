@@ -94,6 +94,7 @@
             android:orientation="vertical"
             android:background="#ffe6e6e6"
             android:padding="16dp"
+            android:visibility="gone"
             >
 
         <TextView

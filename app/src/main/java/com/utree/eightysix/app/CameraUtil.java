@@ -38,6 +38,8 @@ public class CameraUtil {
 
   private boolean mFixedRatio = true;
 
+  private String mTitle;
+
   public CameraUtil(BaseActivity activity, Callback callback) {
     mActivity = activity;
     mCallback = callback;
@@ -49,8 +51,14 @@ public class CameraUtil {
     mCallback = callback;
   }
 
+  public CameraUtil(BaseFragment fragment, Callback callback, String title) {
+    this(fragment, callback);
+    mTitle = title;
+  }
+
   /**
    * Default is true
+   *
    * @param fixedRatio true if want to fix the ratio to 1:1
    */
   public void setFixedRatioWhenCrop(boolean fixedRatio) {
@@ -60,29 +68,31 @@ public class CameraUtil {
   public void showCameraDialog() {
 
     if (mCameraDialog == null) {
-      mCameraDialog = new AlertDialog.Builder(mActivity).setTitle(R.string.add_photo).setItems(new String[]{
-          mActivity.getString(R.string.use_camera),
-          mActivity.getString(R.string.select_album)
-      }, new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-          switch (which) {
-            case 0:
-              if (!(mStartCamera = startCamera())) {
-                mActivity.showToast(R.string.error_start_camera);
+      mCameraDialog = new AlertDialog.Builder(mActivity)
+          .setTitle(mTitle == null ? mActivity.getString(R.string.add_photo) : mTitle)
+          .setItems(new String[]{
+              mActivity.getString(R.string.use_camera),
+              mActivity.getString(R.string.select_album)
+          }, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              switch (which) {
+                case 0:
+                  if (!(mStartCamera = startCamera())) {
+                    mActivity.showToast(R.string.error_start_camera);
+                  }
+                  break;
+                case 1:
+                  if (!(mStartAlbum = startAlbum())) {
+                    mActivity.showToast(R.string.error_start_album);
+                  }
+                  break;
+                case Dialog.BUTTON_NEGATIVE:
+                  dialog.dismiss();
+                  break;
               }
-              break;
-            case 1:
-              if (!(mStartAlbum = startAlbum())) {
-                mActivity.showToast(R.string.error_start_album);
-              }
-              break;
-            case Dialog.BUTTON_NEGATIVE:
-              dialog.dismiss();
-              break;
-          }
-        }
-      }).create();
+            }
+          }).create();
     }
 
     mCameraDialog.show();

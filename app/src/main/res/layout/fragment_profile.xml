@@ -370,7 +370,7 @@
             android:layout_marginTop="72dp"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:text="上传背景图片"
+            android:text="更改背景图片"
             android:textSize="12sp"
             android:textColor="#88ffffff"
             android:padding="4dp"
