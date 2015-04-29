@@ -232,7 +232,8 @@ public class ChatAdapter extends BaseAdapter {
       holder.mFpvPortrait.setEmotion(' ');
       holder.mFpvPortrait.setBackgroundResource(R.drawable.ic_host_portrait);
     } else {
-      holder.mFpvPortrait.setEmotion(mTargetPortrait.charAt(0));
+      holder.mFpvPortrait.setEmotion(mTargetPortrait.charAt(0)
+      );
       holder.mFpvPortrait.setEmotionColor(mTargetPortraitColor);
     }
     return textView;

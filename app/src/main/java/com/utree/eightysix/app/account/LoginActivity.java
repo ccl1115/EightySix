@@ -100,6 +100,7 @@ public class LoginActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
     setTopTitle(getString(R.string.login) + getString(R.string.app_name));
 
     mEtPwd.setHint("");

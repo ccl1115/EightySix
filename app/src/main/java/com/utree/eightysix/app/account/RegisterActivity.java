@@ -92,6 +92,7 @@ public class RegisterActivity extends BaseActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_register);
 
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
     setTopTitle(getString(R.string.register) + getString(R.string.app_name));
 
     mEtPhoneNumber.addTextChangedListener(new TextWatcher() {
