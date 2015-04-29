@@ -10,7 +10,6 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
         android:background="@drawable/apptheme_primary_list_selector"
         >
 
@@ -18,8 +17,10 @@
             android:id="@+id/aiv_portrait"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
             android:layout_marginRight="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
             app:width="48dp"
             app:height="48dp"
             app:radius="8dp"
@@ -29,6 +30,7 @@
             android:id="@+id/tv_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_toRightOf="@+id/aiv_portrait"
             android:layout_toEndOf="@+id/aiv_portrait"
             android:textSize="18sp"
@@ -40,6 +42,7 @@
             android:layout_height="16dp"
             android:layout_toRightOf="@+id/tv_username"
             android:layout_toEndOf="@+id/tv_username"
+            android:layout_marginTop="20dp"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             />
@@ -62,6 +65,15 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:textColor="@color/apptheme_primary_grey_color_200"
+            />
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/apptheme_primary_grey_color_200"
             />
 
 </RelativeLayout>
