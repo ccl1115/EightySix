@@ -149,6 +149,7 @@ public class AvatarsActivity extends BaseActivity {
           if (size < 9) {
             if (mViewId == null) {
               mAivAvatars[size].setImageResource(R.drawable.ic_avatar_add);
+              mIvSelected[size].setVisibility(View.GONE);
               mAivAvatars[size].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -157,10 +158,12 @@ public class AvatarsActivity extends BaseActivity {
               });
             } else {
               mAivAvatars[size].setImageResource(0);
+              mIvSelected[size].setVisibility(View.GONE);
             }
 
             for (int i = size + 1; i < 9; i++) {
               mAivAvatars[i].setImageResource(0);
+              mIvSelected[size].setVisibility(View.GONE);
             }
           }
         }
