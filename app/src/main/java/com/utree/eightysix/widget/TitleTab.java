@@ -26,6 +26,7 @@ public class TitleTab extends FrameLayout {
   @InjectView(R.id.in_tab)
   public IndicatorView mInTab;
   private ViewPager.OnPageChangeListener mListener;
+  private OnTabItemClickedListener mOnTabItemClickedListener;
 
   public TitleTab(Context context) {
     this(context, null, 0);
@@ -110,6 +111,9 @@ public class TitleTab extends FrameLayout {
       @Override
       public void onClick(View v) {
         mViewPager.setCurrentItem(i, true);
+        if (mOnTabItemClickedListener != null) {
+          mOnTabItemClickedListener.onTabItemClicked(v, i);
+        }
       }
     });
     return view;
@@ -132,5 +136,13 @@ public class TitleTab extends FrameLayout {
 
   public void setTabText(int position, String text) {
     ((TextView) mLlTabs.getChildAt(position).findViewById(R.id.tv_title)).setText(text);
+  }
+
+  public void setOnTabItemClicked(OnTabItemClickedListener listener) {
+    mOnTabItemClickedListener = listener;
+  }
+
+  public interface OnTabItemClickedListener {
+    public void onTabItemClicked(View view, int position);
   }
 }

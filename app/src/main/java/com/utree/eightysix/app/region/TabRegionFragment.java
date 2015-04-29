@@ -368,6 +368,25 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
       }
     });
 
+    mTtTab.setOnTabItemClicked(new TitleTab.OnTabItemClickedListener() {
+      @Override
+      public void onTabItemClicked(View view, int position) {
+        if (mVpTab.getCurrentItem() == position) {
+          switch (position) {
+            case 0:
+              mFeedFragment.mLvFeed.setSelection(0);
+              break;
+            case 1:
+              mHotFeedFragment.mLvFeed.setSelection(0);
+              break;
+            case 2:
+              mFriendsFeedFragment.mLvFeed.setSelection(0);
+              break;
+          }
+        }
+      }
+    });
+
     mVpTab.setCurrentItem(getArguments().getInt("tabIndex"));
 
     getBaseActivity().getHandler().postDelayed(new Runnable() {
