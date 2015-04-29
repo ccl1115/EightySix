@@ -39,7 +39,6 @@ import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.ImageActionButton;
 import com.utree.eightysix.widget.ThemedDialog;
 
 import java.io.File;
@@ -426,8 +425,6 @@ public class ChatActivity extends BaseActivity implements
     U.request("chat_fav_add", new OnResponse2<Response>() {
       @Override
       public void onResponseError(Throwable e) {
-        ((ImageActionButton) getTopBar().getActionView(0))
-            .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_outline));
       }
 
       @Override
@@ -436,9 +433,7 @@ public class ChatActivity extends BaseActivity implements
           mConversation.setFavorite(true);
           DaoUtils.getConversationDao().update(mConversation);
           U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_INSERT_OR_UPDATE, mConversation));
-        } else {
-          ((ImageActionButton) getTopBar().getActionView(0))
-              .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_outline));
+          showToast("收藏成功");
         }
       }
     }, Response.class, mChatId, mConversation.getPostId(), mConversation.getCommentId());
@@ -449,8 +444,6 @@ public class ChatActivity extends BaseActivity implements
       U.request("chat_fav_del", new OnResponse2<Response>() {
         @Override
         public void onResponseError(Throwable e) {
-          ((ImageActionButton) getTopBar().getActionView(0))
-              .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
         }
 
         @Override
@@ -459,9 +452,6 @@ public class ChatActivity extends BaseActivity implements
             mConversation.setFavorite(false);
             DaoUtils.getConversationDao().update(mConversation);
             U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, mConversation));
-          } else {
-            ((ImageActionButton) getTopBar().getActionView(0))
-                .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
           }
         }
       }, Response.class, mChatId, mConversation.getPostId(), mConversation.getCommentId());
@@ -537,22 +527,34 @@ public class ChatActivity extends BaseActivity implements
   private void showMoreDialog() {
     new AlertDialog.Builder(this).setTitle(getString(R.string.chat_actions))
         .setItems(
-            new String[]{getString(R.string.report),
+            new String[]{
+                (mConversation.getFavorite() != null && mConversation.getFavorite()) ?
+                    getString(R.string.unfavorite) : getString(R.string.favorite),
+                getString(R.string.report),
                 getString(R.string.delete),
-                (mConversation.getBanned() != null && mConversation.getBanned()) ? getString(R.string.shielded) : getString(R.string.shield)},
+                (mConversation.getBanned() != null && mConversation.getBanned()) ?
+                    getString(R.string.shielded) : getString(R.string.shield)},
             new DialogInterface.OnClickListener() {
               @Override
               public void onClick(DialogInterface dialogInterface, int i) {
                 switch (i) {
                   case 0: {
-                    showReportConfirmDialog();
+                    if (mConversation.getFavorite() != null && mConversation.getFavorite()) {
+                      requestFavDel();
+                    } else {
+                      requestFavAdd();
+                    }
                     break;
                   }
                   case 1: {
-                    showDeleteConfirmDialog();
+                    showReportConfirmDialog();
                     break;
                   }
                   case 2: {
+                    showDeleteConfirmDialog();
+                    break;
+                  }
+                  case 3: {
                     if (mConversation.getBanned() == null || !mConversation.getBanned()) {
                       showShieldConfirmDialog();
                     }

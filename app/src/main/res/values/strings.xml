@@ -295,4 +295,6 @@
     <string name="topic_desc">话题描述</string>
     <string name="assistant">蓝莓小助手</string>
     <string name="settings_msg">消息设置</string>
+    <string name="favorite">收藏</string>
+    <string name="unfavorite">取消收藏</string>
 </resources>
