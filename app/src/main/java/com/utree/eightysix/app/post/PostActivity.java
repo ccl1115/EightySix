@@ -55,7 +55,6 @@ import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.AsyncImageViewWithRoundCorner;
 import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.guide.Guide;
-import de.akquinet.android.androlog.Log;
 
 import java.util.regex.Pattern;
 
@@ -461,28 +460,27 @@ public class PostActivity extends BaseActivity
     mPostId = intent.getStringExtra("id");
     mGotoBottom = intent.getBooleanExtra("bottom", false);
 
-    Log.d("PostActivity", "postId: " + ((mPost != null) ? mPost.id : mPostId));
-
     if (mPost == null && TextUtils.isEmpty(mPostId)) {
       showToast(getString(R.string.post_not_found), false);
       finish();
     } else {
       mPostCommentsAdapter = new PostCommentsAdapter(this, mPost, null);
       mLvComments.setAdapter(mPostCommentsAdapter);
-      if (mPost != null) {
-        if (!TextUtils.isEmpty(mPost.userName)) {
-          mTvName.setVisibility(View.VISIBLE);
-          mAivPortrait.setVisibility(View.VISIBLE);
-          mAivLevelIcon.setVisibility(View.VISIBLE);
-          mTvName.setText(mPost.userName);
-          mAivPortrait.setUrl(mPost.avatar);
-          mAivLevelIcon.setUrl(mPost.levelIcon);
-          mLlBanner.setBackgroundColor(Color.WHITE);
-        } else {
-          mTvName.setVisibility(View.GONE);
-          mAivPortrait.setVisibility(View.GONE);
-          mAivLevelIcon.setVisibility(View.GONE);
-        }
+      if (!TextUtils.isEmpty(mPost.userName)) {
+        mTvName.setVisibility(View.VISIBLE);
+        mAivPortrait.setVisibility(View.VISIBLE);
+        mAivLevelIcon.setVisibility(View.VISIBLE);
+        mTvName.setText(mPost.userName);
+        mAivPortrait.setUrl(mPost.avatar);
+        mAivLevelIcon.setUrl(mPost.levelIcon);
+        mLlBanner.setBackgroundColor(Color.WHITE);
+        mIvClose.setImageResource(R.drawable.ic_action_post_close);
+      } else {
+        mTvName.setVisibility(View.GONE);
+        mAivPortrait.setVisibility(View.GONE);
+        mAivLevelIcon.setVisibility(View.GONE);
+        mLlBanner.setBackgroundColor(Color.TRANSPARENT);
+        mIvClose.setImageResource(R.drawable.ic_action_post_close_white);
       }
     }
 
