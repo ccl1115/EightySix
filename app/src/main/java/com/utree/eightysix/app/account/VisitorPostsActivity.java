@@ -18,7 +18,6 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.response.MyPostsResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
@@ -30,14 +29,14 @@ import com.utree.eightysix.widget.RandomSceneTextView;
 /**
  */
 @Layout(R.layout.activity_visitor_posts)
-@TopTitle(R.string.his_posts)
 public class VisitorPostsActivity extends BaseActivity {
 
   private BasePostsAdapter mAdapter;
 
-  public static void start(Context context, int viewId) {
+  public static void start(Context context, int viewId, String gender) {
     Intent intent = new Intent(context, VisitorPostsActivity.class);
     intent.putExtra("viewId", viewId);
+    intent.putExtra("gender", gender);
 
     if (!(context instanceof Activity)) {
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -63,6 +62,12 @@ public class VisitorPostsActivity extends BaseActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    if (getIntent().getStringExtra("gender").equals("男")) {
+      setTopTitle("他的帖子");
+    } else {
+      setTopTitle("她的帖子");
+    }
 
     setTopSubTitle("非匿名帖");
 

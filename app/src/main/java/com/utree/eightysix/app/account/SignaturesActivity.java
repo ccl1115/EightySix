@@ -38,17 +38,19 @@ import java.util.List;
 @Layout(R.layout.activity_signatures)
 public class SignaturesActivity extends BaseActivity {
 
-  public static void start(Context context, boolean isVisitor, int viewId)   {
+  public static void start(Context context, boolean isVisitor, int viewId, String gender) {
     Intent intent = new Intent(context, SignaturesActivity.class);
 
     intent.putExtra("isVisitor", isVisitor);
     intent.putExtra("viewId", viewId);
+    intent.putExtra("gender", gender);
 
     if (!(context instanceof Activity)) {
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     }
 
     context.startActivity(intent);
+
   }
 
   @InjectView(R.id.alv_signatures)
@@ -72,7 +74,11 @@ public class SignaturesActivity extends BaseActivity {
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
     if (mIsVisitor) {
-      setTopTitle("他的签名");
+      if (getIntent().getStringExtra("gender").equals("男")) {
+        setTopTitle("他的签名");
+      } else {
+        setTopTitle("她的签名");
+      }
     } else {
       setTopTitle("我的签名");
       getTopBar().getAbRight().setText("新增");

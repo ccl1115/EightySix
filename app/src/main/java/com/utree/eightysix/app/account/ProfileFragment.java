@@ -132,13 +132,16 @@ public class ProfileFragment extends HolderFragment {
   public SwipeRefreshLayout mRefreshLayout;
 
   private CameraUtil mCameraUtil;
+
   private boolean mIsVisitor;
+
   private int mViewId;
+
   private String mFileHash;
+
   private Profile mProfile;
 
   private long mLastRefreshTimestamp;
-
 
   @OnClick(R.id.rb_edit)
   public void onRbEditClicked() {
@@ -176,13 +179,13 @@ public class ProfileFragment extends HolderFragment {
 
   @OnClick(R.id.ll_signature)
   public void onLlSignatureClicked() {
-    SignaturesActivity.start(getActivity(), mIsVisitor, mViewId);
+    SignaturesActivity.start(getActivity(), mIsVisitor, mViewId, mProfile == null ? "女" : mProfile.sex);
   }
 
   @OnClick(R.id.tv_my_posts)
   public void onMyPostsClicked() {
     if (mIsVisitor && !isSelf()) {
-      VisitorPostsActivity.start(getActivity(), mViewId);
+      VisitorPostsActivity.start(getActivity(), mViewId, mProfile == null ? "女" : mProfile.sex);
     } else {
       startActivity(new Intent(getActivity(), MyPostsActivity.class));
     }
