@@ -133,7 +133,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="好友请求"
+                    android:text="朋友请求"
                     android:drawableLeft="@drawable/ic_item_friend_requests"
                     android:drawableStart="@drawable/ic_item_friend_requests"
                     android:drawablePadding="10dp"

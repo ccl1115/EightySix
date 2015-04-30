@@ -137,6 +137,8 @@ public class FeedsSearchActivity extends BaseActivity {
     });
 
     requestTags();
+
+    onNewIntent(getIntent());
   }
 
   @Override
