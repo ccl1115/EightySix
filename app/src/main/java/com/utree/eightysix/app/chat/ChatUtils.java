@@ -24,7 +24,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.chat.content.ImageContent;
-import com.utree.eightysix.app.home.HomeActivity;
+import com.utree.eightysix.app.home.HomeTabActivity;
 import com.utree.eightysix.dao.FriendMessage;
 import com.utree.eightysix.dao.Message;
 import com.utree.eightysix.data.Comment;
@@ -380,13 +380,13 @@ public class ChatUtils {
       Intent[] intents;
       if (count == 1) {
         intents = new Intent[]{
-            HomeActivity.getIntent(context, 0, 0),
+            HomeTabActivity.getIntent(context, 0),
             ConversationActivity.getIntent(context),
             ChatActivity.getIntent(context, message.getChatId())
         };
       } else {
         intents = new Intent[]{
-            HomeActivity.getIntent(context, 0, 0),
+            HomeTabActivity.getIntent(context, 0),
             ConversationActivity.getIntent(context)
         };
       }
@@ -430,13 +430,13 @@ public class ChatUtils {
       Intent[] intents;
       if (count == 1) {
         intents = new Intent[]{
-            HomeActivity.getIntent(context, 0, 0),
+            HomeTabActivity.getIntent(context, 0),
             ConversationActivity.getIntent(context),
             ChatActivity.getIntent(context, message.getChatId())
         };
       } else {
         intents = new Intent[]{
-            HomeActivity.getIntent(context, 0, 0),
+            HomeTabActivity.getIntent(context, 0),
             ConversationActivity.getIntent(context)
         };
       }

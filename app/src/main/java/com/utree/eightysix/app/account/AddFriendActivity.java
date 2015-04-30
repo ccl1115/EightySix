@@ -27,7 +27,6 @@ import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.friends.FriendContactListActivity;
 import com.utree.eightysix.app.friends.SendRequestActivity;
 import com.utree.eightysix.app.friends.UserSearchActivity;
-import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.Circle;
@@ -56,9 +55,20 @@ public class AddFriendActivity extends BaseActivity {
 
 
     @SerializedName("object")
-    public HomeActivity.GetInviteCode object;
+    public GetInviteCode object;
   }
 
+  @Keep
+  public static class GetInviteCode {
+    @SerializedName("msg")
+    public String msg;
+
+    @SerializedName("newCount")
+    public int newCount;
+
+    @SerializedName("inviteCode")
+    public String inviteCode;
+  }
 
   public class HeadViewHolder {
 

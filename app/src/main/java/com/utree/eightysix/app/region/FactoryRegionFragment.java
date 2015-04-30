@@ -14,7 +14,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.feed.FeedActivity;
-import com.utree.eightysix.app.home.HomeActivity;
+import com.utree.eightysix.app.home.HomeTabActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.request.FactoryRegionRequest;
 import com.utree.eightysix.response.FactoryRegionResponse;
@@ -48,7 +48,7 @@ public class FactoryRegionFragment extends BaseFragment {
   public void onAlvItemClicked(int position, View view) {
     Circle item = mAdapter.getItem(position);
     if (item.currFactory == 1) {
-      HomeActivity.start(view.getContext(), 0);
+      HomeTabActivity.start(view.getContext(), 0);
     } else {
       FeedActivity.start(view.getContext(), item);
     }

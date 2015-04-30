@@ -86,6 +86,10 @@ public class HomeTabActivity extends BaseActivity {
   }
 
   public static void start(Context context, int regionType) {
+    context.startActivity(getIntent(context, regionType));
+  }
+
+  public static Intent getIntent(Context context, int regionType) {
     Intent i = new Intent(context, HomeTabActivity.class);
     i.putExtra("regionType", regionType);
 
@@ -93,7 +97,7 @@ public class HomeTabActivity extends BaseActivity {
       i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     }
 
-    context.startActivity(i);
+    return i;
   }
 
 

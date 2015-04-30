@@ -27,7 +27,6 @@ import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.event.CurrentCircleNameUpdatedEvent;
 import com.utree.eightysix.app.circle.event.CircleFollowsChangedEvent;
 import com.utree.eightysix.app.feed.FeedActivity;
-import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.app.home.HomeTabActivity;
 import com.utree.eightysix.app.snapshot.SnapshotActivity;
 import com.utree.eightysix.data.Circle;
@@ -137,7 +136,7 @@ public class BaseCirclesActivity extends BaseActivity {
         circle.selected = true;
         if (circle.currFactory == 1) {
           finish();
-          HomeActivity.start(this, 0);
+          HomeTabActivity.start(this, 0);
         } else {
           FeedActivity.start(this, circle, true);
         }

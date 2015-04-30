@@ -50,12 +50,6 @@ public abstract class BasePostsFragment extends BaseFragment {
   public void onViewCreated(View view, Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
 
-    mRefreshLayout.setColorSchemeResources(
-        R.color.apptheme_primary_light_color,
-        R.color.apptheme_primary_light_color_pressed,
-        R.color.apptheme_primary_light_color,
-        R.color.apptheme_primary_light_color_pressed);
-
     mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override
       public void onRefresh() {
@@ -119,9 +113,10 @@ public abstract class BasePostsFragment extends BaseFragment {
 
     if (RESTRequester.responseOk(response)) {
       if (mPage == 1) {
-        if (response.object.size() == 0) {
+        if (response.object == null || response.object.size() == 0) {
           mRstvEmpty.setVisibility(View.VISIBLE);
         } else {
+          mRstvEmpty.setVisibility(View.GONE);
           mAdapter = new BasePostsAdapter(response.object);
           mAlvPosts.setAdapter(mAdapter);
         }

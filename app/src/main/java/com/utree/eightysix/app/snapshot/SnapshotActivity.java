@@ -7,12 +7,10 @@ package com.utree.eightysix.app.snapshot;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.View;
 import android.view.ViewGroup;
 import butterknife.InjectView;
 import com.google.gson.annotations.SerializedName;
@@ -24,15 +22,11 @@ import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.feed.FeedActivity;
-import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.data.Circle;
-import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.ScrollableTitleTab;
-import com.utree.eightysix.widget.TopBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -144,43 +138,6 @@ public class SnapshotActivity extends BaseActivity {
           setTopTitle(mCircle.shortName);
 
           buildFragments(response.object.list);
-
-          mTopBar.setActionAdapter(new TopBar.ActionAdapter() {
-            @Override
-            public String getTitle(int position) {
-              return "动态";
-            }
-
-            @Override
-            public Drawable getIcon(int position) {
-              return null;
-            }
-
-            @Override
-            public Drawable getBackgroundDrawable(int position) {
-              return new RoundRectDrawable(dp2px(2), getResources().getColorStateList(R.color.apptheme_primary_btn_light));
-            }
-
-            @Override
-            public void onClick(View view, int position) {
-              if (mCircle.currFactory == 1) {
-                HomeActivity.start(SnapshotActivity.this, 0);
-              } else {
-                FeedActivity.start(SnapshotActivity.this, mCircle);
-              }
-            }
-
-            @Override
-            public int getCount() {
-              return 1;
-            }
-
-            @Override
-            public TopBar.LayoutParams getLayoutParams(int position) {
-              return new TopBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                  ViewGroup.LayoutParams.MATCH_PARENT);
-            }
-          });
 
         } else {
           finish();
