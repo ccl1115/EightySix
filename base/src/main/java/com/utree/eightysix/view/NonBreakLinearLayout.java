@@ -8,8 +8,10 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 /**
+ * This is magic, use with caution.
  */
 public class NonBreakLinearLayout extends LinearLayout {
   public NonBreakLinearLayout(Context context) {
@@ -28,21 +30,12 @@ public class NonBreakLinearLayout extends LinearLayout {
   protected void onLayout(boolean changed, int l, int t, int r, int b) {
     super.onLayout(changed, l, t, r, b);
 
-    int index = 1;
-    while (true) {
-      View childAt = getChildAt(getChildCount() - index);
-      if (childAt != null) {
-        int rightMargin = ((MarginLayoutParams) childAt.getLayoutParams()).rightMargin;
-        if (childAt.getMeasuredWidth() == 0 ||
-            childAt.getRight() + rightMargin == getRight() - getPaddingRight()) {
-          removeViewInLayout(childAt);
-        } else {
-          break;
-        }
-      } else {
-        break;
+    View v;
+    for (int i = 0, size = getChildCount(); i < size; i++) {
+      v = getChildAt(i);
+      if (((TextView) v).getLineCount() > 1) {
+        v.setVisibility(GONE);
       }
-      index++;
     }
   }
 }

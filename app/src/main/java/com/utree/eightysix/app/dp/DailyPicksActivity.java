@@ -7,12 +7,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.ViewGroup;
 import butterknife.InjectView;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.data.Tag;
@@ -48,8 +50,6 @@ public class DailyPicksActivity extends BaseActivity {
   @InjectView(R.id.vp_tab)
   public ViewPager mVpTab;
 
-  private List<DailyPicksFragment> mDailyPicksFragments = new ArrayList<DailyPicksFragment>();
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -79,29 +79,40 @@ public class DailyPicksActivity extends BaseActivity {
 
       @Override
       public void onResponse(final TagsResponse response) {
+        final List<Tag> tags = response.object.tags;
+        final List<DailyPicksFragment> fragments = new ArrayList<DailyPicksFragment>(tags.size());
+
+        for (final Tag tag : tags) {
+          DailyPicksFragment fragment = new DailyPicksFragment() {
+            @Override
+            protected Tag getRequestTag() {
+              return tag;
+            }
+          };
+          fragments.add(fragment);
+        }
 
         mVpTab.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
           @Override
           public Fragment getItem(final int position) {
-            DailyPicksFragment dailyPicksFragment = new DailyPicksFragment() {
-              @Override
-              protected Tag getRequestTag() {
-                return response.object.tags.get(position);
-              }
-            };
+            return fragments.get(position);
+          }
 
-            mDailyPicksFragments.add(dailyPicksFragment);
-            return dailyPicksFragment;
+          @Override
+          public void destroyItem(ViewGroup container, int position, Object object) {
+            super.destroyItem(container, position, object);
+
+            ((BaseFragment) object).setActive(false);
           }
 
           @Override
           public int getCount() {
-            return response.object.tags.size();
+            return tags.size();
           }
 
           @Override
           public CharSequence getPageTitle(int position) {
-            return response.object.tags.get(position).content;
+            return tags.get(position).content;
           }
         });
 
@@ -115,7 +126,7 @@ public class DailyPicksActivity extends BaseActivity {
 
           @Override
           public void onPageSelected(int position) {
-            mDailyPicksFragments.get(position).setActive(true);
+            fragments.get(position).setActive(true);
           }
 
           @Override
@@ -129,12 +140,14 @@ public class DailyPicksActivity extends BaseActivity {
           public void run() {
             int index = getIntent().getIntExtra("index", 0);
             if (index == 0) {
-              mDailyPicksFragments.get(0).setActive(true);
+              fragments.get(0).setActive(true);
             } else {
-              mVpTab.setCurrentItem(Math.min(mVpTab.getAdapter().getCount() - 1, index));
+              mVpTab.setCurrentItem(Math.min(mVpTab.getAdapter().getCount() - 1, index), false);
             }
           }
         }, 500);
+
+
       }
     }, TagsResponse.class);
   }

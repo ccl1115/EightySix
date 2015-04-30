@@ -64,9 +64,6 @@ public abstract class DailyPicksFragment extends BaseFragment {
   public void onViewCreated(View view, Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
 
-    mRefreshView.setColorSchemeResources(R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed,
-        R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed);
-
     mRefreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override
       public void onRefresh() {

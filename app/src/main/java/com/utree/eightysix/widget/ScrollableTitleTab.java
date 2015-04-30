@@ -8,9 +8,9 @@ import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -103,7 +103,9 @@ public class ScrollableTitleTab extends HorizontalScrollView {
     getHandler().postDelayed(new Runnable() {
       @Override
       public void run() {
-        mInTab.setLayoutParams(new FrameLayout.LayoutParams(mLlTabs.getMeasuredWidth(), U.dp2px(2)));
+        LayoutParams params = new LayoutParams(mLlTabs.getMeasuredWidth(), U.dp2px(2));
+        params.gravity = Gravity.BOTTOM;
+        mInTab.setLayoutParams(params);
       }
     }, 500);
   }
