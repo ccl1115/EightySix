@@ -30,6 +30,7 @@ import com.utree.eightysix.app.friends.UserSearchActivity;
 import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.Circle;
+import com.utree.eightysix.data.Friend;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.qrcode.QRCodeScanEvent;
 import com.utree.eightysix.qrcode.QRCodeScanFragment;
@@ -39,6 +40,8 @@ import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.ThemedDialog;
+
+import java.util.ArrayList;
 
 /**
  * @author simon
@@ -197,9 +200,11 @@ public class AddFriendActivity extends BaseActivity {
       @Override
       public void onResponse(final FriendListResponse response) {
         if (RESTRequester.responseOk(response)) {
+          if (response.object == null  ) {
+            response.object = new ArrayList<Friend>();
+          }
           mFriendRecommendAdapter = new FriendRecommendAdapter(response.object);
           mAlvRecommended.setAdapter(mFriendRecommendAdapter);
-
           if (response.object.size() == 0) {
             headViewHolder.mFlHead.setVisibility(View.GONE);
           }

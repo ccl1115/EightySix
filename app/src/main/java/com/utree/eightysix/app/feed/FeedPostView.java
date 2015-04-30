@@ -124,12 +124,9 @@ public class FeedPostView extends LinearLayout {
 
   @OnClick(R.id.tv_source)
   public void onTvSourceClicked() {
-//    #FIXME temporarily removed
-//    if (mPost.viewType == 8 || (mPost.sourceType == 0 && (mPost.viewType == 3 || mPost.viewType == 4))) {
-//      if (!mPost.shortName.equals(mPost.source)) {
-//        FeedActivity.start(getContext(), mPost.factoryId);
-//      }
-//    }
+    if (mPost.jump == 1) {
+      FeedActivity.start(getContext(), mPost.factoryId);
+    }
   }
 
   @OnClick(R.id.ll_top)

@@ -145,9 +145,12 @@ public class FeedsSearchActivity extends BaseActivity {
   protected void onNewIntent(Intent intent) {
     super.onNewIntent(intent);
 
-    mSearchContent = "#" + intent.getStringExtra("tag");
-    getTopBar().mEtSearch.setText(mSearchContent);
-    requestFeedsSearch(1);
+    String tag = intent.getStringExtra("tag");
+    if (tag != null) {
+      mSearchContent = "#" + tag;
+      getTopBar().mEtSearch.setText(mSearchContent);
+      requestFeedsSearch(1);
+    }
   }
 
   @Override

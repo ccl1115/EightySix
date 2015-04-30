@@ -49,7 +49,7 @@ public class FriendContactListActivity extends BaseActivity {
 
       @Override
       public void onResponse(FriendListResponse response) {
-        if (response.object.isEmpty()) {
+        if (response.object == null || response.object.isEmpty()) {
           mRstvEmpty.setVisibility(View.VISIBLE);
         } else {
           mRstvEmpty.setVisibility(View.GONE);
