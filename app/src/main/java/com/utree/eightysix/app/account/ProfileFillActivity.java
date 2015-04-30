@@ -146,7 +146,7 @@ public class ProfileFillActivity extends BaseActivity {
       @Override
       public void onImageReturn(String path) {
         mAivPortrait.setUrl(path);
-        ImageUtils.asyncUpload(new File(path));
+        ImageUtils.asyncUpload(new File(path), 50);
         mProgressBar.setVisibility(View.VISIBLE);
       }
     });

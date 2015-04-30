@@ -301,7 +301,7 @@ public class ProfileFragment extends HolderFragment {
       public void onImageReturn(String path) {
         File file = new File(path);
         mFileHash = IOUtils.fileHash(file);
-        ImageUtils.asyncUpload(file);
+        ImageUtils.asyncUpload(file, 75);
       }
     }, "上传背景图片");
 

@@ -716,7 +716,7 @@ public class PublishActivity extends BaseActivity implements
   private void setBgImage(String p) {
     final File file = new File(p);
     Bitmap bitmap = ImageUtils.safeDecodeBitmap(file);
-    ImageUtils.asyncUpload(file);
+    ImageUtils.asyncUpload(file, 50);
     mPostEditText.setTextColor(Color.WHITE);
     mPostEditText.setShadowLayer(2, 0, 0, Color.BLACK);
     mTvPostTip.setTextColor(Color.WHITE);

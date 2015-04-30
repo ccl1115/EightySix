@@ -261,8 +261,8 @@ public class ImageUtils {
     }
   }
 
-  public static void compress(File file, int width, int height) {
-    executeTask(new CompressWorker(file, width, height));
+  public static void compress(File file, int width, int height, int quality) {
+    executeTask(new CompressWorker(file, width, height, quality));
   }
 
 
@@ -386,8 +386,8 @@ public class ImageUtils {
    *
    * @param file the file
    */
-  public static void asyncUpload(File file) {
-    executeTask(new UploadWorker(file));
+  public static void asyncUpload(File file, int quality) {
+    executeTask(new UploadWorker(file, quality));
   }
 
   /**
@@ -428,10 +428,11 @@ public class ImageUtils {
     private Bitmap mBitmap;
     private File mFile;
     private String mFileHash;
-    private String mUrl;
+    private final int mQuality;
 
-    UploadWorker(File file) {
+    UploadWorker(File file, int quality) {
       mFile = file;
+      mQuality = quality;
     }
 
     @Override
@@ -453,7 +454,7 @@ public class ImageUtils {
 
       try {
         fos = new FileOutputStream(file);
-        mBitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);
+        mBitmap.compress(Bitmap.CompressFormat.JPEG, mQuality, fos);
       } catch (FileNotFoundException ignored) {
       } finally {
         if (fos != null) {
@@ -837,11 +838,13 @@ public class ImageUtils {
     private File mFrom;
     private final int mWidth;
     private final int mHeight;
+    private final int mQuality;
 
-    public CompressWorker(File from, int width, int height) {
+    public CompressWorker(File from, int width, int height, int quality) {
       mFrom = from;
       mWidth = width;
       mHeight = height;
+      mQuality = quality;
     }
 
     @Override
@@ -849,7 +852,7 @@ public class ImageUtils {
       Bitmap from = safeDecodeBitmap(mFrom, mWidth, mHeight);
 
       try {
-        from.compress(Bitmap.CompressFormat.JPEG, 50, new FileOutputStream(mFrom));
+        from.compress(Bitmap.CompressFormat.JPEG, mQuality, new FileOutputStream(mFrom));
       } catch (FileNotFoundException ignored) {
       }
       return null;

@@ -91,7 +91,7 @@ public class AvatarsActivity extends BaseActivity {
       public void onImageReturn(String path) {
         File file = new File(path);
         mFileHash = IOUtils.fileHash(file);
-        ImageUtils.asyncUpload(file);
+        ImageUtils.asyncUpload(file, 50);
       }
     });
 

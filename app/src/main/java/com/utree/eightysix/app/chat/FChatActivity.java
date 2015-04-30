@@ -257,7 +257,7 @@ public class FChatActivity extends BaseActivity implements
       public void onImageReturn(String path) {
         M.getRegisterHelper().register(this);
         mFile = new File(path);
-        ImageUtils.compress(mFile, 600, 600);
+        ImageUtils.compress(mFile, 600, 600, 50);
       }
 
       @Subscribe
