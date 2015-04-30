@@ -17,25 +17,30 @@
 
         <include
                 layout="@layout/item_head"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:id="@+id/fl_topic"
                 />
 
         <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="105dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
                 >
 
             <android.support.v4.view.ViewPager
                     android:id="@+id/vp_topics"
                     android:layout_width="match_parent"
                     android:layout_height="105dp"
+                    android:layout_marginBottom="8dp"
                     />
 
             <com.utree.eightysix.widget.IndicatorView
                     android:id="@+id/in_topics"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_margin="16dp"
                     android:layout_gravity="center_horizontal|bottom"
                     app:selector="@drawable/indicator_dot_selected"
                     app:drawable="@drawable/indicator_dot"
@@ -46,15 +51,22 @@
 
         <include
                 layout="@layout/item_head"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:id="@+id/fl_daily_picks"
                 />
 
-        <LinearLayout
+        <com.utree.eightysix.view.NonBreakLinearLayout
                 android:id="@+id/ll_tags"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:padding="16dp"
+                android:background="@android:color/white"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="8dp"
+
                 />
 
         <TextView
