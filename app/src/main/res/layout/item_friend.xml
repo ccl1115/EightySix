@@ -60,6 +60,7 @@
             android:layout_toStartOf="@+id/iv_chat"
             android:layout_below="@id/tv_signature"
             android:layout_marginBottom="16dp"
+            android:textColor="@color/apptheme_primary_grey_color_200"
             />
 
     <ImageView
