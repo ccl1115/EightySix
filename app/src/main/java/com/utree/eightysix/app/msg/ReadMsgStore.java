@@ -83,6 +83,6 @@ public class ReadMsgStore {
 
   @Subscribe
   public void onLogout(Account.LogoutEvent event) {
-    sStore = null;
+    sStore.clear();
   }
 }
