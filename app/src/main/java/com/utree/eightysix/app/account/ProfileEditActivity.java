@@ -158,6 +158,9 @@ public class ProfileEditActivity extends BaseActivity {
   @OnClick(R.id.ll_hometown)
   public void onLlHometownClicked() {
     SetHometownFragment fragment = new SetHometownFragment();
+    Bundle args = new Bundle();
+    args.putString("title", "设置家乡");
+    fragment.setArguments(args);
     getSupportFragmentManager().beginTransaction()
         .add(R.id.content, fragment)
         .commit();

@@ -42,8 +42,9 @@
     </style>
 
     <style name="AppTheme.Light" parent="AppTheme">
-        <item name="android:spinnerItemStyle">@style/Widget.Spinner.Item.Light</item>
-        <item name="android:dropDownSpinnerStyle">@style/Widget.Spinner.Light</item>
+        <item name="android:dropDownSpinnerStyle">@android:style/Widget.DeviceDefault.Light.Spinner</item>
+        <item name="android:spinnerDropDownItemStyle">@android:style/Widget.DeviceDefault.Light.DropDownItem.Spinner</item>
+        <item name="android:spinnerItemStyle">@android:style/Widget.DeviceDefault.Light.TextView.SpinnerItem</item>
     </style>
 
     <style name="AppTheme.Dialog" parent="AppTheme">
