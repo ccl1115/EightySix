@@ -68,6 +68,7 @@
             android:padding="16dp"
             android:gravity="center_horizontal"
             android:text="选择生日，系统将自动为你转换年龄及性别哦\n当然，你也可以手动设定星座"
+            android:textColor="@color/apptheme_primary_grey_color_200"
             />
 
 
