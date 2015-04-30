@@ -148,7 +148,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
     mHotFeedFragment.mDistance = mSbDistance.getProgress() + 1000;
     mFriendsFeedFragment.mDistance = mSbDistance.getProgress() + 1000;
     float value = mSbDistance.getProgress() / 1000f;
-    if (value == 9) {
+    if (value > 9f) {
       setRegionType(3);
     } else {
       setRegionType(4);
@@ -272,7 +272,9 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
       @Override
       public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         float value = progress / 1000f + 1;
-        if (((int) value) == 10) {
+        if (value > 10f && value <= 10.2f) {
+          mTvDistance.setText("10km");
+        } else if (value > 10.2f) {
           mTvDistance.setText("同城");
         } else {
           mTvDistance.setText(String.format("%.2fkm", value));

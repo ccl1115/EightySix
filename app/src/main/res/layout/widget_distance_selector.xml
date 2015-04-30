@@ -63,7 +63,7 @@
                 android:layout_toStartOf="@+id/rb_select"
                 android:layout_marginRight="24dp"
                 android:layout_marginEnd="24dp"
-                android:max="9000"
+                android:max="10000"
                 />
 
         <TextView
