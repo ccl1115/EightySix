@@ -20,6 +20,7 @@
                 />
 
         <View
+                android:id="@+id/v_mask"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#44000000"
@@ -88,13 +89,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginBottom="32dp"
                 android:layout_gravity="center"
                 android:textSize="14sp"
                 android:textColor="@android:color/white"
                 android:maxLength="80"
+                android:maxLines="2"
+                android:ellipsize="end"
                 />
 
         <com.utree.eightysix.widget.RoundedButton

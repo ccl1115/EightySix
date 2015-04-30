@@ -21,6 +21,7 @@
             />
 
     <com.utree.eightysix.widget.RoundedButton
+            android:id="@+id/rb_mask"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clickable="false"

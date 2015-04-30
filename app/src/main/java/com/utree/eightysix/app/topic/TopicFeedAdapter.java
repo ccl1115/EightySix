@@ -280,6 +280,9 @@ public class TopicFeedAdapter extends BaseAdapter {
     @InjectView(R.id.aiv_bg)
     public AsyncImageView mAivBg;
 
+    @InjectView(R.id.v_mask)
+    public View mVMask;
+
     private Topic mTopic;
 
     TopicViewHolder(View view) {
@@ -296,9 +299,17 @@ public class TopicFeedAdapter extends BaseAdapter {
         mTopicViewHolder.mTvTitle.setText(topic.title);
 
         if (TextUtils.isEmpty(topic.title)) {
+          mTvTitle.setVisibility(View.GONE);
           mTvText.setTextSize(18);
+          if (TextUtils.isEmpty(topic.content)) {
+            mVMask.setVisibility(View.GONE);
+          } else {
+            mVMask.setVisibility(View.VISIBLE);
+          }
         } else {
           mTvText.setTextSize(14);
+          mVMask.setVisibility(View.VISIBLE);
+          mTvTitle.setVisibility(View.VISIBLE);
         }
 
         if (TextUtils.isEmpty(topic.bgUrl)) {

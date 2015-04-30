@@ -53,6 +53,7 @@ public abstract class AbsFeedFragment extends BaseFragment {
   protected Paginate.Page mPageInfo;
 
   protected boolean mPostPraiseRequesting;
+  private int mCurrent;
 
   @OnItemClick(R.id.lv_feed)
   public void onLvFeedItemClicked(int position, View view) {
@@ -257,6 +258,8 @@ public abstract class AbsFeedFragment extends BaseFragment {
       if (page == 1) {
         mCircle = response.object.circle;
 
+        mCurrent = response.object.current;
+
         U.getBus().post(mCircle);
 
         mFeedAdapter = new FeedAdapter(response.object);
@@ -314,6 +317,9 @@ public abstract class AbsFeedFragment extends BaseFragment {
     if (response != null && response.code == 0 && response.object != null) {
       if (page == 1) {
         mCircle = response.object.circle;
+
+        mCurrent = response.object.current;
+
         U.getBus().post(mCircle);
 
         if (response.object.posts.lists.size() == 0) {
@@ -384,40 +390,53 @@ public abstract class AbsFeedFragment extends BaseFragment {
           builder.setTitle("操作");
 
           if (mCircle.snapshot == 1) {
-            builder.setItems(
-                new String[]{
-                    "快照",
-                    follow
-                },
-                new DialogInterface.OnClickListener() {
-                  @Override
-                  public void onClick(DialogInterface dialog, int which) {
-                    switch (which) {
-                      case 0:
-                        SnapshotActivity.start(getBaseActivity(), mCircle);
-                        break;
-                      case 1:
-                        followCircleItem(response);
-                        break;
+            if (mCurrent == 1) {
+              builder.setItems(new String[]{"快照"},
+                  new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                      switch (which) {
+                        case 0:
+                          SnapshotActivity.start(getBaseActivity(), mCircle);
+                          break;
+                      }
                     }
-                  }
-                });
+                  });
+            } else {
+              builder.setItems(new String[]{"快照", follow},
+                  new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                      switch (which) {
+                        case 0:
+                          SnapshotActivity.start(getBaseActivity(), mCircle);
+                          break;
+                        case 1:
+                          followCircleItem(response);
+                          break;
+                      }
+                    }
+                  });
+            }
           } else {
-            builder.setItems(
-                new String[]{
-                    follow
-                },
-                new DialogInterface.OnClickListener() {
-                  @Override
-                  public void onClick(DialogInterface dialog, int which) {
-                    switch (which) {
-                      case 0:
-                        followCircleItem(response);
-                        break;
+            if (mCurrent == 1) {
+              getTopBar().getAbRight().hide();
+              getBaseActivity().hideProgressBar();
+              return;
+            } else {
+              builder.setItems(new String[]{follow},
+                  new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                      switch (which) {
+                        case 0:
+                          followCircleItem(response);
+                          break;
+                      }
                     }
-                  }
-                });
+                  });
 
+            }
           }
           builder.show();
         }

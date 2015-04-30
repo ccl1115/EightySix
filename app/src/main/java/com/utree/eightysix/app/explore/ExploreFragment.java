@@ -280,7 +280,7 @@ public class ExploreFragment extends BaseFragment {
   }
 
   private void buildNewestTopics(final List<Topic> topics) {
-    mVpTopics.setAdapter(new PagerAdapter() {
+    PagerAdapter adapter = new PagerAdapter() {
       @Override
       public int getCount() {
         return topics.size();
@@ -305,9 +305,10 @@ public class ExploreFragment extends BaseFragment {
       public boolean isViewFromObject(View view, Object object) {
         return object.equals(view);
       }
-    });
+    };
+    mVpTopics.setAdapter(adapter);
 
-    mInTopics.setCount(3);
+    mInTopics.setCount(adapter.getCount());
 
     mVpTopics.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
       @Override
@@ -351,6 +352,9 @@ public class ExploreFragment extends BaseFragment {
     @InjectView(R.id.rb_bg)
     public RoundedButton mRbBg;
 
+    @InjectView(R.id.rb_mask)
+    public RoundedButton mRbMask;
+
     private Topic mTopic;
 
     public ViewHolder(View view) {
@@ -368,6 +372,12 @@ public class ExploreFragment extends BaseFragment {
       mTvTitle.setText(topic.title);
       mTvText.setText(topic.content);
       mTvCount.setText(String.valueOf(topic.postCount) + "条帖子");
+
+      if (TextUtils.isEmpty(topic.title) && TextUtils.isEmpty(topic.content)) {
+        mRbMask.setVisibility(View.INVISIBLE);
+      } else {
+        mRbMask.setVisibility(View.VISIBLE);
+      }
 
       if (TextUtils.isEmpty(topic.bgUrl)) {
         mAivBg.setUrl(null);
