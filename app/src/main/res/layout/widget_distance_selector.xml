@@ -4,99 +4,119 @@
   ~ Copyright (c) 2015. All rights reserved by utree.cn
   -->
 
-<LinearLayout
+<FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/ll_distance_selector"
-        android:orientation="vertical"
+        android:id="@+id/fl_distance_selector"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:visibility="gone"
-        android:background="@color/translucent"
         >
 
     <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:background="@android:color/white"
+            android:background="#eeffffff"
             >
 
-        <TextView
-                android:layout_width="0dp"
+        <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="滑动变更看帖范围"
-                android:textColor="#ff7e7e7e"
+                android:orientation="horizontal"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="8dp"
+                >
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="滑动变更看帖范围"
+                    android:textColor="#ff7e7e7e"
+                    />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="当前范围: "
+                    android:textColor="#ff7e7e7e"
+                    />
+
+            <TextView
+                    android:id="@+id/tv_distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/apptheme_primary_light_color"
+                    />
+        </LinearLayout>
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@color/apptheme_primary_grey_color"
                 />
 
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="当前范围: "
-                android:textColor="#ff7e7e7e"
-                />
 
-        <TextView
-                android:id="@+id/tv_distance"
-                android:layout_width="wrap_content"
+        <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/apptheme_primary_light_color"
-                />
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="16dp"
+                android:paddingTop="8dp"
+                >
+
+            <SeekBar
+                    android:id="@+id/sb_distance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_toLeftOf="@+id/rb_select"
+                    android:layout_toStartOf="@+id/rb_select"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:max="10000"
+                    />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/sb_distance"
+                    android:layout_alignLeft="@+id/sb_distance"
+                    android:layout_alignStart="@+id/sb_distance"
+                    android:text="1km"
+                    android:textColor="#ff7e7e7e"
+                    />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/sb_distance"
+                    android:layout_alignRight="@+id/sb_distance"
+                    android:layout_alignEnd="@+id/sb_distance"
+                    android:text="同城"
+                    android:textColor="#ff7e7e7e"
+                    />
+
+            <com.utree.eightysix.widget.RoundedButton
+                    android:id="@+id/rb_select"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="2dp"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="2dp"
+                    android:text="选定"
+                    />
+        </RelativeLayout>
+
     </LinearLayout>
-
-
-    <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:background="@android:color/white"
-            >
-
-        <SeekBar
-                android:id="@+id/sb_distance"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_toLeftOf="@+id/rb_select"
-                android:layout_toStartOf="@+id/rb_select"
-                android:layout_marginRight="24dp"
-                android:layout_marginEnd="24dp"
-                android:max="10000"
-                />
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/sb_distance"
-                android:layout_alignLeft="@+id/sb_distance"
-                android:layout_alignStart="@+id/sb_distance"
-                android:text="1km"
-                />
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/sb_distance"
-                android:layout_alignRight="@+id/sb_distance"
-                android:layout_alignEnd="@+id/sb_distance"
-                android:text="同城"
-                />
-
-        <com.utree.eightysix.widget.RoundedButton
-                android:id="@+id/rb_select"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:paddingLeft="8dp"
-                android:paddingTop="2dp"
-                android:paddingRight="8dp"
-                android:paddingBottom="2dp"
-                android:text="选定"
-                />
-    </RelativeLayout>
-
-</LinearLayout>
+</FrameLayout>

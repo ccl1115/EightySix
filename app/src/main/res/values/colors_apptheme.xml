@@ -27,7 +27,7 @@
     <color name="apptheme_secondary_light_color_pressed">#ffa23131</color>
     <color name="apptheme_secondary_light_color_disabled">#ff505050</color>
 
-    <color name="apptheme_secondary_dark_color">#FF5e4680</color>
+    <color name="apptheme_secondary_dark_color">#ff494b4d</color>
     <color name="apptheme_secondary_dark_color_pressed">#ff3f2f56</color>
     <color name="apptheme_secondary_dark_color_disabled">#fff7f7f7</color>
 

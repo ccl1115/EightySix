@@ -76,8 +76,8 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
   @InjectView(R.id.tv_current)
   public TextView mTvCurrent;
 
-  @InjectView(R.id.ll_distance_selector)
-  public LinearLayout mLlDistanceSelector;
+  @InjectView(R.id.fl_distance_selector)
+  public FrameLayout mLlDistanceSelector;
 
   @InjectView(R.id.ll_add_follow)
   public LinearLayout mLlAddFollow;
@@ -136,7 +136,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
     BaseCirclesActivity.startMyCircles(getActivity());
   }
 
-  @OnClick(R.id.ll_distance_selector)
+  @OnClick(R.id.fl_distance_selector)
   public void onLlDistanceSelector() {
     mLlDistanceSelector.setVisibility(View.GONE);
   }
@@ -740,7 +740,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
     LinearLayout linearLayout = new LinearLayout(getActivity());
     linearLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-    int p = U.dp2px(8);
+    int m = U.dp2px(8);
     if (circles[0] != null) {
       TextView textView = new TextView(getActivity());
       textView.setSingleLine();
@@ -750,8 +750,8 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
       textView.setTag(circles[0]);
       textView.setGravity(Gravity.CENTER);
 
-      LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
-      params.setMargins(0, p, p, 0);
+      LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, U.dp2px(30), 1);
+      params.setMargins(0, m, m, 0);
       textView.setLayoutParams(params);
 
       textView.setBackgroundResource(R.drawable.border_outline_secondary_dark_color_btn);
@@ -784,8 +784,8 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
       textView.setTag(circles[1]);
       textView.setGravity(Gravity.CENTER);
 
-      LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
-      params.setMargins(p, p, p, 0);
+      LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, U.dp2px(30), 1);
+      params.setMargins(m, m, m, 0);
       textView.setLayoutParams(params);
 
       textView.setBackgroundResource(R.drawable.border_outline_secondary_dark_color_btn);
@@ -811,7 +811,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
     } else {
       View view = new View(getActivity());
       LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, 1, 1);
-      params.setMargins(p, p, p, 0);
+      params.setMargins(m, m, m, 0);
       view.setLayoutParams(params);
       linearLayout.addView(view);
     }
@@ -825,8 +825,8 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
       textView.setTag(circles[2]);
       textView.setGravity(Gravity.CENTER);
 
-      LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
-      params.setMargins(p, p, 0, 0);
+      LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, U.dp2px(30), 1);
+      params.setMargins(m, m, 0, 0);
       textView.setLayoutParams(params);
 
       textView.setBackgroundResource(R.drawable.border_outline_secondary_dark_color_btn);
@@ -852,7 +852,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
     } else {
       View view = new View(getActivity());
       LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, 1, 1);
-      params.setMargins(p, p, 0, 0);
+      params.setMargins(m, m, 0, 0);
       view.setLayoutParams(params);
       linearLayout.addView(view);
     }
