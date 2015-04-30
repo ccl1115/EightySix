@@ -15,6 +15,7 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.data.Post;
+import com.utree.eightysix.response.MsgsResponse;
 import com.utree.eightysix.widget.TitleTab;
 
 /**
@@ -23,6 +24,18 @@ import com.utree.eightysix.widget.TitleTab;
 @Layout(R.layout.activity_msg)
 @TopTitle(R.string.messages)
 public class MsgActivity extends BaseActivity {
+
+  public static void start(Context context, boolean refresh) {
+    Intent intent = new Intent(context, MsgActivity.class);
+    intent.putExtra("refresh", refresh);
+    context.startActivity(intent);
+  }
+
+  public static Intent getIntent(Context context, boolean refresh) {
+    Intent intent = new Intent(context, MsgActivity.class);
+    intent.putExtra("refresh", refresh);
+    return intent;
+  }
 
   @InjectView(R.id.tt_tab)
   public TitleTab mTtTab;
@@ -37,12 +50,21 @@ public class MsgActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResponseOk(MsgsResponse response) {
+      Account.inst().setMyPostCommentCount(0);
+      mTtTab.setTabBudget(0, String.valueOf(0), true);
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
       super.onViewCreated(view, savedInstanceState);
 
       mRstvEmpty.setText("还没有新消息哦");
       mRstvEmpty.setSubText("快去与大家发帖互动吧");
       mRstvEmpty.setDrawable(R.drawable.scene_3);
+
+      int myPostCommentCount = Account.inst().getMyPostCommentCount();
+      mTtTab.setTabBudget(0, String.valueOf(myPostCommentCount), myPostCommentCount == 0);
     }
 
     @Subscribe
@@ -60,12 +82,21 @@ public class MsgActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResponseOk(MsgsResponse response) {
+      Account.inst().setNewCommentCount(0);
+      mTtTab.setTabBudget(1, String.valueOf(0), true);
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
       super.onViewCreated(view, savedInstanceState);
 
       mRstvEmpty.setText(R.string.not_found_msg);
       mRstvEmpty.setSubText(R.string.not_found_msg_tip);
       mRstvEmpty.setDrawable(R.drawable.scene_3);
+
+      int newCommentCount = Account.inst().getNewCommentCount();
+      mTtTab.setTabBudget(1, String.valueOf(newCommentCount), newCommentCount == 0);
     }
 
     @Subscribe
@@ -75,18 +106,6 @@ public class MsgActivity extends BaseActivity {
       }
     }
   };
-
-  public static void start(Context context, boolean refresh) {
-    Intent intent = new Intent(context, MsgActivity.class);
-    intent.putExtra("refresh", refresh);
-    context.startActivity(intent);
-  }
-
-  public static Intent getIntent(Context context, boolean refresh) {
-    Intent intent = new Intent(context, MsgActivity.class);
-    intent.putExtra("refresh", refresh);
-    return intent;
-  }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {

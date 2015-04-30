@@ -11,17 +11,12 @@ import android.widget.AbsListView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
-import com.utree.eightysix.Account;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.circle.event.CircleFollowsChangedEvent;
-import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
 import com.utree.eightysix.app.msg.FetchNotificationService;
-import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
-import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
-import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.app.snapshot.SnapshotActivity;
 import com.utree.eightysix.data.Circle;
@@ -288,30 +283,7 @@ public abstract class AbsFeedFragment extends BaseFragment {
 
       updateTopBar();
 
-      if (response.object.fetch != null) {
-        int count = 0;
-        if (response.object.fetch.newComment != null) {
-          count += response.object.fetch.newComment.unread;
-        }
-
-        if (response.object.fetch.myPostComment != null) {
-          count += response.object.fetch.myPostComment.unread;
-        }
-
-        Account.inst().setNewCommentCount(count);
-
-        if (response.object.fetch.newPraise != null) {
-          Account.inst().setHasNewPraise(response.object.fetch.newPraise.praise == 1);
-          U.getBus().post(new UpdatePraiseCountEvent(response.object.fetch.newPraise.praiseCount,
-              response.object.fetch.newPraise.percent));
-        }
-
-        U.getBus().post(new NewAllPostCountEvent(mCircle.id, response.object.fetch.newPostAllCount));
-        U.getBus().post(new NewHotPostCountEvent(mCircle.id, response.object.fetch.newPostHotCount));
-        U.getBus().post(new NewFriendsPostCountEvent(mCircle.id, response.object.fetch.newPostFriendsCount));
-
-        FetchNotificationService.setCircleId(mCircle.id);
-      }
+      FetchNotificationService.setCircleId(mCircle.id);
     } else {
       cacheOutFeeds(circleId, page);
     }

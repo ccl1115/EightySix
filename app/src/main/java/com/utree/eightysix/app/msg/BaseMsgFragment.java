@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.squareup.otto.Subscribe;
-import com.utree.eightysix.Account;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseFragment;
@@ -102,9 +101,6 @@ public abstract class BaseMsgFragment extends BaseFragment {
     mRstvEmpty.setText(R.string.not_found_msg);
     mRstvEmpty.setSubText(R.string.not_found_msg_tip);
     mRstvEmpty.setDrawable(R.drawable.scene_3);
-
-    // clear account msg new count
-    Account.inst().setNewCommentCount(0);
   }
 
   @Override
@@ -131,6 +127,8 @@ public abstract class BaseMsgFragment extends BaseFragment {
   }
 
   protected abstract int getCreateType();
+
+  protected abstract void onResponseOk(MsgsResponse response);
 
   private void requestMsgs(final int page) {
     if (page == 1) {
@@ -185,6 +183,8 @@ public abstract class BaseMsgFragment extends BaseFragment {
         getBaseActivity().hideRefreshIndicator();
         mAlvRefresh.stopLoadMore();
         mRefreshLayout.setRefreshing(false);
+
+        onResponseOk(response);
       }
 
       @Override

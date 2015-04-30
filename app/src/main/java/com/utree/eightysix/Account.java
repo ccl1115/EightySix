@@ -16,6 +16,7 @@ import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.User;
 import com.utree.eightysix.event.CurrentCircleResponseEvent;
 import com.utree.eightysix.event.HasNewPraiseEvent;
+import com.utree.eightysix.event.MyPostCommentCountEvent;
 import com.utree.eightysix.event.NewCommentCountEvent;
 import com.utree.eightysix.push.FetchAlarmReceiver;
 import com.utree.eightysix.request.LogoutRequest;
@@ -119,6 +120,16 @@ public class Account {
 
   public int getNewCommentCount() {
     return getAccountSharedPreferences().getInt("new_comment_count", 0);
+  }
+
+  public void setMyPostCommentCount(int count) {
+    int value = Math.max(count, 0);
+    U.getBus().post(new MyPostCommentCountEvent(value));
+    getAccountSharedPreferences().edit().putInt("my_post_comment_count", value).apply();
+  }
+
+  public int getMyPostCommentCount() {
+    return getAccountSharedPreferences().getInt("my_post_comment_count", 0);
   }
 
   public void setSilentMode(boolean toggle) {

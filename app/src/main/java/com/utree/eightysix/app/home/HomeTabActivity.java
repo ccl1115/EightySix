@@ -31,6 +31,7 @@ import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.MsgCenterFragment;
 import com.utree.eightysix.app.region.TabRegionFragment;
 import com.utree.eightysix.contact.ContactsSyncService;
+import com.utree.eightysix.event.MyPostCommentCountEvent;
 import com.utree.eightysix.event.NewCommentCountEvent;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.CounterView;
@@ -70,6 +71,7 @@ public class HomeTabActivity extends BaseActivity {
   private boolean mShouldExit;
 
   private int mNewCommentCount;
+  private int mMyPostCommentCount;
   private int mUnreadConversationCount;
   private int mUnreadFConversationCount;
   private int mRequestCount;
@@ -203,6 +205,7 @@ public class HomeTabActivity extends BaseActivity {
     mUnreadFConversationCount = (int) FConversationUtil.getUnreadConversationCount();
     mAssistMessageUnreadCount = (int) FMessageUtil.getAssistUnreadCount();
     mNewCommentCount = Account.inst().getNewCommentCount();
+    mMyPostCommentCount = Account.inst().getMyPostCommentCount();
 
 
     mRbMsgCount.setCount(mUnreadConversationCount + mUnreadFConversationCount + mAssistMessageUnreadCount);
@@ -270,8 +273,7 @@ public class HomeTabActivity extends BaseActivity {
       mUnreadConversationCount = ((Long) event.getObj()).intValue();
       U.getBus().post(new MsgCountEvent(MsgCountEvent.TYPE_UNREAD_CONVERSATION_COUNT, mUnreadConversationCount));
     }
-    mRbMsgCount.setCount(mNewCommentCount + mUnreadConversationCount
-        + mUnreadFConversationCount + mAssistMessageUnreadCount);
+    updateMsgCount();
   }
 
   @Subscribe
@@ -283,15 +285,25 @@ public class HomeTabActivity extends BaseActivity {
       mAssistMessageUnreadCount = ((Long) event.getObj()).intValue();
       U.getBus().post(new MsgCountEvent(MsgCountEvent.TYPE_ASSIST_MESSAGE_COUNT, mAssistMessageUnreadCount));
     }
-    mRbMsgCount.setCount(mNewCommentCount + mUnreadConversationCount
-        + mUnreadFConversationCount + mAssistMessageUnreadCount);
+    updateMsgCount();
   }
 
   @Subscribe
   public void onNewCommentCountEvent(NewCommentCountEvent event) {
     mNewCommentCount = event.getCount();
-    U.getBus().post(new MsgCountEvent(MsgCountEvent.TYPE_NEW_COMMENT_COUNT, mNewCommentCount));
-    mRbMsgCount.setCount(mNewCommentCount + mUnreadFConversationCount
+    U.getBus().post(new MsgCountEvent(MsgCountEvent.TYPE_NEW_COMMENT_COUNT, mNewCommentCount + mMyPostCommentCount));
+    updateMsgCount();
+  }
+
+  @Subscribe
+  public void onMyPostCommentCountEvent(MyPostCommentCountEvent event) {
+    mMyPostCommentCount = event.getCount();
+    U.getBus().post(new MsgCountEvent(MsgCountEvent.TYPE_NEW_COMMENT_COUNT, mNewCommentCount + mMyPostCommentCount));
+    updateMsgCount();
+  }
+
+  private void updateMsgCount() {
+    mRbMsgCount.setCount(mNewCommentCount + mMyPostCommentCount + mUnreadFConversationCount
         + mUnreadConversationCount + mAssistMessageUnreadCount);
   }
 
