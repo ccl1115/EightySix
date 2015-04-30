@@ -27,11 +27,17 @@ public class RequestParams extends com.loopj.android.http.RequestParams {
 
   public void sign() {
     StringBuilder result = new StringBuilder();
-    SortedMap<String, Object> sorted = new TreeMap<String, Object>(urlParamsWithObjects);
+    SortedMap<String, Object> sorted = new TreeMap<String, Object>();
+    sorted.putAll(urlParamsWithObjects);
+    sorted.putAll(urlParams);
     for (ConcurrentHashMap.Entry<String, Object> entry : sorted.entrySet()) {
       result.append(entry.getKey());
       result.append("=");
-      result.append(((HashSet) entry.getValue()).iterator().next().toString());
+      if (entry.getValue() instanceof HashSet) {
+        result.append(((HashSet) entry.getValue()).iterator().next().toString());
+      } else {
+        result.append((String) entry.getValue());
+      }
     }
 
     result.append("lanmei!!!");

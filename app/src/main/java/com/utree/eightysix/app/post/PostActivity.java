@@ -164,17 +164,20 @@ public class PostActivity extends BaseActivity
     }
   }
 
-  @OnClick(R.id.ll_banner)
-  public void onLlBannerClicked() {
+  @OnClick({R.id.aiv_portrait, R.id.tv_name})
+  public void onAivPortraitClicked() {
     if (!TextUtils.isEmpty(mPost.viewUserId)) {
       Bundle args = new Bundle();
       args.putInt("viewId", Integer.valueOf(mPost.viewUserId));
       args.putBoolean("isVisitor", true);
       args.putString("userName", mPost.userName);
       FragmentHolder.start(this, ProfileFragment.class, args);
-    } else {
-      mLvComments.setSelection(0);
     }
+  }
+
+  @OnClick(R.id.ll_banner)
+  public void onLlBannerClicked() {
+    mLvComments.setSelection(0);
   }
 
   @OnClick(R.id.iv_close)
@@ -374,22 +377,26 @@ public class PostActivity extends BaseActivity
 
       @Override
       public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (mPost != null && TextUtils.isEmpty(mPost.viewUserId) && mPostCommentsAdapter != null) {
-          PostPostView postPostView = mPostCommentsAdapter.getPostPostView();
-          if (postPostView.getParent() != null) {
-            mLlBanner.setBackgroundColor(
-                (int) (0x88 * ((-postPostView.getTop()) / (float) postPostView.getMeasuredHeight())) << 24);
-            if (postPostView.getTop() < -40) {
-              mLlBanner.setClickable(true);
-            } else {
-              mLlBanner.setClickable(false);
-            }
-          } else {
-            mLlBanner.setBackgroundColor(0x88000000);
-          }
-        }
         if (mPostCommentsAdapter != null) {
           mPostCommentsAdapter.getPostPostView().mTvContent.setAlpha(1f);
+
+          if (mPost != null) {
+            PostPostView postPostView = mPostCommentsAdapter.getPostPostView();
+            if (postPostView.getParent() != null) {
+              int top = postPostView.getTop();
+              if (top < -40) {
+                mLlBanner.setClickable(true);
+              } else {
+                mLlBanner.setClickable(false);
+              }
+              int height = postPostView.getMeasuredHeight();
+              if (TextUtils.isEmpty(mPost.userName)) {
+                mLlBanner.setBackgroundColor((int) (0x88 * ((-top) / (float) height)) << 24);
+              } else {
+                mLlBanner.setBackgroundColor(((0xff - (int) (0x88 * (-top / (float) height))) << 24) | 0x00ffffff);
+              }
+            }
+          }
         }
       }
     });
@@ -397,6 +404,7 @@ public class PostActivity extends BaseActivity
     mLvComments.setOnTouchListener(new View.OnTouchListener() {
       private float lastY;
       private float y;
+
       @Override
       public boolean onTouch(View v, MotionEvent event) {
 
