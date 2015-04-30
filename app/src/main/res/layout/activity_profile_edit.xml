@@ -39,7 +39,7 @@
                         android:layout_weight="1"
                         android:layout_gravity="center_vertical"
                         android:padding="16dp"
-                        android:text="修改头像"
+                        android:text="更新头像"
                         />
 
                 <com.utree.eightysix.widget.AsyncImageViewWithRoundCorner
