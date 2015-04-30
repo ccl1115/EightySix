@@ -91,7 +91,7 @@ public class MainSettingsActivity extends BaseActivity {
     getSupportFragmentManager().beginTransaction()
         .setCustomAnimations(R.anim.enter_from_top, R.anim.exit_to_bottom, R.anim.enter_from_top, R.anim.exit_to_bottom)
         .add(R.id.content, mMsgSettingsFragment)
-        .addToBackStack(null)
+        .addToBackStack("backStack")
         .commit();
   }
 
@@ -112,7 +112,7 @@ public class MainSettingsActivity extends BaseActivity {
 
   @Override
   public void onActionLeftClicked() {
-    finish();
+    onBackPressed();
   }
 
   @Override
