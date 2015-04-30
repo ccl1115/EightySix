@@ -117,6 +117,7 @@ public class HomeTabActivity extends BaseActivity {
           mTabRegionFragment = new TabRegionFragment();
           Bundle args = new Bundle();
           args.putInt("tabIndex", getIntent().getIntExtra("tabIndex", 0));
+          args.putInt("regionType", getIntent().getIntExtra("regionType", -1));
           mTabRegionFragment.setArguments(args);
           t.add(R.id.fl_content, mTabRegionFragment).commitAllowingStateLoss();
         } else if (mTabRegionFragment.isHidden()) {
@@ -241,8 +242,10 @@ public class HomeTabActivity extends BaseActivity {
 
     int regionType = intent.getIntExtra("regionType", -1);
 
-    if (regionType != -1 && regionType != mTabRegionFragment.getRegionType()) {
-      mTabRegionFragment.setRegionType(regionType);
+    if (mTabRegionFragment != null) {
+      if (regionType != -1 && regionType != mTabRegionFragment.getRegionType()) {
+        mTabRegionFragment.setRegionType(regionType);
+      }
     }
   }
 
