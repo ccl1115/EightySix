@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -55,6 +56,7 @@ public class TopicFeedAdapter extends BaseAdapter {
   public TopicFeedAdapter(Topic topic) {
     mTopic = topic;
     mTopicView = LayoutInflater.from(U.getContext()).inflate(R.layout.item_topic, null, false);
+    mTopicView.setLayoutParams(new ListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, U.dp2px(200)));
     mTopicViewHolder = new TopicViewHolder(mTopicView);
 
     switchTab(TAB_NEW);

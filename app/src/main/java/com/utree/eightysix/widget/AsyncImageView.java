@@ -35,9 +35,9 @@ public class AsyncImageView extends ImageView {
 
     if (url.startsWith("/")) {
       File file = new File(url);
-      Picasso.with(getContext()).load(file).resize(600, 600).into(this);
+      Picasso.with(getContext()).load(file).into(this);
     } else {
-      Picasso.with(getContext()).load(url).resize(600, 600).into(this);
+      Picasso.with(getContext()).load(url).into(this);
     }
 
   }

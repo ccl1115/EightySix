@@ -17,6 +17,7 @@ import com.utree.eightysix.data.Topics;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.widget.AsyncImageViewWithRoundCorner;
+import com.utree.eightysix.widget.RoundedButton;
 
 import java.util.List;
 
@@ -150,6 +151,9 @@ public class TopicListAdapter extends BaseAdapter {
     @InjectView(R.id.ll_parent)
     public LinearLayout mLlParent;
 
+    @InjectView(R.id.rb_mask)
+    public RoundedButton mRbMask;
+
     @InjectView(R.id.aiv_bg)
     public AsyncImageViewWithRoundCorner mAivBg;
 
@@ -159,6 +163,11 @@ public class TopicListAdapter extends BaseAdapter {
       mTvText.setText(topic.content);
       if (TextUtils.isEmpty(topic.title)) {
         mTvTitle.setVisibility(View.GONE);
+        if (TextUtils.isEmpty(topic.content)) {
+          mRbMask.setVisibility(View.GONE);
+        } else {
+          mRbMask.setVisibility(View.VISIBLE);
+        }
       } else {
         mTvTitle.setVisibility(View.VISIBLE);
       }
