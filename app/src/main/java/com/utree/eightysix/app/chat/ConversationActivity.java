@@ -110,6 +110,13 @@ public class ConversationActivity extends BaseActivity {
     super.onCreate(savedInstanceState);
 
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+    getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_action_overflow));
+    getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        showActionDialog();
+      }
+    });
 
     List<Conversation> conversations = ConversationUtil.getConversations(0, PAGE_SIZE);
     mConversationAdapter = new ConversationAdapter(conversations);
