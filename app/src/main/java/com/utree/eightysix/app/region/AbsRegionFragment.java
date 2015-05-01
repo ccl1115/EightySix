@@ -9,6 +9,7 @@ import android.widget.AbsListView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -59,7 +60,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
 
   private int mCircleId;
 
-  protected int mRegionType = -1;
+  protected int mRegionType = Account.inst().getLastRegionType();
   protected int mDistance = -1;
 
   protected int mMode = MODE_REGION;
@@ -372,6 +373,8 @@ public abstract class AbsRegionFragment extends BaseFragment {
 
         mRegionType = response.object.regionType;
         mDistance = response.object.regionRadius;
+
+        Account.inst().setLastRegionType(mRegionType);
 
         U.getBus().post(new RegionResponseEvent(mRegionType, mDistance));
       } else if (mFeedAdapter != null) {

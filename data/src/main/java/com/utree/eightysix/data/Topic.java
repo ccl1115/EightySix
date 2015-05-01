@@ -32,6 +32,9 @@ public class Topic implements Parcelable {
   @SerializedName("bgColor")
   public String bgColor;
 
+  @SerializedName("topicDesc")
+  public String topicDesc;
+
   public Topic() {
   }
 
