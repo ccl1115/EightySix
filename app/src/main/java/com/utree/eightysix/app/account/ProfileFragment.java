@@ -24,6 +24,7 @@ import butterknife.OnClick;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
+import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.CameraUtil;
@@ -133,6 +134,9 @@ public class ProfileFragment extends HolderFragment {
 
   @InjectView(R.id.refresh_view)
   public SwipeRefreshLayout mRefreshLayout;
+
+  @InjectView(R.id.tv_float_exp)
+  public TextView mTvFloatExp;
 
   private CameraUtil mCameraUtil;
 
@@ -359,6 +363,13 @@ public class ProfileFragment extends HolderFragment {
             mFlGuide.setVisibility(View.VISIBLE);
             return;
           } else {
+            getTopBar().getAbRight().setText("编辑");
+            getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                v.getContext().startActivity(new Intent(v.getContext(), ProfileEditActivity.class));
+              }
+            });
             mFlGuide.setVisibility(View.GONE);
           }
 
@@ -471,6 +482,18 @@ public class ProfileFragment extends HolderFragment {
             mTvMyCircles.setVisibility(View.VISIBLE);
             mTvMyFriends.setVisibility(View.VISIBLE);
             mTvAction.setVisibility(View.GONE);
+
+            if (Account.inst().getLastExp() != 0 && Account.inst().getLastExp() < response.object.experience) {
+              AnimatorSet set = new AnimatorSet();
+              set.playTogether(
+                  ObjectAnimator.ofFloat(mTvFloatExp, "alpha", 0.5f, 1f, 0f),
+                  ObjectAnimator.ofFloat(mTvFloatExp, "translationY", 0f, -U.dp2px(25))
+              );
+              set.setDuration(1000);
+              set.start();
+            }
+
+            Account.inst().setLastExp(response.object.experience);
           }
 
           mAivLevelIcon.setUrl(mProfile.levelIcon);

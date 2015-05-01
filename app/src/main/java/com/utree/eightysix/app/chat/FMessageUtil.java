@@ -55,7 +55,8 @@ public class FMessageUtil {
 
   public static FriendConversation setRead(String chatId) {
     List<FriendMessage> list = DaoUtils.getFriendMessageDao().queryBuilder()
-        .where(FriendMessageDao.Properties.ChatId.eq(chatId))
+        .where(FriendMessageDao.Properties.ChatId.eq(chatId),
+            FriendMessageDao.Properties.Read.eq(false))
         .listLazy();
 
     for (FriendMessage m : list) {
@@ -86,9 +87,8 @@ public class FMessageUtil {
 
   public static long getAssistUnreadCount() {
     return DaoUtils.getFriendMessageDao().queryBuilder()
-        .where(FriendMessageDao.Properties.ChatType.eq("assistant"))
-        .where(FriendMessageDao.Properties.Read.eq(false))
-        .where(FriendMessageDao.Properties.Direction.eq(MessageConst.DIRECTION_RECEIVE))
+        .where(FriendMessageDao.Properties.ChatType.eq("assistant"),
+            FriendMessageDao.Properties.Read.eq(false))
         .count();
   }
 }

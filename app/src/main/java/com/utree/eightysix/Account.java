@@ -242,12 +242,12 @@ public class Account {
     return getAccountSharedPreferences().contains("cancel_comment_anonymous");
   }
 
-  public void setLastRegionRadius(int radius) {
-    getAccountSharedPreferences().edit().putInt("radius", radius).apply();
+  public void setLastExp(int exp) {
+    getAccountSharedPreferences().edit().putInt("exp", exp).apply();
   }
 
-  public int getLastRegionRadius() {
-    return getAccountSharedPreferences().getInt("radius", 0);
+  public int getLastExp() {
+    return getAccountSharedPreferences().getInt("exp", 0);
   }
 
   private SharedPreferences getSharedPreferences() {
