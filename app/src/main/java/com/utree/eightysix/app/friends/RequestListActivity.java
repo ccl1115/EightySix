@@ -65,7 +65,7 @@ public class RequestListActivity extends BaseActivity {
         hideProgressBar();
         if (RESTRequester.responseOk(response)) {
           List<FriendRequest> object = response.object;
-          if (object.size() == 0) {
+          if (response.object == null || object.size() == 0) {
             mRstvEmpty.setVisibility(View.VISIBLE);
           } else {
             mRstvEmpty.setVisibility(View.GONE);
