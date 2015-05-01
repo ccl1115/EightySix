@@ -100,7 +100,10 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
 
   private ObjectAnimator mHideTtTabAnimator;
   private ObjectAnimator mShowTtTabAnimator;
+
   private boolean mTtTabHidden;
+
+  private int mLastCircleId = -1;
 
   public TabRegionFragment() {
     mFeedFragment = new FeedRegionFragment();
@@ -491,14 +494,27 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
 
   @Subscribe
   public void onCircleResponseEvent(CircleResponseEvent event) {
+    clearSelectedCircle();
+    if (event.getCircle() != null) {
+      for (View view : mFollowCircleViews) {
+        if (view.getTag() != null) {
+          if (((FollowCircle) view.getTag()).factoryId == event.getCircle().id) {
+            view.setSelected(true);
+            break;
+          }
+        }
+      }
+    }
   }
 
   @Subscribe
   public void onCurrentCircleResponseEvent(CurrentCircleResponseEvent event) {
     if (event.getCircle() != null) {
+      clearSelectedCircle();
       mLlSetCurrent.setVisibility(View.GONE);
       mLlCurrent.setVisibility(View.VISIBLE);
       mTvCurrent.setText(event.getCircle().shortName);
+      mTvCurrent.setSelected(true);
       mTvCurrent.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -531,6 +547,8 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
       mTtTab.setTabBudget(0, "", true);
       mTtTab.setTabBudget(1, "", true);
       mTtTab.setTabBudget(2, "", true);
+    } else {
+      mLastCircleId = -1;
     }
 
     if (mVpTab == null) return;
@@ -552,6 +570,8 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
 
   public void setCircleId(int circleId) {
     clearActive();
+
+    mLastCircleId = circleId;
 
     mFeedFragment.requestFeeds(circleId);
     mHotFeedFragment.requestFeeds(circleId);
@@ -596,6 +616,14 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
   @Subscribe
   public void onCircleFollowsChangedEvent(CircleFollowsChangedEvent event) {
     requestFollowCircles();
+  }
+
+  private void clearSelectedCircle() {
+    mTvCurrent.setSelected(false);
+
+    for (View v : mFollowCircleViews) {
+      v.setSelected(false);
+    }
   }
 
   private void clearActive() {
@@ -680,7 +708,11 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
         mFlFollowCircles.setVisibility(View.GONE);
         mLlDistanceSelector.setVisibility(View.GONE);
         if (position == 0) {
-          setRegionType(0);
+          if (mLastCircleId != -1) {
+            setCircleId(mLastCircleId);
+          } else {
+            setRegionType(0);
+          }
           getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_drawer));
           getTopBar().getAbRight().hide();
         } else if (position == 1) {
@@ -756,6 +788,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
 
       textView.setBackgroundResource(R.drawable.border_outline_secondary_dark_color_btn);
       textView.setTextColor(getResources().getColorStateList(R.color.border_outline_secondary_dark_color_btn_text));
+      textView.setTag(circles[0]);
 
       textView.setOnClickListener(new View.OnClickListener() {
         @Override
@@ -790,6 +823,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
 
       textView.setBackgroundResource(R.drawable.border_outline_secondary_dark_color_btn);
       textView.setTextColor(getResources().getColorStateList(R.color.border_outline_secondary_dark_color_btn_text));
+      textView.setTag(circles[1]);
 
       textView.setOnClickListener(new View.OnClickListener() {
         @Override
@@ -831,6 +865,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
 
       textView.setBackgroundResource(R.drawable.border_outline_secondary_dark_color_btn);
       textView.setTextColor(getResources().getColorStateList(R.color.border_outline_secondary_dark_color_btn_text));
+      textView.setTag(circles[2]);
 
       textView.setOnClickListener(new View.OnClickListener() {
         @Override

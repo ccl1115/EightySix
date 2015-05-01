@@ -60,7 +60,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
   private int mCircleId;
 
   protected int mRegionType = -1;
-  protected int mDistance = 0;
+  protected int mDistance = -1;
 
   protected int mMode = MODE_REGION;
 
@@ -371,9 +371,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
         }
 
         mRegionType = response.object.regionType;
-        if (mRegionType == 4) {
-          mDistance = response.object.regionRadius;
-        }
+        mDistance = response.object.regionRadius;
 
         U.getBus().post(new RegionResponseEvent(mRegionType, mDistance));
       } else if (mFeedAdapter != null) {

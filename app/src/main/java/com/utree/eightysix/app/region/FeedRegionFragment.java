@@ -52,6 +52,11 @@ public class FeedRegionFragment extends AbsRegionFragment {
 
   @Override
   protected void requestFeeds(final int circleId, final int page) {
+    if (getBaseActivity() == null) return;
+    if (mRefresherView != null && page == 1) {
+      mRefresherView.setRefreshing(true);
+      getBaseActivity().showRefreshIndicator(true);
+    }
     getBaseActivity().request(new FeedsRequest(circleId, page), new OnResponse2<FeedsResponse>() {
       @Override
       public void onResponseError(Throwable e) {
@@ -60,18 +65,7 @@ public class FeedRegionFragment extends AbsRegionFragment {
 
       @Override
       public void onResponse(FeedsResponse response) {
-        if (getBaseActivity() == null) return;
-        if (mRefresherView != null && page == 1) {
-          mRefresherView.setRefreshing(true);
-          getBaseActivity().showRefreshIndicator(true);
-        }
-        getBaseActivity().setTopSubTitle("");
-        getBaseActivity().request(new FeedsRequest(circleId, page), new OnResponse<FeedsResponse>() {
-          @Override
-          public void onResponse(FeedsResponse response) {
-            responseForFeedsRequest(response, page);
-          }
-        }, FeedsResponse.class);
+        responseForFeedsRequest(response, page);
       }
     }, FeedsResponse.class);
   }
