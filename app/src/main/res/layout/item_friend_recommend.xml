@@ -11,13 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
-        android:padding="16dp"
         >
 
     <com.utree.eightysix.widget.AsyncImageViewWithRoundCorner
             android:id="@+id/aiv_portrait"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:layout_centerVertical="true"
             app:width="40dp"
             app:height="40dp"
@@ -28,6 +31,7 @@
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_toRightOf="@+id/aiv_portrait"
             android:layout_toEndOf="@+id/aiv_portrait"
             android:paddingLeft="8dp"
@@ -69,4 +73,14 @@
             android:textSize="14sp"
             android:textColor="@color/apptheme_primary_grey_color_200"
             />
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_alignParentBottom="true"
+            android:background="#44000000"
+            />
+
 </RelativeLayout>
