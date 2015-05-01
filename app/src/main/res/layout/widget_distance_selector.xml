@@ -50,6 +50,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/apptheme_primary_light_color"
                     />
+
         </LinearLayout>
 
         <View

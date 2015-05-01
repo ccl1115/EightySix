@@ -653,13 +653,23 @@ public class ProfileFragment extends HolderFragment {
         }
       });
     } else {
-      getBaseActivity().getTopBar().getAbRight().setText("编辑");
-      getBaseActivity().getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          startActivity(new Intent(getActivity(), ProfileEditActivity.class));
-        }
-      });
+      if (TextUtils.isEmpty(mProfile.userName)) {
+        getBaseActivity().getTopBar().getAbRight().setText("设置");
+        getBaseActivity().getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            startActivity(new Intent(getActivity(), MainSettingsActivity.class));
+          }
+        });
+      } else {
+        getBaseActivity().getTopBar().getAbRight().setText("编辑");
+        getBaseActivity().getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            startActivity(new Intent(getActivity(), ProfileEditActivity.class));
+          }
+        });
+      }
     }
   }
 
