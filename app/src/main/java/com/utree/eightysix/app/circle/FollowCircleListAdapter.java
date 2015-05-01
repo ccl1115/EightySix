@@ -16,6 +16,7 @@ import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
+import com.utree.eightysix.app.circle.event.CircleFollowsChangedEvent;
 import com.utree.eightysix.data.FollowCircle;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
@@ -75,6 +76,7 @@ public class FollowCircleListAdapter extends BaseAdapter {
 
   public void remove(FollowCircle item) {
     mCircles.remove(item);
+    U.getBus().post(new CircleFollowsChangedEvent());
     notifyDataSetChanged();
   }
 

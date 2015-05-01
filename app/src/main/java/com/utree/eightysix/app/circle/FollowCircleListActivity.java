@@ -19,6 +19,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.app.circle.event.CircleFollowsChangedEvent;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.data.FollowCircle;
 import com.utree.eightysix.request.CircleSetRequest;
@@ -76,6 +77,7 @@ public class FollowCircleListActivity extends BaseActivity {
               public void onResponse(Response response) {
                 if (RESTRequester.responseOk(response)) {
                   mAdapter.remove(circle);
+                  U.getBus().post(new CircleFollowsChangedEvent());
                 }
               }
             }, Response.class, circle.factoryId);
@@ -116,7 +118,7 @@ public class FollowCircleListActivity extends BaseActivity {
 
       @Override
       public void onResponse(FollowCircleListResponse response) {
-        if (response.object.size() == 0) {
+        if (response.object == null || response.object.size() == 0) {
           mRstvEmpty.setVisibility(View.VISIBLE);
         } else {
           mRstvEmpty.setVisibility(View.GONE);
