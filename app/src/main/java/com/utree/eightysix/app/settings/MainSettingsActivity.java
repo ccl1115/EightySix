@@ -61,21 +61,7 @@ public class MainSettingsActivity extends BaseActivity {
 
   @OnClick (R.id.ll_check_update)
   public void onLlCheckUpdateClicked() {
-    Sync sync = U.getSyncClient().getSync();
-    int version = 0;
-    if (sync != null && sync.upgrade != null) {
-      try {
-        version = Integer.parseInt(sync.upgrade.version);
-      } catch (NumberFormatException ignored) {
-      }
-      if (version > C.VERSION) {
-        new UpgradeDialog(this, sync.upgrade).show();
-      } else {
-        showToast(getString(R.string.newest_version));
-      }
-    } else {
-      showToast(getString(R.string.newest_version));
-    }
+    U.getSyncClient().requestSync();
   }
 
   @OnClick (R.id.tv_dev)
@@ -126,7 +112,10 @@ public class MainSettingsActivity extends BaseActivity {
     } catch (PackageManager.NameNotFoundException ignored) {
     }
 
-    Sync sync = U.getSyncClient().getSync();
+  }
+
+  @Subscribe
+  public void onSyncEvent(Sync sync) {
     if (sync != null && sync.upgrade != null) {
       int v = 0;
       try {
@@ -142,6 +131,21 @@ public class MainSettingsActivity extends BaseActivity {
 
     if (BuildConfig.DEBUG) {
       mTvDev.setVisibility(View.VISIBLE);
+    }
+
+    int version = 0;
+    if (sync != null && sync.upgrade != null) {
+      try {
+        version = Integer.parseInt(sync.upgrade.version);
+      } catch (NumberFormatException ignored) {
+      }
+      if (version > C.VERSION) {
+        new UpgradeDialog(this, sync.upgrade).show();
+      } else {
+        showToast(getString(R.string.newest_version));
+      }
+    } else {
+      showToast(getString(R.string.newest_version));
     }
   }
 

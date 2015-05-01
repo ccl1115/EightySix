@@ -653,7 +653,7 @@ public class ProfileFragment extends HolderFragment {
         }
       });
     } else {
-      if (TextUtils.isEmpty(mProfile.userName)) {
+      if (mProfile != null && TextUtils.isEmpty(mProfile.userName)) {
         getBaseActivity().getTopBar().getAbRight().setText("设置");
         getBaseActivity().getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
           @Override
