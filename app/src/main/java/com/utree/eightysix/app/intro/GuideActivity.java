@@ -334,14 +334,14 @@ public class GuideActivity extends BaseActivity {
       mIvBoy.setVisibility(View.VISIBLE);
       mIvGirl.setVisibility(View.VISIBLE);
       mLlBottom.setVisibility(View.VISIBLE);
+      mLlBottom.setTranslationY(300f);
 
       AnimatorSet circle = new AnimatorSet();
 
       circle.playTogether(
           ObjectAnimator.ofFloat(mIvCircle, "alpha", 0f, 1f),
           ObjectAnimator.ofFloat(mIvCircle, "scaleX", 0.8f, 1f),
-          ObjectAnimator.ofFloat(mIvCircle, "scaleY", 0.2f, 1f),
-          ObjectAnimator.ofFloat(mLlBottom, "translationY", 300f, 0f)
+          ObjectAnimator.ofFloat(mIvCircle, "scaleY", 0.2f, 1f)
       );
       circle.setDuration(200);
       circle.setInterpolator(new OvershootInterpolator(4f));
@@ -362,8 +362,12 @@ public class GuideActivity extends BaseActivity {
       girl.setDuration(1300);
       girl.setInterpolator(new OvershootInterpolator(2f));
 
+      ObjectAnimator bottom = ObjectAnimator.ofFloat(mLlBottom, "translationY", 300f, 0f);
+      bottom.setStartDelay(1300);
+      bottom.setDuration(200);
+
       AnimatorSet set = new AnimatorSet();
-      set.playTogether(circle, boy, girl);
+      set.playTogether(circle, boy, girl, bottom);
       set.start();
     }
 
