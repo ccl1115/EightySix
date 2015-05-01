@@ -51,6 +51,7 @@ import java.util.ArrayList;
 public class AddFriendActivity extends BaseActivity {
 
   private QRCodeScanFragment mQRCodeScanFragment;
+
   private FriendRecommendAdapter mFriendRecommendAdapter;
 
   @Keep

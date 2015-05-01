@@ -90,7 +90,7 @@ public class FriendRecommendAdapter extends BaseAdapter {
 
     private Friend mFriend;
 
-    @OnClick(R.id.aiv_portrait)
+    @OnClick({R.id.aiv_portrait, R.id.tv_name})
     public void onAivPortraitClicked(View v) {
       ProfileFragment.start(v.getContext(), mFriend.viewId, mFriend.userName);
     }

@@ -82,6 +82,7 @@ public class FriendContactListAdapter extends BaseAdapter {
 
     @InjectView(R.id.tv_result)
     public TextView mTvResult;
+
     private Friend mFriend;
 
     @OnClick(R.id.rb_add)
