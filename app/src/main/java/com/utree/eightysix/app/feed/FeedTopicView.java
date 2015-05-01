@@ -3,8 +3,11 @@ package com.utree.eightysix.app.feed;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -44,6 +47,9 @@ public class FeedTopicView extends FrameLayout {
   @InjectView(R.id.tv_tag_2)
   public TextView mTvTag2;
 
+  @InjectView(R.id.v_mask)
+  public View mVMask;
+
   @InjectView(R.id.rb_more)
   public RoundedButton mRbMoreFeeds;
 
@@ -58,6 +64,7 @@ public class FeedTopicView extends FrameLayout {
   public FeedTopicView(Context context) {
     super(context);
     inflate(context, R.layout.item_feed_topic, this);
+    setLayoutParams(new ListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, U.dp2px(190)));
     ButterKnife.inject(this, this);
 
     setPadding(0, U.dp2px(3), 0, 0);
@@ -115,6 +122,18 @@ public class FeedTopicView extends FrameLayout {
 
     mTvHead.setText(topic.headTitle);
     mTvContent.setText(topic.content);
+
+    if (TextUtils.isEmpty(topic.content)) {
+      mTvContent.setVisibility(GONE);
+      if (TextUtils.isEmpty(topic.title)) {
+        mVMask.setVisibility(GONE);
+      } else {
+        mVMask.setVisibility(VISIBLE);
+      }
+    } else {
+      mVMask.setVisibility(VISIBLE);
+      mTvContent.setVisibility(VISIBLE);
+    }
 
     if (TextUtils.isEmpty(mTopic.bgUrl)) {
       mAivBg.setUrl(null);

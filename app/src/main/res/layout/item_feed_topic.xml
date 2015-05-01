@@ -15,6 +15,7 @@
             />
 
     <View
+            android:id="@+id/v_mask"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#44000000"
@@ -65,6 +66,10 @@
                 android:layout_gravity="center"
                 android:textSize="24sp"
                 android:textColor="@android:color/white"
+                android:maxLength="80"
+                android:maxLines="2"
+                android:lines="2"
+                android:ellipsize="end"
                 />
 
         <LinearLayout
@@ -96,35 +101,40 @@
 
         </LinearLayout>
 
-        <LinearLayout
-                android:layout_width="match_parent"
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="8dp"
+            >
+
+        <com.utree.eightysix.widget.RoundedButton
+                android:id="@+id/rb_more"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                >
+                android:layout_weight="1"
+                android:layout_marginRight="8dp"
+                android:layout_marginEnd="8dp"
+                android:minHeight="40dp"
+                android:textColor="@color/apptheme_primary_text_dark"
+                app:background="@color/apptheme_primary_list_selector"
+                />
 
-            <com.utree.eightysix.widget.RoundedButton
-                    android:id="@+id/rb_more"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:minHeight="40dp"
-                    android:textColor="@color/apptheme_primary_text_dark"
-                    app:background="@color/apptheme_primary_list_selector"
-                    />
+        <com.utree.eightysix.widget.RoundedButton
+                android:id="@+id/rb_publish"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:minHeight="40dp"
+                android:text="@string/publish_anonymous"
+                android:textColor="@color/apptheme_primary_light_color"
+                app:background="@color/apptheme_primary_list_selector"
+                />
 
-            <com.utree.eightysix.widget.RoundedButton
-                    android:id="@+id/rb_publish"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:minHeight="40dp"
-                    android:text="@string/publish_anonymous"
-                    android:textColor="@color/apptheme_primary_light_color"
-                    app:background="@color/apptheme_primary_list_selector"
-                    />
-
-        </LinearLayout>
     </LinearLayout>
 
 

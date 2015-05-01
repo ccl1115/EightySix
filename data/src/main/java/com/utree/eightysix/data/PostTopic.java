@@ -10,6 +10,9 @@ public class PostTopic extends BaseItem {
   @SerializedName("headTitle")
   public String headTitle;
 
+  @SerializedName("title")
+  public String title;
+
   @SerializedName("tags")
   public List<Tag> tags;
 
