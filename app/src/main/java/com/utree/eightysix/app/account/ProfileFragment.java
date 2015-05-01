@@ -353,7 +353,7 @@ public class ProfileFragment extends HolderFragment {
         if (RESTRequester.responseOk(response)) {
 
           mProfile = response.object;
-          if (TextUtils.isEmpty(mProfile.userName)) {
+          if (TextUtils.isEmpty(mProfile.userName) && !mIsVisitor) {
             getTopBar().getAbRight().setText(getString(R.string.settings));
             getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
               @Override
