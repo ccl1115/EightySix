@@ -44,6 +44,7 @@ import java.util.Date;
 public class RegisterActivity extends BaseActivity {
 
   private static final int MSG_COUNTDOWN = 0;
+
   @InjectView(R.id.et_phone_number)
   public EditText mEtPhoneNumber;
 

@@ -57,7 +57,7 @@
                 android:layout_height="1px"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:background="@color/apptheme_primary_grey_color"
+                android:background="@color/apptheme_primary_grey_color_200"
                 />
 
 
