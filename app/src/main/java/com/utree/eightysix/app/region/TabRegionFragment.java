@@ -26,6 +26,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseFragment;
+import com.utree.eightysix.app.account.event.CurrentCircleNameUpdatedEvent;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.circle.event.CircleFollowsChangedEvent;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
@@ -530,6 +531,11 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
         }
       });
     }
+  }
+
+  @Subscribe
+  public void onCurrentCircleNameUpdatedEvent(CurrentCircleNameUpdatedEvent event) {
+    setRegionType(0);
   }
 
   public boolean canPublish() {
