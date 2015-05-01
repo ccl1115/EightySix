@@ -53,8 +53,11 @@ public class MessageUtil {
         };
 
         builder.setSpan(span, start, end, 0);
-        String value = params.split("=")[1];
-        builder.replace(start, end, value.substring(1, value.length() - 1));
+
+        if (params != null) {
+          String value = params.split("=")[1];
+          builder.replace(start, end, value.substring(1, value.length() - 1));
+        }
       }
 
       textView.setText(builder);
