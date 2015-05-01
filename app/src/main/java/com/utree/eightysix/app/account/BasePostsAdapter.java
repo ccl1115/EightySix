@@ -15,11 +15,18 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.data.Post;
+import com.utree.eightysix.event.RequireRefreshEvent;
+import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.widget.AsyncImageView;
+import com.utree.eightysix.widget.ThemedDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +92,7 @@ public class BasePostsAdapter extends BaseAdapter {
     return convertView;
   }
 
-  public static class ViewHolder {
+  public class ViewHolder {
 
     @InjectView(R.id.tv_left_tag_1)
     public TextView mTvLeftTag1;
@@ -150,6 +157,62 @@ public class BasePostsAdapter extends BaseAdapter {
         PostActivity.start(v.getContext(), mPosts[1]);
       }
     }
+
+    @OnLongClick(R.id.fl_left)
+    public boolean onFlLeftLongClicked(View v) {
+      return showToRealnameDialog(v, mPosts[0]);
+    }
+
+    @OnLongClick(R.id.fl_right)
+    public boolean onFlRightLongClicked(View v) {
+      return showToRealnameDialog(v, mPosts[1]);
+    }
+
+    private boolean showToRealnameDialog(View v, final Post post) {
+      if (!TextUtils.isEmpty(post.userName)) {
+        return false;
+      }
+
+      final ThemedDialog dialog = new ThemedDialog(v.getContext());
+
+      dialog.setTitle("确认将此帖转为非匿名帖？");
+
+      TextView text = new TextView(v.getContext());
+      text.setText("提醒：转为非匿名帖后，不可以再反转哦");
+      final int p = U.dp2px(16);
+      text.setPadding(p, p, p, p);
+      dialog.setContent(text);
+
+      dialog.setPositive(R.string.okay, new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          U.request("user_post_realname", new OnResponse2<Response>() {
+            @Override
+            public void onResponseError(Throwable e) {
+            }
+
+            @Override
+            public void onResponse(Response response) {
+              if (RESTRequester.responseOk(response)) {
+                U.getBus().post(new RequireRefreshEvent(RequireRefreshEvent.REQUEST_CODE_MY_POSTS));
+              }
+            }
+          }, Response.class, post.id);
+          dialog.dismiss();
+        }
+      });
+
+      dialog.setRbNegative(R.string.cancel, new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          dialog.dismiss();
+        }
+      });
+
+      dialog.show();
+      return true;
+    }
+
 
     public void setData(Post[] posts) {
       mPosts = posts;

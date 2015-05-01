@@ -328,6 +328,17 @@
     </request>
 
     <request>
+        <id>user_post_realname</id>
+        <name>匿名贴转实名帖</name>
+        <path>/userpost/to/realname</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>postId</param>
+        </params>
+    </request>
+
+    <request>
         <id>user_setup_replace</id>
         <name>用户开关设置</name>
         <path>/commit/user/setup/replace</path>

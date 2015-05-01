@@ -39,7 +39,7 @@ public abstract class BasePostsFragment extends BaseFragment {
 
   private boolean mHasMore;
 
-  private BasePostsAdapter mAdapter;
+  protected BasePostsAdapter mAdapter;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

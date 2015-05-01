@@ -18,6 +18,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.event.RequireRefreshEvent;
 import com.utree.eightysix.response.UserSetupResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
@@ -37,8 +38,30 @@ public class MyPostsActivity extends BaseActivity {
   @InjectView(R.id.vp_tab)
   public ViewPager mVpTab;
 
-  private MyAnonymousPostsFragment mMyAnonymousPostsFragment = MyAnonymousPostsFragment.getInstance();
-  private MyRealNamePostsFragment mMyRealNamePostsFragment = MyRealNamePostsFragment.getInstance();
+  private MyAnonymousPostsFragment mMyAnonymousPostsFragment = new MyAnonymousPostsFragment() {
+
+    @Subscribe
+    public void onRequireRefreshEvent(RequireRefreshEvent event) {
+      if (event.getRequestCode() == RequireRefreshEvent.REQUEST_CODE_MY_POSTS) {
+        mPage = 1;
+        requestPosts();
+      }
+    }
+
+  };
+
+  private MyRealNamePostsFragment mMyRealNamePostsFragment = new MyRealNamePostsFragment() {
+
+    @Subscribe
+    public void onRequireRefreshEvent(RequireRefreshEvent event) {
+      if (event.getRequestCode() == RequireRefreshEvent.REQUEST_CODE_MY_POSTS) {
+        mPage = 1;
+        requestPosts();
+      }
+    }
+
+  };
+
   private String mStatus;
 
   @Override
