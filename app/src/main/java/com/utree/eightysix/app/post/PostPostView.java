@@ -22,8 +22,8 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.app.feed.FeedActivity;
+import com.utree.eightysix.app.feed.FeedsSearchActivity;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
-import com.utree.eightysix.app.tag.TagTabActivity;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.request.PostDeleteRequest;
@@ -93,12 +93,12 @@ public class PostPostView extends LinearLayout {
 
   @OnClick(R.id.tv_tag_1)
   public void onTvTag1Clicked() {
-    TagTabActivity.start(getContext(), mPost.tags.get(0));
+    FeedsSearchActivity.start(getContext(), mPost.tags.get(0).content);
   }
 
   @OnClick(R.id.tv_tag_2)
   public void onTvTag2Clicked() {
-    TagTabActivity.start(getContext(), mPost.tags.get(1));
+    FeedsSearchActivity.start(getContext(), mPost.tags.get(1).content);
   }
 
   @OnClick(R.id.tv_source)
