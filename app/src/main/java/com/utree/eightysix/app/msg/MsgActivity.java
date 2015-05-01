@@ -164,12 +164,16 @@ public class MsgActivity extends BaseActivity {
       }
     });
 
-    getHandler().postDelayed(new Runnable() {
-      @Override
-      public void run() {
-        mMyPostMsgFragment.setActive(true);
-      }
-    }, 500);
+      getHandler().postDelayed(new Runnable() {
+        @Override
+        public void run() {
+          if (Account.inst().getNewCommentCount() > 0) {
+            mVpTab.setCurrentItem(1);
+          } else {
+            mMyPostMsgFragment.setActive(true);
+          }
+        }
+      }, 500);
   }
 
   @Override
