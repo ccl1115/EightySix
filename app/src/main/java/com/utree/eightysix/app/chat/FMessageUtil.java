@@ -88,7 +88,7 @@ public class FMessageUtil {
     return DaoUtils.getFriendMessageDao().queryBuilder()
         .where(FriendMessageDao.Properties.ChatType.eq("assistant"))
         .where(FriendMessageDao.Properties.Read.eq(false))
-        .where(FriendMessageDao.Properties.Direction.eq(MessageConst.DIRECTION_SEND))
+        .where(FriendMessageDao.Properties.Direction.eq(MessageConst.DIRECTION_RECEIVE))
         .count();
   }
 }
