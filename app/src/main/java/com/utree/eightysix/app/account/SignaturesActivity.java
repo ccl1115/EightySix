@@ -73,6 +73,8 @@ public class SignaturesActivity extends BaseActivity {
 
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
+    mRstvEmpty.setDrawable(R.drawable.scene_5);
+
     if (mIsVisitor) {
       boolean equals = getIntent().getStringExtra("gender").equals("男");
       String gender = equals ? "他" : "她";
@@ -109,7 +111,7 @@ public class SignaturesActivity extends BaseActivity {
         hideProgressBar();
 
         if (RESTRequester.responseOk(response)) {
-          if (response.object.size() == 0) {
+          if (response.object == null || response.object.size() == 0) {
             mRstvEmpty.setVisibility(View.VISIBLE);
           } else {
             mRstvEmpty.setVisibility(View.GONE);
