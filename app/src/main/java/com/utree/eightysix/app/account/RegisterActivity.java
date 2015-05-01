@@ -20,6 +20,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.home.HomeTabActivity;
 import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.User;
@@ -193,11 +194,9 @@ public class RegisterActivity extends BaseActivity {
             if (user != null) {
               Account.inst().login(user.userId, user.token);
               showToast(R.string.register_success, false);
-              setLoadingText("身份验证中");
               ContactsSyncService.start(RegisterActivity.this, true);
+              HomeTabActivity.start(RegisterActivity.this);
               return;
-            } else {
-              showToast(R.string.server_object_error);
             }
           }
         }
