@@ -149,6 +149,7 @@ public class FeedsSearchActivity extends BaseActivity {
     if (tag != null) {
       mSearchContent = "#" + tag;
       getTopBar().mEtSearch.setText(mSearchContent);
+      showProgressBar(true);
       requestFeedsSearch(1);
     }
   }
@@ -168,6 +169,7 @@ public class FeedsSearchActivity extends BaseActivity {
   public void onActionSearchClicked(CharSequence cs) {
     hideSoftKeyboard(mAlvFeeds);
     mSearchContent = cs.toString();
+    showProgressBar(true);
     requestFeedsSearch(1);
   }
 
@@ -186,6 +188,7 @@ public class FeedsSearchActivity extends BaseActivity {
     U.request("feeds_search", new OnResponse2<FeedsResponse>() {
       @Override
       public void onResponseError(Throwable e) {
+        hideProgressBar();
       }
 
       @Override
@@ -208,6 +211,7 @@ public class FeedsSearchActivity extends BaseActivity {
 
         mLlTags.setVisibility(View.GONE);
         mAlvFeeds.stopLoadMore();
+        hideProgressBar();
       }
     }, FeedsResponse.class, mSearchContent, null, mCurrent, page);
   }
