@@ -717,6 +717,11 @@ public class PostActivity extends BaseActivity
         if (bottom) {
           mLvComments.setSelection(Integer.MAX_VALUE);
           mLlBanner.setClickable(true);
+          if (TextUtils.isEmpty(mPost.userName)) {
+            mLlBanner.setBackgroundColor(0x88000000);
+          } else {
+            mLlBanner.setBackgroundColor(0x88ffffff);
+          }
         }
 
         hideProgressBar();
