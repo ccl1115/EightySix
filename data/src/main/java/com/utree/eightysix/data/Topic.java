@@ -47,19 +47,15 @@ public class Topic implements Parcelable {
     dest.writeString(this.content);
     dest.writeTypedList(tags);
     dest.writeInt(this.postCount);
-    dest.writeString(this.bgUrl);
-    dest.writeString(this.bgColor);
   }
 
   private Topic(Parcel in) {
+    tags = new ArrayList<Tag>();
     this.id = in.readInt();
     this.title = in.readString();
     this.content = in.readString();
-    tags = new ArrayList<Tag>();
     in.readTypedList(tags, Tag.CREATOR);
     this.postCount = in.readInt();
-    this.bgUrl = in.readString();
-    this.bgColor = in.readString();
   }
 
   public static final Creator<Topic> CREATOR = new Creator<Topic>() {
