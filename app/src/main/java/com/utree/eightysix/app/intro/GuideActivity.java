@@ -343,7 +343,7 @@ public class GuideActivity extends BaseActivity {
           ObjectAnimator.ofFloat(mIvCircle, "scaleY", 0.2f, 1f),
           ObjectAnimator.ofFloat(mLlBottom, "translationY", 300f, 0f)
       );
-      circle.setDuration(500);
+      circle.setDuration(200);
       circle.setInterpolator(new OvershootInterpolator(4f));
 
       AnimatorSet boy = new AnimatorSet();
