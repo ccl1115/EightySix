@@ -487,7 +487,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
   @Subscribe
   public void onRegionResponseEvent(RegionResponseEvent event) {
     if (event.getRegion() == 3) {
-      mSbDistance.setProgress(9000);
+      mSbDistance.setProgress(10000);
     } else if (event.getRegion() == 4) {
       mSbDistance.setProgress(event.getDistance() - 1000);
     }
