@@ -21,6 +21,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
@@ -484,12 +485,35 @@ public class ProfileFragment extends HolderFragment {
             mTvAction.setVisibility(View.GONE);
 
             if (Account.inst().getLastExp() != 0 && Account.inst().getLastExp() < response.object.experience) {
+              mTvFloatExp.setText("+" + (response.object.experience - Account.inst().getLastExp()));
+              mTvFloatExp.setVisibility(View.VISIBLE);
               AnimatorSet set = new AnimatorSet();
               set.playTogether(
                   ObjectAnimator.ofFloat(mTvFloatExp, "alpha", 0.5f, 1f, 0f),
                   ObjectAnimator.ofFloat(mTvFloatExp, "translationY", 0f, -U.dp2px(25))
               );
               set.setDuration(1000);
+              set.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                  mTvFloatExp.setVisibility(View.INVISIBLE);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+              });
               set.start();
             }
 
