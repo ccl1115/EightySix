@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -315,6 +316,15 @@ public class GuideActivity extends BaseActivity {
     @InjectView(R.id.ll_bottom)
     public LinearLayout mLlBottom;
 
+    @InjectView(R.id.tv_register)
+    public TextView mTvRegister;
+
+    @InjectView(R.id.tv_login)
+    public TextView mTvLogin;
+
+    @InjectView(R.id.tv_start)
+    public TextView mTvStart;
+
     @OnClick(R.id.tv_register)
     public void onTvRegisterClicked(View view) {
       RegisterActivity.start(view.getContext(), "");
@@ -327,15 +337,22 @@ public class GuideActivity extends BaseActivity {
 
     public Page3ViewHolder(View view) {
       ButterKnife.inject(this, view);
+
+      if (Account.inst().isLogin()) {
+        mTvLogin.setVisibility(View.GONE);
+        mTvRegister.setVisibility(View.GONE);
+        mTvStart.setVisibility(View.VISIBLE);
+      } else {
+        mTvLogin.setVisibility(View.VISIBLE);
+        mTvRegister.setVisibility(View.VISIBLE);
+        mTvStart.setVisibility(View.GONE);
+      }
     }
 
     public void animate() {
       mIvCircle.setVisibility(View.VISIBLE);
       mIvBoy.setVisibility(View.VISIBLE);
       mIvGirl.setVisibility(View.VISIBLE);
-      mLlBottom.setVisibility(View.VISIBLE);
-      mLlBottom.setTranslationY(300f);
-      mLlBottom.setAlpha(0);
 
       AnimatorSet circle = new AnimatorSet();
 
@@ -362,6 +379,10 @@ public class GuideActivity extends BaseActivity {
       );
       girl.setDuration(1300);
       girl.setInterpolator(new OvershootInterpolator(2f));
+
+      mLlBottom.setVisibility(View.VISIBLE);
+      mLlBottom.setTranslationY(300f);
+      mLlBottom.setAlpha(0);
 
       AnimatorSet bottom = new AnimatorSet();
       bottom.playTogether(

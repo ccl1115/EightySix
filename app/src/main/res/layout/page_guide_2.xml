@@ -78,7 +78,6 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="64dp"
             android:fitsSystemWindows="true"
-            android:visibility="invisible"
             >
 
             <TextView
@@ -95,6 +94,7 @@
                     android:textColor="#ff9a00ff"
                     android:gravity="center"
                     android:background="@drawable/rounded_rect_white"
+                    android:visibility="gone"
                     />
 
             <TextView
@@ -107,6 +107,23 @@
                     android:layout_marginRight="32dp"
                     android:layout_marginEnd="32dp"
                     android:text="@string/login"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/white"
+                    android:gravity="center"
+                    android:background="@drawable/round_border"
+                    android:visibility="gone"
+                    />
+
+            <TextView
+                    android:id="@+id/tv_start"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="100dp"
+                    android:layout_marginStart="100dp"
+                    android:layout_marginRight="100dp"
+                    android:layout_marginEnd="100dp"
+                    android:text="开启新版蓝莓"
                     android:textSize="18sp"
                     android:textColor="@android:color/white"
                     android:gravity="center"
