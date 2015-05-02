@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.app.chat.ChatAccount;
+import com.utree.eightysix.app.home.HomeTabActivity;
 import com.utree.eightysix.app.intro.IntroActivity;
 import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.applogger.EntryAdapter;
@@ -248,6 +249,15 @@ public class Account {
 
   public int getLastExp() {
     return getAccountSharedPreferences().getInt("exp", 0);
+  }
+
+  public void setFriendRequestCount(int count) {
+    U.getBus().post(new HomeTabActivity.MsgCountEvent(HomeTabActivity.MsgCountEvent.TYPE_NEW_FRIEND_REQUEST, count));
+    getAccountSharedPreferences().edit().putInt("friend_request_count", count).apply();
+  }
+
+  public int getFriendRequestCount() {
+    return getAccountSharedPreferences().getInt("friend_request_count", 0);
   }
 
   private SharedPreferences getSharedPreferences() {

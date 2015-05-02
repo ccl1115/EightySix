@@ -245,7 +245,7 @@ public class ExploreFragment extends BaseFragment {
           setTagsEmpty();
         }
       }
-    }, TagsResponse.class);
+    }, TagsResponse.class, 1);
   }
 
   private void requestNewestTopics() {

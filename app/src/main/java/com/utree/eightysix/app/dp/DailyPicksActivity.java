@@ -149,6 +149,6 @@ public class DailyPicksActivity extends BaseActivity {
 
 
       }
-    }, TagsResponse.class);
+    }, TagsResponse.class, 0);
   }
 }

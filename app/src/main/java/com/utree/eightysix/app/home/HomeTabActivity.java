@@ -206,9 +206,10 @@ public class HomeTabActivity extends BaseActivity {
     mAssistMessageUnreadCount = (int) FMessageUtil.getAssistUnreadCount();
     mNewCommentCount = Account.inst().getNewCommentCount();
     mMyPostCommentCount = Account.inst().getMyPostCommentCount();
+    mRequestCount = Account.inst().getFriendRequestCount();
 
-
-    mRbMsgCount.setCount(mUnreadConversationCount + mUnreadFConversationCount + mAssistMessageUnreadCount);
+    mRbMsgCount.setCount(mUnreadConversationCount + mUnreadFConversationCount + mAssistMessageUnreadCount +
+        mNewCommentCount + mMyPostCommentCount + mRequestCount);
   }
 
   @Override
@@ -302,9 +303,17 @@ public class HomeTabActivity extends BaseActivity {
     updateMsgCount();
   }
 
+  @Subscribe
+  public void onMsgCountEvent(MsgCountEvent event) {
+    if (event.getType() == MsgCountEvent.TYPE_NEW_FRIEND_REQUEST) {
+      mRequestCount = event.getCount();
+      updateMsgCount();
+    }
+  }
+
   private void updateMsgCount() {
     mRbMsgCount.setCount(mNewCommentCount + mMyPostCommentCount + mUnreadFConversationCount
-        + mUnreadConversationCount + mAssistMessageUnreadCount);
+        + mUnreadConversationCount + mAssistMessageUnreadCount + mRequestCount);
   }
 
   private void clearSelected() {
@@ -321,6 +330,7 @@ public class HomeTabActivity extends BaseActivity {
     public static final int TYPE_ASSIST_MESSAGE_COUNT = 0x3;
     public static final int TYPE_NEW_COMMENT_COUNT = 0x4;
     public static final int TYPE_NEW_PRAISE = 0x5;
+    public static final int TYPE_NEW_FRIEND_REQUEST = 0x6;
 
     private int count;
     private int type;

@@ -19,7 +19,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.chat.*;
 import com.utree.eightysix.app.friends.RequestListActivity;
-import com.utree.eightysix.app.home.HomeTabActivity;
+import com.utree.eightysix.app.home.HomeTabActivity.MsgCountEvent;
 import com.utree.eightysix.event.HasNewPraiseEvent;
 import com.utree.eightysix.widget.CounterView;
 import com.utree.eightysix.widget.RoundedButton;
@@ -39,6 +39,9 @@ public class MsgCenterFragment extends BaseFragment {
 
   @InjectView(R.id.rb_count_assist)
   public CounterView mRbCountAssist;
+
+  @InjectView(R.id.rb_count_request)
+  public CounterView mRbCountRequest;
 
   @InjectView(R.id.rb_praise)
   public RoundedButton mRbPraise;
@@ -86,6 +89,7 @@ public class MsgCenterFragment extends BaseFragment {
     mRbCountFChat.setCount((int) FConversationUtil.getUnreadConversationCount());
     mRbCountAssist.setCount((int) FMessageUtil.getAssistUnreadCount());
     mRbCountMsg.setCount(Account.inst().getNewCommentCount());
+    mRbCountRequest.setCount(Account.inst().getFriendRequestCount());
     mRbPraise.setVisibility(Account.inst().getHasNewPraise() ? View.VISIBLE : View.GONE);
   }
 
@@ -99,19 +103,22 @@ public class MsgCenterFragment extends BaseFragment {
   }
 
   @Subscribe
-  public void onMsgCountEvent(HomeTabActivity.MsgCountEvent event) {
+  public void onMsgCountEvent(MsgCountEvent event) {
     switch (event.getType()) {
-      case HomeTabActivity.MsgCountEvent.TYPE_ASSIST_MESSAGE_COUNT:
+      case MsgCountEvent.TYPE_ASSIST_MESSAGE_COUNT:
         mRbCountAssist.setCount(event.getCount());
         break;
-      case HomeTabActivity.MsgCountEvent.TYPE_UNREAD_CONVERSATION_COUNT:
+      case MsgCountEvent.TYPE_UNREAD_CONVERSATION_COUNT:
         mRbCountChat.setCount(event.getCount());
         break;
-      case HomeTabActivity.MsgCountEvent.TYPE_UNREAD_FCONVERSATION_COUNT:
+      case MsgCountEvent.TYPE_UNREAD_FCONVERSATION_COUNT:
         mRbCountFChat.setCount(event.getCount());
         break;
-      case HomeTabActivity.MsgCountEvent.TYPE_NEW_COMMENT_COUNT:
+      case MsgCountEvent.TYPE_NEW_COMMENT_COUNT:
         mRbCountMsg.setCount(event.getCount());
+        break;
+      case MsgCountEvent.TYPE_NEW_FRIEND_REQUEST:
+        mRbCountRequest.setCount(event.getCount());
         break;
     }
   }

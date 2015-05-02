@@ -19,6 +19,7 @@ import com.utree.eightysix.app.chat.FChatActivity;
 import com.utree.eightysix.app.chat.FConversationActivity;
 import com.utree.eightysix.app.chat.FConversationUtil;
 import com.utree.eightysix.response.FriendChatResponse;
+import com.utree.eightysix.response.MessageUnreadResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 
@@ -47,6 +48,7 @@ public class NotifyUtils {
         (NotificationManager) U.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
     sAddedFriendNames.add(name);
+
     NotificationCompat.Builder builder = new NotificationCompat.Builder(U.getContext());
     builder.setContentTitle(String.format("收到%d条朋友请求", sAddedFriendNames.size()));
     StringBuilder b = new StringBuilder();
@@ -66,6 +68,18 @@ public class NotifyUtils {
             PendingIntent.FLAG_UPDATE_CURRENT));
 
     manager.notify(ID_ADDED_FRIEND, builder.build());
+
+    U.request("message_unread", new OnResponse2<MessageUnreadResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
+      @Override
+      public void onResponse(MessageUnreadResponse response) {
+        Account.inst().setFriendRequestCount(response.object.addedFriendCount);
+      }
+    }, MessageUnreadResponse.class);
   }
 
   public static void passedFriend(final int viewId, final String name) {

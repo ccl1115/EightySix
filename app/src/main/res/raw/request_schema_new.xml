@@ -157,6 +157,9 @@
         <path>/feed/goodTags.do</path>
         <sign/>
         <token/>
+        <params>
+            <param>sourceType</param>
+        </params>
     </request>
 
     <request>
