@@ -196,7 +196,6 @@ public class RegisterActivity extends BaseActivity {
               Account.inst().login(user.userId, user.token);
               showToast(R.string.register_success, false);
               ContactsSyncService.start(RegisterActivity.this, true);
-              HomeTabActivity.start(RegisterActivity.this);
               return;
             }
           }

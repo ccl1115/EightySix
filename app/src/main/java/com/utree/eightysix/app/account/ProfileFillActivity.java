@@ -114,8 +114,8 @@ public class ProfileFillActivity extends BaseActivity {
                 BaseCirclesActivity.startSelect(ProfileFillActivity.this, false);
               } else {
                 U.getBus().post(new ProfileFilledEvent());
-                finish();
               }
+              finish();
             }
           }
         });
