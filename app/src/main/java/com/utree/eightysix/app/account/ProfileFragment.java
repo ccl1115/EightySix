@@ -463,7 +463,7 @@ public class ProfileFragment extends HolderFragment {
               }
 
               if (mProfile.isFriend == 1) {
-                getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_action_ban));
+                getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_action_overflow));
                 getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
                   @Override
                   public void onClick(View v) {
@@ -600,7 +600,7 @@ public class ProfileFragment extends HolderFragment {
     SpannableStringBuilder builder = new SpannableStringBuilder(mProfile.userName);
     ImageSpan span = new ImageSpan(getActivity(),
         event.getGender().equals("男") ? R.drawable.ic_profile_male : R.drawable.ic_profile_female);
-    builder.append("    ");
+    builder.append("   ");
     builder.setSpan(span, builder.length() - 1, builder.length(), 0);
 
     mTvName.setText(builder);
@@ -730,6 +730,44 @@ public class ProfileFragment extends HolderFragment {
               }
             });
       }
+    } else {
+      if (mProfile.isShielded == 1) {
+        builder.setItems(
+            new String[]{
+                "取消屏蔽此用户",
+                "添加朋友"
+            }, new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                  case 0:
+                    requestUnshield();
+                    break;
+                  case 1:
+                    SendRequestActivity.start(getActivity(), mViewId);
+                    break;
+                }
+              }
+            });
+      } else {
+        builder.setItems(
+            new String[]{
+                "屏蔽此用户",
+                "添加朋友"
+            }, new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                  case 0:
+                    showBanConfirmDialog();
+                    break;
+                  case 1:
+                    SendRequestActivity.start(getActivity(), mViewId);
+                    break;
+                }
+              }
+            });
+      }
     }
     builder.show();
   }
@@ -769,11 +807,20 @@ public class ProfileFragment extends HolderFragment {
   private void showBanConfirmDialog() {
     final ThemedDialog dialog = new ThemedDialog(getActivity());
 
-    dialog.setTitle("确认拉黑此用户？");
+    if (mProfile.isFriend == 1) {
+      dialog.setTitle("确认屏蔽此朋友？");
+    } else {
+      dialog.setTitle("确认屏蔽此用户？");
+    }
 
     TextView text = new TextView(getActivity());
 
-    text.setText("拉黑将不再接收此用户的聊天、悄悄话、好友请求等信息");
+    if (mProfile.isFriend == 1) {
+      text.setText("屏蔽后将不再接收此朋友的聊天、悄悄话消息");
+    } else {
+      text.setText("屏蔽后将不再接收此用户的朋友请求、悄悄话消息");
+    }
+
     int px = U.dp2px(24);
     text.setPadding(px, px, px, px);
 
