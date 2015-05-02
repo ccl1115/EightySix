@@ -292,14 +292,10 @@ public class ProfileFragment extends HolderFragment {
       }
     });
 
-    mRefreshLayout.setColorSchemeResources(R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed,
-        R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed);
-
     if (getArguments() != null) {
       mIsVisitor = getArguments().getBoolean("isVisitor", false);
       mViewId = getArguments().getInt("viewId");
     }
-
 
     mCameraUtil = new CameraUtil(this, new CameraUtil.Callback() {
       @Override
@@ -486,13 +482,17 @@ public class ProfileFragment extends HolderFragment {
 
             if (Account.inst().getLastExp() != 0 && Account.inst().getLastExp() < response.object.experience) {
               mTvFloatExp.setText("+" + (response.object.experience - Account.inst().getLastExp()));
+//            if (true) {
+//              mTvFloatExp.setText("+100");
               mTvFloatExp.setVisibility(View.VISIBLE);
+              mTvFloatExp.setAlpha(0f);
               AnimatorSet set = new AnimatorSet();
               set.playTogether(
-                  ObjectAnimator.ofFloat(mTvFloatExp, "alpha", 0.5f, 1f, 0f),
-                  ObjectAnimator.ofFloat(mTvFloatExp, "translationY", 0f, -U.dp2px(25))
+                  ObjectAnimator.ofFloat(mTvFloatExp, "alpha", 0.2f, 1f, 0f),
+                  ObjectAnimator.ofFloat(mTvFloatExp, "translationY", 0f, -U.dp2px(20))
               );
-              set.setDuration(1000);
+              set.setDuration(1300);
+              set.setStartDelay(300);
               set.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
