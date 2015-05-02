@@ -23,7 +23,7 @@ public class DaoUtils {
         new DaoMaster(new DaoMaster.OpenHelper(U.getContext(), "com.utree.eightysix.db." + Account.inst().getUserId(), null) {
           @Override
           public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            if (oldVersion == 26 && newVersion >= 27) {
+            if (oldVersion == 26 && newVersion == 27) {
               // Alter conversation table
               db.execSQL("ALTER TABLE CONVERSATION ADD COLUMN 'USER_ID' TEXT NOT NULL;" +
                   "CREATE INDEX IF NOT EXISTS 'USER_ID' ON CONVERSATION ('USER_ID' ASC);");
@@ -31,6 +31,11 @@ public class DaoUtils {
               // Alter message table
               db.execSQL("ALTER TABLE MESSAGE ADD COLUMN 'USER_ID' TEXT NOT NULL;" +
                   "CREATE INDEX IF NOT EXISTS 'USER_ID' ON MESSAGE ('USER_ID' ASC);");
+            }
+
+            if (oldVersion <= 27 && newVersion == 31) {
+              FriendConversationDao.createTable(db, true);
+              FriendMessageDao.createTable(db, true);
             }
           }
         }.getWritableDatabase());
