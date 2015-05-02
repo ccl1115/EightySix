@@ -68,14 +68,9 @@ public class VisitorPostsActivity extends BaseActivity {
     String gender = getIntent().getStringExtra("gender").equals("男") ? "他" : "她";
     setTopTitle(gender + "的帖子");
     mRstvEmpty.setText(gender + "很懒，还没有帖子呃");
+    mRstvEmpty.setDrawable(R.drawable.scene_3);
 
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
-
-    mRefreshLayout.setColorSchemeResources(
-        R.color.apptheme_primary_light_color,
-        R.color.apptheme_primary_light_color_pressed,
-        R.color.apptheme_primary_light_color,
-        R.color.apptheme_primary_light_color_pressed);
 
     mViewId = getIntent().getIntExtra("viewId", -1);
 
@@ -136,7 +131,7 @@ public class VisitorPostsActivity extends BaseActivity {
       public void onResponse(MyPostsResponse response) {
         if (RESTRequester.responseOk(response)) {
           if (mPage == 1) {
-            if (response.object.size() == 0) {
+            if (response.object == null || response.object.size() == 0) {
               mRstvEmpty.setVisibility(View.VISIBLE);
             } else {
               mRstvEmpty.setVisibility(View.GONE);
