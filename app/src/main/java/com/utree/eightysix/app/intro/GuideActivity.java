@@ -335,6 +335,7 @@ public class GuideActivity extends BaseActivity {
       mIvGirl.setVisibility(View.VISIBLE);
       mLlBottom.setVisibility(View.VISIBLE);
       mLlBottom.setTranslationY(300f);
+      mLlBottom.setAlpha(0);
 
       AnimatorSet circle = new AnimatorSet();
 
@@ -362,9 +363,13 @@ public class GuideActivity extends BaseActivity {
       girl.setDuration(1300);
       girl.setInterpolator(new OvershootInterpolator(2f));
 
-      ObjectAnimator bottom = ObjectAnimator.ofFloat(mLlBottom, "translationY", 300f, 0f);
+      AnimatorSet bottom = new AnimatorSet();
+      bottom.playTogether(
+          ObjectAnimator.ofFloat(mLlBottom, "translationY", 300f, 0f),
+          ObjectAnimator.ofFloat(mLlBottom, "alpha", 0f, 1f)
+      );
       bottom.setStartDelay(1300);
-      bottom.setDuration(200);
+      bottom.setDuration(300);
 
       AnimatorSet set = new AnimatorSet();
       set.playTogether(circle, boy, girl, bottom);

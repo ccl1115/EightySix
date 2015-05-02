@@ -2,10 +2,8 @@ package com.utree.eightysix.qrcode.actions;
 
 import android.net.Uri;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.friends.SendRequestActivity;
 import com.utree.eightysix.qrcode.Action;
-import com.utree.eightysix.rest.OnResponse2;
-import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.rest.Response;
 import de.akquinet.android.androlog.Log;
 
 import java.util.List;
@@ -43,18 +41,6 @@ public class AddFriendAction implements Action {
 
   @Override
   public void act(Uri uri) {
-    U.request("user_friend_request", new OnResponse2<Response>() {
-      @Override
-      public void onResponseError(Throwable e) {
-
-      }
-
-      @Override
-      public void onResponse(Response response) {
-        if (RESTRequester.responseOk(response)) {
-          U.showToast("添加好友成功");
-        }
-      }
-    }, Response.class, mId, "来自扫一扫");
+    SendRequestActivity.start(U.getContext(), Integer.parseInt(mId));
   }
 }
