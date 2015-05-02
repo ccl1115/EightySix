@@ -2,32 +2,22 @@ package com.utree.eightysix.app.settings;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import com.loopj.android.http.FileAsyncHttpResponseHandler;
-import com.loopj.android.http.RequestHandle;
-import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.data.Sync;
 import com.utree.eightysix.utils.Env;
-import com.utree.eightysix.utils.IOUtils;
-import com.utree.eightysix.utils.MD5Util;
 import com.utree.eightysix.widget.ThemedDialog;
-import java.io.File;
 
 /**
  * @author simon
  */
 public class UpgradeDialog extends ThemedDialog {
   private Sync.Upgrade mUpgrade;
-  private RequestHandle mRequestHandle;
 
   public UpgradeDialog(Context context, Sync.Upgrade upgrade) {
     super(context);
@@ -45,6 +35,7 @@ public class UpgradeDialog extends ThemedDialog {
 
     viewHolder.mTvInfo.setText(mUpgrade.info);
     viewHolder.mTvVersion.setText(U.gfs(R.string.new_version, mUpgrade.versionName));
+    viewHolder.mTvInfo.setEms(12);
 
     setPositive(R.string.download_upgrade, new View.OnClickListener() {
       @Override
@@ -70,9 +61,6 @@ public class UpgradeDialog extends ThemedDialog {
         @Override
         public void onClick(View v) {
           dismiss();
-          if (mRequestHandle != null) {
-            mRequestHandle.cancel(true);
-          }
         }
       });
     }
