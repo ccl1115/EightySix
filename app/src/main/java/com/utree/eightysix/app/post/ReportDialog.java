@@ -9,6 +9,8 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.request.ReportRequest;
+import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.ThemedDialog;
 
 /**
@@ -89,9 +91,29 @@ public class ReportDialog extends ThemedDialog {
       }
 
       if (mCommentId == null) {
-        U.getBus().post(new ReportRequest(type, mPostId));
+        U.getRESTRequester().request(new ReportRequest(type, mPostId), new OnResponse2<Response>() {
+          @Override
+          public void onResponseError(Throwable e) {
+
+          }
+
+          @Override
+          public void onResponse(Response response) {
+
+          }
+        }, Response.class);
       } else {
-        U.getBus().post(new ReportRequest(type, mPostId, mCommentId));
+        U.getRESTRequester().request(new ReportRequest(type, mPostId, mCommentId), new OnResponse2<Response>() {
+          @Override
+          public void onResponseError(Throwable e) {
+
+          }
+
+          @Override
+          public void onResponse(Response response) {
+
+          }
+        }, Response.class);
       }
       dismiss();
     }

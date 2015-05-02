@@ -448,8 +448,7 @@ public class ChatUtils {
       NotificationCompat.Builder builder;
       intents = new Intent[]{
           HomeTabActivity.getIntent(context, 0),
-          ConversationActivity.getIntent(context),
-          ChatActivity.getIntent(context, message.getChatId())
+          FChatActivity.getIntent(context, message.getChatId())
       };
 
       builder = new NotificationCompat.Builder(context)

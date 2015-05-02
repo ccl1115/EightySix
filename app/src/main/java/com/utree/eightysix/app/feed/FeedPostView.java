@@ -23,12 +23,16 @@ import com.utree.eightysix.app.FragmentHolder;
 import com.utree.eightysix.app.account.ProfileFragment;
 import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
+import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.app.post.ReportDialog;
 import com.utree.eightysix.app.region.FeedRegionAdapter;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.request.PostDeleteRequest;
+import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AsyncImageView;
@@ -176,7 +180,19 @@ public class FeedPostView extends LinearLayout {
                     break;
                   case 3:
                     U.getAnalyser().trackEvent(U.getContext(), "post_more_delete", "post_more_delete");
-                    U.getBus().post(new PostDeleteRequest(mPost.id));
+                    U.getRESTRequester().request(new PostDeleteRequest(mPost.id), new OnResponse2<Response>() {
+                      @Override
+                      public void onResponseError(Throwable e) {
+
+                      }
+
+                      @Override
+                      public void onResponse(Response response) {
+                        if (RESTRequester.responseOk(response)) {
+                          U.getBus().post(new PostDeleteEvent(mPost));
+                        }
+                      }
+                    }, Response.class);
                     break;
                 }
               }
