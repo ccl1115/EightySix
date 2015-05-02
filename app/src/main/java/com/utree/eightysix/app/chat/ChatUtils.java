@@ -363,10 +363,22 @@ public class ChatUtils {
   public static class NotifyUtil {
 
     private static final int ID_MESSAGE = 0x101000;
+    private static final int ID_FRIEND_MESSAGE = 0x101001;
+    private static final int ID_ASSISTANT = 0x101002;
 
     public static void clear() {
       NotificationManager manager = (NotificationManager) U.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
       manager.cancel(ID_MESSAGE);
+    }
+
+    public static void clearFriendMessage() {
+      NotificationManager manager = (NotificationManager) U.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+      manager.cancel(ID_FRIEND_MESSAGE);
+    }
+
+    public static void clearAssistant() {
+      NotificationManager manager = (NotificationManager) U.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+      manager.cancel(ID_ASSISTANT);
     }
 
     public static void notifyNewMessage(Message message) {
@@ -420,7 +432,53 @@ public class ChatUtils {
 
     }
     public static void notifyNewMessage(FriendMessage message, FriendConversation conversation) {
+      if (message.getChatType().equals("assistant")) {
+        notifyNewAssistantMessage(message);
+      } else if (message.getChatType().equals("friend")) {
+        notifyNewFriendMessage(message, conversation);
+      }
+    }
 
+    private static void notifyNewAssistantMessage(FriendMessage message) {
+      Context context = U.getContext();
+      Intent[] intents;
+      NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+      NotificationCompat.Builder builder;
+        intents = new Intent[]{
+            HomeTabActivity.getIntent(context, 0),
+            ConversationActivity.getIntent(context),
+            ChatActivity.getIntent(context, message.getChatId())
+        };
+
+        builder = new NotificationCompat.Builder(context)
+            .setContentTitle("蓝莓小助手")
+            .setContentText(message.getContent())
+            .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher))
+            .setSmallIcon(R.drawable.ic_launcher)
+            .setLights(Color.GREEN, 500, 2000)
+            .setAutoCancel(true);
+
+      if (Account.inst().getSilentMode()) {
+        builder.setSound(null);
+      } else {
+        builder.setDefaults(Notification.DEFAULT_SOUND);
+      }
+
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        builder.setContentIntent(PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT));
+      } else {
+        builder.setContentIntent(PendingIntent.getActivity(context, 0,
+            FChatActivity.getIntent(context, message.getChatId()),
+            PendingIntent.FLAG_UPDATE_CURRENT));
+      }
+
+      Notification build = builder.build();
+
+      manager.notify(ID_ASSISTANT, build);
+    }
+
+    private static void notifyNewFriendMessage(FriendMessage message, FriendConversation conversation) {
       long count = FMessageUtil.getUnreadCount();
       if (count == 0) {
         return;
@@ -469,14 +527,13 @@ public class ChatUtils {
         builder.setContentIntent(PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT));
       } else {
         builder.setContentIntent(PendingIntent.getActivity(context, 0,
-            ChatActivity.getIntent(context, message.getChatId()),
+            FChatActivity.getIntent(context, message.getChatId()),
             PendingIntent.FLAG_UPDATE_CURRENT));
       }
 
       Notification build = builder.build();
 
-      manager.notify(ID_MESSAGE, build);
-
+      manager.notify(ID_FRIEND_MESSAGE, build);
     }
   }
 }
