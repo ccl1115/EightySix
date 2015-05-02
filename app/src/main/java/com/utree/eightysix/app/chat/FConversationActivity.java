@@ -38,13 +38,18 @@ public class FConversationActivity extends BaseActivity {
   public static final int PAGE_SIZE = 20;
 
   public static void start(Context context) {
+    context.startActivity(getIntent(context));
+  }
+
+  public static Intent getIntent(Context context) {
+
     Intent intent = new Intent(context, FConversationActivity.class);
 
     if (!(context instanceof Activity)) {
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     }
 
-    context.startActivity(intent);
+    return intent;
   }
 
   @InjectView(R.id.alv_conversation)

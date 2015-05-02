@@ -491,8 +491,8 @@ public class ChatUtils {
       if (count == 1 || FConversationUtil.getUnreadConversationCount() == 1) {
         intents = new Intent[]{
             HomeTabActivity.getIntent(context, 0),
-            ConversationActivity.getIntent(context),
-            ChatActivity.getIntent(context, message.getChatId())
+            FConversationActivity.getIntent(context),
+            FChatActivity.getIntent(context, message.getChatId())
         };
 
         builder = new NotificationCompat.Builder(context)
