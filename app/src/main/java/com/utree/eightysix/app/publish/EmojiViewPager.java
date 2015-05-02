@@ -28,7 +28,7 @@ public class EmojiViewPager extends LinearLayout {
       0x1f605,
       0x1f606,
       0x1f607,
-      0x1f608,
+      0x1f631,
       0x1f609,
       0x1f60a,
       0x1f60b,
