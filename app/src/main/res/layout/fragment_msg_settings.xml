@@ -83,7 +83,7 @@
                 android:paddingRight="10dp"
                 android:paddingEnd="10dp"
                 android:textSize="16sp"
-                android:text="接受赞过的帖子的评论消息"
+                android:text="接收赞过的帖子的评论消息"
                 />
 
 
