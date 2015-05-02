@@ -31,7 +31,7 @@
             android:layout_toRightOf="@+id/aiv_portrait"
             android:layout_toEndOf="@+id/aiv_portrait"
             android:layout_marginTop="8dp"
-            android:textSize="18sp"
+            android:textSize="16sp"
             />
 
     <TextView

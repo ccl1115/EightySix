@@ -78,6 +78,9 @@ public class HometownTabFragment extends HolderFragment {
       public void onClick(View v) {
         if (mSetHometownFragment == null) {
           mSetHometownFragment = new SetHometownFragment();
+          Bundle bundle = new Bundle();
+          bundle.putString("title", "设置家乡");
+          mSetHometownFragment.setArguments(bundle);
           mSetHometownFragment.setCallback(new SetHometownFragment.Callback() {
             @Override
             public void onHometownSet(int hometownId) {

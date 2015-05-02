@@ -24,6 +24,7 @@ import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.LoginActivity;
 import com.utree.eightysix.app.account.RegisterActivity;
 import com.utree.eightysix.app.home.HomeTabActivity;
+import com.utree.eightysix.utils.Env;
 
 /**
  */
@@ -340,6 +341,7 @@ public class GuideActivity extends BaseActivity {
     public void onTvStartClicked(View view) {
       finish();
       HomeTabActivity.start(view.getContext());
+      Env.setFirstRun(true);
     }
 
     public Page3ViewHolder(View view) {

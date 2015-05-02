@@ -103,7 +103,7 @@ public class RequestListAdapter extends BaseAdapter {
     @InjectView(R.id.aiv_portrait)
     public AsyncImageView mAivPortrait;
 
-    @OnClick(R.id.aiv_portrait)
+    @OnClick({R.id.aiv_portrait, R.id.tv_name})
     public void onAivPortraitClicked(View v) {
       Bundle args = new Bundle();
       args.putInt("viewId", mRequest.viewId);

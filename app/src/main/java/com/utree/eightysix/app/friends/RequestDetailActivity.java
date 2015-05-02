@@ -20,6 +20,7 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.account.ProfileFillDialog;
+import com.utree.eightysix.app.account.ProfileFragment;
 import com.utree.eightysix.data.FriendRequest;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
@@ -66,6 +67,11 @@ public class RequestDetailActivity extends BaseActivity {
 
   @InjectView(R.id.tv_ignore)
   public TextView mTvIgnore;
+
+  @OnClick({R.id.aiv_portrait, R.id.tv_name})
+  public void onAivPortraitClicked(View v) {
+    ProfileFragment.start(v.getContext(), mRequest.viewId, mRequest.userName);
+  }
 
   @OnClick(R.id.rb_accept)
   public void onRbAcceptClicked(final View view) {
