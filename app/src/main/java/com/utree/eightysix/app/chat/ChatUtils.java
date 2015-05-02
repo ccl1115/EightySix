@@ -497,7 +497,8 @@ public class ChatUtils {
 
         builder = new NotificationCompat.Builder(context)
             .setContentTitle("聊天")
-            .setContentText(String.format("%s：%s", conversation.getTargetName(), message.getContent()))
+            .setContentText(String.format("%s：%s", conversation.getTargetName(),
+                message.getType() == MessageConst.TYPE_IMAGE ? "[图片]" : message.getContent()))
             .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher))
             .setSmallIcon(R.drawable.ic_launcher)
             .setLights(Color.GREEN, 500, 2000)

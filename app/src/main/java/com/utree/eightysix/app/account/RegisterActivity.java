@@ -18,9 +18,9 @@ import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.home.HomeTabActivity;
 import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.User;
@@ -308,6 +308,7 @@ public class RegisterActivity extends BaseActivity {
     }
   }
 
+  @Keep
   public static class InviteCodeDescResponse extends Response {
 
     @SerializedName("object")
