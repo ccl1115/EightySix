@@ -230,6 +230,38 @@
         </profile>
 
         <profile>
+            <id>proguard</id>
+
+            <build>
+                <plugins>
+                    <!-- 这种方法只混淆源代码，混淆速度更快，但是需要编写一些额外的规则 -->
+                    <plugin>
+                        <groupId>com.github.wvengen</groupId>
+                        <artifactId>proguard-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>process-classes</phase>
+                                <goals>
+                                    <goal>proguard</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <injar>classes</injar>
+                            <libs>
+                                <lib>${java.home}/lib/rt.jar</lib>
+                            </libs>
+                            <obfuscate>true</obfuscate>
+                            <options>
+                                <option>@proguard.cfg</option>
+                            </options>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
             <id>release</id>
 
             <build>

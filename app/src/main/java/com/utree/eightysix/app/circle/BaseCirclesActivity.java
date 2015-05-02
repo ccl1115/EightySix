@@ -324,7 +324,7 @@ public class BaseCirclesActivity extends BaseActivity {
         builder.setItems(
             new String[]{
                 "设置在职",
-                response.object.followed == 1 ? "Cancel关注" : "关注"
+                response.object.followed == 1 ? "取消关注" : "关注"
             },
             new DialogInterface.OnClickListener() {
               @Override
