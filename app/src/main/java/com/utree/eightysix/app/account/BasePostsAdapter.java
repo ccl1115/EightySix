@@ -44,7 +44,7 @@ public class BasePostsAdapter extends BaseAdapter {
 
     mFeeds = new ArrayList<Post[]>(feeds.size() >> 1);
 
-    for (int i = 0, size = feeds.size() >> 1; i < size; i += 2) {
+    for (int i = 0, size = feeds.size(); i < size; i += 2) {
       mFeeds.add(new Post[]{feeds.get(i), feeds.get(i + 1)});
     }
   }
@@ -54,7 +54,7 @@ public class BasePostsAdapter extends BaseAdapter {
       feeds.add(null);
     }
 
-    for (int i = 0, size = feeds.size() >> 1; i < size; i += 2) {
+    for (int i = 0, size = feeds.size(); i < size; i += 2) {
       mFeeds.add(new Post[]{feeds.get(i), feeds.get(i + 1)});
     }
 
