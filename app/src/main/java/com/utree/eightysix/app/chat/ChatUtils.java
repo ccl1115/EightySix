@@ -25,6 +25,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.chat.content.ImageContent;
 import com.utree.eightysix.app.home.HomeTabActivity;
+import com.utree.eightysix.dao.FriendConversation;
 import com.utree.eightysix.dao.FriendMessage;
 import com.utree.eightysix.dao.Message;
 import com.utree.eightysix.data.Comment;
@@ -418,9 +419,9 @@ public class ChatUtils {
       manager.notify(ID_MESSAGE, build);
 
     }
-    public static void notifyNewMessage(FriendMessage message) {
+    public static void notifyNewMessage(FriendMessage message, FriendConversation conversation) {
 
-      long count = MessageUtil.getUnreadCount();
+      long count = FMessageUtil.getUnreadCount();
       if (count == 0) {
         return;
       }
@@ -428,26 +429,35 @@ public class ChatUtils {
       NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
       Intent[] intents;
+      NotificationCompat.Builder builder;
       if (count == 1) {
         intents = new Intent[]{
             HomeTabActivity.getIntent(context, 0),
             ConversationActivity.getIntent(context),
             ChatActivity.getIntent(context, message.getChatId())
         };
+
+        builder = new NotificationCompat.Builder(context)
+            .setContentTitle("聊天")
+            .setContentText(String.format("%s：%s", conversation.getTargetName(), message.getContent()))
+            .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher))
+            .setSmallIcon(R.drawable.ic_launcher)
+            .setLights(Color.GREEN, 500, 2000)
+            .setAutoCancel(true);
       } else {
         intents = new Intent[]{
             HomeTabActivity.getIntent(context, 0),
             ConversationActivity.getIntent(context)
         };
-      }
 
-      NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-          .setContentTitle("悄悄话")
-          .setContentText(String.format("你收到了%d条悄悄话", count))
-          .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher))
-          .setSmallIcon(R.drawable.ic_launcher)
-          .setLights(Color.GREEN, 500, 2000)
-          .setAutoCancel(true);
+        builder = new NotificationCompat.Builder(context)
+            .setContentTitle("聊天")
+            .setContentText(String.format("你收到了%d条聊天消息", count))
+            .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher))
+            .setSmallIcon(R.drawable.ic_launcher)
+            .setLights(Color.GREEN, 500, 2000)
+            .setAutoCancel(true);
+      }
 
       if (Account.inst().getSilentMode()) {
         builder.setSound(null);

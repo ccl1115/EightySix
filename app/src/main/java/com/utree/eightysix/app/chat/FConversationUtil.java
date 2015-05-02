@@ -22,7 +22,7 @@ import java.util.List;
 */
 public class FConversationUtil {
 
-  static void createOrUpdateFConversation(EMMessage emMessage) throws EaseMobException {
+  static FriendConversation createOrUpdateFConversation(EMMessage emMessage) throws EaseMobException {
     String chatId = emMessage.getStringAttribute("chatId", null);
     if (TextUtils.isEmpty(chatId) || "0".equals(chatId)) {
       throw new EaseMobException("chatId is empty or equals 0");
@@ -46,6 +46,7 @@ public class FConversationUtil {
     conversation.setTimestamp(System.currentTimeMillis());
 
     DaoUtils.getFriendConversationDao().insertOrReplace(conversation);
+    return conversation;
   }
 
   static FriendConversation getByChatId(String chatId) {

@@ -52,7 +52,7 @@ public class NewFriendMessageWorker extends AsyncTask<Void, Integer, Void> {
 
   private void handleFriend() {
     try {
-      FConversationUtil.createOrUpdateFConversation(mEmMessage);
+      mConversation = FConversationUtil.createOrUpdateFConversation(mEmMessage);
     } catch (EaseMobException e) {
       Log.d(C.TAG.CH, e.toString());
     }
@@ -119,7 +119,7 @@ public class NewFriendMessageWorker extends AsyncTask<Void, Integer, Void> {
   protected void onProgressUpdate(Integer... values) {
     switch (values[0]) {
       case PROGRESS_NOTIFY:
-        //ChatUtils.NotifyUtil.notifyNewMessage(mMessage);
+        ChatUtils.NotifyUtil.notifyNewMessage(mMessage, mConversation);
         break;
       case PROGRESS_UNREAD_CONVERSATION_COUNT:
         U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT,
