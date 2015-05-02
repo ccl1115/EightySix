@@ -58,13 +58,6 @@ public class NewFriendMessageWorker extends AsyncTask<Void, Integer, Void> {
     }
 
     boolean foreground = mMessage.getChatId().equals(FChatActivity.getCurrentFChatId());
-    if (foreground) {
-      // 收到的消息，对应的聊天页面在前台，则不通知该条消息
-      mMessage.setRead(true);
-    } else {
-      publishProgress(PROGRESS_NOTIFY);
-    }
-
     mMessage.setTimestamp(System.currentTimeMillis());
     DaoUtils.getFriendMessageDao().insert(mMessage);
     publishProgress(PROGRESS_INSERT_MESSAGE);
@@ -84,6 +77,14 @@ public class NewFriendMessageWorker extends AsyncTask<Void, Integer, Void> {
         publishProgress(PROGRESS_NEW_ASSISTANT_MESSAGE);
       }
     }
+
+    if (foreground) {
+      // 收到的消息，对应的聊天页面在前台，则不通知该条消息
+      mMessage.setRead(true);
+    } else {
+      publishProgress(PROGRESS_NOTIFY);
+    }
+
 
     if (mMessage.getType() == MessageConst.TYPE_IMAGE) {
       EMChatManager.getInstance().asyncFetchMessage(mEmMessage);
