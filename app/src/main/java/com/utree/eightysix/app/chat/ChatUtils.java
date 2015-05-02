@@ -430,7 +430,7 @@ public class ChatUtils {
 
       Intent[] intents;
       NotificationCompat.Builder builder;
-      if (count == 1) {
+      if (count == 1 || FConversationUtil.getUnreadConversationCount() == 1) {
         intents = new Intent[]{
             HomeTabActivity.getIntent(context, 0),
             ConversationActivity.getIntent(context),
