@@ -77,7 +77,7 @@ public class NotifyUtils {
 
       @Override
       public void onResponse(MessageUnreadResponse response) {
-        Account.inst().setFriendRequestCount(response.object.addedFriendCount);
+        Account.inst().addFriendRequestCount(response.object.addedFriendCount);
       }
     }, MessageUnreadResponse.class);
   }

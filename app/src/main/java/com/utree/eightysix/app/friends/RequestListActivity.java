@@ -35,6 +35,7 @@ public class RequestListActivity extends BaseActivity {
 
   @InjectView(R.id.rstv_empty)
   public RandomSceneTextView mRstvEmpty;
+
   private RequestListAdapter mRequestListAdapter;
 
   @OnItemClick(R.id.alv_requests)

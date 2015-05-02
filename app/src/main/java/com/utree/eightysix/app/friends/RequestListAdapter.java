@@ -152,7 +152,8 @@ public class RequestListAdapter extends BaseAdapter {
     @OnClick(R.id.tv_ignore)
     public void onTvIgnoreClicked() {
 
-      mRequest.type = "ignored";
+      mRequest.type = "ignore";
+      mTvResult.setVisibility(View.VISIBLE);
       mRbAccept.setVisibility(View.GONE);
       mTvIgnore.setVisibility(View.GONE);
       mTvResult.setText("已忽略");
@@ -191,7 +192,7 @@ public class RequestListAdapter extends BaseAdapter {
         mRbAccept.setVisibility(View.VISIBLE);
         mTvIgnore.setVisibility(View.VISIBLE);
         mTvResult.setVisibility(View.GONE);
-      } else if ("ignored".equals(mRequest.type)) {
+      } else if ("ignore".equals(mRequest.type)) {
         mTvResult.setVisibility(View.VISIBLE);
         mRbAccept.setVisibility(View.GONE);
         mTvIgnore.setVisibility(View.GONE);

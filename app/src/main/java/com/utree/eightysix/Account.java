@@ -256,6 +256,11 @@ public class Account {
     getAccountSharedPreferences().edit().putInt("friend_request_count", count).apply();
   }
 
+  public void addFriendRequestCount(int count) {
+    int newCount = count + getFriendRequestCount();
+    setFriendRequestCount(newCount);
+  }
+
   public int getFriendRequestCount() {
     return getAccountSharedPreferences().getInt("friend_request_count", 0);
   }
