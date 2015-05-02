@@ -110,6 +110,7 @@ public class FollowCircleListAdapter extends BaseAdapter {
           if (RESTRequester.responseOk(response)) {
             mCircles.remove(mItem);
             notifyDataSetChanged();
+            U.getBus().post(new CircleFollowsChangedEvent());
           }
 
         }
@@ -124,7 +125,7 @@ public class FollowCircleListAdapter extends BaseAdapter {
 
       if (item.factoryType == 1) {
         mRbIcon.setText(U.gs(R.string.factory));
-        mRbIcon.setBackgroundColor(res.getColor(R.color.apptheme_secondary_dark_color));
+        mRbIcon.setBackgroundColor(res.getColor(R.color.apptheme_primary_light_color));
       } else if (item.factoryType == 2) {
         mRbIcon.setText(U.gs(R.string.business));
         mRbIcon.setBackgroundColor(0xffff6600);
