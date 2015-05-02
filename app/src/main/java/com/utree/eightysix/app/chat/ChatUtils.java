@@ -431,6 +431,7 @@ public class ChatUtils {
       manager.notify(ID_MESSAGE, build);
 
     }
+
     public static void notifyNewMessage(FriendMessage message, FriendConversation conversation) {
       if (message.getChatType().equals("assistant")) {
         notifyNewAssistantMessage(message);
@@ -445,19 +446,19 @@ public class ChatUtils {
       NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
       NotificationCompat.Builder builder;
-        intents = new Intent[]{
-            HomeTabActivity.getIntent(context, 0),
-            ConversationActivity.getIntent(context),
-            ChatActivity.getIntent(context, message.getChatId())
-        };
+      intents = new Intent[]{
+          HomeTabActivity.getIntent(context, 0),
+          ConversationActivity.getIntent(context),
+          ChatActivity.getIntent(context, message.getChatId())
+      };
 
-        builder = new NotificationCompat.Builder(context)
-            .setContentTitle("蓝莓小助手")
-            .setContentText(message.getContent())
-            .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher))
-            .setSmallIcon(R.drawable.ic_launcher)
-            .setLights(Color.GREEN, 500, 2000)
-            .setAutoCancel(true);
+      builder = new NotificationCompat.Builder(context)
+          .setContentTitle("蓝莓小助手")
+          .setContentText(message.getContent())
+          .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher))
+          .setSmallIcon(R.drawable.ic_launcher)
+          .setLights(Color.GREEN, 500, 2000)
+          .setAutoCancel(true);
 
       if (Account.inst().getSilentMode()) {
         builder.setSound(null);
@@ -503,10 +504,19 @@ public class ChatUtils {
             .setSmallIcon(R.drawable.ic_launcher)
             .setLights(Color.GREEN, 500, 2000)
             .setAutoCancel(true);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+          builder.setContentIntent(PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT));
+        } else {
+          builder.setContentIntent(PendingIntent.getActivity(context, 0,
+              FConversationActivity.getIntent(context),
+              PendingIntent.FLAG_UPDATE_CURRENT));
+        }
+
       } else {
         intents = new Intent[]{
             HomeTabActivity.getIntent(context, 0),
-            ConversationActivity.getIntent(context)
+            FConversationActivity.getIntent(context)
         };
 
         builder = new NotificationCompat.Builder(context)
@@ -516,6 +526,15 @@ public class ChatUtils {
             .setSmallIcon(R.drawable.ic_launcher)
             .setLights(Color.GREEN, 500, 2000)
             .setAutoCancel(true);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+          builder.setContentIntent(PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT));
+        } else {
+          builder.setContentIntent(PendingIntent.getActivity(context, 0,
+              FChatActivity.getIntent(context, message.getChatId()),
+              PendingIntent.FLAG_UPDATE_CURRENT));
+        }
+
       }
 
       if (Account.inst().getSilentMode()) {
@@ -524,13 +543,6 @@ public class ChatUtils {
         builder.setDefaults(Notification.DEFAULT_SOUND);
       }
 
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-        builder.setContentIntent(PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT));
-      } else {
-        builder.setContentIntent(PendingIntent.getActivity(context, 0,
-            FChatActivity.getIntent(context, message.getChatId()),
-            PendingIntent.FLAG_UPDATE_CURRENT));
-      }
 
       Notification build = builder.build();
 

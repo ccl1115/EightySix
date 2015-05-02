@@ -341,7 +341,7 @@ public class GuideActivity extends BaseActivity {
     public void onTvStartClicked(View view) {
       finish();
       HomeTabActivity.start(view.getContext());
-      Env.setFirstRun(true);
+      Env.setFirstRun(false);
     }
 
     public Page3ViewHolder(View view) {
