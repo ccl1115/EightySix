@@ -158,7 +158,7 @@
     <!-- FeedActivity -->
     <string name="not_select_circle">不设置在哪里上班，没法玩啊</string>
     <string name="friends_info">朋友(%1$d) | 工友(%2$d)</string>
-    <string name="hidden_friends_feed">你朋友发了%1$d条秘密，但是被隐藏了</string>
+    <string name="hidden_friends_feed">你朋友发了%1$d条帖子，但是被隐藏了</string>
     <string name="unlock_to_view">解锁查看</string>
     <string name="about">蓝莓的故事</string>
     <string name="no_publish_perm_tip">如果这里有%1$d个朋友在职，就能证明你也在这里工作过，就可以发帖啦。</string>
@@ -216,25 +216,25 @@
     <string name="notification_friend_new_post">你的朋友发了一条新帖子</string>
     <string name="notification_friends_new_posts">你的朋友发了%d条帖子</string>
     <string name="notification_circle_unlocked">新的朋友圈解锁了！</string>
-    <string name="notification_circle_unlocked_tip">看看［%1$s］里的朋友发的秘密吧</string>
+    <string name="notification_circle_unlocked_tip">看看［%1$s］里的朋友发的帖子吧</string>
     <string name="notification_new">新提醒</string>
-    <string name="notification_new_follow_comment">你关注的秘密有了新的评论</string>
-    <string name="notification_new_own_comment">你发布的秘密有了新的评论</string>
-    <string name="notification_new_follow_comments">你关注的%d条秘密有了新的评论</string>
-    <string name="notification_new_own_comments">你发布的%d条秘密有了新的评论</string>
+    <string name="notification_new_follow_comment">你关注的帖子有了新的评论</string>
+    <string name="notification_new_own_comment">你发布的帖子有了新的评论</string>
+    <string name="notification_new_follow_comments">你关注的%d条帖子有了新的评论</string>
+    <string name="notification_new_own_comments">你发布的%d条帖子有了新的评论</string>
     <string name="notification_new_friend">新朋友加入</string>
     <string name="notification_new_friend_tip">［%s］的朋友数＋1，能猜到他是谁吗</string>
     <string name="notification_new_friend_tip_plural">［%1$s］的朋友数＋%2$d，能猜到他们是谁吗</string>
     <string name="notification_circle_create_approve">圈子审核通过</string>
-    <string name="notification_circle_create_approve_tip">你申请创建的圈子［%1$s］已经解锁了</string>
+    <string name="notification_circle_create_approve_tip">你申请创建的圈子［%1$s］已经审核通过了</string>
 
 
     <!-- Overlay Tips -->
-    <string name="overlay_tip_source">发这条秘密的人，你肯定认识。为了保护作者，系统将把你的朋友和他们在这个厂的朋友都显示为认识的人。</string>
-    <string name="overlay_tip_repost">你会看到是因为这条秘密在这个厂很火！而且你的朋友正在关注。</string>
-    <string name="overlay_tip_praise">赞，可以鼓励作者，并且当该秘密有更新时，你将收到提醒</string>
-    <string name="overlay_tip_portrait">每次评论新的秘密，你的头像都会不同。</string>
-    <string name="overlay_tip_share">遇到屌炸天的秘密时，记得分享给朋友哦！</string>
+    <string name="overlay_tip_source">发这条帖子的人，你肯定认识。TA会是你的朋友或朋友的朋友。</string>
+    <string name="overlay_tip_repost">你会看到是因为这条帖子在这个厂很火！而且你的朋友正在关注。</string>
+    <string name="overlay_tip_praise">赞，可以鼓励作者，并且当该帖子被评论时，你将收到提醒</string>
+    <string name="overlay_tip_portrait">每次评论新的帖子，你的头像都会不同，这是你在帖子里的临时身份。</string>
+    <string name="overlay_tip_share">遇到感兴趣的帖子时，记得分享给朋友哦！</string>
     <string name="overlay_tip_temp_name">临时名，发帖时带上专属昵称，让自己的帖子更有个性。</string>
     <string name="overlay_tip_tags">标签，是对帖子的分类；打上标签，有价值的帖子会被集中展现和回复。</string>
 
@@ -257,7 +257,7 @@
     <string name="add_new_friend">添加朋友</string>
     <string name="my_id">我的蓝莓ID：%1$s</string>
     <string name="scan_to_be_friend">让小伙伴扫一扫，即可加为蓝莓朋友</string>
-    <string name="people_know_you_count">* %1$d个认识你的人会收到你发的秘密</string>
+    <string name="people_know_you_count">* %1$d个认识你的人会收到你发的帖子</string>
     <string name="friends_in_contact">通讯录联系人 (%1$d)</string>
     <string name="friends_from_scan">来自扫一扫添加 (%1$d)</string>
     <string name="known_people">我认识的人</string>

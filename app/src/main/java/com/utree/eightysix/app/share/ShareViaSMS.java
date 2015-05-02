@@ -39,11 +39,11 @@ class ShareViaSMS extends IShare {
   }
 
   protected String shareContentForApp() {
-    return "%s的某同事匿名邀请你加入【蓝莓-%s圈】。点击查看-";
+    return "%s的某同事邀请你加入【蓝莓-%s圈】。点击查看-";
   }
 
   protected String shareContentForPost() {
-    return "%s的同事匿名给你分享了1条厂里的秘密，点击查看-";
+    return "%s的同事给你分享了1条厂里的帖子，点击查看-";
   }
 
   @Override

@@ -442,8 +442,8 @@ public class ChatUtils {
       }
 
       NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-          .setContentTitle("匿名聊天")
-          .setContentText(String.format("你收到了%d条聊天消息", count))
+          .setContentTitle("悄悄话")
+          .setContentText(String.format("你收到了%d条悄悄话", count))
           .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher))
           .setSmallIcon(R.drawable.ic_launcher)
           .setLights(Color.GREEN, 500, 2000)

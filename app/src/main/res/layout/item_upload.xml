@@ -83,5 +83,5 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:background="@android:color/white"
-            android:text="朋友是你通讯录里的联系人。"/>
+            android:text="朋友是你在蓝莓里关系最亲密的人"/>
 </LinearLayout>

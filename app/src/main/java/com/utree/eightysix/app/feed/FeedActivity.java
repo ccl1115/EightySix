@@ -277,7 +277,7 @@ public class FeedActivity extends BaseActivity {
           showInviteDialog();
         }
       });
-      mUnlockDialog.setTitle("秘密为什么会隐藏");
+      mUnlockDialog.setTitle("帖子为什么会隐藏");
     }
 
     if (!mUnlockDialog.isShowing()) {

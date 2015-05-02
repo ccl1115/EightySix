@@ -329,7 +329,7 @@
 
     <request>
         <id>user_post_realname</id>
-        <name>匿名贴转实名帖</name>
+        <name>匿名帖转实名帖</name>
         <path>/userpost/to/realname</path>
         <sign/>
         <token/>

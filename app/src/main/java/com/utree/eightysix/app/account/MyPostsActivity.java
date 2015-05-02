@@ -189,17 +189,17 @@ public class MyPostsActivity extends BaseActivity {
   private void showTurnOnPrivacyDialog() {
     final ThemedDialog dialog = new ThemedDialog(this);
 
-    dialog.setTitle("隐私开关");
+    dialog.setTitle("隐私锁");
 
     TextView view = new TextView(this);
-    view.setText("此开关开启时，其他人访问你的用户中心时，将隐藏你发表的所有帖子；开关关闭时，将只隐藏你的匿名帖！");
+    view.setText("隐私锁上锁后，其他人访问你的个人主页时，将隐藏你发表的所有帖子；锁被开启时，将只隐藏你的匿名帖！");
     view.setEms(15);
     final int px = U.dp2px(16);
     view.setPadding(px, px, px, px);
 
     dialog.setContent(view);
 
-    dialog.setPositive("开启", new View.OnClickListener() {
+    dialog.setPositive("上锁", new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_privacy_on));

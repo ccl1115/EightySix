@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:text="提醒：取消匿名后，发帖将带上你的身份信息，如用户名、头像等"
+            android:text="提醒：取消匿名后，发帖将带上你的身份信息，如昵称、头像等"
             />
 
     <CheckBox

@@ -35,7 +35,7 @@ public abstract class IShare {
   }
 
   protected String shareTitleForPost() {
-    return "分享1个%s的秘密";
+    return "分享1个%s的帖子";
   }
 
   protected String shareTitleForComment() {
@@ -47,7 +47,7 @@ public abstract class IShare {
   }
 
   protected String shareContentForPost() {
-    return "转自【蓝莓】-工厂里的秘密社区";
+    return "转自【蓝莓】-打工者的社交平台";
   }
 
   protected abstract String shareTitleForBainian();
