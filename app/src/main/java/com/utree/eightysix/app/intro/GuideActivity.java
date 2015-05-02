@@ -23,6 +23,7 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.LoginActivity;
 import com.utree.eightysix.app.account.RegisterActivity;
+import com.utree.eightysix.app.home.HomeTabActivity;
 
 /**
  */
@@ -302,7 +303,7 @@ public class GuideActivity extends BaseActivity {
     }
   }
 
-  public static class Page3ViewHolder {
+  public class Page3ViewHolder {
 
     @InjectView(R.id.iv_circle)
     public ImageView mIvCircle;
@@ -333,6 +334,12 @@ public class GuideActivity extends BaseActivity {
     @OnClick(R.id.tv_login)
     public void onTvLoginClicked(View view) {
       LoginActivity.start(view.getContext(), "");
+    }
+
+    @OnClick(R.id.tv_start)
+    public void onTvStartClicked(View view) {
+      finish();
+      HomeTabActivity.start(view.getContext());
     }
 
     public Page3ViewHolder(View view) {
