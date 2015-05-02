@@ -383,7 +383,7 @@ public class ChatUtils {
 
     public static void notifyNewMessage(Message message) {
 
-      long count = MessageUtil.getUnreadCount();
+      long count = ConversationUtil.getUnreadConversationCount();
       if (count == 0) {
         return;
       }
@@ -405,8 +405,8 @@ public class ChatUtils {
       }
 
       NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-          .setContentTitle("聊天")
-          .setContentText(String.format("你收到了%d条聊天消息", count))
+          .setContentTitle("悄悄话")
+          .setContentText(String.format("你收到了%d条悄悄话", count))
           .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher))
           .setSmallIcon(R.drawable.ic_launcher)
           .setLights(Color.GREEN, 500, 2000)
@@ -480,7 +480,7 @@ public class ChatUtils {
     }
 
     private static void notifyNewFriendMessage(FriendMessage message, FriendConversation conversation) {
-      long count = FMessageUtil.getUnreadCount();
+      long count = FConversationUtil.getUnreadConversationCount();
       if (count == 0) {
         return;
       }
