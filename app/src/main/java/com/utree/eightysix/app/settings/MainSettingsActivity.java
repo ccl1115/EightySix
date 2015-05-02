@@ -17,6 +17,7 @@ import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.devmode.DevModeActivity;
 import com.utree.eightysix.app.publish.FeedbackActivity;
+import com.utree.eightysix.app.web.BaseWebActivity;
 import com.utree.eightysix.data.Sync;
 import com.utree.eightysix.widget.RoundedButton;
 
@@ -83,7 +84,13 @@ public class MainSettingsActivity extends BaseActivity {
 
   @OnClick(R.id.tv_help)
   public void onTvHelpClicked() {
-    startActivity(new Intent(this, HelpActivity.class));
+    try {
+      BaseWebActivity.start(this,
+          "http://web.lanmeiquan.com/Web/help/introduction?version=" +
+              getPackageManager().getPackageInfo(getPackageName(), 0).versionName +
+              "&title=%E4%BD%BF%E7%94%A8%E5%B8%AE%E5%8A%A9");
+    } catch (PackageManager.NameNotFoundException ignored) {
+    }
   }
 
   @OnClick(R.id.tv_feedback)
