@@ -1,12 +1,12 @@
 [submodule "emojicon"]
 	path = emojicon
-	url = http://git.lanmeiquan.cn/scm/eig/emojicon
+	url = http://182.254.185.162:7990/scm/eig/emojicon
     branch = master
 [submodule "wiki"]
 	path = wiki
-	url = http://git.lanmeiquan.cn/scm/eig/wiki
+	url = http://182.254.185.162:7990/scm/eig/wiki
 	branch = master
 [submodule "ImageViewZoom"]
 	path = ImageViewZoom
-	url = http://git.lanmeiquan.cn/scm/eig/imageviewzoom.git
+	url = http://182.254.185.162:7990/scm/eig/imageviewzoom.git
 	branch = master
