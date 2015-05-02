@@ -380,9 +380,9 @@ public class ProfileFragment extends HolderFragment {
 
           mTvName.setText(builder);
           if (mProfile.birthday == -1) {
-            mTvBirthday.setVisibility(View.INVISIBLE);
-            mTvAge.setVisibility(View.INVISIBLE);
-            mTvConstellation.setVisibility(View.INVISIBLE);
+            mTvBirthday.setVisibility(View.GONE);
+            mTvAge.setVisibility(View.GONE);
+            mTvConstellation.setVisibility(View.GONE);
           } else {
             mTvBirthday.setVisibility(View.VISIBLE);
             mTvBirthday.setText(TimeUtil.getDate(mProfile.birthday));
