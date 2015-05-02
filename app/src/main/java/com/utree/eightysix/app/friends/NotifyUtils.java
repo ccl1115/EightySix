@@ -55,11 +55,11 @@ public class NotifyUtils {
       b.append("，");
     }
     b.deleteCharAt(b.length() - 1);
+    builder.setContentText(b.toString());
     builder.setAutoCancel(true)
         .setDefaults(Account.inst().getSilentMode() ? Notification.DEFAULT_LIGHTS : Notification.DEFAULT_ALL)
         .setLargeIcon(sLargeIcon)
         .setSmallIcon(R.drawable.ic_launcher);
-    builder.setContentText(b.toString());
     builder.setContentIntent(PendingIntent.getActivity(U.getContext(),
             0,
             new Intent(U.getContext(), RequestListActivity.class),

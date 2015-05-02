@@ -56,18 +56,19 @@
                     tools:ignore="RtlSymmetry"
                     />
 
-            <ImageView
-                    android:id="@+id/iv_emotion"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_gravity="center_vertical|end"
-                    android:src="@drawable/ic_action_emotion"
-                    android:visibility="gone"
-                    />
 
         </FrameLayout>
 
+        <ImageView
+                android:id="@+id/iv_emotion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_action_emotion"
+                android:visibility="gone"
+                />
 
         <ImageView
                 android:id="@+id/iv_camera"

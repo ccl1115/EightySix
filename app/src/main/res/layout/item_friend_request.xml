@@ -41,8 +41,8 @@
             android:layout_toRightOf="@+id/aiv_portrait"
             android:layout_toEndOf="@+id/aiv_portrait"
             android:layout_below="@+id/tv_name"
-            android:ems="10"
-            android:maxLines="2"
+            android:ems="12"
+            android:singleLine="true"
             android:ellipsize="end"
             android:textSize="12sp"
             android:textColor="@color/apptheme_primary_grey_color_200"
@@ -55,6 +55,9 @@
             android:layout_toRightOf="@+id/aiv_portrait"
             android:layout_toEndOf="@+id/aiv_portrait"
             android:layout_below="@+id/tv_info"
+            android:layout_marginTop="2dp"
+            android:textSize="12sp"
+            android:textColor="@color/apptheme_primary_grey_color_200"
             />
 
     <com.utree.eightysix.widget.RoundedButton
