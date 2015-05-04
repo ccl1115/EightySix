@@ -28,8 +28,9 @@ public class AsyncImageView extends ImageView {
   }
 
   public void setUrl(String url) {
+    setImageBitmap(null);
+
     if (url == null || url.length() == 0) {
-      setImageBitmap(null);
       return;
     }
 
@@ -43,8 +44,9 @@ public class AsyncImageView extends ImageView {
   }
 
   public void setUrl(String url, int width, int height) {
-    if (url == null) {
-      setImageBitmap(null);
+    setImageBitmap(null);
+
+    if (url == null || url.length() == 0) {
       return;
     }
 

@@ -83,8 +83,9 @@ public class AsyncImageViewWithRoundCorner extends AsyncImageView {
 
   @Override
   public void setUrl(String url) {
+    setBitmap(null);
+
     if (url == null || url.length() == 0) {
-      setImageBitmap(null);
       return;
     }
 
@@ -105,8 +106,9 @@ public class AsyncImageViewWithRoundCorner extends AsyncImageView {
   }
 
   public void setUrl(String url, int width, int height) {
+    setImageBitmap(null);
+
     if (url == null) {
-      setImageBitmap(null);
       return;
     }
 
