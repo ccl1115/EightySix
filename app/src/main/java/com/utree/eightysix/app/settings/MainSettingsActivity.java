@@ -119,6 +119,9 @@ public class MainSettingsActivity extends BaseActivity {
     } catch (PackageManager.NameNotFoundException ignored) {
     }
 
+    if (BuildConfig.DEBUG) {
+      mTvDev.setVisibility(View.VISIBLE);
+    }
   }
 
   @Subscribe
@@ -134,10 +137,6 @@ public class MainSettingsActivity extends BaseActivity {
       } else {
         mRbUpgradeDot.setVisibility(View.INVISIBLE);
       }
-    }
-
-    if (BuildConfig.DEBUG) {
-      mTvDev.setVisibility(View.VISIBLE);
     }
 
     int version = 0;
