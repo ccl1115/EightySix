@@ -91,6 +91,8 @@ public class MsgCenterFragment extends BaseFragment {
     mRbCountMsg.setCount(Account.inst().getNewCommentCount());
     mRbCountRequest.setCount(Account.inst().getFriendRequestCount());
     mRbPraise.setVisibility(Account.inst().getHasNewPraise() ? View.VISIBLE : View.GONE);
+
+    updateTopBar();
   }
 
   @Subscribe
@@ -126,13 +128,6 @@ public class MsgCenterFragment extends BaseFragment {
   @Override
   public void onAttach(Activity activity) {
     super.onAttach(activity);
-    updateTopBar();
-  }
-
-  @Override
-  public void onDetach() {
-    super.onDetach();
-
   }
 
   @Override

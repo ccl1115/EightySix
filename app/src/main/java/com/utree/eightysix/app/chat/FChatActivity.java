@@ -371,7 +371,7 @@ public class FChatActivity extends BaseActivity implements
           if (conversation.size() == 0) {
             has = false;
             FriendMessage message = ChatUtils.infoFriendMsg(mChatId, getString(R.string.no_more_history));
-            message.setTimestamp(mChatAdapter.getItem(0).getTimestamp() - 1);
+            message.setTimestamp(0l);
             mChatAdapter.add(message);
           } else {
             has = true;

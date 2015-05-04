@@ -193,7 +193,9 @@ public class HomeTabActivity extends BaseActivity {
     getHandler().postDelayed(new Runnable() {
       @Override
       public void run() {
-        onTabItemClicked(mFlFeed);
+        if (!isFinishing() || !isDestroyed()) {
+          onTabItemClicked(mFlFeed);
+        }
       }
     }, 1000);
 

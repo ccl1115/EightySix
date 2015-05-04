@@ -327,6 +327,8 @@ public class ProfileFragment extends HolderFragment {
       }
     });
 
+    updateTopTitle();
+
     requestProfile();
     mLastRefreshTimestamp = System.currentTimeMillis();
   }
@@ -546,7 +548,6 @@ public class ProfileFragment extends HolderFragment {
   @Override
   public void onAttach(Activity activity) {
     super.onAttach(activity);
-    updateTopTitle();
   }
 
   @Override
