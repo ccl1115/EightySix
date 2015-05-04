@@ -34,22 +34,23 @@
             android:layout_marginTop="16dp"
             android:layout_toRightOf="@+id/aiv_portrait"
             android:layout_toEndOf="@+id/aiv_portrait"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             />
 
     <TextView
             android:id="@+id/tv_source"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_toRightOf="@+id/aiv_portrait"
             android:layout_toEndOf="@+id/aiv_portrait"
             android:layout_below="@+id/tv_name"
-            android:layout_marginTop="2dp"
             android:textSize="14sp"
             android:textColor="@color/apptheme_primary_grey_color_200"
-            android:paddingLeft="6dp"
-            android:paddingRight="6dp"
             />
 
     <com.utree.eightysix.widget.RoundedButton

@@ -121,6 +121,11 @@ public class AsyncImageViewWithRoundCorner extends AsyncImageView {
   }
 
   private void setBitmap(Bitmap bitmap) {
+    if (bitmap == null) {
+      setImageDrawable(null);
+      return;
+    }
+
     int width, height;
 
     if (getLayoutParams().width != ViewGroup.LayoutParams.MATCH_PARENT &&

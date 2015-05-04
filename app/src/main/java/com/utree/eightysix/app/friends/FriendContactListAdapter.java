@@ -14,6 +14,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.data.Friend;
+import com.utree.eightysix.widget.AsyncImageViewWithRoundCorner;
 import com.utree.eightysix.widget.RoundedButton;
 
 import java.util.List;
@@ -83,6 +84,9 @@ public class FriendContactListAdapter extends BaseAdapter {
     @InjectView(R.id.tv_result)
     public TextView mTvResult;
 
+    @InjectView(R.id.aiv_portrait)
+    public AsyncImageViewWithRoundCorner mAivPortrait;
+
     private Friend mFriend;
 
     @OnClick(R.id.rb_add)
@@ -104,7 +108,7 @@ public class FriendContactListAdapter extends BaseAdapter {
         mTvResult.setText("已添加");
         mTvResult.setVisibility(View.VISIBLE);
         mRbAdd.setVisibility(View.GONE);
-      } else if ("ignored".equals(mFriend.type)) {
+      } else if ("ignore".equals(mFriend.type)) {
         mTvResult.setText("被忽略");
         mTvResult.setVisibility(View.VISIBLE);
         mRbAdd.setVisibility(View.GONE);
@@ -116,6 +120,7 @@ public class FriendContactListAdapter extends BaseAdapter {
 
     public ViewHolder(View view) {
       ButterKnife.inject(this, view);
+      mAivPortrait.setVisibility(View.GONE);
     }
   }
 }
