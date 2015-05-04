@@ -79,6 +79,8 @@ public class FConversationUtil {
         .buildDelete()
         .executeDeleteWithoutDetachingEntities();
     DaoUtils.getFriendConversationDao().delete(conversation);
+    U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT,
+        FConversationUtil.getUnreadConversationCount()));
   }
 
   public static String getChatIdByViewId(int viewId) {
@@ -116,6 +118,8 @@ public class FConversationUtil {
     DaoUtils.getFriendConversationDao().deleteAll();
     DaoUtils.getFriendMessageDao().deleteAll();
     U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_CONVERSATIONS_RELOAD, null));
+    U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT,
+        FConversationUtil.getUnreadConversationCount()));
   }
 
   static FriendConversation setLastMessage(FriendMessage message) {

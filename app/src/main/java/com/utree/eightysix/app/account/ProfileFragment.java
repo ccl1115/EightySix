@@ -186,9 +186,9 @@ public class ProfileFragment extends HolderFragment {
   @OnClick(R.id.aiv_portrait)
   public void onAivPortraitClicked() {
     if (mIsVisitor && !isSelf()) {
-      AvatarViewerActivity.start(getActivity(), 0, mViewId);
+      AvatarsActivity.start(getActivity(), mViewId);
     } else {
-      AvatarViewerActivity.start(getActivity(), 0, -1);
+      AvatarsActivity.start(getActivity(), -1);
     }
   }
 

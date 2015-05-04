@@ -107,13 +107,17 @@ public class MessageUtil {
     }
     DaoUtils.getMessageDao().updateInTx(list);
 
-    List<Conversation> conversations = DaoUtils.getConversationDao().queryBuilder().where(ConversationDao.Properties.UnreadCount.notEq(0)).list();
+    List<Conversation> conversations = DaoUtils.getConversationDao().queryBuilder()
+        .where(ConversationDao.Properties.UnreadCount.notEq(0))
+        .list();
     for (Conversation conversation : conversations) {
       conversation.setUnreadCount(0L);
     }
     DaoUtils.getConversationDao().updateInTx(conversations);
 
     U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATIONS_RELOAD, null));
+    U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT,
+        ConversationUtil.getUnreadConversationCount()));
   }
 
   public static Conversation setRead(String chatId) {

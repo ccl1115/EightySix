@@ -51,6 +51,8 @@ public class FMessageUtil {
     DaoUtils.getFriendConversationDao().updateInTx(conversations);
 
     U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_CONVERSATIONS_RELOAD, null));
+    U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT,
+        FConversationUtil.getUnreadConversationCount()));
   }
 
   public static FriendConversation setRead(String chatId) {

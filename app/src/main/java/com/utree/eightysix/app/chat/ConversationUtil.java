@@ -174,6 +174,8 @@ public class ConversationUtil {
         .where(ConversationDao.Properties.ChatId.eq(chatId))
         .buildDelete()
         .executeDeleteWithoutDetachingEntities();
+    U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT,
+        getUnreadConversationCount()));
   }
 
   public static void deleteConversation(Conversation conversation) {
@@ -182,6 +184,8 @@ public class ConversationUtil {
         .buildDelete()
         .executeDeleteWithoutDetachingEntities();
     DaoUtils.getConversationDao().delete(conversation);
+    U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT,
+        getUnreadConversationCount()));
   }
 
   /**
@@ -203,6 +207,8 @@ public class ConversationUtil {
 
     DaoUtils.getConversationDao().deleteInTx(list);
     U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATIONS_RELOAD, null));
+    U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_UPDATE_UNREAD_CONVERSATION_COUNT,
+        getUnreadConversationCount()));
   }
 
   public static Conversation setLastMessage(Message message) {
