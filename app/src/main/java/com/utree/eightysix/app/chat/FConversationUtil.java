@@ -65,7 +65,8 @@ public class FConversationUtil {
 
   static List<FriendConversation> getConversations(int page, int size) {
     return DaoUtils.getFriendConversationDao().queryBuilder()
-        .where(FriendConversationDao.Properties.ChatType.eq("friend"))
+        .where(FriendConversationDao.Properties.ChatType.eq("friend"),
+            FriendConversationDao.Properties.LastMsg.isNotNull())
         .orderDesc(FriendConversationDao.Properties.Timestamp)
         .offset(page * size)
         .limit(size)
@@ -92,7 +93,6 @@ public class FConversationUtil {
       conversation.setViewId(viewId);
       conversation.setChatId(chat.chatId);
       conversation.setUnreadCount(0l);
-      conversation.setLastMsg("");
       conversation.setTimestamp(System.currentTimeMillis());
       conversation.setMyAvatar(chat.myAvatar);
       conversation.setMyName(chat.myName);

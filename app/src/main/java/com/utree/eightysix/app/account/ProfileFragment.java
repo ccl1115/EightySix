@@ -430,7 +430,7 @@ public class ProfileFragment extends HolderFragment {
               mTvSettings.setVisibility(View.GONE);
               mTvMyCircles.setVisibility(View.GONE);
               mTvMyFriends.setVisibility(View.GONE);
-              getBaseActivity().getTopBar().setTitle(getArguments().getString("userName"));
+              getBaseActivity().getTopBar().setTitle(mProfile.userName);
 
               if (response.object.postPrivacy.equals("on")) {
                 mTvMyPosts.setVisibility(View.GONE);
