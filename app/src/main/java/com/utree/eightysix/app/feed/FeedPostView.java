@@ -335,6 +335,7 @@ public class FeedPostView extends LinearLayout {
     if (!TextUtils.isEmpty(mPost.userName)) {
       mLlTop.setVisibility(VISIBLE);
       mTvName.setText(mPost.userName);
+      mAivPortrait.setUrl(null);
       mAivPortrait.setUrl(mPost.avatar);
     } else {
       mLlTop.setVisibility(GONE);
