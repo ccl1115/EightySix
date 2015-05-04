@@ -148,11 +148,18 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
   @OnClick(R.id.rb_select)
   public void onRbSelect() {
     mLlDistanceSelector.setVisibility(View.GONE);
-    mFeedFragment.mDistance = mSbDistance.getProgress() + 1000;
-    mHotFeedFragment.mDistance = mSbDistance.getProgress() + 1000;
-    mFriendsFeedFragment.mDistance = mSbDistance.getProgress() + 1000;
-    float value = mSbDistance.getProgress() / 1000f;
-    if (value > 9f) {
+    int progress = mSbDistance.getProgress();
+    if (progress > 9000 && progress < 9200) {
+      mFeedFragment.mDistance = 10000;
+      mHotFeedFragment.mDistance = 10000;
+      mFriendsFeedFragment.mDistance = 10000;
+    } else {
+      mFeedFragment.mDistance = progress + 1000;
+      mHotFeedFragment.mDistance = progress + 1000;
+      mFriendsFeedFragment.mDistance = progress + 1000;
+    }
+
+    if (progress > 9200) {
       setRegionType(3);
     } else {
       setRegionType(4);

@@ -343,7 +343,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
       getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-          FactoryRegionActivity.start(getActivity(), 4, mDistance);
+          FactoryRegionActivity.start(getActivity(), mRegionType, mDistance);
         }
       });
     }
