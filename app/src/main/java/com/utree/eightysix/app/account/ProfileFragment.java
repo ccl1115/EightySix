@@ -71,6 +71,12 @@ public class ProfileFragment extends HolderFragment {
     FragmentHolder.start(context, ProfileFragment.class, args);
   }
 
+  public static void start(Context context) {
+    Bundle args = new Bundle();
+    args.putBoolean("isVisitor", false);
+    FragmentHolder.start(context, ProfileFragment.class, args);
+  }
+
   @InjectView(R.id.tv_name)
   public TextView mTvName;
 

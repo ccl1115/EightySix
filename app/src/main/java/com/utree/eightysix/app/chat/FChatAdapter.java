@@ -13,6 +13,7 @@ import butterknife.InjectView;
 import com.rockerhieu.emojicon.EmojiconTextView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.account.ProfileFragment;
 import com.utree.eightysix.app.chat.content.ImageContent;
 import com.utree.eightysix.dao.FriendConversation;
 import com.utree.eightysix.dao.FriendMessage;
@@ -41,11 +42,13 @@ public class FChatAdapter extends BaseAdapter {
   private static final int TYPE_IMAGE_FROM = 5;
   private static final int TYPE_IMAGE_TO = 6;
 
+
   private List<FriendMessage> mMessages;
   private Comparator<FriendMessage> mMessageComparator;
 
   private String mMyPortraitUrl;
   private String mTargetPortraitUrl;
+  private int mTargetViewId;
 
   {
     mMessageComparator = new Comparator<FriendMessage>() {
@@ -70,6 +73,7 @@ public class FChatAdapter extends BaseAdapter {
     this();
     mMyPortraitUrl = conversation.getMyAvatar();
     mTargetPortraitUrl = conversation.getTargetAvatar();
+    mTargetViewId = conversation.getViewId();
   }
 
   public void add(FriendMessage message) {
@@ -193,6 +197,12 @@ public class FChatAdapter extends BaseAdapter {
     View textView = getTextView(R.layout.item_friend_chat_text_from, convertView, parent, message);
     TextItemViewHolder holder = (TextItemViewHolder) textView.getTag();
     holder.mAivPortrait.setUrl(mTargetPortraitUrl);
+    holder.mAivPortrait.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        ProfileFragment.start(v.getContext(), mTargetViewId, "");
+      }
+    });
 
     MessageUtil.setText(holder.mTvText, message);
     return textView;
@@ -204,6 +214,13 @@ public class FChatAdapter extends BaseAdapter {
     View textView = getTextView(R.layout.item_friend_chat_text_to, convertView, parent, message);
     TextItemViewHolder holder = (TextItemViewHolder) textView.getTag();
     holder.mAivPortrait.setUrl(mMyPortraitUrl);
+    holder.mAivPortrait.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        ProfileFragment.start(v.getContext());
+      }
+    });
+
     holder.mTvText.setText(message.getContent());
     return textView;
   }
@@ -228,6 +245,12 @@ public class FChatAdapter extends BaseAdapter {
     View imageView = getImageView(R.layout.item_friend_chat_image_from, position, convertView, parent);
     ImageItemViewHolder holder = (ImageItemViewHolder) imageView.getTag();
     holder.mAivPortrait.setUrl(mTargetPortraitUrl);
+    holder.mAivPortrait.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        ProfileFragment.start(v.getContext(), mTargetViewId, "");
+      }
+    });
     return imageView;
   }
 
@@ -235,6 +258,12 @@ public class FChatAdapter extends BaseAdapter {
     View imageView = getImageView(R.layout.item_friend_chat_image_to, position, convertView, parent);
     ImageItemViewHolder holder = (ImageItemViewHolder) imageView.getTag();
     holder.mAivPortrait.setUrl(mMyPortraitUrl);
+    holder.mAivPortrait.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        ProfileFragment.start(v.getContext());
+      }
+    });
     return imageView;
   }
 
