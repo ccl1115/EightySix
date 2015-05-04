@@ -34,6 +34,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:layout_margin="8dp"
+                android:paddingLeft="3dp"
+                android:paddingStart="3dp"
+                android:paddingTop="1dp"
+                android:paddingRight="1dp"
+                android:paddingEnd="3dp"
+                android:paddingBottom="1dp"
                 android:src="@drawable/ic_warning"
                 />
 
