@@ -73,6 +73,13 @@ public class FConversationUtil {
         .list();
   }
 
+  public static void deleteConversation(FriendConversation conversation) {
+    DaoUtils.getMessageDao().queryBuilder()
+        .where(FriendMessageDao.Properties.ChatId.eq(conversation.getChatId()))
+        .buildDelete()
+        .executeDeleteWithoutDetachingEntities();
+    DaoUtils.getFriendConversationDao().delete(conversation);
+  }
 
   public static String getChatIdByViewId(int viewId) {
     FriendConversation friendConversation = DaoUtils.getFriendConversationDao().queryBuilder()

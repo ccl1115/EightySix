@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
+import butterknife.OnItemLongClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
@@ -22,10 +23,12 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.app.account.ProfileFragment;
 import com.utree.eightysix.dao.FriendConversation;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RandomSceneTextView;
+import com.utree.eightysix.widget.ThemedDialog;
 
 import java.util.List;
 
@@ -58,6 +61,12 @@ public class FConversationActivity extends BaseActivity {
   @InjectView(R.id.rstv_empty)
   public RandomSceneTextView mRstvEmpty;
 
+  private FConversationAdapter mAdapter;
+
+  private int mPage = 0;
+  private boolean mHasMore;
+
+
   @OnItemClick(R.id.alv_conversation)
   public void onAlvConversationItemClicked(int position) {
     FriendConversation item = mAdapter.getItem(position);
@@ -65,10 +74,33 @@ public class FConversationActivity extends BaseActivity {
     ChatUtils.startFriendChat(this, item.getViewId());
   }
 
-  private FConversationAdapter mAdapter;
+  @OnItemLongClick(R.id.alv_conversation)
+  public boolean onAlvConversationItemLongClicked(final View view, final int position) {
+    final FriendConversation conversation = mAdapter.getItem(position);
 
-  private int mPage = 0;
-  private boolean mHasMore;
+    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+
+    builder.setTitle("聊天操作")
+        .setItems(new String[]{
+            "删除此条聊天",
+            "查看个人主页"
+        }, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            switch (which) {
+              case 0:
+                showConfirmDeleteDialog(conversation);
+                break;
+              case 1:
+                ProfileFragment.start(view.getContext(), conversation.getViewId(), "");
+                break;
+            }
+          }
+        })
+        .show();
+
+    return true;
+  }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -155,5 +187,27 @@ public class FConversationActivity extends BaseActivity {
           }
         });
     builder.show();
+  }
+
+  private void showConfirmDeleteDialog(final FriendConversation conversation) {
+    final ThemedDialog dialog = new ThemedDialog(this);
+    dialog.setTitle("确认删除此条聊天？");
+    dialog.setPositive(R.string.okay, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        FConversationUtil.deleteConversation(conversation);
+        mAdapter.remove(conversation);
+        dialog.dismiss();
+      }
+    });
+
+    dialog.setRbNegative(R.string.cancel, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        dialog.dismiss();
+      }
+    });
+
+    dialog.show();
   }
 }

@@ -49,6 +49,11 @@ public class FConversationAdapter extends BaseAdapter {
     notifyDataSetChanged();
   }
 
+  public void remove(FriendConversation conversation) {
+    mConversations.remove(conversation);
+    notifyDataSetChanged();
+  }
+
   @Override
   public int getCount() {
     return mConversations.size();
