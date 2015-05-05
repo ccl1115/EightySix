@@ -32,7 +32,9 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.FragmentHolder;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.OverlayTipUtil;
+import com.utree.eightysix.app.account.ProfileFillActivity;
 import com.utree.eightysix.app.account.ProfileFragment;
+import com.utree.eightysix.app.account.event.ProfileFilledEvent;
 import com.utree.eightysix.app.bs.BlueStarFragment;
 import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.app.feed.event.*;
@@ -309,11 +311,6 @@ public class PostActivity extends BaseActivity
   @OnClick(R.id.iv_post)
   public void onRbPostClicked() {
     U.getAnalyser().trackEvent(this, "post_comment", "post_comment");
-    showProgressBar();
-    mEtPostContent.setEnabled(false);
-    mIvPost.setEnabled(false);
-    mFlEmotion.setVisibility(View.GONE);
-    mIvEmotion.setSelected(false);
     requestPublishComment();
   }
 
@@ -754,6 +751,17 @@ public class PostActivity extends BaseActivity
   }
 
   private void requestPublishComment() {
+    if (TextUtils.isEmpty(mPost.viewerName)) {
+      ProfileFillActivity.start(PostActivity.this, false);
+      return;
+    }
+
+    mEtPostContent.setEnabled(false);
+    mIvPost.setEnabled(false);
+    mFlEmotion.setVisibility(View.GONE);
+    mIvEmotion.setSelected(false);
+    showProgressBar();
+
     PublishCommentRequest request;
     if (mIvAnonymous.isSelected()) {
       request = new PublishCommentRequest(mEtPostContent.getText().toString(), mPost.id);
@@ -787,6 +795,11 @@ public class PostActivity extends BaseActivity
             requestComment(1, true);
           }
         }, PublishCommentResponse.class);
+  }
+
+  @Subscribe
+  public void onProfileFilledEvent(ProfileFilledEvent event) {
+    requestComment(1, true);
   }
 
   @Override

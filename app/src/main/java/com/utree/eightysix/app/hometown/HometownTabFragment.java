@@ -14,10 +14,12 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.HolderFragment;
 import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
+import com.utree.eightysix.app.hometown.event.HometownNotSetEvent;
 import com.utree.eightysix.widget.TitleTab;
 import com.utree.eightysix.widget.TopBar;
 
@@ -76,27 +78,7 @@ public class HometownTabFragment extends HolderFragment {
     getBaseActivity().getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        if (mSetHometownFragment == null) {
-          mSetHometownFragment = new SetHometownFragment();
-          Bundle bundle = new Bundle();
-          bundle.putString("title", "设置家乡");
-          mSetHometownFragment.setArguments(bundle);
-          mSetHometownFragment.setCallback(new SetHometownFragment.Callback() {
-            @Override
-            public void onHometownSet(int hometownId) {
-              mHotHometownFeedsFragment.setHometown(0, -1);
-              mNewHometownFeedsFragment.setHometown(0, -1);
-              refresh();
-            }
-          });
-          getFragmentManager().beginTransaction()
-              .add(R.id.content, mSetHometownFragment)
-              .commit();
-        } else if (mSetHometownFragment.isDetached()) {
-          getFragmentManager().beginTransaction()
-              .attach(mSetHometownFragment)
-              .commit();
-        }
+        showSetHometownFragment();
       }
     });
 
@@ -159,6 +141,30 @@ public class HometownTabFragment extends HolderFragment {
     }, 500);
   }
 
+  private void showSetHometownFragment() {
+    if (mSetHometownFragment == null) {
+      mSetHometownFragment = new SetHometownFragment();
+      Bundle bundle = new Bundle();
+      bundle.putString("title", "设置家乡");
+      mSetHometownFragment.setArguments(bundle);
+      mSetHometownFragment.setCallback(new SetHometownFragment.Callback() {
+        @Override
+        public void onHometownSet(int hometownId) {
+          mHotHometownFeedsFragment.setHometown(0, -1);
+          mNewHometownFeedsFragment.setHometown(0, -1);
+          refresh();
+        }
+      });
+      getFragmentManager().beginTransaction()
+          .add(R.id.content, mSetHometownFragment)
+          .commit();
+    } else if (mSetHometownFragment.isDetached()) {
+      getFragmentManager().beginTransaction()
+          .attach(mSetHometownFragment)
+          .commit();
+    }
+  }
+
   @Override
   public void onDestroyView() {
     super.onDestroyView();
@@ -209,6 +215,11 @@ public class HometownTabFragment extends HolderFragment {
   private void clearActive() {
     mNewHometownFeedsFragment.setActive(false);
     mHotHometownFeedsFragment.setActive(false);
+  }
+
+  @Subscribe
+  public void onHometownNotSetEvent(HometownNotSetEvent event) {
+    showSetHometownFragment();
   }
 
   @Override

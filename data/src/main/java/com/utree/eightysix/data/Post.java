@@ -184,6 +184,8 @@ public class Post extends BaseItem implements Parcelable {
     dest.writeString(this.avatar);
     dest.writeString(this.viewUserId);
     dest.writeString(this.levelIcon);
+    dest.writeString(this.viewerName);
+    dest.writeInt(this.jump);
     dest.writeString(this.bgUrl);
     dest.writeString(this.bgColor);
     dest.writeString(this.content);
@@ -220,6 +222,8 @@ public class Post extends BaseItem implements Parcelable {
     this.avatar = in.readString();
     this.viewUserId = in.readString();
     this.levelIcon = in.readString();
+    this.viewerName = in.readString();
+    this.jump = in.readInt();
     this.bgUrl = in.readString();
     this.bgColor = in.readString();
     this.content = in.readString();

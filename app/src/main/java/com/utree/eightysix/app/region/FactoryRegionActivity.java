@@ -83,11 +83,7 @@ public class FactoryRegionActivity extends BaseActivity {
         setTopTitle("同城的工厂");
         break;
       case 4:
-        if (mRegionRadius >= 10000) {
-          setTopTitle("同城的工厂");
-        } else {
-          setTopTitle(String.format("%.2f公里内的工厂", mRegionRadius / 1000f));
-        }
+        setTopTitle(String.format("%.2f公里内的工厂", mRegionRadius / 1000f));
         break;
     }
 

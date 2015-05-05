@@ -60,7 +60,7 @@ public class ImageCropActivity extends BaseActivity {
 
   @OnClick(R.id.rb_okay)
   public void onRbOkayClicked() {
-    File cropped = IOUtils.createTmpFile("crop_image");
+    File cropped = IOUtils.createTmpFile("crop_image_" + System.currentTimeMillis());
 
     OutputStream stream = null;
     try {

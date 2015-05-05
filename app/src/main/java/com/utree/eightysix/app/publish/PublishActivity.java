@@ -21,7 +21,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.*;
-import butterknife.*;
+import butterknife.InjectView;
+import butterknife.OnClick;
+import butterknife.OnFocusChange;
+import butterknife.OnTextChanged;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ArgbEvaluator;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -36,6 +39,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.CameraUtil;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.app.account.ProfileFillActivity;
 import com.utree.eightysix.app.publish.event.PostPublishedEvent;
 import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.data.Post;
@@ -49,6 +53,7 @@ import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.Env;
+import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.widget.*;
 import com.utree.eightysix.widget.panel.GridPanel;
@@ -115,6 +120,7 @@ public class PublishActivity extends BaseActivity implements
   protected int mTopicId;
 
   private String mImageUploadUrl;
+  private String mImageHash;
 
   private Dialog mDescriptionDialog;
   private boolean mIsOpened;
@@ -261,25 +267,6 @@ public class PublishActivity extends BaseActivity implements
     }
   }
 
-  @OnCheckedChanged(R.id.cb_check)
-  public void onCbAnonymousCheckChanged(boolean checked) {
-    if (!checked) {
-      if (Account.inst().getCancelPostAnonymousDialog()) {
-        showCancelAnonymousDialog();
-      }
-    }
-
-    Account.inst().setPostAnonymous(checked);
-
-    if (checked) {
-      mEtTempName.setVisibility(View.VISIBLE);
-      mIvTempName.setVisibility(View.VISIBLE);
-    } else {
-      mEtTempName.setVisibility(View.INVISIBLE);
-      mIvTempName.setVisibility(View.INVISIBLE);
-    }
-  }
-
   @Override
   public void onActionLeftClicked() {
     confirmFinish();
@@ -315,6 +302,35 @@ public class PublishActivity extends BaseActivity implements
     mTvPostTip.setText(getHintText());
 
     mCbAnonymous.setChecked(Account.inst().getPostAnonymous());
+
+    if (Account.inst().getPostAnonymous()) {
+      mEtTempName.setVisibility(View.VISIBLE);
+      mIvTempName.setVisibility(View.VISIBLE);
+    } else {
+      mEtTempName.setVisibility(View.INVISIBLE);
+      mIvTempName.setVisibility(View.INVISIBLE);
+    }
+
+    mCbAnonymous.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+      @Override
+      public void onCheckedChanged(CompoundButton buttonView, boolean checked) {
+        if (!checked) {
+          if (Account.inst().getCancelPostAnonymousDialog()) {
+            showCancelAnonymousDialog();
+          }
+        }
+
+        Account.inst().setPostAnonymous(checked);
+
+        if (checked) {
+          mEtTempName.setVisibility(View.VISIBLE);
+          mIvTempName.setVisibility(View.VISIBLE);
+        } else {
+          mEtTempName.setVisibility(View.INVISIBLE);
+          mIvTempName.setVisibility(View.INVISIBLE);
+        }
+      }
+    });
 
     //region To detect soft keyboard visibility change
     // works after ICM
@@ -510,11 +526,13 @@ public class PublishActivity extends BaseActivity implements
       return;
     }
 
-    mImageUploadFinished = true;
-    mImageUploadUrl = event.getUrl();
+    if (mImageHash != null && mImageHash.equals(event.getHash())) {
+      mImageUploadFinished = true;
+      mImageUploadUrl = event.getUrl();
 
-    if (mRequestStarted) {
-      requestPublish();
+      if (mRequestStarted) {
+        requestPublish();
+      }
     }
   }
 
@@ -716,6 +734,7 @@ public class PublishActivity extends BaseActivity implements
   private void setBgImage(String p) {
     final File file = new File(p);
     Bitmap bitmap = ImageUtils.safeDecodeBitmap(file);
+    mImageHash = IOUtils.fileHash(file);
     ImageUtils.asyncUpload(file, 50);
     mPostEditText.setTextColor(Color.WHITE);
     mPostEditText.setShadowLayer(2, 0, 0, Color.BLACK);
@@ -786,6 +805,8 @@ public class PublishActivity extends BaseActivity implements
             U.getBus().post(new PostPublishedEvent(post, mFactoryId));
 
             finish();
+          } else if (response.code == 0x32309) {
+            ProfileFillActivity.start(PublishActivity.this, false);
           }
           hideProgressBar();
           enablePublishButton();

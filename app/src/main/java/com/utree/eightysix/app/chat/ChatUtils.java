@@ -288,7 +288,6 @@ public class ChatUtils {
     U.request("get_chat_info", new OnResponse2<ChatInfoResponse>() {
       @Override
       public void onResponseError(Throwable throwable) {
-        U.showToast(U.gs(R.string.create_conversation_failed));
         context.hideProgressBar();
       }
 
@@ -297,8 +296,6 @@ public class ChatUtils {
         if (RESTRequester.responseOk(response)) {
           ConversationUtil.createIfNotExist(response.object, post);
           ChatActivity.start(context, response.object.chatId);
-        } else {
-          U.showToast(U.gs(R.string.create_conversation_failed));
         }
         context.hideProgressBar();
       }

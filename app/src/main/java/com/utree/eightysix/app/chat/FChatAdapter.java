@@ -49,6 +49,7 @@ public class FChatAdapter extends BaseAdapter {
   private String mMyPortraitUrl;
   private String mTargetPortraitUrl;
   private int mTargetViewId;
+  private String mChatType;
 
   {
     mMessageComparator = new Comparator<FriendMessage>() {
@@ -74,6 +75,7 @@ public class FChatAdapter extends BaseAdapter {
     mMyPortraitUrl = conversation.getMyAvatar();
     mTargetPortraitUrl = conversation.getTargetAvatar();
     mTargetViewId = conversation.getViewId();
+    mChatType = conversation.getChatType();
   }
 
   public void add(FriendMessage message) {
@@ -197,12 +199,14 @@ public class FChatAdapter extends BaseAdapter {
     View textView = getTextView(R.layout.item_friend_chat_text_from, convertView, parent, message);
     TextItemViewHolder holder = (TextItemViewHolder) textView.getTag();
     holder.mAivPortrait.setUrl(mTargetPortraitUrl);
-    holder.mAivPortrait.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        ProfileFragment.start(v.getContext(), mTargetViewId, "");
-      }
-    });
+    if (mChatType.equals("friend")) {
+      holder.mAivPortrait.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          ProfileFragment.start(v.getContext(), mTargetViewId, "");
+        }
+      });
+    }
 
     MessageUtil.setText(holder.mTvText, message);
     return textView;
@@ -245,12 +249,14 @@ public class FChatAdapter extends BaseAdapter {
     View imageView = getImageView(R.layout.item_friend_chat_image_from, position, convertView, parent);
     ImageItemViewHolder holder = (ImageItemViewHolder) imageView.getTag();
     holder.mAivPortrait.setUrl(mTargetPortraitUrl);
-    holder.mAivPortrait.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        ProfileFragment.start(v.getContext(), mTargetViewId, "");
-      }
-    });
+    if (mChatType.equals("friend")) {
+      holder.mAivPortrait.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          ProfileFragment.start(v.getContext(), mTargetViewId, "");
+        }
+      });
+    }
     return imageView;
   }
 
