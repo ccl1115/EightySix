@@ -78,9 +78,10 @@ public class UserSearchAdapter extends BaseAdapter {
 
     public void setData(Friend friend) {
       if (friend.isFriend == 1) {
-        friend.userName += " (朋友)";
+        mTvUsername.setText(friend.userName + " (朋友)");
+      } else {
+        mTvUsername.setText(friend.userName);
       }
-      mTvUsername.setText(friend.userName);
       mTvSource.setText(friend.workinFactory);
       mTvRelation.setText(friend.relation);
       mAivLevelIcon.setUrl(friend.levelIcon);

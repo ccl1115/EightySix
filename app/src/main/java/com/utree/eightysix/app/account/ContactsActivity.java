@@ -26,7 +26,6 @@ import com.utree.eightysix.response.UnregContactsResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.TextActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -134,20 +133,9 @@ public class ContactsActivity extends BaseActivity {
   }
 
   protected void enableSendButton() {
-    mTopBar.getActionView(0).setEnabled(true);
-    mTopBar.getActionView(0).setActionBackgroundDrawable(
-        new RoundRectDrawable(U.dp2px(2),
-            getResources().getColorStateList(R.color.apptheme_primary_btn_light)));
-    ((TextActionButton) mTopBar.getActionView(0)).setTextColor(Color.WHITE);
   }
 
   private void disableSendButton() {
-    mTopBar.getActionView(0).setEnabled(false);
-    mTopBar.getActionView(0).setActionBackgroundDrawable(
-        new RoundRectDrawable(U.dp2px(2),
-            getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
-    ((TextActionButton) mTopBar.getActionView(0)).setTextColor(
-        getResources().getColor(R.color.apptheme_primary_grey_color_disabled));
   }
 
   private void requestUnregContacts() {

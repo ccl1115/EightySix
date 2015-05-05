@@ -53,8 +53,9 @@ public class UserSearchActivity extends BaseActivity {
       public void onResponse(FriendListResponse response) {
 
         if (RESTRequester.responseOk(response)) {
-          if (response.object.isEmpty()) {
+          if (response.object == null || response.object.isEmpty()) {
             mRstvEmpty.setVisibility(View.VISIBLE);
+            mAlvUsers.setAdapter(null);
           } else {
             mRstvEmpty.setVisibility(View.GONE);
             mUserSearchAdapter = new UserSearchAdapter(response.object);

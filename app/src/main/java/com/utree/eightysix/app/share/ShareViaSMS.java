@@ -39,7 +39,7 @@ class ShareViaSMS extends IShare {
   }
 
   protected String shareContentForApp() {
-    return "%s的某同事邀请你加入【蓝莓-%s圈】。点击查看-";
+    return "我在蓝莓等你，快来一起玩吧【蓝莓-%s圈】。点击查看-";
   }
 
   protected String shareContentForPost() {
