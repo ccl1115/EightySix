@@ -491,7 +491,6 @@ public class ChatUtils {
       if (count == 1) {
         intents = new Intent[]{
             HomeTabActivity.getIntent(context, 0),
-            FConversationActivity.getIntent(context),
             FChatActivity.getIntent(context, message.getChatId())
         };
 

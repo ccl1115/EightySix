@@ -61,8 +61,9 @@ public class FChatActivity extends BaseActivity implements
   }
 
   public static Intent getIntent(Context context, String chatId) {
-
     Intent intent = new Intent(context, FChatActivity.class);
+
+    intent.setAction(chatId);
     intent.putExtra("chatId", chatId);
 
     if (!(context instanceof Activity)) {

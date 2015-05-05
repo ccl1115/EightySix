@@ -142,7 +142,9 @@ public class AvatarViewerActivity extends BaseActivity {
             }
           });
 
-          mTvCount.setText(String.format("%d/%d", 1, response.object.size()));
+          final int index = getIntent().getIntExtra("index", 1);
+          mTvCount.setText(String.format("%d/%d", index, response.object.size()));
+          mVpAvatars.setCurrentItem(index);
         }
       }
     }, UserAvatarsResponse.class, viewId);

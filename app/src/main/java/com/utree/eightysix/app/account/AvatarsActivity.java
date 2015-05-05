@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import butterknife.InjectView;
 import butterknife.InjectViews;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
@@ -30,6 +31,7 @@ import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.widget.AsyncImageView;
+import com.utree.eightysix.widget.RandomSceneTextView;
 import com.utree.eightysix.widget.ThemedDialog;
 
 import java.io.File;
@@ -78,6 +80,9 @@ public class AvatarsActivity extends BaseActivity {
   })
   public ImageView[] mIvSelected;
 
+  @InjectView(R.id.rstv_empty)
+  public RandomSceneTextView mRstvEmpty;
+
   private CameraUtil mCameraUtil;
   private String mFileHash;
   private Integer mViewId;
@@ -116,8 +121,12 @@ public class AvatarsActivity extends BaseActivity {
         if (RESTRequester.responseOk(response)) {
           final int size = response.object == null ? 0 : response.object.size();
 
-          if (mViewId == null && size == 0) {
-            mCameraUtil.showCameraDialog();
+          if (size == 0) {
+            if (mViewId == null) {
+              mCameraUtil.showCameraDialog();
+            } else {
+              mRstvEmpty.setVisibility(View.VISIBLE);
+            }
           }
 
           for (int i = 0; i < size; i++) {
@@ -133,7 +142,7 @@ public class AvatarsActivity extends BaseActivity {
               mAivAvatars[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                  AvatarViewerActivity.start(v.getContext(), finalI, -1);
+                  AvatarViewerActivity.start(v.getContext(), finalI, mViewId);
                 }
               });
               mAivAvatars[i].setOnLongClickListener(new View.OnLongClickListener() {
@@ -263,7 +272,7 @@ public class AvatarsActivity extends BaseActivity {
         new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
-            switch(which) {
+            switch (which) {
               case 0:
                 showSelectConfirmDialog(avatar);
                 break;
