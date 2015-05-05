@@ -142,8 +142,8 @@ public class AvatarViewerActivity extends BaseActivity {
             }
           });
 
-          final int index = getIntent().getIntExtra("index", 1);
-          mTvCount.setText(String.format("%d/%d", index, response.object.size()));
+          final int index = getIntent().getIntExtra("index", 0);
+          mTvCount.setText(String.format("%d/%d", index + 1, response.object.size()));
           mVpAvatars.setCurrentItem(index);
         }
       }

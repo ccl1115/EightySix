@@ -178,10 +178,32 @@ public class FConversationActivity extends BaseActivity {
           public void onClick(DialogInterface dialog, int which) {
             switch (which) {
               case 0:
-                FMessageUtil.setAllRead();
+                new AlertDialog.Builder(FConversationActivity.this)
+                    .setTitle("确认忽略所有未读？")
+                    .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
+                      @Override
+                      public void onClick(DialogInterface dialog, int which) {
+                        FMessageUtil.setAllRead();
+                      }
+                    }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                      @Override
+                      public void onClick(DialogInterface dialog, int which) {
+                      }
+                    }).show();
                 break;
               case 1:
-                FConversationUtil.deleteAllConversation();
+                new AlertDialog.Builder(FConversationActivity.this)
+                    .setTitle("确认清空会话列表？")
+                    .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
+                      @Override
+                      public void onClick(DialogInterface dialog, int which) {
+                        FConversationUtil.deleteAllConversation();
+                      }
+                    }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                      @Override
+                      public void onClick(DialogInterface dialog, int which) {
+                      }
+                    }).show();
                 break;
             }
           }

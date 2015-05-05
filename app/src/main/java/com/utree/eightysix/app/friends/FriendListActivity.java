@@ -89,8 +89,6 @@ public class FriendListActivity extends BaseActivity {
             for (String s : mIndex) {
               TextView textView = new TextView(FriendListActivity.this);
               textView.setText(s);
-              int px = U.dp2px(4);
-              textView.setPadding(px, px, px, px);
               textView.setGravity(Gravity.CENTER);
               textView.setTextSize(12);
               final int finalIndex = index;

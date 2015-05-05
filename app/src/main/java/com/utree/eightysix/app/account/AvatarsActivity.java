@@ -142,7 +142,7 @@ public class AvatarsActivity extends BaseActivity {
               mAivAvatars[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                  AvatarViewerActivity.start(v.getContext(), finalI, mViewId);
+                  AvatarViewerActivity.start(v.getContext(), finalI, mViewId == null ? -1 : mViewId);
                 }
               });
               mAivAvatars[i].setOnLongClickListener(new View.OnLongClickListener() {

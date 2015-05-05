@@ -11,7 +11,6 @@ import android.view.View;
 import butterknife.InjectView;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
-import com.utree.eightysix.C;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
@@ -19,7 +18,6 @@ import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.widget.TopBar;
-import de.akquinet.android.androlog.Log;
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 import it.sephiroth.android.library.imagezoom.ImageViewTouchBase;
 
@@ -58,10 +56,10 @@ public class ImageViewerActivity extends BaseActivity {
   public void onImageLoadedEvent(ImageUtils.ImageLoadedEvent event) {
     if (event.getHash().equals(mHash) && (mLoadRemote || event.getWidth() == 600 && event.getHeight() == 600)) {
       mImageViewTouch.setImageBitmap(event.getBitmap());
-      hideProgressBar();
       mBitmap = event.getBitmap();
       mLoaded = true;
     }
+    hideProgressBar();
   }
 
   @Override
@@ -72,17 +70,13 @@ public class ImageViewerActivity extends BaseActivity {
 
     final String local = getIntent().getStringExtra("local");
     final String remote = getIntent().getStringExtra("remote");
-    final String secret = getIntent().getStringExtra("secret");
-
-    Log.d(C.TAG.CH, "ImageViewer local: " + local);
-    Log.d(C.TAG.CH, "ImageViewer remote: " + remote);
-    Log.d(C.TAG.CH, "ImageViewer secret: " + secret);
 
 
     if (!new File(local).exists()) {
       mLoadRemote = true;
       mHash = ImageUtils.getUrlHash(remote);
       ImageUtils.asyncLoad(remote, mHash);
+      showProgressBar();
     } else {
       mImageViewTouch.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
       File file = new File(local);
@@ -130,8 +124,6 @@ public class ImageViewerActivity extends BaseActivity {
         return null;
       }
     });
-
-    showProgressBar();
   }
 
   @Override
