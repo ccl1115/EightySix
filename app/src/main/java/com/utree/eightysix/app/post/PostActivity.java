@@ -404,6 +404,9 @@ public class PostActivity extends BaseActivity
 
       @Override
       public boolean onTouch(View v, MotionEvent event) {
+        if (mPostCommentsAdapter == null) {
+          return false;
+        }
 
         if (mPostCommentsAdapter.getPostPostView().getTop() == 0) {
           switch (MotionEventCompat.getActionMasked(event)) {

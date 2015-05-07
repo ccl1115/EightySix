@@ -16,6 +16,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
+import com.nineoldandroids.view.ViewHelper;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
@@ -390,8 +391,8 @@ public class GuideActivity extends BaseActivity {
       girl.setInterpolator(new OvershootInterpolator(2f));
 
       mLlBottom.setVisibility(View.VISIBLE);
-      mLlBottom.setTranslationY(300f);
-      mLlBottom.setAlpha(0);
+      ViewHelper.setTranslationY(mLlBottom, 300f);
+      ViewHelper.setAlpha(mLlBottom, 0f);
 
       AnimatorSet bottom = new AnimatorSet();
       bottom.playTogether(

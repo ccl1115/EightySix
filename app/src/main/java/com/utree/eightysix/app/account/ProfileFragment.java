@@ -25,6 +25,7 @@ import butterknife.OnClick;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
+import com.nineoldandroids.view.ViewHelper;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
@@ -285,7 +286,7 @@ public class ProfileFragment extends HolderFragment {
       @Override
       public void onDrag(int value) {
         getBaseActivity().showRefreshIndicator(false);
-        mAivBg.setTranslationY(Math.max(Math.min(MAX_HEIGHT, value), 0));
+        ViewHelper.setTranslationY(mAivBg, Math.max(Math.min(MAX_HEIGHT, value), 0));
       }
 
       @Override
@@ -322,8 +323,8 @@ public class ProfileFragment extends HolderFragment {
       @Override
       public void onScrollChanged() {
         mScrollY = -mScrollView.getScrollY();
-        mRbChangeBg.setTranslationY(mScrollY);
-        mAivBg.setTranslationY(mScrollY);
+        ViewHelper.setTranslationY(mRbChangeBg, mScrollY);
+        ViewHelper.setTranslationY(mAivBg, mScrollY);
       }
     });
 
