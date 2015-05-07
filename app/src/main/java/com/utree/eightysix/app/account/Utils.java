@@ -91,14 +91,14 @@ class Utils {
     }
 
     static Constellation ARIES = new Constellation(2, 20, 3, 19, "白羊座");
-    static Constellation TAURUS = new Constellation(3, 19, 4, 18, "金牛座");
+    static Constellation TAURUS = new Constellation(3, 19, 4, 20, "金牛座");
     static Constellation GEMINI = new Constellation(4, 20, 5, 21, "双子座");
     static Constellation CANCER = new Constellation(5, 21, 6, 22, "巨蟹座");
     static Constellation LEO = new Constellation(6, 22, 7, 22, "狮子座");
     static Constellation VIRGO = new Constellation(7, 22, 8, 22, "处女座");
-    static Constellation LIBRA = new Constellation(8, 22, 9, 23, "天平座");
-    static Constellation SCORPIO = new Constellation(9, 23, 10, 21, "天蝎座");
-    static Constellation SAGITTARIUS = new Constellation(10, 21, 11, 21, "射手座");
+    static Constellation LIBRA = new Constellation(8, 22, 9, 23, "天秤座");
+    static Constellation SCORPIO = new Constellation(9, 23, 10, 22, "天蝎座");
+    static Constellation SAGITTARIUS = new Constellation(10, 22, 11, 21, "射手座");
     static Constellation CAPRICORN = new Constellation(11, 21, 0, 19, "摩羯座");
     static Constellation AQUARIUS = new Constellation(0, 19, 1, 18, "水瓶座");
     static Constellation PISCES = new Constellation(1, 18, 2, 20, "双鱼座");
@@ -107,7 +107,7 @@ class Utils {
     public String toString() {
       return String.format("%s (%d.%d - %d.%d)", name,
           start.get(Calendar.MONTH) + 1,
-          start.get(Calendar.DAY_OF_MONTH),
+          start.get(Calendar.DAY_OF_MONTH) + 1,
           end.get(Calendar.MONTH) + 1,
           end.get(Calendar.DAY_OF_MONTH));
     }
