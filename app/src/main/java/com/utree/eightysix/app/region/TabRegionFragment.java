@@ -121,7 +121,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
     if (!canPublish()) {
       showNoPermDialog();
     } else {
-      PublishActivity.start(getActivity(), -1, null);
+      PublishActivity.start(getActivity(), mFeedFragment.getCircle().id, null);
     }
   }
 
@@ -589,6 +589,10 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
     mFeedFragment.requestFeeds(circleId);
     mHotFeedFragment.requestFeeds(circleId);
     mFriendsFeedFragment.requestFeeds(circleId);
+
+    mTtTab.setTabBudget(0, "", true);
+    mTtTab.setTabBudget(1, "", true);
+    mTtTab.setTabBudget(2, "", true);
 
     if (mVpTab == null) return;
 

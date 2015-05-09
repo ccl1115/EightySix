@@ -72,6 +72,12 @@ public class HotFeedRegionFragment extends AbsRegionFragment {
   }
 
   @Override
+  protected void responseForFeedsRequest(FeedsResponse response, int page) {
+    super.responseForFeedsRequest(response, page);
+    U.getBus().post(new NewHotPostCountEvent(mCircle.id, 0));
+  }
+
+  @Override
   protected void cacheOutFeedsByRegion(final int regionType, int distance, final int page) {
     if (getBaseActivity() == null) return;
     getBaseActivity().cacheOut(new FeedByRegionRequest(page, regionType, 1), new OnResponse<FeedsByRegionResponse>() {
@@ -145,7 +151,7 @@ public class HotFeedRegionFragment extends AbsRegionFragment {
       }
     }
     if (isAdded()) {
-      requestRegionFeeds(mRegionType, mDistance, 1);
+      refresh();
     }
   }
 

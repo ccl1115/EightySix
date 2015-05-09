@@ -72,6 +72,12 @@ public class FriendsFeedRegionFragment extends AbsRegionFragment {
   }
 
   @Override
+  protected void responseForFeedsRequest(FeedsResponse response, int page) {
+    super.responseForFeedsRequest(response, page);
+    U.getBus().post(new NewFriendsPostCountEvent(mCircle.id, 0));
+  }
+
+  @Override
   protected void cacheOutFeedsByRegion(final int regionType, int distance, final int page) {
     if (getBaseActivity() == null) return;
     getBaseActivity().cacheOut(new FeedByRegionRequest(page, regionType, 2), new OnResponse<FeedsByRegionResponse>() {
@@ -168,7 +174,7 @@ public class FriendsFeedRegionFragment extends AbsRegionFragment {
       }
     }
     if (isAdded()) {
-      requestRegionFeeds(mRegionType, mDistance, 1);
+      refresh();
     }
   }
 

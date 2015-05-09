@@ -144,7 +144,7 @@ public class FeedRegionFragment extends AbsRegionFragment {
       }
     }
     if (isAdded()) {
-      requestRegionFeeds(mRegionType, mDistance, 1);
+      refresh();
     }
   }
 

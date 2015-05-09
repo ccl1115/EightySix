@@ -109,9 +109,11 @@ public class ContactsSyncService extends IntentService {
         data.setSign(true);
         StringBuilder builder = new StringBuilder();
         for (Contact contact : contacts) {
-          contact.name = contact.name.replaceAll(";;;|___", "");
-          contact.phone = contact.phone.replaceAll(";;;|___", "");
-          builder.append(contact.phone).append("___").append(contact.name).append(";;;");
+          if (contact.name != null && contact.phone != null) {
+            contact.name = contact.name.replaceAll(";;;|___", "");
+            contact.phone = contact.phone.replaceAll(";;;|___", "");
+            builder.append(contact.phone).append("___").append(contact.name).append(";;;");
+          }
         }
 
         data.getParams().add("contacts", builder.toString());
