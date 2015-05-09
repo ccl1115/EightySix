@@ -651,7 +651,6 @@ public class ProfileFragment extends HolderFragment {
   private void updateTopTitle() {
     getBaseActivity().setTopTitle("我");
     getBaseActivity().setTopSubTitle("");
-    getBaseActivity().getTopBar().getAbLeft().hide();
     getBaseActivity().showTopBar(true);
     getBaseActivity().hideRefreshIndicator();
     if (mIsVisitor && !isSelf()) {

@@ -9,7 +9,6 @@
         android:id="@+id/fl_distance_selector"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         >
 
     <LinearLayout
@@ -30,27 +29,30 @@
                 >
 
             <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="滑动变更看帖范围"
-                    android:textColor="#ff7e7e7e"
-                    />
-
-            <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="当前范围: "
+                    android:text="滑动变更看帖范围，当前范围: "
                     android:textColor="#ff7e7e7e"
                     />
 
             <TextView
                     android:id="@+id/tv_distance"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:textColor="@color/apptheme_primary_light_color"
                     />
 
+            <com.utree.eightysix.widget.RoundedButton
+                    android:id="@+id/rb_select"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="2dp"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="2dp"
+                    android:text="选定"
+                    />
         </LinearLayout>
 
         <View
@@ -65,59 +67,94 @@
         <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingBottom="16dp"
-                android:paddingTop="8dp"
                 >
 
-            <SeekBar
-                    android:id="@+id/sb_distance"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_toLeftOf="@+id/rb_select"
-                    android:layout_toStartOf="@+id/rb_select"
-                    android:layout_marginRight="24dp"
-                    android:layout_marginEnd="24dp"
-                    android:max="10000"
-                    />
-
-            <TextView
+            <RadioGroup
+                    android:id="@+id/rg_group"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/sb_distance"
-                    android:layout_alignLeft="@+id/sb_distance"
-                    android:layout_alignStart="@+id/sb_distance"
-                    android:text="1km"
-                    android:textColor="#ff7e7e7e"
-                    />
+                    android:orientation="vertical"
+                    >
 
-            <TextView
+                <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="附近："
+                        />
+
+                <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="地区："
+                        />
+            </RadioGroup>
+
+            <RelativeLayout
+                    android:id="@+id/rl_distance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/rg_group"
+                    android:layout_toEndOf="@+id/rg_group"
+                    android:padding="8dp"
+                    >
+
+                <SeekBar
+                        android:id="@+id/sb_distance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="10000"
+                        />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/sb_distance"
+                        android:layout_alignLeft="@+id/sb_distance"
+                        android:layout_alignStart="@+id/sb_distance"
+                        android:text="1km"
+                        android:textColor="#ff7e7e7e"
+                        />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/sb_distance"
+                        android:layout_alignRight="@+id/sb_distance"
+                        android:layout_alignEnd="@+id/sb_distance"
+                        android:text="同城"
+                        android:textColor="#ff7e7e7e"
+                        />
+
+            </RelativeLayout>
+
+
+            <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/sb_distance"
-                    android:layout_alignRight="@+id/sb_distance"
-                    android:layout_alignEnd="@+id/sb_distance"
-                    android:text="同城"
-                    android:textColor="#ff7e7e7e"
-                    />
+                    android:layout_marginTop="2dp"
+                    android:layout_toRightOf="@+id/rg_group"
+                    android:layout_toEndOf="@+id/rg_group"
+                    android:layout_below="@+id/rl_distance"
+                    android:orientation="horizontal"
+                    >
 
-            <com.utree.eightysix.widget.RoundedButton
-                    android:id="@+id/rb_select"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:paddingLeft="8dp"
-                    android:paddingTop="2dp"
-                    android:paddingRight="8dp"
-                    android:paddingBottom="2dp"
-                    android:text="选定"
-                    />
+                <TextView
+                        android:id="@+id/tv_district"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:padding="8dp"
+                        android:text="地区"
+                        />
+
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_action_image"
+                        />
+            </LinearLayout>
         </RelativeLayout>
-
     </LinearLayout>
 </FrameLayout>

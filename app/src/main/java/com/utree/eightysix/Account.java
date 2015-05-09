@@ -330,6 +330,8 @@ public class Account {
       // 停止后台定时拉消息服务
       FetchAlarmReceiver.stopAlarm(U.getContext());
 
+      Account.inst().getAccountSharedPreferences().edit().clear().apply();
+
       if (!Account.inst().setUserId("") && !Account.inst().setToken("")) {
         Account.inst().mIsLogin = false;
       }
