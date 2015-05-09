@@ -355,11 +355,6 @@ public class FChatActivity extends BaseActivity implements
 
     U.getChatBus().register(this);
 
-    mRefreshView.setColorSchemeResources(R.color.apptheme_primary_light_color,
-        R.color.apptheme_primary_light_color_pressed,
-        R.color.apptheme_primary_light_color,
-        R.color.apptheme_primary_light_color_pressed);
-
     mRefreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       private int page = 0;
       private boolean has = true;
@@ -420,11 +415,11 @@ public class FChatActivity extends BaseActivity implements
         mConversation = FMessageUtil.setRead(mChatId);
         publishProgress(1);
 
-        mUnreadConversationCount = ConversationUtil.getUnreadConversationCount();
-        publishProgress(2);
-
         if (mConversation.getChatType().equals("assistant")) {
           publishProgress(3);
+        } else {
+          mUnreadConversationCount = ConversationUtil.getUnreadConversationCount();
+          publishProgress(2);
         }
         return null;
       }

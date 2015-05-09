@@ -90,7 +90,7 @@ public class FConversationAdapter extends BaseAdapter {
     switch (event.getStatus()) {
       case FriendChatEvent.EVENT_CONVERSATION_INSERT_OR_UPDATE: {
         FriendConversation obj = (FriendConversation) event.getObj();
-        if (obj == null) return;
+        if (obj == null || obj.getChatType().equals("assistant")) return;
         for (int i = 0; i < mConversations.size(); i++) {
           FriendConversation conversation = mConversations.get(i);
           if (conversation.getId().equals(obj.getId())) {
