@@ -162,21 +162,11 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
     mLlDistanceSelector.setVisibility(View.GONE);
     if (mRbRegion.isChecked()) {
       int progress = mSbDistance.getProgress();
-      if (progress > 9000 && progress < 9200) {
-        mFeedFragment.mDistance = 10000;
-        mHotFeedFragment.mDistance = 10000;
-        mFriendsFeedFragment.mDistance = 10000;
-      } else {
-        mFeedFragment.mDistance = progress + 1000;
-        mHotFeedFragment.mDistance = progress + 1000;
-        mFriendsFeedFragment.mDistance = progress + 1000;
-      }
+      mFeedFragment.mDistance = progress + 1000;
+      mHotFeedFragment.mDistance = progress + 1000;
+      mFriendsFeedFragment.mDistance = progress + 1000;
 
-      if (progress > 9200) {
-        setRegionType(3);
-      } else {
-        setRegionType(4);
-      }
+      setRegionType(4);
     } else if (mRbArea.isChecked()) {
       setRegionType(5);
     }
@@ -327,13 +317,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
       @Override
       public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         float value = progress / 1000f + 1;
-        if (value > 10f && value <= 10.2f) {
-          mTvDistance.setText("10km");
-        } else if (value > 10.2f) {
-          mTvDistance.setText("同城");
-        } else {
-          mTvDistance.setText(String.format("%.2fkm", value));
-        }
+        mTvDistance.setText(String.format("%.2fkm", value));
       }
 
       @Override
