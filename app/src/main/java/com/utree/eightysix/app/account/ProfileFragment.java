@@ -671,16 +671,17 @@ public class ProfileFragment extends HolderFragment {
       }
     }
 
-    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
-    getTopBar().getAbLeft().setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        if (getBaseActivity() instanceof FragmentHolder) {
+    if (getBaseActivity() instanceof FragmentHolder) {
+      getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+      getTopBar().getAbLeft().setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
           getBaseActivity().finish();
         }
-      }
-    });
-
+      });
+    } else {
+      getTopBar().getAbLeft().hide();
+    }
   }
 
   @Override
