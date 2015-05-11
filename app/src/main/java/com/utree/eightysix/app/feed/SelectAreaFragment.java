@@ -119,8 +119,8 @@ public class SelectAreaFragment extends BaseFragment {
       }
     });
 
-    mTvTitle.setText("切换地区");
-    mRbSettings.setText("切换");
+    mTvTitle.setText("选择地区");
+    mRbSettings.setText("确认");
 
     mLlParent.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(8), Color.WHITE));
 

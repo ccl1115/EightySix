@@ -280,7 +280,7 @@ public class PostActivity extends BaseActivity
             getString(R.string.share),
             getString(R.string.report),
             getString(R.string.delete),
-            getString(R.string.ban_comment)
+            comment.ban == 1 ? getString(R.string.unban_comment) : getString(R.string.ban_comment)
         };
       }
     } else if (comment.self == 1) {
@@ -328,7 +328,23 @@ public class PostActivity extends BaseActivity
                     U.getBus().post(new PostCommentDeleteRequest(mPost.id, comment.id));
                     break;
                   case 5:
-                    showConfirmBanCommentDialog(comment);
+                    if (comment.ban == 1) {
+                      U.request("comment_unban", new OnResponse2<Response>() {
+                        @Override
+                        public void onResponseError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onResponse(Response response) {
+                          if (RESTRequester.responseOk(response)) {
+                            comment.ban = 0;
+                          }
+                        }
+                      }, Response.class, mPost.id, comment.id);
+                    } else {
+                      showConfirmBanCommentDialog(comment);
+                    }
                     break;
                 }
               }
@@ -706,7 +722,7 @@ public class PostActivity extends BaseActivity
     dialog.setPositive(R.string.okay, new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        U.request("comment_blacklist", new OnResponse2<Response>() {
+        U.request("comment_ban", new OnResponse2<Response>() {
           @Override
           public void onResponseError(Throwable e) {
 
@@ -715,7 +731,7 @@ public class PostActivity extends BaseActivity
           @Override
           public void onResponse(Response response) {
             if (RESTRequester.responseOk(response)) {
-
+              comment.ban = 1;
             }
           }
         }, Response.class, mPost.id, comment.id);

@@ -359,7 +359,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
       getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-          FactoryRegionActivity.start(getActivity(), mRegionType, mDistance);
+          FactoryRegionActivity.start(getActivity(), mRegionType, mAreaName);
         }
       });
     }
@@ -518,8 +518,6 @@ public abstract class AbsRegionFragment extends BaseFragment {
     if (response != null && response.code == 0 && response.object != null) {
       if (page == 1) {
         mCircle = response.object.circle;
-
-        U.getBus().post(new CurrentCircleResponseEvent(mCircle));
 
         if (response.object.posts.lists.size() == 0) {
           mRstvEmpty.setVisibility(View.VISIBLE);

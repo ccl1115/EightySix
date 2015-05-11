@@ -88,7 +88,7 @@ public class MsgCenterFragment extends BaseFragment {
     mRbCountChat.setCount((int) ConversationUtil.getUnreadConversationCount());
     mRbCountFChat.setCount((int) FConversationUtil.getUnreadConversationCount());
     mRbCountAssist.setCount((int) FMessageUtil.getAssistUnreadCount());
-    mRbCountMsg.setCount(Account.inst().getNewCommentCount());
+    mRbCountMsg.setCount(Account.inst().getNewCommentCount() + Account.inst().getMyPostCommentCount());
     mRbCountRequest.setCount(Account.inst().getFriendRequestCount());
     mRbPraise.setVisibility(Account.inst().getHasNewPraise() ? View.VISIBLE : View.GONE);
 

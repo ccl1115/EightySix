@@ -61,6 +61,19 @@ public class FactoryRegionActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
+  public static void start(Context context, int regionType, String areaName) {
+    Intent intent = new Intent(context, FactoryRegionActivity.class);
+
+    intent.putExtra("regionType", regionType);
+    intent.putExtra("areaName", areaName);
+
+    if (!(context instanceof Activity)) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    context.startActivity(intent);
+  }
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -84,6 +97,9 @@ public class FactoryRegionActivity extends BaseActivity {
         break;
       case 4:
         setTopTitle(String.format("%.2f公里内的工厂", mRegionRadius / 1000f));
+        break;
+      case 5:
+        setTopTitle(String.format("%s的工厂", getIntent().getStringExtra("areaName")));
         break;
     }
 

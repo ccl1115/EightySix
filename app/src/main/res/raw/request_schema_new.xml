@@ -182,14 +182,26 @@
     </request>
 
     <request>
-        <id>comment_blacklist</id>
+        <id>comment_ban</id>
         <name>楼主屏蔽评论</name>
         <path>/comment/blacklist.do</path>
         <token/>
         <sign/>
         <params>
-            <param>post_id</param>
-            <param>comment_id</param>
+            <param>postId</param>
+            <param>commentId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>comment_unban</id>
+        <name>楼主取消屏蔽评论</name>
+        <path>/comment/cancelBlacklist.do</path>
+        <token/>
+        <sign/>
+        <params>
+            <param>postId</param>
+            <param>commentId</param>
         </params>
     </request>
 

@@ -118,6 +118,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
   private boolean mTtTabHidden;
 
   private int mLastCircleId = -1;
+  private int mLastRegion = 4;
 
   public TabRegionFragment() {
     mFeedFragment = new FeedRegionFragment();
@@ -169,8 +170,10 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
       mFriendsFeedFragment.mDistance = progress + 1000;
 
       setRegionType(4);
+      mLastRegion = 4;
     } else if (mRbArea.isChecked()) {
       setRegionType(5);
+      mLastRegion = 5;
     }
   }
 
@@ -205,6 +208,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
   public void onRbArea(boolean checked) {
     if (checked) {
       mTvDistance.setText(mTvAreaName.getText());
+      mSbDistance.setEnabled(false);
     }
   }
 
@@ -212,6 +216,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
   public void onRbRegion(boolean checked) {
     if (checked) {
       mTvDistance.setText(String.format("%.2fkm", mSbDistance.getProgress() / 1000f + 1));
+      mSbDistance.setEnabled(true);
     }
   }
 
@@ -344,7 +349,8 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
       public void onStopTrackingTouch(SeekBar seekBar) {
 
       }
-    });
+    })
+    ;
 
     mVpTab.setOffscreenPageLimit(2);
 
@@ -544,6 +550,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
       mSbDistance.setProgress(event.getDistance() - 1000);
     } else if (event.getRegion() == 5) {
       mRbArea.setChecked(true);
+      mTvDistance.setText(event.getCityName());
     }
     mTvAreaName.setText(event.getCityName());
   }
@@ -565,7 +572,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
 
   @Subscribe
   public void onCurrentCircleResponseEvent(CurrentCircleResponseEvent event) {
-    if (event.getCircle() != null) {
+    if (event.getCircle() != null && event.getCircle().id != 0) {
       clearSelectedCircle();
       mLlSetCurrent.setVisibility(View.GONE);
       mLlCurrent.setVisibility(View.VISIBLE);
@@ -782,7 +789,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
           getTopBar().getAbRight().hide();
         } else if (position == 1) {
           clearFollowCircleViews();
-          setRegionType(4);
+          setRegionType(mLastRegion);
           getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_distance));
           getTopBar().getAbRight().hide();
         }
