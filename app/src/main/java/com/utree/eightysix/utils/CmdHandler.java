@@ -15,7 +15,6 @@ import com.utree.eightysix.app.msg.PraiseActivity;
 import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.app.settings.HelpActivity;
 import com.utree.eightysix.app.snapshot.SnapshotActivity;
-import com.utree.eightysix.app.tag.TagTabActivity;
 import com.utree.eightysix.app.topic.TopicActivity;
 import com.utree.eightysix.app.topic.TopicListActivity;
 import com.utree.eightysix.app.web.BaseWebActivity;
@@ -54,7 +53,6 @@ public class CmdHandler {
         topic.id = Integer.parseInt(args[1]);
         TopicActivity.start(context, topic);
       } else if ("tag".equals(args[0])) {
-        TagTabActivity.start(context, Integer.parseInt(args[1]));
       } else if ("bs".equals(args[0])) {
         BaseWebActivity.start(context,
             String.format("http://c.lanmeiquan.com/activity/blueStar.do?userid=%s&token=%s",

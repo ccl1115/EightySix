@@ -266,10 +266,36 @@ public class PostActivity extends BaseActivity
     U.getAnalyser().trackEvent(this, "comment_more", "comment_more");
 
     String[] items;
-    if (comment.self == 1 || mPost.owner == 1) {
-      items = new String[]{getString(R.string.chat_anonymous), getString(R.string.like), getString(R.string.share), getString(R.string.report), getString(R.string.delete)};
+    if (mPost.owner == 1) {
+      if (comment.self == 1) {
+        items = new String[]{getString(R.string.chat_anonymous),
+            getString(R.string.like),
+            getString(R.string.share),
+            getString(R.string.report),
+            getString(R.string.delete),
+        };
+      } else {
+        items = new String[]{getString(R.string.chat_anonymous),
+            getString(R.string.like),
+            getString(R.string.share),
+            getString(R.string.report),
+            getString(R.string.delete),
+            getString(R.string.ban_comment)
+        };
+      }
+    } else if (comment.self == 1) {
+      items = new String[]{getString(R.string.chat_anonymous),
+          getString(R.string.like),
+          getString(R.string.share),
+          getString(R.string.report),
+          getString(R.string.delete)
+      };
     } else {
-      items = new String[]{getString(R.string.chat_anonymous), getString(R.string.like), getString(R.string.share), getString(R.string.report)};
+      items = new String[]{getString(R.string.chat_anonymous),
+          getString(R.string.like),
+          getString(R.string.share),
+          getString(R.string.report)
+      };
     }
 
     mCommentContextDialog = new AlertDialog.Builder(this).setTitle(getString(R.string.comment_action))
@@ -300,6 +326,9 @@ public class PostActivity extends BaseActivity
                     break;
                   case 4:
                     U.getBus().post(new PostCommentDeleteRequest(mPost.id, comment.id));
+                    break;
+                  case 5:
+                    showConfirmBanCommentDialog(comment);
                     break;
                 }
               }
@@ -661,6 +690,46 @@ public class PostActivity extends BaseActivity
           .attach(mBlueStarFragment)
           .commit();
     }
+  }
+
+  private void showConfirmBanCommentDialog(final Comment comment) {
+    final ThemedDialog dialog = new ThemedDialog(this);
+    dialog.setTitle("确认禁止TA评论此帖？");
+
+    TextView textView = new TextView(this);
+    textView.setText("提醒：确认后,Ta将不能再评论此帖子");
+    int px = U.dp2px(16);
+    textView.setPadding(px, px, px, px);
+
+    dialog.setContent(textView);
+
+    dialog.setPositive(R.string.okay, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        // #TODO add http request
+        U.request("comment_blacklist", new OnResponse2<Response>() {
+          @Override
+          public void onResponseError(Throwable e) {
+
+          }
+
+          @Override
+          public void onResponse(Response response) {
+            if (RESTRequester.responseOk(response)) {
+
+            }
+          }
+        }, Response.class, mPost.id, comment.id);
+        dialog.dismiss();
+      }
+    });
+
+    dialog.setRbNegative(R.string.cancel, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        dialog.dismiss();
+      }
+    });
   }
 
   private void requestComment(final int page, final boolean bottom) {

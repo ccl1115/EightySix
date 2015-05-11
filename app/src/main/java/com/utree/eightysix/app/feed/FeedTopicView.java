@@ -16,7 +16,6 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.publish.PublishActivity;
-import com.utree.eightysix.app.tag.TagTabActivity;
 import com.utree.eightysix.app.topic.TopicActivity;
 import com.utree.eightysix.app.topic.TopicListActivity;
 import com.utree.eightysix.data.PostTopic;
@@ -107,12 +106,12 @@ public class FeedTopicView extends FrameLayout {
 
   @OnClick(R.id.tv_tag_1)
   public void onTvTag1Clicked() {
-    TagTabActivity.start(getContext(), mTopic.tags.get(0));
+    FeedsSearchActivity.start(getContext(), mTopic.tags.get(0).content);
   }
 
   @OnClick(R.id.tv_tag_2)
   public void onTvTag2Clicked() {
-    TagTabActivity.start(getContext(), mTopic.tags.get(1));
+    FeedsSearchActivity.start(getContext(), mTopic.tags.get(1).content);
   }
 
   public void setData(PostTopic topic) {

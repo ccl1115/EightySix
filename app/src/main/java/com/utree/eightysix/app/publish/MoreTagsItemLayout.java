@@ -6,10 +6,11 @@ import android.view.View;
 import android.widget.TextView;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.app.tag.TagTabActivity;
+import com.utree.eightysix.app.feed.FeedsSearchActivity;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.widget.FloatingLayout;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class MoreTagsItemLayout extends FloatingLayout {
       view.setOnClickListener(new OnClickListener() {
         @Override
         public void onClick(View v) {
-          TagTabActivity.start(getContext(), (Tag) v.getTag());
+          FeedsSearchActivity.start(getContext(), ((Tag) v.getTag()).content);
         }
       });
 

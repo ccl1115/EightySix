@@ -30,7 +30,6 @@ import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.dp.DailyPicksActivity;
 import com.utree.eightysix.app.feed.FeedsSearchActivity;
 import com.utree.eightysix.app.hometown.HometownTabFragment;
-import com.utree.eightysix.app.tag.TagTabActivity;
 import com.utree.eightysix.app.topic.TopicActivity;
 import com.utree.eightysix.app.topic.TopicListActivity;
 import com.utree.eightysix.app.web.BaseWebActivity;
@@ -396,7 +395,7 @@ public class ExploreFragment extends BaseFragment {
             mTvTag1.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View v) {
-                TagTabActivity.start(v.getContext(), tag);
+                FeedsSearchActivity.start(v.getContext(), tag.content);
               }
             });
             break;
@@ -405,7 +404,7 @@ public class ExploreFragment extends BaseFragment {
             mTvTag2.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View v) {
-                TagTabActivity.start(v.getContext(), tag);
+                FeedsSearchActivity.start(v.getContext(), tag.content);
               }
             });
             break;
