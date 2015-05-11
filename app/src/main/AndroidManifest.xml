@@ -107,7 +107,7 @@
 
         <activity android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.feed.FeedActivity" android:screenOrientation="portrait"/>
 
-        <activity android:clearTaskOnLaunch="true" android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.home.HomeTabActivity" android:screenOrientation="portrait"/>
+        <activity android:clearTaskOnLaunch="true" android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.home.HomeTabActivity" android:theme="@style/AppTheme.Light" android:screenOrientation="portrait"/>
 
         <activity android:exported="@bool/exported" android:name=".app.intro.GuideActivity" android:screenOrientation="portrait"/>
 

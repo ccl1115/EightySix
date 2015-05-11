@@ -31,7 +31,7 @@ public class FeedRegionFragment extends AbsRegionFragment {
   }
 
   @Override
-  protected void requestRegionFeeds(final int regionType, int distance, final int page) {
+  protected void requestRegionFeeds(final int regionType, int distance, int areaType, int areaId, final int page) {
     if (getBaseActivity() == null) return;
     if (mRefresherView != null && page == 1) {
       mRefresherView.setRefreshing(true);
@@ -40,7 +40,7 @@ public class FeedRegionFragment extends AbsRegionFragment {
 
     getBaseActivity().setTopSubTitle("");
 
-    getBaseActivity().request(new FeedByRegionRequest(page, regionType, 0, distance),
+    getBaseActivity().request(new FeedByRegionRequest(page, regionType, 0, distance, areaType, areaId),
         new OnResponse<FeedsByRegionResponse>() {
           @Override
           public void onResponse(FeedsByRegionResponse response) {
@@ -71,7 +71,7 @@ public class FeedRegionFragment extends AbsRegionFragment {
   }
 
   @Override
-  protected void cacheOutFeedsByRegion(final int regionType, int distance, final int page) {
+  protected void cacheOutFeedsByRegion(final int regionType, int distance, int areaType, int areaId, final int page) {
     if (getBaseActivity() == null) return;
     getBaseActivity().cacheOut(new FeedByRegionRequest(page, regionType, distance), new OnResponse<FeedsByRegionResponse>() {
       @Override

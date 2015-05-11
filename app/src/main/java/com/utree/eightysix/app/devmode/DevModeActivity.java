@@ -2,9 +2,6 @@ package com.utree.eightysix.app.devmode;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import butterknife.InjectView;
@@ -12,7 +9,6 @@ import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
-import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.ProfileFillActivity;
@@ -67,47 +63,48 @@ public class DevModeActivity extends BaseActivity {
     mEtLatitude.setText(Env.getLastLatitude());
     mEtLongitude.setText(Env.getLastLongitude());
 
-    final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, new String[]{
-        "http://c.lanmeiquan.com",
-        "http://182.254.172.170",
-        "http://192.168.0.118:8088"
-    });
-    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    mSpApi.setAdapter(adapter);
-
-    mSpApi.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-      @Override
-      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        U.getRESTRequester().setHost(adapter.getItem(position));
-        mNeedLogout = true;
-      }
-
-      @Override
-      public void onNothingSelected(AdapterView<?> parent) {
-
-      }
-    });
-
-    final ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, new String[] {
-        "http://testing.gz.1251114078.cee.myqcloud.com",
-        "http://production.gz.1251114078.cee.myqcloud.com"
-    });
-    adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    mSpApiSecond.setAdapter(adapter2);
-
-    mSpApiSecond.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-      @Override
-      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        U.getRESTRequester().setSecondHost(adapter2.getItem(position));
-        mNeedLogout = true;
-      }
-
-      @Override
-      public void onNothingSelected(AdapterView<?> parent) {
-
-      }
-    });
+//    final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, new String[]{
+//        "http://c.lanmeiquan.com",
+//        "http://182.254.172.170",
+//        "http://192.168.0.118:8088"
+//    });
+//    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//    mSpApi.setAdapter(adapter);
+//
+//    mSpApi.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//      @Override
+//      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//        U.getRESTRequester().setHost(adapter.getItem(position));
+//        mNeedLogout = true;
+//      }
+//
+//      @Override
+//      public void onNothingSelected(AdapterView<?> parent) {
+//
+//      }
+//    });
+//
+//    final ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, new String[] {
+//        "http://testing.gz.1251114078.cee.myqcloud.com",
+//        "http://production.gz.1251114078.cee.myqcloud.com"
+//    });
+//
+//    adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//    mSpApiSecond.setAdapter(adapter2);
+//
+//    mSpApiSecond.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//
+//      @Override
+//      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//        U.getRESTRequester().setSecondHost(adapter2.getItem(position));
+//        mNeedLogout = true;
+//      }
+//
+//      @Override
+//      public void onNothingSelected(AdapterView<?> parent) {
+//
+//      }
+//    });
   }
 
   @Override

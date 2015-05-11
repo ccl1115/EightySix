@@ -28,6 +28,14 @@ public class FeedByRegionRequest extends Paginate {
   @Optional
   public int regionRadius;
 
+  @Param("areaType")
+  @Optional
+  public int areaType;
+
+  @Param("areaId")
+  @Optional
+  public int areaId;
+
   public FeedByRegionRequest(int currPage) {
     super(currPage);
   }
@@ -43,5 +51,11 @@ public class FeedByRegionRequest extends Paginate {
     this.regionType = regionType;
     this.tabType = tabType;
     this.regionRadius = regionRadius;
+  }
+
+  public FeedByRegionRequest(int currPage, int regionType, int tabType, int regionRadius, int areaType, int areaId) {
+    this(currPage, regionType, tabType, regionRadius);
+    this.areaId = areaId;
+    this.areaType = areaType;
   }
 }

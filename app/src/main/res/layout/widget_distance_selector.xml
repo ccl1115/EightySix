@@ -68,6 +68,8 @@
         <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 >
 
             <RadioGroup
@@ -78,6 +80,7 @@
                     >
 
                 <RadioButton
+                        android:id="@+id/rb_region"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
@@ -85,6 +88,7 @@
                         />
 
                 <RadioButton
+                        android:id="@+id/rb_area"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
@@ -116,6 +120,8 @@
                         android:layout_alignStart="@+id/sb_distance"
                         android:text="1km"
                         android:textColor="#ff7e7e7e"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
                         />
 
                 <TextView
@@ -124,8 +130,10 @@
                         android:layout_below="@+id/sb_distance"
                         android:layout_alignRight="@+id/sb_distance"
                         android:layout_alignEnd="@+id/sb_distance"
-                        android:text="同城"
+                        android:text="10km"
                         android:textColor="#ff7e7e7e"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
                         />
 
             </RelativeLayout>
@@ -142,15 +150,15 @@
                     >
 
                 <TextView
-                        android:id="@+id/tv_district"
+                        android:id="@+id/tv_area_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:padding="8dp"
                         android:text="地区"
                         />
 
                 <ImageView
+                        android:id="@+id/iv_select_area"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_action_image"

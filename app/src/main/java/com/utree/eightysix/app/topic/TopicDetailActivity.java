@@ -64,7 +64,7 @@ public class TopicDetailActivity extends BaseActivity {
       mVLine.setVisibility(View.VISIBLE);
     }
     mTvTitle.setText(topic.title);
-    mTvText.setText(topic.content);
+    mTvText.setText(topic.topicDesc);
   }
 
   @Override

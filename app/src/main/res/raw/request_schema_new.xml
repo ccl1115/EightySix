@@ -163,6 +163,14 @@
     </request>
 
     <request>
+        <id>feed_get_area</id>
+        <name>feed当前地区</name>
+        <path>/feed/getArea.do</path>
+        <sign/>
+        <token/>
+    </request>
+
+    <request>
         <id>newest_topics</id>
         <name>最新话题</name>
         <path>/topic/listNew.do</path>

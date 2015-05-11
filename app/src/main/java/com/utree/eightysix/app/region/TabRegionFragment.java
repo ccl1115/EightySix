@@ -12,10 +12,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.SeekBar;
-import android.widget.TextView;
+import android.widget.*;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -29,6 +26,7 @@ import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.account.event.CurrentCircleNameUpdatedEvent;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.circle.event.CircleFollowsChangedEvent;
+import com.utree.eightysix.app.feed.SelectAreaFragment;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
 import com.utree.eightysix.app.feed.event.UploadClickedEvent;
@@ -89,9 +87,23 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
   @InjectView(R.id.tv_distance)
   public TextView mTvDistance;
 
+  @InjectView(R.id.tv_area_name)
+  public TextView mTvAreaName;
+
+  @InjectView(R.id.rb_region)
+  public RadioButton mRbRegion;
+
+  @InjectView(R.id.rb_area)
+  public RadioButton mRbArea;
+
+  @InjectView(R.id.iv_select_area)
+  public ImageView mIvSelectArea;
+
   private FeedRegionFragment mFeedFragment;
   private HotFeedRegionFragment mHotFeedFragment;
   private FriendsFeedRegionFragment mFriendsFeedFragment;
+
+  private SelectAreaFragment mSelectAreaFragment;
 
   private ThemedDialog mNoPermDialog;
   private ThemedDialog mUnlockDialog;
@@ -148,21 +160,53 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
   @OnClick(R.id.rb_select)
   public void onRbSelect() {
     mLlDistanceSelector.setVisibility(View.GONE);
-    int progress = mSbDistance.getProgress();
-    if (progress > 9000 && progress < 9200) {
-      mFeedFragment.mDistance = 10000;
-      mHotFeedFragment.mDistance = 10000;
-      mFriendsFeedFragment.mDistance = 10000;
-    } else {
-      mFeedFragment.mDistance = progress + 1000;
-      mHotFeedFragment.mDistance = progress + 1000;
-      mFriendsFeedFragment.mDistance = progress + 1000;
-    }
+    if (mRbRegion.isChecked()) {
+      int progress = mSbDistance.getProgress();
+      if (progress > 9000 && progress < 9200) {
+        mFeedFragment.mDistance = 10000;
+        mHotFeedFragment.mDistance = 10000;
+        mFriendsFeedFragment.mDistance = 10000;
+      } else {
+        mFeedFragment.mDistance = progress + 1000;
+        mHotFeedFragment.mDistance = progress + 1000;
+        mFriendsFeedFragment.mDistance = progress + 1000;
+      }
 
-    if (progress > 9200) {
-      setRegionType(3);
-    } else {
-      setRegionType(4);
+      if (progress > 9200) {
+        setRegionType(3);
+      } else {
+        setRegionType(4);
+      }
+    } else if (mRbArea.isChecked()) {
+      setRegionType(5);
+    }
+  }
+
+  @OnClick(R.id.iv_select_area)
+  public void onIvSelectArea() {
+    if (mSelectAreaFragment == null) {
+      mSelectAreaFragment = new SelectAreaFragment();
+      mSelectAreaFragment.setCallback(new SelectAreaFragment.Callback() {
+        @Override
+        public void onAreaSelected(int areaType, int areaId, String areaName) {
+          mLlDistanceSelector.setVisibility(View.GONE);
+          mTvAreaName.setText(areaName);
+          mFeedFragment.mAreaId = areaId;
+          mFeedFragment.mAreaType = areaType;
+          mHotFeedFragment.mAreaId = areaId;
+          mHotFeedFragment.mAreaType = areaType;
+          mFriendsFeedFragment.mAreaId = areaId;
+          mFriendsFeedFragment.mAreaType = areaType;
+          setRegionType(5);
+        }
+      });
+      getFragmentManager().beginTransaction()
+          .add(R.id.content, mSelectAreaFragment)
+          .commit();
+    } else if (mSelectAreaFragment.isDetached()) {
+      getFragmentManager().beginTransaction()
+          .attach(mSelectAreaFragment)
+          .commit();
     }
   }
 
@@ -494,10 +538,15 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
   @Subscribe
   public void onRegionResponseEvent(RegionResponseEvent event) {
     if (event.getRegion() == 3) {
+      mRbRegion.setChecked(true);
       mSbDistance.setProgress(10000);
     } else if (event.getRegion() == 4) {
+      mRbRegion.setChecked(true);
       mSbDistance.setProgress(event.getDistance() - 1000);
+    } else if (event.getRegion() == 5) {
+      mRbArea.setChecked(true);
     }
+    mTvAreaName.setText(event.getCityName());
   }
 
   @Subscribe
@@ -687,7 +736,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
   }
 
   private void setTopBarTitle() {
-    if (mFeedFragment.getRegionType() == 4 || mFeedFragment.getRegionType() == 3) {
+    if (mFeedFragment.getRegionType() == 4 || mFeedFragment.getRegionType() == 3 || mFeedFragment.getRegionType() == 5) {
       getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_distance));
     } else {
       getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_drawer));
