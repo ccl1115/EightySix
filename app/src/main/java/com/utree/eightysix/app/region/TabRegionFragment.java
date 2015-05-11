@@ -134,6 +134,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
       showNoPermDialog();
     } else {
       PublishActivity.start(getActivity(), mFeedFragment.getCircle().id, null);
+
     }
   }
 
@@ -191,7 +192,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
         }
       });
       getFragmentManager().beginTransaction()
-          .add(R.id.content, mSelectAreaFragment)
+          .add(R.id.fl_parent, mSelectAreaFragment)
           .commit();
     } else if (mSelectAreaFragment.isDetached()) {
       getFragmentManager().beginTransaction()
