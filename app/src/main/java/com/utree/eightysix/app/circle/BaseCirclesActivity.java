@@ -543,6 +543,7 @@ public class BaseCirclesActivity extends BaseActivity {
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
           U.getBus().post(new CurrentCircleNameUpdatedEvent(circle.shortName));
+          U.getBus().post(new CircleFollowsChangedEvent());
           HomeTabActivity.start(BaseCirclesActivity.this);
           finish();
         }
