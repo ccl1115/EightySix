@@ -25,6 +25,7 @@ import com.utree.eightysix.response.HometownResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
+import com.utree.eightysix.widget.RoundedButton;
 
 import java.util.List;
 
@@ -61,6 +62,9 @@ public class SelectAreaFragment extends BaseFragment {
 
   @InjectView(R.id.progress_bar)
   public FrameLayout mFlProgressBar;
+
+  @InjectView(R.id.rb_settings)
+  public RoundedButton mRbSettings;
 
   private Callback mCallback;
 
@@ -116,6 +120,7 @@ public class SelectAreaFragment extends BaseFragment {
     });
 
     mTvTitle.setText("切换地区");
+    mRbSettings.setText("切换");
 
     mLlParent.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(8), Color.WHITE));
 
