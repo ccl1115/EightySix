@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -180,15 +181,14 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
       mSelectAreaFragment.setCallback(new SelectAreaFragment.Callback() {
         @Override
         public void onAreaSelected(int areaType, int areaId, String areaName) {
-          mLlDistanceSelector.setVisibility(View.GONE);
           mTvAreaName.setText(areaName);
+          mTvDistance.setText(areaName);
           mFeedFragment.mAreaId = areaId;
           mFeedFragment.mAreaType = areaType;
           mHotFeedFragment.mAreaId = areaId;
           mHotFeedFragment.mAreaType = areaType;
           mFriendsFeedFragment.mAreaId = areaId;
           mFriendsFeedFragment.mAreaType = areaType;
-          setRegionType(5);
         }
       });
       getFragmentManager().beginTransaction()
@@ -198,6 +198,20 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
       getFragmentManager().beginTransaction()
           .attach(mSelectAreaFragment)
           .commit();
+    }
+  }
+
+  @OnCheckedChanged(R.id.rb_area)
+  public void onRbArea(boolean checked) {
+    if (checked) {
+      mTvDistance.setText(mTvAreaName.getText());
+    }
+  }
+
+  @OnCheckedChanged(R.id.rb_region)
+  public void onRbRegion(boolean checked) {
+    if (checked) {
+      mTvDistance.setText(String.format("%.2fkm", mSbDistance.getProgress() / 1000f + 1));
     }
   }
 

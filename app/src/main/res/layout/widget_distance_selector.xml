@@ -32,7 +32,7 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="滑动变更看帖范围，当前范围: "
+                    android:text="变更看帖范围，当前范围: "
                     android:textColor="#ff7e7e7e"
                     />
 
@@ -165,7 +165,8 @@
                         android:id="@+id/iv_select_area"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_action_image"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_area_select"
                         />
             </LinearLayout>
         </RelativeLayout>

@@ -697,7 +697,7 @@ public class PostActivity extends BaseActivity
     dialog.setTitle("确认禁止TA评论此帖？");
 
     TextView textView = new TextView(this);
-    textView.setText("提醒：确认后,Ta将不能再评论此帖子");
+    textView.setText("提醒：确认后,TA将不能再评论此帖子");
     int px = U.dp2px(16);
     textView.setPadding(px, px, px, px);
 
@@ -706,7 +706,6 @@ public class PostActivity extends BaseActivity
     dialog.setPositive(R.string.okay, new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        // #TODO add http request
         U.request("comment_blacklist", new OnResponse2<Response>() {
           @Override
           public void onResponseError(Throwable e) {
@@ -730,6 +729,8 @@ public class PostActivity extends BaseActivity
         dialog.dismiss();
       }
     });
+
+    dialog.show();
   }
 
   private void requestComment(final int page, final boolean bottom) {
