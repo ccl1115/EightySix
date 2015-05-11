@@ -183,6 +183,13 @@ public class BaseCirclesActivity extends BaseActivity {
     super.onCreate(savedInstanceState);
 
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+    getTopBar().getAbRight().setText("创建");
+    getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        startActivity(new Intent(BaseCirclesActivity.this, CircleCreateActivity.class));
+      }
+    });
 
     setContentView(R.layout.activity_base_circles);
 
