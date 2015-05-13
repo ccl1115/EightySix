@@ -209,6 +209,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
     if (checked) {
       mTvDistance.setText(mTvAreaName.getText());
       mSbDistance.setEnabled(false);
+      mIvSelectArea.setEnabled(true);
     }
   }
 
@@ -217,6 +218,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
     if (checked) {
       mTvDistance.setText(String.format("%.2fkm", mSbDistance.getProgress() / 1000f + 1));
       mSbDistance.setEnabled(true);
+      mIvSelectArea.setEnabled(false);
     }
   }
 

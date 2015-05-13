@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" android:versionCode="59" android:versionName="2.0.2-SNAPSHOT" package="com.utree.eightysix">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" android:versionCode="60" android:versionName="2.0.2" package="com.utree.eightysix">
 
     <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="21"/>
 
@@ -107,7 +107,7 @@
 
         <activity android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.feed.FeedActivity" android:screenOrientation="portrait"/>
 
-        <activity android:clearTaskOnLaunch="true" android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.home.HomeTabActivity" android:theme="@style/AppTheme.Light" android:screenOrientation="portrait"/>
+        <activity android:clearTaskOnLaunch="true" android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.home.HomeTabActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme.Light"/>
 
         <activity android:exported="@bool/exported" android:name=".app.intro.GuideActivity" android:screenOrientation="portrait"/>
 
