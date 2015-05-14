@@ -8,16 +8,10 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  */
-public class Friend {
-
-  @SerializedName("userName")
-  public String userName;
+public class Friend extends BaseUser {
 
   @SerializedName("name")
   public String name;
-
-  @SerializedName("avatar")
-  public String avatar;
 
   @SerializedName("level")
   public int level;
@@ -28,17 +22,8 @@ public class Friend {
   @SerializedName("signature")
   public String signature;
 
-  @SerializedName("viewId")
-  public int viewId;
-
-  @SerializedName("workinFactoryId")
-  public int workinFactoryId;
-
   @SerializedName("initial")
   public String initial;
-
-  @SerializedName("workinFactory")
-  public String workinFactory;
 
   @SerializedName("relation")
   public String relation;

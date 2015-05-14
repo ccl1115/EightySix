@@ -400,6 +400,25 @@
     </request>
 
     <request>
+        <id>praised_users</id>
+        <name>谁赞过我</name>
+        <path>/user/praised/mine</path>
+        <sign/>
+        <token/>
+    </request>
+
+    <request>
+        <id>user_praise_add</id>
+        <name>赞用户</name>
+        <path>/commit/user/praise/create</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>viewId</param>
+        </params>
+    </request>
+
+    <request>
         <id>copywriting</id>
         <name>文案</name>
         <path>/system/copywriting</path>

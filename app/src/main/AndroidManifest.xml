@@ -121,8 +121,6 @@
 
         <activity android:exported="@bool/exported" android:name=".app.publish.FeedbackActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden|adjustResize"/>
 
-        <activity android:exported="@bool/exported" android:name=".app.account.PraiseStaticActivity" android:screenOrientation="portrait"/>
-
         <activity android:exported="@bool/exported" android:name=".app.msg.MsgActivity" android:screenOrientation="portrait"/>
 
         <activity android:exported="@bool/exported" android:name=".app.circle.BaseCirclesActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateAlwaysHidden"/>
@@ -290,6 +288,7 @@
                 <action android:name=""/>
             </intent-filter>
         </activity>
+        <activity android:name=".app.account.PraiseHistoryActivity"/>
 
         <!-- 【必须】 信鸽service -->
         <service android:exported="true" android:name="com.tencent.android.tpush.service.XGPushService" android:persistent="true" android:process=":xg_service_v2" tools:ignore="ExportedService"/>
