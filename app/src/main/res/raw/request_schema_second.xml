@@ -405,6 +405,10 @@
         <path>/user/praised/mine</path>
         <sign/>
         <token/>
+        <params>
+            <param>page</param>
+            <param>limit</param>
+        </params>
     </request>
 
     <request>

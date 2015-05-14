@@ -28,6 +28,7 @@ import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.utils.TimeUtil;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.AsyncImageViewWithRoundCorner;
+import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RandomSceneTextView;
 
 import java.util.List;
@@ -37,11 +38,7 @@ import java.util.List;
 @Layout(R.layout.activity_praise_history)
 public class PraiseHistoryActivity extends BaseActivity {
 
-  @InjectView(R.id.alv_praised_users)
-  public AdvancedListView mAdvPraisedUsers;
-
-  @InjectView(R.id.rstv_empty)
-  public RandomSceneTextView mRstvEmpty;
+  private static final int PAGE_SIZE = 20;
 
   public static void start(Context context, int viewId) {
     Intent intent = new Intent(context, PraiseHistoryActivity.class);
@@ -55,29 +52,65 @@ public class PraiseHistoryActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
+  @InjectView(R.id.alv_praised_users)
+  public AdvancedListView mAlvPraisedUsers;
+
+  @InjectView(R.id.rstv_empty)
+  public RandomSceneTextView mRstvEmpty;
+
+  public int mPage = 1;
+  public boolean mHasMore;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    showProgressBar();
+
+    mAlvPraisedUsers.setLoadMoreCallback(new LoadMoreCallback() {
+      @Override
+      public View getLoadMoreView(ViewGroup parent) {
+        return LayoutInflater.from(parent.getContext()).inflate(R.layout.footer_load_more, parent, false);
+      }
+
+      @Override
+      public boolean hasMore() {
+        return mHasMore;
+      }
+
+      @Override
+      public boolean onLoadMoreStart() {
+        mPage += 1;
+        requestPraisedUsers();
+        return true;
+      }
+    });
+
+    requestPraisedUsers();
+  }
+
+  private void requestPraisedUsers() {
     U.request("praised_users", new OnResponse2<PraisedUsersResponse>() {
       @Override
       public void onResponseError(Throwable e) {
-
+        hideProgressBar();
       }
 
       @Override
       public void onResponse(PraisedUsersResponse response) {
         if (RESTRequester.responseOk(response)) {
           if (response.object == null || response.object.size() == 0) {
+            mHasMore = false;
             mRstvEmpty.setVisibility(View.VISIBLE);
-            mAdvPraisedUsers.setAdapter(null);
+            mAlvPraisedUsers.setAdapter(null);
           } else {
             mRstvEmpty.setVisibility(View.GONE);
-            mAdvPraisedUsers.setAdapter(new PraiseHistoryAdapter(response.object));
+            mAlvPraisedUsers.setAdapter(new PraiseHistoryAdapter(response.object));
           }
         }
+        hideProgressBar();
       }
-    }, PraisedUsersResponse.class);
+    }, PraisedUsersResponse.class, mPage, PAGE_SIZE);
   }
 
   @Override
