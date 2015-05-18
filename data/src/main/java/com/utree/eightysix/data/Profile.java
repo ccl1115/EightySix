@@ -6,6 +6,8 @@ package com.utree.eightysix.data;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  */
 public class Profile {
@@ -69,4 +71,22 @@ public class Profile {
 
   @SerializedName("postPrivacy")
   public String postPrivacy;
+
+  @SerializedName("praisedCount")
+  public int praisedCount;
+
+  @SerializedName("praiseConsecutiveTimes")
+  public int praiseConsecutiveTimes;
+
+  @SerializedName("praisedList")
+  public List<Portrait> praisedList;
+
+  public static class Portrait {
+
+    @SerializedName("avatar")
+    public String avatar;
+
+    @SerializedName("viewId")
+    public int viewId;
+  }
 }

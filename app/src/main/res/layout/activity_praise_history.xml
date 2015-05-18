@@ -8,6 +8,7 @@
              xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
+             android:background="@android:color/white"
         >
 
     <com.utree.eightysix.widget.AdvancedListView
@@ -17,6 +18,7 @@
             />
 
     <com.utree.eightysix.widget.RandomSceneTextView
+            android:id="@+id/rstv_empty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

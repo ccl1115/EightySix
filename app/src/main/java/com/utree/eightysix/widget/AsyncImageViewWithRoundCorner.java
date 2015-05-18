@@ -51,7 +51,7 @@ public class AsyncImageViewWithRoundCorner extends AsyncImageView {
     }
   };
 
-  private final int mRadius;
+  private int mRadius;
 
   private int mImageWidth = -1;
   private int mImageHeight = -1;
@@ -118,6 +118,10 @@ public class AsyncImageViewWithRoundCorner extends AsyncImageView {
     } else {
       Picasso.with(getContext()).load(url).resize(width, height).into(mTarget);
     }
+  }
+
+  public void setRadius(int radius) {
+    mRadius = radius;
   }
 
   private void setBitmap(Bitmap bitmap) {

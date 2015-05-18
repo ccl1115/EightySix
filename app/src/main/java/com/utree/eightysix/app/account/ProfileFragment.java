@@ -11,17 +11,12 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
-import android.widget.ProgressBar;
-import android.widget.ScrollView;
-import android.widget.TextView;
+import android.view.*;
+import android.widget.*;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.google.gson.annotations.SerializedName;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -30,6 +25,7 @@ import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.CameraUtil;
 import com.utree.eightysix.app.FragmentHolder;
 import com.utree.eightysix.app.HolderFragment;
@@ -56,6 +52,7 @@ import com.utree.eightysix.widget.ThemedDialog;
 
 import java.io.File;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  */
@@ -147,6 +144,21 @@ public class ProfileFragment extends HolderFragment {
   @InjectView(R.id.tv_float_exp)
   public TextView mTvFloatExp;
 
+  @InjectView(R.id.iv_praise)
+  public ImageView mIvPraise;
+
+  @InjectView(R.id.tv_praise)
+  public TextView mTvPraise;
+
+  @InjectView(R.id.ll_praise_me)
+  public LinearLayout mLlPraiseMe;
+
+  @InjectView(R.id.tv_praise_me)
+  public TextView mTvPraiseMe;
+
+  @InjectView(R.id.ll_portraits)
+  public LinearLayout mLlPortraits;
+
   private CameraUtil mCameraUtil;
 
   private boolean mIsVisitor;
@@ -175,7 +187,7 @@ public class ProfileFragment extends HolderFragment {
   }
 
   @OnClick(R.id.rb_change_bg)
-  public void onRbChageBgClicked() {
+  public void onRbChangeBgClicked() {
     mCameraUtil.showCameraDialog();
   }
 
@@ -257,6 +269,72 @@ public class ProfileFragment extends HolderFragment {
     }, CopywritingResponse.class);
   }
 
+  @OnClick(R.id.iv_praise)
+  public void onIvPraiseClicked(final View v) {
+    U.request("user_praise_add", new OnResponse2<PraiseResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
+      @Override
+      public void onResponse(final PraiseResponse response) {
+        if (RESTRequester.responseOk(response)) {
+          addExperienceAnimation(response.object.experience);
+          mTvExp.setText(String.format("%d/%d",
+              mProfile.experience + response.object.experience, mProfile.nextExperience));
+          mPbExp.setProgress(mProfile.experience + response.object.experience);
+
+          if (mIsVisitor) {
+            if ("男".equals(mProfile.sex)) {
+              mTvPraiseMe.setText(String.format("谁赞过他（%d）", mProfile.praisedCount + 1));
+            } else if ("女".equals(mProfile.sex)) {
+              mTvPraiseMe.setText(String.format("谁赞过她（%d）", mProfile.praisedCount + 1));
+            }
+          } else {
+            mTvPraiseMe.setText(String.format("谁赞过我（%d）", mProfile.praisedCount + 1));
+          }
+
+          buildPraisedList(response.object.praisedList);
+
+          AnimatorSet set = new AnimatorSet();
+          set.playTogether(
+              ObjectAnimator.ofFloat(v, "translationY", 0f, -U.dp2px(100)),
+              ObjectAnimator.ofFloat(v, "alpha", 1f, 0f),
+              ObjectAnimator.ofFloat(mTvPraise, "alpha", 0f, 1f)
+          );
+          set.setDuration(300);
+
+          set.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+              mTvPraise.setVisibility(View.VISIBLE);
+              mTvPraise.setText(String.format("已赞\n连续%d天", response.object.consecutiveTimes));
+              v.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+              v.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+          });
+
+          set.start();
+        }
+      }
+    }, PraiseResponse.class, mViewId);
+  }
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     return inflater.inflate(R.layout.fragment_profile, container, false);
@@ -276,7 +354,6 @@ public class ProfileFragment extends HolderFragment {
         AnimatorSet set = new AnimatorSet();
         set.playTogether(
             ObjectAnimator.ofFloat(mAivBg, "translationY", mAivBg.getTranslationY(), 0)
-
         );
         set.setDuration(200);
         set.start();
@@ -350,7 +427,9 @@ public class ProfileFragment extends HolderFragment {
       public void onResponseError(Throwable e) {
         getBaseActivity().hideRefreshIndicator();
         mRefreshLayout.setRefreshing(false);
-        getBaseActivity().finish();
+        if (getBaseActivity() instanceof FragmentHolder) {
+          getBaseActivity().finish();
+        }
       }
 
       @Override
@@ -435,12 +514,15 @@ public class ProfileFragment extends HolderFragment {
               if ("男".equals(mProfile.sex)) {
                 mTvMyPosts.setText("他的帖子");
                 mTvTitleSignature.setText("他的签名");
+                mTvPraiseMe.setText(String.format("谁赞过他（%d）", mProfile.praisedCount));
               } else if ("女".equals(mProfile.sex)) {
                 mTvMyPosts.setText("她的帖子");
                 mTvTitleSignature.setText("她的签名");
+                mTvPraiseMe.setText(String.format("谁赞过她（%d）", mProfile.praisedCount));
               } else {
                 mTvMyPosts.setText("Ta的帖子");
                 mTvTitleSignature.setText("Ta的签名");
+                mTvPraiseMe.setText(String.format("谁赞过Ta（%d）", mProfile.praisedCount));
               }
 
               if (mProfile.isFriend == 1) {
@@ -473,6 +555,15 @@ public class ProfileFragment extends HolderFragment {
                 getTopBar().getAbRight().hide();
               }
 
+              if (mProfile.praiseConsecutiveTimes == 0) {
+                mIvPraise.setVisibility(View.VISIBLE);
+                mTvPraise.setVisibility(View.GONE);
+              } else {
+                mIvPraise.setVisibility(View.GONE);
+                mTvPraise.setVisibility(View.VISIBLE);
+                mTvPraise.setText(String.format("已赞\n连续%d天", mProfile.praiseConsecutiveTimes));
+              }
+
             }
           } else {
             mRbChangeBg.setVisibility(View.VISIBLE);
@@ -480,42 +571,10 @@ public class ProfileFragment extends HolderFragment {
             mTvMyCircles.setVisibility(View.VISIBLE);
             mTvMyFriends.setVisibility(View.VISIBLE);
             mTvAction.setVisibility(View.GONE);
+            mTvPraiseMe.setText(String.format("谁赞过我（%d）", mProfile.praisedCount));
 
             if (Account.inst().getLastExp() != 0 && Account.inst().getLastExp() < response.object.experience) {
-              mTvFloatExp.setText("+" + (response.object.experience - Account.inst().getLastExp()));
-//            if (true) {
-//              mTvFloatExp.setText("+100");
-              mTvFloatExp.setVisibility(View.VISIBLE);
-              mTvFloatExp.setAlpha(0f);
-              AnimatorSet set = new AnimatorSet();
-              set.playTogether(
-                  ObjectAnimator.ofFloat(mTvFloatExp, "alpha", 0.2f, 1f, 0f),
-                  ObjectAnimator.ofFloat(mTvFloatExp, "translationY", 0f, -U.dp2px(20))
-              );
-              set.setDuration(1300);
-              set.setStartDelay(300);
-              set.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                  mTvFloatExp.setVisibility(View.INVISIBLE);
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-
-                }
-              });
-              set.start();
+              addExperienceAnimation(response.object.experience - Account.inst().getLastExp());
             }
 
             Account.inst().setLastExp(response.object.experience);
@@ -526,6 +585,8 @@ public class ProfileFragment extends HolderFragment {
           mPbExp.setMax(mProfile.nextExperience);
           mPbExp.setProgress(mProfile.experience);
 
+          buildPraisedList(mProfile.praisedList);
+
         } else {
           if (getBaseActivity() instanceof FragmentHolder) {
             getBaseActivity().finish();
@@ -534,6 +595,41 @@ public class ProfileFragment extends HolderFragment {
       }
     }, ProfileResponse.class, userId);
 
+  }
+
+  private void addExperienceAnimation(int value) {
+    mTvFloatExp.setText("+" + value);
+    mTvFloatExp.setVisibility(View.VISIBLE);
+    mTvFloatExp.setAlpha(0f);
+    AnimatorSet set = new AnimatorSet();
+    set.playTogether(
+        ObjectAnimator.ofFloat(mTvFloatExp, "alpha", 0.2f, 1f, 0f),
+        ObjectAnimator.ofFloat(mTvFloatExp, "translationY", 0f, -U.dp2px(20))
+    );
+    set.setDuration(1300);
+    set.setStartDelay(300);
+    set.addListener(new Animator.AnimatorListener() {
+      @Override
+      public void onAnimationStart(Animator animation) {
+
+      }
+
+      @Override
+      public void onAnimationEnd(Animator animation) {
+        mTvFloatExp.setVisibility(View.INVISIBLE);
+      }
+
+      @Override
+      public void onAnimationCancel(Animator animation) {
+
+      }
+
+      @Override
+      public void onAnimationRepeat(Animator animation) {
+
+      }
+    });
+    set.start();
   }
 
   @Override
@@ -884,4 +980,68 @@ public class ProfileFragment extends HolderFragment {
     });
     dialog.show();
   }
+
+  private void buildPraisedList(List<Profile.Portrait> praisedList) {
+    mLlPortraits.removeAllViews();
+    if (praisedList == null || praisedList.size() == 0) {
+      mLlPraiseMe.setVisibility(View.GONE);
+    } else {
+      mLlPraiseMe.setVisibility(View.VISIBLE);
+
+      for (int i = 0, s = Math.min(5, praisedList.size()); i < s; i++) {
+        final Profile.Portrait portrait = praisedList.get(i);
+        AsyncImageViewWithRoundCorner view = new AsyncImageViewWithRoundCorner(getActivity());
+        final int size = U.dp2px(30);
+        final int px = U.dp2px(4);
+        view.setRadius(px);
+        view.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            ProfileFragment.start(v.getContext(), portrait.viewId, "");
+          }
+        });
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(size, size);
+        lp.setMargins(px, px, px, px);
+        view.setLayoutParams(lp);
+        view.setUrl(portrait.avatar, size, size);
+        mLlPortraits.addView(view);
+      }
+
+      TextView tv = new TextView(getActivity());
+      tv.setText("更多>");
+      LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+      lp.gravity = Gravity.CENTER_VERTICAL;
+      tv.setLayoutParams(lp);
+      tv.setGravity(Gravity.RIGHT);
+      tv.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          PraiseHistoryActivity.start(v.getContext(), mIsVisitor ? mViewId : -1, mIsVisitor ? mProfile.sex : "");
+        }
+      });
+
+      mLlPortraits.addView(tv);
+    }
+  }
+
+  @Keep
+  public static class PraiseResponse extends Response {
+
+    @SerializedName("object")
+    public Praise object;
+
+    @Keep
+    public static class Praise {
+
+      @SerializedName("consecutiveTimes")
+      public int consecutiveTimes;
+
+      @SerializedName("experience")
+      public int experience;
+
+      @SerializedName("praisedList")
+      public List<Profile.Portrait> praisedList;
+    }
+  }
+
 }

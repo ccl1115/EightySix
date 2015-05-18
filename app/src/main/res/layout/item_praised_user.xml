@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/aiv_portrait"
             android:layout_toEndOf="@+id/aiv_portrait"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="10dp"
             android:textSize="16sp"
             />
 
@@ -41,7 +41,7 @@
             android:layout_toRightOf="@+id/aiv_portrait"
             android:layout_toEndOf="@+id/aiv_portrait"
             android:layout_below="@+id/tv_name"
-            android:ems="12"
+            android:layout_marginTop="2dp"
             android:singleLine="true"
             android:ellipsize="end"
             android:textSize="12sp"

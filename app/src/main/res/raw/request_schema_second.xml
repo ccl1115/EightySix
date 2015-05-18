@@ -408,6 +408,7 @@
         <params>
             <param>page</param>
             <param>limit</param>
+            <param>viewId</param>
         </params>
     </request>
 

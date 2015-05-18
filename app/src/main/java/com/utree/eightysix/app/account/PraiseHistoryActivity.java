@@ -15,6 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
@@ -39,11 +40,13 @@ import java.util.List;
 public class PraiseHistoryActivity extends BaseActivity {
 
   private static final int PAGE_SIZE = 20;
+  private Integer mViewId;
 
-  public static void start(Context context, int viewId) {
+  public static void start(Context context, int viewId, String gender) {
     Intent intent = new Intent(context, PraiseHistoryActivity.class);
 
     intent.putExtra("viewId", viewId);
+    intent.putExtra("gender", gender);
 
     if (!(context instanceof Activity)) {
       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -66,6 +69,22 @@ public class PraiseHistoryActivity extends BaseActivity {
     super.onCreate(savedInstanceState);
 
     showProgressBar();
+
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+
+    mViewId = getIntent().getIntExtra("viewId", -1);
+    if (mViewId == -1) {
+      mViewId = null;
+    }
+    final String gender = getIntent().getStringExtra("gender");
+
+    if ("男".equals(gender)) {
+      setTopTitle("谁赞过他");
+    } else if ("女".equals(gender)) {
+      setTopTitle("谁赞过她");
+    } else {
+      setTopTitle("谁赞过我");
+    }
 
     mAlvPraisedUsers.setLoadMoreCallback(new LoadMoreCallback() {
       @Override
@@ -110,7 +129,7 @@ public class PraiseHistoryActivity extends BaseActivity {
         }
         hideProgressBar();
       }
-    }, PraisedUsersResponse.class, mPage, PAGE_SIZE);
+    }, PraisedUsersResponse.class, mPage, PAGE_SIZE, mViewId);
   }
 
   @Override
@@ -180,12 +199,20 @@ public class PraiseHistoryActivity extends BaseActivity {
 
     @InjectView(R.id.aiv_portrait)
     public AsyncImageViewWithRoundCorner mAivPortrait;
+    private PraisedUser mUser;
+
+    @OnClick(R.id.aiv_portrait)
+    public void onAivPortraitClicked(View v) {
+      ProfileFragment.start(v.getContext(), mUser.viewId, "");
+    }
 
     public void setData(PraisedUser user) {
-      mTvName.setText(user.userName);
+      mUser = user;
+      mTvName.setText(mUser.userName);
       mTvInfo.setText(String.format("最近已连续点赞%d次，共点赞%d次", user.consecutiveTimes, user.totalTimes));
-      mTvTimestamp.setText(TimeUtil.getElapsed(user.timestamp));
-      mTvCircleName.setText(user.workinFactory);
+      mTvTimestamp.setText(TimeUtil.getElapsed(mUser.timestamp));
+      mTvCircleName.setText(mUser.workinFactory);
+      mAivPortrait.setUrl(mUser.avatar);
     }
 
     public ViewHolder(View view) {
