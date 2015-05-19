@@ -22,6 +22,7 @@ import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.*;
 import com.utree.eightysix.app.feed.event.UploadClickedEvent;
 import com.utree.eightysix.data.*;
+import com.utree.eightysix.response.FeedsByRegionResponse;
 import com.utree.eightysix.utils.CmdHandler;
 import com.utree.eightysix.widget.RoundedButton;
 
@@ -52,6 +53,8 @@ public class FeedRegionAdapter extends BaseAdapter {
   public static final int TYPE_FEED_INTENT = 12;
   public static final int TYPE_BAINIAN = 13;
 
+  private FeedsByRegionResponse.Extra mExtra;
+
   protected Feeds mFeeds;
 
   protected int mTipSourcePosition = TNS;
@@ -59,6 +62,12 @@ public class FeedRegionAdapter extends BaseAdapter {
   protected int mTipRepostPosition = TNS;
   protected int mTipTempNamePosition = TNS;
   protected int mTipTagsPosition = TNS;
+
+  public FeedRegionAdapter(FeedsByRegion feeds, FeedsByRegionResponse.Extra extra) {
+    this(feeds);
+    mExtra = extra;
+    mFeeds.posts.lists.add(new FeedSign(mExtra));
+  }
 
   public FeedRegionAdapter(FeedsByRegion feeds) {
     mFeeds = feeds;

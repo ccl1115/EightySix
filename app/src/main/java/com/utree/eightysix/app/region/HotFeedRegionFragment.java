@@ -39,14 +39,18 @@ public class HotFeedRegionFragment extends AbsRegionFragment {
       getBaseActivity().showRefreshIndicator(true);
     }
     getBaseActivity().setTopSubTitle("");
-    getBaseActivity().request(new FeedByRegionRequest(page, regionType, 1, distance),
-        new OnResponse<FeedsByRegionResponse>() {
-          @Override
-          public void onResponse(FeedsByRegionResponse response) {
-            responseForFeedsByRegionRequest(response, page);
-          }
-        }, FeedsByRegionResponse.class);
 
+    U.request("feeds_by_region", new OnResponse2<FeedsByRegionResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
+      @Override
+      public void onResponse(FeedsByRegionResponse response) {
+        responseForFeedsByRegionRequest(response, page);
+      }
+    }, FeedsByRegionResponse.class, page, regionType, 1, distance, null, null);
   }
 
   @Override

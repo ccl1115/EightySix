@@ -438,4 +438,43 @@
         <sign/>
         <token/>
     </request>
+
+    <request>
+        <id>userfactory_sign</id>
+        <name>工厂签到日历</name>
+        <path>/userfactory/sign</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>factoryId</param>
+            <param>page</param>
+        </params>
+    </request>
+
+    <request>
+        <id>userfactory_sign_create</id>
+        <name>工厂签到</name>
+        <path>/commit/userfactory/sign/create</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>factoryId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>feeds_by_region</id>
+        <name>区域feeds</name>
+        <path>/feed/listByRegion</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>currPage</param>
+            <param>regionType</param>
+            <param>tabType</param>
+            <param>regionRadius</param>
+            <param>areaType</param>
+            <param>areaId</param>
+        </params>
+    </request>
 </api>

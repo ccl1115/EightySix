@@ -13,6 +13,7 @@ public class BaseItem {
   public static final int TYPE_OPTION_SET = 1004;
   public static final int TYPE_TOPIC = 1005;
   public static final int TYPE_BAINIAN = 1006;
+  public static final int TYPE_SIGN = 1007;
 
   /**
    * Entrance of snapshot
