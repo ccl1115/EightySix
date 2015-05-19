@@ -52,8 +52,7 @@ public class FeedRegionAdapter extends BaseAdapter {
   public static final int TYPE_TOPIC = 11;
   public static final int TYPE_FEED_INTENT = 12;
   public static final int TYPE_BAINIAN = 13;
-
-  private FeedsByRegionResponse.Extra mExtra;
+  public static final int TYPE_SIGN = 14;
 
   protected Feeds mFeeds;
 
@@ -65,8 +64,8 @@ public class FeedRegionAdapter extends BaseAdapter {
 
   public FeedRegionAdapter(FeedsByRegion feeds, FeedsByRegionResponse.Extra extra) {
     this(feeds);
-    mExtra = extra;
-    mFeeds.posts.lists.add(new FeedSign(mExtra));
+    FeedsByRegionResponse.Extra extra1 = extra;
+    mFeeds.posts.lists.add(new FeedSign(extra1));
   }
 
   public FeedRegionAdapter(FeedsByRegion feeds) {
