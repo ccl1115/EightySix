@@ -16,10 +16,9 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
-import com.utree.eightysix.U;
 import com.utree.eightysix.app.HolderFragment;
-import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
 import com.utree.eightysix.app.hometown.event.HometownNotSetEvent;
+import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.widget.TitleTab;
 import com.utree.eightysix.widget.TopBar;
 
@@ -47,8 +46,8 @@ public class HometownTabFragment extends HolderFragment {
   }
 
   @OnClick(R.id.ib_send)
-  public void onIbSendClicked() {
-    U.getBus().post(new StartPublishActivityEvent());
+  public void onIbSendClicked(View v) {
+    PublishActivity.startHometown(v.getContext());
   }
 
   @Override
