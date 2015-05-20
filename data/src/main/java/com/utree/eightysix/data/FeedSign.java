@@ -20,10 +20,14 @@ public class FeedSign extends BaseItem {
   @SerializedName("signMissingTimes")
   public int signMissingTimes;
 
+  @SerializedName("rank")
+  public int rank;
+
   public FeedSign(FeedsByRegionResponse.Extra extra) {
     super(BaseItem.TYPE_SIGN);
     signConsecutiveTimes = extra.signConsecutiveTimes;
     signed = extra.signed;
     signMissingTimes = extra.signMissingTimes;
+    rank = extra.rank;
   }
 }

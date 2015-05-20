@@ -377,7 +377,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
         U.getBus().post(new CurrentCircleResponseEvent(mCircle));
 
         M.getRegisterHelper().unregister(mFeedAdapter);
-        mFeedAdapter = new FeedRegionAdapter(response.object);
+        mFeedAdapter = new FeedRegionAdapter(response.object, response.extra);
         M.getRegisterHelper().register(mFeedAdapter);
         mLvFeed.setAdapter(mFeedAdapter);
 
@@ -480,7 +480,7 @@ public abstract class AbsRegionFragment extends BaseFragment {
         }
 
         M.getRegisterHelper().unregister(mFeedAdapter);
-        mFeedAdapter = new FeedRegionAdapter(response.object);
+        mFeedAdapter = new FeedRegionAdapter(response.object, response.extra);
         M.getRegisterHelper().register(mFeedAdapter);
         mLvFeed.setAdapter(mFeedAdapter);
 

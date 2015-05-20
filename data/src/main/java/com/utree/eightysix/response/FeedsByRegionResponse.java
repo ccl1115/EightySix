@@ -23,5 +23,8 @@ public class FeedsByRegionResponse extends Response {
 
         @SerializedName("signed")
         public int signed;
+
+        @SerializedName("rank")
+        public int rank;
     }
 }

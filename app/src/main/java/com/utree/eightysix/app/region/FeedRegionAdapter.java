@@ -37,7 +37,7 @@ public class FeedRegionAdapter extends BaseAdapter {
    */
   protected static final int TNS = -1;
 
-  protected final int TYPE_COUNT = 14;
+  protected final int TYPE_COUNT = 15;
   public static final int TYPE_PLACEHOLDER = 0;
   public static final int TYPE_UNLOCK = 1;
   public static final int TYPE_UPLOAD = 2;
@@ -64,8 +64,9 @@ public class FeedRegionAdapter extends BaseAdapter {
 
   public FeedRegionAdapter(FeedsByRegion feeds, FeedsByRegionResponse.Extra extra) {
     this(feeds);
-    FeedsByRegionResponse.Extra extra1 = extra;
-    mFeeds.posts.lists.add(new FeedSign(extra1));
+    if (feeds.circle != null && feeds.current == 1) {
+      mFeeds.posts.lists.add(0, new FeedSign(extra));
+    }
   }
 
   public FeedRegionAdapter(FeedsByRegion feeds) {
@@ -93,6 +94,7 @@ public class FeedRegionAdapter extends BaseAdapter {
   }
 
   public FeedRegionAdapter() {
+
   }
 
   public void add(List<BaseItem> posts) {
@@ -202,7 +204,20 @@ public class FeedRegionAdapter extends BaseAdapter {
       case TYPE_BAINIAN:
         convertView = getBainianView(position, convertView, parent);
         break;
+      case TYPE_SIGN:
+        convertView = getSignView(position, convertView, parent);
+        break;
     }
+
+    return convertView;
+  }
+
+  private View getSignView(int position, View convertView, ViewGroup parent) {
+    if (convertView == null) {
+      convertView = new FeedSignView(parent.getContext());
+    }
+
+    ((FeedSignView) convertView).setData((FeedSign) getItem(position));
 
     return convertView;
   }
@@ -254,6 +269,8 @@ public class FeedRegionAdapter extends BaseAdapter {
           return TYPE_FEED_INTENT;
         case BaseItem.TYPE_BAINIAN:
           return TYPE_BAINIAN;
+        case BaseItem.TYPE_SIGN:
+          return TYPE_SIGN;
         case TYPE_UPLOAD:
         case TYPE_UNLOCK:
         case TYPE_SELECT:

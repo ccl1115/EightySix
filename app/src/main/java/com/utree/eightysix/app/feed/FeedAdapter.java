@@ -14,6 +14,7 @@ import java.util.List;
 public class FeedAdapter extends FeedRegionAdapter {
 
   public FeedAdapter(Feeds feeds) {
+    super();
     mFeeds = feeds;
 
     boolean hasPosts = false;
