@@ -217,7 +217,7 @@ public class FeedRegionAdapter extends BaseAdapter {
       convertView = new FeedSignView(parent.getContext());
     }
 
-    ((FeedSignView) convertView).setData((FeedSign) getItem(position));
+    ((FeedSignView) convertView).setData((FeedSign) getItem(position), mFeeds.circle.id);
 
     return convertView;
   }
