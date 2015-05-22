@@ -497,6 +497,8 @@ public class ProfileFragment extends HolderFragment {
               mTvMyFriends.setVisibility(View.VISIBLE);
               mTvAction.setVisibility(View.INVISIBLE);
               getBaseActivity().getTopBar().setTitle("我");
+
+              mTvPraiseMe.setText(String.format("谁赞过我（%d）", mProfile.praisedCount));
             } else {
               mRbChangeBg.setVisibility(View.GONE);
               mTvSettings.setVisibility(View.GONE);
