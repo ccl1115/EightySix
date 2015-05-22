@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  */
-public class WeekRankResponse extends Response {
+public class BaseLadderResponse extends Response {
 
   @SerializedName("object")
   public List<RankedUser> object;
