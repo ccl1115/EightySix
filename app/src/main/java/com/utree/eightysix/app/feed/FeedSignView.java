@@ -6,6 +6,7 @@ package com.utree.eightysix.app.feed;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -13,6 +14,8 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.app.sign.SignCalendarFragment;
 import com.utree.eightysix.data.FeedSign;
 import com.utree.eightysix.response.FeedSignResultResponse;
 import com.utree.eightysix.rest.OnResponse2;
@@ -46,6 +49,13 @@ public class FeedSignView extends LinearLayout {
     inflate(context, R.layout.item_feed_sign, this);
 
     ButterKnife.inject(this, this);
+
+    setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        SignCalendarFragment.start(((BaseActivity) v.getContext()).getSupportFragmentManager(), mFactoryId);
+      }
+    });
   }
 
   @OnClick(R.id.rb_sign)
@@ -91,6 +101,6 @@ public class FeedSignView extends LinearLayout {
               response.object.bluestar, response.object.experience));
         }
       }
-    }, FeedSignResultResponse.class, mFactoryId);
+    }, FeedSignResultResponse.class, mFactoryId, null);
   }
 }

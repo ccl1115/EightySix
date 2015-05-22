@@ -459,6 +459,7 @@
         <token/>
         <params>
             <param>factoryId</param>
+            <param>date</param>
         </params>
     </request>
 
