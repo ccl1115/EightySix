@@ -1,8 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<!--
+  ~ Copyright (c) 2015. All rights reserved by utree.cn
+  -->
 
-</LinearLayout>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+
+    <com.utree.eightysix.widget.AsyncImageViewWithRoundCorner
+            android:id="@+id/aiv_portrait"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="16dp"
+            android:layout_centerVertical="true"
+            app:radius="4dp"
+            app:width="40dp"
+            app:height="40dp"
+            />
+
+    <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/aiv_portrait"
+            android:layout_toRightOf="@+id/aiv_portrait"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:textSize="16sp"
+            />
+
+    <com.utree.eightysix.widget.AsyncImageView
+            android:id="@+id/aiv_level_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_toEndOf="@+id/tv_name"
+            android:layout_toRightOf="@+id/tv_name"
+            android:layout_alignTop="@+id/tv_name"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            />
+
+    <TextView
+            android:id="@+id/tv_circle_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/aiv_portrait"
+            android:layout_toRightOf="@+id/aiv_portrait"
+            android:layout_below="@+id/tv_name"
+            android:textSize="14sp"
+            />
+
+    <TextView
+            android:id="@+id/tv_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/tv_exp"
+            android:layout_toStartOf="@+id/tv_exp"
+            android:layout_centerVertical="true"
+            />
+
+    <TextView
+            android:id="@+id/tv_exp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/tv_rank"
+            android:textSize="12sp"
+            />
+
+</RelativeLayout>

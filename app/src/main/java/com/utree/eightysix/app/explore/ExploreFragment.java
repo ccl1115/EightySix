@@ -30,6 +30,7 @@ import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.dp.DailyPicksActivity;
 import com.utree.eightysix.app.feed.FeedsSearchActivity;
 import com.utree.eightysix.app.hometown.HometownTabFragment;
+import com.utree.eightysix.app.ladder.LadderActivity;
 import com.utree.eightysix.app.topic.TopicActivity;
 import com.utree.eightysix.app.topic.TopicListActivity;
 import com.utree.eightysix.app.web.BaseWebActivity;
@@ -96,6 +97,11 @@ public class ExploreFragment extends BaseFragment {
   @OnClick(R.id.tv_hometown)
   public void onTvHometownClicked() {
     FragmentHolder.start(getActivity(), R.style.AppTheme_Light, HometownTabFragment.class, null);
+  }
+
+  @OnClick(R.id.tv_ladder)
+  public void onTvLadderClicked() {
+    startActivity(new Intent(getActivity(), LadderActivity.class));
   }
 
   @OnClick(R.id.tv_snapshot)

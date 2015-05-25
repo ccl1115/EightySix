@@ -113,6 +113,23 @@
                 />
 
         <TextView
+                android:id="@+id/tv_ladder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:paddingTop="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="10dp"
+                android:background="@drawable/apptheme_primary_list_selector"
+                android:text="蓝莓风云榜"
+                android:drawableLeft="@drawable/ic_item_search_post"
+                android:drawableStart="@drawable/ic_item_search_post"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                />
+
+        <TextView
                 android:id="@+id/tv_hometown"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

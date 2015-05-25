@@ -478,4 +478,20 @@
             <param>areaId</param>
         </params>
     </request>
+
+    <request>
+        <id>ladder_week_rank</id>
+        <name>上升最快</name>
+        <path>/user/experience/weekrank</path>
+        <sign/>
+        <token/>
+    </request>
+
+    <request>
+        <id>ladder_all_rank</id>
+        <name>经验最多</name>
+        <path>/user/experience/allrank</path>
+        <sign/>
+        <token/>
+    </request>
 </api>
