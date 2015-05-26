@@ -112,8 +112,7 @@
                 android:gravity="center_vertical"
                 />
 
-        <TextView
-                android:id="@+id/tv_ladder"
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -122,12 +121,32 @@
                 android:paddingRight="15dp"
                 android:paddingBottom="10dp"
                 android:background="@drawable/apptheme_primary_list_selector"
-                android:text="蓝莓风云榜"
-                android:drawableLeft="@drawable/ic_item_search_post"
-                android:drawableStart="@drawable/ic_item_search_post"
-                android:drawablePadding="10dp"
-                android:gravity="center_vertical"
-                />
+                android:orientation="horizontal"
+                >
+
+            <TextView
+                    android:id="@+id/tv_ladder"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="蓝莓风云榜"
+                    android:drawableLeft="@drawable/ic_item_search_post"
+                    android:drawableStart="@drawable/ic_item_search_post"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    />
+
+            <TextView
+                    android:id="@+id/tv_ladder_new"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="NEW"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/holo_red_light"
+                    android:visibility="gone"
+                    />
+        </LinearLayout>
 
         <TextView
                 android:id="@+id/tv_hometown"

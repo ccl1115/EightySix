@@ -29,9 +29,10 @@
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/aiv_portrait"
             android:layout_toRightOf="@+id/aiv_portrait"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
+            android:maxEms="8"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:textSize="16sp"
             />
 
@@ -39,11 +40,11 @@
             android:id="@+id/aiv_level_icon"
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:layout_toEndOf="@+id/tv_name"
             android:layout_toRightOf="@+id/tv_name"
             android:layout_alignTop="@+id/tv_name"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
             />
 
     <TextView
@@ -53,26 +54,42 @@
             android:layout_toEndOf="@+id/aiv_portrait"
             android:layout_toRightOf="@+id/aiv_portrait"
             android:layout_below="@+id/tv_name"
+            android:maxEms="8"
+            android:ellipsize="end"
             android:textSize="14sp"
+            android:singleLine="true"
             />
 
-    <TextView
-            android:id="@+id/tv_rank"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/tv_exp"
-            android:layout_toStartOf="@+id/tv_exp"
-            android:layout_centerVertical="true"
-            />
-
-    <TextView
-            android:id="@+id/tv_exp"
-            android:layout_width="wrap_content"
+    <LinearLayout
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/tv_rank"
-            android:textSize="12sp"
-            />
+            android:layout_centerVertical="true"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            >
+
+        <TextView
+                android:id="@+id/tv_rank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
+                />
+
+        <TextView
+                android:id="@+id/tv_exp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
+                android:textSize="12sp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:gravity="end"
+                />
+    </LinearLayout>
 
 </RelativeLayout>

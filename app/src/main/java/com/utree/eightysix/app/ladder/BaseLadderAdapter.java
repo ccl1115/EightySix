@@ -11,7 +11,9 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.utree.eightysix.R;
+import com.utree.eightysix.app.account.ProfileFragment;
 import com.utree.eightysix.data.RankedUser;
 import com.utree.eightysix.response.BaseLadderResponse;
 import com.utree.eightysix.widget.AsyncImageView;
@@ -38,7 +40,7 @@ public class BaseLadderAdapter extends BaseAdapter {
 
   @Override
   public int getCount() {
-    return mUsers.size();
+    return mUsers.size() + 1;
   }
 
   @Override
@@ -112,18 +114,37 @@ public class BaseLadderAdapter extends BaseAdapter {
 
     @InjectView(R.id.aiv_level_icon)
     public AsyncImageView mAivLevelIcon;
+    private RankedUser mUser;
+
+    @OnClick(R.id.aiv_portrait)
+    public void onAivPortraitClicked(View v) {
+      ProfileFragment.start(v.getContext(), mUser.viewId, "");
+    }
 
     public ViewHolder(View view) {
       ButterKnife.inject(this, view);
     }
 
     public void setData(RankedUser user) {
-      mTvName.setText(user.userName);
-      mTvCircleName.setText(user.workinFactory);
-      mTvRank.setText(String.valueOf(user.rank));
-      mTvExp.setText("+" + user.experience);
-      mAivLevelIcon.setUrl(user.levelIcon);
-      mAivPortrait.setUrl(user.avatar);
+      mUser = user;
+      mTvName.setText(mUser.userName);
+      mTvCircleName.setText(mUser.workinFactory);
+      mTvRank.setText(String.valueOf(mUser.rank));
+      mTvExp.setText("+" + mUser.experience);
+      mAivLevelIcon.setUrl(mUser.levelIcon);
+      mAivPortrait.setUrl(mUser.avatar);
+
+      switch (mUser.rank) {
+        case 1:
+        case 2:
+        case 3:
+          mTvRank.setTextSize(30);
+          mTvRank.setTextColor(0xffff0000);
+          break;
+        default:
+          mTvRank.setTextSize(18);
+          mTvRank.setTextColor(0xff000000);
+      }
     }
   }
 }

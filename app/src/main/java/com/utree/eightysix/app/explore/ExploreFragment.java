@@ -41,6 +41,7 @@ import com.utree.eightysix.response.TopicListResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.utils.ColorUtil;
+import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AsyncImageViewWithRoundCorner;
 import com.utree.eightysix.widget.IndicatorView;
 import com.utree.eightysix.widget.RoundedButton;
@@ -68,6 +69,9 @@ public class ExploreFragment extends BaseFragment {
 
   @InjectView(R.id.ll_tags)
   public LinearLayout mLlTags;
+
+  @InjectView(R.id.tv_ladder_new)
+  public TextView mTvLadderNew;
 
   private Handler mHandler = new Handler();
 
@@ -101,6 +105,7 @@ public class ExploreFragment extends BaseFragment {
 
   @OnClick(R.id.tv_ladder)
   public void onTvLadderClicked() {
+    mTvLadderNew.setVisibility(View.GONE);
     startActivity(new Intent(getActivity(), LadderActivity.class));
   }
 
@@ -131,6 +136,10 @@ public class ExploreFragment extends BaseFragment {
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
+
+    if (Env.firstRun("ladder_new")) {
+      mTvLadderNew.setVisibility(View.VISIBLE);
+    }
 
     TextView picksHead = (TextView) mFlDailyPicksHead.findViewById(R.id.tv_head);
     picksHead.setText("每日精选");

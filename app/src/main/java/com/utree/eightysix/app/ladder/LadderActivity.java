@@ -15,6 +15,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
+import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.TitleTab;
 
 /**
@@ -46,6 +47,10 @@ public class LadderActivity extends BaseActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    Env.setFirstRun("ladder_new", false);
+
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
     mVpTab.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
       @Override
