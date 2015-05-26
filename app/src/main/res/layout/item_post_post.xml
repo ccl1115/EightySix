@@ -30,14 +30,10 @@
             android:textColor="@android:color/white"
             />
 
-    <com.rockerhieu.emojicon.EmojiconTextView
-            android:id="@+id/tv_content"
-            style="@style/TextView.PostStyle"
+    <android.support.v4.view.ViewPager
+            android:id="@+id/vp_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="48dp"
-            android:paddingRight="48dp"
-            android:textColor="@android:color/white"
             />
 
     <LinearLayout

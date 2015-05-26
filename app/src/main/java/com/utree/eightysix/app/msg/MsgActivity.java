@@ -43,7 +43,7 @@ public class MsgActivity extends BaseActivity {
   @InjectView(R.id.vp_tab)
   public ViewPager mVpTab;
 
-  private BaseMsgFragment mMyPostMsgFragment = new BaseMsgFragment() {
+  public BaseMsgFragment mMyPostMsgFragment = new BaseMsgFragment() {
     @Override
     protected int getCreateType() {
       return 1;
@@ -75,7 +75,7 @@ public class MsgActivity extends BaseActivity {
     }
   };
 
-  private BaseMsgFragment mOtherMsgFragment = new BaseMsgFragment() {
+  public BaseMsgFragment mOtherMsgFragment = new BaseMsgFragment() {
     @Override
     protected int getCreateType() {
       return 0;

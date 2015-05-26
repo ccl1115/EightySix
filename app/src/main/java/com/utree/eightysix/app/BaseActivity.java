@@ -171,6 +171,10 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     mTopBar.setTitleClickMode(mode);
   }
 
+  public final <T extends Response> void request(RequestData request, OnResponse<T> onResponse, Class<T> clz) {
+    U.getRESTRequester().request(request, new HandlerWrapper<T>(request, onResponse, clz));
+  }
+
   public final <T extends Response> void request(Object request, OnResponse<T> onResponse, Class<T> clz) {
     RequestData data = new RequestData(request);
     U.getRESTRequester().request(request, new HandlerWrapper<T>(data, onResponse, clz));

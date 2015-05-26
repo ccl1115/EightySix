@@ -14,10 +14,10 @@ report.debug = true
 
 #configs for request REST api
 api.host = http://c.lanmeiquan.com
-
-api.host.second = http://119.29.43.68
+api.host.second = http://client.lanmeiquan.com
 
 api.ip = 203.195.128.218
+api.ip.second = 119.29.43.68
 
 api.timeout = 15000
 api.retry = 5
@@ -66,7 +66,8 @@ account.phone.length = 11
 account.pwd.length.min = 6
 account.pwd.length.max = 16
 
-post.length = 77
+post.length = 1540
+post.lines = 140
 circle.length = 50
 circle.short.length = 6
 

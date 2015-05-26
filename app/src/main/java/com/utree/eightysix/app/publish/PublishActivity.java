@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -51,6 +52,7 @@ import com.utree.eightysix.response.TagsResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.RequestData;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.utils.IOUtils;
@@ -60,6 +62,7 @@ import com.utree.eightysix.widget.panel.GridPanel;
 import com.utree.eightysix.widget.panel.Item;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -143,7 +146,7 @@ public class PublishActivity extends BaseActivity implements
     Intent intent = new Intent(context, PublishActivity.class);
     intent.putExtra("factoryId", factoryId);
     if (tags != null) {
-      intent.putParcelableArrayListExtra("tags", (java.util.ArrayList<? extends android.os.Parcelable>) tags);
+      intent.putParcelableArrayListExtra("tags", (ArrayList<? extends Parcelable>) tags);
     }
 
     if (!(context instanceof Activity)) {
@@ -168,7 +171,7 @@ public class PublishActivity extends BaseActivity implements
     Intent intent = new Intent(context, PublishActivity.class);
     intent.putExtra("topicId", topicId);
     if (tags != null) {
-      intent.putParcelableArrayListExtra("tags", (java.util.ArrayList<? extends android.os.Parcelable>) tags);
+      intent.putParcelableArrayListExtra("tags", (ArrayList<? extends Parcelable>) tags);
     }
 
     if (!(context instanceof Activity)) {
@@ -411,10 +414,12 @@ public class PublishActivity extends BaseActivity implements
         if (s.length() > length) {
           mPostEditText.setText(mBefore);
           mPostEditText.setSelection(mBefore.length());
-        } else if (mPostEditText.getLineCount() > 7) {
+        } else if (mPostEditText.getLineCount() > U.getConfigInt("post.lines")) {
           mPostEditText.setText(mBefore.subSequence(0, mBefore.length() - 1));
           mPostEditText.setSelection(mBefore.length() - 1);
         }
+
+        mPostEditText.getSelectionStart();
       }
 
       @Override
@@ -428,7 +433,7 @@ public class PublishActivity extends BaseActivity implements
       public boolean onKey(View view, int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
           int editTextLineCount = ((EditText) view).getLineCount();
-          if (editTextLineCount >= 7) {
+          if (editTextLineCount >= U.getConfigInt("post.lines")) {
             return true;
           }
         }
@@ -788,7 +793,12 @@ public class PublishActivity extends BaseActivity implements
 
       disablePublishButton();
 
-      request(builder.build(), new OnResponse<PublishPostResponse>() {
+      PublishRequest build = builder.build();
+
+      RequestData<PublishPostResponse> requestData = new RequestData<PublishPostResponse>(build);
+      requestData.setHost(U.getConfig("api.host.second"));
+
+      request(requestData, new OnResponse<PublishPostResponse>() {
         @Override
         public void onResponse(PublishPostResponse response) {
           if (RESTRequester.responseOk(response)) {

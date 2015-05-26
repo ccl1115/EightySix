@@ -420,7 +420,7 @@ public class PostActivity extends BaseActivity
       @Override
       public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (mPostCommentsAdapter != null) {
-          mPostCommentsAdapter.getPostPostView().mTvContent.setAlpha(1f);
+          mPostCommentsAdapter.getPostPostView().mVpContent.setAlpha(1f);
 
           if (mPost != null) {
             PostPostView postPostView = mPostCommentsAdapter.getPostPostView();
@@ -462,12 +462,13 @@ public class PostActivity extends BaseActivity
 
               if (y > lastY) {
                 mPostCommentsAdapter.getPostPostView()
-                    .mTvContent.setAlpha(Math.max(0f, 1f - ((y - lastY) / U.dp2px(80))));
+                    .mVpContent.setAlpha(Math.max(0f, 1f - ((y - lastY) / U.dp2px(80))));
               }
               break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-              mPostCommentsAdapter.getPostPostView().mTvContent.setAlpha(1f);
+              lastY = 0;
+              mPostCommentsAdapter.getPostPostView().mVpContent.setAlpha(1f);
               break;
           }
         }

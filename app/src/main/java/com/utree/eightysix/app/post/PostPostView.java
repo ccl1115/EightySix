@@ -4,9 +4,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
@@ -33,6 +37,8 @@ import com.utree.eightysix.widget.TagView;
 
 import java.util.List;
 
+import static com.utree.eightysix.utils.TextUtils.*;
+
 /**
  * This is the post view in PostActivity
  *
@@ -46,8 +52,8 @@ public class PostPostView extends LinearLayout {
   @InjectView(R.id.aiv_bg)
   public AsyncImageView mAivBg;
 
-  @InjectView(R.id.tv_content)
-  public TextView mTvContent;
+  @InjectView(R.id.vp_content)
+  public ViewPager mVpContent;
 
   @InjectView(R.id.tv_source)
   public TextView mTvSource;
@@ -112,7 +118,7 @@ public class PostPostView extends LinearLayout {
   public void onAivBgClicked() {
     if (mClicked) {
       mClicked = false;
-      mTvContent.setVisibility(mTvContent.getVisibility() == VISIBLE ? INVISIBLE : VISIBLE);
+      mVpContent.setVisibility(mVpContent.getVisibility() == VISIBLE ? INVISIBLE : VISIBLE);
       removeCallbacks(mCancel);
     } else {
       mClicked = true;
@@ -179,7 +185,33 @@ public class PostPostView extends LinearLayout {
       setPadding(0, 0, 0, 0);
     }
 
-    mTvContent.setText(mPost.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content);
+    final String[] paged = page(mPost.content, getResources().getDisplayMetrics().widthPixels - 2 * U.dp2px(48), 23);
+
+    mVpContent.setAdapter(new PagerAdapter() {
+      @Override
+      public int getCount() {
+        return paged.length;
+      }
+
+      @Override
+      public boolean isViewFromObject(View view, Object object) {
+        return view.equals(object);
+      }
+
+      @Override
+      public Object instantiateItem(ViewGroup container, int position) {
+        TextView view = new TextView(container.getContext(), null, 0, R.style.TextView_PostStyle);
+        view.setText(paged[position]);
+        container.addView(view);
+        return view;
+      }
+
+      @Override
+      public void destroyItem(ViewGroup container, int position, Object object) {
+        container.removeView((View) object);
+      }
+    });
+
     if (mPost.comments > 0) {
       mTvComment.setText(String.valueOf(post.comments));
     } else {

@@ -130,6 +130,21 @@
                 android:textColor="@android:color/white"
                 android:checked="true"
                 />
+
+        <com.utree.eightysix.widget.RoundedButton
+                android:id="@+id/rb_page"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="40dp"
+                android:textSize="12sp"
+                android:textColor="@android:color/white"
+                app:radius="4dp"
+                app:background="@color/translucent"
+                />
+
     </FrameLayout>
 
 

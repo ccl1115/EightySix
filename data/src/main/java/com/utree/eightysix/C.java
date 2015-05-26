@@ -35,7 +35,7 @@ public class C {
   public static final String API_VALICODE_CREATE_FACTORY = "/factory/valiCode.do";
 
 
-  public static final String API_FEED_ADD = "/feed/add.do";
+  public static final String API_FEED_ADD = "/commit/post/create";
   public static final String API_FEED_DELETE = "/feed/delete.do";
   public static final String API_FEED_LIST = "/feed/list.do";
   public static final String API_FEED_HOT_LIST = "/feed/listHot.do";
