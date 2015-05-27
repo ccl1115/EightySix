@@ -758,7 +758,12 @@ public class PostActivity extends BaseActivity
     showProgressBar();
     ReadMsgStore.inst().addRead(id);
     U.getAnalyser().trackEvent(this, "post_load", "post_load");
-    request(new PostCommentsRequest(id, viewType, isHot, isRepost, page), new OnResponse<PostCommentsResponse>() {
+    U.request("post_comments", new OnResponse2<PostCommentsResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
       @Override
       public void onResponse(PostCommentsResponse response) {
         if (RESTRequester.responseOk(response)) {
@@ -812,8 +817,9 @@ public class PostActivity extends BaseActivity
         }
 
         hideProgressBar();
+
       }
-    }, PostCommentsResponse.class);
+    }, PostCommentsResponse.class, id, viewType, isHot, isRepost, page);
   }
 
   private void cacheOutComments(final int page, final boolean bottom) {

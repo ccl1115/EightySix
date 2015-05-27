@@ -60,17 +60,18 @@ public class FeedRegionFragment extends AbsRegionFragment {
       mRefresherView.setRefreshing(true);
       getBaseActivity().showRefreshIndicator(true);
     }
-    getBaseActivity().request(new FeedsRequest(circleId, page), new OnResponse2<FeedsResponse>() {
+
+    U.request("feed_list", new OnResponse2<FeedsResponse>() {
       @Override
       public void onResponseError(Throwable e) {
-        cacheOutFeeds(circleId, page);
+
       }
 
       @Override
       public void onResponse(FeedsResponse response) {
         responseForFeedsRequest(response, page);
       }
-    }, FeedsResponse.class);
+    }, FeedsResponse.class, circleId, page);
   }
 
   @Override

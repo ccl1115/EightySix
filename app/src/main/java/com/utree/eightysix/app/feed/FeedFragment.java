@@ -35,13 +35,18 @@ public class FeedFragment extends AbsFeedFragment {
       mRefresherView.setRefreshing(true);
       getBaseActivity().setTopSubTitle("");
     }
-    getBaseActivity().request(new FeedsRequest(id, page), new OnResponse<FeedsResponse>() {
+
+    U.request("feed_list", new OnResponse2<FeedsResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
       @Override
       public void onResponse(FeedsResponse response) {
         responseForRequest(id, response, page);
       }
-    }, FeedsResponse.class);
-
+    }, FeedsResponse.class, id, page);
   }
 
   @Override

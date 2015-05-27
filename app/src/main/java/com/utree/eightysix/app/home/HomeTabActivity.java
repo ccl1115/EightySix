@@ -195,8 +195,10 @@ public class HomeTabActivity extends BaseActivity {
     getHandler().postDelayed(new Runnable() {
       @Override
       public void run() {
-        if (!isFinishing() || !mDestroyed) {
+        try {
           onTabItemClicked(mFlFeed);
+        } catch (IllegalStateException ignored) {
+
         }
       }
     }, 1000);

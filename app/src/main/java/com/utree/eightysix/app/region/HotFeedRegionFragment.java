@@ -61,12 +61,18 @@ public class HotFeedRegionFragment extends AbsRegionFragment {
       getBaseActivity().showRefreshIndicator(true);
     }
     getBaseActivity().setTopSubTitle("");
-    getBaseActivity().request(new FeedsHotRequest(circleId, page), new OnResponse<FeedsResponse>() {
+
+    U.request("feed_list_host", new OnResponse2<FeedsResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
       @Override
       public void onResponse(FeedsResponse response) {
         responseForFeedsRequest(response, page);
       }
-    }, FeedsResponse.class);
+    }, FeedsResponse.class, circleId, page);
   }
 
   @Override

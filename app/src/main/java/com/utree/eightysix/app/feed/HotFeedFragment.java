@@ -8,7 +8,6 @@ import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.FeedsFriendsRequest;
-import com.utree.eightysix.request.FeedsHotRequest;
 import com.utree.eightysix.request.PostPraiseRequest;
 import com.utree.eightysix.response.FeedsResponse;
 import com.utree.eightysix.rest.OnResponse;
@@ -32,12 +31,18 @@ public class HotFeedFragment extends AbsFeedFragment {
       mRefresherView.setRefreshing(true);
       getBaseActivity().setTopSubTitle("");
     }
-    getBaseActivity().request(new FeedsHotRequest(id, page), new OnResponse<FeedsResponse>() {
+
+    U.request("feed_list_hot", new OnResponse2<FeedsResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
       @Override
       public void onResponse(FeedsResponse response) {
         responseForRequest(id, response, page);
       }
-    }, FeedsResponse.class);
+    }, FeedsResponse.class, id, page);
   }
 
   @Override

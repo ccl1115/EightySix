@@ -62,12 +62,18 @@ public class FriendsFeedRegionFragment extends AbsRegionFragment {
       getBaseActivity().showRefreshIndicator(true);
     }
     getBaseActivity().setTopSubTitle("");
-    getBaseActivity().request(new FeedsFriendsRequest(circleId, page), new OnResponse<FeedsResponse>() {
+
+    U.request("feed_list_friends", new OnResponse2<FeedsResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
       @Override
       public void onResponse(FeedsResponse response) {
         responseForFeedsRequest(response, page);
       }
-    }, FeedsResponse.class);
+    }, FeedsResponse.class, circleId, page);
   }
 
   @Override

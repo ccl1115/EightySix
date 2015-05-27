@@ -494,4 +494,56 @@
         <sign/>
         <token/>
     </request>
+
+    <request>
+        <id>post_comments</id>
+        <name>帖子评论</name>
+        <path>/comment/lists</path>
+        <sign/>
+        <token/>
+        <cache/>
+        <params>
+            <param>postId</param>
+            <param>viewType</param>
+            <param>isHot</param>
+            <param>isRepost</param>
+            <param>currPage</param>
+        </params>
+    </request>
+
+    <request>
+        <id>feed_list</id>
+        <name>工厂feed</name>
+        <path>/feed/lists</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>factoryId</param>
+            <param>currPage</param>
+        </params>
+    </request>
+
+    <request>
+        <id>feed_list_hot</id>
+        <name>工厂feed</name>
+        <path>/feed/listhot</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>factoryId</param>
+            <param>currPage</param>
+        </params>
+    </request>
+
+    <request>
+        <id>feed_list_friend</id>
+        <name>工厂feed</name>
+        <path>/feed/listfriends</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>factoryId</param>
+            <param>currPage</param>
+        </params>
+    </request>
 </api>

@@ -1,14 +1,12 @@
 package com.utree.eightysix.request;
 
 import com.utree.eightysix.C;
-import com.utree.eightysix.rest.Api;
-import com.utree.eightysix.rest.Optional;
-import com.utree.eightysix.rest.Param;
-import com.utree.eightysix.rest.Token;
+import com.utree.eightysix.rest.*;
 
 /**
  */
 @Api (C.API_FEED_ADD)
+@Sign
 @Token
 public class PublishRequest {
 

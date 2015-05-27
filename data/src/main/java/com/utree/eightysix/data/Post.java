@@ -108,9 +108,7 @@ public class Post extends BaseItem implements Parcelable {
 
     Post post = (Post) o;
 
-    if (!id.equals(post.id)) return false;
-
-    return true;
+    return id != null && id.equals(post.id);
   }
 
   @Override

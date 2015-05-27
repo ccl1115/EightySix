@@ -6,7 +6,6 @@ package com.utree.eightysix.utils;
 
 import android.graphics.Paint;
 import com.utree.eightysix.U;
-import de.akquinet.android.androlog.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,13 +21,14 @@ public class TextUtils {
       sPaint = new Paint();
     }
 
+    String[] lines = content.split("\\n+");
+
     sPaint.setTextSize(U.dp2px(textSize));
     int index;
     int line = 0;
     int start = 0;
     List<Integer> pageIndex = new ArrayList<Integer>();
     while ((index = sPaint.breakText(content, start, content.length(), true, width, null)) < (content.length() - start)) {
-      Log.d("TextUtils", "index: " + index);
       line ++;
 
       if (line >= 7) {
