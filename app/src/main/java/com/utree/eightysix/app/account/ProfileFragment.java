@@ -299,11 +299,15 @@ public class ProfileFragment extends HolderFragment {
 
           AnimatorSet set = new AnimatorSet();
           set.playTogether(
-              ObjectAnimator.ofFloat(v, "translationY", 0f, -U.dp2px(100)),
+              ObjectAnimator.ofFloat(v, "translationY", 0f, 0f, -U.dp2px(50)),
+              ObjectAnimator.ofFloat(v, "scaleX", 1f, 0.9f, 1.2f, 0.9f, 1.4f),
+              ObjectAnimator.ofFloat(v, "scaleY", 1f, 0.9f, 1.2f, 0.9f, 1.4f),
               ObjectAnimator.ofFloat(v, "alpha", 1f, 0f),
-              ObjectAnimator.ofFloat(mTvPraise, "alpha", 0f, 1f)
+              ObjectAnimator.ofFloat(mTvPraise, "alpha", 0f, 0f, 1f),
+              ObjectAnimator.ofFloat(mTvPraise, "scaleX", 1.8f, 1.8f, 1f),
+              ObjectAnimator.ofFloat(mTvPraise, "scaleY", 1.8f, 1.8f, 1f)
           );
-          set.setDuration(300);
+          set.setDuration(1000);
 
           set.addListener(new Animator.AnimatorListener() {
             @Override
