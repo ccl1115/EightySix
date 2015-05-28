@@ -32,10 +32,13 @@ public class BaseLadderAdapter extends BaseAdapter {
 
   private List<RankedUser> mUsers;
 
+  private String mApi;
 
-  public BaseLadderAdapter(BaseLadderResponse response) {
+
+  public BaseLadderAdapter(BaseLadderResponse response, String api) {
     mUsers = response.object;
     mExtra = response.extra;
+    mApi = api;
   }
 
   public void add(List<RankedUser> users) {
@@ -100,7 +103,7 @@ public class BaseLadderAdapter extends BaseAdapter {
     return convertView;
   }
 
-  public static class ViewHolder {
+  public class ViewHolder {
 
     @InjectView(R.id.tv_name)
     public TextView mTvName;
@@ -121,7 +124,7 @@ public class BaseLadderAdapter extends BaseAdapter {
     public AsyncImageView mAivLevelIcon;
     private RankedUser mUser;
 
-    @OnClick(R.id.aiv_portrait)
+    @OnClick({R.id.aiv_portrait, R.id.tv_name})
     public void onAivPortraitClicked(View v) {
       ProfileFragment.start(v.getContext(), mUser.viewId, "");
     }
@@ -135,7 +138,11 @@ public class BaseLadderAdapter extends BaseAdapter {
       mTvName.setText(mUser.userName);
       mTvCircleName.setText(mUser.workinFactory);
       mTvRank.setText(String.valueOf(mUser.rank));
-      mTvExp.setText("+" + mUser.experience);
+      if ("ladder_week_rank".equals(mApi)) {
+        mTvExp.setText("+" + mUser.experience);
+      } else {
+        mTvExp.setText(String.valueOf(mUser.experience));
+      }
       mAivLevelIcon.setUrl(mUser.levelIcon);
       mAivPortrait.setUrl(mUser.avatar);
 

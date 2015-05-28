@@ -76,7 +76,7 @@ public abstract class BaseLadderFragment extends BaseFragment {
           mHasMore = response.object != null && response.object.size() > 0;
 
           if (mPage == 1) {
-            mAdapter = new BaseLadderAdapter(response);
+            mAdapter = new BaseLadderAdapter(response, getApi());
             mAlvLadder.setAdapter(mAdapter);
           } else {
             mAdapter.add(response.object);
