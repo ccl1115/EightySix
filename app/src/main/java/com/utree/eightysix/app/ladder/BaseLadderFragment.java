@@ -58,6 +58,7 @@ public abstract class BaseLadderFragment extends BaseFragment {
       }
     });
 
+    getBaseActivity().showProgressBar();
     request();
   }
 
@@ -65,7 +66,8 @@ public abstract class BaseLadderFragment extends BaseFragment {
     U.request(getApi(), new OnResponse2<BaseLadderResponse>() {
       @Override
       public void onResponseError(Throwable e) {
-
+        getBaseActivity().hideProgressBar();
+        mAlvLadder.stopLoadMore();
       }
 
       @Override
@@ -80,6 +82,8 @@ public abstract class BaseLadderFragment extends BaseFragment {
             mAdapter.add(response.object);
           }
         }
+        getBaseActivity().hideProgressBar();
+        mAlvLadder.stopLoadMore();
       }
     }, BaseLadderResponse.class, mPage);
   }

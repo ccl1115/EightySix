@@ -485,6 +485,9 @@
         <path>/user/experience/weekrank</path>
         <sign/>
         <token/>
+        <params>
+            <param>page</param>
+        </params>
     </request>
 
     <request>
@@ -493,6 +496,9 @@
         <path>/user/experience/allrank</path>
         <sign/>
         <token/>
+        <params>
+            <param>page</param>
+        </params>
     </request>
 
     <request>
