@@ -48,8 +48,6 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/transparent"
                 android:padding="48dp"
-                android:maxLength="77"
-                android:maxLines="7"
                 android:inputType="textMultiLine"
                 android:textColor="@android:color/white"
                 android:textSize="23sp"
@@ -142,7 +140,7 @@
                 android:textSize="12sp"
                 android:textColor="@android:color/white"
                 app:radius="4dp"
-                app:background="@color/translucent"
+                app:background="@color/translucent_200"
                 />
 
     </FrameLayout>

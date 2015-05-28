@@ -4,7 +4,10 @@
 
 package com.utree.eightysix.utils;
 
-import android.graphics.Paint;
+import android.text.Layout;
+import android.text.SpannableStringBuilder;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import com.utree.eightysix.U;
 
 import java.util.ArrayList;
@@ -14,44 +17,63 @@ import java.util.List;
  */
 public class TextUtils {
 
-  public static Paint sPaint;
+  public static List<CharSequence> page(CharSequence content, int width, int height, int textSize) {
+    PageSplitter pageSplitter = new PageSplitter(width, height, 1f, 1f);
+    pageSplitter.append(content);
+    TextPaint textPaint = new TextPaint();
+    textPaint.setTextSize(U.dp2px(textSize));
+    pageSplitter.split(textPaint);
+    return pageSplitter.getPages();
+  }
 
-  public static String[] page(String content, int width, int textSize) {
-    if (sPaint == null) {
-      sPaint = new Paint();
+  private static class PageSplitter {
+    private int pageWidth;
+    private int pageHeight;
+    private final float lineSpacingMultiplier;
+    private final float lineSpacingExtra;
+    private final List<CharSequence> pages = new ArrayList<CharSequence>();
+    private SpannableStringBuilder mSpannableStringBuilder = new SpannableStringBuilder();
+
+    public PageSplitter(int pageWidth, int pageHeight, float lineSpacingMultiplier, float lineSpacingExtra) {
+      this.pageWidth = pageWidth;
+      this.pageHeight = pageHeight;
+      this.lineSpacingMultiplier = lineSpacingMultiplier;
+      this.lineSpacingExtra = lineSpacingExtra;
     }
 
-    String[] lines = content.split("\\n+");
+    public void append(CharSequence charSequence) {
+      mSpannableStringBuilder.append(charSequence);
+    }
 
-    sPaint.setTextSize(U.dp2px(textSize));
-    int index;
-    int line = 0;
-    int start = 0;
-    List<Integer> pageIndex = new ArrayList<Integer>();
-    while ((index = sPaint.breakText(content, start, content.length(), true, width, null)) < (content.length() - start)) {
-      line ++;
-
-      if (line >= 7) {
-        pageIndex.add(index + start);
-        line = 0;
+    public void split(TextPaint textPaint) {
+      StaticLayout staticLayout = new StaticLayout(
+          mSpannableStringBuilder,
+          textPaint,
+          pageWidth,
+          Layout.Alignment.ALIGN_NORMAL,
+          lineSpacingMultiplier,
+          lineSpacingExtra,
+          false
+      );
+      int startLine = 0;
+      while(startLine < staticLayout.getLineCount()) {
+        int startLineTop = staticLayout.getLineTop(startLine);
+        int endLine = staticLayout.getLineForVertical(startLineTop + pageHeight);
+        int endLineBottom = staticLayout.getLineBottom(endLine);
+        int lastFullyVisibleLine;
+        if(endLineBottom > startLineTop + pageHeight)
+          lastFullyVisibleLine = endLine - 1;
+        else
+          lastFullyVisibleLine = endLine;
+        int startOffset = staticLayout.getLineStart(startLine);
+        int endOffset = staticLayout.getLineEnd(lastFullyVisibleLine);
+        pages.add(mSpannableStringBuilder.subSequence(startOffset, endOffset));
+        startLine = lastFullyVisibleLine + 1;
       }
-      start += index;
     }
 
-    if (pageIndex.size() == 0) {
-      pageIndex.add(content.length());
+    public List<CharSequence> getPages() {
+      return pages;
     }
-
-    String[] ret = new String[pageIndex.size()];
-
-    int j = 0;
-    int pre = 0;
-    for (int i : pageIndex) {
-      ret[j] = content.substring(pre, i);
-      pre = i;
-      j++;
-    }
-
-    return ret;
   }
 }

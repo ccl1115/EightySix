@@ -68,6 +68,7 @@ account.pwd.length.max = 16
 
 post.length = 1540
 post.lines = 140
+
 circle.length = 50
 circle.short.length = 6
 

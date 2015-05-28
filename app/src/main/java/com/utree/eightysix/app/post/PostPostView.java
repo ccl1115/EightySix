@@ -33,6 +33,7 @@ import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.request.PostDeleteRequest;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.widget.AsyncImageView;
+import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.TagView;
 
 import java.util.List;
@@ -72,6 +73,9 @@ public class PostPostView extends LinearLayout {
 
   @InjectView(R.id.tv_tag_2)
   public TagView mTvTag2;
+
+  @InjectView(R.id.rb_page)
+  public RoundedButton mRbPage;
 
   private Post mPost;
 
@@ -185,12 +189,13 @@ public class PostPostView extends LinearLayout {
       setPadding(0, 0, 0, 0);
     }
 
-    final String[] paged = page(mPost.content, getResources().getDisplayMetrics().widthPixels - 2 * U.dp2px(48), 23);
+    int size = getResources().getDisplayMetrics().widthPixels - 2 * U.dp2px(48);
+    final List<CharSequence> paged = page(mPost.content, size, size - U.dp2px(46), 23);
 
     mVpContent.setAdapter(new PagerAdapter() {
       @Override
       public int getCount() {
-        return paged.length;
+        return paged.size();
       }
 
       @Override
@@ -201,7 +206,7 @@ public class PostPostView extends LinearLayout {
       @Override
       public Object instantiateItem(ViewGroup container, int position) {
         TextView view = new TextView(container.getContext(), null, 0, R.style.TextView_PostStyle);
-        view.setText(paged[position]);
+        view.setText(paged.get(position));
         container.addView(view);
         return view;
       }
@@ -211,6 +216,30 @@ public class PostPostView extends LinearLayout {
         container.removeView((View) object);
       }
     });
+
+    if (paged.size() > 1) {
+      mRbPage.setVisibility(VISIBLE);
+      mRbPage.setText(String.format("%d/%d", mVpContent.getCurrentItem() + 1, paged.size()));
+
+      mVpContent.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+          mRbPage.setText(String.format("%d/%d", mVpContent.getCurrentItem() + 1, paged.size()));
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+      });
+    } else {
+      mRbPage.setVisibility(GONE);
+    }
 
     if (mPost.comments > 0) {
       mTvComment.setText(String.valueOf(post.comments));

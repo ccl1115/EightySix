@@ -117,6 +117,9 @@ public class PublishActivity extends BaseActivity implements
   @InjectView(R.id.iv_temp_name)
   public ImageView mIvTempName;
 
+  @InjectView(R.id.rb_page)
+  public RoundedButton mRbPage;
+
   protected PublishLayout mPublishLayout;
 
   protected int mFactoryId;
@@ -420,6 +423,8 @@ public class PublishActivity extends BaseActivity implements
         }
 
         mPostEditText.getSelectionStart();
+
+        mRbPage.setText(String.valueOf(mPostEditText.getLineCount() / 7) + 1);
       }
 
       @Override
