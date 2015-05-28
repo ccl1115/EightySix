@@ -52,10 +52,16 @@ public abstract class BaseLadderFragment extends BaseFragment {
 
       @Override
       public boolean onLoadMoreStart() {
-        return false;
+        mPage++;
+        request();
+        return true;
       }
     });
 
+    request();
+  }
+
+  private void request() {
     U.request(getApi(), new OnResponse2<BaseLadderResponse>() {
       @Override
       public void onResponseError(Throwable e) {
@@ -65,6 +71,8 @@ public abstract class BaseLadderFragment extends BaseFragment {
       @Override
       public void onResponse(BaseLadderResponse response) {
         if (RESTRequester.responseOk(response)) {
+          mHasMore = response.object != null && response.object.size() > 0;
+
           if (mPage == 1) {
             mAdapter = new BaseLadderAdapter(response);
             mAlvLadder.setAdapter(mAdapter);
