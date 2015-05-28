@@ -38,6 +38,11 @@ public class BaseLadderAdapter extends BaseAdapter {
     mExtra = response.extra;
   }
 
+  public void add(List<RankedUser> users) {
+    mUsers.addAll(users);
+    notifyDataSetChanged();
+  }
+
   @Override
   public int getCount() {
     return mUsers.size() + 1;

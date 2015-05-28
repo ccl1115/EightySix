@@ -105,10 +105,7 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
     AppIntent m;
     try {
       m = U.getGson().fromJson(xgPushTextMessage.getContent(), AppIntent.class);
-
-
     } catch (Exception e) {
-      U.getAnalyser().reportError(context, "xg push invalid msg: " + xgPushTextMessage.getContent());
       return;
     }
 
@@ -165,16 +162,16 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
 
   @Override
   public void onNotifactionClickedResult(Context context, XGPushClickedResult xgPushClickedResult) {
-    try {
-      AppIntent m = U.getGson().fromJson(xgPushClickedResult.getCustomContent(), AppIntent.class);
-      if (m.type == TYPE_CMD) {
-        mCmdHandler.handle(context, m.cmd);
-      }
-    } catch (Exception e) {
-      if (BuildConfig.DEBUG) {
-        e.printStackTrace();
-      } else {
-        U.getAnalyser().reportError(context, "xg push invalid msg: " + xgPushClickedResult.getCustomContent());
+    if (xgPushClickedResult.getActionType() == XGPushClickedResult.NOTIFACTION_CLICKED_TYPE) {
+      try {
+        AppIntent m = U.getGson().fromJson(xgPushClickedResult.getCustomContent(), AppIntent.class);
+        if (m.type == TYPE_CMD) {
+          mCmdHandler.handle(context, m.cmd);
+        }
+      } catch (Exception e) {
+        if (BuildConfig.DEBUG) {
+          e.printStackTrace();
+        }
       }
     }
   }

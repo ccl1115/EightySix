@@ -17,6 +17,7 @@ import com.utree.eightysix.response.BaseLadderResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.widget.AdvancedListView;
+import com.utree.eightysix.widget.LoadMoreCallback;
 
 /**
  */
@@ -24,6 +25,10 @@ public abstract class BaseLadderFragment extends BaseFragment {
 
   @InjectView(R.id.alv_ladder)
   public AdvancedListView mAlvLadder;
+
+  private boolean mHasMore;
+  private int mPage = 1;
+  private BaseLadderAdapter mAdapter;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,6 +39,23 @@ public abstract class BaseLadderFragment extends BaseFragment {
   public void onViewCreated(View view, Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
 
+    mAlvLadder.setLoadMoreCallback(new LoadMoreCallback() {
+      @Override
+      public View getLoadMoreView(ViewGroup parent) {
+        return LayoutInflater.from(parent.getContext()).inflate(R.layout.footer_load_more, parent, false);
+      }
+
+      @Override
+      public boolean hasMore() {
+        return mHasMore;
+      }
+
+      @Override
+      public boolean onLoadMoreStart() {
+        return false;
+      }
+    });
+
     U.request(getApi(), new OnResponse2<BaseLadderResponse>() {
       @Override
       public void onResponseError(Throwable e) {
@@ -43,10 +65,15 @@ public abstract class BaseLadderFragment extends BaseFragment {
       @Override
       public void onResponse(BaseLadderResponse response) {
         if (RESTRequester.responseOk(response)) {
-          mAlvLadder.setAdapter(new BaseLadderAdapter(response));
+          if (mPage == 1) {
+            mAdapter = new BaseLadderAdapter(response);
+            mAlvLadder.setAdapter(mAdapter);
+          } else {
+            mAdapter.add(response.object);
+          }
         }
       }
-    }, BaseLadderResponse.class);
+    }, BaseLadderResponse.class, mPage);
   }
 
   protected abstract String getApi();
