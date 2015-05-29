@@ -263,7 +263,7 @@ public class FeedPostView extends LinearLayout {
 
     String content = post.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content;
 
-    mTvContent.setText(content);
+    com.utree.eightysix.utils.TextUtils.setPostText(mTvContent, content);
     if (post.comments > 0) {
       mTvComment.setText(String.valueOf(post.comments));
     } else {

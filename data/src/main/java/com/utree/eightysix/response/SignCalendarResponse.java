@@ -34,5 +34,8 @@ public class SignCalendarResponse extends Response {
 
     @SerializedName("signMissingTimes")
     public int signMissingTimes;
+
+    @SerializedName("costBluestar")
+    public int costBluestar;
   }
 }

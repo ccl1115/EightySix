@@ -8,10 +8,15 @@ import android.text.Layout;
 import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.text.style.ClickableSpan;
+import android.view.View;
+import android.widget.TextView;
 import com.utree.eightysix.U;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  */
@@ -75,5 +80,26 @@ public class TextUtils {
     public List<CharSequence> getPages() {
       return pages;
     }
+  }
+
+  private static Pattern sPattern = Pattern.compile("【.+】");
+
+  public static void setPostText(TextView textView, CharSequence text) {
+    Matcher matcher = sPattern.matcher(text);
+
+    SpannableStringBuilder builder = new SpannableStringBuilder(text);
+
+    while(matcher.find()) {
+      final int start = matcher.start();
+      final int end = matcher.end();
+
+      builder.setSpan(new ClickableSpan() {
+        @Override
+        public void onClick(View widget) {
+        }
+      }, start, end, 0);
+    }
+
+    textView.setText(builder);
   }
 }

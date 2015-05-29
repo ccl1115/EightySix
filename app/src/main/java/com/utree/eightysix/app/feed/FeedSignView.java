@@ -59,9 +59,11 @@ public class FeedSignView extends LinearLayout {
   }
 
   @OnClick(R.id.rb_sign)
-  public void onRbSignClick() {
+  public void onRbSignClick(View v) {
     if (mFeedSign != null && mFeedSign.signed == 0) {
       sign();
+    } else {
+      SignCalendarFragment.start(((BaseActivity) v.getContext()).getSupportFragmentManager(), mFactoryId);
     }
   }
 

@@ -155,7 +155,7 @@ public class SignCalendarFragment extends BaseFragment {
       }
 
       @Override
-      public void onResponse(SignCalendarResponse response) {
+      public void onResponse(final SignCalendarResponse response) {
 
         mTvInfo.setText(String.format("你已连续打卡%d天，近一个月漏打卡%d天",
             response.extra.signConsecutiveTimes, response.extra.signMissingTimes));
@@ -173,7 +173,7 @@ public class SignCalendarFragment extends BaseFragment {
               mTvDates[index].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                  showSignDialog(date.date);
+                  showSignDialog(date.date, response.extra.costBluestar);
                 }
               });
             }
@@ -184,10 +184,18 @@ public class SignCalendarFragment extends BaseFragment {
     }, SignCalendarResponse.class, mFactoryId, mPage);
   }
 
-  private void showSignDialog(final String date) {
+  private void showSignDialog(final String date, int costBluestar) {
     final ThemedDialog dialog = new ThemedDialog(getActivity());
 
     dialog.setTitle("确认为" + date + "补打卡");
+
+    TextView view = new TextView(getActivity());
+    view.setText(String.format("提醒：补打卡会消耗%d颗蓝星哦", costBluestar));
+
+    int px = U.dp2px(16);
+    view.setPadding(px, px, px, px);
+
+    dialog.setContent(view);
 
     dialog.setPositive(R.string.okay, new View.OnClickListener() {
       @Override
