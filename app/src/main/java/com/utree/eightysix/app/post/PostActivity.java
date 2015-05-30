@@ -858,39 +858,32 @@ public class PostActivity extends BaseActivity
     mIvEmotion.setSelected(false);
     showProgressBar();
 
-    PublishCommentRequest request;
-    if (mIvAnonymous.isSelected()) {
-      request = new PublishCommentRequest(mEtPostContent.getText().toString(), mPost.id);
-    } else {
-      request = new PublishCommentRequest(mEtPostContent.getText().toString(), mPost.id, 1);
-    }
-    request(request,
-        new OnResponse2<PublishCommentResponse>() {
-          @Override
-          public void onResponseError(Throwable e) {
-            mIvPost.setEnabled(true);
-          }
+    U.request("post_comment", new OnResponse2<PublishCommentResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        mIvPost.setEnabled(true);
+      }
 
-          @Override
-          public void onResponse(PublishCommentResponse response) {
-            if (RESTRequester.responseOk(response)) {
-              mPostCommentsAdapter.add(response.object);
-              mPost.comments++;
-              mPost.relation = 1;
-              U.getBus().post(mPost);
-              mEtPostContent.setText("");
-              mIvPost.setEnabled(false);
-            } else {
-              mIvPost.setEnabled(true);
-            }
+      @Override
+      public void onResponse(PublishCommentResponse response) {
+        if (RESTRequester.responseOk(response)) {
+          mPostCommentsAdapter.add(response.object);
+          mPost.comments++;
+          mPost.relation = 1;
+          U.getBus().post(mPost);
+          mEtPostContent.setText("");
+          mIvPost.setEnabled(false);
+        } else {
+          mIvPost.setEnabled(true);
+        }
 
-            hideProgressBar();
-            mEtPostContent.setEnabled(true);
-            mLvComments.setSelection(Integer.MAX_VALUE);
+        hideProgressBar();
+        mEtPostContent.setEnabled(true);
+        mLvComments.setSelection(Integer.MAX_VALUE);
 
-            requestComment(1, true);
-          }
-        }, PublishCommentResponse.class);
+        requestComment(1, true);
+      }
+    }, PublishCommentResponse.class, mEtPostContent.getText().toString(), mPost.id, mIvAnonymous.isSelected() ? 1 : null);
   }
 
   @Subscribe
