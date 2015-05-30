@@ -552,4 +552,17 @@
             <param>currPage</param>
         </params>
     </request>
+
+    <request>
+        <id>post_comment</id>
+        <name>发表评论</name>
+        <path>/commit/comment/create</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>content</param>
+            <param>postId</param>
+            <param>realName</param>
+        </params>
+    </request>
 </api>

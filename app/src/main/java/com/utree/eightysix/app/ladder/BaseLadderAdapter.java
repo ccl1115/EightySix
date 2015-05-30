@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -122,6 +123,10 @@ public class BaseLadderAdapter extends BaseAdapter {
 
     @InjectView(R.id.aiv_level_icon)
     public AsyncImageView mAivLevelIcon;
+
+    @InjectView(R.id.iv_arrow)
+    public ImageView mIvArrow;
+
     private RankedUser mUser;
 
     @OnClick({R.id.aiv_portrait, R.id.tv_name})
@@ -156,6 +161,12 @@ public class BaseLadderAdapter extends BaseAdapter {
         default:
           mTvRank.setTextSize(18);
           mTvRank.setTextColor(0xff000000);
+      }
+
+      if ("up".equals(user.change)) {
+        mIvArrow.setImageResource(R.drawable.ic_arrow_up);
+      } else if ("down".equals(user.change)) {
+        mIvArrow.setImageResource(R.drawable.ic_arrow_down);
       }
     }
   }

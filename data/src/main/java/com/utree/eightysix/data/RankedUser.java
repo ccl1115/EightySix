@@ -21,4 +21,7 @@ public class RankedUser extends BaseUser {
 
   @SerializedName("experience")
   public int experience;
+
+  @SerializedName("change")
+  public String change;
 }
