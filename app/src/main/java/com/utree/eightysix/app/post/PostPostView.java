@@ -100,6 +100,21 @@ public class PostPostView extends LinearLayout {
     ButterKnife.inject(this, this);
 
     M.getRegisterHelper().register(this);
+
+    setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if (mClicked) {
+          mClicked = false;
+          mVpContent.setVisibility(mVpContent.getVisibility() == VISIBLE ? INVISIBLE : VISIBLE);
+          removeCallbacks(mCancel);
+        } else {
+          mClicked = true;
+          postDelayed(mCancel, 1000);
+        }
+      }
+    });
+
   }
 
   @OnClick(R.id.tv_tag_1)
@@ -116,18 +131,6 @@ public class PostPostView extends LinearLayout {
   public void onTvSourceClicked() {
     if (mPost.jump == 1) {
       FeedActivity.start(getContext(), mPost.factoryId);
-    }
-  }
-
-  @OnClick(R.id.aiv_bg)
-  public void onAivBgClicked() {
-    if (mClicked) {
-      mClicked = false;
-      mVpContent.setVisibility(mVpContent.getVisibility() == VISIBLE ? INVISIBLE : VISIBLE);
-      removeCallbacks(mCancel);
-    } else {
-      mClicked = true;
-      postDelayed(mCancel, 1000);
     }
   }
 

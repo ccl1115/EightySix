@@ -167,9 +167,10 @@ public class SignCalendarFragment extends BaseFragment {
           mTvDates[index].setText(date.date.split("\\.", 2)[1] + "\n" + (date.signed == 1 ? "已打卡" : "未打卡"));
           if (date.signed == 1) {
             mTvDates[index].setBackgroundColor(Color.WHITE);
+            mTvDates[index].setOnClickListener(null);
           } else {
             mTvDates[index].setBackgroundColor(getResources().getColor(R.color.apptheme_primary_light_color_100));
-            if (i != 0) {
+            if (!(mPage == 1 && i == 0)) {
               mTvDates[index].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

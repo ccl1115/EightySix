@@ -74,7 +74,7 @@ public class FriendListActivity extends BaseActivity {
       @Override
       public void onResponse(FriendListResponse response) {
         if (RESTRequester.responseOk(response)) {
-          if (response.object.size() == 0) {
+          if (response.object == null || response.object.size() == 0) {
             mRstvEmpty.setVisibility(View.VISIBLE);
           } else {
             mRstvEmpty.setVisibility(View.GONE);
