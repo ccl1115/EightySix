@@ -883,7 +883,7 @@ public class PostActivity extends BaseActivity
 
         requestComment(1, true);
       }
-    }, PublishCommentResponse.class, mEtPostContent.getText().toString(), mPost.id, mIvAnonymous.isSelected() ? 1 : null);
+    }, PublishCommentResponse.class, mEtPostContent.getText().toString(), mPost.id, mIvAnonymous.isSelected() ? 0 : 1);
   }
 
   @Subscribe

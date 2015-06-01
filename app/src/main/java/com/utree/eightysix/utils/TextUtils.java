@@ -12,6 +12,8 @@ import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.TextView;
 import com.utree.eightysix.U;
+import com.utree.eightysix.app.topic.TopicActivity;
+import com.utree.eightysix.data.Topic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,9 +84,9 @@ public class TextUtils {
     }
   }
 
-  private static Pattern sPattern = Pattern.compile("【.+】");
+  private static Pattern sPattern = Pattern.compile("#.+#");
 
-  public static void setPostText(TextView textView, CharSequence text) {
+  public static void setPostText(TextView textView, CharSequence text, final int topicId) {
     Matcher matcher = sPattern.matcher(text);
 
     SpannableStringBuilder builder = new SpannableStringBuilder(text);
@@ -96,6 +98,14 @@ public class TextUtils {
       builder.setSpan(new ClickableSpan() {
         @Override
         public void onClick(View widget) {
+          Topic topic = new Topic();
+          topic.id = topicId;
+          TopicActivity.start(widget.getContext(), topic);
+        }
+
+        @Override
+        public void updateDrawState(TextPaint ds) {
+          ds.setColor(0x88ffffff);
         }
       }, start, end, 0);
     }

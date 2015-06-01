@@ -8,6 +8,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -205,7 +206,11 @@ public class PostPostView extends LinearLayout {
 
       @Override
       public Object instantiateItem(ViewGroup container, int position) {
-        TextView view = new TextView(container.getContext(), null, 0, R.style.TextView_PostStyle);
+        TextView view = new TextView(container.getContext());
+        view.setTextSize(23);
+        view.setPadding(U.dp2px(48), 0, U.dp2px(48), 0);
+        view.setTextColor(Color.WHITE);
+        view.setGravity(Gravity.CENTER);
         view.setText(paged.get(position));
         container.addView(view);
         return view;
