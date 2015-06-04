@@ -18,4 +18,7 @@ public class PraisedUser extends BaseUser {
 
   @SerializedName("createTime")
   public long timestamp;
+
+  @SerializedName("praised")
+  public int praised;
 }

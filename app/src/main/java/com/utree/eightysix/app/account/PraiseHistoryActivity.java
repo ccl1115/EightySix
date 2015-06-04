@@ -27,6 +27,7 @@ import com.utree.eightysix.data.PraisedUser;
 import com.utree.eightysix.response.PraisedUsersResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.TimeUtil;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.AsyncImageViewWithRoundCorner;
@@ -153,7 +154,7 @@ public class PraiseHistoryActivity extends BaseActivity {
     finish();
   }
 
-  public static class PraiseHistoryAdapter extends BaseAdapter {
+  public class PraiseHistoryAdapter extends BaseAdapter {
 
     private List<PraisedUser> mPraisedUserList;
 
@@ -193,7 +194,7 @@ public class PraiseHistoryActivity extends BaseActivity {
     }
   }
 
-  public static class ViewHolder {
+  public class ViewHolder {
 
     @InjectView(R.id.tv_name)
     public TextView mTvName;
@@ -209,11 +210,27 @@ public class PraiseHistoryActivity extends BaseActivity {
 
     @InjectView(R.id.aiv_portrait)
     public AsyncImageViewWithRoundCorner mAivPortrait;
+
+    @InjectView(R.id.tv_praise)
+    public TextView mTvPraise;
+
     private PraisedUser mUser;
 
-    @OnClick(R.id.aiv_portrait)
-    public void onAivPortraitClicked(View v) {
-      ProfileFragment.start(v.getContext(), mUser.viewId, "");
+    @OnClick(R.id.tv_praise)
+    public void onTvPraiseClicked() {
+      U.request("user_praise_add", new OnResponse2<Response>() {
+        @Override
+        public void onResponseError(Throwable e) {
+
+        }
+
+        @Override
+        public void onResponse(Response response) {
+          mUser.praised = 1;
+          U.showToast("已回赞成功，对方经验+1");
+          setData(mUser);
+        }
+      }, Response.class, mUser.viewId);
     }
 
     public void setData(PraisedUser user) {
@@ -223,6 +240,20 @@ public class PraiseHistoryActivity extends BaseActivity {
       mTvTimestamp.setText(TimeUtil.getElapsed(mUser.timestamp));
       mTvCircleName.setText(mUser.workinFactory);
       mAivPortrait.setUrl(mUser.avatar);
+
+      if (mViewId == null) {
+        mTvPraise.setVisibility(View.VISIBLE);
+
+        if (mUser.praised == 1) {
+          mTvPraise.setText("已回赞");
+          mTvPraise.setEnabled(false);
+        } else if (mUser.praised == 0) {
+          mTvPraise.setText("回赞");
+          mTvPraise.setEnabled(true);
+        }
+      } else {
+        mTvPraise.setVisibility(View.INVISIBLE);
+      }
     }
 
     public ViewHolder(View view) {

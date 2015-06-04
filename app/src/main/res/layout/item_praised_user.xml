@@ -64,12 +64,25 @@
             android:id="@+id/tv_timestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_margin="8dp"
-            android:layout_alignTop="@+id/tv_name"
+            android:layout_toRightOf="@+id/tv_circle_name"
+            android:layout_toEndOf="@+id/tv_circle_name"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_alignTop="@+id/tv_circle_name"
             android:textSize="12sp"
             android:textColor="@color/apptheme_primary_grey_color_200"
+            />
+
+    <TextView
+            style="@style/border_outline_secondary_dark_color_btn"
+            android:id="@+id/tv_praise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="16dp"
+            android:text="回赞"
             />
 
     <View
