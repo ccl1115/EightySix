@@ -16,6 +16,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
@@ -41,6 +42,7 @@ public class PraiseHistoryActivity extends BaseActivity {
 
   private static final int PAGE_SIZE = 20;
   private Integer mViewId;
+  private PraiseHistoryAdapter mAdapter;
 
   public static void start(Context context, int viewId, String gender) {
     Intent intent = new Intent(context, PraiseHistoryActivity.class);
@@ -63,6 +65,13 @@ public class PraiseHistoryActivity extends BaseActivity {
 
   public int mPage = 1;
   public boolean mHasMore;
+
+  @OnItemClick(R.id.alv_praised_users)
+  public void onAlvPraisedUsersItemClicked(int position) {
+    PraisedUser item = mAdapter.getItem(position);
+
+    ProfileFragment.start(this, item.viewId, item.userName);
+  }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -124,7 +133,8 @@ public class PraiseHistoryActivity extends BaseActivity {
             mAlvPraisedUsers.setAdapter(null);
           } else {
             mRstvEmpty.setVisibility(View.GONE);
-            mAlvPraisedUsers.setAdapter(new PraiseHistoryAdapter(response.object));
+            mAdapter = new PraiseHistoryAdapter(response.object);
+            mAlvPraisedUsers.setAdapter(mAdapter);
           }
         }
         hideProgressBar();

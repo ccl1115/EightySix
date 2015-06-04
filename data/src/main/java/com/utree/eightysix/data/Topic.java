@@ -50,6 +50,7 @@ public class Topic implements Parcelable {
     dest.writeString(this.content);
     dest.writeTypedList(tags);
     dest.writeInt(this.postCount);
+    dest.writeString(this.topicDesc);
   }
 
   private Topic(Parcel in) {
@@ -59,6 +60,7 @@ public class Topic implements Parcelable {
     this.content = in.readString();
     in.readTypedList(tags, Tag.CREATOR);
     this.postCount = in.readInt();
+    this.topicDesc = in.readString();
   }
 
   public static final Creator<Topic> CREATOR = new Creator<Topic>() {

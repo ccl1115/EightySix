@@ -130,8 +130,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="蓝莓风云榜"
-                    android:drawableLeft="@drawable/ic_item_search_post"
-                    android:drawableStart="@drawable/ic_item_search_post"
+                    android:drawableLeft="@drawable/ic_item_ladder"
+                    android:drawableStart="@drawable/ic_item_ladder"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
                     />

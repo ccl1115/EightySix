@@ -57,23 +57,13 @@
             android:maxEms="8"
             android:ellipsize="end"
             android:textSize="14sp"
+            android:textColor="@color/apptheme_primary_grey_color_200"
             android:singleLine="true"
-            />
-
-    <ImageView
-            android:id="@+id/iv_arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/ll_rank"
-            android:layout_toStartOf="@+id/ll_rank"
             />
 
     <LinearLayout
             android:id="@+id/ll_rank"
-            android:layout_width="100dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
@@ -90,6 +80,13 @@
                 android:layout_marginEnd="16dp"
                 />
 
+        <ImageView
+                android:id="@+id/iv_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                />
+
         <TextView
                 android:id="@+id/tv_exp"
                 android:layout_width="0dp"
@@ -98,6 +95,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginEnd="16dp"
                 android:textSize="12sp"
+                android:textColor="@color/apptheme_primary_grey_color_200"
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:gravity="end"

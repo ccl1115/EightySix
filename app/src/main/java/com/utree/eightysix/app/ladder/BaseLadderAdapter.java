@@ -167,6 +167,8 @@ public class BaseLadderAdapter extends BaseAdapter {
         mIvArrow.setImageResource(R.drawable.ic_arrow_up);
       } else if ("down".equals(user.change)) {
         mIvArrow.setImageResource(R.drawable.ic_arrow_down);
+      } else {
+        mIvArrow.setImageResource(0);
       }
     }
   }

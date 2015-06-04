@@ -210,6 +210,11 @@ public class ProfileFragment extends HolderFragment {
     SignaturesActivity.start(getActivity(), mIsVisitor, mViewId, mProfile == null ? "女" : mProfile.sex);
   }
 
+  @OnClick(R.id.ll_praise_me)
+  public void onLlPraiseClicked(View v) {
+    PraiseHistoryActivity.start(v.getContext(), mIsVisitor ? mViewId : -1, mIsVisitor ? mProfile.sex : "");
+  }
+
   @OnClick(R.id.tv_my_posts)
   public void onMyPostsClicked() {
     if (mIsVisitor && !isSelf()) {
@@ -284,6 +289,8 @@ public class ProfileFragment extends HolderFragment {
           mTvExp.setText(String.format("%d/%d",
               mProfile.experience + response.object.experience, mProfile.nextExperience));
           mPbExp.setProgress(mProfile.experience + response.object.experience);
+
+          U.showToast("点赞成功，为主人经验+1");
 
           if (mIsVisitor) {
             if ("男".equals(mProfile.sex)) {
@@ -1015,6 +1022,7 @@ public class ProfileFragment extends HolderFragment {
 
       TextView tv = new TextView(getActivity());
       tv.setText("更多>");
+      tv.setTextColor(getResources().getColor(R.color.apptheme_primary_grey_color_200));
       LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
       lp.gravity = Gravity.CENTER_VERTICAL;
       tv.setLayoutParams(lp);

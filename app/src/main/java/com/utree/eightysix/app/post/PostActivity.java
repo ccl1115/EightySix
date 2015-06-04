@@ -794,6 +794,8 @@ public class PostActivity extends BaseActivity
           }
 
           U.getBus().post(mPost);
+        } else if ((response.code & 0xffff) == 0x2120) {
+          finish();
         } else {
           if (mPostCommentsAdapter != null && mPostCommentsAdapter.getCount() == 1) {
             mPostCommentsAdapter.setNeedReload(true);

@@ -310,8 +310,10 @@ public class PublishActivity extends BaseActivity implements
     mCbAnonymous.setChecked(Account.inst().getPostAnonymous());
 
     if (Account.inst().getPostAnonymous()) {
-      mEtTempName.setVisibility(View.VISIBLE);
-      mIvTempName.setVisibility(View.VISIBLE);
+      if (mSendType == 0) {
+        mEtTempName.setVisibility(View.VISIBLE);
+        mIvTempName.setVisibility(View.VISIBLE);
+      }
     } else {
       mEtTempName.setVisibility(View.INVISIBLE);
       mIvTempName.setVisibility(View.INVISIBLE);
@@ -329,8 +331,10 @@ public class PublishActivity extends BaseActivity implements
         Account.inst().setPostAnonymous(checked);
 
         if (checked) {
-          mEtTempName.setVisibility(View.VISIBLE);
-          mIvTempName.setVisibility(View.VISIBLE);
+          if (mSendType == 0) {
+            mEtTempName.setVisibility(View.VISIBLE);
+            mIvTempName.setVisibility(View.VISIBLE);
+          }
         } else {
           mEtTempName.setVisibility(View.INVISIBLE);
           mIvTempName.setVisibility(View.INVISIBLE);
@@ -424,7 +428,8 @@ public class PublishActivity extends BaseActivity implements
 
         mPostEditText.getSelectionStart();
 
-        mRbPage.setText(String.valueOf(mPostEditText.getLineCount() / 7) + 1);
+        mRbPage.setVisibility(View.VISIBLE);
+        mRbPage.setText(String.valueOf(mPostEditText.getLineCount() / 7 + 1));
       }
 
       @Override

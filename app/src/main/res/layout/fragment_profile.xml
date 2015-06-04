@@ -325,7 +325,12 @@
                                 android:id="@+id/tv_praise_me"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="8dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:drawableLeft="@drawable/ic_item_my_praises"
+                                android:drawableStart="@drawable/ic_item_my_praises"
+                                android:drawablePadding="10dp"
+                                android:gravity="center_vertical"
                                 />
 
                         <View
