@@ -79,6 +79,8 @@ public abstract class AbsRegionFragment extends BaseFragment {
    */
   private boolean mCircleSelected;
 
+  protected abstract int getType();
+
   public void requestRegion(int regionType) {
     mMode = MODE_REGION;
     mRegionType = regionType;

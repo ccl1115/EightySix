@@ -64,7 +64,7 @@ public class FeedRegionAdapter extends BaseAdapter {
 
   public FeedRegionAdapter(FeedsByRegion feeds, FeedsByRegionResponse.Extra extra) {
     this(feeds);
-    if (feeds.circle != null && feeds.current == 1) {
+    if (feeds.circle != null && feeds.current == 1 && extra != null) {
       mFeeds.posts.lists.add(0, new FeedSign(extra));
     }
   }

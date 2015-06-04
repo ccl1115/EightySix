@@ -32,6 +32,11 @@ public class HotFeedRegionFragment extends AbsRegionFragment {
   }
 
   @Override
+  protected int getType() {
+    return 1;
+  }
+
+  @Override
   protected void requestRegionFeeds(final int regionType, int distance, int areaType, int areaId, final int page) {
     if (getBaseActivity() == null) return;
     if (mRefresherView != null && page == 1) {
@@ -50,7 +55,7 @@ public class HotFeedRegionFragment extends AbsRegionFragment {
       public void onResponse(FeedsByRegionResponse response) {
         responseForFeedsByRegionRequest(response, page);
       }
-    }, FeedsByRegionResponse.class, page, regionType, 1, distance, null, null);
+    }, FeedsByRegionResponse.class, page, regionType, getType(), distance, null, null);
   }
 
   @Override

@@ -33,6 +33,11 @@ public class FriendsFeedRegionFragment extends AbsRegionFragment {
   }
 
   @Override
+  protected int getType() {
+    return 2;
+  }
+
+  @Override
   protected void requestRegionFeeds(final int regionType, int distance, int areaType, int areaId, final int page) {
     if (getBaseActivity() == null) return;
     if (mRefresherView != null && page == 1) {
@@ -51,7 +56,7 @@ public class FriendsFeedRegionFragment extends AbsRegionFragment {
       public void onResponse(FeedsByRegionResponse response) {
         responseForFeedsByRegionRequest(response, page);
       }
-    }, FeedsByRegionResponse.class, page, regionType, 2, distance, null, null);
+    }, FeedsByRegionResponse.class, page, regionType, getType(), distance, null, null);
   }
 
   @Override
