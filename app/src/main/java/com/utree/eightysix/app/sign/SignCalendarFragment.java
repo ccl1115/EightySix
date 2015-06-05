@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -68,6 +69,9 @@ public class SignCalendarFragment extends BaseFragment {
 
   @InjectView(R.id.iv_right)
   public ImageView mIvRight;
+
+  @InjectView(R.id.ll_parent)
+  public LinearLayout mLlParent;
 
   private int mFactoryId;
   private int mPage = 1;
@@ -144,42 +148,50 @@ public class SignCalendarFragment extends BaseFragment {
     });
 
     mFlParent.requestFocus();
-
   }
 
   private void requestSignCalendar() {
     U.request("userfactory_sign", new OnResponse2<SignCalendarResponse>() {
       @Override
       public void onResponseError(Throwable e) {
-
+        getFragmentManager().beginTransaction()
+            .remove(SignCalendarFragment.this)
+            .commit();
       }
 
       @Override
       public void onResponse(final SignCalendarResponse response) {
+        if (RESTRequester.responseOk(response)) {
+          mLlParent.setVisibility(View.VISIBLE);
 
-        mTvInfo.setText(String.format("你已连续打卡%d天，近一个月漏打卡%d天",
-            response.extra.signConsecutiveTimes, response.extra.signMissingTimes));
+          mTvInfo.setText(String.format("你已连续打卡%d天，近一个月漏打卡%d天",
+              response.extra.signConsecutiveTimes, response.extra.signMissingTimes));
 
-        List<SignCalendarResponse.SignDate> object = response.object;
-        int index = 0;
-        for (int i = object.size() - 1; i >= 0; i--) {
-          final SignCalendarResponse.SignDate date = object.get(i);
-          mTvDates[index].setText(date.date.split("\\.", 2)[1] + "\n" + (date.signed == 1 ? "已打卡" : "未打卡"));
-          if (date.signed == 1) {
-            mTvDates[index].setBackgroundColor(Color.WHITE);
-            mTvDates[index].setOnClickListener(null);
-          } else {
-            mTvDates[index].setBackgroundColor(getResources().getColor(R.color.apptheme_primary_light_color_100));
-            if (!(mPage == 1 && i == 0)) {
-              mTvDates[index].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                  showSignDialog(date.date, response.extra.costBluestar);
-                }
-              });
+          List<SignCalendarResponse.SignDate> object = response.object;
+          int index = 0;
+          for (int i = object.size() - 1; i >= 0; i--) {
+            final SignCalendarResponse.SignDate date = object.get(i);
+            mTvDates[index].setText(date.date.split("\\.", 2)[1] + "\n" + (date.signed == 1 ? "已打卡" : "未打卡"));
+            if (date.signed == 1) {
+              mTvDates[index].setBackgroundColor(Color.WHITE);
+              mTvDates[index].setOnClickListener(null);
+            } else {
+              mTvDates[index].setBackgroundColor(getResources().getColor(R.color.apptheme_primary_light_color_100));
+              if (!(mPage == 1 && i == 0)) {
+                mTvDates[index].setOnClickListener(new View.OnClickListener() {
+                  @Override
+                  public void onClick(View v) {
+                    showSignDialog(date.date, response.extra.costBluestar);
+                  }
+                });
+              }
             }
+            index++;
           }
-          index++;
+        } else {
+          getFragmentManager().beginTransaction()
+              .remove(SignCalendarFragment.this)
+              .commit();
         }
       }
     }, SignCalendarResponse.class, mFactoryId, mPage);
