@@ -37,6 +37,7 @@ import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.AsyncImageViewWithRoundCorner;
+import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.ViewHighlighter;
 
 import java.util.List;
@@ -105,6 +106,9 @@ public class FeedPostView extends LinearLayout {
 
   @InjectView(R.id.aiv_level_icon)
   public AsyncImageView mAivLevelIcon;
+
+  @InjectView(R.id.rb_long_text)
+  public RoundedButton mRbLongText;
 
   private Post mPost;
 
@@ -261,9 +265,10 @@ public class FeedPostView extends LinearLayout {
       return;
     }
 
-    String content = post.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content;
+    com.utree.eightysix.utils.TextUtils.setPostText(mTvContent, mPost.content, mPost.topicId);
+    
+    mRbLongText.setVisibility(mPost.content.length() > 77 ? VISIBLE : GONE);
 
-    com.utree.eightysix.utils.TextUtils.setPostText(mTvContent, content, 0);
     if (post.comments > 0) {
       mTvComment.setText(String.valueOf(post.comments));
     } else {

@@ -86,7 +86,7 @@ public class FeedTopicView extends FrameLayout {
     if (Account.inst().getCurrentCircle() != null) {
       TopicListActivity.start(getContext());
       TopicActivity.start(getContext(), getTopic());
-      PublishActivity.startWithTopicId(getContext(), mTopic.id, mTopic.tags);
+      PublishActivity.startWithTopicId(getContext(), mTopic.id, mTopic.tags, mTopic.hint);
     } else {
       U.showToast("还没有在职工厂，不能发话题帖哦");
     }

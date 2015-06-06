@@ -138,6 +138,27 @@
                 android:ellipsize="end"
                 />
 
+        <com.utree.eightysix.widget.RoundedButton
+                android:id="@+id/rb_long_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="48dp"
+                android:text="长文本"
+                android:textSize="12sp"
+                android:textColor="@android:color/white"
+                android:paddingLeft="8dp"
+                android:paddingTop="2dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="2dp"
+                android:visibility="gone"
+                app:background="@color/translucent_200"
+                app:radius="4dp"
+                />
+
+
         <LinearLayout
                 android:id="@+id/fl_grid_panel"
                 android:orientation="horizontal"

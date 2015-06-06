@@ -133,7 +133,7 @@ public class TopicActivity extends BaseActivity {
       @Override
       public void onSendClicked() {
         if (Account.inst().getCurrentCircle() != null) {
-          PublishActivity.startWithTopicId(TopicActivity.this, mTopic.id, mTopic.tags);
+          PublishActivity.startWithTopicId(TopicActivity.this, mTopic.id, mTopic.tags, mTopic.hint);
         } else {
           U.showToast("还没有在职工厂，不能发话题帖哦");
         }

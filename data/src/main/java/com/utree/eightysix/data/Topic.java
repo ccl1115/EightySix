@@ -35,6 +35,9 @@ public class Topic implements Parcelable {
   @SerializedName("topicDesc")
   public String topicDesc;
 
+  @SerializedName("topicHit")
+  public String hint;
+
   public Topic() {
   }
 

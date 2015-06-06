@@ -170,12 +170,13 @@ public class PublishActivity extends BaseActivity implements
     context.startActivity(intent);
   }
 
-  public static void startWithTopicId(Context context, int topicId, List<Tag> tags) {
+  public static void startWithTopicId(Context context, int topicId, List<Tag> tags, String hint) {
     Intent intent = new Intent(context, PublishActivity.class);
     intent.putExtra("topicId", topicId);
     if (tags != null) {
       intent.putParcelableArrayListExtra("tags", (ArrayList<? extends Parcelable>) tags);
     }
+    intent.putExtra("hint", hint);
 
     if (!(context instanceof Activity)) {
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -295,6 +296,11 @@ public class PublishActivity extends BaseActivity implements
     mTopicId = getIntent().getIntExtra("topicId", -1);
 
     mSendType = getIntent().getIntExtra("sendType", 0);
+
+    final String hint = getIntent().getStringExtra("hint");
+    if (hint != null) {
+      mPostEditText.setHint(hint);
+    }
 
     mPublishLayout = new PublishLayout(this);
     setContentView(mPublishLayout);

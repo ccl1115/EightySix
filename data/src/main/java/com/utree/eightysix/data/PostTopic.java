@@ -22,4 +22,6 @@ public class PostTopic extends BaseItem {
   @SerializedName("id")
   public int id;
 
+  @SerializedName("topicHit")
+  public String hint;
 }
