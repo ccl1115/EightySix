@@ -10,13 +10,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -26,6 +28,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.FragmentHolder;
 import com.utree.eightysix.app.account.AddFriendActivity;
+import com.utree.eightysix.app.account.AddFriendActivity.GetInviteCodeResponse;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.dp.DailyPicksActivity;
 import com.utree.eightysix.app.feed.FeedsSearchActivity;
@@ -36,18 +39,19 @@ import com.utree.eightysix.app.topic.TopicListActivity;
 import com.utree.eightysix.app.web.BaseWebActivity;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.data.Topic;
+import com.utree.eightysix.qrcode.QRCodeScanFragment;
 import com.utree.eightysix.response.TagsResponse;
 import com.utree.eightysix.response.TopicListResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.Env;
-import com.utree.eightysix.widget.AsyncImageViewWithRoundCorner;
-import com.utree.eightysix.widget.IndicatorView;
-import com.utree.eightysix.widget.RoundedButton;
-import com.utree.eightysix.widget.TagView;
+import com.utree.eightysix.widget.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  */
@@ -76,6 +80,10 @@ public class ExploreFragment extends BaseFragment {
   private Handler mHandler = new Handler();
 
   private long mLastRefreshTimestamp;
+
+  private ListPopupWindow mListPopupWindow;
+
+  private QRCodeScanFragment mQRCodeScanFragment;
 
   private Runnable mCarousel = new Runnable() {
 
@@ -205,8 +213,103 @@ public class ExploreFragment extends BaseFragment {
     getBaseActivity().getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        Intent intent = new Intent(getActivity(), AddFriendActivity.class);
-        getActivity().startActivity(intent);
+        if (mListPopupWindow == null) {
+          mListPopupWindow = new ListPopupWindow(v.getContext());
+          String[] items = {
+              "添加朋友",
+              "扫一扫",
+              "邀请朋友，赚蓝星",
+              "分享蓝莓"
+          };
+
+          List<Map<String, String>> data = new ArrayList<Map<String, String>>(items.length);
+
+          for (String i : items) {
+            Map<String, String> item = new HashMap<String, String>();
+            item.put("text", i);
+            data.add(item);
+          }
+
+          mListPopupWindow.setAdapter(new SimpleAdapter(v.getContext(),
+              data,
+              android.R.layout.simple_list_item_1,
+              new String[]{"text"},
+              new int[]{android.R.id.text1}));
+          mListPopupWindow.setWidth(U.dp2px(200));
+          mListPopupWindow.setDropDownGravity(Gravity.RIGHT);
+          mListPopupWindow.setAnchorView(getTopBar());
+          mListPopupWindow.setModal(true);
+
+          mListPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+              switch (position) {
+                case 0:
+                  getActivity().startActivity(new Intent(getActivity(), AddFriendActivity.class));
+                  break;
+                case 1:
+                  if (mQRCodeScanFragment == null) {
+                    mQRCodeScanFragment = new QRCodeScanFragment();
+                    getFragmentManager().beginTransaction()
+                        .add(android.R.id.content, mQRCodeScanFragment)
+                        .commit();
+                  } else if (mQRCodeScanFragment.isDetached()) {
+                    getFragmentManager().beginTransaction()
+                        .attach(mQRCodeScanFragment)
+                        .commit();
+                  }
+                  break;
+                case 2:
+                  getBaseActivity().showProgressBar(true);
+
+                  U.request("get_invite_code", new OnResponse2<GetInviteCodeResponse>() {
+                    @Override
+                    public void onResponseError(Throwable e) {
+                      getBaseActivity().hideProgressBar();
+                    }
+
+                    @Override
+                    public void onResponse(GetInviteCodeResponse response) {
+                      getBaseActivity().hideProgressBar();
+                      final ThemedDialog dialog = new ThemedDialog(getBaseActivity());
+                      dialog.setTitle("你的专属邀请码");
+
+                      TextView textView = new TextView(getBaseActivity());
+                      SpannableStringBuilder builder = new SpannableStringBuilder();
+                      builder.append(response.object.msg).append("\n\n").append("你的专属邀请码是：\n");
+                      SpannableString color = new SpannableString(response.object.inviteCode);
+                      color.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.apptheme_primary_light_color)), 0, color.length(), 0);
+                      builder.append(color);
+                      builder.append("\n\n").append("你已经邀请了").append(String.valueOf(response.object.newCount)).append("个人\n");
+
+                      textView.setText(builder);
+                      textView.setGravity(Gravity.CENTER);
+                      textView.setEms(12);
+                      textView.setPadding(U.dp2px(16), U.dp2px(8), U.dp2px(16), U.dp2px(8));
+                      textView.setTextSize(16);
+                      dialog.setContent(textView);
+                      dialog.setPositive("知道啦", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                          dialog.dismiss();
+                        }
+                      });
+
+                      dialog.show();
+                    }
+                  }, GetInviteCodeResponse.class, null, null);
+                  break;
+                case 3:
+                  U.getShareManager().shareAppDialog(getBaseActivity(), Account.inst().getCurrentCircle()).show();
+                  break;
+              }
+
+              mListPopupWindow.dismiss();
+            }
+          });
+        }
+
+        mListPopupWindow.show();
       }
     });
     getBaseActivity().getTopBar().getAbLeft().hide();

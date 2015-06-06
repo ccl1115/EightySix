@@ -24,6 +24,7 @@ import com.utree.eightysix.push.PushHelper;
 import com.utree.eightysix.push.XGPushHelper;
 import com.utree.eightysix.qrcode.ActionDispatcher;
 import com.utree.eightysix.qrcode.actions.AddFriendAction;
+import com.utree.eightysix.qrcode.actions.UrlAction;
 import com.utree.eightysix.report.Reporter;
 import com.utree.eightysix.report.ReporterImpl;
 import com.utree.eightysix.rest.IRESTRequester;
@@ -412,6 +413,7 @@ public class U {
     if (sActionDispatcher == null) {
       sActionDispatcher = new ActionDispatcher();
       sActionDispatcher.register(new AddFriendAction());
+      sActionDispatcher.register(new UrlAction());
     }
 
     return sActionDispatcher;
