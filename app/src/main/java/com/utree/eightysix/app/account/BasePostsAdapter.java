@@ -37,7 +37,9 @@ public class BasePostsAdapter extends BaseAdapter {
 
   private List<Post[]> mFeeds;
 
-  public BasePostsAdapter(List<Post> feeds) {
+  private int mType;
+
+  public BasePostsAdapter(List<Post> feeds, int type) {
     if (feeds.size() % 2 != 0) {
       feeds.add(null);
     }
@@ -47,6 +49,8 @@ public class BasePostsAdapter extends BaseAdapter {
     for (int i = 0, size = feeds.size(); i < size; i += 2) {
       mFeeds.add(new Post[]{feeds.get(i), feeds.get(i + 1)});
     }
+
+    mType = type;
   }
 
   public void add(List<Post> feeds) {
@@ -169,7 +173,7 @@ public class BasePostsAdapter extends BaseAdapter {
     }
 
     private boolean showToRealnameDialog(View v, final Post post) {
-      if (!TextUtils.isEmpty(post.userName)) {
+      if (mType == 1) {
         return false;
       }
 

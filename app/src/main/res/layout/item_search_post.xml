@@ -38,7 +38,7 @@
                 />
 
 
-        <TextView
+        <com.rockerhieu.emojicon.EmojiconTextView
                 android:id="@+id/tv_content_left"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -47,7 +47,7 @@
                 android:padding="10dp"
                 android:textSize="12sp"
                 android:textColor="@android:color/white"
-                android:maxLines="10"
+                android:maxLines="7"
                 />
 
         <LinearLayout
@@ -142,7 +142,7 @@
                 android:background="#44000000"
                 />
 
-        <TextView
+        <com.rockerhieu.emojicon.EmojiconTextView
                 android:id="@+id/tv_content_right"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -151,7 +151,7 @@
                 android:padding="10dp"
                 android:textSize="12sp"
                 android:textColor="@android:color/white"
-                android:maxLines="10"
+                android:maxLines="7"
                 />
 
         <LinearLayout

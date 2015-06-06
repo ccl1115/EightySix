@@ -135,7 +135,7 @@ public class VisitorPostsActivity extends BaseActivity {
               mRstvEmpty.setVisibility(View.VISIBLE);
             } else {
               mRstvEmpty.setVisibility(View.GONE);
-              mAdapter = new BasePostsAdapter(response.object);
+              mAdapter = new BasePostsAdapter(response.object, 1);
               mAlvPosts.setAdapter(mAdapter);
             }
           } else {

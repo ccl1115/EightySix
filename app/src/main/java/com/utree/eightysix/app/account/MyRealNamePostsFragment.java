@@ -21,6 +21,11 @@ public class MyRealNamePostsFragment extends BasePostsFragment {
 
 
   @Override
+  protected int getType() {
+    return 1;
+  }
+
+  @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
@@ -44,6 +49,6 @@ public class MyRealNamePostsFragment extends BasePostsFragment {
       public void onResponse(MyPostsResponse response) {
         responseForPosts(response);
       }
-    }, MyPostsResponse.class, null, 1, mPage, PAGE_SIZE);
+    }, MyPostsResponse.class, null, getType(), mPage, PAGE_SIZE);
   }
 }

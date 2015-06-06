@@ -31,12 +31,6 @@ import java.util.List;
  */
 public class FeedTopicView extends FrameLayout {
 
-  @InjectView(R.id.tv_head)
-  public TextView mTvHead;
-
-  @InjectView(R.id.tv_more)
-  public TextView mTvMore;
-
   @InjectView(R.id.tv_content)
   public TextView mTvContent;
 
@@ -98,12 +92,6 @@ public class FeedTopicView extends FrameLayout {
     }
   }
 
-  @OnClick(R.id.tv_more)
-  public void onTvMoreClicked() {
-    U.getAnalyser().trackEvent(getContext(), "feed_topic_more", "feed_topic_more");
-    TopicListActivity.start(getContext());
-  }
-
   @OnClick(R.id.tv_tag_1)
   public void onTvTag1Clicked() {
     FeedsSearchActivity.start(getContext(), mTopic.tags.get(0).content);
@@ -119,7 +107,6 @@ public class FeedTopicView extends FrameLayout {
 
     mTopic = topic;
 
-    mTvHead.setText(topic.headTitle);
     mTvContent.setText(topic.content);
 
     if (TextUtils.isEmpty(topic.content)) {

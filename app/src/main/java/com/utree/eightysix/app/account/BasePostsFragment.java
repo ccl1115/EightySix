@@ -41,6 +41,8 @@ public abstract class BasePostsFragment extends BaseFragment {
 
   protected BasePostsAdapter mAdapter;
 
+  protected abstract int getType();
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     return inflater.inflate(R.layout.fragment_my_anonymous_posts, container, false);
@@ -117,7 +119,7 @@ public abstract class BasePostsFragment extends BaseFragment {
           mRstvEmpty.setVisibility(View.VISIBLE);
         } else {
           mRstvEmpty.setVisibility(View.GONE);
-          mAdapter = new BasePostsAdapter(response.object);
+          mAdapter = new BasePostsAdapter(response.object, getType());
           mAlvPosts.setAdapter(mAdapter);
         }
       } else {
