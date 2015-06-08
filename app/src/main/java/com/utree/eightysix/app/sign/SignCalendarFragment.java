@@ -173,9 +173,11 @@ public class SignCalendarFragment extends BaseFragment {
             final SignCalendarResponse.SignDate date = object.get(i);
             mTvDates[index].setText(date.date.split("\\.", 2)[1] + "\n" + (date.signed == 1 ? "已打卡" : "未打卡"));
             if (date.signed == 1) {
+              mTvDates[index].setTextColor(0xffd4145a);
               mTvDates[index].setBackgroundColor(Color.WHITE);
               mTvDates[index].setOnClickListener(null);
             } else {
+              mTvDates[index].setTextColor(Color.BLACK);
               mTvDates[index].setBackgroundColor(getResources().getColor(R.color.apptheme_primary_light_color_100));
               if (!(mPage == 1 && i == 0)) {
                 mTvDates[index].setOnClickListener(new View.OnClickListener() {
