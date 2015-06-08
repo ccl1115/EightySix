@@ -11,7 +11,6 @@ import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.FeedsRequest;
-import com.utree.eightysix.request.PostPraiseRequest;
 import com.utree.eightysix.response.FeedsResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.OnResponse2;
@@ -77,7 +76,14 @@ public class FeedFragment extends AbsFeedFragment {
       return;
     }
     mPostPraiseRequesting = true;
-    getBaseActivity().request(new PostPraiseRequest(event.getPost().id), new OnResponse2<Response>() {
+
+    U.request("post_praise", new OnResponse2<Response>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        mPostPraiseRequesting = false;
+
+      }
+
       @Override
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
@@ -93,12 +99,7 @@ public class FeedFragment extends AbsFeedFragment {
 
         mPostPraiseRequesting = false;
       }
-
-      @Override
-      public void onResponseError(Throwable e) {
-                                               mPostPraiseRequesting = false;
-                                                                                                                  }
-    }, Response.class);
+    }, Response.class, event.getPost().id);
   }
 
   @Subscribe

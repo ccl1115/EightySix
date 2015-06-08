@@ -575,7 +575,13 @@ public class PostActivity extends BaseActivity
   @Subscribe
   public void onPostCommentPraiseEvent(final PostCommentPraiseEvent event) {
     if (!event.isCancel()) {
-      request(new CommentPraiseRequest(mPost.id, event.getComment().id), new OnResponse<Response>() {
+
+      U.request("comment_praise", new OnResponse2<Response>() {
+        @Override
+        public void onResponseError(Throwable e) {
+
+        }
+
         @Override
         public void onResponse(Response response) {
           if (!RESTRequester.responseOk(response)) {
@@ -584,7 +590,7 @@ public class PostActivity extends BaseActivity
             mPostCommentsAdapter.notifyDataSetChanged();
           }
         }
-      }, Response.class);
+      }, Response.class, mPost.id, event.getComment().id);
     }
   }
 
@@ -592,7 +598,12 @@ public class PostActivity extends BaseActivity
   public void onPostPostPraiseEvent(final PostPostPraiseEvent event) {
 
     if (!event.isCancel()) {
-      request(new PostPraiseRequest(event.getPost().id), new OnResponse2<Response>() {
+      U.request("post_praise", new OnResponse2<Response>() {
+        @Override
+        public void onResponseError(Throwable e) {
+
+        }
+
         @Override
         public void onResponse(Response response) {
           if (RESTRequester.responseOk(response)) {
@@ -605,17 +616,18 @@ public class PostActivity extends BaseActivity
           }
           mPostCommentsAdapter.notifyDataSetChanged();
         }
-
-        @Override
-        public void onResponseError(Throwable e) {
-        }
-      }, Response.class);
+      }, Response.class, event.getPost().id);
     }
   }
 
   @Subscribe
   public void onPostCommentDeleteRequest(final PostCommentDeleteRequest request) {
-    request(request, new OnResponse<CommentDeleteResponse>() {
+    U.request("comment_delete", new OnResponse2<CommentDeleteResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
       @Override
       public void onResponse(CommentDeleteResponse response) {
         if (RESTRequester.responseOk(response)) {
@@ -630,7 +642,7 @@ public class PostActivity extends BaseActivity
           }
         }
       }
-    }, CommentDeleteResponse.class);
+    }, CommentDeleteResponse.class, request.postId, request.commentId);
   }
 
   @Subscribe
@@ -647,7 +659,12 @@ public class PostActivity extends BaseActivity
 
   @Subscribe
   public void onPostDeleteRequest(PostDeleteRequest request) {
-    request(request, new OnResponse<Response>() {
+    U.request("post_delete", new OnResponse2<Response>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
       @Override
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
@@ -655,7 +672,7 @@ public class PostActivity extends BaseActivity
           finish();
         }
       }
-    }, Response.class);
+    }, Response.class, request.postId);
   }
 
   @Subscribe

@@ -29,7 +29,6 @@ import com.utree.eightysix.app.region.FeedRegionAdapter;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.drawable.RoundRectDrawable;
-import com.utree.eightysix.request.PostDeleteRequest;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
@@ -184,7 +183,7 @@ public class FeedPostView extends LinearLayout {
                     break;
                   case 3:
                     U.getAnalyser().trackEvent(U.getContext(), "post_more_delete", "post_more_delete");
-                    U.getRESTRequester().request(new PostDeleteRequest(mPost.id), new OnResponse2<Response>() {
+                    U.request("post_delete", new OnResponse2<Response>() {
                       @Override
                       public void onResponseError(Throwable e) {
 
@@ -196,7 +195,7 @@ public class FeedPostView extends LinearLayout {
                           U.getBus().post(new PostDeleteEvent(mPost));
                         }
                       }
-                    }, Response.class);
+                    }, Response.class, mPost.id);
                     break;
                 }
               }

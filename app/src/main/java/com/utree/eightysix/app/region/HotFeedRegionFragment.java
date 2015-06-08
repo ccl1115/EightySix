@@ -13,7 +13,6 @@ import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.FeedByRegionRequest;
 import com.utree.eightysix.request.FeedsHotRequest;
-import com.utree.eightysix.request.PostPraiseRequest;
 import com.utree.eightysix.response.FeedsByRegionResponse;
 import com.utree.eightysix.response.FeedsResponse;
 import com.utree.eightysix.rest.OnResponse;
@@ -131,7 +130,13 @@ public class HotFeedRegionFragment extends AbsRegionFragment {
       return;
     }
     mPostPraiseRequesting = true;
-    getBaseActivity().request(new PostPraiseRequest(event.getPost().id), new OnResponse2<Response>() {
+
+    U.request("post_praise", new OnResponse2<Response>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        mPostPraiseRequesting = false;
+      }
+
       @Override
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
@@ -147,12 +152,7 @@ public class HotFeedRegionFragment extends AbsRegionFragment {
 
         mPostPraiseRequesting = false;
       }
-
-      @Override
-      public void onResponseError(Throwable e) {
-        mPostPraiseRequesting = false;
-      }
-    }, Response.class);
+    }, Response.class, event.getPost().id);
   }
 
   @Subscribe

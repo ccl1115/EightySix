@@ -40,7 +40,6 @@ public class C {
   public static final String API_FEED_LIST = "/feed/list.do";
   public static final String API_FEED_HOT_LIST = "/feed/listHot.do";
   public static final String API_FEED_FRIENDS_LIST = "/feed/listFriends.do";
-  public static final String API_FEED_PRAISE = "/feed/praise.do";
   public static final String API_FEED_PRAISE_CANCEL = "/feed/cancelPraise.do";
   public static final String API_FEED_SUBMIT_ANSWER = "/feed/submitAnswer.do";
   public static final String API_FEED_CHANGE_NAME = "/feed/changeName.do";
@@ -57,10 +56,8 @@ public class C {
   public static final String API_TOPIC_NEW = "/topic/new.do";
   public static final String API_TOPIC_FEATURE = "/topic/feature.do";
 
-  public static final String API_COMMENT_ADD = "/comment/add.do";
   public static final String API_COMMENT_DELETE = "/comment/delete.do";
   public static final String API_COMMENT_LIST = "/comment/list.do";
-  public static final String API_COMMENT_PRAISE = "/comment/praise.do";
   public static final String API_COMMENT_PRAISE_CANCEL = "/comment/cancelPraise.do";
   public static final String API_COMMENT_RECEIVE_STAR = "/comment/receiveStar.do";
   public static final String API_COMMENT_SHARE_CONTENT = "/comment/shareContent.do";

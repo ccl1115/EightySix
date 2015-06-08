@@ -565,4 +565,61 @@
             <param>realName</param>
         </params>
     </request>
+
+    <request>
+        <id>post_praise</id>
+        <name>帖子点赞</name>
+        <path>/commit/post/praise</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>postId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>comment_praise</id>
+        <name>评论点赞</name>
+        <path>/commit/comment/praise</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>postId</param>
+            <param>commentId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>post_delete</id>
+        <name>帖子删除</name>
+        <path>/commit/post/delete</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>postId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>comment_delete</id>
+        <name>评论删除</name>
+        <path>/commit/comment/delete</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>postId</param>
+            <param>commentId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>publish_post</id>
+        <name>发帖</name>
+        <path>/commit/post/create</path>
+        <sign/>
+        <token/>
+        <params>
+            <param></param>
+        </params>
+    </request>
 </api>
