@@ -447,7 +447,6 @@
         <token/>
         <params>
             <param>factoryId</param>
-            <param>page</param>
         </params>
     </request>
 

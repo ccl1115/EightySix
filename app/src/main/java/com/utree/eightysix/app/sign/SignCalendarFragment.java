@@ -23,16 +23,19 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.response.SignCalendarResponse;
+import com.utree.eightysix.response.SignCalendarResponse.SignDate;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.widget.ThemedDialog;
 
-import java.util.List;
+import java.util.Collections;
 
 /**
  */
 public class SignCalendarFragment extends BaseFragment {
+
+  private SignCalendarResponse mSignDates;
 
   public static void start(FragmentManager manager, int factoryId) {
     SignCalendarFragment fragment = new SignCalendarFragment();
@@ -74,6 +77,7 @@ public class SignCalendarFragment extends BaseFragment {
   public LinearLayout mLlParent;
 
   private int mFactoryId;
+
   private int mPage = 1;
 
   @OnClick(R.id.fl_parent)
@@ -85,36 +89,74 @@ public class SignCalendarFragment extends BaseFragment {
 
   @OnClick(R.id.iv_left)
   public void onIvLeftClicked() {
-    if (mPage < 3) {
-      mPage += 1;
-    }
+    final int size = mSignDates.object.size();
 
-    if (mPage == 3) {
+    if (mPage == 1 && size > 10) {
+      clearSignDates();
+
+      int end = mSignDates.object.size() - 10;
+      int index = 10 - Math.abs(end);
+      for (SignDate date : mSignDates.object.subList(Math.max(0, end - 10), end)) {
+        setSignDate(index, date);
+        index++;
+      }
+      mPage = 2;
+
+      if (size > 20) {
+        mIvLeft.setImageResource(R.drawable.ic_arrow_left);
+      } else {
+        mIvLeft.setImageResource(R.drawable.ic_arrow_left_grey);
+      }
+
+      mIvRight.setImageResource(R.drawable.ic_arrow_right);
+    } else if (mPage == 2 && size > 20) {
+      clearSignDates();
+
+      int end = mSignDates.object.size() - 20;
+      int index = 10 - end;
+      for (SignDate date : mSignDates.object.subList(Math.max(0, end - 10), end)) {
+        setSignDate(index, date);
+        index++;
+      }
+
+      mPage = 3;
+
       mIvLeft.setImageResource(R.drawable.ic_arrow_left_grey);
       mIvRight.setImageResource(R.drawable.ic_arrow_right);
-    } else {
-      mIvLeft.setImageResource(R.drawable.ic_arrow_left);
-      mIvRight.setImageResource(R.drawable.ic_arrow_right);
     }
-
-    requestSignCalendar();
   }
 
   @OnClick(R.id.iv_right)
   public void onIvRightClicked() {
-    if (mPage > 1) {
-      mPage -= 1;
-    }
 
-    if (mPage == 1) {
+    if (mPage == 2) {
+      clearSignDates();
+      int index = 0;
+      int end = mSignDates.object.size();
+      for (SignDate date : mSignDates.object.subList(Math.max(0, end - 10), end)) {
+        setSignDate(index, date);
+        index ++;
+      }
+
+      mPage = 1;
+
       mIvLeft.setImageResource(R.drawable.ic_arrow_left);
+
       mIvRight.setImageResource(R.drawable.ic_arrow_right_grey);
-    } else {
+    } else if (mPage == 3) {
+      clearSignDates();
+      int index = 0;
+      int end = mSignDates.object.size() - 10;
+      for (SignDate date : mSignDates.object.subList(Math.max(0, end - 10), end)) {
+        setSignDate(index, date);
+        index ++;
+      }
+
+      mPage = 2;
+
       mIvLeft.setImageResource(R.drawable.ic_arrow_left);
       mIvRight.setImageResource(R.drawable.ic_arrow_right);
     }
-
-    requestSignCalendar();
   }
 
   @Override
@@ -161,34 +203,27 @@ public class SignCalendarFragment extends BaseFragment {
 
       @Override
       public void onResponse(final SignCalendarResponse response) {
-        if (RESTRequester.responseOk(response)) {
+        if (RESTRequester.responseOk(response) && response.object != null) {
+          clearSignDates();
           mLlParent.setVisibility(View.VISIBLE);
 
           mTvInfo.setText(String.format("你已连续打卡%d天，近一个月漏打卡%d天",
               response.extra.signConsecutiveTimes, response.extra.signMissingTimes));
 
-          List<SignCalendarResponse.SignDate> object = response.object;
+          mSignDates = response;
+          Collections.reverse(mSignDates.object);
           int index = 0;
-          for (int i = object.size() - 1; i >= 0; i--) {
-            final SignCalendarResponse.SignDate date = object.get(i);
-            mTvDates[index].setText(date.date.split("\\.", 2)[1] + "\n" + (date.signed == 1 ? "已打卡" : "未打卡"));
-            if (date.signed == 1) {
-              mTvDates[index].setTextColor(0xffd4145a);
-              mTvDates[index].setBackgroundColor(Color.WHITE);
-              mTvDates[index].setOnClickListener(null);
-            } else {
-              mTvDates[index].setTextColor(Color.BLACK);
-              mTvDates[index].setBackgroundColor(getResources().getColor(R.color.apptheme_primary_light_color_100));
-              if (!(mPage == 1 && i == 0)) {
-                mTvDates[index].setOnClickListener(new View.OnClickListener() {
-                  @Override
-                  public void onClick(View v) {
-                    showSignDialog(date.date, response.extra.costBluestar);
-                  }
-                });
-              }
-            }
+          for (SignDate date : response.object.subList(Math.max(0, response.object.size() - 10), response.object.size())) {
+            setSignDate(index, date);
             index++;
+          }
+
+          mPage = 1;
+
+          if (mSignDates.object.size() > 10) {
+            mIvLeft.setImageResource(R.drawable.ic_arrow_left);
+          } else {
+            mIvLeft.setImageResource(R.drawable.ic_arrow_left_grey);
           }
         } else {
           getFragmentManager().beginTransaction()
@@ -196,7 +231,25 @@ public class SignCalendarFragment extends BaseFragment {
               .commit();
         }
       }
-    }, SignCalendarResponse.class, mFactoryId, mPage);
+    }, SignCalendarResponse.class, mFactoryId);
+  }
+
+  private void setSignDate(int index, final SignDate date) {
+    if (date.signed == 1) {
+      mTvDates[index].setTextColor(0xffd4145a);
+      mTvDates[index].setText(date.date.split("\\.", 2)[1] + "\n" + "已打卡");
+      mTvDates[index].setOnClickListener(null);
+    } else {
+      mTvDates[index].setTextColor(Color.BLACK);
+      mTvDates[index].setBackgroundColor(getResources().getColor(R.color.apptheme_primary_light_color_100));
+      mTvDates[index].setText(date.date.split("\\.", 2)[1] + "\n" + "漏打卡");
+      mTvDates[index].setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          showSignDialog(date.date, mSignDates.extra.costBluestar);
+        }
+      });
+    }
   }
 
   private void showSignDialog(final String date, int costBluestar) {
@@ -240,5 +293,12 @@ public class SignCalendarFragment extends BaseFragment {
     });
 
     dialog.show();
+  }
+
+  private void clearSignDates() {
+    for (TextView textView : mTvDates) {
+      textView.setText("");
+      textView.setBackgroundColor(0x00ffffff);
+    }
   }
 }
