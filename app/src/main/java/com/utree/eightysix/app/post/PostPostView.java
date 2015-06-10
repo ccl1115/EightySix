@@ -215,6 +215,19 @@ public class PostPostView extends LinearLayout {
         view.setTextColor(Color.WHITE);
         view.setGravity(Gravity.CENTER);
         view.setText(paged.get(position));
+        view.setOnClickListener(new OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            if (mClicked) {
+              mClicked = false;
+              mVpContent.setVisibility(mVpContent.getVisibility() == VISIBLE ? INVISIBLE : VISIBLE);
+              removeCallbacks(mCancel);
+            } else {
+              mClicked = true;
+              postDelayed(mCancel, 1000);
+            }
+          }
+        });
         container.addView(view);
         return view;
       }

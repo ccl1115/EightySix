@@ -226,9 +226,11 @@ public class PraiseHistoryActivity extends BaseActivity {
 
         @Override
         public void onResponse(Response response) {
-          mUser.praised = 1;
-          U.showToast("已回赞成功，对方经验+1");
-          setData(mUser);
+          if (RESTRequester.responseOk(response)) {
+            mUser.praised = 1;
+            U.showToast("已回赞成功，对方经验+1");
+            setData(mUser);
+          }
         }
       }, Response.class, mUser.viewId);
     }
