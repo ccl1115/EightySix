@@ -95,7 +95,7 @@ public class SignCalendarFragment extends BaseFragment {
       clearSignDates();
 
       int end = mSignDates.object.size() - 10;
-      int index = 10 - Math.abs(end);
+      int index = 10 - end;
       for (SignDate date : mSignDates.object.subList(Math.max(0, end - 10), end)) {
         setSignDate(index, date);
         index++;

@@ -155,6 +155,16 @@
             <artifactId>picasso</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.squareup.okhttp</groupId>
+            <artifactId>okhttp</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.squareup.okhttp</groupId>
+            <artifactId>okhttp-urlconnection</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
