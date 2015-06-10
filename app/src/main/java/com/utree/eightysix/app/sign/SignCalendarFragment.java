@@ -299,6 +299,7 @@ public class SignCalendarFragment extends BaseFragment {
     for (TextView textView : mTvDates) {
       textView.setText("");
       textView.setBackgroundColor(0x00ffffff);
+      textView.setOnClickListener(null);
     }
   }
 }
