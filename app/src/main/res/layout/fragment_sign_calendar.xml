@@ -270,7 +270,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp"
-                android:textSize="14sp"
+                android:textSize="12sp"
+                android:textColor="@color/apptheme_primary_grey_color_200"
+                android:gravity="center_horizontal"
                 />
     </LinearLayout>
 

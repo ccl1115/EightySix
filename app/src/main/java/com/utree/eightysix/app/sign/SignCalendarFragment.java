@@ -207,7 +207,7 @@ public class SignCalendarFragment extends BaseFragment {
           clearSignDates();
           mLlParent.setVisibility(View.VISIBLE);
 
-          mTvInfo.setText(String.format("你已连续打卡%d天，近一个月漏打卡%d天",
+          mTvInfo.setText(String.format("每天前10名打卡，获得3倍的蓝星，连续打卡经验翻倍\n你已连续打卡%d天，近一个月漏打卡%d天",
               response.extra.signConsecutiveTimes, response.extra.signMissingTimes));
 
           mSignDates = response;
