@@ -265,8 +265,10 @@ public class FeedPostView extends LinearLayout {
     }
 
     com.utree.eightysix.utils.TextUtils.setPostText(mTvContent, mPost.content, mPost.topicId);
-    
-    mRbLongText.setVisibility(mPost.content.length() > 77 ? VISIBLE : GONE);
+
+    int size = getResources().getDisplayMetrics().widthPixels - 2 * U.dp2px(48);
+    final List<CharSequence> paged = com.utree.eightysix.utils.TextUtils.page(mPost.content, size, size - U.dp2px(46), 23);
+    mRbLongText.setVisibility(paged.size() > 1 ? VISIBLE : GONE);
 
     if (post.comments > 0) {
       mTvComment.setText(String.valueOf(post.comments));
