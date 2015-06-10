@@ -48,7 +48,7 @@ public class FriendsFeedRegionFragment extends AbsRegionFragment {
     U.request("feeds_by_region", new OnResponse2<FeedsByRegionResponse>() {
       @Override
       public void onResponseError(Throwable e) {
-
+        mLvFeed.loadError();
       }
 
       @Override
@@ -70,7 +70,7 @@ public class FriendsFeedRegionFragment extends AbsRegionFragment {
     U.request("feed_list_friends", new OnResponse2<FeedsResponse>() {
       @Override
       public void onResponseError(Throwable e) {
-
+        mLvFeed.loadError();
       }
 
       @Override

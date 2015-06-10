@@ -47,7 +47,7 @@ public class HotFeedRegionFragment extends AbsRegionFragment {
     U.request("feeds_by_region", new OnResponse2<FeedsByRegionResponse>() {
       @Override
       public void onResponseError(Throwable e) {
-
+        mLvFeed.loadError();
       }
 
       @Override
@@ -69,7 +69,7 @@ public class HotFeedRegionFragment extends AbsRegionFragment {
     U.request("feed_list_host", new OnResponse2<FeedsResponse>() {
       @Override
       public void onResponseError(Throwable e) {
-
+        mLvFeed.loadError();
       }
 
       @Override
