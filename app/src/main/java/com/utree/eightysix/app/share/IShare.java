@@ -10,6 +10,7 @@ import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.ShareContentRequest;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 
 /**
@@ -134,7 +135,9 @@ public abstract class IShare {
 
           @Override
           public void onResponse(Response response) {
-
+            if (RESTRequester.responseOk(response)) {
+              U.showToast("经验+2");
+            }
           }
         }, Response.class, null, null);
       }

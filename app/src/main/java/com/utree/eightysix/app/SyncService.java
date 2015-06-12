@@ -6,12 +6,9 @@ import android.content.Intent;
 import android.os.IBinder;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.U;
-import com.utree.eightysix.request.SyncRequest;
 import com.utree.eightysix.response.SyncResponse;
-import com.utree.eightysix.rest.HandlerWrapper;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.rest.RequestData;
 
 /**
  * @author simon
@@ -41,8 +38,7 @@ public class SyncService extends Service {
 
   private void requestSync() {
     sSyncing = true;
-    RequestData data = new RequestData(new SyncRequest(U.getConfig("app.parentId")));
-    U.getRESTRequester().request(data, new HandlerWrapper<SyncResponse>(data, new OnResponse2<SyncResponse>() {
+    U.request("sync", new OnResponse2<SyncResponse>() {
       @Override
       public void onResponseError(Throwable e) {
         if (BuildConfig.DEBUG) {
@@ -62,6 +58,6 @@ public class SyncService extends Service {
         }
         sSyncing = false;
       }
-    }, SyncResponse.class));
+    }, SyncResponse.class);
   }
 }

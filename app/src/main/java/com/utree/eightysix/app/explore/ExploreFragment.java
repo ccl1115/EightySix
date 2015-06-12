@@ -22,6 +22,7 @@ import android.widget.*;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -37,6 +38,7 @@ import com.utree.eightysix.app.ladder.LadderActivity;
 import com.utree.eightysix.app.topic.TopicActivity;
 import com.utree.eightysix.app.topic.TopicListActivity;
 import com.utree.eightysix.app.web.BaseWebActivity;
+import com.utree.eightysix.data.Sync;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.data.Topic;
 import com.utree.eightysix.qrcode.QRCodeScanFragment;
@@ -73,6 +75,9 @@ public class ExploreFragment extends BaseFragment {
 
   @InjectView(R.id.ll_tags)
   public LinearLayout mLlTags;
+
+  @InjectView(R.id.ll_ladder)
+  public LinearLayout mLlLadder;
 
   @InjectView(R.id.tv_ladder_new)
   public TextView mTvLadderNew;
@@ -173,8 +178,28 @@ public class ExploreFragment extends BaseFragment {
     requestNewestTopics();
     mLastRefreshTimestamp = System.currentTimeMillis();
 
+    Sync sync = U.getSyncClient().getSync();
+    if (sync != null) {
+      String userRankSwitch = sync.userRankSwitch;
+      if ("on".equals(userRankSwitch)) {
+        mLlLadder.setVisibility(View.VISIBLE);
+      } else if ("off".equals(userRankSwitch)) {
+        mLlLadder.setVisibility(View.GONE);
+      }
+    }
+
     updateTopBar();
     startCarousel();
+  }
+
+  @Subscribe
+  public void onSyncEvent(Sync sync) {
+    String userRankSwitch = sync.userRankSwitch;
+    if ("on".equals(userRankSwitch)) {
+      mLlLadder.setVisibility(View.VISIBLE);
+    } else if ("off".equals(userRankSwitch)) {
+      mLlLadder.setVisibility(View.GONE);
+    }
   }
 
   @Override

@@ -29,6 +29,9 @@ public class Sync {
   @SerializedName("qqGroup")
   public String qqGroup;
 
+  @SerializedName("userRankSwitch")
+  public String userRankSwitch;
+
   /**
    * Default is 15
    */

@@ -612,13 +612,10 @@
     </request>
 
     <request>
-        <id>publish_post</id>
-        <name>发帖</name>
-        <path>/commit/post/create</path>
+        <id>sync</id>
+        <name>同步接口</name>
+        <path>/system/sync</path>
         <sign/>
         <token/>
-        <params>
-            <param></param>
-        </params>
     </request>
 </api>
