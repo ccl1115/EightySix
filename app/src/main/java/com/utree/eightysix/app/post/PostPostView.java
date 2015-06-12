@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -14,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -31,15 +32,18 @@ import com.utree.eightysix.app.feed.FeedsSearchActivity;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.data.Tag;
+import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.request.PostDeleteRequest;
 import com.utree.eightysix.utils.ColorUtil;
+import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.TagView;
+import com.utree.eightysix.widget.ViewHighlighter;
 
 import java.util.List;
 
-import static com.utree.eightysix.utils.TextUtils.*;
+import static com.utree.eightysix.utils.TextUtils.page;
 
 /**
  * This is the post view in PostActivity
@@ -47,7 +51,7 @@ import static com.utree.eightysix.utils.TextUtils.*;
  * @author simon
  * @see PostActivity
  */
-public class PostPostView extends LinearLayout {
+public class PostPostView extends FrameLayout {
 
   private static int sPostLength = U.getConfigInt("post.length");
 
@@ -81,6 +85,8 @@ public class PostPostView extends LinearLayout {
   private Post mPost;
 
   private boolean mClicked = false;
+
+  private View mTipPostPage;
 
   private Runnable mCancel = new Runnable() {
     @Override
@@ -195,6 +201,33 @@ public class PostPostView extends LinearLayout {
 
     int size = getResources().getDisplayMetrics().widthPixels - 2 * U.dp2px(48);
     final List<CharSequence> paged = page(mPost.content, size, size - U.dp2px(46), 23);
+
+    if (paged.size() > 1)  {
+      if (Env.firstRun("overlay_tip_post_page")) {
+        if (mTipPostPage == null) {
+          mTipPostPage = LayoutInflater.from(getContext())
+              .inflate(R.layout.overlay_tip_post_page, this, false);
+
+          mTipPostPage.setBackgroundDrawable(new BitmapDrawable(getResources(),
+              new ViewHighlighter(mRbPage, this).genMask()));
+
+          mTipPostPage.findViewById(R.id.ll_tip).setBackgroundDrawable(
+              new RoundRectDrawable(U.dp2px(8), Color.WHITE));
+
+          addView(mTipPostPage);
+
+          mTipPostPage.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+              view.setVisibility(GONE);
+              Env.setFirstRun("overlay_tip_post_page", false);
+            }
+          });
+        } else {
+          mTipPostPage.setVisibility(VISIBLE);
+        }
+      }
+    }
 
     mVpContent.setAdapter(new PagerAdapter() {
       @Override

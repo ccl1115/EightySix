@@ -237,6 +237,7 @@
     <string name="overlay_tip_share">遇到感兴趣的帖子时，记得分享给朋友哦！</string>
     <string name="overlay_tip_temp_name">临时名，发帖时带上专属昵称，让自己的帖子更有个性。</string>
     <string name="overlay_tip_tags">标签，是对帖子的分类；打上标签，有价值的帖子会被集中展现和回复。</string>
+    <string name="overlay_tip_post_page">这是一个长文帖，可左右滑动，翻页查完整内容哦</string>
 
     <string name="ask_question">我要提问</string>
 
