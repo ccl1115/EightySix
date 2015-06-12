@@ -154,6 +154,7 @@
                 android:paddingRight="8dp"
                 android:paddingBottom="2dp"
                 android:visibility="gone"
+                android:clickable="false"
                 app:background="@color/translucent_200"
                 app:radius="4dp"
                 />
