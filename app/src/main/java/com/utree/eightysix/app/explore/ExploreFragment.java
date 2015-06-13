@@ -246,21 +246,30 @@ public class ExploreFragment extends BaseFragment {
               "邀请朋友，赚蓝星",
               "分享蓝莓"
           };
+          int[] drawables = {
+              R.drawable.popup_add_friend,
+              R.drawable.popup_scan,
+              R.drawable.popup_blue_star,
+              R.drawable.popup_share
+          };
 
-          List<Map<String, String>> data = new ArrayList<Map<String, String>>(items.length);
+          List<Map<String, Object>> data = new ArrayList<Map<String, Object>>(items.length);
 
-          for (String i : items) {
-            Map<String, String> item = new HashMap<String, String>();
-            item.put("text", i);
+          for (int i = 0; i < items.length; i++) {
+            String str = items[i];
+            int drawable = drawables[i];
+            Map<String, Object> item = new HashMap<String, Object>();
+            item.put("text", str);
+            item.put("image", drawable);
             data.add(item);
           }
 
           mListPopupWindow.setAdapter(new SimpleAdapter(v.getContext(),
               data,
-              android.R.layout.simple_list_item_1,
-              new String[]{"text"},
-              new int[]{android.R.id.text1}));
-          mListPopupWindow.setWidth(U.dp2px(200));
+              R.layout.item_explore_popup,
+              new String[]{"text", "image"},
+              new int[]{R.id.tv, R.id.iv}));
+          mListPopupWindow.setWidth(U.dp2px(190));
           mListPopupWindow.setDropDownGravity(Gravity.RIGHT);
           mListPopupWindow.setAnchorView(getTopBar());
           mListPopupWindow.setModal(true);
