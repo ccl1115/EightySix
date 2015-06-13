@@ -212,7 +212,7 @@ public class ProfileFragment extends HolderFragment {
 
   @OnClick(R.id.ll_praise_me)
   public void onLlPraiseClicked(View v) {
-    PraiseHistoryActivity.start(v.getContext(), mIsVisitor ? mViewId : -1, mIsVisitor ? mProfile.sex : "");
+    PraiseHistoryActivity.start(v.getContext(), mIsVisitor ? mViewId : -1, mIsVisitor ? mProfile.sex : "", mProfile.praisedCount);
   }
 
   @OnClick(R.id.tv_my_posts)
@@ -1030,7 +1030,7 @@ public class ProfileFragment extends HolderFragment {
       tv.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-          PraiseHistoryActivity.start(v.getContext(), mIsVisitor ? mViewId : -1, mIsVisitor ? mProfile.sex : "");
+          PraiseHistoryActivity.start(v.getContext(), mIsVisitor ? mViewId : -1, mIsVisitor ? mProfile.sex : "", mProfile.praisedCount);
         }
       });
 

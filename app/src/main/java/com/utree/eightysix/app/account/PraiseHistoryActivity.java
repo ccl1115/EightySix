@@ -45,11 +45,12 @@ public class PraiseHistoryActivity extends BaseActivity {
   private Integer mViewId;
   private PraiseHistoryAdapter mAdapter;
 
-  public static void start(Context context, int viewId, String gender) {
+  public static void start(Context context, int viewId, String gender, int count) {
     Intent intent = new Intent(context, PraiseHistoryActivity.class);
 
     intent.putExtra("viewId", viewId);
     intent.putExtra("gender", gender);
+    intent.putExtra("count", count);
 
     if (!(context instanceof Activity)) {
       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -89,11 +90,11 @@ public class PraiseHistoryActivity extends BaseActivity {
     final String gender = getIntent().getStringExtra("gender");
 
     if ("男".equals(gender)) {
-      setTopTitle("谁赞过他");
+      setTopTitle(String.format("谁赞过他（%d）", getIntent().getIntExtra("count", 0)));
     } else if ("女".equals(gender)) {
-      setTopTitle("谁赞过她");
+      setTopTitle(String.format("谁赞过她（%d）", getIntent().getIntExtra("count", 0)));
     } else {
-      setTopTitle("谁赞过我");
+      setTopTitle(String.format("谁赞过我（%d）", getIntent().getIntExtra("count", 0)));
     }
 
     mAlvPraisedUsers.setLoadMoreCallback(new LoadMoreCallback() {
