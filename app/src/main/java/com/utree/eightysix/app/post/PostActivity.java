@@ -504,15 +504,6 @@ public class PostActivity extends BaseActivity
   }
 
   @Override
-  protected void onDestroy() {
-    super.onDestroy();
-
-    if (mPostId != null) {
-      U.getBus().post(new RefreshFeedEvent());
-    }
-  }
-
-  @Override
   protected void onNewIntent(Intent intent) {
     super.onNewIntent(intent);
 

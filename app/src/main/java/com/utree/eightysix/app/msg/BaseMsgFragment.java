@@ -15,6 +15,7 @@ import butterknife.InjectView;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
+import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.data.Post;
@@ -136,7 +137,17 @@ public abstract class BaseMsgFragment extends BaseFragment {
       getBaseActivity().showRefreshIndicator(true);
       ReadMsgStore.inst().clearRead();
     }
-    getBaseActivity().request(new MsgsRequest(getCreateType(), page), new OnResponse2<MsgsResponse>() {
+
+    U.request("remind_list", new OnResponse2<MsgsResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        mRstvEmpty.setVisibility(View.VISIBLE);
+        getBaseActivity().hideProgressBar();
+        getBaseActivity().hideRefreshIndicator();
+        mAlvRefresh.stopLoadMore();
+        mRefreshLayout.setRefreshing(false);
+      }
+
       @Override
       public void onResponse(MsgsResponse response) {
         if (RESTRequester.responseOk(response)) {
@@ -186,16 +197,7 @@ public abstract class BaseMsgFragment extends BaseFragment {
 
         onResponseOk(response);
       }
-
-      @Override
-      public void onResponseError(Throwable e) {
-        mRstvEmpty.setVisibility(View.VISIBLE);
-        getBaseActivity().hideProgressBar();
-        getBaseActivity().hideRefreshIndicator();
-        mAlvRefresh.stopLoadMore();
-        mRefreshLayout.setRefreshing(false);
-      }
-    }, MsgsResponse.class);
+    }, MsgsResponse.class, getCreateType(), page);
   }
 
   private void cacheOutMsg(final int page) {

@@ -154,7 +154,16 @@ public class PraiseActivity extends BaseActivity {
       mRvMsg.setRefreshing(true);
       ReadMsgStore.inst().clearRead();
     }
-    request(new PraisesRequest(page), new OnResponse2<MsgsResponse>() {
+    U.request("praise_list", new OnResponse2<MsgsResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        hideProgressBar();
+        hideRefreshIndicator();
+        mAlvMsg.stopLoadMore();
+        mRvMsg.setRefreshing(false);
+        mRstvEmpty.setVisibility(View.VISIBLE);
+      }
+
       @Override
       public void onResponse(MsgsResponse response) {
         if (RESTRequester.responseOk(response)) {
@@ -199,17 +208,7 @@ public class PraiseActivity extends BaseActivity {
         mAlvMsg.stopLoadMore();
         mRvMsg.setRefreshing(false);
       }
-
-      @Override
-      public void onResponseError(Throwable e) {
-        hideProgressBar();
-        hideRefreshIndicator();
-        mAlvMsg.stopLoadMore();
-        mRvMsg.setRefreshing(false);
-        mRstvEmpty.setVisibility(View.VISIBLE);
-      }
-
-    }, MsgsResponse.class);
+    }, MsgsResponse.class, page);
   }
 
   private void cacheOutPraises(final int page) {
