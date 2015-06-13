@@ -16,7 +16,7 @@
     <version>2.1.0-SNAPSHOT</version>
 
     <properties>
-        <android.manifest.versionCode>60</android.manifest.versionCode>
+        <android.manifest.versionCode>65</android.manifest.versionCode>
         <android.manifest.versionName>${project.version}</android.manifest.versionName>
     </properties>
 

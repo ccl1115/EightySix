@@ -4,6 +4,7 @@
 
 package com.utree.eightysix.app.sign;
 
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -22,6 +23,7 @@ import butterknife.OnClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
+import com.utree.eightysix.app.web.BaseWebActivity;
 import com.utree.eightysix.response.SignCalendarResponse;
 import com.utree.eightysix.response.SignCalendarResponse.SignDate;
 import com.utree.eightysix.rest.OnResponse2;
@@ -85,6 +87,16 @@ public class SignCalendarFragment extends BaseFragment {
     getFragmentManager().beginTransaction()
         .remove(this)
         .commit();
+  }
+
+  @OnClick(R.id.iv_info)
+  public void onIvInfoClicked(View v) {
+    try {
+      BaseWebActivity.start(v.getContext(), "http://web.lanmeiquan.com/Web/help/Howtoincreaseexp?version=" +
+          v.getContext().getPackageManager().getPackageInfo(v.getContext().getPackageName(), 0).versionName +
+          "&title=%E4%BD%BF%E7%94%A8%E5%B8%AE%E5%8A%A9");
+    } catch (PackageManager.NameNotFoundException ignored) {
+    }
   }
 
   @OnClick(R.id.iv_left)
