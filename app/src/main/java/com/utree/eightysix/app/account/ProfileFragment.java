@@ -308,7 +308,7 @@ public class ProfileFragment extends HolderFragment {
               mProfile.experience + response.object.experience, mProfile.nextExperience));
           mPbExp.setProgress(mProfile.experience + response.object.experience);
 
-          U.showToast("点赞成功，为主人经验+1");
+          U.showToast("点赞成功，为主人经验+1，明天再来哦");
 
           if (mIsVisitor) {
             if ("男".equals(mProfile.sex)) {
