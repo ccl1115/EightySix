@@ -60,6 +60,8 @@ public class FriendChatEvent {
 
   public static final int EVENT_NEW_ASSISTANT_MESSAGE = 40;
 
+  public static final int EVENT_WARNING_MSG_RECEIVE = 50;
+
   private int mStatus;
 
   private Object mObj;

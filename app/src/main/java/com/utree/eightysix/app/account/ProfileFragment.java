@@ -26,6 +26,7 @@ import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
+import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.CameraUtil;
 import com.utree.eightysix.app.FragmentHolder;
 import com.utree.eightysix.app.HolderFragment;
@@ -132,8 +133,11 @@ public class ProfileFragment extends HolderFragment {
   @InjectView(R.id.aiv_level_icon)
   public AsyncImageView mAivLevelIcon;
 
-  @InjectView(R.id.tv_action)
-  public TextView mTvAction;
+  @InjectView(R.id.ll_action)
+  public LinearLayout mLlAction;
+
+  @InjectView(R.id.tv_add_friend)
+  public TextView mTvAddFriend;
 
   @InjectView(R.id.scroll_view)
   public ScrollView mScrollView;
@@ -272,6 +276,20 @@ public class ProfileFragment extends HolderFragment {
         getBaseActivity().hideProgressBar();
       }
     }, CopywritingResponse.class);
+  }
+
+  @OnClick(R.id.tv_add_friend)
+  public void onTvAddFriendClicked(View v) {
+    SendRequestActivity.start(v.getContext(), mViewId);
+  }
+
+  @OnClick(R.id.tv_chat)
+  public void onTvChatClicked(View v) {
+    if (mProfile.isFriend == 1) {
+      ChatUtils.startFriendChat((BaseActivity) v.getContext(), mViewId);
+    } else {
+      ChatUtils.startStrangerChat((BaseActivity) v.getContext(), mViewId);
+    }
   }
 
   @OnClick(R.id.iv_praise)
@@ -506,7 +524,7 @@ public class ProfileFragment extends HolderFragment {
               mTvSettings.setVisibility(View.VISIBLE);
               mTvMyCircles.setVisibility(View.VISIBLE);
               mTvMyFriends.setVisibility(View.VISIBLE);
-              mTvAction.setVisibility(View.INVISIBLE);
+              mLlAction.setVisibility(View.INVISIBLE);
               getBaseActivity().getTopBar().setTitle("我");
 
               mTvPraiseMe.setText(String.format("谁赞过我（%d）", mProfile.praisedCount));
@@ -523,7 +541,7 @@ public class ProfileFragment extends HolderFragment {
                 mTvMyPosts.setVisibility(View.VISIBLE);
               }
 
-              mTvAction.setVisibility(View.VISIBLE);
+              mLlAction.setVisibility(View.VISIBLE);
               if ("男".equals(mProfile.sex)) {
                 mTvMyPosts.setText("他的帖子");
                 mTvTitleSignature.setText("他的签名");
@@ -539,21 +557,9 @@ public class ProfileFragment extends HolderFragment {
               }
 
               if (mProfile.isFriend == 1) {
-                mTvAction.setText("发起聊天");
-                mTvAction.setOnClickListener(new View.OnClickListener() {
-                  @Override
-                  public void onClick(View v) {
-                    ChatUtils.startFriendChat(getBaseActivity(), mViewId);
-                  }
-                });
+                mTvAddFriend.setVisibility(View.GONE);
               } else {
-                mTvAction.setText("添加朋友");
-                mTvAction.setOnClickListener(new View.OnClickListener() {
-                  @Override
-                  public void onClick(View v) {
-                    SendRequestActivity.start(v.getContext(), mViewId);
-                  }
-                });
+                mTvAddFriend.setVisibility(View.VISIBLE);
               }
 
               if (mProfile.isFriend == 1) {
@@ -583,7 +589,7 @@ public class ProfileFragment extends HolderFragment {
             mTvSettings.setVisibility(View.VISIBLE);
             mTvMyCircles.setVisibility(View.VISIBLE);
             mTvMyFriends.setVisibility(View.VISIBLE);
-            mTvAction.setVisibility(View.GONE);
+            mLlAction.setVisibility(View.GONE);
             mTvPraiseMe.setText(String.format("谁赞过我（%d）", mProfile.praisedCount));
 
             if (Account.inst().getLastExp() != 0 && Account.inst().getLastExp() < response.object.experience) {

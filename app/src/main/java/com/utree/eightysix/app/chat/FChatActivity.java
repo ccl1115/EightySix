@@ -15,9 +15,7 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.*;
 import butterknife.*;
 import com.rockerhieu.emojicon.EmojiconEditText;
 import com.rockerhieu.emojicon.EmojiconGridFragment;
@@ -39,6 +37,7 @@ import com.utree.eightysix.app.publish.EmojiViewPager;
 import com.utree.eightysix.dao.FriendConversation;
 import com.utree.eightysix.dao.FriendConversationDao;
 import com.utree.eightysix.dao.FriendMessage;
+import com.utree.eightysix.dao.FriendMessageDao;
 import com.utree.eightysix.utils.DaoUtils;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
@@ -53,8 +52,8 @@ import java.util.List;
  */
 @Layout(R.layout.activity_fchat)
 public class FChatActivity extends BaseActivity implements
-  EmojiconsFragment.OnEmojiconBackspaceClickedListener,
-  EmojiconGridFragment.OnEmojiconClickedListener {
+    EmojiconsFragment.OnEmojiconBackspaceClickedListener,
+    EmojiconGridFragment.OnEmojiconClickedListener {
 
   public static void start(Context context, String chatId) {
     context.startActivity(getIntent(context, chatId));
@@ -101,6 +100,12 @@ public class FChatActivity extends BaseActivity implements
 
   @InjectView(R.id.iv_emotion)
   public ImageView mIvEmotion;
+
+  @InjectView(R.id.tv_text)
+  public TextView mTvText;
+
+  @InjectView(R.id.ll_notice)
+  public LinearLayout mLlNotice;
 
   private FChatAdapter mChatAdapter;
 
@@ -215,6 +220,11 @@ public class FChatActivity extends BaseActivity implements
         }
         case FriendChatEvent.EVENT_UPDATE_MSG: {
           mChatAdapter.notifyDataSetChanged();
+          break;
+        }
+        case FriendChatEvent.EVENT_WARNING_MSG_RECEIVE: {
+          mTvText.setText(((FriendMessage) event.getObj()).getContent());
+          mLlNotice.setVisibility(View.VISIBLE);
           break;
         }
         case FriendChatEvent.EVENT_SENT_MSG_SUCCESS: {
@@ -390,6 +400,8 @@ public class FChatActivity extends BaseActivity implements
 
     addBannedInfoMsg();
 
+    addWarningMsg();
+
     getSupportFragmentManager()
         .beginTransaction()
         .add(R.id.fl_emotion, EmojiFragment.newInstance())
@@ -554,6 +566,26 @@ public class FChatActivity extends BaseActivity implements
   private void addBannedInfoMsg() {
     if (mConversation.getBanned() != null && mConversation.getBanned()) {
       mChatAdapter.add(ChatUtils.infoFriendMsg(mChatId, "你已将对方拉黑，不会再收到对方发来的消息"));
+    }
+  }
+
+  private void addWarningMsg() {
+    long count = DaoUtils.getFriendMessageDao().queryBuilder()
+        .where(FriendMessageDao.Properties.ChatId.eq(mChatId),
+            FriendMessageDao.Properties.Type.eq(MessageConst.TYPE_TXT),
+            FriendMessageDao.Properties.Direction.eq(MessageConst.DIRECTION_SEND))
+        .count();
+
+    if (count == 0) {
+      FriendMessage unique = DaoUtils.getFriendMessageDao().queryBuilder()
+          .where(FriendMessageDao.Properties.ChatId.eq(mChatId),
+              FriendMessageDao.Properties.Type.eq(MessageConst.TYPE_WARNING))
+          .limit(1)
+          .unique();
+      if (unique != null) {
+        mTvText.setText(unique.getContent());
+        mLlNotice.setVisibility(View.VISIBLE);
+      }
     }
   }
 }

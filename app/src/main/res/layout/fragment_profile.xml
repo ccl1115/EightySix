@@ -530,16 +530,45 @@
         </LinearLayout>
     </FrameLayout>
 
-    <TextView
-            android:id="@+id/tv_action"
+    <LinearLayout
+            android:id="@+id/ll_action"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="@color/apptheme_primary_light_color"
-            android:textColor="@color/apptheme_primary_text_light"
-            android:textSize="18sp"
-            android:gravity="center"
+            android:orientation="horizontal"
             android:visibility="gone"
-            />
+            >
+
+        <TextView
+                android:id="@+id/tv_add_friend"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:textColor="@color/apptheme_primary_text_light"
+                android:textSize="18sp"
+                android:text="添加好友"
+                android:gravity="center"
+                android:visibility="gone"
+                />
+
+        <View
+                android:layout_width="1px"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:background="@android:color/white"
+                />
+
+        <TextView
+                android:id="@+id/tv_chat"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:textColor="@color/apptheme_primary_text_light"
+                android:text="发起聊天"
+                android:textSize="18sp"
+                android:gravity="center"
+                />
+    </LinearLayout>
 </FrameLayout>
 

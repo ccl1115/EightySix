@@ -239,6 +239,19 @@ public class ChatUtils {
     return m;
   }
 
+  public static FriendMessage warningFriendMsg(String chatId, String msg) {
+    FriendMessage m = new FriendMessage();
+
+    m.setTimestamp(System.currentTimeMillis());
+    m.setType(MessageConst.TYPE_WARNING);
+    m.setContent(msg);
+    m.setChatId(chatId);
+    m.setDirection(MessageConst.DIRECTION_NON);
+    m.setStatus(MessageConst.STATUS_CREATE);
+
+    return m;
+  }
+
   public static void startChat(final BaseActivity context, final Post post, final Comment comment) {
     if (comment.self == 1) {
       U.showToast("不能向自己发起聊天哦！");
@@ -325,6 +338,33 @@ public class ChatUtils {
         context.hideProgressBar();
       }
     }, FriendChatResponse.class, "friend", viewId);
+
+    context.showProgressBar();
+  }
+
+  public static void startStrangerChat(final BaseActivity context, final int viewId) {
+    String chatId = FConversationUtil.getChatIdByViewId(viewId);
+
+    if (chatId != null) {
+      FChatActivity.start(context, chatId);
+      return;
+    }
+
+    U.request("get_friend_chat_info", new OnResponse2<FriendChatResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
+      @Override
+      public void onResponse(FriendChatResponse response) {
+        if (RESTRequester.responseOk(response)) {
+          FConversationUtil.createIfNotExist(response.object, viewId, "stranger");
+          FChatActivity.start(context, response.object.chatId);
+        }
+        context.hideProgressBar();
+      }
+    }, FriendChatResponse.class, "stranger", viewId);
 
     context.showProgressBar();
   }
