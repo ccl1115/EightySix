@@ -47,6 +47,8 @@ public class RequestListActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    NotifyUtils.clearAddedFriendNames();
+
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
     Account.inst().setFriendRequestCount(0);

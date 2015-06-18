@@ -24,6 +24,7 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.account.ProfileFragment;
+import com.utree.eightysix.app.friends.NotifyUtils;
 import com.utree.eightysix.dao.FriendConversation;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
@@ -105,6 +106,8 @@ public class FConversationActivity extends BaseActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    NotifyUtils.clearPassedFriendNames();
 
     getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
     getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_action_overflow));

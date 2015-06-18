@@ -43,6 +43,14 @@ public class NotifyUtils {
     sLargeIcon = BitmapFactory.decodeResource(U.getContext().getResources(), R.drawable.ic_launcher);
   }
 
+  public static void clearAddedFriendNames() {
+    sAddedFriendNames.clear();
+  }
+
+  public static void clearPassedFriendNames() {
+    sPassedFriendNames.clear();
+  }
+
   public static void addedFriend(String name) {
     NotificationManager manager =
         (NotificationManager) U.getContext().getSystemService(Context.NOTIFICATION_SERVICE);

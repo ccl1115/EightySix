@@ -32,6 +32,7 @@ import com.utree.eightysix.app.FragmentHolder;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.ProfileFragment;
 import com.utree.eightysix.app.chat.event.FriendChatEvent;
+import com.utree.eightysix.app.friends.NotifyUtils;
 import com.utree.eightysix.app.publish.EmojiFragment;
 import com.utree.eightysix.app.publish.EmojiViewPager;
 import com.utree.eightysix.dao.FriendConversation;
@@ -259,6 +260,8 @@ public class FChatActivity extends BaseActivity implements
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    NotifyUtils.clearPassedFriendNames();
 
     mCameraUtil = new CameraUtil(this, new CameraUtil.Callback() {
       private File mFile;
