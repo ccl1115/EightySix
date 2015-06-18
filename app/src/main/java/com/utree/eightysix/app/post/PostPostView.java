@@ -53,8 +53,6 @@ import static com.utree.eightysix.utils.TextUtils.page;
  */
 public class PostPostView extends FrameLayout {
 
-  private static int sPostLength = U.getConfigInt("post.length");
-
   @InjectView(R.id.aiv_bg)
   public AsyncImageView mAivBg;
 
@@ -200,9 +198,14 @@ public class PostPostView extends FrameLayout {
     }
 
     int size = getResources().getDisplayMetrics().widthPixels - 2 * U.dp2px(48);
-    final List<CharSequence> paged = page(mPost.content, size, size - U.dp2px(46), 23);
+    final List<CharSequence> paged;
+    if (TextUtils.isEmpty(mPost.topicPrev)) {
+      paged = page(mPost.content, size, size - U.dp2px(46), 23);
+    } else {
+      paged = page("#" + mPost.topicPrev + "#" + mPost.content, size, size - U.dp2px(46), 23);
+    }
 
-    if (paged.size() > 1)  {
+    if (paged.size() > 1) {
       if (Env.firstRun("overlay_tip_post_page")) {
         if (mTipPostPage == null) {
           mTipPostPage = LayoutInflater.from(getContext())
@@ -242,13 +245,17 @@ public class PostPostView extends FrameLayout {
 
       @Override
       public Object instantiateItem(ViewGroup container, int position) {
+        FrameLayout layout = new FrameLayout(container.getContext());
         TextView view = new TextView(container.getContext());
         view.setTextSize(23);
-        view.setPadding(U.dp2px(48), 0, U.dp2px(48), 0);
         view.setTextColor(Color.WHITE);
         view.setGravity(Gravity.CENTER);
-        view.setText(paged.get(position));
-        view.setOnClickListener(new OnClickListener() {
+        if (position == 0 && !TextUtils.isEmpty(mPost.topicPrev)) {
+          com.utree.eightysix.utils.TextUtils.setPostText(view, paged.get(position), mPost.topicId);
+        } else {
+          view.setText(paged.get(position));
+        }
+        layout.setOnClickListener(new OnClickListener() {
           @Override
           public void onClick(View v) {
             if (mClicked) {
@@ -261,8 +268,13 @@ public class PostPostView extends FrameLayout {
             }
           }
         });
-        container.addView(view);
-        return view;
+        FrameLayout.LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.gravity = Gravity.CENTER;
+        params.leftMargin = U.dp2px(48);
+        params.rightMargin = U.dp2px(48);
+        layout.addView(view, params);
+        container.addView(layout);
+        return layout;
       }
 
       @Override

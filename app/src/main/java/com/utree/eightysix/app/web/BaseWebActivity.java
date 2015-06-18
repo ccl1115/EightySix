@@ -69,7 +69,11 @@ public class BaseWebActivity extends BaseActivity {
 
   @Override
   public void onActionLeftClicked() {
-    finish();
+    if (mWbBase.canGoBack()) {
+      mWbBase.goBack();
+    } else {
+      finish();
+    }
   }
 
   @SuppressLint ("SetJavaScriptEnabled")
@@ -172,4 +176,12 @@ public class BaseWebActivity extends BaseActivity {
     }
   }
 
+  @Override
+  public void onBackPressed() {
+    if (mWbBase.canGoBack()) {
+      mWbBase.goBack();
+    } else {
+      super.onBackPressed();
+    }
+  }
 }

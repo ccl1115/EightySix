@@ -24,6 +24,7 @@ import com.utree.eightysix.app.account.ProfileFragment;
 import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.app.feed.event.FeedPostPraiseEvent;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
+import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.app.post.ReportDialog;
 import com.utree.eightysix.app.region.FeedRegionAdapter;
 import com.utree.eightysix.data.Post;
@@ -133,6 +134,13 @@ public class FeedPostView extends LinearLayout {
   public void onTvSourceClicked() {
     if (mPost.jump == 1) {
       FeedActivity.start(getContext(), mPost.factoryId);
+    }
+  }
+
+  @OnClick({R.id.fl_content, R.id.tv_content})
+  public void onItemClicked(View v) {
+    if (mPost != null) {
+      PostActivity.start(v.getContext(), mPost);
     }
   }
 
@@ -264,7 +272,11 @@ public class FeedPostView extends LinearLayout {
       return;
     }
 
-    com.utree.eightysix.utils.TextUtils.setPostText(mTvContent, mPost.content, mPost.topicId);
+    if (TextUtils.isEmpty(mPost.topicPrev)) {
+      mTvContent.setText(mPost.content);
+    } else {
+      com.utree.eightysix.utils.TextUtils.setPostText(mTvContent, "#" + mPost.topicPrev + "#" + mPost.content, mPost.topicId);
+    }
 
     int size = getResources().getDisplayMetrics().widthPixels - 2 * U.dp2px(48);
     final List<CharSequence> paged = com.utree.eightysix.utils.TextUtils.page(mPost.content, size, size - U.dp2px(46), 23);

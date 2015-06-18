@@ -4,10 +4,8 @@
 
 package com.utree.eightysix.utils;
 
-import android.text.Layout;
-import android.text.SpannableStringBuilder;
-import android.text.StaticLayout;
-import android.text.TextPaint;
+import android.text.*;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.TextView;
@@ -105,11 +103,12 @@ public class TextUtils {
 
         @Override
         public void updateDrawState(TextPaint ds) {
-          ds.setColor(0x88ffffff);
+          ds.setColor(0xccffffff);
         }
-      }, start, end, 0);
+      }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
+    textView.setMovementMethod(LinkMovementMethod.getInstance());
     textView.setText(builder);
   }
 }

@@ -104,6 +104,9 @@ public class Post extends BaseItem implements Parcelable {
   @SerializedName("topicId")
   public int topicId;
 
+  @SerializedName("topicPrev")
+  public String topicPrev;
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -187,6 +190,8 @@ public class Post extends BaseItem implements Parcelable {
     dest.writeString(this.levelIcon);
     dest.writeString(this.viewerName);
     dest.writeInt(this.jump);
+    dest.writeInt(this.topicId);
+    dest.writeString(this.topicPrev);
     dest.writeString(this.bgUrl);
     dest.writeString(this.bgColor);
     dest.writeString(this.content);
@@ -225,6 +230,8 @@ public class Post extends BaseItem implements Parcelable {
     this.levelIcon = in.readString();
     this.viewerName = in.readString();
     this.jump = in.readInt();
+    this.topicId = in.readInt();
+    this.topicPrev = in.readString();
     this.bgUrl = in.readString();
     this.bgColor = in.readString();
     this.content = in.readString();

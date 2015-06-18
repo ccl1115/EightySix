@@ -10,14 +10,12 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnItemClick;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.circle.event.CircleFollowsChangedEvent;
 import com.utree.eightysix.app.msg.FetchNotificationService;
-import com.utree.eightysix.app.post.PostActivity;
 import com.utree.eightysix.app.snapshot.SnapshotActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Feeds;
@@ -54,13 +52,6 @@ public abstract class AbsFeedFragment extends BaseFragment {
 
   protected boolean mPostPraiseRequesting;
   private int mCurrent;
-
-  @OnItemClick(R.id.lv_feed)
-  public void onLvFeedItemClicked(int position, View view) {
-    Object item = mLvFeed.getAdapter().getItem(position);
-    if (item == null || !(item instanceof Post)) return;
-    PostActivity.start(getActivity(), (Post) item);
-  }
 
   @Override
   public void onAttach(Activity activity) {
