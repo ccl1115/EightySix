@@ -285,11 +285,7 @@ public class ProfileFragment extends HolderFragment {
 
   @OnClick(R.id.tv_chat)
   public void onTvChatClicked(View v) {
-    if (mProfile.isFriend == 1) {
-      ChatUtils.startFriendChat((BaseActivity) v.getContext(), mViewId);
-    } else {
-      ChatUtils.startStrangerChat((BaseActivity) v.getContext(), mViewId);
-    }
+    ChatUtils.startFriendChat((BaseActivity) v.getContext(), mViewId);
   }
 
   @OnClick(R.id.iv_praise)

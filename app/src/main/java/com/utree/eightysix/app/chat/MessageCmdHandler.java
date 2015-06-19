@@ -8,7 +8,9 @@ import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMMessage;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.chat.event.ChatEvent;
+import com.utree.eightysix.app.chat.event.FriendChatEvent;
 import com.utree.eightysix.app.friends.NotifyUtils;
+import com.utree.eightysix.dao.FriendMessage;
 import com.utree.eightysix.dao.Message;
 import com.utree.eightysix.utils.DaoUtils;
 
@@ -48,11 +50,18 @@ public class MessageCmdHandler {
   private void handleChatNotify(EMMessage message) {
     String chatId = message.getStringAttribute("chatId", null);
     String content = message.getStringAttribute("content", null);
+    String chatType = message.getStringAttribute("chatType", null);
 
     if (chatId != null && content != null) {
-      Message warning = ChatUtils.warningMsg(chatId, content);
-      DaoUtils.getMessageDao().insertOrReplace(warning);
-      U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_WARNING_MSG_RECEIVE, warning));
+      if ("whisper".equals(chatType)) {
+        Message warning = ChatUtils.warningMsg(chatId, content);
+        DaoUtils.getMessageDao().insertOrReplace(warning);
+        U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_WARNING_MSG_RECEIVE, warning));
+      } else if ("stranger".equals(chatType)) {
+        FriendMessage warning = ChatUtils.warningFriendMsg(chatId, content);
+        DaoUtils.getFriendMessageDao().insertOrReplace(warning);
+        U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_WARNING_MSG_RECEIVE, warning));
+      }
     }
   }
 }

@@ -152,6 +152,8 @@ public class FChatAdapter extends BaseAdapter {
         return getInfoView(position, convertView, parent);
       case TYPE_TIMESTAMP:
         return getTimestampView(position, convertView, parent);
+      case TYPE_INVALID:
+        return getInvalid(convertView, parent);
     }
     return null;
   }
@@ -186,6 +188,13 @@ public class FChatAdapter extends BaseAdapter {
     }
 
     return TYPE_INVALID;
+  }
+
+  private View getInvalid(View convertView, ViewGroup parent) {
+    if (convertView == null) {
+      convertView = new View(parent.getContext());
+    }
+    return convertView;
   }
 
   @Override
