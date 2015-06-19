@@ -60,6 +60,7 @@ import java.util.List;
 public class ProfileFragment extends HolderFragment {
 
   private static final long REFRESH_INTERVAL = 60000 * 30;
+  private ListPopupWindow mPopupWindow;
 
   public static void start(Context context, int viewId, String userName) {
     Bundle args = new Bundle();
@@ -433,6 +434,7 @@ public class ProfileFragment extends HolderFragment {
     updateTopTitle();
 
     requestProfile();
+
     mLastRefreshTimestamp = System.currentTimeMillis();
   }
 
@@ -558,17 +560,13 @@ public class ProfileFragment extends HolderFragment {
                 mTvAddFriend.setVisibility(View.VISIBLE);
               }
 
-              if (mProfile.isFriend == 1) {
-                getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_action_overflow));
-                getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
-                  @Override
-                  public void onClick(View v) {
-                    showMenuDialog();
-                  }
-                });
-              } else {
-                getTopBar().getAbRight().hide();
-              }
+              getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_action_overflow));
+              getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                  showMenuDialog();
+                }
+              });
 
               if (mProfile.praiseConsecutiveTimes == 0) {
                 mIvPraise.setVisibility(View.VISIBLE);
@@ -754,32 +752,23 @@ public class ProfileFragment extends HolderFragment {
     getBaseActivity().setTopSubTitle("");
     getBaseActivity().showTopBar(true);
     getBaseActivity().hideRefreshIndicator();
-    if (mIsVisitor && !isSelf()) {
-      getBaseActivity().getTopBar().getAbRight().setText("拉黑");
+
+    if (mProfile != null && TextUtils.isEmpty(mProfile.userName)) {
+      getBaseActivity().getTopBar().getAbRight().setText("设置");
       getBaseActivity().getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
+          startActivity(new Intent(getActivity(), MainSettingsActivity.class));
         }
       });
     } else {
-      if (mProfile != null && TextUtils.isEmpty(mProfile.userName)) {
-        getBaseActivity().getTopBar().getAbRight().setText("设置");
-        getBaseActivity().getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-            startActivity(new Intent(getActivity(), MainSettingsActivity.class));
-          }
-        });
-      } else {
-        getBaseActivity().getTopBar().getAbRight().setText("编辑");
-        getBaseActivity().getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-            startActivity(new Intent(getActivity(), ProfileEditActivity.class));
-          }
-        });
-      }
+      getBaseActivity().getTopBar().getAbRight().setText("编辑");
+      getBaseActivity().getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          startActivity(new Intent(getActivity(), ProfileEditActivity.class));
+        }
+      });
     }
 
     if (getBaseActivity() instanceof FragmentHolder) {
