@@ -10,9 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnItemClick;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
+import com.utree.eightysix.app.account.ProfileFragment;
+import com.utree.eightysix.data.RankedUser;
 import com.utree.eightysix.response.BaseLadderResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
@@ -29,6 +32,16 @@ public abstract class BaseLadderFragment extends BaseFragment {
   private boolean mHasMore;
   private int mPage = 1;
   private BaseLadderAdapter mAdapter;
+
+  @OnItemClick(R.id.alv_ladder)
+  public void onAlvLadderItemClicked(int position) {
+    Object user = mAdapter.getItem(position);
+
+    if (user instanceof RankedUser) {
+      RankedUser user1 = (RankedUser) user;
+      ProfileFragment.start(getActivity(), user1.viewId, user1.userName);
+    }
+  }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
