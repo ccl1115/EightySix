@@ -30,7 +30,7 @@ public class NewMessageBroadcastReceiver extends BroadcastReceiver {
       if (fm != null) {
         new NewFriendMessageWorker(fm, message).execute();
       }
-    } else {
+    } else if ("whisper".equals(chatType)) {
       final Message m = ChatUtils.toMessage(message);
       if (m != null) {
         new NewMessageWorker(m, message).execute();

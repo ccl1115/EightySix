@@ -217,6 +217,7 @@ public class FChatActivity extends BaseActivity implements
         case FriendChatEvent.EVENT_RECEIVE_MSG: {
           mChatAdapter.add((FriendMessage) event.getObj());
           mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
+          mLlNotice.setVisibility(View.GONE);
           break;
         }
         case FriendChatEvent.EVENT_UPDATE_MSG: {
@@ -232,6 +233,7 @@ public class FChatActivity extends BaseActivity implements
           FriendConversation conversation = FConversationUtil.setLastMessage((FriendMessage) event.getObj());
           U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_CONVERSATION_INSERT_OR_UPDATE, conversation));
           mChatAdapter.notifyDataSetChanged();
+          mLlNotice.setVisibility(View.GONE);
           break;
         }
         case FriendChatEvent.EVENT_SENT_MSG_ERROR: {
