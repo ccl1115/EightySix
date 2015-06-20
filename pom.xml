@@ -13,7 +13,7 @@
         <module>dao-generator</module>
         <module>configuration-generator</module>
         <module>oss-batch</module>
-        <module>emojicon/library</module>
+        <module>emojicon</module>
         <module>ImageViewZoom/library</module>
         <module>app</module>
         <module>fixture</module>
