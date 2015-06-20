@@ -10,11 +10,13 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
+import com.nineoldandroids.view.ViewHelper;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -116,9 +118,9 @@ public class FeedPostView extends LinearLayout {
 
   private View mTipSource;
   private View mTipPraise;
-  private View mTipRepost;
   private View mTipTempName;
   private View mTipTags;
+  private View mTipTopic;
 
   @OnClick(R.id.tv_tag_1)
   public void onTvTag1Clicked() {
@@ -448,36 +450,6 @@ public class FeedPostView extends LinearLayout {
     hideTip(mTipPraise);
   }
 
-  public void showRepostTip() {
-    if (mTipRepost == null) {
-      mTipRepost = LayoutInflater.from(getContext())
-          .inflate(R.layout.overlay_tip_repost, this, false);
-
-      mTipRepost.setBackgroundDrawable(new BitmapDrawable(getResources(),
-          new ViewHighlighter(mTvSource, mFlContent).genMask()));
-
-      mTipRepost.findViewById(R.id.ll_tip).setBackgroundDrawable(
-          new RoundRectDrawable(U.dp2px(8), Color.WHITE));
-
-      mFlContent.addView(mTipRepost);
-
-      mTipRepost.setOnClickListener(new OnClickListener() {
-        @Override
-        public void onClick(View view) {
-          view.setVisibility(GONE);
-          U.getBus().post(new FeedRegionAdapter.DismissTipOverlayEvent(TYPE_REPOST));
-          Env.setFirstRun("overlay_tip_repost", false);
-        }
-      });
-    } else {
-      mTipRepost.setVisibility(VISIBLE);
-    }
-  }
-
-  public void hideRepostTip() {
-    hideTip(mTipRepost);
-  }
-
   public void showTempNameTip() {
     if (mTipTempName == null) {
       mTipTempName = LayoutInflater.from(getContext())
@@ -536,6 +508,35 @@ public class FeedPostView extends LinearLayout {
 
   public void hideTagsTip() {
     hideTip(mTipTags);
+  }
+
+  public void showTopicTip() {
+    if (mTipTopic == null) {
+      mTipTopic = LayoutInflater.from(getContext())
+          .inflate(R.layout.overlay_tip_topic, this, false);
+
+      FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+      lp.topMargin = mTvContent.getTop() + U.dp2px(35);
+
+      mFlContent.addView(mTipTopic, lp);
+
+      ViewHelper.setTranslationX(mTipTopic.findViewById(R.id.iv_arrow), mTvContent.getLeft() + U.dp2px(40));
+
+      mTipTopic.setOnClickListener(new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          v.setVisibility(GONE);
+          U.getBus().post(new FeedRegionAdapter.DismissTipOverlayEvent(TYPE_TOPIC));
+          Env.setFirstRun("overlay_tip_topic", false);
+        }
+      });
+    } else {
+      mTipTopic.setVisibility(VISIBLE);
+    }
+  }
+
+  public void hideTopicTip() {
+    hideTip(mTipTopic);
   }
 
   private void hideTip(View view) {

@@ -58,9 +58,9 @@ public class FeedRegionAdapter extends BaseAdapter {
 
   protected int mTipSourcePosition = TNS;
   protected int mTipPraisePosition = TNS;
-  protected int mTipRepostPosition = TNS;
   protected int mTipTempNamePosition = TNS;
   protected int mTipTagsPosition = TNS;
+  protected int mTipTopicPosition = TNS;
 
   public FeedRegionAdapter(FeedsByRegion feeds, FeedsByRegionResponse.Extra extra) {
     this(feeds);
@@ -313,15 +313,6 @@ public class FeedRegionAdapter extends BaseAdapter {
     notifyDataSetChanged();
   }
 
-  public void showTipShare(int position) {
-    notifyDataSetChanged();
-  }
-
-  public void showTipRepost(int position) {
-    mTipRepostPosition = position;
-    notifyDataSetChanged();
-  }
-
   public void showTipTempName(int position) {
     mTipTempNamePosition = position;
     notifyDataSetChanged();
@@ -329,6 +320,11 @@ public class FeedRegionAdapter extends BaseAdapter {
 
   public void showTipTags(int position) {
     mTipTagsPosition = position;
+    notifyDataSetChanged();
+  }
+
+  public void showTipTopic(int position) {
+    mTipTopicPosition = position;
     notifyDataSetChanged();
   }
 
@@ -340,9 +336,6 @@ public class FeedRegionAdapter extends BaseAdapter {
         break;
       case DismissTipOverlayEvent.TYPE_SOURCE:
         mTipSourcePosition = TNS;
-        break;
-      case DismissTipOverlayEvent.TYPE_REPOST:
-        mTipRepostPosition = TNS;
         break;
       case DismissTipOverlayEvent.TYPE_TAGS:
         mTipTagsPosition = TNS;
@@ -356,9 +349,9 @@ public class FeedRegionAdapter extends BaseAdapter {
   public boolean tipsShowing() {
     return mTipPraisePosition != TNS
         || mTipSourcePosition != TNS
-        || mTipRepostPosition != TNS
         || mTipTagsPosition != TNS
-        || mTipTempNamePosition != TNS;
+        || mTipTempNamePosition != TNS
+        || mTipTopicPosition != TNS;
   }
 
   private View getPostView(int position, View convertView, ViewGroup parent) {
@@ -377,14 +370,16 @@ public class FeedRegionAdapter extends BaseAdapter {
       feedPostView.showSourceTip();
     } else if (mTipSourcePosition == TNS && mTipPraisePosition == position) {
       feedPostView.showPraiseTip();
-    } else if (mTipRepostPosition == TNS && mTipTagsPosition == position) {
+    } else if (mTipPraisePosition == TNS && mTipTagsPosition == position) {
       feedPostView.showTagsTip();
+    } else if (mTipTagsPosition == TNS && mTipTopicPosition == position) {
+      feedPostView.showTopicTip();
     } else {
       feedPostView.hidePraiseTip();
       feedPostView.hideSourceTip();
-      feedPostView.hideRepostTip();
       feedPostView.hideTempNameTip();
       feedPostView.hideTagsTip();
+      feedPostView.hideTopicTip();
     }
 
     return convertView;
@@ -628,9 +623,9 @@ public class FeedRegionAdapter extends BaseAdapter {
 
     public static final int TYPE_SOURCE = 1;
     public static final int TYPE_PRAISE = 2;
-    public static final int TYPE_REPOST = 4;
     public static final int TYPE_TEMP_NAME = 5;
     public static final int TYPE_TAGS = 6;
+    public static final int TYPE_TOPIC = 7;
 
     public DismissTipOverlayEvent(int type) {
       mType = type;

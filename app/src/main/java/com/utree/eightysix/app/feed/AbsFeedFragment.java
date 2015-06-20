@@ -140,10 +140,6 @@ public abstract class AbsFeedFragment extends BaseFragment {
             mFeedAdapter.showTipSource(firstItem);
           } else if (Env.firstRun("overlay_tip_praise")) {
             mFeedAdapter.showTipPraise(firstItem);
-          } else if (Env.firstRun("overlay_tip_share")) {
-            mFeedAdapter.showTipShare(firstItem);
-          } else if (post.isRepost == 1 && Env.firstRun("overlay_tip_repost")) {
-            mFeedAdapter.showTipRepost(firstItem);
           }
         }
       }

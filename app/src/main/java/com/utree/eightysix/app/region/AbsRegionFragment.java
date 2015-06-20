@@ -2,6 +2,7 @@ package com.utree.eightysix.app.region;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -211,12 +212,10 @@ public abstract class AbsRegionFragment extends BaseFragment {
             mFeedAdapter.showTipSource(firstItem);
           } else if (Env.firstRun("overlay_tip_praise")) {
             mFeedAdapter.showTipPraise(firstItem);
-          } else if (Env.firstRun("overlay_tip_share")) {
-            mFeedAdapter.showTipShare(firstItem);
-          } else if (post.isRepost == 1 && Env.firstRun("overlay_tip_repost")) {
-            mFeedAdapter.showTipRepost(firstItem);
           } else if (post.tags != null && post.tags.size() > 0 &&  Env.firstRun("overlay_tip_tags")) {
             mFeedAdapter.showTipTags(firstItem);
+          } else if (!TextUtils.isEmpty(post.topicPrev) && Env.firstRun("overlay_tip_topic")) {
+            mFeedAdapter.showTipTopic(firstItem);
           }
         }
       }

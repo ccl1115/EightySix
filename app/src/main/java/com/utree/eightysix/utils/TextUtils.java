@@ -103,7 +103,7 @@ public class TextUtils {
 
         @Override
         public void updateDrawState(TextPaint ds) {
-          ds.setColor(0xccffffff);
+          ds.setColor(0x99ffffff);
         }
       }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
