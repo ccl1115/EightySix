@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
+import com.utree.eightysix.app.dp.DailyPicksActivity;
 import com.utree.eightysix.app.feed.FeedActivity;
 import com.utree.eightysix.app.home.HomeTabActivity;
 import com.utree.eightysix.app.msg.MsgActivity;
@@ -66,6 +67,8 @@ public class CmdHandler {
         SnapshotActivity.start(context, Integer.parseInt(args[1]));
       } else if ("help".equals(args[0])) {
         context.startActivity(new Intent(context, HelpActivity.class));
+      } else if ("dp".equals(args[0])) {
+        DailyPicksActivity.start(context, 0);
       }
     } catch (Exception ignored) {
 
