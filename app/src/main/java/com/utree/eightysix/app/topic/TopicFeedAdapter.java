@@ -20,6 +20,7 @@ import com.utree.eightysix.data.Topic;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.RandomSceneTextView;
+import com.utree.eightysix.widget.RoundedButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -285,6 +286,9 @@ public class TopicFeedAdapter extends BaseAdapter {
     @InjectView(R.id.v_mask)
     public View mVMask;
 
+    @InjectView(R.id.rb_more)
+    public RoundedButton mRbMore;
+
     private Topic mTopic;
 
     TopicViewHolder(View view) {
@@ -333,6 +337,12 @@ public class TopicFeedAdapter extends BaseAdapter {
               mTopicViewHolder.mTvTag2.setText("#" + g.content);
               break;
           }
+        }
+
+        if (TextUtils.isEmpty(topic.topicDesc)) {
+          mRbMore.setVisibility(View.GONE);
+        } else {
+          mRbMore.setVisibility(View.VISIBLE);
         }
       }
 
