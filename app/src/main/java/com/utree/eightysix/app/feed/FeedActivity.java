@@ -3,13 +3,11 @@ package com.utree.eightysix.app.feed;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -27,24 +25,21 @@ import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
 import com.utree.eightysix.app.feed.event.UploadClickedEvent;
 import com.utree.eightysix.app.publish.PublishActivity;
-import com.utree.eightysix.app.snapshot.SnapshotActivity;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.Circle;
-import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.request.FriendsSizeRequest;
 import com.utree.eightysix.response.FriendsSizeResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.widget.ThemedDialog;
-import com.utree.eightysix.widget.TopBar;
 
 /**
  */
-@Layout (R.layout.activity_feed)
+@Layout(R.layout.activity_feed)
 public class FeedActivity extends BaseActivity {
 
   private static final String FIRST_RUN_KEY = "feed";
 
-  @InjectView (R.id.ib_send)
+  @InjectView(R.id.ib_send)
   public ImageButton mSend;
 
   private TabFragment mTabFragment;
@@ -131,7 +126,7 @@ public class FeedActivity extends BaseActivity {
     return intent;
   }
 
-  @OnClick (R.id.ib_send)
+  @OnClick(R.id.ib_send)
   public void onIbSendClicked() {
     U.getAnalyser().trackEvent(this, "feed_publish", "feed_publish");
     if (!mTabFragment.canPublish()) {
@@ -156,7 +151,11 @@ public class FeedActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    ContactsSyncService.start(this, false);
+    setFillContent(true);
+
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+
+    getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_action_overflow));
 
     Circle circle = getIntent().getParcelableExtra("circle");
     int id = getIntent().getIntExtra("id", -1);
@@ -171,41 +170,6 @@ public class FeedActivity extends BaseActivity {
     }
 
     onNewIntent(getIntent());
-  }
-
-  public void setAdapter() {
-    mTopBar.setActionAdapter(new TopBar.ActionAdapter() {
-      @Override
-      public String getTitle(int position) {
-        return getString(R.string.snapshot);
-      }
-
-      @Override
-      public Drawable getIcon(int position) {
-        return null;
-      }
-
-      @Override
-      public Drawable getBackgroundDrawable(int position) {
-        return new RoundRectDrawable(dp2px(2), getResources().getColorStateList(R.color.apptheme_primary_btn_light));
-      }
-
-      @Override
-      public void onClick(View view, int position) {
-        SnapshotActivity.start(FeedActivity.this, mTabFragment.getCircle());
-      }
-
-      @Override
-      public int getCount() {
-        return 1;
-      }
-
-      @Override
-      public TopBar.LayoutParams getLayoutParams(int position) {
-        return new TopBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.MATCH_PARENT);
-      }
-    });
   }
 
   @Override
@@ -313,7 +277,7 @@ public class FeedActivity extends BaseActivity {
           showInviteDialog();
         }
       });
-      mUnlockDialog.setTitle("秘密为什么会隐藏");
+      mUnlockDialog.setTitle("帖子为什么会隐藏");
     }
 
     if (!mUnlockDialog.isShowing()) {
@@ -352,7 +316,7 @@ public class FeedActivity extends BaseActivity {
   @Keep
   class NoPermViewHolder {
 
-    @InjectView (R.id.tv_no_perm_tip)
+    @InjectView(R.id.tv_no_perm_tip)
     TextView mTvNoPermTip;
 
     NoPermViewHolder(View view) {

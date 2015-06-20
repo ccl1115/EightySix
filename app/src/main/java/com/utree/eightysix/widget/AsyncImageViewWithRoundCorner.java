@@ -5,12 +5,15 @@
 package com.utree.eightysix.widget;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Target;
+import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 
@@ -30,7 +33,8 @@ public class AsyncImageViewWithRoundCorner extends AsyncImageView {
   private final int sImageMaxWidth;
   private final int sImageMinHeight;
   private final int sImageMaxHeight;
-  private Target mTarget = new Target() {
+
+  private final Target mTarget = new Target() {
     @Override
     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
       setBitmap(bitmap);
@@ -46,6 +50,11 @@ public class AsyncImageViewWithRoundCorner extends AsyncImageView {
 
     }
   };
+
+  private int mRadius;
+
+  private int mImageWidth = -1;
+  private int mImageHeight = -1;
 
   public AsyncImageViewWithRoundCorner(Context context) {
     this(context, null);
@@ -63,28 +72,43 @@ public class AsyncImageViewWithRoundCorner extends AsyncImageView {
 
     sImageMinHeight = U.dp2px(IMAGE_MIN_HEIGHT);
     sImageMaxHeight = U.dp2px(IMAGE_MAX_HEIGHT);
+
+    TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.AsyncImageViewWithRoundCorner);
+
+    mRadius = (int) ta.getDimension(R.styleable.AsyncImageViewWithRoundCorner_radius, U.dp2px(14));
+
+    mImageWidth = (int) ta.getDimension(R.styleable.AsyncImageViewWithRoundCorner_width, -1);
+    mImageHeight = (int) ta.getDimension(R.styleable.AsyncImageViewWithRoundCorner_height, -1);
   }
 
   @Override
   public void setUrl(String url) {
-    super.setUrl(url);
+    setBitmap(null);
 
-    if (url == null) {
-      setImageBitmap(null);
+    if (url == null || url.length() == 0) {
       return;
     }
 
     if (url.startsWith("/")) {
       File file = new File(url);
-      Picasso.with(getContext()).load(file).resize(600, 600).into(mTarget);
+      RequestCreator load = Picasso.with(getContext()).load(file);
+      if (mImageHeight != -1 && mImageWidth != -1) {
+        load.resize(mImageWidth, mImageHeight);
+      }
+      load.into(mTarget);
     } else {
-      Picasso.with(getContext()).load(url).resize(600, 600).into(mTarget);
+      RequestCreator load = Picasso.with(getContext()).load(url);
+      if (mImageHeight != -1 && mImageWidth != -1) {
+        load.resize(mImageWidth, mImageHeight);
+      }
+      load.into(mTarget);
     }
   }
 
   public void setUrl(String url, int width, int height) {
+    setImageBitmap(null);
+
     if (url == null) {
-      setImageBitmap(null);
       return;
     }
 
@@ -96,30 +120,48 @@ public class AsyncImageViewWithRoundCorner extends AsyncImageView {
     }
   }
 
-  private void setBitmap(Bitmap bitmap) {
-    int width, height;
-    if (bitmap.getWidth() < sImageMinWidth) {
-      width = sImageMinWidth;
-      height = Math.min(sImageMaxHeight,
-          (int) (((float) width / bitmap.getWidth()) * bitmap.getHeight()));
-    } else if (bitmap.getWidth() > sImageMaxWidth) {
-      width = sImageMaxWidth;
-      height = Math.max(sImageMinHeight,
-          (int) (((float) width / bitmap.getWidth()) * bitmap.getHeight()));
-    } else if (bitmap.getHeight() < sImageMinHeight) {
-      height = sImageMinHeight;
-      width = Math.max(sImageMaxWidth,
-          (int) (((float) height / bitmap.getHeight()) * bitmap.getWidth()));
-    } else if (bitmap.getHeight() > sImageMaxHeight) {
-      height = sImageMaxHeight;
-      width = Math.min(sImageMinWidth,
-          (int) (((float) height / bitmap.getHeight()) * bitmap.getWidth()));
-    } else {
-      width = bitmap.getWidth();
-      height = bitmap.getHeight();
-    }
-    setLayoutParams(new LinearLayout.LayoutParams(width, height));
-
-    setImageDrawable(new RoundRectDrawable(U.dp2px(14), bitmap));
+  public void setRadius(int radius) {
+    mRadius = radius;
   }
+
+  private void setBitmap(Bitmap bitmap) {
+    if (bitmap == null) {
+      setImageDrawable(null);
+      return;
+    }
+
+    int width, height;
+
+    if (getLayoutParams().width != ViewGroup.LayoutParams.MATCH_PARENT &&
+        getLayoutParams().height != ViewGroup.LayoutParams.MATCH_PARENT) {
+      if (bitmap.getWidth() < sImageMinWidth) {
+        width = sImageMinWidth;
+        height = Math.min(sImageMaxHeight,
+            (int) (((float) width / bitmap.getWidth()) * bitmap.getHeight()));
+      } else if (bitmap.getWidth() > sImageMaxWidth) {
+        width = sImageMaxWidth;
+        height = Math.max(sImageMinHeight,
+            (int) (((float) width / bitmap.getWidth()) * bitmap.getHeight()));
+      } else if (bitmap.getHeight() < sImageMinHeight) {
+        height = sImageMinHeight;
+        width = Math.max(sImageMaxWidth,
+            (int) (((float) height / bitmap.getHeight()) * bitmap.getWidth()));
+      } else if (bitmap.getHeight() > sImageMaxHeight) {
+        height = sImageMaxHeight;
+        width = Math.min(sImageMinWidth,
+            (int) (((float) height / bitmap.getHeight()) * bitmap.getWidth()));
+      } else {
+        width = bitmap.getWidth();
+        height = bitmap.getHeight();
+      }
+
+      getLayoutParams().width = mImageWidth != -1 ? mImageWidth : width;
+      getLayoutParams().height = mImageHeight != -1 ? mImageHeight : height;
+
+      setLayoutParams(getLayoutParams());
+    }
+
+    setImageDrawable(new RoundRectDrawable(mRadius, bitmap));
+  }
+
 }

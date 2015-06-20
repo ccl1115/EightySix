@@ -8,6 +8,7 @@ import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -21,13 +22,15 @@ import com.utree.eightysix.request.PublishRequest;
 import com.utree.eightysix.response.PublishPostResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.RequestData;
 import com.utree.eightysix.rest.Response;
+
 import java.util.Random;
 
 /**
  * @author simon
  */
-@Layout (R.layout.activity_option_publish)
+@Layout(R.layout.activity_option_publish)
 public class OptionPublishActivity extends BaseActivity {
 
   public static final int REQUEST_PUBLISH_OPTION = 1;
@@ -38,11 +41,11 @@ public class OptionPublishActivity extends BaseActivity {
   };
   public boolean mRequesting;
   public int mCircleId;
-  @InjectView (R.id.et_post_content)
+  @InjectView(R.id.et_post_content)
   public EditText mEtPostContent;
-  @InjectView (R.id.tv_display)
+  @InjectView(R.id.tv_display)
   public TextView mTvDisplay;
-  @InjectView (R.id.tv_send)
+  @InjectView(R.id.tv_send)
   public TextView mTvSend;
 
   public static void start(Activity activity, String hint, String name, int circleId) {
@@ -57,23 +60,23 @@ public class OptionPublishActivity extends BaseActivity {
     activity.startActivityForResult(intent, REQUEST_PUBLISH_OPTION);
   }
 
-  @OnClick (R.id.tv_send)
+  @OnClick(R.id.tv_send)
   public void onRbSendClicked() {
     requestPublish();
   }
 
-  @OnClick (R.id.iv_close)
+  @OnClick(R.id.iv_close)
   public void onIvCloseClicked() {
     setResult(RESULT_CANCELED);
     finish();
   }
 
-  @OnClick (R.id.tv_shuffle)
+  @OnClick(R.id.tv_shuffle)
   public void onTvShuffleClicked() {
     requestChangeName();
   }
 
-  @OnTextChanged (R.id.et_post_content)
+  @OnTextChanged(R.id.et_post_content)
   public void onEtPostContentChanged(CharSequence cs) {
     if (cs.length() == 0) {
       mTvSend.setEnabled(false);
@@ -102,6 +105,7 @@ public class OptionPublishActivity extends BaseActivity {
   }
 
   @Override
+  @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     setResult(RESULT_CANCELED);
     finish();
@@ -141,40 +145,42 @@ public class OptionPublishActivity extends BaseActivity {
     showProgressBar(true);
     final String url = U.getCloudStorage().getUrl(U.getBgBucket(), "",
         BG_NAME[new Random().nextInt(BG_NAME.length - 1)]);
-    request(new PublishRequest.Builder().bgUrl(url).bgColor("")
-            .content(mEtPostContent.getText().toString())
-            .sourceType(1)
-            .factoryId(mCircleId)
-            .build(),
-        new OnResponse2<PublishPostResponse>() {
-          @Override
-          public void onResponseError(Throwable e) {
-            showToast("发表失败，请重试");
-            hideProgressBar();
-          }
+    PublishRequest build = new PublishRequest.Builder().bgUrl(url).bgColor("")
+        .content(mEtPostContent.getText().toString())
+        .sourceType(1)
+        .factoryId(mCircleId)
+        .build();
+    RequestData<PublishPostResponse> res = new RequestData<PublishPostResponse>(build);
+    res.setHost(U.getConfig("api.host.second"));
+    request(res, new OnResponse2<PublishPostResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        showToast("发表失败，请重试");
+        hideProgressBar();
+      }
 
-          @Override
-          public void onResponse(PublishPostResponse response) {
-            if (RESTRequester.responseOk(response)) {
-              Post post = new Post();
-              post.id = response.object.id;
-              post.content = mEtPostContent.getText().toString();
-              post.source = mTvDisplay.getText().toString();
-              post.bgColor = "";
-              post.bgUrl = url;
-              post.type = BaseItem.TYPE_POST;
+      @Override
+      public void onResponse(PublishPostResponse response) {
+        if (RESTRequester.responseOk(response)) {
+          Post post = new Post();
+          post.id = response.object.id;
+          post.content = mEtPostContent.getText().toString();
+          post.source = mTvDisplay.getText().toString();
+          post.bgColor = "";
+          post.bgUrl = url;
+          post.type = BaseItem.TYPE_POST;
 
-              U.getBus().post(new PostPublishedEvent(post, mCircleId));
+          U.getBus().post(new PostPublishedEvent(post, mCircleId));
 
-              showToast("发表成功");
+          showToast("发表成功");
 
-              setResult(RESULT_OK);
-              finish();
-            } else {
-              showToast("发表失败，请重试");
-            }
-            hideProgressBar();
-          }
-        }, PublishPostResponse.class);
+          setResult(RESULT_OK);
+          finish();
+        } else {
+          showToast("发表失败，请重试");
+        }
+        hideProgressBar();
+      }
+    }, PublishPostResponse.class);
   }
 }

@@ -1,15 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:orientation="vertical"
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="32dp"
+            >
+
+        <com.utree.eightysix.widget.AsyncImageView
+                android:id="@+id/aiv_bg"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                />
+
+        <View
+                android:id="@+id/v_mask"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#44000000"
+                />
+
+    </FrameLayout>
 
     <LinearLayout
             android:id="@+id/ll_top"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
 
         <LinearLayout
                 android:layout_width="match_parent"
@@ -17,7 +42,8 @@
                 android:orientation="horizontal"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:paddingTop="8dp">
+                android:paddingTop="8dp"
+                >
 
             <TextView
                     android:id="@+id/tv_tag_1"
@@ -25,54 +51,71 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="4dp"
                     android:layout_marginEnd="4dp"
-                    android:textColor="@color/apptheme_primary_white_btn"/>
+                    android:textColor="@color/apptheme_primary_white_btn"
+                    />
 
             <TextView
                     android:id="@+id/tv_tag_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/apptheme_primary_white_btn"/>
+                    android:textColor="@color/apptheme_primary_white_btn"
+                    />
 
 
             <View
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
+                    android:layout_height="1px"
+                    android:layout_weight="1"
+                    />
 
             <TextView
                     android:id="@+id/tv_feed_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"/>
+                    android:textColor="@android:color/white"
+                    />
         </LinearLayout>
+
+        <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:layout_margin="8dp"
+                android:textColor="@android:color/white"
+                />
 
         <TextView
                 android:id="@+id/tv_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="32dp"
+                android:layout_margin="16dp"
                 android:layout_gravity="center"
-                android:textSize="26sp"
-                android:textColor="@android:color/white"/>
+                android:textSize="14sp"
+                android:textColor="@android:color/white"
+                android:maxLength="80"
+                android:maxLines="2"
+                android:ellipsize="end"
+                />
+
     </LinearLayout>
 
     <LinearLayout
             android:id="@+id/ll_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/ll_top"
+            android:layout_gravity="bottom"
             android:orientation="horizontal"
             android:baselineAligned="false"
-            android:background="#fff0f0f0">
+            android:background="#fff0f0f0"
+            >
 
         <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                >
 
             <TextView
                     android:id="@+id/tv_tab_left"
@@ -80,25 +123,29 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="最新"/>
+                    android:text="最新"
+                    />
 
             <View
                     android:id="@+id/v_tab_left"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:background="@color/apptheme_primary_light_color"/>
+                    android:background="@color/apptheme_primary_light_color"
+                    />
         </LinearLayout>
 
         <View
                 android:layout_width="1px"
                 android:layout_height="match_parent"
-                android:background="@color/apptheme_primary_light_color"/>
+                android:background="@color/apptheme_primary_light_color"
+                />
 
         <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                >
 
             <TextView
                     android:id="@+id/tv_tab_right"
@@ -106,14 +153,16 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="精选"/>
+                    android:text="精选"
+                    />
 
             <View
                     android:id="@+id/v_tab_right"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:visibility="invisible"
-                    android:background="@color/apptheme_primary_light_color"/>
+                    android:background="@color/apptheme_primary_light_color"
+                    />
         </LinearLayout>
 
 
@@ -123,9 +172,26 @@
             android:id="@+id/ib_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="-32dp"
-            android:layout_above="@+id/ll_bottom"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="14dp"
             android:src="@drawable/ic_post_pen"
-            android:background="@drawable/btn_post"/>
-</RelativeLayout>
+            android:background="@drawable/btn_post"
+            />
+
+    <com.utree.eightysix.widget.RoundedButton
+            android:id="@+id/rb_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="56dp"
+            android:layout_gravity="bottom|end"
+            android:textSize="12sp"
+            android:text="查看详情"
+            android:paddingLeft="4dp"
+            android:paddingTop="2dp"
+            android:paddingRight="4dp"
+            android:paddingBottom="2dp"
+            app:background="@color/apptheme_primary_transparent_btn"
+            />
+</FrameLayout>

@@ -12,7 +12,6 @@ import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.DaoUtils;
 import com.utree.eightysix.utils.IOUtils;
-import org.jivesoftware.smack.packet.Packet;
 
 import java.io.*;
 
@@ -126,7 +125,7 @@ public class SenderImpl implements Sender {
   public Message txt(String chatId, String postId, String commentId, String txt) {
     Message m = new Message();
 
-    m.setMsgId(uniqueMsgId());
+    m.setMsgId(ChatUtils.uniqueMsgId());
 
     m.setChatId(chatId);
     m.setPostId(postId);
@@ -157,7 +156,7 @@ public class SenderImpl implements Sender {
     if (!f.exists()) return null;
     Message m = new Message();
 
-    m.setMsgId(uniqueMsgId());
+    m.setMsgId(ChatUtils.uniqueMsgId());
 
     m.setChatId(chatId);
     m.setPostId(postId);
@@ -178,9 +177,4 @@ public class SenderImpl implements Sender {
     return null;
   }
 
-  private String uniqueMsgId() {
-    String var0 = Long.toHexString(System.currentTimeMillis());
-    var0 = var0.substring(6);
-    return Packet.nextID() + "-" + var0;
-  }
 }

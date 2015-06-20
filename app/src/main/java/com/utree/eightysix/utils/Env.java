@@ -106,6 +106,14 @@ public class Env {
     return getSharedPreferences().getString("location_last_city", "");
   }
 
+  public static void setLastDistrict(String district) {
+    getSharedPreferences().edit().putString("location_last_district", district).apply();
+  }
+
+  public static String getLastDistrict() {
+    return getSharedPreferences().getString("location_last_district", "");
+  }
+
   public static long getUpgradeCanceledTimestamp() {
     return getSharedPreferences().getLong(String.format("upgrade_canceled_time_%d", C.VERSION), 0);
   }
@@ -145,5 +153,13 @@ public class Env {
 
   private static SharedPreferences getSharedPreferences() {
     return U.getContext().getSharedPreferences("env", Context.MODE_PRIVATE);
+  }
+
+  public static void setLastLocationTimestamp(long currentTimeMillis) {
+    getSharedPreferences().edit().putLong("last_location_timestamp", currentTimeMillis).apply();
+  }
+
+  public static long getLastLocationTimestamp() {
+    return getSharedPreferences().getLong("last_location_timestamp", System.currentTimeMillis());
   }
 }

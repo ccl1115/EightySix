@@ -51,7 +51,10 @@ public class BaseApplication extends Application {
     if (isMainProcess()) {
       Log.init(this);
 
+      // 初始化异常捕捉处理
       U.getReporter().init();
+
+      // 同步接口
       U.getSyncClient().getSync();
 
       // 初始化账号信息
@@ -64,12 +67,15 @@ public class BaseApplication extends Application {
       U.getPushHelper().startWork();
 
       // 域名检查
-      startService(new Intent(this, PingService.class));
+      if (!BuildConfig.DEBUG) {
+        startService(new Intent(this, PingService.class));
+      }
 
       // 环信聊天初始化
       EMChat.getInstance().init(this);
       ChatAccount.inst();
 
+      // 启动发帖背景图片同步服务
       startService(new Intent(this, BgSyncService.class));
 
       if (BuildConfig.DEBUG) {

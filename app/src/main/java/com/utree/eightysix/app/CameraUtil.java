@@ -29,6 +29,7 @@ public class CameraUtil {
   private static final int REQUEST_CODE_ALBUM = 0x1001;
   private static final int REQUEST_CODE_CROP = 0x1002;
   private BaseActivity mActivity;
+  private BaseFragment mFragment;
   private AlertDialog mCameraDialog;
   private boolean mStartCamera;
   private boolean mStartAlbum;
@@ -37,13 +38,27 @@ public class CameraUtil {
 
   private boolean mFixedRatio = true;
 
+  private String mTitle;
+
   public CameraUtil(BaseActivity activity, Callback callback) {
     mActivity = activity;
     mCallback = callback;
   }
 
+  public CameraUtil(BaseFragment fragment, Callback callback) {
+    mFragment = fragment;
+    mActivity = fragment.getBaseActivity();
+    mCallback = callback;
+  }
+
+  public CameraUtil(BaseFragment fragment, Callback callback, String title) {
+    this(fragment, callback);
+    mTitle = title;
+  }
+
   /**
    * Default is true
+   *
    * @param fixedRatio true if want to fix the ratio to 1:1
    */
   public void setFixedRatioWhenCrop(boolean fixedRatio) {
@@ -53,29 +68,31 @@ public class CameraUtil {
   public void showCameraDialog() {
 
     if (mCameraDialog == null) {
-      mCameraDialog = new AlertDialog.Builder(mActivity).setTitle(R.string.add_photo).setItems(new String[]{
-          mActivity.getString(R.string.use_camera),
-          mActivity.getString(R.string.select_album)
-      }, new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-          switch (which) {
-            case 0:
-              if (!(mStartCamera = startCamera())) {
-                mActivity.showToast(R.string.error_start_camera);
+      mCameraDialog = new AlertDialog.Builder(mActivity)
+          .setTitle(mTitle == null ? mActivity.getString(R.string.add_photo) : mTitle)
+          .setItems(new String[]{
+              mActivity.getString(R.string.use_camera),
+              mActivity.getString(R.string.select_album)
+          }, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              switch (which) {
+                case 0:
+                  if (!(mStartCamera = startCamera())) {
+                    mActivity.showToast(R.string.error_start_camera);
+                  }
+                  break;
+                case 1:
+                  if (!(mStartAlbum = startAlbum())) {
+                    mActivity.showToast(R.string.error_start_album);
+                  }
+                  break;
+                case Dialog.BUTTON_NEGATIVE:
+                  dialog.dismiss();
+                  break;
               }
-              break;
-            case 1:
-              if (!(mStartAlbum = startAlbum())) {
-                mActivity.showToast(R.string.error_start_album);
-              }
-              break;
-            case Dialog.BUTTON_NEGATIVE:
-              dialog.dismiss();
-              break;
-          }
-        }
-      }).create();
+            }
+          }).create();
     }
 
     mCameraDialog.show();
@@ -86,7 +103,11 @@ public class CameraUtil {
       Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
       mOutputFile = IOUtils.createTmpFile("camera_output");
       i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mOutputFile));
-      mActivity.startActivityForResult(i, REQUEST_CODE_CAMERA);
+      if (mFragment != null) {
+        mFragment.startActivityForResult(i, REQUEST_CODE_CAMERA);
+      } else {
+        mActivity.startActivityForResult(i, REQUEST_CODE_CAMERA);
+      }
       return true;
     } catch (Exception e) {
       return false;
@@ -97,7 +118,11 @@ public class CameraUtil {
     try {
       Intent i = new Intent(Intent.ACTION_PICK);
       i.setType("image/*");
-      mActivity.startActivityForResult(i, REQUEST_CODE_ALBUM);
+      if (mFragment != null) {
+        mFragment.startActivityForResult(i, REQUEST_CODE_ALBUM);
+      } else {
+        mActivity.startActivityForResult(i, REQUEST_CODE_ALBUM);
+      }
       return true;
     } catch (Exception e) {
       return false;
@@ -105,7 +130,11 @@ public class CameraUtil {
   }
 
   public boolean startCrop() {
-    ImageCropActivity.startForResult(mActivity, REQUEST_CODE_CROP, Uri.fromFile(mOutputFile), mFixedRatio);
+    if (mFragment != null) {
+      ImageCropActivity.startForResult(mFragment, REQUEST_CODE_CROP, Uri.fromFile(mOutputFile), mFixedRatio);
+    } else {
+      ImageCropActivity.startForResult(mActivity, REQUEST_CODE_CROP, Uri.fromFile(mOutputFile), mFixedRatio);
+    }
     return true;
   }
 

@@ -13,7 +13,7 @@ import com.utree.eightysix.R;
 
 /**
  */
-public final class RoundedButton extends TextView {
+public class RoundedButton extends TextView {
 
     private int mRadius;
     private ColorStateList mColorStateList;

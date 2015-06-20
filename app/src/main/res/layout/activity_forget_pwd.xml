@@ -36,12 +36,12 @@
 
         <com.utree.eightysix.widget.RoundedButton
                 android:id="@+id/btn_ok_1"
-                android:text="@string/okay"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:text="@string/okay"
                 app:radius="2dp"
                 app:background="@color/apptheme_primary_btn_light"
                 />
@@ -63,12 +63,12 @@
                 />
 
         <com.utree.eightysix.widget.RoundedButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/done"
                 android:id="@+id/btn_done"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="25dp"
+                android:text="@string/done"
                 android:enabled="false"
                 app:radius="2dp"
                 app:background="@color/apptheme_primary_btn_light"

@@ -1,15 +1,12 @@
 package com.utree.eightysix.request;
 
-import android.os.Build;
 import com.utree.eightysix.C;
-import com.utree.eightysix.rest.Api;
-import com.utree.eightysix.rest.Optional;
-import com.utree.eightysix.rest.Param;
-import com.utree.eightysix.rest.Token;
+import com.utree.eightysix.rest.*;
 
 /**
  */
 @Api (C.API_FEED_ADD)
+@Sign
 @Token
 public class PublishRequest {
 
@@ -42,6 +39,13 @@ public class PublishRequest {
   @Param("tempName")
   @Optional
   public String tempName;
+
+  /**
+   * 0 匿名
+   * 1 实名
+   */
+  @Param("realName")
+  public Integer realName;
 
   /**
    * 0 old type
@@ -100,6 +104,11 @@ public class PublishRequest {
 
     public Builder sendType(int type) {
       mPublishRequest.sendType = type;
+      return this;
+    }
+
+    public Builder realName(int realName) {
+      mPublishRequest.realName = realName;
       return this;
     }
 

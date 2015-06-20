@@ -13,8 +13,6 @@ import com.utree.eightysix.M;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseApplication;
 import com.utree.eightysix.app.chat.event.ChatEvent;
-import com.utree.eightysix.rest.OnResponse2;
-import com.utree.eightysix.rest.Response;
 import de.akquinet.android.androlog.Log;
 
 /**
@@ -23,12 +21,20 @@ import de.akquinet.android.androlog.Log;
 public class ChatAccount {
 
   private static ChatAccount sChatAccount;
+
   private NewMessageBroadcastReceiver mNewMessageBroadcastReceiver;
+  private NewCmdMessageBroadcastReceiver mNewCmdMessageBroadcastReceiver;
+
   private Sender mSender;
+  private FriendSender mFriendSender;
+  private MessageCmdHandler mMessageCmdHandler;
+
   private boolean mIsLogin;
 
   private ChatAccount() {
     mSender = new SenderImpl();
+    mFriendSender = new FriendSenderImpl();
+    mMessageCmdHandler = new MessageCmdHandler();
   }
 
   public static ChatAccount inst() {
@@ -43,8 +49,16 @@ public class ChatAccount {
     return sChatAccount;
   }
 
+  public MessageCmdHandler getMessageCmdHandler() {
+    return mMessageCmdHandler;
+  }
+
   public Sender getSender() {
     return mSender;
+  }
+
+  public FriendSender getFriendSender() {
+    return mFriendSender;
   }
 
   public void login() {
@@ -107,17 +121,12 @@ public class ChatAccount {
                   filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY - 1);
                   U.getContext().getApplicationContext().registerReceiver(mNewMessageBroadcastReceiver, filter);
 
+                  mNewCmdMessageBroadcastReceiver = new NewCmdMessageBroadcastReceiver();
+                  IntentFilter filter1 = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
+                  filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY - 1);
+                  U.getContext().getApplicationContext().registerReceiver(mNewCmdMessageBroadcastReceiver, filter1);
+
                   EMChat.getInstance().setAppInited();
-
-                  U.request("chat_online", new OnResponse2<Response>() {
-                    @Override
-                    public void onResponseError(Throwable e) {
-                    }
-
-                    @Override
-                    public void onResponse(Response response) {
-                    }
-                  }, Response.class, null, null);
                 }
               });
             }
@@ -163,6 +172,10 @@ public class ChatAccount {
   public void unregisterReceiver() {
     if (mNewMessageBroadcastReceiver != null) {
       U.getContext().getApplicationContext().unregisterReceiver(mNewMessageBroadcastReceiver);
+    }
+
+    if (mNewCmdMessageBroadcastReceiver != null) {
+      U.getContext().getApplicationContext().unregisterReceiver(mNewCmdMessageBroadcastReceiver);
     }
   }
 

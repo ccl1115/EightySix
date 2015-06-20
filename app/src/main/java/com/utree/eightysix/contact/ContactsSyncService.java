@@ -105,11 +105,15 @@ public class ContactsSyncService extends IntentService {
       public void run() {
         final ImportContactsRequest request = new ImportContactsRequest();
         RequestData data = new RequestData(request);
+        data.setHost(U.getConfig("api.host.second"));
+        data.setSign(true);
         StringBuilder builder = new StringBuilder();
         for (Contact contact : contacts) {
-          contact.name = contact.name.replaceAll(";;;|___", "");
-          contact.phone = contact.phone.replaceAll(";;;|___", "");
-          builder.append(contact.phone).append("___").append(contact.name).append(";;;");
+          if (contact.name != null && contact.phone != null) {
+            contact.name = contact.name.replaceAll(";;;|___", "");
+            contact.phone = contact.phone.replaceAll(";;;|___", "");
+            builder.append(contact.phone).append("___").append(contact.name).append(";;;");
+          }
         }
 
         data.getParams().add("contacts", builder.toString());
@@ -119,7 +123,7 @@ public class ContactsSyncService extends IntentService {
           public void onResponse(ContactsSyncResponse response) {
             if (RESTRequester.responseOk(response)) {
               Env.setTimestamp(TIMESTAMP_KEY);
-              U.getBus().post(new ContactsSyncEvent(true, response.object.friendCount));
+              U.getBus().post(new ContactsSyncEvent(true, response.object == null ? 0 : response.object.friendCount));
             } else {
               cacheContacts(new ArrayList<Contact>());
               U.getBus().post(new ContactsSyncEvent(false, 0));

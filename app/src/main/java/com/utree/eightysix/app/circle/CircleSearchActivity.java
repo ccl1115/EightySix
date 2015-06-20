@@ -23,7 +23,7 @@ import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.feed.FeedActivity;
-import com.utree.eightysix.app.home.HomeActivity;
+import com.utree.eightysix.app.home.HomeTabActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.request.CircleSetRequest;
@@ -72,8 +72,6 @@ public class CircleSearchActivity extends BaseActivity {
 
   private boolean mSelectMode;
 
-  private boolean mLocatingFinished;
-  private boolean mRequestSearchStarted;
   private ThemedDialog mCircleSetDialog;
 
   public static void start(Context context, boolean select) {
@@ -167,6 +165,8 @@ public class CircleSearchActivity extends BaseActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
     mSelectMode = getIntent().getBooleanExtra("select", false);
 
@@ -284,7 +284,6 @@ public class CircleSearchActivity extends BaseActivity {
   }
 
   private void requestSearch(final int page, final String keyword) {
-    mRequestSearchStarted = true;
     request(new SearchCircleRequest(page, keyword), new OnResponse<CirclesResponse>() {
       @Override
       public void onResponse(CirclesResponse response) {
@@ -319,7 +318,7 @@ public class CircleSearchActivity extends BaseActivity {
       @Override
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
-          HomeActivity.start(CircleSearchActivity.this);
+          HomeTabActivity.start(CircleSearchActivity.this);
           finish();
         }
       }

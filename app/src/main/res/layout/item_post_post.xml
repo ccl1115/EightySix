@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
+
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         >
 
     <com.utree.eightysix.widget.AsyncImageView
             android:id="@+id/aiv_bg"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="360dp"
             android:scaleType="centerCrop"
             />
 
@@ -19,13 +22,35 @@
             />
 
     <TextView
-            android:id="@+id/tv_content"
-            style="@style/TextView.PostStyle"
+            android:id="@+id/tv_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_gravity="end"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            />
+
+    <android.support.v4.view.ViewPager
+            android:id="@+id/vp_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="48dp"
-            android:paddingRight="48dp"
-            android:textColor="@android:color/white"
+            />
+
+    <com.utree.eightysix.widget.RoundedButton
+            android:id="@+id/rb_page"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="40dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            app:background="@color/translucent_200"
+            app:radius="4dp"
             />
 
     <LinearLayout
@@ -80,14 +105,11 @@
                 />
 
         <ImageView
-                android:id="@+id/iv_chat"
+                android:id="@+id/iv_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_chat_normal"
+                android:src="@drawable/ic_s_overflow"
                 />
 
     </LinearLayout>
@@ -125,3 +147,4 @@
 
 
 </FrameLayout>
+

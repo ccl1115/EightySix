@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Copyright (c) 2015. All rights reserved by utree.cn
+  -->
+
+<com.utree.eightysix.view.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:paddingLeft="36dp"
+        android:paddingRight="36dp"
+        >
+
+    <com.utree.eightysix.widget.AdvancedListView
+            android:id="@+id/alv_tags"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+</com.utree.eightysix.view.SwipeRefreshLayout>

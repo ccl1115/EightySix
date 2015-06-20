@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Copyright (c) 2015. All rights reserved by utree.cn
+  -->
+
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+
+    <com.utree.eightysix.widget.AsyncImageViewWithRoundCorner
+            android:id="@+id/aiv_portrait"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="16dp"
+            android:layout_centerVertical="true"
+            app:radius="4dp"
+            app:width="40dp"
+            app:height="40dp"
+            />
+
+    <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/aiv_portrait"
+            android:layout_toRightOf="@+id/aiv_portrait"
+            android:layout_marginTop="16dp"
+            android:maxEms="7"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textSize="16sp"
+            />
+
+    <com.utree.eightysix.widget.AsyncImageView
+            android:id="@+id/aiv_level_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@+id/tv_name"
+            android:layout_toRightOf="@+id/tv_name"
+            android:layout_alignTop="@+id/tv_name"
+            />
+
+    <TextView
+            android:id="@+id/tv_circle_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/aiv_portrait"
+            android:layout_toRightOf="@+id/aiv_portrait"
+            android:layout_below="@+id/tv_name"
+            android:maxEms="8"
+            android:ellipsize="end"
+            android:textSize="14sp"
+            android:textColor="@color/apptheme_primary_grey_color_200"
+            android:singleLine="true"
+            />
+
+    <TextView
+            android:id="@+id/tv_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/iv_arrow"
+            android:layout_toStartOf="@+id/iv_arrow"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_centerVertical="true"
+            />
+
+    <ImageView
+            android:id="@+id/iv_arrow"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="65dp"
+            android:layout_marginEnd="65dp"
+            />
+
+    <TextView
+            android:id="@+id/tv_exp"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_centerVertical="true"
+            android:textSize="12sp"
+            android:textColor="@color/apptheme_primary_grey_color_200"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:gravity="start"
+            />
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="#fff0f0f0"
+            android:layout_alignParentBottom="true"
+            />
+</RelativeLayout>

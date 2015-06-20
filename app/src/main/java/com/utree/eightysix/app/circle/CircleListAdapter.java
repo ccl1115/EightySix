@@ -226,7 +226,7 @@ class CircleListAdapter extends BaseAdapter {
 
       if (item.circleType == 1) {
         mRbIcon.setText(U.gs(R.string.factory));
-        mRbIcon.setBackgroundColor(res.getColor(R.color.apptheme_secondary_dark_color));
+        mRbIcon.setBackgroundColor(res.getColor(R.color.apptheme_primary_light_color));
       } else if (item.circleType == 2) {
         mRbIcon.setText(U.gs(R.string.business));
         mRbIcon.setBackgroundColor(0xffff6600);

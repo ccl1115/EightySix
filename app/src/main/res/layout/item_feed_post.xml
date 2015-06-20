@@ -4,17 +4,57 @@
        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
        android:orientation="vertical"
        android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:paddingLeft="8dp"
-       android:paddingRight="8dp"
-       android:paddingTop="8dp"
+       android:layout_height="wrap_content"
+       android:paddingTop="3dp"
         >
+
+    <LinearLayout
+            android:id="@+id/ll_top"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:background="@android:color/white"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            >
+
+        <com.utree.eightysix.widget.AsyncImageViewWithRoundCorner
+                android:id="@+id/aiv_portrait"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
+                app:radius="4dp"
+                app:width="30dp"
+                app:height="30dp"
+                />
+
+        <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textSize="16sp"
+                android:textColor="#abaeb3"
+                />
+
+        <com.utree.eightysix.widget.AsyncImageView
+                android:id="@+id/aiv_level_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                />
+
+    </LinearLayout>
 
     <FrameLayout
             android:id="@+id/fl_content"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="360dp"
             >
 
         <com.utree.eightysix.widget.AsyncImageView
@@ -46,6 +86,18 @@
                 android:ems="6"
                 />
 
+        <TextView
+                android:id="@+id/tv_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="end"
+                android:textSize="14sp"
+                android:textColor="@android:color/white"
+                />
+
         <LinearLayout
                 android:id="@+id/ll_tags"
                 android:layout_width="wrap_content"
@@ -75,25 +127,39 @@
 
         </LinearLayout>
 
-        <TextView
+        <com.rockerhieu.emojicon.EmojiconTextView
                 style="@style/TextView.PostStyle"
                 android:id="@+id/tv_content"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textColor="@android:color/white"
-                android:background="@android:color/transparent"
-                />
-
-        <ImageView
-                android:id="@+id/iv_share"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginEnd="10dp"
-                android:src="@drawable/ic_share"
+                android:layout_gravity="center"
+                android:textColor="@android:color/white"
+                android:background="@android:color/transparent"
+                android:maxLines="7"
+                android:ellipsize="end"
                 />
+
+        <com.utree.eightysix.widget.RoundedButton
+                android:id="@+id/rb_long_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="48dp"
+                android:text="查看详情"
+                android:textSize="12sp"
+                android:textColor="@android:color/white"
+                android:paddingLeft="8dp"
+                android:paddingTop="2dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="2dp"
+                android:visibility="gone"
+                android:clickable="false"
+                app:background="@color/translucent_200"
+                app:radius="4dp"
+                />
+
 
         <LinearLayout
                 android:id="@+id/fl_grid_panel"
@@ -154,14 +220,11 @@
                     />
 
             <ImageView
-                    android:id="@+id/iv_chat"
+                    android:id="@+id/iv_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_chat_normal"
+                    android:src="@drawable/ic_s_overflow"
                     />
 
         </LinearLayout>
@@ -178,7 +241,7 @@
             android:id="@+id/ll_comment"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="35dp"
             android:background="@android:color/white"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
@@ -201,6 +264,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
                 android:textSize="14sp"
                 android:paddingLeft="6dp"
                 android:paddingRight="6dp"
@@ -208,7 +272,7 @@
                 android:singleLine="true"
                 android:ellipsize="end"
                 android:textColor="@android:color/black"
-                app:emojiconSize="24dp"
+                app:emojiconSize="16dp"
                 />
 
         <TextView

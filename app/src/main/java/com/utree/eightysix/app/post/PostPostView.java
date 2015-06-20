@@ -1,11 +1,22 @@
 package com.utree.eightysix.app.post;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.widget.*;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -17,16 +28,22 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.app.feed.FeedActivity;
+import com.utree.eightysix.app.feed.FeedsSearchActivity;
 import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
-import com.utree.eightysix.app.home.HomeActivity;
-import com.utree.eightysix.app.tag.TagTabActivity;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.data.Tag;
+import com.utree.eightysix.drawable.RoundRectDrawable;
+import com.utree.eightysix.request.PostDeleteRequest;
 import com.utree.eightysix.utils.ColorUtil;
+import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AsyncImageView;
+import com.utree.eightysix.widget.RoundedButton;
 import com.utree.eightysix.widget.TagView;
+import com.utree.eightysix.widget.ViewHighlighter;
 
 import java.util.List;
+
+import static com.utree.eightysix.utils.TextUtils.page;
 
 /**
  * This is the post view in PostActivity
@@ -34,35 +51,47 @@ import java.util.List;
  * @author simon
  * @see PostActivity
  */
-public class PostPostView extends LinearLayout {
+public class PostPostView extends FrameLayout {
 
-  private static int sPostLength = U.getConfigInt("post.length");
-
-  @InjectView (R.id.aiv_bg)
+  @InjectView(R.id.aiv_bg)
   public AsyncImageView mAivBg;
 
-  @InjectView (R.id.tv_content)
-  public TextView mTvContent;
+  @InjectView(R.id.vp_content)
+  public ViewPager mVpContent;
 
-  @InjectView (R.id.tv_source)
+  @InjectView(R.id.tv_source)
   public TextView mTvSource;
 
-  @InjectView (R.id.tv_comment)
+  @InjectView(R.id.tv_comment)
   public TextView mTvComment;
 
-  @InjectView (R.id.tv_praise)
+  @InjectView(R.id.tv_praise)
   public TextView mTvPraise;
 
-  @InjectView (R.id.tv_tag_1)
+  @InjectView(R.id.tv_distance)
+  public TextView mTvDistance;
+
+  @InjectView(R.id.tv_tag_1)
   public TagView mTvTag1;
 
-  @InjectView (R.id.tv_tag_2)
+  @InjectView(R.id.tv_tag_2)
   public TagView mTvTag2;
 
-  @InjectView(R.id.iv_chat)
-  public ImageView mIvChat;
+  @InjectView(R.id.rb_page)
+  public RoundedButton mRbPage;
 
   private Post mPost;
+
+  private boolean mClicked = false;
+
+  private View mTipPostPage;
+
+  private Runnable mCancel = new Runnable() {
+    @Override
+    public void run() {
+      mClicked = false;
+    }
+  };
 
   public PostPostView(Context context) {
     this(context, null);
@@ -75,32 +104,84 @@ public class PostPostView extends LinearLayout {
     ButterKnife.inject(this, this);
 
     M.getRegisterHelper().register(this);
+
+    setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if (mClicked) {
+          mClicked = false;
+          mVpContent.setVisibility(mVpContent.getVisibility() == VISIBLE ? INVISIBLE : VISIBLE);
+          removeCallbacks(mCancel);
+        } else {
+          mClicked = true;
+          postDelayed(mCancel, 1000);
+        }
+      }
+    });
+
   }
 
-  @OnClick (R.id.tv_tag_1)
+  @OnClick(R.id.tv_tag_1)
   public void onTvTag1Clicked() {
-    TagTabActivity.start(getContext(), mPost.tags.get(0));
+    FeedsSearchActivity.start(getContext(), mPost.tags.get(0).content);
   }
 
-  @OnClick (R.id.tv_tag_2)
+  @OnClick(R.id.tv_tag_2)
   public void onTvTag2Clicked() {
-    TagTabActivity.start(getContext(), mPost.tags.get(1));
+    FeedsSearchActivity.start(getContext(), mPost.tags.get(1).content);
   }
 
   @OnClick(R.id.tv_source)
   public void onTvSourceClicked() {
-    if (mPost.viewType == 8 || (mPost.sourceType == 0 && (mPost.viewType == 3 || mPost.viewType == 4))) {
-      if (mPost.userCurrFactoryId == mPost.factoryId) {
-        HomeActivity.start(getContext(), 0);
-      } else {
-        FeedActivity.start(getContext(), mPost.factoryId);
-      }
+    if (mPost.jump == 1) {
+      FeedActivity.start(getContext(), mPost.factoryId);
     }
   }
 
-  @OnClick(R.id.iv_chat)
-  public void onIvChatClicked() {
-    ChatUtils.startChat((BaseActivity) getContext(), mPost);
+  @OnClick(R.id.iv_more)
+  public void onIvMoreClicked() {
+    if (mPost == null) return;
+
+    U.getAnalyser().trackEvent(U.getContext(), "post_more", "post_more");
+    String[] items;
+    if (mPost.owner == 1) {
+      items = new String[]{
+          getResources().getString(R.string.chat_anonymous),
+          getResources().getString(R.string.share),
+          getResources().getString(R.string.report),
+          getResources().getString(R.string.delete)};
+    } else {
+      items = new String[]{
+          getResources().getString(R.string.chat_anonymous),
+          getResources().getString(R.string.share),
+          getResources().getString(R.string.report),
+      };
+    }
+    new AlertDialog.Builder(getContext()).setTitle(U.gs(R.string.post_action))
+        .setItems(items,
+            new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                  case 0:
+                    ChatUtils.startChat(((BaseActivity) getContext()), mPost);
+                    break;
+                  case 1:
+                    U.getAnalyser().trackEvent(U.getContext(), "post_more_share", "post_more_share");
+                    U.getShareManager().sharePostDialog(((BaseActivity) getContext()), mPost).show();
+                    break;
+                  case 2:
+                    U.getAnalyser().trackEvent(U.getContext(), "post_more_report", "post_more_report");
+                    new ReportDialog(getContext(), mPost.id).show();
+                    break;
+                  case 3:
+                    U.getAnalyser().trackEvent(U.getContext(), "post_more_delete", "post_more_delete");
+                    U.getBus().post(new PostDeleteRequest(mPost.id));
+                    break;
+                }
+              }
+            }).create().show();
+
   }
 
   public void setData(Post post) {
@@ -110,7 +191,122 @@ public class PostPostView extends LinearLayout {
       return;
     }
 
-    mTvContent.setText(mPost.content.length() > sPostLength ? post.content.substring(0, sPostLength) : post.content);
+    if (!TextUtils.isEmpty(mPost.userName)) {
+      setPadding(0, U.dp2px(46), 0, 0);
+    } else {
+      setPadding(0, 0, 0, 0);
+    }
+
+    int size = getResources().getDisplayMetrics().widthPixels - 2 * U.dp2px(48);
+    final List<CharSequence> paged;
+    if (TextUtils.isEmpty(mPost.topicPrev)) {
+      paged = page(mPost.content, size, size - U.dp2px(46), 23);
+    } else {
+      paged = page("#" + mPost.topicPrev + "#" + mPost.content, size, size - U.dp2px(46), 23);
+    }
+
+    if (paged.size() > 1) {
+      if (Env.firstRun("overlay_tip_post_page")) {
+        if (mTipPostPage == null) {
+          mTipPostPage = LayoutInflater.from(getContext())
+              .inflate(R.layout.overlay_tip_post_page, this, false);
+
+          mTipPostPage.setBackgroundDrawable(new BitmapDrawable(getResources(),
+              new ViewHighlighter(mRbPage, this).genMask()));
+
+          mTipPostPage.findViewById(R.id.ll_tip).setBackgroundDrawable(
+              new RoundRectDrawable(U.dp2px(8), Color.WHITE));
+
+          addView(mTipPostPage);
+
+          mTipPostPage.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+              view.setVisibility(GONE);
+              Env.setFirstRun("overlay_tip_post_page", false);
+            }
+          });
+        } else {
+          mTipPostPage.setVisibility(VISIBLE);
+        }
+      }
+    }
+
+    mVpContent.setAdapter(new PagerAdapter() {
+      @Override
+      public int getCount() {
+        return paged.size();
+      }
+
+      @Override
+      public boolean isViewFromObject(View view, Object object) {
+        return view.equals(object);
+      }
+
+      @Override
+      public Object instantiateItem(ViewGroup container, int position) {
+        FrameLayout layout = new FrameLayout(container.getContext());
+        TextView view = new TextView(container.getContext());
+        view.setTextSize(23);
+        view.setTextColor(Color.WHITE);
+        view.setGravity(Gravity.CENTER);
+        if (position == 0 && !TextUtils.isEmpty(mPost.topicPrev)) {
+          com.utree.eightysix.utils.TextUtils.setPostText(view, paged.get(position), mPost.topicId);
+        } else {
+          view.setText(paged.get(position));
+        }
+        layout.setOnClickListener(new OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            if (mClicked) {
+              mClicked = false;
+              mVpContent.setVisibility(mVpContent.getVisibility() == VISIBLE ? INVISIBLE : VISIBLE);
+              removeCallbacks(mCancel);
+            } else {
+              mClicked = true;
+              postDelayed(mCancel, 1000);
+            }
+          }
+        });
+        FrameLayout.LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.gravity = Gravity.CENTER;
+        params.leftMargin = U.dp2px(48);
+        params.rightMargin = U.dp2px(48);
+        layout.addView(view, params);
+        container.addView(layout);
+        return layout;
+      }
+
+      @Override
+      public void destroyItem(ViewGroup container, int position, Object object) {
+        container.removeView((View) object);
+      }
+    });
+
+    if (paged.size() > 1) {
+      mRbPage.setVisibility(VISIBLE);
+      mRbPage.setText(String.format("%d/%d", mVpContent.getCurrentItem() + 1, paged.size()));
+
+      mVpContent.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+          mRbPage.setText(String.format("%d/%d", mVpContent.getCurrentItem() + 1, paged.size()));
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+      });
+    } else {
+      mRbPage.setVisibility(GONE);
+    }
+
     if (mPost.comments > 0) {
       mTvComment.setText(String.valueOf(post.comments));
     } else {
@@ -131,6 +327,8 @@ public class PostPostView extends LinearLayout {
       mAivBg.setUrl(null);
       mAivBg.setBackgroundColor(ColorUtil.strToColor(mPost.bgColor));
     }
+
+    mTvDistance.setText(mPost.distance);
 
     mTvComment.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_reply, 0, 0, 0);
 
@@ -160,9 +358,10 @@ public class PostPostView extends LinearLayout {
         }
       }
     }
+
   }
 
-  @OnClick (R.id.tv_praise)
+  @OnClick(R.id.tv_praise)
   public void onTvPraiseClicked() {
     if (mPost == null) return;
     if (mPost.praised != 1) {
@@ -186,14 +385,15 @@ public class PostPostView extends LinearLayout {
   }
 
   @Override
-  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    final int widthSize = widthMeasureSpec & ~(0x3 << 30);
-    super.onMeasure(widthMeasureSpec, widthSize + MeasureSpec.EXACTLY);
+  protected void onAttachedToWindow() {
+    super.onAttachedToWindow();
+    removeCallbacks(mCancel);
   }
 
   @Override
   protected void onDetachedFromWindow() {
     M.getRegisterHelper().unregister(this);
+    removeCallbacks(mCancel);
     super.onDetachedFromWindow();
   }
 }

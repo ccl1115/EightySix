@@ -10,6 +10,9 @@ public class PostTopic extends BaseItem {
   @SerializedName("headTitle")
   public String headTitle;
 
+  @SerializedName("title")
+  public String title;
+
   @SerializedName("tags")
   public List<Tag> tags;
 
@@ -19,4 +22,6 @@ public class PostTopic extends BaseItem {
   @SerializedName("id")
   public int id;
 
+  @SerializedName("topicHit")
+  public String hint;
 }

@@ -2,16 +2,15 @@ package com.utree.eightysix.app.chat;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Instrumentation;
 import android.content.*;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.*;
 import butterknife.*;
 import com.rockerhieu.emojicon.EmojiconEditText;
 import com.rockerhieu.emojicon.EmojiconGridFragment;
@@ -31,18 +30,16 @@ import com.utree.eightysix.app.publish.EmojiViewPager;
 import com.utree.eightysix.dao.Conversation;
 import com.utree.eightysix.dao.ConversationDao;
 import com.utree.eightysix.dao.Message;
+import com.utree.eightysix.dao.MessageDao;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
-import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.DaoUtils;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
 import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.ImageActionButton;
 import com.utree.eightysix.widget.ThemedDialog;
-import com.utree.eightysix.widget.TopBar;
 
 import java.io.File;
 import java.util.List;
@@ -84,6 +81,12 @@ public class ChatActivity extends BaseActivity implements
   @InjectView(R.id.iv_emotion)
   public ImageView mIvEmotion;
 
+  @InjectView(R.id.ll_notice)
+  public LinearLayout mLlNotice;
+
+  @InjectView(R.id.tv_text)
+  public TextView mTvText;
+
   private ChatAdapter mChatAdapter;
 
   private String mChatId;
@@ -93,6 +96,8 @@ public class ChatActivity extends BaseActivity implements
   private CameraUtil mCameraUtil;
 
   private boolean mIsOpened;
+
+  private Instrumentation mInstrumentation = new Instrumentation();
 
   static void start(Context context, String chatId) {
     context.startActivity(getIntent(context, chatId));
@@ -112,10 +117,6 @@ public class ChatActivity extends BaseActivity implements
 
   public static String getCurrentChatId() {
     return sCurrentChatId;
-  }
-
-  public static void setCurrentChatId(String currentChatId) {
-    ChatActivity.sCurrentChatId = currentChatId;
   }
 
   @OnClick(R.id.iv_post)
@@ -212,6 +213,12 @@ public class ChatActivity extends BaseActivity implements
         case ChatEvent.EVENT_RECEIVE_MSG: {
           mChatAdapter.add((Message) event.getObj());
           mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
+          mLlNotice.setVisibility(View.GONE);
+          break;
+        }
+        case ChatEvent.EVENT_WARNING_MSG_RECEIVE: {
+          mTvText.setText(((Message) event.getObj()).getContent());
+          mLlNotice.setVisibility(View.VISIBLE);
           break;
         }
         case ChatEvent.EVENT_UPDATE_MSG: {
@@ -219,7 +226,7 @@ public class ChatActivity extends BaseActivity implements
           break;
         }
         case ChatEvent.EVENT_SENT_MSG_SUCCESS: {
-          Conversation conversation = ChatUtils.ConversationUtil.setLastMessage((Message) event.getObj());
+          Conversation conversation = ConversationUtil.setLastMessage((Message) event.getObj());
           U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_INSERT_OR_UPDATE, conversation));
           mChatAdapter.notifyDataSetChanged();
           break;
@@ -232,6 +239,7 @@ public class ChatActivity extends BaseActivity implements
         case ChatEvent.EVENT_SENDING_MSG: {
           mChatAdapter.add((Message) event.getObj());
           mAlvChats.smoothScrollToPosition(Integer.MAX_VALUE);
+          mLlNotice.setVisibility(View.GONE);
           break;
         }
         case ChatEvent.EVENT_MSG_REMOVE: {
@@ -248,6 +256,7 @@ public class ChatActivity extends BaseActivity implements
   }
 
   @Override
+  @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();
   }
@@ -259,19 +268,18 @@ public class ChatActivity extends BaseActivity implements
   }
 
   @Override
-  public boolean showActionOverflow() {
-    return true;
-  }
-
-  @Override
-  public void onActionOverflowClicked() {
-    showMoreDialog();
-  }
-
-
-  @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+
+    getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_action_overflow));
+    getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        showMoreDialog();
+      }
+    });
 
     mCameraUtil = new CameraUtil(this, new CameraUtil.Callback() {
       private File mFile;
@@ -281,7 +289,7 @@ public class ChatActivity extends BaseActivity implements
       public void onImageReturn(String path) {
         M.getRegisterHelper().register(this);
         mFile = new File(path);
-        ImageUtils.compress(mFile, 600, 600);
+        ImageUtils.compress(mFile, 600, 600, 50);
       }
 
       @Subscribe
@@ -342,21 +350,17 @@ public class ChatActivity extends BaseActivity implements
         .where(ConversationDao.Properties.ChatId.eq(mChatId))
         .unique();
 
-    setTopTitle(mConversation.getRelation());
-    setTopSubTitle("来自" + mConversation.getPostSource());
+    setTopTitle("悄悄话");
 
     if (mChatId == null) {
       finish();
     }
 
-    mChatAdapter = new ChatAdapter(mConversation.getMyPortrait(),
-        ColorUtil.strToColor(mConversation.getMyPortraitColor()),
-        mConversation.getPortrait(),
-        ColorUtil.strToColor(mConversation.getPortraitColor()));
+    mChatAdapter = new ChatAdapter(mConversation);
 
     mAlvChats.setAdapter(mChatAdapter);
 
-    mChatAdapter.add(ChatUtils.MessageUtil.getConversation(mChatId, 0));
+    mChatAdapter.add(MessageUtil.getMessages(mChatId, 0));
     mAlvChats.setSelection(Integer.MAX_VALUE);
 
     U.getChatBus().register(this);
@@ -374,7 +378,7 @@ public class ChatActivity extends BaseActivity implements
       public void onRefresh() {
         if (has) {
           page++;
-          List<Message> conversation = ChatUtils.MessageUtil.getConversation(mChatId, page);
+          List<Message> conversation = MessageUtil.getMessages(mChatId, page);
           if (conversation.size() == 0) {
             has = false;
             Message message = ChatUtils.infoMsg(mChatId, getString(R.string.no_more_history));
@@ -389,7 +393,7 @@ public class ChatActivity extends BaseActivity implements
       }
 
       @Override
-      public void onDrag() {
+      public void onDrag(int value) {
 
       }
 
@@ -405,49 +409,9 @@ public class ChatActivity extends BaseActivity implements
       addCommentSummaryInfo();
     }
 
-    getTopBar().setActionAdapter(new TopBar.ActionAdapter() {
-      @Override
-      public String getTitle(int position) {
-        return null;
-      }
-
-      @Override
-      public Drawable getIcon(int position) {
-        return mConversation.getFavorite() ?
-            getResources().getDrawable(R.drawable.ic_favorite_selected) :
-            getResources().getDrawable(R.drawable.ic_favorite_outline);
-      }
-
-      @Override
-      public Drawable getBackgroundDrawable(int position) {
-        return getResources().getDrawable(R.drawable.apptheme_primary_btn_dark);
-      }
-
-      @Override
-      public void onClick(View view, int position) {
-        if (mConversation.getFavorite()) {
-          ((ImageActionButton) getTopBar().getActionView(0))
-              .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_outline));
-          requestFavDel();
-        } else {
-          ((ImageActionButton) getTopBar().getActionView(0))
-              .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
-          requestFavAdd();
-        }
-      }
-
-      @Override
-      public int getCount() {
-        return 1;
-      }
-
-      @Override
-      public TopBar.LayoutParams getLayoutParams(int position) {
-        return null;
-      }
-    });
-
     addBannedInfoMsg();
+
+    addWarningMsg();
 
     getSupportFragmentManager()
         .beginTransaction()
@@ -461,8 +425,6 @@ public class ChatActivity extends BaseActivity implements
     U.request("chat_fav_add", new OnResponse2<Response>() {
       @Override
       public void onResponseError(Throwable e) {
-        ((ImageActionButton) getTopBar().getActionView(0))
-            .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_outline));
       }
 
       @Override
@@ -471,9 +433,7 @@ public class ChatActivity extends BaseActivity implements
           mConversation.setFavorite(true);
           DaoUtils.getConversationDao().update(mConversation);
           U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_INSERT_OR_UPDATE, mConversation));
-        } else {
-          ((ImageActionButton) getTopBar().getActionView(0))
-              .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_outline));
+          showToast("收藏成功");
         }
       }
     }, Response.class, mChatId, mConversation.getPostId(), mConversation.getCommentId());
@@ -484,8 +444,6 @@ public class ChatActivity extends BaseActivity implements
       U.request("chat_fav_del", new OnResponse2<Response>() {
         @Override
         public void onResponseError(Throwable e) {
-          ((ImageActionButton) getTopBar().getActionView(0))
-              .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
         }
 
         @Override
@@ -494,9 +452,6 @@ public class ChatActivity extends BaseActivity implements
             mConversation.setFavorite(false);
             DaoUtils.getConversationDao().update(mConversation);
             U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_UPDATE, mConversation));
-          } else {
-            ((ImageActionButton) getTopBar().getActionView(0))
-                .setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_selected));
           }
         }
       }, Response.class, mChatId, mConversation.getPostId(), mConversation.getCommentId());
@@ -515,10 +470,10 @@ public class ChatActivity extends BaseActivity implements
 
       @Override
       protected Void doInBackground(Void... voids) {
-        mConversation = ChatUtils.MessageUtil.setRead(mChatId);
+        mConversation = MessageUtil.setRead(mChatId);
         publishProgress(1);
 
-        mUnreadConversationCount = ChatUtils.ConversationUtil.getUnreadConversationCount();
+        mUnreadConversationCount = ConversationUtil.getUnreadConversationCount();
         publishProgress(2);
         return null;
       }
@@ -572,22 +527,34 @@ public class ChatActivity extends BaseActivity implements
   private void showMoreDialog() {
     new AlertDialog.Builder(this).setTitle(getString(R.string.chat_actions))
         .setItems(
-            new String[]{getString(R.string.report),
+            new String[]{
+                (mConversation.getFavorite() != null && mConversation.getFavorite()) ?
+                    getString(R.string.unfavorite) : getString(R.string.favorite),
+                getString(R.string.report),
                 getString(R.string.delete),
-                (mConversation.getBanned() != null && mConversation.getBanned()) ? getString(R.string.shielded) : getString(R.string.shield)},
+                (mConversation.getBanned() != null && mConversation.getBanned()) ?
+                    getString(R.string.shielded) : getString(R.string.shield)},
             new DialogInterface.OnClickListener() {
               @Override
               public void onClick(DialogInterface dialogInterface, int i) {
                 switch (i) {
                   case 0: {
-                    showReportConfirmDialog();
+                    if (mConversation.getFavorite() != null && mConversation.getFavorite()) {
+                      requestFavDel();
+                    } else {
+                      requestFavAdd();
+                    }
                     break;
                   }
                   case 1: {
-                    showDeleteConfirmDialog();
+                    showReportConfirmDialog();
                     break;
                   }
                   case 2: {
+                    showDeleteConfirmDialog();
+                    break;
+                  }
+                  case 3: {
                     if (mConversation.getBanned() == null || !mConversation.getBanned()) {
                       showShieldConfirmDialog();
                     }
@@ -637,7 +604,7 @@ public class ChatActivity extends BaseActivity implements
           @Override
           public void onClick(DialogInterface dialogInterface, int i) {
             requestFavDel();
-            ChatUtils.ConversationUtil.deleteConversation(mChatId);
+            ConversationUtil.deleteConversation(mChatId);
             U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_CONVERSATION_REMOVE, mChatId));
             finish();
           }
@@ -703,7 +670,7 @@ public class ChatActivity extends BaseActivity implements
   }
 
   private void addPostSummaryInfo() {
-    Message message = ChatUtils.MessageUtil.addPostSummaryInfo(mChatId,
+    Message message = MessageUtil.addPostSummaryInfo(mChatId,
         System.currentTimeMillis(),
         mConversation.getPostId(),
         mConversation.getPostContent());
@@ -711,7 +678,7 @@ public class ChatActivity extends BaseActivity implements
   }
 
   private void addCommentSummaryInfo() {
-    Message message = ChatUtils.MessageUtil.addCommentSummaryInfo(mChatId,
+    Message message = MessageUtil.addCommentSummaryInfo(mChatId,
         System.currentTimeMillis(),
         mConversation.getPostId(),
         mConversation.getPostContent(),
@@ -728,12 +695,12 @@ public class ChatActivity extends BaseActivity implements
   @Override
   public void onEmojiconClicked(Emojicon emojicon) {
     if ("\u274c".equals(emojicon.getEmoji())) {
-      final int sel = mEtPostContent.getSelectionStart();
-      if (sel > 0) {
-        mEtPostContent.getText().delete(sel - 2, sel);
-//        mEtPostContent.setText(mEtPostContent.getText().delete(sel - 1, 1));
-//        mEtPostContent.setSelection(sel - 1);
-      }
+      (new Thread() {
+        @Override
+        public void run() {
+          mInstrumentation.sendKeyDownUpSync(KeyEvent.KEYCODE_DEL);
+        }
+      }).start();
     } else {
       String text = mEtPostContent.getText().toString();
       String before = text.substring(0, mEtPostContent.getSelectionStart());
@@ -771,6 +738,26 @@ public class ChatActivity extends BaseActivity implements
   private void addBannedInfoMsg() {
     if (mConversation.getBanned() != null && mConversation.getBanned()) {
       mChatAdapter.add(ChatUtils.infoMsg(mChatId, "你已将对方拉黑，不会再收到对方发来的消息"));
+    }
+  }
+
+  private void addWarningMsg() {
+    long count = DaoUtils.getMessageDao().queryBuilder()
+        .where(MessageDao.Properties.ChatId.eq(mChatId),
+            MessageDao.Properties.Type.eq(MessageConst.TYPE_TXT),
+            MessageDao.Properties.Direction.eq(MessageConst.DIRECTION_SEND))
+        .count();
+
+    if (count == 0) {
+      Message unique = DaoUtils.getMessageDao().queryBuilder()
+          .where(MessageDao.Properties.ChatId.eq(mChatId),
+              MessageDao.Properties.Type.eq(MessageConst.TYPE_WARNING))
+          .limit(1)
+          .unique();
+      if (unique != null) {
+        mTvText.setText(unique.getContent());
+        mLlNotice.setVisibility(View.VISIBLE);
+      }
     }
   }
 }

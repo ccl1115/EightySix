@@ -3,28 +3,34 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
        android:orientation="horizontal"
        android:layout_width="match_parent"
-       android:layout_height="match_parent">
+       android:layout_height="match_parent"
+        >
 
     <FrameLayout
             android:id="@+id/fl_left"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="4dp">
+            android:layout_marginLeft="6dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginEnd="3dp"
+            >
 
         <com.utree.eightysix.widget.AsyncImageView
                 android:id="@+id/aiv_bg_left"
                 android:scaleType="centerCrop"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                />
 
         <View
                 android:id="@+id/v_darken_left"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#44000000"/>
+                android:background="#44000000"
+                />
 
 
         <TextView
@@ -36,13 +42,15 @@
                 android:padding="10dp"
                 android:textSize="12sp"
                 android:textColor="@android:color/white"
-                android:maxLines="10"/>
+                android:maxLines="10"
+                />
 
         <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_gravity="bottom"
-                android:background="@drawable/vertical_shadow_gradient">
+                android:background="@drawable/vertical_shadow_gradient"
+                >
 
             <TextView
                     android:id="@+id/tv_count_left"
@@ -51,7 +59,8 @@
                     android:layout_gravity="end|bottom"
                     android:padding="8dp"
                     android:gravity="center_vertical"
-                    android:textColor="@android:color/white"/>
+                    android:textColor="@android:color/white"
+                    />
 
         </FrameLayout>
 
@@ -59,7 +68,8 @@
                 android:id="@+id/v_mask_left"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#88ffffff"/>
+                android:background="#88ffffff"
+                />
 
         <ImageView
                 android:id="@+id/iv_unfollow_left"
@@ -67,7 +77,8 @@
                 android:layout_height="32dp"
                 android:layout_gravity="bottom"
                 android:padding="8dp"
-                android:src="@drawable/ic_unfollow_normal"/>
+                android:src="@drawable/ic_unfollow_normal"
+                />
     </FrameLayout>
 
     <FrameLayout
@@ -75,21 +86,26 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="4dp">
+            android:layout_marginTop="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginStart="3dp"
+            >
 
         <com.utree.eightysix.widget.AsyncImageView
                 android:id="@+id/aiv_bg_right"
                 android:scaleType="centerCrop"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                />
 
         <View
                 android:id="@+id/v_darken_right"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#44000000"/>
+                android:background="#44000000"
+                />
 
         <TextView
                 android:id="@+id/tv_content_right"
@@ -100,13 +116,15 @@
                 android:padding="10dp"
                 android:textSize="12sp"
                 android:textColor="@android:color/white"
-                android:maxLines="10"/>
+                android:maxLines="10"
+                />
 
         <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_gravity="bottom"
-                android:background="@drawable/vertical_shadow_gradient">
+                android:background="@drawable/vertical_shadow_gradient"
+                >
 
             <TextView
                     android:id="@+id/tv_count_right"
@@ -115,7 +133,8 @@
                     android:layout_gravity="end|bottom"
                     android:padding="8dp"
                     android:gravity="center_vertical"
-                    android:textColor="@android:color/white"/>
+                    android:textColor="@android:color/white"
+                    />
 
         </FrameLayout>
 
@@ -123,7 +142,8 @@
                 android:id="@+id/v_mask_right"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#88ffffff"/>
+                android:background="#88ffffff"
+                />
 
         <ImageView
                 android:id="@+id/iv_unfollow_right"
@@ -131,6 +151,7 @@
                 android:layout_height="32dp"
                 android:layout_gravity="bottom"
                 android:padding="8dp"
-                android:src="@drawable/ic_unfollow_normal"/>
+                android:src="@drawable/ic_unfollow_normal"
+                />
     </FrameLayout>
 </merge>

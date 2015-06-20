@@ -17,10 +17,8 @@ import butterknife.OnClick;
 import com.google.zxing.*;
 import com.google.zxing.client.android.camera.CameraConfigurationUtils;
 import com.google.zxing.common.HybridBinarizer;
-import com.google.zxing.qrcode.encoder.QRCode;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.app.event.QRCodeScanEvent;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 
 /**
@@ -85,6 +83,24 @@ public class QRCodeScanFragment extends Fragment implements Camera.PreviewCallba
     ButterKnife.inject(this, view);
 
     mLlBg.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(8), Color.WHITE));
+
+    view.setFocusableInTouchMode(true);
+
+    view.requestFocus();
+
+    view.setOnKeyListener(new View.OnKeyListener() {
+      @Override
+      public boolean onKey(View v, int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+          getFragmentManager().beginTransaction()
+              .setCustomAnimations(R.anim.enter_from_top, R.anim.exit_to_bottom)
+              .detach(QRCodeScanFragment.this)
+              .commit();
+          return true;
+        }
+        return false;
+      }
+    });
   }
 
   @Override

@@ -12,13 +12,13 @@ import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.FeedByRegionRequest;
-import com.utree.eightysix.request.PostPraiseRequest;
+import com.utree.eightysix.request.FeedsHotRequest;
 import com.utree.eightysix.response.FeedsByRegionResponse;
+import com.utree.eightysix.response.FeedsResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
-import com.utree.eightysix.widget.TopBar;
 
 import java.util.Iterator;
 
@@ -31,55 +31,86 @@ public class HotFeedRegionFragment extends AbsRegionFragment {
   }
 
   @Override
-  protected void requestFeeds(final int regionType, final int page) {
+  protected int getType() {
+    return 1;
+  }
+
+  @Override
+  protected void requestRegionFeeds(final int regionType, int distance, int areaType, int areaId, final int page) {
     if (getBaseActivity() == null) return;
     if (mRefresherView != null && page == 1) {
       mRefresherView.setRefreshing(true);
       getBaseActivity().showRefreshIndicator(true);
     }
-    switch (regionType) {
-      case 0:
-        getBaseActivity().setTopTitle(mCircle == null ? "" : mCircle.shortName);
-        getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_ONE);
-        break;
-      case 1:
-        getBaseActivity().setTopTitle("1公里内");
-        getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
-        break;
-      case 2:
-        getBaseActivity().setTopTitle("5公里内");
-        getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
-        break;
-      case 3:
-        getBaseActivity().setTopTitle("同城");
-        getBaseActivity().setTopBarClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
-        break;
-    }
     getBaseActivity().setTopSubTitle("");
-    getBaseActivity().request(new FeedByRegionRequest(page, regionType, 1), new OnResponse<FeedsByRegionResponse>() {
+
+    U.request("feeds_by_region", new OnResponse2<FeedsByRegionResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        mLvFeed.loadError();
+      }
+
       @Override
       public void onResponse(FeedsByRegionResponse response) {
-        responseForRequest(response, regionType, page);
+        responseForFeedsByRegionRequest(response, page);
       }
-    }, FeedsByRegionResponse.class);
-
+    }, FeedsByRegionResponse.class, page, regionType, getType(), distance, null, null);
   }
 
   @Override
-  protected void responseForRequest(FeedsByRegionResponse response, int regionType, int page) {
-    super.responseForRequest(response, regionType, page);
+  protected void requestFeeds(int circleId, final int page) {
+    if (getBaseActivity() == null) return;
+    if (mRefresherView != null && page == 1) {
+      mRefresherView.setRefreshing(true);
+      getBaseActivity().showRefreshIndicator(true);
+    }
+    getBaseActivity().setTopSubTitle("");
+
+    U.request("feed_list_host", new OnResponse2<FeedsResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        mLvFeed.loadError();
+      }
+
+      @Override
+      public void onResponse(FeedsResponse response) {
+        responseForFeedsRequest(response, page);
+      }
+    }, FeedsResponse.class, circleId, page);
+  }
+
+  @Override
+  protected void responseForFeedsByRegionRequest(FeedsByRegionResponse response, int page) {
+    super.responseForFeedsByRegionRequest(response, page);
     U.getBus().post(new NewHotPostCountEvent(mCircle.id, 0));
   }
 
   @Override
-  protected void cacheOutFeeds(final int regionType, final int page) {
+  protected void responseForFeedsRequest(FeedsResponse response, int page) {
+    super.responseForFeedsRequest(response, page);
+    U.getBus().post(new NewHotPostCountEvent(mCircle.id, 0));
+  }
+
+  @Override
+  protected void cacheOutFeedsByRegion(final int regionType, int distance, int areaType, int areaId, final int page) {
     if (getBaseActivity() == null) return;
     getBaseActivity().cacheOut(new FeedByRegionRequest(page, regionType, 1), new OnResponse<FeedsByRegionResponse>() {
       @Override
       public void onResponse(FeedsByRegionResponse response) {
-        responseForCache(response, regionType, page);
+        responseForFeedsByRegionCache(response, page);
       }
     }, FeedsByRegionResponse.class);
+  }
+
+  @Override
+  protected void cacheOutFeeds(int circle, final int page) {
+    if (getBaseActivity() == null) return;
+    getBaseActivity().cacheOut(new FeedsHotRequest(circle, page), new OnResponse<FeedsResponse>() {
+      @Override
+      public void onResponse(FeedsResponse response) {
+        responseForFeedsCache(response, page);
+      }
+    }, FeedsResponse.class);
   }
 
   @Override
@@ -99,7 +130,13 @@ public class HotFeedRegionFragment extends AbsRegionFragment {
       return;
     }
     mPostPraiseRequesting = true;
-    getBaseActivity().request(new PostPraiseRequest(event.getPost().id), new OnResponse2<Response>() {
+
+    U.request("post_praise", new OnResponse2<Response>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        mPostPraiseRequesting = false;
+      }
+
       @Override
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
@@ -115,12 +152,7 @@ public class HotFeedRegionFragment extends AbsRegionFragment {
 
         mPostPraiseRequesting = false;
       }
-
-      @Override
-      public void onResponseError(Throwable e) {
-                                               mPostPraiseRequesting = false;
-                                                                                                                  }
-    }, Response.class);
+    }, Response.class, event.getPost().id);
   }
 
   @Subscribe
@@ -134,7 +166,7 @@ public class HotFeedRegionFragment extends AbsRegionFragment {
       }
     }
     if (isAdded()) {
-      requestFeeds(getRegionType(), 1);
+      refresh();
     }
   }
 
@@ -156,16 +188,18 @@ public class HotFeedRegionFragment extends AbsRegionFragment {
 
   @Subscribe
   public void onContactsSyncEvent(ContactsSyncEvent event) {
-    if (mFeedAdapter != null && mFeedAdapter.getFeeds().upContact == 0) {
-      if (event.isSucceed()) {
-        U.showToast("上传通讯录成功");
-      } else {
-        U.showToast("上传通讯录失败");
+    if (isResumed()) {
+      if (mFeedAdapter != null && mFeedAdapter.getFeeds().upContact == 0) {
+        if (event.isSucceed()) {
+          U.showToast("上传通讯录成功");
+        } else {
+          U.showToast("上传通讯录失败");
+        }
       }
-    }
 
-    refresh();
-    getBaseActivity().hideProgressBar();
+      refresh();
+      getBaseActivity().hideProgressBar();
+    }
   }
 
   @Subscribe

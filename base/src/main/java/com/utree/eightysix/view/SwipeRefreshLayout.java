@@ -20,7 +20,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
@@ -61,7 +60,7 @@ import android.widget.AbsListView;
 public class SwipeRefreshLayout extends ViewGroup {
   private static final String LOG_TAG = SwipeRefreshLayout.class.getSimpleName();
 
-  private static final long RETURN_TO_ORIGINAL_POSITION_TIMEOUT = 300;
+  private static final long RETURN_TO_ORIGINAL_POSITION_TIMEOUT = 0;
   private static final float ACCELERATE_INTERPOLATION_FACTOR = 1.5f;
   private static final float DECELERATE_INTERPOLATION_FACTOR = 2f;
   private static final float PROGRESS_BAR_HEIGHT = 4;
@@ -69,7 +68,6 @@ public class SwipeRefreshLayout extends ViewGroup {
   private static final int REFRESH_TRIGGER_DISTANCE = 120;
   private static final int INVALID_POINTER = -1;
 
-  private SwipeProgressBar mProgressBar; //the thing that shows progress is going
   private View mTarget; //the content that gets pulled down
   private int mOriginalOffsetTop;
   private OnRefreshListener mListener;
@@ -116,8 +114,6 @@ public class SwipeRefreshLayout extends ViewGroup {
   private Animation mShrinkTrigger = new Animation() {
     @Override
     public void applyTransformation(float interpolatedTime, Transformation t) {
-      float percent = mFromPercentage + ((0 - mFromPercentage) * interpolatedTime);
-      mProgressBar.setTriggerPercentage(percent);
     }
   };
 
@@ -156,14 +152,6 @@ public class SwipeRefreshLayout extends ViewGroup {
       mReturningToStart = true;
       // Timeout fired since the user last moved their finger; animate the
       // trigger to 0 and put the target back at its original position
-      if (mProgressBar != null) {
-        mFromPercentage = mCurrPercentage;
-        mShrinkTrigger.setDuration(mMediumAnimationDuration);
-        mShrinkTrigger.setAnimationListener(mShrinkAnimationListener);
-        mShrinkTrigger.reset();
-        mShrinkTrigger.setInterpolator(mDecelerateInterpolator);
-        startAnimation(mShrinkTrigger);
-      }
       animateOffsetToStartPosition(mCurrentTargetOffsetTop + getPaddingTop(),
           mReturnToStartPositionListener);
       mListener.onCancel();
@@ -196,7 +184,6 @@ public class SwipeRefreshLayout extends ViewGroup {
         android.R.integer.config_mediumAnimTime);
 
     setWillNotDraw(false);
-    mProgressBar = new SwipeProgressBar(this);
     final DisplayMetrics metrics = getResources().getDisplayMetrics();
     mProgressBarHeight = (int) (metrics.density * PROGRESS_BAR_HEIGHT);
     mDecelerateInterpolator = new DecelerateInterpolator(DECELERATE_INTERPOLATION_FACTOR);
@@ -246,7 +233,6 @@ public class SwipeRefreshLayout extends ViewGroup {
       return;
     }
     mCurrPercentage = percent;
-    mProgressBar.setTriggerPercentage(percent);
   }
 
   /**
@@ -260,11 +246,6 @@ public class SwipeRefreshLayout extends ViewGroup {
       ensureTarget();
       mCurrPercentage = 0;
       mRefreshing = refreshing;
-      if (mRefreshing) {
-        mProgressBar.start();
-      } else {
-        mProgressBar.stop();
-      }
     }
   }
 
@@ -295,7 +276,6 @@ public class SwipeRefreshLayout extends ViewGroup {
    */
   public void setColorSchemeColors(int color1, int color2, int color3, int color4) {
     ensureTarget();
-    mProgressBar.setColorScheme(color1, color2, color3, color4);
   }
 
   /**
@@ -328,16 +308,9 @@ public class SwipeRefreshLayout extends ViewGroup {
   }
 
   @Override
-  public void draw(Canvas canvas) {
-    super.draw(canvas);
-    mProgressBar.draw(canvas);
-  }
-
-  @Override
   protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
     final int width = getMeasuredWidth();
     final int height = getMeasuredHeight();
-    mProgressBar.setBounds(0, 0, width, mProgressBarHeight);
     if (getChildCount() == 0) {
       return;
     }
@@ -426,7 +399,7 @@ public class SwipeRefreshLayout extends ViewGroup {
         if (yDiff > mTouchSlop) {
           mLastMotionY = y;
           mIsBeingDragged = true;
-          mListener.onDrag();
+          mListener.onDrag((int) yDiff);
         }
         break;
 
@@ -484,10 +457,10 @@ public class SwipeRefreshLayout extends ViewGroup {
 
         if (!mIsBeingDragged && yDiff > mTouchSlop) {
           mIsBeingDragged = true;
-          mListener.onDrag();
         }
 
         if (mIsBeingDragged) {
+          mListener.onDrag((int) yDiff);
           // User velocity passed min velocity; trigger a refresh
           if (yDiff > mDistanceToTriggerSync) {
             // User movement passed distance; trigger a refresh
@@ -498,14 +471,14 @@ public class SwipeRefreshLayout extends ViewGroup {
                 mAccelerateInterpolator.getInterpolation(
                     yDiff / mDistanceToTriggerSync));
             updateContentOffsetTop((int) (yDiff));
-            if (mLastMotionY > y && mTarget.getTop() == getPaddingTop()) {
-              // If the user puts the view back at the top, we
-              // don't need to. This shouldn't be considered
-              // cancelling the gesture as the user can restart from the top.
-              removeCallbacks(mCancel);
-            } else {
-              updatePositionTimeout();
-            }
+//            if (mLastMotionY > y && mTarget.getTop() == getPaddingTop()) {
+//              // If the user puts the view back at the top, we
+//              // don't need to. This shouldn't be considered
+//              // cancelling the gesture as the user can restart from the top.
+//              removeCallbacks(mCancel);
+//            } else {
+//              updatePositionTimeout();
+//            }
           }
           mLastMotionY = y;
         }
@@ -528,6 +501,7 @@ public class SwipeRefreshLayout extends ViewGroup {
         mCurrPercentage = 0;
         mActivePointerId = INVALID_POINTER;
         mListener.onCancel();
+        updatePositionTimeout();
         return false;
     }
 
@@ -580,7 +554,7 @@ public class SwipeRefreshLayout extends ViewGroup {
   public interface OnRefreshListener {
     public void onRefresh();
 
-    public void onDrag();
+    public void onDrag(int value);
 
     public void onCancel();
   }

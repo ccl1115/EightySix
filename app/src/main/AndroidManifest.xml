@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" android:versionCode="46" android:versionName="1.7.1" package="com.utree.eightysix">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" android:versionCode="65" android:versionName="2.1.0-SNAPSHOT" package="com.utree.eightysix">
 
     <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="21"/>
 
@@ -107,7 +107,7 @@
 
         <activity android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.feed.FeedActivity" android:screenOrientation="portrait"/>
 
-        <activity android:exported="@bool/exported" android:clearTaskOnLaunch="true" android:launchMode="singleTask" android:name=".app.home.HomeActivity" android:screenOrientation="portrait"/>
+        <activity android:clearTaskOnLaunch="true" android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.home.HomeTabActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme.Light"/>
 
         <activity android:exported="@bool/exported" android:name=".app.intro.GuideActivity" android:screenOrientation="portrait"/>
 
@@ -120,8 +120,6 @@
         <activity android:exported="@bool/exported" android:launchMode="singleTask" android:name=".app.post.PostActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden|adjustPan"/>
 
         <activity android:exported="@bool/exported" android:name=".app.publish.FeedbackActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden|adjustResize"/>
-
-        <activity android:exported="@bool/exported" android:name=".app.account.PraiseStaticActivity" android:screenOrientation="portrait"/>
 
         <activity android:exported="@bool/exported" android:name=".app.msg.MsgActivity" android:screenOrientation="portrait"/>
 
@@ -155,8 +153,6 @@
 
         <activity android:exported="@bool/exported" android:name=".app.chat.ChatActivity" android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden|adjustResize"/>
 
-        <activity android:exported="@bool/exported" android:label="标签详情" android:launchMode="singleTask" android:name=".app.tag.TagTabActivity" android:screenOrientation="portrait"/>
-
         <activity android:exported="@bool/exported" android:label="全部话题" android:name=".app.topic.TopicListActivity" android:screenOrientation="portrait"/>
 
         <activity android:exported="@bool/exported" android:label="话题详情" android:name=".app.topic.TopicActivity" android:screenOrientation="portrait"/>
@@ -170,6 +166,56 @@
         <activity android:exported="@bool/exported" android:label="厂区快照" android:name=".app.snapshot.SnapshotActivity" android:screenOrientation="portrait"/>
 
         <activity android:exported="@bool/exported" android:name=".app.web.BainianWebActivity" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.FragmentHolder" android:screenOrientation="portrait"/>
+
+        <activity android:label="开发者模式" android:name=".app.devmode.DevModeActivity"/>
+
+        <activity android:label="完善资料" android:name=".app.account.ProfileFillActivity" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.account.ProfileEditActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme.Light"/>
+
+        <activity android:name=".app.account.NameEditActivity" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.account.BirthdayEditActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme.Light"/>
+
+        <activity android:label="更新签名" android:name=".app.account.SignatureEditActivity" android:screenOrientation="portrait"/>
+
+        <activity android:label="用户头像列表" android:name=".app.account.AvatarsActivity" android:screenOrientation="portrait"/>
+
+        <activity android:label="查看头像大图" android:launchMode="singleTask" android:name=".app.account.AvatarViewerActivity" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.friends.FriendListActivity" android:screenOrientation="portrait"/>
+
+        <activity android:label="好友请求" android:name=".app.friends.RequestListActivity" android:screenOrientation="portrait"/>
+
+        <activity android:label="我关注的圈子" android:name=".app.circle.FollowCircleListActivity" android:screenOrientation="portrait"/>
+
+        <activity android:label="朋友请求详情" android:name=".app.friends.RequestDetailActivity" android:screenOrientation="portrait"/>
+
+        <activity android:label="帖子搜索" android:launchMode="singleTask" android:name=".app.feed.FeedsSearchActivity" android:screenOrientation="portrait"/>
+
+        <activity android:label="用户签名" android:name=".app.account.SignaturesActivity" android:screenOrientation="portrait"/>
+
+        <activity android:label="我的帖子" android:name=".app.account.MyPostsActivity" android:screenOrientation="portrait"/>
+
+        <activity android:label="他的帖子" android:name=".app.account.VisitorPostsActivity" android:screenOrientation="portrait"/>
+
+        <activity android:name=".app.dp.DailyPicksActivity" android:screenOrientation="portrait"/>
+
+        <activity android:label="全部标签" android:name=".app.tag.AllTagsActivity" android:screenOrientation="portrait"/>
+
+        <activity android:label="搜索朋友" android:name=".app.friends.UserSearchActivity" android:screenOrientation="portrait"/>
+
+        <activity android:label="发送朋友请求" android:name=".app.friends.SendRequestActivity" android:screenOrientation="portrait"/>
+
+        <activity android:label="手机联系人" android:name=".app.friends.FriendContactListActivity" android:screenOrientation="portrait"/>
+
+        <activity android:label="话题详情" android:name=".app.topic.TopicDetailActivity" android:screenOrientation="portrait"/>
+
+        <activity android:label="好友会话列表" android:name=".app.chat.FConversationActivity" android:screenOrientation="portrait"/>
+
+        <activity android:label="朋友聊天" android:name=".app.chat.FChatActivity" android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize"/>
 
         <service android:enabled="true" android:name=".contact.ContactsSyncService"/>
         <service android:enabled="true" android:name=".app.msg.FetchNotificationService"/>
@@ -242,7 +288,8 @@
                 <action android:name=""/>
             </intent-filter>
         </activity>
-        <activity android:label="开发者模式" android:name=".app.devmode.DevModeActivity"/>
+        <activity android:name=".app.account.PraiseHistoryActivity"/>
+        <activity android:name=".app.ladder.LadderActivity"/>
 
         <!-- 【必须】 信鸽service -->
         <service android:exported="true" android:name="com.tencent.android.tpush.service.XGPushService" android:persistent="true" android:process=":xg_service_v2" tools:ignore="ExportedService"/>

@@ -47,6 +47,18 @@ public class Comment implements Parcelable {
   @SerializedName("distance")
   public String distance;
 
+  @SerializedName("userName")
+  public String name;
+
+  @SerializedName("userViewId")
+  public String viewId;
+
+  @SerializedName("levelIcon")
+  public String levelIcon;
+
+  @SerializedName("blackList")
+  public int ban;
+
   /**
    * 1 deleted
    * 0 not deleted
@@ -71,6 +83,9 @@ public class Comment implements Parcelable {
     return true;
   }
 
+  public Comment() {
+  }
+
   @Override
   public int describeContents() {
     return 0;
@@ -91,10 +106,11 @@ public class Comment implements Parcelable {
     dest.writeInt(this.owner);
     dest.writeString(this.time);
     dest.writeString(this.distance);
+    dest.writeString(this.name);
+    dest.writeString(this.viewId);
+    dest.writeString(this.levelIcon);
+    dest.writeInt(this.ban);
     dest.writeInt(this.delete);
-  }
-
-  public Comment() {
   }
 
   private Comment(Parcel in) {
@@ -111,10 +127,14 @@ public class Comment implements Parcelable {
     this.owner = in.readInt();
     this.time = in.readString();
     this.distance = in.readString();
+    this.name = in.readString();
+    this.viewId = in.readString();
+    this.levelIcon = in.readString();
+    this.ban = in.readInt();
     this.delete = in.readInt();
   }
 
-  public static final Parcelable.Creator<Comment> CREATOR = new Parcelable.Creator<Comment>() {
+  public static final Creator<Comment> CREATOR = new Creator<Comment>() {
     public Comment createFromParcel(Parcel source) {
       return new Comment(source);
     }

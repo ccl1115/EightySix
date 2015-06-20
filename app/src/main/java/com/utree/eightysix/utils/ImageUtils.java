@@ -14,8 +14,10 @@ import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.U;
 import com.utree.eightysix.request.UploadImageRequest;
 import com.utree.eightysix.response.UploadImageResponse;
+import com.utree.eightysix.rest.HandlerWrapper;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
+import com.utree.eightysix.rest.RequestData;
 import de.akquinet.android.androlog.Log;
 import org.apache.http.Header;
 
@@ -158,7 +160,7 @@ public class ImageUtils {
    * @param file the bitmap file
    * @return bitmap or null if error occurred
    */
-  @SuppressWarnings ("SuspiciousNameCombination")
+  @SuppressWarnings("SuspiciousNameCombination")
   public static Bitmap safeDecodeBitmap(File file) {
     int widthPixels = (int) (U.getContext().getResources().getDisplayMetrics().widthPixels * 0.75);
     try {
@@ -192,7 +194,7 @@ public class ImageUtils {
    * @param hash the bitmap snapshot
    * @return bitmap or null if error occurred
    */
-  @SuppressWarnings ("SuspiciousNameCombination")
+  @SuppressWarnings("SuspiciousNameCombination")
   public static Bitmap safeDecodeBitmap(String hash) {
     int widthPixels = 600;
     try {
@@ -220,7 +222,7 @@ public class ImageUtils {
     }
   }
 
-  @SuppressWarnings ("SuspiciousNameCombination")
+  @SuppressWarnings("SuspiciousNameCombination")
   public static Bitmap safeDecodeBitmap(int resId) {
     int widthPixels = 600;
     try {
@@ -259,8 +261,8 @@ public class ImageUtils {
     }
   }
 
-  public static void compress(File file, int width, int height) {
-    executeTask(new CompressWorker(file, width, height));
+  public static void compress(File file, int width, int height, int quality) {
+    executeTask(new CompressWorker(file, width, height, quality));
   }
 
 
@@ -384,8 +386,8 @@ public class ImageUtils {
    *
    * @param file the file
    */
-  public static void asyncUpload(File file) {
-    executeTask(new UploadWorker(file));
+  public static void asyncUpload(File file, int quality) {
+    executeTask(new UploadWorker(file, quality));
   }
 
   /**
@@ -426,14 +428,18 @@ public class ImageUtils {
     private Bitmap mBitmap;
     private File mFile;
     private String mFileHash;
-    private String mUrl;
+    private final int mQuality;
 
-    UploadWorker(File file) {
+    UploadWorker(File file, int quality) {
       mFile = file;
+      mQuality = quality;
     }
 
     @Override
     protected Void doInBackground(Void... params) {
+      final String hash = IOUtils.fileHash(mFile);
+      mFileHash = hash;
+
       if (mFile != null) {
         mBitmap = safeDecodeBitmap(mFile, 600, 600);
       }
@@ -448,7 +454,7 @@ public class ImageUtils {
 
       try {
         fos = new FileOutputStream(file);
-        mBitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);
+        mBitmap.compress(Bitmap.CompressFormat.JPEG, mQuality, fos);
       } catch (FileNotFoundException ignored) {
       } finally {
         if (fos != null) {
@@ -459,8 +465,6 @@ public class ImageUtils {
         }
       }
 
-      final String hash = IOUtils.fileHash(file);
-      mFileHash = hash;
       File newPath = new File(file.getParent() + "/" + hash + ".jpg");
       file.renameTo(newPath);
       mFile = newPath;
@@ -473,22 +477,25 @@ public class ImageUtils {
 
     @Override
     protected void onPostExecute(Void aVoid) {
-      U.getRESTRequester().request(new UploadImageRequest(mFile), new OnResponse2<UploadImageResponse>() {
-        @Override
-        public void onResponseError(Throwable e) {
-          U.getBus().post(new ImageUploadedEvent(null, null));
-        }
+      RequestData<UploadImageResponse> data = new RequestData<UploadImageResponse>(new UploadImageRequest(mFile));
+      data.setHost(U.getConfig("api.host.second"));
+      U.getRESTRequester().request(data,
+          new HandlerWrapper<UploadImageResponse>(data, new OnResponse2<UploadImageResponse>() {
+            @Override
+            public void onResponseError(Throwable e) {
+              U.getBus().post(new ImageUploadedEvent(null, null));
+            }
 
-        @Override
-        public void onResponse(UploadImageResponse response) {
-          if (RESTRequester.responseOk(response)) {
-            cacheImage(mFileHash, mFile);
-            U.getBus().post(new ImageUploadedEvent(mFileHash, response.imageUrl));
-          } else {
-            U.getBus().post(new ImageUploadedEvent(null, null));
-          }
-        }
-      }, UploadImageResponse.class);
+            @Override
+            public void onResponse(UploadImageResponse response) {
+              if (RESTRequester.responseOk(response)) {
+                cacheImage(mFileHash, mFile);
+                U.getBus().post(new ImageUploadedEvent(mFileHash, response.object.imageUrl));
+              } else {
+                U.getBus().post(new ImageUploadedEvent(null, null));
+              }
+            }
+          }, UploadImageResponse.class));
     }
   }
 
@@ -831,11 +838,13 @@ public class ImageUtils {
     private File mFrom;
     private final int mWidth;
     private final int mHeight;
+    private final int mQuality;
 
-    public CompressWorker(File from, int width, int height) {
+    public CompressWorker(File from, int width, int height, int quality) {
       mFrom = from;
       mWidth = width;
       mHeight = height;
+      mQuality = quality;
     }
 
     @Override
@@ -843,7 +852,7 @@ public class ImageUtils {
       Bitmap from = safeDecodeBitmap(mFrom, mWidth, mHeight);
 
       try {
-        from.compress(Bitmap.CompressFormat.JPEG, 50, new FileOutputStream(mFrom));
+        from.compress(Bitmap.CompressFormat.JPEG, mQuality, new FileOutputStream(mFrom));
       } catch (FileNotFoundException ignored) {
       }
       return null;

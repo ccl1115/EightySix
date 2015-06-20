@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
@@ -60,6 +61,8 @@ public class TopicListActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+
     requestTopicList(1);
 
     mAlvTopic.setLoadMoreCallback(new LoadMoreCallback() {
@@ -87,6 +90,7 @@ public class TopicListActivity extends BaseActivity {
   }
 
   @Override
+  @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();
   }

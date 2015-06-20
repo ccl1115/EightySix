@@ -5,6 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
+import android.widget.TextView;
+import com.utree.eightysix.R;
 
 /**
  * @author simon
@@ -18,6 +20,7 @@ class LoadMoreAdapterWrapper extends BaseAdapter {
   private LoadMoreCallback mCallback;
 
   private int mLoadMoreType;
+  private boolean mIsError;
 
 
   public LoadMoreAdapterWrapper(ListAdapter adapter, LoadMoreCallback moreCallback) {
@@ -58,8 +61,23 @@ class LoadMoreAdapterWrapper extends BaseAdapter {
     if (getItemViewType(position) == mLoadMoreType) {
       if (convertView == null) convertView = mCallback.getLoadMoreView(parent);
 
-      if (mCallback.hasMore()) {
+      if (mIsError) {
         convertView.setVisibility(View.VISIBLE);
+        convertView.findViewById(R.id.pb_loading).setVisibility(View.GONE);
+        ((TextView) convertView.findViewById(R.id.tv_loading)).setText("点击加载更多");
+        convertView.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            if (!mIsLoading) {
+              mIsLoading = mCallback.onLoadMoreStart();
+            }
+          }
+        });
+      } else if (mCallback.hasMore()) {
+        convertView.setVisibility(View.VISIBLE);
+        convertView.findViewById(R.id.pb_loading).setVisibility(View.VISIBLE);
+        ((TextView) convertView.findViewById(R.id.tv_loading)).setText("正在加载更多");
+        convertView.setOnClickListener(null);
         if (!mIsLoading) {
           mIsLoading = mCallback.onLoadMoreStart();
         }
@@ -91,6 +109,13 @@ class LoadMoreAdapterWrapper extends BaseAdapter {
 
   public void stopLoadMore() {
     mIsLoading = false;
+    mIsError = false;
+    notifyDataSetChanged();
+  }
+
+  public void loadError() {
+    mIsError = true;
+    mIsLoading = false;
     notifyDataSetChanged();
   }
 
@@ -117,4 +142,5 @@ class LoadMoreAdapterWrapper extends BaseAdapter {
     super.unregisterDataSetObserver(observer);
     mListAdapter.unregisterDataSetObserver(observer);
   }
+
 }

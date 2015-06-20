@@ -20,15 +20,16 @@
     <include layout="@layout/widget_invite_code"/>
 
     <com.utree.eightysix.widget.RoundedButton
-            app:radius="2dp"
-            app:background="@color/apptheme_primary_btn_light"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/register"
-            android:id="@+id/btn_register"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="25dp"
+            android:minHeight="48dp"
+            android:text="@string/register"
+            android:id="@+id/btn_register"
             android:enabled="false"
+            app:radius="2dp"
+            app:background="@color/apptheme_primary_btn_light"
             />
 
     <TextView

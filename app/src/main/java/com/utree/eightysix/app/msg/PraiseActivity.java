@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import butterknife.InjectView;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
@@ -15,6 +14,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.feed.event.PostDeleteEvent;
 import com.utree.eightysix.app.feed.event.UpdatePraiseCountEvent;
 import com.utree.eightysix.data.Paginate;
@@ -31,19 +31,17 @@ import com.utree.eightysix.widget.RandomSceneTextView;
 /**
  * @author simon
  */
-@Layout (R.layout.activity_msg)
+@Layout (R.layout.fragment_base_msg)
+@TopTitle(R.string.praise_count)
 public class PraiseActivity extends BaseActivity {
 
   @InjectView (R.id.refresh_view)
   public SwipeRefreshLayout mRvMsg;
 
-  @InjectView (R.id.tv_no_new_msg)
-  public TextView mTvNoNewMsg;
-
   @InjectView (R.id.alv_refresh)
   public AdvancedListView mAlvMsg;
 
-  @InjectView(R.id.tv_empty_text)
+  @InjectView(R.id.rstv_empty)
   public RandomSceneTextView mRstvEmpty;
 
   private MsgAdapter mMsgAdapter;
@@ -60,6 +58,8 @@ public class PraiseActivity extends BaseActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
     mRvMsg.setColorScheme(R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed,
         R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed);
@@ -102,7 +102,7 @@ public class PraiseActivity extends BaseActivity {
       }
 
       @Override
-      public void onDrag() {
+      public void onDrag(int value) {
         showRefreshIndicator(false);
       }
 
@@ -117,8 +117,6 @@ public class PraiseActivity extends BaseActivity {
     mRstvEmpty.setText(R.string.not_found_praise);
     mRstvEmpty.setSubText(R.string.not_found_praise_tip);
     mRstvEmpty.setDrawable(R.drawable.scene_5);
-
-    mTvNoNewMsg.setText(R.string.no_new_praise);
 
     // clear account new praise
     Account.inst().setHasNewPraise(false);
@@ -156,7 +154,16 @@ public class PraiseActivity extends BaseActivity {
       mRvMsg.setRefreshing(true);
       ReadMsgStore.inst().clearRead();
     }
-    request(new PraisesRequest(page), new OnResponse2<MsgsResponse>() {
+    U.request("praise_list", new OnResponse2<MsgsResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        hideProgressBar();
+        hideRefreshIndicator();
+        mAlvMsg.stopLoadMore();
+        mRvMsg.setRefreshing(false);
+        mRstvEmpty.setVisibility(View.VISIBLE);
+      }
+
       @Override
       public void onResponse(MsgsResponse response) {
         if (RESTRequester.responseOk(response)) {
@@ -177,18 +184,15 @@ public class PraiseActivity extends BaseActivity {
             mMsgAdapter.add(response.object.posts.lists);
           }
 
-          mTvNoNewMsg.setVisibility(View.VISIBLE);
 
           if (response.object.posts.lists.size() == 0) {
             mRstvEmpty.setVisibility(View.VISIBLE);
-            mTvNoNewMsg.setVisibility(View.GONE);
           } else {
             mRstvEmpty.setVisibility(View.GONE);
           }
 
           for (Post post : response.object.posts.lists) {
             if (post.read == 1) {
-              mTvNoNewMsg.setVisibility(View.GONE);
               break;
             }
           }
@@ -197,7 +201,6 @@ public class PraiseActivity extends BaseActivity {
         } else {
           if (mMsgAdapter == null || mMsgAdapter.getCount() == 0) {
             mRstvEmpty.setVisibility(View.VISIBLE);
-            mTvNoNewMsg.setVisibility(View.GONE);
           }
         }
         hideProgressBar();
@@ -205,18 +208,7 @@ public class PraiseActivity extends BaseActivity {
         mAlvMsg.stopLoadMore();
         mRvMsg.setRefreshing(false);
       }
-
-      @Override
-      public void onResponseError(Throwable e) {
-        hideProgressBar();
-        hideRefreshIndicator();
-        mAlvMsg.stopLoadMore();
-        mRvMsg.setRefreshing(false);
-        mRstvEmpty.setVisibility(View.VISIBLE);
-        mTvNoNewMsg.setVisibility(View.GONE);
-      }
-
-    }, MsgsResponse.class);
+    }, MsgsResponse.class, page);
   }
 
   private void cacheOutPraises(final int page) {
@@ -240,18 +232,15 @@ public class PraiseActivity extends BaseActivity {
             setTopSubTitle(getString(R.string.praise_count_rank,
                 response.object.rank, response.object.topPraiseCount));
 
-            mTvNoNewMsg.setVisibility(View.VISIBLE);
 
             if (response.object.posts.lists.size() == 0) {
               mRstvEmpty.setVisibility(View.VISIBLE);
-              mTvNoNewMsg.setVisibility(View.GONE);
             } else {
               mRstvEmpty.setVisibility(View.GONE);
             }
 
             for (Post post : response.object.posts.lists) {
               if (post.read == 1) {
-                mTvNoNewMsg.setVisibility(View.GONE);
                 break;
               }
             }
@@ -274,7 +263,6 @@ public class PraiseActivity extends BaseActivity {
         mAlvMsg.stopLoadMore();
         mRvMsg.setRefreshing(false);
         mRstvEmpty.setVisibility(View.VISIBLE);
-        mTvNoNewMsg.setVisibility(View.GONE);
       }
 
     }, MsgsResponse.class);

@@ -2,41 +2,70 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-    <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/page_guide_margin_top"
-            android:layout_marginBottom="60dp"
-            android:layout_above="@+id/tv_tip"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/guide_1"/>
+                android:layout_height="match_parent"
+        >
 
     <TextView
             android:id="@+id/tv_tip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="12dp"
-            android:layout_above="@+id/tv_sub_tip"
+            android:layout_marginTop="50dp"
             android:layout_centerHorizontal="true"
-            android:textSize="26sp"
-            android:textColor="@android:color/black"
-            android:text="工厂里的秘密社区"/>
+            android:textSize="23sp"
+            android:textColor="@android:color/white"
+            android:text="打工者自己的社交平台"
+            android:shadowDx="0"
+            android:shadowDy="6"
+            android:shadowRadius="2"
+            android:shadowColor="#44000000"
+            />
 
     <TextView
             android:id="@+id/tv_sub_tip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginBottom="100dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="12dp"
             android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:gravity="center"
-            android:textSize="16sp"
-            android:textColor="@android:color/black"
-            android:text="这里只有工厂里打工的人才能加入，而且你无法知道他们的身份"/>
+            android:layout_below="@+id/tv_tip"
+            android:textSize="15sp"
+            android:textColor="@android:color/white"
+            android:text="蓝莓，是打工者的生活方式。这里来自五湖四海的我们，手相牵心相系，编织起漂泊者的经历"
+            android:shadowDx="0"
+            android:shadowDy="4"
+            android:shadowRadius="2"
+            android:shadowColor="#44000000"
+            />
+
+    <ImageView
+            android:id="@+id/iv_circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="200dp"
+            android:src="@drawable/guide_1_component_circle"
+            android:visibility="invisible"
+            />
+
+    <ImageView
+            android:id="@+id/iv_big_heart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="245dp"
+            android:src="@drawable/guide_1_component_big_heart"
+            android:visibility="invisible"
+            />
+
+    <ImageView
+            android:id="@+id/iv_hearts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="190dp"
+            android:src="@drawable/guide_1_component_hearts"
+            android:visibility="invisible"
+            />
 
 </RelativeLayout>

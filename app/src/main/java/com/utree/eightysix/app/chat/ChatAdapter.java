@@ -1,5 +1,7 @@
 package com.utree.eightysix.app.chat;
 
+import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +13,9 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.chat.content.ImageContent;
 import com.utree.eightysix.app.post.PostActivity;
+import com.utree.eightysix.dao.Conversation;
 import com.utree.eightysix.dao.Message;
+import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.TimeUtil;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.FontPortraitView;
@@ -38,6 +42,8 @@ public class ChatAdapter extends BaseAdapter {
   private static final int TYPE_TIMESTAMP = 6;
   private static final int TYPE_IMAGE_FROM = 7;
   private static final int TYPE_IMAGE_TO = 8;
+
+  private Conversation mConversation;
 
   private List<Message> mMessages;
   private Comparator<Message> mMessageComparator;
@@ -66,6 +72,14 @@ public class ChatAdapter extends BaseAdapter {
     mMessages = new ArrayList<Message>();
   }
 
+  public ChatAdapter(Conversation conversation) {
+    this();
+    mMyPortrait = conversation.getMyPortrait();
+    mMyPortraitColor = ColorUtil.strToColor(conversation.getMyPortraitColor());
+    mTargetPortrait = conversation.getPortrait();
+    mTargetPortraitColor = ColorUtil.strToColor(conversation.getPortraitColor());
+    mConversation = conversation;
+  }
   public ChatAdapter(String myPortrait,
                      int myPortraitColor,
                      String targetPortrait,
@@ -150,10 +164,13 @@ public class ChatAdapter extends BaseAdapter {
       case TYPE_INFO:
         return getInfoView(position, convertView, parent);
       case TYPE_POST:
+        return getPostView(position, convertView, parent);
       case TYPE_COMMENT:
         return getPostCommentInfoView(position, convertView, parent);
       case TYPE_TIMESTAMP:
         return getTimestampView(position, convertView, parent);
+      case TYPE_INVALID:
+        return getInvalid(convertView, parent);
     }
     return null;
   }
@@ -201,6 +218,13 @@ public class ChatAdapter extends BaseAdapter {
     return TYPE_COUNT;
   }
 
+  private View getInvalid(View convertView, ViewGroup parent) {
+    if (convertView == null) {
+      convertView = new View(parent.getContext());
+    }
+    return convertView;
+  }
+
   private View getTextFromView(int position, View convertView, ViewGroup parent) {
     View textView = getTextView(R.layout.item_chat_text_from, position, convertView, parent);
     TextItemViewHolder holder = (TextItemViewHolder) textView.getTag();
@@ -208,7 +232,8 @@ public class ChatAdapter extends BaseAdapter {
       holder.mFpvPortrait.setEmotion(' ');
       holder.mFpvPortrait.setBackgroundResource(R.drawable.ic_host_portrait);
     } else {
-      holder.mFpvPortrait.setEmotion(mTargetPortrait.charAt(0));
+      holder.mFpvPortrait.setEmotion(mTargetPortrait.charAt(0)
+      );
       holder.mFpvPortrait.setEmotionColor(mTargetPortraitColor);
     }
     return textView;
@@ -323,11 +348,42 @@ public class ChatAdapter extends BaseAdapter {
 
     final Message message = getItem(position);
     EmojiconTextView textView = (EmojiconTextView) convertView.findViewById(R.id.rb_info);
+    textView.setBackgroundResource(R.drawable.bg_chat_comment_info);
     textView.setText(message.getContent());
     textView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
         PostActivity.start(view.getContext(), message.getPostId());
+      }
+    });
+
+    return convertView;
+  }
+
+  private View getPostView(int position, View convertView, ViewGroup parent) {
+    PostItemViewHolder holder;
+    if (convertView == null) {
+      convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_post, parent, false);
+      holder = new PostItemViewHolder(convertView);
+      convertView.setTag(holder);
+    } else {
+      holder = (PostItemViewHolder) convertView.getTag();
+    }
+
+    final Message message = getItem(position);
+
+    if (TextUtils.isEmpty(mConversation.getBgUrl())) {
+      holder.mAivBg.setUrl(null);
+      holder.mFlPost.setBackgroundColor(ColorUtil.strToColor(mConversation.getBgColor()));
+    } else {
+      holder.mAivBg.setUrl(mConversation.getBgUrl());
+      holder.mFlPost.setBackgroundColor(Color.TRANSPARENT);
+    }
+    holder.mTvContent.setText(mConversation.getPostContent());
+    holder.mFlPost.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        PostActivity.start(v.getContext(), message.getPostId());
       }
     });
 
@@ -405,6 +461,22 @@ public class ChatAdapter extends BaseAdapter {
     LinearLayout mLlBubble;
 
     ImageItemViewHolder(View view) {
+      ButterKnife.inject(this, view);
+    }
+  }
+
+  class PostItemViewHolder {
+
+    @InjectView(R.id.fl_post)
+    FrameLayout mFlPost;
+
+    @InjectView(R.id.tv_content)
+    TextView mTvContent;
+
+    @InjectView(R.id.aiv_post_bg)
+    AsyncImageView mAivBg;
+
+    PostItemViewHolder(View view) {
       ButterKnife.inject(this, view);
     }
   }

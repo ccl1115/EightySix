@@ -3,12 +3,10 @@ package com.utree.eightysix.app.account;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.text.InputType;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import butterknife.InjectView;
@@ -28,9 +26,6 @@ import com.utree.eightysix.response.UnregContactsResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.widget.AdvancedListView;
-import com.utree.eightysix.widget.TextActionButton;
-import com.utree.eightysix.widget.TopBar;
-import de.akquinet.android.androlog.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,60 +88,27 @@ public class ContactsActivity extends BaseActivity {
 
     showProgressBar();
 
-    mTopBar.setActionAdapter(new TopBar.ActionAdapter() {
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+    getTopBar().getAbRight().setText(getString(R.string.send));
+    getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
       @Override
-      public String getTitle(int position){
-        return getString(R.string.send);
-      }
-
-      @Override
-      public Drawable getIcon(int position) {
-        return null;
-      }
-
-      @Override
-      public Drawable getBackgroundDrawable(int position) {
-        return new RoundRectDrawable(U.dp2px(2), getResources().getColorStateList(R.color.apptheme_primary_btn_light));
-      }
-
-      @Override
-      public void onClick(View view, int position) {
+      public void onClick(View v) {
+        if (mContactsAdapter == null) return;
         for (Contact contact : mContactsAdapter.getChecked()) {
           String textToShare = getIntent().getStringExtra("textToShare");
           sendSMS(contact.phone, textToShare);
-          Log.d(TAG, "send Share msg to " + contact.toString());
-          Log.d(TAG, "with share msg " + textToShare);
-
         }
 
         showToast(getString(R.string.share_succeed), false);
         finish();
       }
-
-      @Override
-      public int getCount() {
-        return 1;
-      }
-
-      @Override
-      public TopBar.LayoutParams getLayoutParams(int position) {
-        TopBar.LayoutParams layoutParams = new TopBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.rightMargin = U.dp2px(8);
-        return layoutParams;
-      }
     });
-
-    mTopBar.getActionView(0).setActionBackgroundDrawable(
-        new RoundRectDrawable(U.dp2px(2),
-            getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
-    ((TextActionButton) mTopBar.getActionView(0)).setTextColor(
-        getResources().getColor(R.color.apptheme_primary_grey_color_disabled));
 
     requestUnregContacts();
   }
 
   @Override
+  @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();
   }
@@ -171,20 +133,9 @@ public class ContactsActivity extends BaseActivity {
   }
 
   protected void enableSendButton() {
-    mTopBar.getActionView(0).setEnabled(true);
-    mTopBar.getActionView(0).setActionBackgroundDrawable(
-        new RoundRectDrawable(U.dp2px(2),
-            getResources().getColorStateList(R.color.apptheme_primary_btn_light)));
-    ((TextActionButton) mTopBar.getActionView(0)).setTextColor(Color.WHITE);
   }
 
   private void disableSendButton() {
-    mTopBar.getActionView(0).setEnabled(false);
-    mTopBar.getActionView(0).setActionBackgroundDrawable(
-        new RoundRectDrawable(U.dp2px(2),
-            getResources().getColor(R.color.apptheme_primary_light_color_disabled)));
-    ((TextActionButton) mTopBar.getActionView(0)).setTextColor(
-        getResources().getColor(R.color.apptheme_primary_grey_color_disabled));
   }
 
   private void requestUnregContacts() {

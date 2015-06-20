@@ -144,7 +144,6 @@ public class RegionFragment extends BaseFragment {
 
   @Subscribe
   public void onRegionUpdateEvent(RegionResponseEvent event) {
-    setCurrentCircle(event.getCircle());
 
     clearSelected();
     switch (event.getRegion()) {

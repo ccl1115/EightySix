@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Copyright (c) 2015. All rights reserved by utree.cn
+  -->
+
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="176dp"
+        >
+
+    <FrameLayout
+            android:id="@+id/fl_left"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginTop="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginEnd="3dp"
+            >
+
+        <com.utree.eightysix.widget.AsyncImageView
+                android:id="@+id/aiv_bg_left"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                />
+
+        <View
+                android:id="@+id/v_darken_left"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#44000000"
+                />
+
+
+        <com.rockerhieu.emojicon.EmojiconTextView
+                android:id="@+id/tv_content_left"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textSize="12sp"
+                android:textColor="@android:color/white"
+                android:maxLines="7"
+                />
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_gravity="center_horizontal"
+                >
+
+            <com.utree.eightysix.widget.TagView
+                    android:id="@+id/tv_left_tag_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+            <com.utree.eightysix.widget.TagView
+                    android:id="@+id/tv_left_tag_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_gravity="bottom"
+                >
+
+            <TextView
+                    style="@style/TextView.SingleLine"
+                    android:id="@+id/tv_left_source"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="4dp"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white"
+                    />
+
+            <TextView
+                    android:id="@+id/tv_left_praise"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:drawableLeft="@drawable/ic_heart_white_normal"
+                    android:drawableStart="@drawable/ic_heart_white_normal"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white"
+                    android:gravity="center_vertical"
+                    />
+
+            <TextView
+                    android:id="@+id/tv_left_reply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:drawableLeft="@drawable/ic_reply"
+                    android:drawableStart="@drawable/ic_reply"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white"
+                    android:gravity="center_vertical"
+                    />
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <FrameLayout
+            android:id="@+id/fl_right"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginTop="6dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginEnd="6dp"
+            >
+
+        <com.utree.eightysix.widget.AsyncImageView
+                android:id="@+id/aiv_bg_right"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                />
+
+        <View
+                android:id="@+id/v_darken_right"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#44000000"
+                />
+
+        <com.rockerhieu.emojicon.EmojiconTextView
+                android:id="@+id/tv_content_right"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textSize="12sp"
+                android:textColor="@android:color/white"
+                android:maxLines="7"
+                />
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_gravity="center_horizontal"
+                >
+
+            <com.utree.eightysix.widget.TagView
+                    android:id="@+id/tv_right_tag_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+            <com.utree.eightysix.widget.TagView
+                    android:id="@+id/tv_right_tag_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_gravity="bottom"
+                >
+
+            <TextView
+                    style="@style/TextView.SingleLine"
+                    android:id="@+id/tv_right_source"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="4dp"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white"
+                    />
+
+            <TextView
+                    android:id="@+id/tv_right_praise"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:drawableLeft="@drawable/ic_heart_white_normal"
+                    android:drawableStart="@drawable/ic_heart_white_normal"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white"
+                    android:gravity="center_vertical"
+                    />
+
+            <TextView
+                    android:id="@+id/tv_right_reply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:drawableLeft="@drawable/ic_reply"
+                    android:drawableStart="@drawable/ic_reply"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white"
+                    android:gravity="center_vertical"
+                    />
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

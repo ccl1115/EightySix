@@ -1,10 +1,7 @@
 package com.utree.eightysix.request;
 
 import com.utree.eightysix.C;
-import com.utree.eightysix.rest.Api;
-import com.utree.eightysix.rest.Cache;
-import com.utree.eightysix.rest.Token;
-import com.utree.eightysix.rest.Log;
+import com.utree.eightysix.rest.*;
 
 /**
  * @author simon
@@ -15,8 +12,11 @@ import com.utree.eightysix.rest.Log;
 @Log
 public class MsgsRequest extends Paginate {
 
+  @Param("createType")
+  public int createType;
 
-  public MsgsRequest(int currPage) {
+  public MsgsRequest(int createType, int currPage) {
     super(currPage);
+    this.createType = createType;
   }
 }

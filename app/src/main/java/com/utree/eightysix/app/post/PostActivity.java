@@ -6,13 +6,15 @@ import android.app.Instrumentation;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.view.MotionEventCompat;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AbsListView;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
+import android.widget.*;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
@@ -27,8 +29,12 @@ import com.utree.eightysix.M;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
+import com.utree.eightysix.app.FragmentHolder;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.OverlayTipUtil;
+import com.utree.eightysix.app.account.ProfileFillActivity;
+import com.utree.eightysix.app.account.ProfileFragment;
+import com.utree.eightysix.app.account.event.ProfileFilledEvent;
 import com.utree.eightysix.app.bs.BlueStarFragment;
 import com.utree.eightysix.app.chat.ChatUtils;
 import com.utree.eightysix.app.feed.event.*;
@@ -47,29 +53,32 @@ import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.AdvancedListView;
+import com.utree.eightysix.widget.AsyncImageView;
+import com.utree.eightysix.widget.AsyncImageViewWithRoundCorner;
 import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.guide.Guide;
-import de.akquinet.android.androlog.Log;
 
 import java.util.regex.Pattern;
 
 /**
  * @author simon
  */
-@Layout (R.layout.activity_post)
-public class PostActivity extends BaseActivity implements EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener {
+@Layout(R.layout.activity_post)
+public class PostActivity extends BaseActivity
+    implements EmojiconGridFragment.OnEmojiconClickedListener,
+    EmojiconsFragment.OnEmojiconBackspaceClickedListener {
 
-  @InjectView (R.id.lv_comments)
+  @InjectView(R.id.lv_comments)
   public AdvancedListView mLvComments;
 
-  @InjectView (R.id.et_post_content)
+  @InjectView(R.id.et_post_content)
   public EmojiconEditText mEtPostContent;
 
   @InjectView(R.id.iv_post)
   public ImageView mIvPost;
 
-  @InjectView(R.id.fl_banner)
-  public FrameLayout mFlBanner;
+  @InjectView(R.id.ll_banner)
+  public LinearLayout mLlBanner;
 
   @InjectView(R.id.fl_post_comment)
   public FrameLayout mFlPostComment;
@@ -79,6 +88,21 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
 
   @InjectView(R.id.fl_emotion)
   public EmojiViewPager mFlEmotion;
+
+  @InjectView(R.id.iv_anonymous)
+  public ImageView mIvAnonymous;
+
+  @InjectView(R.id.aiv_portrait)
+  public AsyncImageViewWithRoundCorner mAivPortrait;
+
+  @InjectView(R.id.tv_name)
+  public TextView mTvName;
+
+  @InjectView(R.id.iv_close)
+  public ImageView mIvClose;
+
+  @InjectView(R.id.aiv_level_icon)
+  public AsyncImageView mAivLevelIcon;
 
   private Post mPost;
 
@@ -133,7 +157,7 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
 
   private static final Pattern POST_CONTENT_PATTERN = Pattern.compile("[ \r\n]*");
 
-  @OnTextChanged (R.id.et_post_content)
+  @OnTextChanged(R.id.et_post_content)
   public void onEtPostContentTextChanged(CharSequence text) {
     if (TextUtils.isEmpty(text) || POST_CONTENT_PATTERN.matcher(text).matches()) {
       mIvPost.setEnabled(false);
@@ -142,8 +166,19 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
     }
   }
 
-  @OnClick(R.id.fl_banner)
-  public void onFlBannerClicked() {
+  @OnClick({R.id.aiv_portrait, R.id.tv_name})
+  public void onAivPortraitClicked() {
+    if (!TextUtils.isEmpty(mPost.viewUserId)) {
+      Bundle args = new Bundle();
+      args.putInt("viewId", Integer.valueOf(mPost.viewUserId));
+      args.putBoolean("isVisitor", true);
+      args.putString("userName", mPost.userName);
+      FragmentHolder.start(this, ProfileFragment.class, args);
+    }
+  }
+
+  @OnClick(R.id.ll_banner)
+  public void onLlBannerClicked() {
     mLvComments.setSelection(0);
   }
 
@@ -153,60 +188,71 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
     finishOrShowQuitConfirmDialog();
   }
 
-  @OnClick(R.id.iv_more)
-  public void onIvMoreClicked() {
-    if (mPost == null) return;
+  @OnClick(R.id.iv_anonymous)
+  public void onIvAnonymousClicked() {
+    boolean selected = mIvAnonymous.isSelected();
 
-    U.getAnalyser().trackEvent(U.getContext(), "post_more", "post_more");
-    String[] items;
-    if (mPost.owner == 1) {
-      items = new String[]{U.gs(R.string.share),
-          getString(R.string.start_chat),
-          getString(R.string.report),
-          getString(R.string.like),
-          getString(R.string.delete)};
-    } else {
-      items = new String[]{U.gs(R.string.share),
-          getString(R.string.start_chat),
-          getString(R.string.report),
-          getString(R.string.like)};
+    if (selected) {
+      if (Account.inst().getCancelCommentAnonymousDialog()) {
+        showCancelAnonymousDialog();
+      }
     }
-    new AlertDialog.Builder(this).setTitle(U.gs(R.string.post_action))
-        .setItems(items,
-            new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                  case 0:
-                    U.getAnalyser().trackEvent(U.getContext(), "post_more_share", "post_more_share");
-                    U.getShareManager().sharePostDialog(PostActivity.this, mPost).show();
-                    break;
-                  case 1:
-                    ChatUtils.startChat(PostActivity.this, mPost);
-                    break;
-                  case 2:
-                    U.getAnalyser().trackEvent(U.getContext(), "post_more_report", "post_more_report");
-                    new ReportDialog(PostActivity.this, mPost.id).show();
-                    break;
-                  case 3:
-                    if (mPost == null) return;
-                    if (mPost.praised != 1) {
-                      U.getAnalyser().trackEvent(U.getContext(), "post_more_praise", "praise");
-                      mPostCommentsAdapter.getPostPostView().doPraise();
-                    }
-                    mPostCommentsAdapter.notifyDataSetChanged();
-                    break;
-                  case 4:
-                    U.getAnalyser().trackEvent(U.getContext(), "post_more_delete", "post_more_delete");
-                    U.getBus().post(new PostDeleteRequest(mPost.id));
-                    break;
-                }
-              }
-            }).create().show();
+
+    mIvAnonymous.setSelected(!selected);
+    mEtPostContent.setHint(!selected ? "匿名发表评论" : "发表评论");
+    Account.inst().setCommentAnonymous(!selected);
   }
 
+  private void showCancelAnonymousDialog() {
+    final ThemedDialog dialog = new ThemedDialog(this);
 
-  @OnItemClick (R.id.lv_comments)
+    dialog.setTitle("确认取消匿名么？");
+
+    View view = LayoutInflater.from(this).inflate(R.layout.dialog_cancel_comment_anonymouse, null, false);
+
+    ((CheckBox) view.findViewById(R.id.cb_check)).setOnCheckedChangeListener(
+        new CompoundButton.OnCheckedChangeListener() {
+          @Override
+          public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            Account.inst().setCancelCommentAnonymousDialog(!isChecked);
+          }
+        });
+
+    dialog.setContent(view);
+
+    dialog.setPositive(R.string.okay, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        mIvAnonymous.setSelected(false);
+        Account.inst().setCommentAnonymous(false);
+        mEtPostContent.setHint("发表评论");
+        dialog.dismiss();
+      }
+    });
+
+    dialog.setRbNegative(R.string.cancel, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        mIvAnonymous.setSelected(true);
+        Account.inst().setCommentAnonymous(true);
+        mEtPostContent.setHint("匿名发表评论");
+        dialog.dismiss();
+      }
+    });
+
+    dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+      @Override
+      public void onCancel(DialogInterface dialog) {
+        mIvAnonymous.setSelected(true);
+        Account.inst().setCommentAnonymous(true);
+        mEtPostContent.setHint("匿名发表评论");
+      }
+    });
+
+    dialog.show();
+  }
+
+  @OnItemClick(R.id.lv_comments)
   public void onLvCommentsItemClicked(final int position) {
     if (position == 0) return;
 
@@ -220,10 +266,36 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
     U.getAnalyser().trackEvent(this, "comment_more", "comment_more");
 
     String[] items;
-    if (comment.self == 1 || mPost.owner == 1) {
-      items = new String[]{getString(R.string.start_chat), getString(R.string.like), getString(R.string.share), getString(R.string.report), getString(R.string.delete)};
+    if (mPost.owner == 1) {
+      if (comment.self == 1) {
+        items = new String[]{getString(R.string.chat_anonymous),
+            getString(R.string.like),
+            getString(R.string.share),
+            getString(R.string.report),
+            getString(R.string.delete),
+        };
+      } else {
+        items = new String[]{getString(R.string.chat_anonymous),
+            getString(R.string.like),
+            getString(R.string.share),
+            getString(R.string.report),
+            getString(R.string.delete),
+            comment.ban == 1 ? getString(R.string.unban_comment) : getString(R.string.ban_comment)
+        };
+      }
+    } else if (comment.self == 1) {
+      items = new String[]{getString(R.string.chat_anonymous),
+          getString(R.string.like),
+          getString(R.string.share),
+          getString(R.string.report),
+          getString(R.string.delete)
+      };
     } else {
-      items = new String[]{getString(R.string.start_chat), getString(R.string.like), getString(R.string.share), getString(R.string.report)};
+      items = new String[]{getString(R.string.chat_anonymous),
+          getString(R.string.like),
+          getString(R.string.share),
+          getString(R.string.report)
+      };
     }
 
     mCommentContextDialog = new AlertDialog.Builder(this).setTitle(getString(R.string.comment_action))
@@ -255,6 +327,25 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
                   case 4:
                     U.getBus().post(new PostCommentDeleteRequest(mPost.id, comment.id));
                     break;
+                  case 5:
+                    if (comment.ban == 1) {
+                      U.request("comment_unban", new OnResponse2<Response>() {
+                        @Override
+                        public void onResponseError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onResponse(Response response) {
+                          if (RESTRequester.responseOk(response)) {
+                            comment.ban = 0;
+                          }
+                        }
+                      }, Response.class, mPost.id, comment.id);
+                    } else {
+                      showConfirmBanCommentDialog(comment);
+                    }
+                    break;
                 }
               }
             }).create();
@@ -265,11 +356,6 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
   @OnClick(R.id.iv_post)
   public void onRbPostClicked() {
     U.getAnalyser().trackEvent(this, "post_comment", "post_comment");
-    showProgressBar();
-    mEtPostContent.setEnabled(false);
-    mIvPost.setEnabled(false);
-    mFlEmotion.setVisibility(View.GONE);
-    mIvEmotion.setSelected(false);
     requestPublishComment();
   }
 
@@ -299,6 +385,10 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
     hideTopBar(false);
 
     mIvEmotion.setVisibility(View.VISIBLE);
+
+    mIvAnonymous.setVisibility(View.VISIBLE);
+    mIvAnonymous.setSelected(Account.inst().getCommentAnonymous());
+    mEtPostContent.setHint(mIvAnonymous.isSelected() ? "匿名发表评论" : "发表评论");
 
     mLvComments.setOnScrollListener(new AbsListView.OnScrollListener() {
       @Override
@@ -330,19 +420,59 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
       @Override
       public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (mPostCommentsAdapter != null) {
-          PostPostView postPostView = mPostCommentsAdapter.getPostPostView();
-          if (postPostView.getParent() != null) {
-            int top = postPostView.getTop();
-            if (top <= 0 && top >= -40) {
-              mFlBanner.setClickable(false);
-            } else {
-              mFlBanner.setClickable(true);
+          mPostCommentsAdapter.getPostPostView().mVpContent.setAlpha(1f);
+
+          if (mPost != null) {
+            PostPostView postPostView = mPostCommentsAdapter.getPostPostView();
+            if (postPostView.getParent() != null) {
+              int top = postPostView.getTop();
+              if (top < -40) {
+                mLlBanner.setClickable(true);
+              } else {
+                mLlBanner.setClickable(false);
+              }
+              int height = postPostView.getMeasuredHeight();
+              if (TextUtils.isEmpty(mPost.userName)) {
+                mLlBanner.setBackgroundColor((int) (0x88 * ((-top) / (float) height)) << 24);
+              } else {
+                mLlBanner.setBackgroundColor(((0xff - (int) (0x88 * (-top / (float) height))) << 24) | 0x00ffffff);
+              }
             }
-            mFlBanner.setBackgroundColor((int) (0x88 * ((-top) / (float) postPostView.getMeasuredHeight())) << 24);
-          } else {
-            mFlBanner.setBackgroundColor(0x88000000);
           }
         }
+      }
+    });
+
+    mLvComments.setOnTouchListener(new View.OnTouchListener() {
+      private float lastY;
+      private float y;
+
+      @Override
+      public boolean onTouch(View v, MotionEvent event) {
+        if (mPostCommentsAdapter == null) {
+          return false;
+        }
+
+        if (mPostCommentsAdapter.getPostPostView().getTop() == 0) {
+          switch (MotionEventCompat.getActionMasked(event)) {
+            case MotionEvent.ACTION_DOWN:
+              lastY = MotionEventCompat.getY(event, 0);
+            case MotionEvent.ACTION_MOVE:
+              y = MotionEventCompat.getY(event, 0);
+
+              if (y > lastY) {
+                mPostCommentsAdapter.getPostPostView()
+                    .mVpContent.setAlpha(Math.max(0f, 1f - ((y - lastY) / U.dp2px(80))));
+              }
+              break;
+            case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_UP:
+              lastY = 0;
+              mPostCommentsAdapter.getPostPostView().mVpContent.setAlpha(1f);
+              break;
+          }
+        }
+        return false;
       }
     });
 
@@ -355,6 +485,7 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
 
     mFlEmotion.setFragmentManager(getSupportFragmentManager());
 
+
     onNewIntent(getIntent());
   }
 
@@ -362,7 +493,7 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
   protected void onResume() {
     super.onResume();
     M.getRegisterHelper().register(mLvComments);
-    
+
     hideSoftKeyboard(mEtPostContent);
   }
 
@@ -373,15 +504,6 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
   }
 
   @Override
-  protected void onDestroy() {
-    super.onDestroy();
-
-    if (mPostId != null) {
-      U.getBus().post(new RefreshFeedEvent());
-    }
-  }
-
-  @Override
   protected void onNewIntent(Intent intent) {
     super.onNewIntent(intent);
 
@@ -389,14 +511,30 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
     mPostId = intent.getStringExtra("id");
     mGotoBottom = intent.getBooleanExtra("bottom", false);
 
-    Log.d("PostActivity", "postId: " + ((mPost != null) ? mPost.id : mPostId));
-
-    if (mPost == null && TextUtils.isEmpty(mPostId)) {
-      showToast(getString(R.string.post_not_found), false);
-      finish();
+    if (mPost == null) {
+      if (TextUtils.isEmpty(mPostId)) {
+        showToast(getString(R.string.post_not_found), false);
+        finish();
+      }
     } else {
       mPostCommentsAdapter = new PostCommentsAdapter(this, mPost, null);
       mLvComments.setAdapter(mPostCommentsAdapter);
+      if (!TextUtils.isEmpty(mPost.userName)) {
+        mTvName.setVisibility(View.VISIBLE);
+        mAivPortrait.setVisibility(View.VISIBLE);
+        mAivLevelIcon.setVisibility(View.VISIBLE);
+        mTvName.setText(mPost.userName);
+        mAivPortrait.setUrl(mPost.avatar);
+        mAivLevelIcon.setUrl(mPost.levelIcon);
+        mLlBanner.setBackgroundColor(Color.WHITE);
+        mIvClose.setImageResource(R.drawable.ic_action_post_close);
+      } else {
+        mTvName.setVisibility(View.GONE);
+        mAivPortrait.setVisibility(View.GONE);
+        mAivLevelIcon.setVisibility(View.GONE);
+        mLlBanner.setBackgroundColor(Color.TRANSPARENT);
+        mIvClose.setImageResource(R.drawable.ic_action_post_close_white);
+      }
     }
 
     cacheOutComments(1, mGotoBottom);
@@ -425,11 +563,16 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
   }
 
 
-
   @Subscribe
   public void onPostCommentPraiseEvent(final PostCommentPraiseEvent event) {
     if (!event.isCancel()) {
-      request(new CommentPraiseRequest(mPost.id, event.getComment().id), new OnResponse<Response>() {
+
+      U.request("comment_praise", new OnResponse2<Response>() {
+        @Override
+        public void onResponseError(Throwable e) {
+
+        }
+
         @Override
         public void onResponse(Response response) {
           if (!RESTRequester.responseOk(response)) {
@@ -438,7 +581,7 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
             mPostCommentsAdapter.notifyDataSetChanged();
           }
         }
-      }, Response.class);
+      }, Response.class, mPost.id, event.getComment().id);
     }
   }
 
@@ -446,7 +589,12 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
   public void onPostPostPraiseEvent(final PostPostPraiseEvent event) {
 
     if (!event.isCancel()) {
-      request(new PostPraiseRequest(event.getPost().id), new OnResponse2<Response>() {
+      U.request("post_praise", new OnResponse2<Response>() {
+        @Override
+        public void onResponseError(Throwable e) {
+
+        }
+
         @Override
         public void onResponse(Response response) {
           if (RESTRequester.responseOk(response)) {
@@ -459,17 +607,18 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
           }
           mPostCommentsAdapter.notifyDataSetChanged();
         }
-
-        @Override
-        public void onResponseError(Throwable e) {
-        }
-      }, Response.class);
+      }, Response.class, event.getPost().id);
     }
   }
 
   @Subscribe
   public void onPostCommentDeleteRequest(final PostCommentDeleteRequest request) {
-    request(request, new OnResponse<CommentDeleteResponse>() {
+    U.request("comment_delete", new OnResponse2<CommentDeleteResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
       @Override
       public void onResponse(CommentDeleteResponse response) {
         if (RESTRequester.responseOk(response)) {
@@ -484,7 +633,7 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
           }
         }
       }
-    }, CommentDeleteResponse.class);
+    }, CommentDeleteResponse.class, request.postId, request.commentId);
   }
 
   @Subscribe
@@ -501,7 +650,12 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
 
   @Subscribe
   public void onPostDeleteRequest(PostDeleteRequest request) {
-    request(request, new OnResponse<Response>() {
+    U.request("post_delete", new OnResponse2<Response>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
       @Override
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
@@ -509,7 +663,7 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
           finish();
         }
       }
-    }, Response.class);
+    }, Response.class, request.postId);
   }
 
   @Subscribe
@@ -563,6 +717,47 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
     }
   }
 
+  private void showConfirmBanCommentDialog(final Comment comment) {
+    final ThemedDialog dialog = new ThemedDialog(this);
+    dialog.setTitle("确认禁止TA评论此帖？");
+
+    TextView textView = new TextView(this);
+    textView.setText("提醒：确认后,TA将不能再评论此帖子");
+    int px = U.dp2px(16);
+    textView.setPadding(px, px, px, px);
+
+    dialog.setContent(textView);
+
+    dialog.setPositive(R.string.okay, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        U.request("comment_ban", new OnResponse2<Response>() {
+          @Override
+          public void onResponseError(Throwable e) {
+
+          }
+
+          @Override
+          public void onResponse(Response response) {
+            if (RESTRequester.responseOk(response)) {
+              comment.ban = 1;
+            }
+          }
+        }, Response.class, mPost.id, comment.id);
+        dialog.dismiss();
+      }
+    });
+
+    dialog.setRbNegative(R.string.cancel, new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        dialog.dismiss();
+      }
+    });
+
+    dialog.show();
+  }
+
   private void requestComment(final int page, final boolean bottom) {
     final String id = mPost == null ? mPostId : mPost.id;
     final int viewType = mPost == null ? 0 : mPost.viewType;
@@ -571,7 +766,12 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
     showProgressBar();
     ReadMsgStore.inst().addRead(id);
     U.getAnalyser().trackEvent(this, "post_load", "post_load");
-    request(new PostCommentsRequest(id, viewType, isHot, isRepost, page), new OnResponse<PostCommentsResponse>() {
+    U.request("post_comments", new OnResponse2<PostCommentsResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
       @Override
       public void onResponse(PostCommentsResponse response) {
         if (RESTRequester.responseOk(response)) {
@@ -580,26 +780,56 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
           mPost = response.object.post;
           mPostCommentsAdapter.setNeedReload(false);
 
+          if (!TextUtils.isEmpty(mPost.userName)) {
+            mTvName.setVisibility(View.VISIBLE);
+            mAivPortrait.setVisibility(View.VISIBLE);
+            mAivLevelIcon.setVisibility(View.VISIBLE);
+            mTvName.setText(mPost.userName);
+            mAivPortrait.setUrl(mPost.avatar);
+            mAivLevelIcon.setUrl(mPost.levelIcon);
+            mLlBanner.setBackgroundColor(Color.WHITE);
+            mIvClose.setImageResource(R.drawable.ic_action_post_close);
+          } else {
+            mTvName.setVisibility(View.GONE);
+            mAivPortrait.setVisibility(View.GONE);
+            mAivLevelIcon.setVisibility(View.GONE);
+            mLlBanner.setBackgroundColor(Color.TRANSPARENT);
+            mIvClose.setImageResource(R.drawable.ic_action_post_close_white);
+          }
 
           if (response.object.blueStar == 1) {
             showBlueStarFragment(response.object.blueStarType, response.object.starToken);
           }
 
           U.getBus().post(mPost);
+        } else if ((response.code & 0xffff) == 0x2120) {
+          finish();
         } else {
           if (mPostCommentsAdapter != null && mPostCommentsAdapter.getCount() == 1) {
             mPostCommentsAdapter.setNeedReload(true);
           }
         }
 
+        if (!Account.inst().hasCancelCommentAnonymousSet()) {
+          if (!TextUtils.isEmpty(mPost.userName) && mPost.owner == 1) {
+            mIvAnonymous.setSelected(false);
+          }
+        }
+
         if (bottom) {
           mLvComments.setSelection(Integer.MAX_VALUE);
-          mFlBanner.setClickable(true);
+          mLlBanner.setClickable(true);
+          if (TextUtils.isEmpty(mPost.userName)) {
+            mLlBanner.setBackgroundColor(0x88000000);
+          } else {
+            mLlBanner.setBackgroundColor(0x88ffffff);
+          }
         }
 
         hideProgressBar();
+
       }
-    }, PostCommentsResponse.class);
+    }, PostCommentsResponse.class, id, viewType, isHot, isRepost, page);
   }
 
   private void cacheOutComments(final int page, final boolean bottom) {
@@ -627,33 +857,48 @@ public class PostActivity extends BaseActivity implements EmojiconGridFragment.O
   }
 
   private void requestPublishComment() {
-    request(new PublishCommentRequest(mEtPostContent.getText().toString(), mPost.id),
-        new OnResponse2<PublishCommentResponse>() {
-          @Override
-          public void onResponseError(Throwable e) {
-            mIvPost.setEnabled(true);
-          }
+    if (TextUtils.isEmpty(mPost.viewerName)) {
+      ProfileFillActivity.start(PostActivity.this, false);
+      return;
+    }
 
-          @Override
-          public void onResponse(PublishCommentResponse response) {
-            if (RESTRequester.responseOk(response)) {
-              mPostCommentsAdapter.add(response.object);
-              mPost.comments++;
-              mPost.relation = 1;
-              U.getBus().post(mPost);
-              mEtPostContent.setText("");
-              mIvPost.setEnabled(false);
-            } else {
-              mIvPost.setEnabled(true);
-            }
+    mEtPostContent.setEnabled(false);
+    mIvPost.setEnabled(false);
+    mFlEmotion.setVisibility(View.GONE);
+    mIvEmotion.setSelected(false);
+    showProgressBar();
 
-            hideProgressBar();
-            mEtPostContent.setEnabled(true);
-            mLvComments.setSelection(Integer.MAX_VALUE);
+    U.request("post_comment", new OnResponse2<PublishCommentResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        mIvPost.setEnabled(true);
+      }
 
-            requestComment(1, true);
-          }
-        }, PublishCommentResponse.class);
+      @Override
+      public void onResponse(PublishCommentResponse response) {
+        if (RESTRequester.responseOk(response)) {
+          mPostCommentsAdapter.add(response.object);
+          mPost.comments++;
+          mPost.relation = 1;
+          U.getBus().post(mPost);
+          mEtPostContent.setText("");
+          mIvPost.setEnabled(false);
+        } else {
+          mIvPost.setEnabled(true);
+        }
+
+        hideProgressBar();
+        mEtPostContent.setEnabled(true);
+        mLvComments.setSelection(Integer.MAX_VALUE);
+
+        requestComment(1, true);
+      }
+    }, PublishCommentResponse.class, mEtPostContent.getText().toString(), mPost.id, mIvAnonymous.isSelected() ? 0 : 1);
+  }
+
+  @Subscribe
+  public void onProfileFilledEvent(ProfileFilledEvent event) {
+    requestComment(1, true);
   }
 
   @Override

@@ -9,12 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.feed.FeedActivity;
-import com.utree.eightysix.app.home.HomeActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
 import com.utree.eightysix.request.FactoryRegionRequest;
@@ -22,34 +22,50 @@ import com.utree.eightysix.response.FactoryRegionResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
+import com.utree.eightysix.widget.RandomSceneTextView;
 
 /**
  */
 @Layout(R.layout.activity_factory_region)
 public class FactoryRegionActivity extends BaseActivity {
 
-  @InjectView(R.id.content)
+  @InjectView(R.id.alv_factories)
   public AdvancedListView mAlvFactories;
+
+  @InjectView(R.id.rstv_empty)
+  public RandomSceneTextView mRstvEmpty;
 
   public Paginate.Page mPageInfo;
 
   private FactoryRegionAdapter2 mAdapter;
-  private int mRegionType;
 
-  @OnItemClick(R.id.content)
+  private int mRegionType;
+  private int mRegionRadius;
+
+  @OnItemClick(R.id.alv_factories)
   public void onAlvFactoriesItemClicked(int position) {
     Circle item = mAdapter.getItem(position);
-    if (item.currFactory == 1) {
-      HomeActivity.start(this);
-    } else {
-      FeedActivity.start(this, item);
-    }
+    FeedActivity.start(this, item);
   }
 
-  public static void start(Context context, int regionType) {
+  public static void start(Context context, int regionType, int regionRadius) {
     Intent intent = new Intent(context, FactoryRegionActivity.class);
 
     intent.putExtra("regionType", regionType);
+    intent.putExtra("regionRadius", regionRadius);
+
+    if (!(context instanceof Activity)) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    context.startActivity(intent);
+  }
+
+  public static void start(Context context, int regionType, String areaName) {
+    Intent intent = new Intent(context, FactoryRegionActivity.class);
+
+    intent.putExtra("regionType", regionType);
+    intent.putExtra("areaName", areaName);
 
     if (!(context instanceof Activity)) {
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -62,9 +78,12 @@ public class FactoryRegionActivity extends BaseActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    mRegionType = getIntent().getIntExtra("regionType", 1);
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
-    requestFactoryRegion(mRegionType, 1);
+    mRegionType = getIntent().getIntExtra("regionType", 1);
+    mRegionRadius = getIntent().getIntExtra("regionRadius", 1000);
+
+    requestFactoryRegion(mRegionType, mRegionRadius, 1);
 
     switch (mRegionType) {
       case 1:
@@ -75,6 +94,12 @@ public class FactoryRegionActivity extends BaseActivity {
         break;
       case 3:
         setTopTitle("同城的工厂");
+        break;
+      case 4:
+        setTopTitle(String.format("%.2f公里内的工厂", mRegionRadius / 1000f));
+        break;
+      case 5:
+        setTopTitle(String.format("%s的工厂", getIntent().getStringExtra("areaName")));
         break;
     }
 
@@ -92,7 +117,7 @@ public class FactoryRegionActivity extends BaseActivity {
       @Override
       public boolean onLoadMoreStart() {
         if (mPageInfo != null) {
-          requestFactoryRegion(mRegionType, mPageInfo.currPage + 1);
+          requestFactoryRegion(mRegionType, mRegionRadius, mPageInfo.currPage + 1);
           return true;
         } else {
           return false;
@@ -108,15 +133,16 @@ public class FactoryRegionActivity extends BaseActivity {
   }
 
   @Override
+  @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();
   }
 
-  private void requestFactoryRegion(int regionType, final int page) {
+  private void requestFactoryRegion(int regionType, int regionRaidus, final int page) {
     if (page == 1) {
       showProgressBar();
     }
-    request(new FactoryRegionRequest(regionType, page), new OnResponse2<FactoryRegionResponse>() {
+    request(new FactoryRegionRequest(regionType, regionRaidus, page), new OnResponse2<FactoryRegionResponse>() {
       @Override
       public void onResponseError(Throwable e) {
         hideProgressBar();
@@ -126,8 +152,13 @@ public class FactoryRegionActivity extends BaseActivity {
       @Override
       public void onResponse(FactoryRegionResponse response) {
         if (page == 1) {
-          mAdapter = new FactoryRegionAdapter2(response.object.lists);
-          mAlvFactories.setAdapter(mAdapter);
+          if (response.object.lists.size() == 0) {
+            mRstvEmpty.setVisibility(View.VISIBLE);
+          } else {
+            mRstvEmpty.setVisibility(View.GONE);
+            mAdapter = new FactoryRegionAdapter2(response.object.lists);
+            mAlvFactories.setAdapter(mAdapter);
+          }
         } else {
           mAdapter.add(response.object.lists);
         }

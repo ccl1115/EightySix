@@ -1,9 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.utree.eightysix.widget.AdvancedListView
+<FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white">
+        >
 
-</com.utree.eightysix.widget.AdvancedListView>
+    <com.utree.eightysix.widget.AdvancedListView
+            android:id="@+id/alv_factories"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            />
+
+    <com.utree.eightysix.widget.RandomSceneTextView
+            android:id="@+id/rstv_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            app:text="此范围内没有工厂呃"
+            app:subText="切换范围，查找更多工厂吧"
+            app:drawable="@drawable/scene_4"
+            />
+
+</FrameLayout>

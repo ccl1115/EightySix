@@ -17,7 +17,7 @@
             android:id="@+id/in_tab"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:layout_gravity="top"
+            android:layout_gravity="bottom"
             app:drawable="@drawable/apptheme_indicator_tab"
             app:selector="@drawable/apptheme_indicator_tab_selected"
             app:spacing="0dp"

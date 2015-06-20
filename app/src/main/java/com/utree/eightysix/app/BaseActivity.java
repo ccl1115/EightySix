@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.ResultReceiver;
 import android.support.v4.app.FragmentActivity;
-import android.util.*;
 import android.view.*;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -27,8 +26,6 @@ import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.event.LogoutListener;
 import com.utree.eightysix.rest.*;
 import com.utree.eightysix.utils.Env;
-import com.utree.eightysix.widget.ITopBar2;
-import com.utree.eightysix.widget.RefreshIndicator;
 import com.utree.eightysix.widget.TopBar;
 
 import java.io.InputStream;
@@ -146,54 +143,17 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
       mShowProgressBarAnimator.playTogether(
           ObjectAnimator.ofFloat(mLlLoadingWrapper,
               "translationY",
-              (getTranslationY(mLlLoadingWrapper) == 0) ?
-                  mLlLoadingWrapper.getMeasuredHeight() : getTranslationY(mLlLoadingWrapper),
+              mLlLoadingWrapper.getMeasuredHeight(),
               0),
           ObjectAnimator.ofFloat(mLlLoadingWrapper, "alpha", 0f, 1f)
       );
       mShowProgressBarAnimator.setDuration(500);
     }
-    if (mHideProgressBarAnimator != null) mHideProgressBarAnimator.cancel();
     mShowProgressBarAnimator.start();
   }
 
   public final void hideProgressBar() {
-    if (mHideProgressBarAnimator == null) {
-      mHideProgressBarAnimator = new AnimatorSet();
-      mHideProgressBarAnimator.playTogether(
-          ObjectAnimator.ofFloat(mLlLoadingWrapper,
-              "translationY",
-              getTranslationY(mLlLoadingWrapper),
-              mLlLoadingWrapper.getMeasuredHeight()),
-          ObjectAnimator.ofFloat(mLlLoadingWrapper, "alpha", 1f, 0f)
-      );
-      mHideProgressBarAnimator.setDuration(500);
-      mHideProgressBarAnimator.addListener(new Animator.AnimatorListener() {
-        @Override
-        public void onAnimationStart(Animator animation) {
-
-        }
-
-        @Override
-        public void onAnimationEnd(Animator animation) {
-          mProgressBar.setVisibility(View.INVISIBLE);
-          ViewHelper.setTranslationY(mLlLoadingWrapper, 0);
-        }
-
-        @Override
-        public void onAnimationCancel(Animator animation) {
-
-        }
-
-        @Override
-        public void onAnimationRepeat(Animator animation) {
-
-        }
-      });
-    }
-    if (mShowProgressBarAnimator != null) mShowProgressBarAnimator.cancel();
-    mHideProgressBarAnimator.start();
-
+    mProgressBar.setVisibility(View.INVISIBLE);
     hideProgressMask();
   }
 
@@ -209,6 +169,10 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
 
   public void setTopBarClickMode(int mode) {
     mTopBar.setTitleClickMode(mode);
+  }
+
+  public final <T extends Response> void request(RequestData request, OnResponse<T> onResponse, Class<T> clz) {
+    U.getRESTRequester().request(request, new HandlerWrapper<T>(request, onResponse, clz));
   }
 
   public final <T extends Response> void request(Object request, OnResponse<T> onResponse, Class<T> clz) {
@@ -323,7 +287,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     return mFillContent;
   }
 
-  protected final  void setFillContent(boolean fillContent) {
+  public final  void setFillContent(boolean fillContent) {
     if (mFillContent == fillContent) return;
     mFillContent = fillContent;
     FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mBaseView.findViewById(R.id.content).getLayoutParams();
@@ -460,34 +424,47 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     mResumed = true;
 
     sBackground = false;
+
+    if (System.currentTimeMillis() - Env.getLastLocationTimestamp() > 3600000) {
+      M.getLocation().requestLocation();
+      Env.setLastLocationTimestamp(System.currentTimeMillis());
+    }
   }
 
-  protected final void hideTopBar(boolean animate) {
+  public final void hideTopBar(boolean animate) {
     if (!topBarShown()) return;
+    if (mHideTopBarAnimator.isRunning()) {
+      return;
+    }
     ((FrameLayout.LayoutParams) findViewById(R.id.content).getLayoutParams()).topMargin = 0;
     mBaseView.requestLayout();
     if (animate) {
-      if (mShowTopBarAnimator != null && mShowTopBarAnimator.isRunning()) {
+      if (mShowTopBarAnimator.isRunning()) {
         mShowTopBarAnimator.cancel();
       }
       mHideTopBarAnimator.start();
     } else {
       mTopBar.setVisibility(View.INVISIBLE);
+      onTopBarHidden();
     }
   }
 
-  protected final void showTopBar(boolean animate) {
+  public final void showTopBar(boolean animate) {
     if (topBarShown()) return;
+    if (mShowTopBarAnimator.isRunning()) {
+      return;
+    }
     ((FrameLayout.LayoutParams) findViewById(R.id.content).getLayoutParams()).topMargin
         = mFillContent ? 0 : getResources().getDimensionPixelOffset(R.dimen.activity_top_bar_height);
     mBaseView.requestLayout();
     if (animate) {
-      if (mHideTopBarAnimator != null && mHideTopBarAnimator.isRunning()) {
+      if (mHideTopBarAnimator.isRunning()) {
         mHideTopBarAnimator.cancel();
       }
       mShowTopBarAnimator.start();
     } else {
       mTopBar.setVisibility(View.VISIBLE);
+      onTopBarShown();
     }
   }
 
@@ -533,6 +510,13 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
     new CacheInWorker(RESTRequester.genCacheKey(data.getApi(), data.getParams()), string).execute();
   }
 
+  protected void onTopBarShown() {
+
+  }
+
+  protected void onTopBarHidden() {
+
+  }
 
   protected final void cancelAll() {
   }
@@ -542,16 +526,11 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   }
 
   protected final void setActionLeftDrawable(Drawable drawable) {
-    if (drawable == null) {
-      mTopBar.mActionLeft.setPadding(U.dp2px(10), 0, 0, 0);
-    } else {
-      mTopBar.mActionLeft.setPadding(0, 0, 0, 0);
-    }
-    mTopBar.mActionLeft.setImageDrawable(drawable);
+    mTopBar.getAbLeft().setDrawable(drawable);
   }
 
   protected final void setActionLeftVisibility(int visibility) {
-    mTopBar.mActionLeft.setVisibility(visibility);
+    mTopBar.getAbLeft().setVisibility(visibility);
   }
 
 
@@ -588,6 +567,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
       @Override
       public void onAnimationEnd(Animator animation) {
         mTopBar.setVisibility(View.INVISIBLE);
+        onTopBarHidden();
       }
 
       @Override
@@ -608,6 +588,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
       @Override
       public void onAnimationStart(Animator animation) {
         mTopBar.setVisibility(View.VISIBLE);
+        onTopBarShown();
       }
 
       @Override

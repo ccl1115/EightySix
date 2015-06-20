@@ -1,26 +1,41 @@
 package com.utree.eightysix.app.region.event;
 
-import com.utree.eightysix.data.Circle;
-
 /**
  */
 public class RegionResponseEvent {
 
   private int region;
+  private int mDistance;
+  private int areaType;
+  private int areaId;
+  private String cityName;
 
-  private Circle circle;
-
-  public RegionResponseEvent(int region, Circle circle) {
+  public RegionResponseEvent(int region, int distance, int areaType, int areaId, String cityName) {
     this.region = region;
-    this.circle = circle;
+    mDistance = distance;
+    this.areaType = areaType;
+    this.areaId = areaId;
+    this.cityName = cityName;
   }
 
   public int getRegion() {
     return region;
   }
 
-  public Circle getCircle() {
-    return circle;
+  public int getDistance() {
+    return mDistance;
+  }
+
+  public int getAreaType() {
+    return areaType;
+  }
+
+  public int getAreaId() {
+    return areaId;
+  }
+
+  public String getCityName() {
+    return cityName;
   }
 }
 

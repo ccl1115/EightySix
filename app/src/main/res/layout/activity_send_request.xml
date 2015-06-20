@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Copyright (c) 2015. All rights reserved by utree.cn
+  -->
+
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        >
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="编辑并发送添加朋友请求，对方验证通过后，你们就是蓝莓朋友了哦"
+            android:textSize="14sp"
+            android:textColor="@color/apptheme_primary_grey_color_200"
+            />
+
+    <EditText
+            android:id="@+id/et_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:lines="5"
+            android:maxLines="5"
+            android:maxLength="80"
+            android:inputType="textMultiLine"
+            android:gravity="bottom"
+            />
+</LinearLayout>

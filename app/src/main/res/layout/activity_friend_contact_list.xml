@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Copyright (c) 2015. All rights reserved by utree.cn
+  -->
+
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        >
+
+    <com.utree.eightysix.widget.AdvancedListView
+            android:id="@+id/alv_contacts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+    <com.utree.eightysix.widget.RandomSceneTextView
+            android:id="@+id/rstv_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            app:text="没有可添加的手机联系人好友"
+            app:subText="邀请朋友加入蓝莓吧，朋友多乐趣更多哦"
+            app:drawable="@drawable/scene_4"
+            />
+</FrameLayout>

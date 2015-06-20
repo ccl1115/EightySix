@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.topic;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import com.utree.eightysix.data.Topic;
 import com.utree.eightysix.data.Topics;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.utils.ColorUtil;
+import com.utree.eightysix.widget.AsyncImageViewWithRoundCorner;
+import com.utree.eightysix.widget.RoundedButton;
 
 import java.util.List;
 
@@ -100,10 +103,14 @@ public class TopicListAdapter extends BaseAdapter {
       convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_head, parent, false);
     }
 
+    TextView textView = (TextView) convertView.findViewById(R.id.tv_head);
+    textView.setCompoundDrawablePadding(U.dp2px(8));
     if (position == 0) {
-      ((TextView) convertView.findViewById(R.id.tv_head)).setText(mTopics.newTopic.headTitle);
+      textView.setText(mTopics.newTopic.headTitle);
+      textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_head_newest_topic, 0, 0, 0);
     } else {
-      ((TextView) convertView.findViewById(R.id.tv_head)).setText(mTopics.hotTopic.headTitle);
+      textView.setText(mTopics.hotTopic.headTitle);
+      textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_head_daily_picks, 0, 0, 0);
     }
 
     return convertView;
@@ -119,47 +126,76 @@ public class TopicListAdapter extends BaseAdapter {
       holder = ((TopicViewHolder) convertView.getTag());
     }
 
-    Topic topic = ((Topic) getItem(position));
-
-    holder.mTvMore.setText(String.format("%d条内容", topic.postCount));
-    holder.mTvText.setText(topic.content);
-    holder.mLlParent.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(4), ColorUtil.strToColor(topic.bgColor)));
-
-    holder.mTvTag1.setText("");
-    holder.mTvTag2.setText("");
-
-    List<Tag> tags = topic.tags;
-    for (int i = 0; i < tags.size(); i++) {
-      final Tag g = tags.get(i);
-      switch (i) {
-        case 0:
-          holder.mTvTag1.setText("#" + g.content);
-          break;
-        case 1:
-          holder.mTvTag2.setText("#" + g.content);
-          break;
-      }
-    }
+    holder.setData((Topic) getItem(position));
 
     return convertView;
   }
 
   public static class TopicViewHolder {
 
-    @InjectView (R.id.tv_tag_1)
+    @InjectView(R.id.tv_tag_1)
     public TextView mTvTag1;
 
-    @InjectView (R.id.tv_tag_2)
+    @InjectView(R.id.tv_tag_2)
     public TextView mTvTag2;
 
-    @InjectView (R.id.tv_text)
+    @InjectView(R.id.tv_text)
     public TextView mTvText;
 
-    @InjectView (R.id.tv_more)
+    @InjectView(R.id.tv_title)
+    public TextView mTvTitle;
+
+    @InjectView(R.id.tv_more)
     public TextView mTvMore;
 
-    @InjectView (R.id.ll_parent)
+    @InjectView(R.id.ll_parent)
     public LinearLayout mLlParent;
+
+    @InjectView(R.id.rb_mask)
+    public RoundedButton mRbMask;
+
+    @InjectView(R.id.aiv_bg)
+    public AsyncImageViewWithRoundCorner mAivBg;
+
+    public void setData(Topic topic) {
+
+      mTvMore.setText(String.format("%d条内容", topic.postCount));
+      mTvText.setText(topic.content);
+      if (TextUtils.isEmpty(topic.title)) {
+        mTvTitle.setVisibility(View.GONE);
+        if (TextUtils.isEmpty(topic.content)) {
+          mRbMask.setVisibility(View.GONE);
+        } else {
+          mRbMask.setVisibility(View.VISIBLE);
+        }
+      } else {
+        mTvTitle.setVisibility(View.VISIBLE);
+      }
+      mTvTitle.setText(topic.title);
+      if (TextUtils.isEmpty(topic.bgUrl)) {
+        mAivBg.setUrl(null);
+        mLlParent.setBackgroundDrawable(new RoundRectDrawable(U.dp2px(4), ColorUtil.strToColor(topic.bgColor)));
+      } else {
+        mAivBg.setUrl(topic.bgUrl);
+        mLlParent.setBackgroundDrawable(null);
+      }
+
+      mTvTag1.setText("");
+      mTvTag2.setText("");
+
+      List<Tag> tags = topic.tags;
+      for (int i = 0; i < tags.size(); i++) {
+        final Tag g = tags.get(i);
+        switch (i) {
+          case 0:
+            mTvTag1.setText("#" + g.content);
+            break;
+          case 1:
+            mTvTag2.setText("#" + g.content);
+            break;
+        }
+      }
+    }
 
     public TopicViewHolder(View view) {
       ButterKnife.inject(this, view);

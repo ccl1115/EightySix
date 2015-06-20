@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.app.chat.ChatAccount;
+import com.utree.eightysix.app.home.HomeTabActivity;
 import com.utree.eightysix.app.intro.IntroActivity;
 import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.applogger.EntryAdapter;
@@ -16,6 +17,7 @@ import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.User;
 import com.utree.eightysix.event.CurrentCircleResponseEvent;
 import com.utree.eightysix.event.HasNewPraiseEvent;
+import com.utree.eightysix.event.MyPostCommentCountEvent;
 import com.utree.eightysix.event.NewCommentCountEvent;
 import com.utree.eightysix.push.FetchAlarmReceiver;
 import com.utree.eightysix.request.LogoutRequest;
@@ -117,20 +119,18 @@ public class Account {
     getAccountSharedPreferences().edit().putInt("new_comment_count", value).apply();
   }
 
-  public void incNewCommentCount(int count) {
-    int value = getNewCommentCount() + count;
-    U.getBus().post(new NewCommentCountEvent(value));
-    getAccountSharedPreferences().edit().putInt("new_comment_count", value).apply();
-  }
-
-  public void decNewCommentCount(int count) {
-    int value = Math.max(getNewCommentCount() - count, 0);
-    U.getBus().post(new NewCommentCountEvent(value));
-    getAccountSharedPreferences().edit().putInt("new_comment_count", value).apply();
-  }
-
   public int getNewCommentCount() {
     return getAccountSharedPreferences().getInt("new_comment_count", 0);
+  }
+
+  public void setMyPostCommentCount(int count) {
+    int value = Math.max(count, 0);
+    U.getBus().post(new MyPostCommentCountEvent(value));
+    getAccountSharedPreferences().edit().putInt("my_post_comment_count", value).apply();
+  }
+
+  public int getMyPostCommentCount() {
+    return getAccountSharedPreferences().getInt("my_post_comment_count", 0);
   }
 
   public void setSilentMode(boolean toggle) {
@@ -173,6 +173,96 @@ public class Account {
 
   public int getLastRegionType() {
     return getAccountSharedPreferences().getInt("last_region_type", -1);
+  }
+
+  /**
+   * 设置是否匿名发帖
+   * @param anonymous true if anonymous
+   */
+  public void setPostAnonymous(boolean anonymous) {
+    getAccountSharedPreferences().edit().putBoolean("post_anonymous", anonymous).apply();
+  }
+
+  /**
+   * 是否匿名发帖
+   * @return true if anonymous
+   */
+  public boolean getPostAnonymous() {
+    return getAccountSharedPreferences().getBoolean("post_anonymous", true);
+  }
+
+  /**
+   * 设置是否展示取消匿名发帖提醒对话框
+   * @param anonymous true if show
+   */
+  public void setCancelPostAnonymousDialog(boolean anonymous) {
+    getAccountSharedPreferences().edit().putBoolean("cancel_post_anonymous", anonymous).apply();
+  }
+
+  /**
+   * 是否展示取消匿名提醒发帖对话框
+   * @return true if show
+   */
+  public boolean getCancelPostAnonymousDialog() {
+    return getAccountSharedPreferences().getBoolean("cancel_post_anonymous", true);
+  }
+
+  /**
+   * 设置是否匿名发评论
+   * @param anonymous true if anonymous
+   */
+  public void setCommentAnonymous(boolean anonymous) {
+    getAccountSharedPreferences().edit().putBoolean("comment_anonymous", anonymous).apply();
+  }
+
+  /**
+   * 是否匿名发评论
+   * @return true if anonymous
+   */
+  public boolean getCommentAnonymous() {
+    return getAccountSharedPreferences().getBoolean("comment_anonymous", true);
+  }
+
+  /**
+   * 设置是否展示取消匿名发评论对话框
+   * @param anonymous true if show
+   */
+  public void setCancelCommentAnonymousDialog(boolean anonymous) {
+    getAccountSharedPreferences().edit().putBoolean("cancel_comment_anonymous", anonymous).apply();
+  }
+
+  /**
+   * 设置是否展示取消匿名发评论对话框
+   * @return true if show
+   */
+  public boolean getCancelCommentAnonymousDialog() {
+    return getAccountSharedPreferences().getBoolean("cancel_comment_anonymous", true);
+  }
+
+  public boolean hasCancelCommentAnonymousSet() {
+    return getAccountSharedPreferences().contains("cancel_comment_anonymous");
+  }
+
+  public void setLastExp(int exp) {
+    getAccountSharedPreferences().edit().putInt("exp", exp).apply();
+  }
+
+  public int getLastExp() {
+    return getAccountSharedPreferences().getInt("exp", 0);
+  }
+
+  public void setFriendRequestCount(int count) {
+    U.getBus().post(new HomeTabActivity.MsgCountEvent(HomeTabActivity.MsgCountEvent.TYPE_NEW_FRIEND_REQUEST, count));
+    getAccountSharedPreferences().edit().putInt("friend_request_count", count).apply();
+  }
+
+  public void addFriendRequestCount(int count) {
+    int newCount = count + getFriendRequestCount();
+    setFriendRequestCount(newCount);
+  }
+
+  public int getFriendRequestCount() {
+    return getAccountSharedPreferences().getInt("friend_request_count", 0);
   }
 
   private SharedPreferences getSharedPreferences() {
@@ -239,6 +329,8 @@ public class Account {
 
       // 停止后台定时拉消息服务
       FetchAlarmReceiver.stopAlarm(U.getContext());
+
+      Account.inst().getAccountSharedPreferences().edit().clear().apply();
 
       if (!Account.inst().setUserId("") && !Account.inst().setToken("")) {
         Account.inst().mIsLogin = false;

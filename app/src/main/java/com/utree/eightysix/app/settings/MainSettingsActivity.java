@@ -3,12 +3,11 @@ package com.utree.eightysix.app.settings;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.TextView;
 import butterknife.InjectView;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
 import com.tencent.tauth.Tencent;
@@ -18,6 +17,7 @@ import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.app.devmode.DevModeActivity;
 import com.utree.eightysix.app.publish.FeedbackActivity;
+import com.utree.eightysix.app.web.BaseWebActivity;
 import com.utree.eightysix.data.Sync;
 import com.utree.eightysix.widget.RoundedButton;
 
@@ -31,11 +31,13 @@ public class MainSettingsActivity extends BaseActivity {
   @InjectView (R.id.rb_upgrade_dot)
   public RoundedButton mRbUpgradeDot;
 
-  @InjectView(R.id.cb_silent_mode)
-  public CheckBox mCbSilentMode;
-
   @InjectView(R.id.tv_dev)
   public TextView mTvDev;
+
+  @InjectView(R.id.tv_version)
+  public TextView mTvVersion;
+
+  private MsgSettingsFragment mMsgSettingsFragment;
 
   @OnClick (R.id.tv_logout)
   public void onRbLogoutClicked() {
@@ -60,7 +62,83 @@ public class MainSettingsActivity extends BaseActivity {
 
   @OnClick (R.id.ll_check_update)
   public void onLlCheckUpdateClicked() {
-    Sync sync = U.getSyncClient().getSync();
+    U.getSyncClient().requestSync();
+  }
+
+  @OnClick (R.id.tv_dev)
+  public void onTvDevClicked() {
+    startActivity(new Intent(this, DevModeActivity.class));
+  }
+
+  @OnClick(R.id.tv_msg_settings)
+  public void onLlMsgSettingsClicked() {
+    if (mMsgSettingsFragment == null) {
+      mMsgSettingsFragment = new MsgSettingsFragment();
+    }
+    getSupportFragmentManager().beginTransaction()
+        .setCustomAnimations(R.anim.enter_from_top, R.anim.exit_to_bottom, R.anim.enter_from_top, R.anim.exit_to_bottom)
+        .add(R.id.content, mMsgSettingsFragment)
+        .addToBackStack("backStack")
+        .commit();
+  }
+
+  @OnClick(R.id.tv_help)
+  public void onTvHelpClicked() {
+    try {
+      BaseWebActivity.start(this,
+          "http://web.lanmeiquan.com/Web/help/introduction?version=" +
+              getPackageManager().getPackageInfo(getPackageName(), 0).versionName +
+              "&title=%E4%BD%BF%E7%94%A8%E5%B8%AE%E5%8A%A9");
+    } catch (PackageManager.NameNotFoundException ignored) {
+    }
+  }
+
+  @OnClick(R.id.tv_feedback)
+  public void onTvFeedbackClicked() {
+    FeedbackActivity.start(this);
+  }
+
+  @OnClick(R.id.tv_join_qq)
+  public void onTvJoinQQClicked() {
+    Tencent.createInstance(U.getConfig("qq.app_id"), this).joinQQGroup(this, U.getSyncClient().getSync().qqGroup);
+  }
+
+  @Override
+  public void onActionLeftClicked() {
+    onBackPressed();
+  }
+
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+
+    try {
+      mTvVersion.setText(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
+    } catch (PackageManager.NameNotFoundException ignored) {
+    }
+
+    if (BuildConfig.DEBUG) {
+      mTvDev.setVisibility(View.VISIBLE);
+    }
+  }
+
+  @Subscribe
+  public void onSyncEvent(Sync sync) {
+    if (sync != null && sync.upgrade != null) {
+      int v = 0;
+      try {
+        v = Integer.parseInt(sync.upgrade.version);
+      } catch (NumberFormatException ignored) {
+      }
+      if (v > C.VERSION) {
+        mRbUpgradeDot.setVisibility(View.VISIBLE);
+      } else {
+        mRbUpgradeDot.setVisibility(View.INVISIBLE);
+      }
+    }
+
     int version = 0;
     if (sync != null && sync.upgrade != null) {
       try {
@@ -77,65 +155,17 @@ public class MainSettingsActivity extends BaseActivity {
     }
   }
 
-  @OnClick (R.id.tv_dev)
-  public void onTvDevClicked() {
-    startActivity(new Intent(this, DevModeActivity.class));
-  }
-
-  @OnCheckedChanged(R.id.cb_silent_mode)
-  public void onCbSilentModeChecked(boolean checked){
-    Account.inst().setSilentMode(checked);
-  }
-
-  @OnClick(R.id.tv_help)
-  public void onTvHelpClicked() {
-    startActivity(new Intent(this, HelpActivity.class));
-  }
-
-  @OnClick(R.id.tv_feedback)
-  public void onTvFeedbackClicked() {
-    FeedbackActivity.start(this);
-  }
-
-  @OnClick(R.id.tv_join_qq)
-  public void onTvJoinQQClicked() {
-    Tencent.createInstance(U.getConfig("qq.app_id"), this).joinQQGroup(this, "Q2hi2FH3Mjq27D0jd3s8Vi3zOWl13UHe");
-  }
-
-  @Override
-  public void onActionLeftClicked() {
-    finish();
-  }
-
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-
-    Sync sync = U.getSyncClient().getSync();
-    if (sync != null && sync.upgrade != null) {
-      int v = 0;
-      try {
-        v = Integer.parseInt(sync.upgrade.version);
-      } catch (NumberFormatException ignored) {
-      }
-      if (v > C.VERSION) {
-        mRbUpgradeDot.setVisibility(View.VISIBLE);
-      } else {
-        mRbUpgradeDot.setVisibility(View.INVISIBLE);
-      }
-    }
-
-    if (BuildConfig.DEBUG) {
-      mTvDev.setVisibility(View.VISIBLE);
-    }
-
-    mCbSilentMode.setChecked(Account.inst().getSilentMode());
-  }
-
   @Override
   @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();
   }
 
+
+  @Override
+  public void onBackPressed() {
+    super.onBackPressed();
+
+    setTopTitle(getString(R.string.settings));
+  }
 }

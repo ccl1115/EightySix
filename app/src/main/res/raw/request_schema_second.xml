@@ -12,6 +12,18 @@
     </request>
 
     <request>
+        <id>get_friend_chat_info</id>
+        <name>获取friendChatId</name>
+        <path>/im/chat/chatinfo</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>chatType</param>
+            <param>viewId</param>
+        </params>
+    </request>
+
+    <request>
         <id>chat_send</id>
         <name>发私聊</name>
         <path>/commit/im/send/privateChat</path>
@@ -26,7 +38,7 @@
             <param>file</param>
         </params>
     </request>
-<!--
+
     <request>
         <id>chat_ack</id>
         <name>收到消息确认</name>
@@ -36,7 +48,7 @@
         <params>
             <param>msgId</param>
         </params>
-    </request> -->
+    </request>
 
     <request>
         <id>chat_report</id>
@@ -63,7 +75,7 @@
     <request>
         <id>chat_fav_add</id>
         <name>收藏聊天会话</name>
-        <path>/commit/im/favorite/addChat</path>
+        <path>/commit/im/favorite/chat/create</path>
         <sign/>
         <token/>
         <params>
@@ -76,7 +88,7 @@
     <request>
         <id>chat_fav_del</id>
         <name>取消收藏聊天会话</name>
-        <path>/commit/im/favorite/delChat</path>
+        <path>/commit/im/favorite/chat/delete</path>
         <sign/>
         <token/>
         <params>
@@ -96,31 +108,40 @@
     </request>
 
     <request>
-        <id>chat_ol_list</id>
-        <name>聊天会话在线列表</name>
-        <path>/im/chat/onlineStatus</path>
-        <sign/>
-        <token/>
-        <params>
-            <param>chatIds</param>
-        </params>
-        <responseClz>ChatOnlineListResponse</responseClz>
-    </request>
-
-    <request>
-        <id>chat_online</id>
-        <name>登陆聊天服务</name>
-        <path>/commit/im/online</path>
-        <sign/>
-        <token/>
-    </request>
-
-    <request>
         <id>share_callback</id>
         <name>分享成功之后调用</name>
         <path>/commit/share/callback</path>
         <sign/>
         <token/>
+    </request>
+
+    <request>
+        <id>profile_fill</id>
+        <name>完善个人资料</name>
+        <path>/commit/user/profile/replace</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>avatar</param>
+            <param>sex</param>
+            <param>userName</param>
+            <param>birthday</param>
+            <param>constellation</param>
+            <param>background</param>
+            <param>signature</param>
+            <param>age</param>
+        </params>
+    </request>
+
+    <request>
+        <id>profile</id>
+        <name>个人资料</name>
+        <path>/user/info</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>viewId</param>
+        </params>
     </request>
 
     <request>
@@ -132,6 +153,541 @@
             <param>phone</param>
             <param>password</param>
             <param>valiCode</param>
+        </params>
+    </request>
+
+    <request>
+        <id>follow_circle_add</id>
+        <name>添加关注圈子</name>
+        <path>/commit/userfactory/like/create</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>factoryId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>follow_circle_followed</id>
+        <name>if followed or not</name>
+        <path>/userfactory/whetherlike</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>factoryId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>follow_circle_del</id>
+        <name>删除关注圈子</name>
+        <path>/commit/userfactory/like/delete</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>factoryId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>follow_circle_list</id>
+        <name>关注圈子列表</name>
+        <path>/userfactory/like</path>
+        <sign/>
+        <token/>
+    </request>
+
+    <request>
+        <id>user_avatars</id>
+        <name>头像列表</name>
+        <path>/user/avatar</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>viewId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>user_avatar_del</id>
+        <name>删除头像</name>
+        <path>/commit/user/avatar/delete</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>avatar</param>
+        </params>
+    </request>
+
+    <request>
+        <id>user_friend_list</id>
+        <name>朋友列表</name>
+        <path>/user/friend/mine</path>
+        <sign/>
+        <token/>
+    </request>
+
+    <request>
+        <id>user_friend_request</id>
+        <name>添加好友</name>
+        <path>/commit/user/friend/create</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>viewId</param>
+            <param>content</param>
+        </params>
+    </request>
+
+    <request>
+        <id>user_friend_accept</id>
+        <name>通过请求</name>
+        <path>/commit/user/friend/pass</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>viewId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>user_friend_requests</id>
+        <name>好友请求</name>
+        <path>/user/friend/created</path>
+        <sign/>
+        <token/>
+    </request>
+
+    <request>
+        <id>user_friend_ignore</id>
+        <name>忽略请求</name>
+        <path>/commit/user/friend/ignore</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>viewId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>user_friend_del</id>
+        <name>删除好友</name>
+        <path>/commit/user/friend/delete</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>viewId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>user_search</id>
+        <name>搜索用户</name>
+        <path>/user/search</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>keyword</param>
+        </params>
+    </request>
+
+    <request>
+        <id>user_signatures</id>
+        <name>用户签名</name>
+        <path>/user/signature</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>viewId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>user_signature_del</id>
+        <name>删除签名</name>
+        <path>/commit/user/signature/delete</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>id</param>
+        </params>
+    </request>
+
+    <request>
+        <id>user_posts</id>
+        <name>我的帖子</name>
+        <path>/userpost/mine</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>viewId</param>
+            <param>realName</param>
+            <param>page</param>
+            <param>limit</param>
+        </params>
+    </request>
+
+    <request>
+        <id>user_post_realname</id>
+        <name>匿名帖转实名帖</name>
+        <path>/userpost/to/realname</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>postId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>user_setup_replace</id>
+        <name>用户开关设置</name>
+        <path>/commit/user/setup/replace</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>type</param>
+            <param>status</param>
+        </params>
+    </request>
+
+    <request>
+        <id>user_friend_contacts</id>
+        <name>手机联系人列表</name>
+        <path>/user/friend/contact</path>
+        <sign/>
+        <token/>
+    </request>
+
+    <request>
+        <id>user_friend_recommend</id>
+        <name>好友推荐</name>
+        <path>/user/friend/recommend</path>
+        <sign/>
+        <token/>
+    </request>
+
+    <request>
+        <id>user_setup</id>
+        <name>用户开关</name>
+        <path>/user/setup</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>type</param>
+        </params>
+    </request>
+
+    <request>
+        <id>user_shield</id>
+        <name>屏蔽用户</name>
+        <path>/commit/user/shield/replace</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>viewId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>user_unshield</id>
+        <name>屏蔽用户</name>
+        <path>/commit/user/shield/delete</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>viewId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>praised_users</id>
+        <name>谁赞过我</name>
+        <path>/user/praised/mine</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>page</param>
+            <param>limit</param>
+            <param>viewId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>user_praise_add</id>
+        <name>赞用户</name>
+        <path>/commit/user/praise/create</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>viewId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>copywriting</id>
+        <name>文案</name>
+        <path>/system/copywriting</path>
+        <sign/>
+        <token/>
+    </request>
+
+    <request>
+        <id>message_unread</id>
+        <name>未读消息</name>
+        <path>/message/unread</path>
+        <sign/>
+        <token/>
+    </request>
+
+    <request>
+        <id>userfactory_sign</id>
+        <name>工厂签到日历</name>
+        <path>/userfactory/sign</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>factoryId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>userfactory_sign_create</id>
+        <name>工厂签到</name>
+        <path>/commit/userfactory/sign/create</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>factoryId</param>
+            <param>date</param>
+        </params>
+    </request>
+
+    <request>
+        <id>feeds_by_region</id>
+        <name>区域feeds</name>
+        <path>/feed/listByRegion</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>currPage</param>
+            <param>regionType</param>
+            <param>tabType</param>
+            <param>regionRadius</param>
+            <param>areaType</param>
+            <param>areaId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>ladder_week_rank</id>
+        <name>上升最快</name>
+        <path>/user/experience/weekrank</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>page</param>
+        </params>
+    </request>
+
+    <request>
+        <id>ladder_all_rank</id>
+        <name>经验最多</name>
+        <path>/user/experience/allrank</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>page</param>
+        </params>
+    </request>
+
+    <request>
+        <id>post_comments</id>
+        <name>帖子评论</name>
+        <path>/comment/lists</path>
+        <sign/>
+        <token/>
+        <cache/>
+        <params>
+            <param>postId</param>
+            <param>viewType</param>
+            <param>isHot</param>
+            <param>isRepost</param>
+            <param>currPage</param>
+        </params>
+    </request>
+
+    <request>
+        <id>feed_list</id>
+        <name>工厂feed</name>
+        <path>/feed/lists</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>factoryId</param>
+            <param>currPage</param>
+        </params>
+    </request>
+
+    <request>
+        <id>feed_list_hot</id>
+        <name>工厂feed</name>
+        <path>/feed/listhot</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>factoryId</param>
+            <param>currPage</param>
+        </params>
+    </request>
+
+    <request>
+        <id>feed_list_friend</id>
+        <name>工厂feed</name>
+        <path>/feed/listfriends</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>factoryId</param>
+            <param>currPage</param>
+        </params>
+    </request>
+
+    <request>
+        <id>post_comment</id>
+        <name>发表评论</name>
+        <path>/commit/comment/create</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>content</param>
+            <param>postId</param>
+            <param>realName</param>
+        </params>
+    </request>
+
+    <request>
+        <id>post_praise</id>
+        <name>帖子点赞</name>
+        <path>/commit/post/praise</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>postId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>comment_praise</id>
+        <name>评论点赞</name>
+        <path>/commit/comment/praise</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>postId</param>
+            <param>commentId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>post_delete</id>
+        <name>帖子删除</name>
+        <path>/commit/post/delete</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>postId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>comment_delete</id>
+        <name>评论删除</name>
+        <path>/commit/comment/delete</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>postId</param>
+            <param>commentId</param>
+        </params>
+    </request>
+
+    <request>
+        <id>sync</id>
+        <name>同步接口</name>
+        <path>/system/sync</path>
+        <sign/>
+        <token/>
+    </request>
+
+    <request>
+        <id>feeds_search</id>
+        <name>搜索</name>
+        <path>/post/search</path>
+        <token/>
+        <params>
+            <param>content</param>
+            <param>tagId</param>
+            <param>currFactory</param>
+            <param>currPage</param>
+        </params>
+    </request>
+
+    <request>
+        <id>get_hometown_feeds</id>
+        <name>get feeds of hometown</name>
+        <path>/feed/listByHometown</path>
+        <token/>
+        <params>
+            <param>currPage</param>
+            <param>tabType</param>
+            <param>hometownId</param>
+            <param>hometownType</param>
+        </params>
+    </request>
+
+    <request>
+        <id>daily_picks</id>
+        <name>每日精选</name>
+        <path>/feed/listwithgoodtag</path>
+        <token/>
+        <params>
+            <param>tagId</param>
+            <param>currPage</param>
+        </params>
+    </request>
+
+    <request>
+        <id>feed_snapshot</id>
+        <name>得到某个快照的列表</name>
+        <path>/feed/listwithsnapshot</path>
+        <token/>
+        <params>
+            <param>factoryId</param>
+            <param>snapshot</param>
+            <param>currPage</param>
+        </params>
+    </request>
+
+    <request>
+        <id>remind_list</id>
+        <name>消息列表</name>
+        <path>/remind/lists</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>createType</param>
+            <param>currPage</param>
+        </params>
+    </request>
+
+    <request>
+        <id>praise_list</id>
+        <name>消息列表</name>
+        <path>/remind/praiselists</path>
+        <sign/>
+        <token/>
+        <params>
+            <param>currPage</param>
         </params>
     </request>
 </api>

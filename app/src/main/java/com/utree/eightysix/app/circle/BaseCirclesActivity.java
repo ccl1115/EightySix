@@ -24,8 +24,10 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.account.event.CurrentCircleNameUpdatedEvent;
+import com.utree.eightysix.app.circle.event.CircleFollowsChangedEvent;
 import com.utree.eightysix.app.feed.FeedActivity;
-import com.utree.eightysix.app.home.HomeActivity;
+import com.utree.eightysix.app.home.HomeTabActivity;
 import com.utree.eightysix.app.snapshot.SnapshotActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Paginate;
@@ -34,6 +36,7 @@ import com.utree.eightysix.request.CircleSetRequest;
 import com.utree.eightysix.request.FactoryRegionRequest;
 import com.utree.eightysix.request.MyCirclesRequest;
 import com.utree.eightysix.request.SelectCirclesRequest;
+import com.utree.eightysix.response.CircleIsFollowResponse;
 import com.utree.eightysix.response.CirclesResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.OnResponse2;
@@ -54,6 +57,7 @@ public class BaseCirclesActivity extends BaseActivity {
   public static final int MODE_SELECT = 1;
   public static final int MODE_MY = 2;
   public static final int MODE_SNAPSHOT = 3;
+  public static final int MODE_REGION = 4;
 
   @InjectView(R.id.alv_refresh)
   public AdvancedListView mLvCircles;
@@ -83,9 +87,6 @@ public class BaseCirclesActivity extends BaseActivity {
   private ThemedDialog mCircleSetDialog;
 
 
-  public BaseCirclesActivity() {
-  }
-
   public static void startSelect(Context context, boolean cancelable) {
     Intent intent = new Intent(context, BaseCirclesActivity.class);
     intent.putExtra("mode", MODE_SELECT);
@@ -105,6 +106,11 @@ public class BaseCirclesActivity extends BaseActivity {
     context.startActivity(intent);
   }
 
+  public static void startRegion(Context context) {
+    Intent intent = new Intent(context, BaseCirclesActivity.class);
+    intent.putExtra("mode", MODE_REGION);
+  }
+
   @OnClick({R.id.fl_search, R.id.tv_search_hint})
   public void onFlSearchClicked() {
     if (mMode == MODE_MY) {
@@ -115,6 +121,9 @@ public class BaseCirclesActivity extends BaseActivity {
       CircleSearchActivity.start(this, true);
     } else if (mMode == MODE_SNAPSHOT) {
       U.getAnalyser().trackEvent(this, "circle_search", "snapshot");
+      CircleSearchActivity.start(this, false);
+    } else if (mMode == MODE_REGION) {
+      U.getAnalyser().trackEvent(this, "circle_search", "region");
       CircleSearchActivity.start(this, false);
     }
   }
@@ -127,7 +136,7 @@ public class BaseCirclesActivity extends BaseActivity {
         circle.selected = true;
         if (circle.currFactory == 1) {
           finish();
-          HomeActivity.start(this, 0);
+          HomeTabActivity.start(this, 0);
         } else {
           FeedActivity.start(this, circle, true);
         }
@@ -145,8 +154,8 @@ public class BaseCirclesActivity extends BaseActivity {
   public boolean onLvCirclesItemLongClicked(int position) {
     final Circle circle = mCircleListAdapter.getItem(position);
     if (circle != null) {
-      if (mMode == MODE_MY && !circle.viewGroupType.equals("我所在的圈子")) {
-        showCircleSetDialog(circle);
+      if (mMode == MODE_MY) {
+        showCircleDialog(circle);
         return true;
       }
     }
@@ -172,6 +181,15 @@ public class BaseCirclesActivity extends BaseActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+    getTopBar().getAbRight().setText("创建");
+    getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        startActivity(new Intent(BaseCirclesActivity.this, CircleCreateActivity.class));
+      }
+    });
 
     setContentView(R.layout.activity_base_circles);
 
@@ -269,7 +287,7 @@ public class BaseCirclesActivity extends BaseActivity {
       }
 
       @Override
-      public void onDrag() {
+      public void onDrag(int value) {
         showRefreshIndicator(false);
       }
 
@@ -279,16 +297,14 @@ public class BaseCirclesActivity extends BaseActivity {
       }
     });
 
-    if (mMode == MODE_SELECT && !mCancelable) {
-      setActionLeftDrawable(null);
+    if (mMode != MODE_SELECT || mCancelable) {
+      getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
     }
   }
 
   @Override
   public void onBackPressed() {
-    if (mMode != MODE_SELECT) {
-      super.onBackPressed();
-    } else if (mCancelable) {
+    if (mMode != MODE_SELECT || mCancelable) {
       super.onBackPressed();
     }
   }
@@ -297,6 +313,70 @@ public class BaseCirclesActivity extends BaseActivity {
   @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();
+  }
+
+  protected void showCircleDialog(final Circle circle) {
+    showProgressBar(true);
+    U.request("follow_circle_followed", new OnResponse2<CircleIsFollowResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        hideProgressBar();
+      }
+
+      @Override
+      public void onResponse(final CircleIsFollowResponse response) {
+        hideProgressBar();
+        AlertDialog.Builder builder = new AlertDialog.Builder(BaseCirclesActivity.this);
+        builder.setTitle("操作");
+        builder.setItems(
+            new String[]{
+                "设置在职",
+                response.object.followed == 1 ? "取消关注" : "关注"
+            },
+            new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                  case 0:
+                    showCircleSetDialog(circle);
+                    break;
+                  case 1:
+                    if (response.object.followed == 1) {
+                      U.request("follow_circle_del", new OnResponse2<Response>() {
+                        @Override
+                        public void onResponseError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onResponse(Response response) {
+                          if (RESTRequester.responseOk(response)) {
+                            showToast("成功Cancel关注");
+                          }
+                        }
+                      }, Response.class, circle.id);
+                    } else {
+                      U.request("follow_circle_add", new OnResponse2<Response>() {
+                        @Override
+                        public void onResponseError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onResponse(Response response) {
+                          if (RESTRequester.responseOk(response)) {
+                            showToast("成功关注");
+                            U.getBus().post(new CircleFollowsChangedEvent());
+                          }
+                        }
+                      }, Response.class, circle.id);
+                    }
+                    break;
+                }
+              }
+            }).show();
+      }
+    }, CircleIsFollowResponse.class, circle.id);
   }
 
   protected void showCircleSetDialog(final Circle circle) {
@@ -337,7 +417,7 @@ public class BaseCirclesActivity extends BaseActivity {
         .setPositiveButton("停止", new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
-            HomeActivity.start(BaseCirclesActivity.this);
+            HomeTabActivity.start(BaseCirclesActivity.this);
             finish();
           }
         }).setNegativeButton("继续", new DialogInterface.OnClickListener() {
@@ -469,15 +549,17 @@ public class BaseCirclesActivity extends BaseActivity {
       @Override
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
-          HomeActivity.start(BaseCirclesActivity.this);
+          U.getBus().post(new CurrentCircleNameUpdatedEvent(circle.shortName));
+          U.getBus().post(new CircleFollowsChangedEvent());
+          HomeTabActivity.start(BaseCirclesActivity.this);
           finish();
         }
       }
     }, Response.class);
   }
 
-  private void requestRegionCircles(final int regionType, final int page) {
-    request(new FactoryRegionRequest(regionType, page), new OnResponse2<CirclesResponse>() {
+  private void requestRegionCircles(final int regionType, final int regionRadius, final int page) {
+    request(new FactoryRegionRequest(regionType, regionRadius, page), new OnResponse2<CirclesResponse>() {
       @Override
       public void onResponseError(Throwable e) {
         mLvCircles.stopLoadMore();

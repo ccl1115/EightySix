@@ -80,6 +80,33 @@ public class Post extends BaseItem implements Parcelable {
   @SerializedName("hometownText")
   public String hometownText;
 
+  @SerializedName("distance")
+  public String distance;
+
+  @SerializedName("userName")
+  public String userName;
+
+  @SerializedName("avatar")
+  public String avatar;
+
+  @SerializedName("viewUserId")
+  public String viewUserId;
+
+  @SerializedName("levelIcon")
+  public String levelIcon;
+
+  @SerializedName("viewerName")
+  public String viewerName;
+
+  @SerializedName("jump")
+  public int jump;
+
+  @SerializedName("topicId")
+  public int topicId;
+
+  @SerializedName("topicPrev")
+  public String topicPrev;
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -87,9 +114,7 @@ public class Post extends BaseItem implements Parcelable {
 
     Post post = (Post) o;
 
-    if (!id.equals(post.id)) return false;
-
-    return true;
+    return id != null && id.equals(post.id);
   }
 
   @Override
@@ -98,11 +123,6 @@ public class Post extends BaseItem implements Parcelable {
   }
 
   public Post() {
-  }
-
-  @Override
-  public int describeContents() {
-    return 0;
   }
 
   @Override
@@ -134,6 +154,11 @@ public class Post extends BaseItem implements Parcelable {
   }
 
   @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
   public void writeToParcel(Parcel dest, int flags) {
     dest.writeInt(this.factoryId);
     dest.writeString(this.circle);
@@ -153,7 +178,20 @@ public class Post extends BaseItem implements Parcelable {
     dest.writeInt(this.isRepost);
     dest.writeInt(this.isHot);
     dest.writeInt(this.owner);
+    dest.writeInt(this.sourceType);
+    dest.writeInt(this.userCurrFactoryId);
     dest.writeTypedList(tags);
+    dest.writeInt(this.relation);
+    dest.writeString(this.hometownText);
+    dest.writeString(this.distance);
+    dest.writeString(this.userName);
+    dest.writeString(this.avatar);
+    dest.writeString(this.viewUserId);
+    dest.writeString(this.levelIcon);
+    dest.writeString(this.viewerName);
+    dest.writeInt(this.jump);
+    dest.writeInt(this.topicId);
+    dest.writeString(this.topicPrev);
     dest.writeString(this.bgUrl);
     dest.writeString(this.bgColor);
     dest.writeString(this.content);
@@ -161,7 +199,6 @@ public class Post extends BaseItem implements Parcelable {
   }
 
   private Post(Parcel in) {
-    tags = new ArrayList<Tag>();
     this.factoryId = in.readInt();
     this.circle = in.readString();
     this.shortName = in.readString();
@@ -180,7 +217,21 @@ public class Post extends BaseItem implements Parcelable {
     this.isRepost = in.readInt();
     this.isHot = in.readInt();
     this.owner = in.readInt();
+    this.sourceType = in.readInt();
+    this.userCurrFactoryId = in.readInt();
+    tags = new ArrayList<Tag>();
     in.readTypedList(tags, Tag.CREATOR);
+    this.relation = in.readInt();
+    this.hometownText = in.readString();
+    this.distance = in.readString();
+    this.userName = in.readString();
+    this.avatar = in.readString();
+    this.viewUserId = in.readString();
+    this.levelIcon = in.readString();
+    this.viewerName = in.readString();
+    this.jump = in.readInt();
+    this.topicId = in.readInt();
+    this.topicPrev = in.readString();
     this.bgUrl = in.readString();
     this.bgColor = in.readString();
     this.content = in.readString();

@@ -14,16 +14,17 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.R;
-import com.utree.eightysix.U;
-import com.utree.eightysix.app.BaseFragment;
-import com.utree.eightysix.app.feed.event.StartPublishActivityEvent;
+import com.utree.eightysix.app.HolderFragment;
+import com.utree.eightysix.app.hometown.event.HometownNotSetEvent;
+import com.utree.eightysix.app.publish.PublishActivity;
 import com.utree.eightysix.widget.TitleTab;
 import com.utree.eightysix.widget.TopBar;
 
 /**
  */
-public class HometownTabFragment extends BaseFragment {
+public class HometownTabFragment extends HolderFragment {
 
   @InjectView(R.id.tt_tab)
   public TitleTab mTtTab;
@@ -35,14 +36,18 @@ public class HometownTabFragment extends BaseFragment {
 
   private NewHometownFeedsFragment mNewHometownFeedsFragment;
 
+  private SetHometownFragment mSetHometownFragment;
+
+  private HometownInfoFragment mHometownInfoFragment;
+
   public HometownTabFragment() {
     mNewHometownFeedsFragment = new NewHometownFeedsFragment();
     mHotHometownFeedsFragment = new HotHometownFeedsFragment();
   }
 
   @OnClick(R.id.ib_send)
-  public void onIbSendClicked() {
-    U.getBus().post(new StartPublishActivityEvent());
+  public void onIbSendClicked(View v) {
+    PublishActivity.startHometown(v.getContext());
   }
 
   @Override
@@ -54,9 +59,27 @@ public class HometownTabFragment extends BaseFragment {
   public void onViewCreated(View view, Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
 
+    getBaseActivity().setFillContent(true);
+
     getBaseActivity().setTopTitle(getString(R.string.hometown_feed));
     getBaseActivity().setTopSubTitle("");
     getBaseActivity().getTopBar().setTitleClickMode(TopBar.TITLE_CLICK_MODE_DIVIDE);
+
+    getBaseActivity().getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+    getBaseActivity().getTopBar().getAbLeft().setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        getBaseActivity().finish();
+      }
+    });
+
+    getBaseActivity().getTopBar().getAbRight().setText("设置");
+    getBaseActivity().getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        showSetHometownFragment();
+      }
+    });
 
     mVpHometown.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
 
@@ -117,6 +140,30 @@ public class HometownTabFragment extends BaseFragment {
     }, 500);
   }
 
+  private void showSetHometownFragment() {
+    if (mSetHometownFragment == null) {
+      mSetHometownFragment = new SetHometownFragment();
+      Bundle bundle = new Bundle();
+      bundle.putString("title", "设置家乡");
+      mSetHometownFragment.setArguments(bundle);
+      mSetHometownFragment.setCallback(new SetHometownFragment.Callback() {
+        @Override
+        public void onHometownSet(int hometownId) {
+          mHotHometownFeedsFragment.setHometown(0, -1);
+          mNewHometownFeedsFragment.setHometown(0, -1);
+          refresh();
+        }
+      });
+      getFragmentManager().beginTransaction()
+          .add(R.id.content, mSetHometownFragment)
+          .commit();
+    } else if (mSetHometownFragment.isDetached()) {
+      getFragmentManager().beginTransaction()
+          .attach(mSetHometownFragment)
+          .commit();
+    }
+  }
+
   @Override
   public void onDestroyView() {
     super.onDestroyView();
@@ -130,7 +177,6 @@ public class HometownTabFragment extends BaseFragment {
     mHotHometownFeedsFragment.setHometown(hometownId, hometownType);
 
     if (getBaseActivity() != null) {
-      getBaseActivity().setTopTitle(hometownName);
       getBaseActivity().setTopSubTitle("");
     }
 
@@ -168,5 +214,40 @@ public class HometownTabFragment extends BaseFragment {
   private void clearActive() {
     mNewHometownFeedsFragment.setActive(false);
     mHotHometownFeedsFragment.setActive(false);
+  }
+
+  @Subscribe
+  public void onHometownNotSetEvent(HometownNotSetEvent event) {
+    showSetHometownFragment();
+  }
+
+  @Override
+  public void onTitleClicked() {
+    if (mHometownInfoFragment == null) {
+      mHometownInfoFragment = new HometownInfoFragment();
+      mHometownInfoFragment.setCallback(new HometownInfoFragment.Callback() {
+        @Override
+        public void onHometownClicked(int hometownId, int hometownType, String hometownName) {
+          setHometown(hometownId, hometownType, hometownName);
+        }
+      });
+      getFragmentManager().beginTransaction()
+          .add(R.id.content, mHometownInfoFragment)
+          .commit();
+    } else if (mHometownInfoFragment.isDetached()) {
+      getFragmentManager().beginTransaction()
+          .attach(mHometownInfoFragment)
+          .commit();
+    }
+  }
+
+  @Override
+  protected void onActionLeftClicked() {
+    getActivity().finish();
+  }
+
+  @Override
+  protected void onActionOverflowClicked() {
+
   }
 }

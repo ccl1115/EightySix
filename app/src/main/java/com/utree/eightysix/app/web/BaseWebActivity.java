@@ -20,8 +20,8 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.widget.GearsView;
-import de.akquinet.android.androlog.Log;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 /**
@@ -69,13 +69,19 @@ public class BaseWebActivity extends BaseActivity {
 
   @Override
   public void onActionLeftClicked() {
-    finish();
+    if (mWbBase.canGoBack()) {
+      mWbBase.goBack();
+    } else {
+      finish();
+    }
   }
 
   @SuppressLint ("SetJavaScriptEnabled")
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
     String title = getIntent().getStringExtra("title");
     if (title != null) {
@@ -91,6 +97,20 @@ public class BaseWebActivity extends BaseActivity {
       public void onPageStarted(WebView view, String url, Bitmap favicon) {
         super.onPageStarted(view, url, favicon);
         mGvLoading.setVisibility(View.VISIBLE);
+        if (url.contains("?")) {
+          String[] str = url.split("\\?")[1].split("&");
+          for (String s : str) {
+            String[] kv = s.split("=");
+            if (kv.length == 2) {
+              if (kv[0].equals("title")) {
+                try {
+                  setTopTitle(URLDecoder.decode(kv[1], "utf-8"));
+                } catch (UnsupportedEncodingException ignored) {
+                }
+              }
+            }
+          }
+        }
       }
 
       @Override
@@ -108,10 +128,8 @@ public class BaseWebActivity extends BaseActivity {
 
       @Override
       public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        Log.d("BaseWebActivity", "overriding url loading: " + url);
         int factoryId = 0;
         String shortName = "";
-        int bainian = 0;
         if (url.contains("?")) {
           String[] str = url.split("\\?")[1].split("&");
           for (String s : str) {
@@ -122,8 +140,8 @@ public class BaseWebActivity extends BaseActivity {
               } else if (kv[0].equals("shortName")) {
                 shortName = kv[1];
                 shortName = URLDecoder.decode(shortName);
-              } else if (kv[0].equals("share")) {
-
+              } else if (kv[0].equals("title")) {
+                setTopTitle(kv[1]);
               }
             }
           }
@@ -158,4 +176,12 @@ public class BaseWebActivity extends BaseActivity {
     }
   }
 
+  @Override
+  public void onBackPressed() {
+    if (mWbBase.canGoBack()) {
+      mWbBase.goBack();
+    } else {
+      super.onBackPressed();
+    }
+  }
 }

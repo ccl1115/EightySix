@@ -10,6 +10,7 @@ import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.ShareContentRequest;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.OnResponse2;
+import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 
 /**
@@ -35,7 +36,7 @@ public abstract class IShare {
   }
 
   protected String shareTitleForPost() {
-    return "分享1个%s的秘密";
+    return "分享1个%s的帖子";
   }
 
   protected String shareTitleForComment() {
@@ -47,7 +48,7 @@ public abstract class IShare {
   }
 
   protected String shareContentForPost() {
-    return "转自【蓝莓】-工厂里的秘密社区";
+    return "转自【蓝莓】-打工者的社交平台";
   }
 
   protected abstract String shareTitleForBainian();
@@ -134,7 +135,9 @@ public abstract class IShare {
 
           @Override
           public void onResponse(Response response) {
-
+            if (RESTRequester.responseOk(response)) {
+              U.showToast("经验+2");
+            }
           }
         }, Response.class, null, null);
       }

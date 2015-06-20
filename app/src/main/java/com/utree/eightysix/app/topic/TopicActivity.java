@@ -75,6 +75,8 @@ public class TopicActivity extends BaseActivity {
     super.onCreate(savedInstanceState);
     setTopTitle("话题");
 
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+
     mTopic = getIntent().getParcelableExtra("topic");
 
     if (mTopic != null) {
@@ -131,7 +133,7 @@ public class TopicActivity extends BaseActivity {
       @Override
       public void onSendClicked() {
         if (Account.inst().getCurrentCircle() != null) {
-          PublishActivity.startWithTopicId(TopicActivity.this, mTopic.id, mTopic.tags);
+          PublishActivity.startWithTopicId(TopicActivity.this, mTopic.id, mTopic.tags, mTopic.hint);
         } else {
           U.showToast("还没有在职工厂，不能发话题帖哦");
         }
@@ -148,6 +150,7 @@ public class TopicActivity extends BaseActivity {
   }
 
   @Override
+  @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();
   }

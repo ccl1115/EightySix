@@ -15,7 +15,6 @@ import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
 import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
 import com.utree.eightysix.data.PullNotification;
-import com.utree.eightysix.push.PushMessageReceiver;
 import com.utree.eightysix.request.FetchNotificationRequest;
 import com.utree.eightysix.response.FetchResponse;
 import com.utree.eightysix.rest.HandlerWrapper;
@@ -36,7 +35,7 @@ import java.util.List;
 public class FetchNotificationService extends Service {
 
   public static final String TAG = "FetchNotificationService";
-  private static final int FETCH_INTERVAL = 60000;
+  private static final int FETCH_INTERVAL = 60000 * 2;
   private static final int MSG_FETCH = 0x1;
 
   private static int sCircleId;
@@ -60,7 +59,7 @@ public class FetchNotificationService extends Service {
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
     mShowCommentNotify = intent.getBooleanExtra("showCommentNotify", false);
-    if (intent.getBooleanExtra("loop", true) && !BuildConfig.DEBUG) {
+    if (intent.getBooleanExtra("loop", true) && U.getConfig("fetch.notice").equals("on")) {
       mHandler.sendEmptyMessageDelayed(MSG_FETCH, 1000);
     } else {
       requestFetch();
@@ -141,32 +140,43 @@ public class FetchNotificationService extends Service {
             Account.inst().setHasNewPraise(true);
           }
 
-          int count = 0;
-          int type = 0;
+          int count;
+          int type;
 
-          PullNotification comments = null;
+          PullNotification comments;
           if (response.object.newComment != null) {
             comments = response.object.newComment;
             type = comments.type;
             count = comments.unread;
-          } else if (response.object.myPostComment != null) {
+            if (mShowCommentNotify) {
+              if (count == 1) {
+                PullNotification.Item item = comments.lists.get(0);
+                getNM().notify(NotifyUtil.ID_FOLLOW_COMMENT,
+                    mNotifyUtil.buildComment(count, item.value, type, circleId == item.factoryId, sCircleId));
+              } else if (count > 1) {
+                getNM().notify(NotifyUtil.ID_FOLLOW_COMMENT, mNotifyUtil.buildComment(count, null, type, false, 0));
+              }
+            }
+
+            Account.inst().setNewCommentCount(count);
+          }
+
+          if (response.object.myPostComment != null) {
             comments = response.object.myPostComment;
             type = comments.type;
             count = comments.unread;
-          }
-
-          if (mShowCommentNotify) {
-            if (count == 1) {
-              PullNotification.Item item = comments.lists.get(0);
-              getNM().notify(type == PushMessageReceiver.TYPE_FOLLOW_COMMENT ? NotifyUtil.ID_FOLLOW_COMMENT : NotifyUtil.ID_OWN_COMMENT,
-                  mNotifyUtil.buildComment(count, item.value, type, circleId == item.factoryId, sCircleId));
-            } else if (count > 1) {
-              getNM().notify(type == PushMessageReceiver.TYPE_FOLLOW_COMMENT ? NotifyUtil.ID_FOLLOW_COMMENT : NotifyUtil.ID_OWN_COMMENT,
-                  mNotifyUtil.buildComment(count, null, type, false, 0));
+            if (mShowCommentNotify) {
+              if (count == 1) {
+                PullNotification.Item item = comments.lists.get(0);
+                getNM().notify(NotifyUtil.ID_OWN_COMMENT,
+                    mNotifyUtil.buildComment(count, item.value, type, circleId == item.factoryId, sCircleId));
+              } else if (count > 1) {
+                getNM().notify(NotifyUtil.ID_OWN_COMMENT, mNotifyUtil.buildComment(count, null, type, false, 0));
+              }
             }
+             Account.inst().setMyPostCommentCount(count);
           }
 
-          Account.inst().setNewCommentCount(count);
 
 
           PullNotification newPost = response.object.newPost;

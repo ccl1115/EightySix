@@ -15,8 +15,6 @@ public class AsyncImageView extends ImageView {
 
   protected String mUrlHash;
 
-  protected boolean mLocal;
-
   public AsyncImageView(Context context) {
     this(context, null, 0);
   }
@@ -30,23 +28,25 @@ public class AsyncImageView extends ImageView {
   }
 
   public void setUrl(String url) {
-    if (url == null) {
-      setImageBitmap(null);
+    setImageBitmap(null);
+
+    if (url == null || url.length() == 0) {
       return;
     }
 
     if (url.startsWith("/")) {
       File file = new File(url);
-      Picasso.with(getContext()).load(file).resize(600, 600).into(this);
+      Picasso.with(getContext()).load(file).into(this);
     } else {
-      Picasso.with(getContext()).load(url).resize(600, 600).into(this);
+      Picasso.with(getContext()).load(url).into(this);
     }
 
   }
 
   public void setUrl(String url, int width, int height) {
-    if (url == null) {
-      setImageBitmap(null);
+    setImageBitmap(null);
+
+    if (url == null || url.length() == 0) {
       return;
     }
 

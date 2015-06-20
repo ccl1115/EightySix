@@ -8,10 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.U;
-import com.utree.eightysix.dao.ConversationDao;
-import com.utree.eightysix.dao.DaoMaster;
-import com.utree.eightysix.dao.DaoSession;
-import com.utree.eightysix.dao.MessageDao;
+import com.utree.eightysix.dao.*;
 
 /**
  */
@@ -35,6 +32,11 @@ public class DaoUtils {
               db.execSQL("ALTER TABLE MESSAGE ADD COLUMN 'USER_ID' TEXT NOT NULL;" +
                   "CREATE INDEX IF NOT EXISTS 'USER_ID' ON MESSAGE ('USER_ID' ASC);");
             }
+
+            if (oldVersion <= 27 && newVersion == 31) {
+              FriendConversationDao.createTable(db, true);
+              FriendMessageDao.createTable(db, true);
+            }
           }
         }.getWritableDatabase());
     mDaoSession = sDaoMaster.newSession();
@@ -54,5 +56,21 @@ public class DaoUtils {
     }
 
     return mDaoSession.getMessageDao();
+  }
+
+  public static FriendConversationDao getFriendConversationDao() {
+    if (sDaoMaster == null) {
+      init();
+    }
+
+    return mDaoSession.getFriendConversationDao();
+  }
+
+  public static FriendMessageDao getFriendMessageDao() {
+    if (sDaoMaster == null) {
+      init();
+    }
+
+    return mDaoSession.getFriendMessageDao();
   }
 }

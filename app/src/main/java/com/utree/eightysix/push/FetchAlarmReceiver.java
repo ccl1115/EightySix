@@ -17,7 +17,6 @@ import java.util.Date;
  */
 public class FetchAlarmReceiver extends BroadcastReceiver {
 
-  private static final String TAG = "FetchAlarmReceiver";
   private static final String ACTION = "com.utree.eightysix.action.FETCH";
   private static final int INTERVAL = 3600000;
 

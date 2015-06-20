@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Copyright (c) 2015. All rights reserved by utree.cn
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal"
+              android:gravity="end"
+              android:padding="8dp"
+        >
+
+    <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+
+    <LinearLayout
+            android:id="@+id/ll_bubble"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_chat_item_to"
+            tools:ignore="UselessParent"
+            >
+
+        <ImageView
+                android:id="@+id/iv_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="8dp"
+                android:paddingLeft="3dp"
+                android:paddingStart="3dp"
+                android:paddingTop="1dp"
+                android:paddingRight="1dp"
+                android:paddingEnd="3dp"
+                android:paddingBottom="1dp"
+                android:src="@drawable/ic_warning"
+                />
+
+        <ProgressBar
+                android:id="@+id/pb_loading"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                />
+
+        <com.utree.eightysix.widget.AsyncImageViewWithRoundCorner
+                android:id="@+id/iv_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="1dp"
+                android:paddingStart="1dp"
+                android:paddingTop="1dp"
+                android:paddingRight="3dp"
+                android:paddingEnd="3dp"
+                android:paddingBottom="1dp"
+                android:scaleType="centerCrop"
+                />
+
+    </LinearLayout>
+
+    <com.utree.eightysix.widget.AsyncImageViewWithRoundCorner
+            android:id="@+id/aiv_portrait"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="6dp"
+            app:width="40dp"
+            app:height="40dp"
+            app:radius="4dp"
+            />
+</LinearLayout>

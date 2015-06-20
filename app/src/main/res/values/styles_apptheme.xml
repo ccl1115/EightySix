@@ -12,12 +12,25 @@
         <item name="android:textColorHint">#FFd8d8d8</item>
     </style>
 
+    <style name="Widget.EditText.AppTheme.Dark" parent="Widget.EditText.AppTheme">
+        <item name="android:background">@drawable/apptheme_edit_text_holo_dark</item>
+    </style>
+
     <style name="Widget.CheckBox.AppTheme" parent="android:Widget.CompoundButton.CheckBox">
         <item name="android:button">@drawable/apptheme_btn_check_holo_light</item>
     </style>
 
-
     <style name="Widget.RadioButton.AppTheme" parent="android:Widget.CompoundButton.RadioButton">
+    </style>
+
+    <style name="Widget.SeekBar.Apptheme" parent="android:Widget.Holo.SeekBar">
+        <item name="android:thumb">@drawable/seekbar_thumb</item>
+        <item name="android:progressDrawable">@drawable/seekbar_progress_horizontal</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:thumbOffset">10dp</item>
+        <item name="android:minHeight">8dp</item>
+        <item name="android:maxHeight">8dp</item>
     </style>
 
     <style name="Widget.TopBar"/>
@@ -25,22 +38,14 @@
     <style name="Widget.TopBar.AppTheme">
         <item name="android:background">@color/apptheme_top_bar_bg_color</item>
         <item name="titleColor">#fff7f7f7</item>
-        <item name="topLineColor">#ff41454d</item>
-        <item name="botLineColor">#ff2b2333</item>
+        <item name="topLineColor">#ffa64af3</item>
+        <item name="botLineColor">#ff6b24a8</item>
     </style>
 
     <style name="Widget.RefreshIndicator"/>
 
     <style name="Widget.RefreshIndicator.AppTheme">
-        <item name="android:background">#ff363940</item>
-    </style>
-
-    <style name="Widget.RoundedButton.Apptheme.Small">
-        <item name="background">@color/apptheme_primary_grey_btn</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:minWidth">110dp</item>
-        <item name="android:minHeight">30dp</item>
-        <item name="android:textColor">@color/apptheme_primary_text_dark</item>
+        <item name="android:background">@color/apptheme_top_bar_bg_color</item>
     </style>
 
     <style name="Widget.ProgressBar"/>
@@ -51,14 +56,32 @@
 
     <style name="Widget.RoundedButton.Apptheme">
         <item name="android:gravity">center</item>
-        <item name="android:textColor">@color/apptheme_primary_text_light</item>
+        <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:minHeight">48dp</item>
         <item name="android:clickable">true</item>
         <item name="android:paddingLeft">8dp</item>
         <item name="android:paddingRight">8dp</item>
         <item name="radius">2dp</item>
         <item name="background">@color/apptheme_primary_btn_light</item>
+    </style>
+
+    <style name="Widget.RoundedButton.Apptheme.Small">
+        <item name="background">@color/apptheme_primary_grey_btn</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:minWidth">110dp</item>
+        <item name="android:minHeight">30dp</item>
+        <item name="android:textColor">@color/apptheme_primary_text_dark</item>
+    </style>
+
+    <style name="Widget.RoundedButton.Apptheme.Count">
+        <item name="android:textSize">10sp</item>
+        <item name="android:paddingTop">1dp</item>
+        <item name="android:paddingBottom">1dp</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:paddingRight">5dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="radius">16dp</item>
+        <item name="background">@color/apptheme_secondary_light_color</item>
     </style>
 
     <style name="Widget.PostEditText"/>
@@ -73,9 +96,10 @@
 
     <style name="TextView.PostStyle">
         <item name="android:textSize" tools:ignore="SpUsage">23dp</item>
-        <item name="android:paddingLeft">40dp</item>
-        <item name="android:paddingRight">40dp</item>
+        <item name="android:layout_marginLeft">48dp</item>
+        <item name="android:layout_marginRight">48dp</item>
         <item name="android:gravity">center</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="Widget.ListView.Apptheme" parent="android:Widget.ListView">
@@ -92,5 +116,46 @@
         <item name="android:singleLine">true</item>
         <item name="android:lines">1</item>
         <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="Widget.Spinner"/>
+
+    <style name="Widget.Spinner.DropdownItem"/>
+
+    <style name="Widget.Spinner.Dropdown"/>
+
+    <style name="Widget.Spinner.Item"/>
+
+    <style name="Widget.Spinner.Item.Apptheme">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">4dp</item>
+    </style>
+
+    <style name="Widget.Spinner.Item.Light">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">4dp</item>
+    </style>
+
+    <style name="Widget.Spinner.Apptheme" parent="android:Widget.Holo.Light.Spinner">
+        <item name="android:background">@drawable/ic_spinner_bg</item>
+        <item name="android:gravity">center</item>
+        <item name="android:dropDownHeight">wrap_content</item>
+    </style>
+
+    <style name="Widget.Spinner.Light" parent="android:Widget.Holo.Light.Spinner">
+        <item name="android:background">@drawable/ic_spinner_bg_light</item>
+        <item name="android:gravity">center</item>
+        <item name="android:dropDownHeight">wrap_content</item>
+    </style>
+
+    <style name="Widget.Spinner.DropdownItem.Apptheme" parent="android:Widget.TextView.SpinnerItem">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">16dp</item>
     </style>
 </resources>

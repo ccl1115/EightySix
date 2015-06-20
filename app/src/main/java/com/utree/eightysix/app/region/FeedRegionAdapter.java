@@ -1,5 +1,6 @@
 package com.utree.eightysix.app.region;
 
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +17,12 @@ import com.squareup.picasso.Picasso;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.annotations.Keep;
+import com.utree.eightysix.app.account.AddFriendActivity;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.*;
-import com.utree.eightysix.app.feed.event.InviteClickedEvent;
-import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
 import com.utree.eightysix.app.feed.event.UploadClickedEvent;
 import com.utree.eightysix.data.*;
+import com.utree.eightysix.response.FeedsByRegionResponse;
 import com.utree.eightysix.utils.CmdHandler;
 import com.utree.eightysix.widget.RoundedButton;
 
@@ -36,7 +37,7 @@ public class FeedRegionAdapter extends BaseAdapter {
    */
   protected static final int TNS = -1;
 
-  protected final int TYPE_COUNT = 14;
+  protected final int TYPE_COUNT = 15;
   public static final int TYPE_PLACEHOLDER = 0;
   public static final int TYPE_UNLOCK = 1;
   public static final int TYPE_UPLOAD = 2;
@@ -51,18 +52,24 @@ public class FeedRegionAdapter extends BaseAdapter {
   public static final int TYPE_TOPIC = 11;
   public static final int TYPE_FEED_INTENT = 12;
   public static final int TYPE_BAINIAN = 13;
+  public static final int TYPE_SIGN = 14;
 
   protected Feeds mFeeds;
 
   protected int mTipSourcePosition = TNS;
   protected int mTipPraisePosition = TNS;
-  protected int mTipSharePosition = TNS;
   protected int mTipRepostPosition = TNS;
   protected int mTipTempNamePosition = TNS;
   protected int mTipTagsPosition = TNS;
 
+  public FeedRegionAdapter(FeedsByRegion feeds, FeedsByRegionResponse.Extra extra) {
+    this(feeds);
+    if (feeds.circle != null && feeds.current == 1 && extra != null) {
+      mFeeds.posts.lists.add(0, new FeedSign(extra));
+    }
+  }
 
-  public FeedRegionAdapter(Feeds feeds) {
+  public FeedRegionAdapter(FeedsByRegion feeds) {
     mFeeds = feeds;
 
     if (mFeeds.selectFactory != 1) {
@@ -87,6 +94,7 @@ public class FeedRegionAdapter extends BaseAdapter {
   }
 
   public FeedRegionAdapter() {
+
   }
 
   public void add(List<BaseItem> posts) {
@@ -196,7 +204,20 @@ public class FeedRegionAdapter extends BaseAdapter {
       case TYPE_BAINIAN:
         convertView = getBainianView(position, convertView, parent);
         break;
+      case TYPE_SIGN:
+        convertView = getSignView(position, convertView, parent);
+        break;
     }
+
+    return convertView;
+  }
+
+  private View getSignView(int position, View convertView, ViewGroup parent) {
+    if (convertView == null) {
+      convertView = new FeedSignView(parent.getContext());
+    }
+
+    ((FeedSignView) convertView).setData((FeedSign) getItem(position), mFeeds.circle.id);
 
     return convertView;
   }
@@ -248,6 +269,8 @@ public class FeedRegionAdapter extends BaseAdapter {
           return TYPE_FEED_INTENT;
         case BaseItem.TYPE_BAINIAN:
           return TYPE_BAINIAN;
+        case BaseItem.TYPE_SIGN:
+          return TYPE_SIGN;
         case TYPE_UPLOAD:
         case TYPE_UNLOCK:
         case TYPE_SELECT:
@@ -291,7 +314,6 @@ public class FeedRegionAdapter extends BaseAdapter {
   }
 
   public void showTipShare(int position) {
-    mTipSharePosition = position;
     notifyDataSetChanged();
   }
 
@@ -316,9 +338,6 @@ public class FeedRegionAdapter extends BaseAdapter {
       case DismissTipOverlayEvent.TYPE_PRAISE:
         mTipPraisePosition = TNS;
         break;
-      case DismissTipOverlayEvent.TYPE_SHARE:
-        mTipSharePosition = TNS;
-        break;
       case DismissTipOverlayEvent.TYPE_SOURCE:
         mTipSourcePosition = TNS;
         break;
@@ -336,7 +355,6 @@ public class FeedRegionAdapter extends BaseAdapter {
 
   public boolean tipsShowing() {
     return mTipPraisePosition != TNS
-        || mTipSharePosition != TNS
         || mTipSourcePosition != TNS
         || mTipRepostPosition != TNS
         || mTipTagsPosition != TNS
@@ -359,16 +377,11 @@ public class FeedRegionAdapter extends BaseAdapter {
       feedPostView.showSourceTip();
     } else if (mTipSourcePosition == TNS && mTipPraisePosition == position) {
       feedPostView.showPraiseTip();
-    } else if (mTipPraisePosition == TNS && mTipSharePosition == position) {
-      feedPostView.showShareTip();
-    } else if (mTipSharePosition == TNS && mTipRepostPosition == position) {
-      feedPostView.showRepostTip();
     } else if (mTipRepostPosition == TNS && mTipTagsPosition == position) {
       feedPostView.showTagsTip();
     } else {
       feedPostView.hidePraiseTip();
       feedPostView.hideSourceTip();
-      feedPostView.hideShareTip();
       feedPostView.hideRepostTip();
       feedPostView.hideTempNameTip();
       feedPostView.hideTagsTip();
@@ -411,7 +424,8 @@ public class FeedRegionAdapter extends BaseAdapter {
     if (position == getCount() - 1) {
       convertView.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, U.dp2px(48)));
     } else {
-      convertView.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, U.dp2px(0)));
+      convertView.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+          parent.getResources().getDimensionPixelSize(R.dimen.activity_top_bar_height) + U.dp2px(36)));
     }
     return convertView;
   }
@@ -443,7 +457,7 @@ public class FeedRegionAdapter extends BaseAdapter {
       @Override
       public void onClick(View v) {
         U.getAnalyser().trackEvent(U.getContext(), "feed_unlock", "feed_unlock");
-        U.getBus().post(new UnlockClickedEvent());
+        v.getContext().startActivity(new Intent(v.getContext(), AddFriendActivity.class));
       }
     });
 
@@ -562,9 +576,9 @@ public class FeedRegionAdapter extends BaseAdapter {
 
   static class InviteFriendViewHolder {
     @OnClick(R.id.rb_invite)
-    public void onRbInviteClicked() {
-      U.getAnalyser().trackEvent(U.getContext(), "feed_invite_friend", "feed_invite_friend");
-      U.getBus().post(new InviteClickedEvent());
+    public void onRbInviteClicked(View v) {
+      U.getAnalyser().trackEvent(v.getContext(), "feed_invite_friend", "feed_invite_friend");
+      v.getContext().startActivity(new Intent(v.getContext(), AddFriendActivity.class));
     }
 
     public InviteFriendViewHolder(View view) {
@@ -574,9 +588,9 @@ public class FeedRegionAdapter extends BaseAdapter {
 
   static class InviteFactoryViewHolder {
     @OnClick(R.id.rb_invite)
-    public void onRbInviteClicked() {
+    public void onRbInviteClicked(View v) {
       U.getAnalyser().trackEvent(U.getContext(), "feed_invite_factory", "feed_invite_factory");
-      U.getBus().post(new InviteClickedEvent());
+      v.getContext().startActivity(new Intent(v.getContext(), AddFriendActivity.class));
     }
 
     public InviteFactoryViewHolder(View view) {
@@ -614,7 +628,6 @@ public class FeedRegionAdapter extends BaseAdapter {
 
     public static final int TYPE_SOURCE = 1;
     public static final int TYPE_PRAISE = 2;
-    public static final int TYPE_SHARE = 3;
     public static final int TYPE_REPOST = 4;
     public static final int TYPE_TEMP_NAME = 5;
     public static final int TYPE_TAGS = 6;

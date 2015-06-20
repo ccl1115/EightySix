@@ -8,8 +8,6 @@ import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.data.BaseItem;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.FeedsFriendsRequest;
-import com.utree.eightysix.request.FeedsHotRequest;
-import com.utree.eightysix.request.PostPraiseRequest;
 import com.utree.eightysix.response.FeedsResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.OnResponse2;
@@ -32,12 +30,18 @@ public class HotFeedFragment extends AbsFeedFragment {
       mRefresherView.setRefreshing(true);
       getBaseActivity().setTopSubTitle("");
     }
-    getBaseActivity().request(new FeedsHotRequest(id, page), new OnResponse<FeedsResponse>() {
+
+    U.request("feed_list_hot", new OnResponse2<FeedsResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+
+      }
+
       @Override
       public void onResponse(FeedsResponse response) {
         responseForRequest(id, response, page);
       }
-    }, FeedsResponse.class);
+    }, FeedsResponse.class, id, page);
   }
 
   @Override
@@ -66,7 +70,13 @@ public class HotFeedFragment extends AbsFeedFragment {
       return;
     }
     mPostPraiseRequesting = true;
-    getBaseActivity().request(new PostPraiseRequest(event.getPost().id), new OnResponse2<Response>() {
+
+    U.request("post_praise", new OnResponse2<Response>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        mPostPraiseRequesting = false;
+      }
+
       @Override
       public void onResponse(Response response) {
         if (RESTRequester.responseOk(response)) {
@@ -82,12 +92,7 @@ public class HotFeedFragment extends AbsFeedFragment {
 
         mPostPraiseRequesting = false;
       }
-
-      @Override
-      public void onResponseError(Throwable e) {
-                                               mPostPraiseRequesting = false;
-                                                                                                                  }
-    }, Response.class);
+    }, Response.class, event.getPost().id);
   }
 
   @Subscribe
@@ -108,15 +113,17 @@ public class HotFeedFragment extends AbsFeedFragment {
 
   @Subscribe
   public void onContactsSyncEvent(ContactsSyncEvent event) {
-    if (mFeedAdapter != null && mFeedAdapter.getFeeds().upContact == 0) {
-      if (event.isSucceed()) {
-        U.showToast("上传通讯录成功");
-      } else {
-        U.showToast("上传通讯录失败");
+    if (isResumed()) {
+      if (mFeedAdapter != null && mFeedAdapter.getFeeds().upContact == 0) {
+        if (event.isSucceed()) {
+          U.showToast("上传通讯录成功");
+        } else {
+          U.showToast("上传通讯录失败");
+        }
       }
-    }
 
-    refresh();
-    getBaseActivity().hideProgressBar();
+      refresh();
+      getBaseActivity().hideProgressBar();
+    }
   }
 }

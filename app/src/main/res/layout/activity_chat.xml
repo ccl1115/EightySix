@@ -1,29 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@android:color/white"
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
         >
 
-    <com.utree.eightysix.view.SwipeRefreshLayout
-            android:id="@+id/refresh_view"
+    <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             >
 
-        <com.utree.eightysix.widget.AdvancedListView
-                android:id="@+id/alv_chats"
+        <com.utree.eightysix.view.SwipeRefreshLayout
+                android:id="@+id/refresh_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                />
+                >
 
-    </com.utree.eightysix.view.SwipeRefreshLayout>
+            <com.utree.eightysix.widget.AdvancedListView
+                    android:id="@+id/alv_chats"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
+
+        </com.utree.eightysix.view.SwipeRefreshLayout>
+
+        <LinearLayout
+                android:id="@+id/ll_notice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="64dp"
+                android:layout_marginRight="64dp"
+                android:layout_marginBottom="40dp"
+                android:layout_gravity="center_horizontal|bottom"
+                android:orientation="vertical"
+                android:background="#88e6e6e6"
+                android:padding="16dp"
+                android:visibility="gone"
+                >
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="温馨提示："
+                    />
+
+            <TextView
+                    android:id="@+id/tv_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textSize="14sp"
+                    />
+        </LinearLayout>
+    </FrameLayout>
 
     <include
-            layout="@layout/widget_post_comment"
+            layout="@layout/widget_post_chat"
             android:id="@+id/fl_send"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -76,3 +113,4 @@
 
     </RelativeLayout>
 </LinearLayout>
+

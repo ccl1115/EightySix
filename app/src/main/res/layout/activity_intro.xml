@@ -4,18 +4,34 @@
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@drawable/intro">
+                android:background="@drawable/bg_intro"
+        >
 
     <ImageView
             android:id="@+id/big_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="96dp"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentTop="false"
+            android:layout_marginTop="120dp"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/big_logo"/>
+            android:src="@drawable/big_logo"
+            />
+
+    <TextView
+            android:id="@+id/tv_app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="260dp"
+            android:textSize="36sp"
+            android:textColor="@android:color/white"
+            android:text="@string/app_name"
+            android:shadowDx="0"
+            android:shadowDy="6"
+            android:shadowRadius="2"
+            android:shadowColor="#44000000"
+            />
+
 
     <TextView
             android:id="@+id/intro_text"
@@ -24,23 +40,15 @@
             android:layout_gravity="center_horizontal"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="48dp"
-            android:layout_below="@+id/big_logo"
+            android:layout_below="@+id/tv_app_name"
             android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:text="让漂泊的心 有个家"/>
-
-    <TextView
-            android:id="@+id/intro_url"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="2015 utree.cn, all rights reserved"
-            android:textSize="12sp"
-            android:textColor="#44ffffff"
-            android:layout_marginBottom="10dp"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"/>
+            android:textSize="24sp"
+            android:text="让漂泊的心 有个家"
+            android:shadowDx="0"
+            android:shadowDy="4"
+            android:shadowRadius="2"
+            android:shadowColor="#44000000"
+            />
 
     <LinearLayout
             android:id="@+id/ll_actions"
@@ -48,35 +56,38 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="60dp"
             android:layout_alignParentBottom="true"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            >
 
         <TextView
                 android:id="@+id/tv_join"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="8dp"
-                android:textColor="@color/apptheme_primary_text_light"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="16dp"
+                android:textColor="@android:color/white"
                 android:gravity="center"
                 android:visibility="invisible"
                 android:text="立即加入"
                 android:textSize="16sp"
-                android:background="@drawable/round_border"/>
+                android:background="@drawable/round_border"
+                />
 
         <TextView
                 android:id="@+id/tv_login"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="16dp"
-                android:textColor="@color/apptheme_primary_text_light"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="32dp"
+                android:textColor="@android:color/white"
                 android:gravity="center"
                 android:visibility="invisible"
                 android:text="登  录"
                 android:textSize="16sp"
-                android:background="@drawable/round_border"/>
+                android:background="@drawable/round_border"
+                />
     </LinearLayout>
 
 </RelativeLayout>

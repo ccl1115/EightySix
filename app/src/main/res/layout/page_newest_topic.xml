@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Copyright (c) 2015. All rights reserved by utree.cn
+  -->
+
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="105dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        >
+
+    <com.utree.eightysix.widget.AsyncImageViewWithRoundCorner
+            android:id="@+id/aiv_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:radius="4dp"
+            />
+
+    <com.utree.eightysix.widget.RoundedButton
+            android:id="@+id/rb_mask"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:radius="4dp"
+            app:background="#44000000"
+            />
+
+    <com.utree.eightysix.widget.RoundedButton
+            android:id="@+id/rb_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:radius="4dp"
+            android:clickable="false"
+            />
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="8dp"
+            >
+
+        <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                />
+
+        <TextView
+                android:id="@+id/tv_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:lines="2"
+                android:maxLength="80"
+                />
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_gravity="start|bottom"
+            >
+
+        <com.utree.eightysix.widget.TagView
+                android:id="@+id/tv_tag_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                tools:ignore="SmallSp"
+                />
+
+        <com.utree.eightysix.widget.TagView
+                android:id="@+id/tv_tag_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                tools:ignore="SmallSp"
+                />
+    </LinearLayout>
+
+    <TextView
+            android:id="@+id/tv_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_gravity="end|bottom"
+            android:textSize="12sp"
+            android:textColor="@android:color/white"
+            />
+</FrameLayout>

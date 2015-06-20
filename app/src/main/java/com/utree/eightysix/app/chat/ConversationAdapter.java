@@ -21,7 +21,6 @@ import com.utree.eightysix.dao.Conversation;
 import com.utree.eightysix.data.ChatOnline;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.DaoUtils;
-import com.utree.eightysix.utils.TimeUtil;
 import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.FontPortraitView;
 import com.utree.eightysix.widget.RoundedButton;
@@ -130,10 +129,9 @@ public class ConversationAdapter extends BaseAdapter {
     if (conversation.getBanned() != null && conversation.getBanned()) {
       holder.mTvBanned.setVisibility(View.VISIBLE);
     } else {
-      holder.mTvBanned.setVisibility(View.INVISIBLE);
+      holder.mTvBanned.setVisibility(View.GONE);
     }
 
-    holder.mTvName.setText(conversation.getRelation());
     holder.mTvLast.setText(conversation.getLastMsg());
 
     String portrait = conversation.getPortrait();
@@ -144,16 +142,6 @@ public class ConversationAdapter extends BaseAdapter {
       } else {
         holder.mFpvPortrait.setEmotion(portrait.charAt(0));
         holder.mFpvPortrait.setEmotionColor(ColorUtil.strToColor(conversation.getPortraitColor()));
-      }
-    }
-
-    if (conversation.getOnline() != null) {
-      if (conversation.getOnline()) {
-        holder.mTvStatus.setText("在线");
-        holder.mTvStatus.setTextColor(parent.getResources().getColor(R.color.apptheme_primary_light_color));
-      } else {
-        holder.mTvStatus.setText(TimeUtil.getDuration(conversation.getOfflineDuration() * 1000) + "在线");
-        holder.mTvStatus.setTextColor(parent.getResources().getColor(R.color.apptheme_primary_grey_color_200));
       }
     }
 
@@ -237,7 +225,7 @@ public class ConversationAdapter extends BaseAdapter {
         break;
       }
       case ChatEvent.EVENT_CONVERSATIONS_RELOAD: {
-        mConversations = ChatUtils.ConversationUtil.getConversations();
+        mConversations = ConversationUtil.getConversations();
         notifyDataSetChanged();
         break;
       }
@@ -255,14 +243,8 @@ public class ConversationAdapter extends BaseAdapter {
 
   public static class ViewHolder {
 
-    @InjectView(R.id.tv_name)
-    public TextView mTvName;
-
     @InjectView(R.id.tv_info)
     public TextView mTvInfo;
-
-    @InjectView(R.id.tv_status)
-    public TextView mTvStatus;
 
     @InjectView(R.id.tv_last)
     public TextView mTvLast;

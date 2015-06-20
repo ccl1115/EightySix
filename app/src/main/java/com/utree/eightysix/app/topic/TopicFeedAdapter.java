@@ -1,10 +1,12 @@
 package com.utree.eightysix.app.topic;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -16,6 +18,7 @@ import com.utree.eightysix.data.Post;
 import com.utree.eightysix.data.Tag;
 import com.utree.eightysix.data.Topic;
 import com.utree.eightysix.utils.ColorUtil;
+import com.utree.eightysix.widget.AsyncImageView;
 import com.utree.eightysix.widget.RandomSceneTextView;
 
 import java.util.ArrayList;
@@ -53,6 +56,7 @@ public class TopicFeedAdapter extends BaseAdapter {
   public TopicFeedAdapter(Topic topic) {
     mTopic = topic;
     mTopicView = LayoutInflater.from(U.getContext()).inflate(R.layout.item_topic, null, false);
+    mTopicView.setLayoutParams(new ListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, U.dp2px(200)));
     mTopicViewHolder = new TopicViewHolder(mTopicView);
 
     switchTab(TAB_NEW);
@@ -190,24 +194,7 @@ public class TopicFeedAdapter extends BaseAdapter {
 
     final Topic topic = (Topic) getItem(position);
 
-    if (topic != null) {
-      mTopicViewHolder.mTvFeedCount.setText(topic.postCount + "条内容");
-      mTopicViewHolder.mTvText.setText(topic.content);
-      mTopicViewHolder.mLlTop.setBackgroundColor(ColorUtil.strToColor(topic.bgColor));
-
-      List<Tag> tags = topic.tags;
-      for (int i = 0; i < tags.size(); i++) {
-        Tag g = tags.get(i);
-        switch (i) {
-          case 0:
-            mTopicViewHolder.mTvTag1.setText("#" + g.content);
-            break;
-          case 1:
-            mTopicViewHolder.mTvTag2.setText("#" + g.content);
-            break;
-        }
-      }
-    }
+    mTopicViewHolder.setData(topic);
 
     return convertView;
   }
@@ -217,11 +204,11 @@ public class TopicFeedAdapter extends BaseAdapter {
       convertView = new FeedPostView(parent.getContext());
     }
 
-    final int p = U.dp2px(8);
+    final int p = U.dp2px(3);
     if (position == getCount() - 1) {
-      convertView.setPadding(p, p, p, p);
+      convertView.setPadding(0, p, 0, p);
     } else {
-      convertView.setPadding(p, p, p, 0);
+      convertView.setPadding(0, p, 0, 0);
     }
 
     ((FeedPostView) convertView).setData((Post) getItem(position));
@@ -277,6 +264,9 @@ public class TopicFeedAdapter extends BaseAdapter {
     @InjectView (R.id.tv_tab_left)
     public TextView mTvTabLeft;
 
+    @InjectView(R.id.tv_title)
+    public TextView mTvTitle;
+
     @InjectView (R.id.v_tab_left)
     public View mVTabLeft;
 
@@ -289,8 +279,68 @@ public class TopicFeedAdapter extends BaseAdapter {
     @InjectView (R.id.ll_top)
     public LinearLayout mLlTop;
 
+    @InjectView(R.id.aiv_bg)
+    public AsyncImageView mAivBg;
+
+    @InjectView(R.id.v_mask)
+    public View mVMask;
+
+    private Topic mTopic;
+
     TopicViewHolder(View view) {
       ButterKnife.inject(this, view);
+    }
+
+    public void setData(Topic topic) {
+      mTopic = topic;
+
+
+      if (topic != null) {
+        mTopicViewHolder.mTvFeedCount.setText(topic.postCount + "条内容");
+        mTopicViewHolder.mTvText.setText(topic.content);
+        mTopicViewHolder.mTvTitle.setText(topic.title);
+
+        if (TextUtils.isEmpty(topic.title)) {
+          mTvTitle.setVisibility(View.GONE);
+          mTvText.setTextSize(18);
+          if (TextUtils.isEmpty(topic.content)) {
+            mVMask.setVisibility(View.GONE);
+          } else {
+            mVMask.setVisibility(View.VISIBLE);
+          }
+        } else {
+          mTvText.setTextSize(14);
+          mVMask.setVisibility(View.VISIBLE);
+          mTvTitle.setVisibility(View.VISIBLE);
+        }
+
+        if (TextUtils.isEmpty(topic.bgUrl)) {
+          mTopicViewHolder.mAivBg.setUrl(null);
+          mTopicViewHolder.mLlTop.setBackgroundColor(ColorUtil.strToColor(topic.bgColor));
+        } else {
+          mTopicViewHolder.mAivBg.setUrl(topic.bgUrl);
+          mTopicViewHolder.mLlTop.setBackgroundColor(0);
+        }
+
+        List<Tag> tags = topic.tags;
+        for (int i = 0; i < tags.size(); i++) {
+          Tag g = tags.get(i);
+          switch (i) {
+            case 0:
+              mTopicViewHolder.mTvTag1.setText("#" + g.content);
+              break;
+            case 1:
+              mTopicViewHolder.mTvTag2.setText("#" + g.content);
+              break;
+          }
+        }
+      }
+
+    }
+
+    @OnClick(R.id.rb_more)
+    public void onRbMoreClicked(View v) {
+      TopicDetailActivity.start(v.getContext(), mTopic);
     }
 
     @OnClick (R.id.tv_tab_left)

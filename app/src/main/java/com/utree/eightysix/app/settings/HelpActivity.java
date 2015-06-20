@@ -3,6 +3,7 @@ package com.utree.eightysix.app.settings;
 import android.os.Bundle;
 import android.webkit.WebView;
 import butterknife.InjectView;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
@@ -25,6 +26,8 @@ public class HelpActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
+
     try {
       InputStream inputStream = getAssets().open("help.html");
       Reader reader = new InputStreamReader(inputStream);
@@ -39,6 +42,7 @@ public class HelpActivity extends BaseActivity {
   }
 
   @Override
+  @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();
   }

@@ -75,6 +75,9 @@ public class Msgs {
   @SerializedName("selectFactory")
   public int selectFactory;
 
+  @SerializedName("notReadCount")
+  public int notReadCount;
+
   @SerializedName ("posts")
   public Paginate<Post> posts;
 }

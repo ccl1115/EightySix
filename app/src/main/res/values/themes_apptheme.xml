@@ -26,12 +26,25 @@
         <item name="roundedButtonStyle">@style/Widget.RoundedButton.Apptheme</item>
         <item name="postEditTextStyle">@style/Widget.PostEditText.Apptheme</item>
         <item name="refreshIndicatorStyle">@style/Widget.RefreshIndicator.AppTheme</item>
+        <item name="counterViewStyle">@style/Widget.RoundedButton.Apptheme.Count</item>
 
         <item name="android:editTextStyle">@style/Widget.EditText.AppTheme</item>
         <item name="android:checkboxStyle">@style/Widget.CheckBox.AppTheme</item>
         <item name="android:radioButtonStyle">@style/Widget.RadioButton.AppTheme</item>
 
         <item name="android:listViewStyle">@style/Widget.ListView.Apptheme</item>
+
+        <item name="android:dropDownSpinnerStyle">@style/Widget.Spinner.Apptheme</item>
+        <item name="android:spinnerDropDownItemStyle">@style/Widget.Spinner.DropdownItem.Apptheme</item>
+        <item name="android:spinnerItemStyle">@style/Widget.Spinner.Item.Apptheme</item>
+
+        <item name="android:seekBarStyle">@style/Widget.SeekBar.Apptheme</item>
+    </style>
+
+    <style name="AppTheme.Light" parent="AppTheme">
+        <item name="android:dropDownSpinnerStyle">@android:style/Widget.DeviceDefault.Light.Spinner</item>
+        <item name="android:spinnerDropDownItemStyle">@android:style/Widget.DeviceDefault.Light.DropDownItem.Spinner</item>
+        <item name="android:spinnerItemStyle">@android:style/Widget.DeviceDefault.Light.TextView.SpinnerItem</item>
     </style>
 
     <style name="AppTheme.Dialog" parent="AppTheme">

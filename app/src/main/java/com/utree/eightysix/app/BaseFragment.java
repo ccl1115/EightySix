@@ -19,10 +19,6 @@ public class BaseFragment extends Fragment {
   private boolean mActive;
 
   public void setActive(boolean active) {
-    if (BuildConfig.DEBUG) {
-      Log.d("BaseFragment", getClass().getSimpleName() + ": @setActive " + active);
-    }
-
     if (mActive != active) {
       mActive = active;
       if (mActive) {

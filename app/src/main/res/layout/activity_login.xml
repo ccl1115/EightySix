@@ -58,15 +58,16 @@
     </LinearLayout>
 
     <com.utree.eightysix.widget.RoundedButton
-            app:radius="2dp"
-            app:background="@color/apptheme_primary_btn_light"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:minHeight="48dp"
             android:text="@string/login"
             android:id="@+id/btn_login"
             android:enabled="false"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
+            app:radius="2dp"
+            app:background="@color/apptheme_primary_btn_light"
             />
 
     <com.utree.eightysix.widget.RoundedButton

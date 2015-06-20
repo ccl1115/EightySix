@@ -18,7 +18,7 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.account.LoginActivity;
 import com.utree.eightysix.app.account.RegisterActivity;
-import com.utree.eightysix.app.home.HomeActivity;
+import com.utree.eightysix.app.home.HomeTabActivity;
 import com.utree.eightysix.utils.Env;
 import de.akquinet.android.androlog.Log;
 
@@ -74,11 +74,11 @@ public class IntroActivity extends BaseActivity {
     getHandler().postDelayed(new Runnable() {
       @Override
       public void run() {
-        if (Account.inst().isLogin()) {
-          HomeActivity.start(IntroActivity.this);
-          finish();
-        } else if (Env.firstRun()) {
+        if (Env.firstRun()) {
           startActivity(new Intent(IntroActivity.this, GuideActivity.class));
+          finish();
+        } else if (Account.inst().isLogin()) {
+          HomeTabActivity.start(IntroActivity.this);
           finish();
         } else {
           showLogin();

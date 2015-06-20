@@ -1,33 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+<!--
+  ~ Copyright (c) 2015. All rights reserved by utree.cn
+  -->
 
-    <LinearLayout
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/apptheme_primary_list_selector"
+        >
+
+    <com.utree.eightysix.widget.AsyncImageViewWithRoundCorner
+            android:id="@+id/aiv_portrait"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_centerVertical="true"
+            app:width="50dp"
+            app:height="50dp"
+            app:radius="4dp"
+            />
+
+    <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/aiv_portrait"
+            android:layout_toEndOf="@+id/aiv_portrait"
+            android:layout_toLeftOf="@+id/iv_chat"
+            android:layout_toStartOf="@+id/iv_chat"
+            android:layout_marginTop="12dp"
+            android:ellipsize="end"
+            />
+
+    <TextView
+            android:id="@+id/tv_signature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/aiv_portrait"
+            android:layout_toEndOf="@+id/aiv_portrait"
+            android:layout_toLeftOf="@+id/iv_chat"
+            android:layout_toStartOf="@+id/iv_chat"
+            android:layout_below="@+id/tv_name"
+            />
+
+    <TextView
+            android:id="@+id/tv_circle_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/aiv_portrait"
+            android:layout_toEndOf="@+id/aiv_portrait"
+            android:layout_toLeftOf="@+id/iv_chat"
+            android:layout_toStartOf="@+id/iv_chat"
+            android:layout_below="@id/tv_signature"
+            android:layout_marginBottom="16dp"
+            android:textColor="@color/apptheme_primary_grey_color_200"
+            />
+
+    <ImageView
+            android:id="@+id/iv_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="24dp"
+            android:layout_marginEnd="24dp"
+            android:padding="16dp"
+            android:src="@drawable/ic_chat_grey_normal"
+            />
+
+    <View
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:background="@drawable/apptheme_primary_list_selector">
+            android:layout_height="1px"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/apptheme_primary_grey_color"
+            />
 
-        <TextView
-                android:id="@+id/tv_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:textSize="16sp"/>
-
-        <TextView
-                android:id="@+id/tv_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:textColor="@color/apptheme_primary_dark_color"
-                android:textSize="14sp"/>
-    </LinearLayout>
-
-    <include layout="@layout/widget_primary_divider"/>
-</LinearLayout>
+</RelativeLayout>

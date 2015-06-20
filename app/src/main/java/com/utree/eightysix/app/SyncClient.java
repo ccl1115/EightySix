@@ -25,6 +25,10 @@ public class SyncClient {
     Env.setHostIp(mSync.ip);
   }
 
+  public void requestSync() {
+    SyncService.start(U.getContext());
+  }
+
   public Sync getSync() {
     if (mSync == null) {
       SyncService.start(U.getContext());

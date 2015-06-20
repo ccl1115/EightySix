@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Copyright (c) 2015. All rights reserved by utree.cn
+  -->
+
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        >
+
+    <com.utree.eightysix.widget.AdvancedListView
+            android:id="@+id/alv_feeds"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+    <com.utree.eightysix.widget.RandomSceneTextView
+            android:id="@id/rstv_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            />
+
+    <LinearLayout
+            android:id="@+id/ll_tags"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+        <com.utree.eightysix.view.RandomFloatingLayout
+                android:id="@+id/rfl_tags"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                />
+
+        <com.utree.eightysix.widget.RoundedButton
+                android:id="@+id/rb_all_tags"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="64dp"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                app:background="#ffe6e6e6"
+                android:text="查看全部标签"
+                android:textColor="#ff313233"
+                />
+    </LinearLayout>
+</FrameLayout>

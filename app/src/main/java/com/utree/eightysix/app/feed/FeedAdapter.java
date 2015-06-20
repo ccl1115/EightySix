@@ -14,6 +14,7 @@ import java.util.List;
 public class FeedAdapter extends FeedRegionAdapter {
 
   public FeedAdapter(Feeds feeds) {
+    super();
     mFeeds = feeds;
 
     boolean hasPosts = false;
@@ -81,9 +82,6 @@ public class FeedAdapter extends FeedRegionAdapter {
     switch (event.getType()) {
       case DismissTipOverlayEvent.TYPE_PRAISE:
         mTipPraisePosition = TNS;
-        break;
-      case DismissTipOverlayEvent.TYPE_SHARE:
-        mTipSharePosition = TNS;
         break;
       case DismissTipOverlayEvent.TYPE_SOURCE:
         mTipSourcePosition = TNS;

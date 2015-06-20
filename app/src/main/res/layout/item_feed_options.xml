@@ -3,7 +3,8 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
        xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
        android:layout_width="match_parent"
-       android:layout_height="match_parent">
+       android:layout_height="match_parent"
+        >
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -13,12 +14,14 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:orientation="vertical"
-            android:background="@drawable/item_gradient_bg">
+            android:background="@drawable/item_gradient_bg"
+            >
 
         <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp">
+                android:padding="12dp"
+                >
 
             <TextView
                     android:id="@+id/tv_sub_title"
@@ -32,20 +35,22 @@
                     android:paddingBottom="2dp"
                     android:text="系列"
                     android:minHeight="0dp"
-                    android:background="@drawable/round_border_normal"/>
+                    />
 
             <ImageView
                     android:id="@+id/iv_refresh"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"/>
+                    android:layout_gravity="right"
+                    />
 
         </FrameLayout>
 
         <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.5"/>
+                android:layout_weight="0.5"
+                />
 
         <TextView
                 android:id="@+id/tv_title"
@@ -54,12 +59,14 @@
                 android:layout_gravity="center_horizontal"
                 android:textSize="28sp"
                 android:gravity="center_horizontal"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/white"
+                />
 
         <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.5"/>
+                android:layout_weight="0.5"
+                />
 
 
         <TextView
@@ -70,7 +77,8 @@
                 android:layout_marginTop="8dp"
                 android:gravity="center"
                 android:text="Q1"
-                android:background="@drawable/apptheme_primary_list_selector"/>
+                android:background="@drawable/apptheme_primary_list_selector"
+                />
 
         <TextView
                 android:id="@+id/tv_q2"
@@ -80,7 +88,8 @@
                 android:layout_marginTop="1dp"
                 android:gravity="center"
                 android:text="Q2"
-                android:background="@drawable/apptheme_primary_list_selector"/>
+                android:background="@drawable/apptheme_primary_list_selector"
+                />
 
         <TextView
                 android:id="@+id/tv_q3"
@@ -90,7 +99,8 @@
                 android:layout_marginTop="1dp"
                 android:gravity="center"
                 android:text="Q3"
-                android:background="@drawable/apptheme_primary_list_selector"/>
+                android:background="@drawable/apptheme_primary_list_selector"
+                />
 
         <TextView
                 android:id="@+id/tv_other"
@@ -101,7 +111,8 @@
                 android:layout_marginBottom="24dp"
                 android:gravity="center"
                 android:text="以上都不是"
-                android:background="@drawable/apptheme_primary_list_selector"/>
+                android:background="@drawable/apptheme_primary_list_selector"
+                />
 
         <EditText
                 android:id="@+id/et_other"
@@ -116,7 +127,8 @@
                 android:hint="请填写他的姓名"
                 android:inputType="text"
                 android:background="@color/apptheme_primary_grey_color_disabled"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                />
 
         <TextView
                 android:id="@+id/tv_tip"
@@ -126,7 +138,8 @@
                 android:layout_marginBottom="32dp"
                 android:gravity="center_horizontal"
                 android:textSize="20sp"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/white"
+                />
 
         <com.utree.eightysix.widget.RoundedButton
                 android:id="@+id/rb_next"
@@ -138,7 +151,8 @@
                 android:textColor="@color/apptheme_primary_light_color"
                 android:visibility="gone"
                 android:text="下一步"
-                app:background="@color/apptheme_primary_white_btn"/>
+                app:background="@color/apptheme_primary_white_btn"
+                />
     </LinearLayout>
 
     <FrameLayout
@@ -147,16 +161,19 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:visibility="gone">
+            android:visibility="gone"
+            >
 
         <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#AA000000"/>
+                android:background="#AA000000"
+                />
 
         <ProgressBar
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                />
     </FrameLayout>
 </merge>

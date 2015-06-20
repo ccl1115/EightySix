@@ -15,7 +15,6 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.utils.ImageUtils;
-import com.utree.eightysix.widget.TextActionButton;
 import com.utree.eightysix.widget.panel.Item;
 
 /**
@@ -48,8 +47,6 @@ public class FeedbackActivity extends PublishActivity {
     showSoftKeyboard(mPostEditText);
 
     onIvShuffleClicked();
-
-    ((TextActionButton) mTopBar.getActionView(0)).setText("发表");
   }
 
   @Override

@@ -6,11 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
@@ -42,6 +42,7 @@ public class ContactFriendsActivity extends BaseActivity {
   }
 
   @Override
+  @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();
   }
@@ -131,7 +132,7 @@ public class ContactFriendsActivity extends BaseActivity {
       ItemViewHolder holder;
       if (convertView == null) {
         convertView = LayoutInflater.from(ContactFriendsActivity.this)
-            .inflate(R.layout.item_friend, parent, false);
+            .inflate(R.layout.item_contact_friend, parent, false);
         holder = new ItemViewHolder(convertView);
         convertView.setTag(holder);
       } else {

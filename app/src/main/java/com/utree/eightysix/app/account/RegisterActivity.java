@@ -18,9 +18,9 @@ import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
+import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
-import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.contact.ContactsSyncEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.User;
@@ -44,6 +44,7 @@ import java.util.Date;
 public class RegisterActivity extends BaseActivity {
 
   private static final int MSG_COUNTDOWN = 0;
+
   @InjectView(R.id.et_phone_number)
   public EditText mEtPhoneNumber;
 
@@ -93,6 +94,7 @@ public class RegisterActivity extends BaseActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_register);
 
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
     setTopTitle(getString(R.string.register) + getString(R.string.app_name));
 
     mEtPhoneNumber.addTextChangedListener(new TextWatcher() {
@@ -193,11 +195,8 @@ public class RegisterActivity extends BaseActivity {
             if (user != null) {
               Account.inst().login(user.userId, user.token);
               showToast(R.string.register_success, false);
-              setLoadingText("身份验证中");
               ContactsSyncService.start(RegisterActivity.this, true);
               return;
-            } else {
-              showToast(R.string.server_object_error);
             }
           }
         }
@@ -279,7 +278,7 @@ public class RegisterActivity extends BaseActivity {
 
   @Subscribe
   public void onContactsSyncEvent(ContactsSyncEvent event) {
-    BaseCirclesActivity.startSelect(this, false);
+    ProfileFillActivity.start(this, true);
     finish();
   }
 
@@ -309,6 +308,7 @@ public class RegisterActivity extends BaseActivity {
     }
   }
 
+  @Keep
   public static class InviteCodeDescResponse extends Response {
 
     @SerializedName("object")

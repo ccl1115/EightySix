@@ -2,8 +2,6 @@ package com.utree.eightysix.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import com.squareup.otto.Subscribe;
@@ -58,6 +56,12 @@ public final class AdvancedListView extends ListView {
   public void stopLoadMore() {
     if (mAdapterWrapper != null) {
       mAdapterWrapper.stopLoadMore();
+    }
+  }
+
+  public void loadError() {
+    if (mAdapterWrapper != null) {
+      mAdapterWrapper.loadError();
     }
   }
 

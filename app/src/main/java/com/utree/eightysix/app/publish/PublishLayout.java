@@ -17,23 +17,29 @@ import com.utree.eightysix.U;
 public class PublishLayout extends ViewGroup {
 
   public final static int PANEL_INFO = 0x0;
-  private int mLastPanel = PANEL_INFO;
   public final static int PANEL_COLOR = 0x1;
   public final static int PANEL_TAGS = 0x2;
-  @InjectView (R.id.fl_top)
+  public final static int PANEL_EMOTION = 0x3;
+
+  private int mLastPanel = PANEL_INFO;
+
+  @InjectView(R.id.fl_top)
   public FrameLayout mFlTop;
 
-  @InjectView (R.id.rl_panel)
+  @InjectView(R.id.rl_panel)
   public RelativeLayout mRlPanel;
 
-  @InjectView (R.id.ll_bottom)
+  @InjectView(R.id.ll_bottom)
   public LinearLayout mLlInfo;
 
-  @InjectView (R.id.fl_grid_panel)
+  @InjectView(R.id.fl_grid_panel)
   public FrameLayout mFlGridPanel;
 
-  @InjectView (R.id.sl_tags)
+  @InjectView(R.id.sl_tags)
   public ScrollView mSvTags;
+
+  @InjectView(R.id.fl_emotion)
+  public EmojiViewPager mFlEmotion;
 
   private boolean mPanelHidden = false;
 
@@ -65,12 +71,20 @@ public class PublishLayout extends ViewGroup {
       mFlGridPanel.setVisibility(VISIBLE);
       mLlInfo.setVisibility(GONE);
       mSvTags.setVisibility(GONE);
+      mFlEmotion.setVisibility(GONE);
     } else if (mLastPanel == PANEL_INFO) {
       mLlInfo.setVisibility(VISIBLE);
       mFlGridPanel.setVisibility(GONE);
       mSvTags.setVisibility(GONE);
+      mFlEmotion.setVisibility(GONE);
     } else if (mLastPanel == PANEL_TAGS) {
       mSvTags.setVisibility(VISIBLE);
+      mFlGridPanel.setVisibility(GONE);
+      mLlInfo.setVisibility(GONE);
+      mFlEmotion.setVisibility(GONE);
+    } else if (mLastPanel == PANEL_EMOTION) {
+      mFlEmotion.setVisibility(VISIBLE);
+      mSvTags.setVisibility(GONE);
       mFlGridPanel.setVisibility(GONE);
       mLlInfo.setVisibility(GONE);
     }
@@ -83,6 +97,7 @@ public class PublishLayout extends ViewGroup {
     mFlGridPanel.setVisibility(GONE);
     mLlInfo.setVisibility(GONE);
     mSvTags.setVisibility(GONE);
+    mFlEmotion.setVisibility(GONE);
     mPanelHidden = true;
   }
 
@@ -91,14 +106,22 @@ public class PublishLayout extends ViewGroup {
       mFlGridPanel.setVisibility(VISIBLE);
       mLlInfo.setVisibility(GONE);
       mSvTags.setVisibility(GONE);
+      mFlEmotion.setVisibility(GONE);
     } else if (mLastPanel == PANEL_INFO) {
       mLlInfo.setVisibility(VISIBLE);
       mFlGridPanel.setVisibility(GONE);
       mSvTags.setVisibility(GONE);
+      mFlEmotion.setVisibility(GONE);
     } else if (mLastPanel == PANEL_TAGS) {
       mLlInfo.setVisibility(GONE);
       mFlGridPanel.setVisibility(GONE);
       mSvTags.setVisibility(VISIBLE);
+      mFlEmotion.setVisibility(GONE);
+    } else if (mLastPanel == PANEL_EMOTION) {
+      mFlEmotion.setVisibility(VISIBLE);
+      mLlInfo.setVisibility(GONE);
+      mFlGridPanel.setVisibility(GONE);
+      mSvTags.setVisibility(GONE);
     }
 
     mPanelHidden = false;
@@ -118,12 +141,20 @@ public class PublishLayout extends ViewGroup {
       mLlInfo.layout(l, mRlPanel.getBottom(), r, mRlPanel.getBottom() + mLlInfo.getMeasuredHeight());
       mFlGridPanel.layout(0, 0, 0, 0);
       mSvTags.layout(0, 0, 0, 0);
+      mFlEmotion.layout(0, 0, 0, 0);
     } else if (mLastPanel == PANEL_COLOR) {
       mFlGridPanel.layout(l, mRlPanel.getBottom(), r, mRlPanel.getBottom() + mFlGridPanel.getMeasuredHeight());
       mLlInfo.layout(0, 0, 0, 0);
       mSvTags.layout(0, 0, 0, 0);
+      mFlEmotion.layout(0, 0, 0, 0);
     } else if (mLastPanel == PANEL_TAGS) {
       mSvTags.layout(l, mRlPanel.getBottom(), r, mRlPanel.getBottom() + mSvTags.getMeasuredHeight());
+      mFlGridPanel.layout(0, 0, 0, 0);
+      mLlInfo.layout(0, 0, 0, 0);
+      mFlEmotion.layout(0, 0, 0, 0);
+    } else if (mLastPanel == PANEL_EMOTION) {
+      mFlEmotion.layout(l, mRlPanel.getBottom(), r, mRlPanel.getBottom() + mFlEmotion.getMeasuredHeight());
+      mSvTags.layout(0, 0, 0, 0);
       mFlGridPanel.layout(0, 0, 0, 0);
       mLlInfo.layout(0, 0, 0, 0);
     }
@@ -170,6 +201,11 @@ public class PublishLayout extends ViewGroup {
     if (mLastPanel == PANEL_TAGS && !mPanelHidden) {
       measureChild(mSvTags, widthMeasureSpec, heightSize + MeasureSpec.AT_MOST);
       heightLeft -= mSvTags.getMeasuredHeight();
+    }
+
+    if (mLastPanel == PANEL_EMOTION && !mPanelHidden) {
+      measureChild(mFlEmotion, widthMeasureSpec, heightSize + MeasureSpec.AT_MOST);
+      heightLeft -= mFlEmotion.getMeasuredHeight();
     }
 
     measureChild(mRlPanel, widthMeasureSpec, heightLeft + MeasureSpec.AT_MOST);

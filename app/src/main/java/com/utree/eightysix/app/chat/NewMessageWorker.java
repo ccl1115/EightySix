@@ -28,6 +28,7 @@ class NewMessageWorker extends AsyncTask<Void, Integer, Void> {
   private static final int PROGRESS_UPDATE_CONVERSATION = 3;
   private static final int PROGRESS_INFO_MESSAGE = 6;
   private static final int PROGRESS_MESSAGE_DOWNLOADED = 7;
+  private static final int PROGRESS_MESSAGE_ACK = 8;
 
   private Message mMessage;
   private EMMessage mEmMessage;
@@ -44,16 +45,19 @@ class NewMessageWorker extends AsyncTask<Void, Integer, Void> {
 
   @Override
   protected Void doInBackground(Void... voids) {
+    handleWhisper();
+    return null;
+  }
 
+  private void handleWhisper() {
     try {
-      ChatUtils.ConversationUtil.createOrUpdateConversation(mEmMessage);
+      ConversationUtil.createOrUpdateConversation(mEmMessage);
     } catch (EaseMobException e) {
       Log.d(C.TAG.CH, e.toString());
-      return null;
     }
 
     if (mMessage.getCommentId() == null) {
-      mInfoMessage = ChatUtils.MessageUtil.addPostSummaryInfo(mMessage.getChatId(),
+      mInfoMessage = MessageUtil.addPostSummaryInfo(mMessage.getChatId(),
           mMessage.getTimestamp() - 1,
           mEmMessage.getStringAttribute("postId", null),
           mEmMessage.getStringAttribute("postContent", null));
@@ -61,7 +65,7 @@ class NewMessageWorker extends AsyncTask<Void, Integer, Void> {
         publishProgress(PROGRESS_INFO_MESSAGE);
       }
     } else {
-      mInfoMessage = ChatUtils.MessageUtil.addCommentSummaryInfo(mMessage.getChatId(),
+      mInfoMessage = MessageUtil.addCommentSummaryInfo(mMessage.getChatId(),
           mMessage.getTimestamp() - 1,
           mEmMessage.getStringAttribute("postId", null),
           mEmMessage.getStringAttribute("postContent", null),
@@ -84,15 +88,15 @@ class NewMessageWorker extends AsyncTask<Void, Integer, Void> {
     DaoUtils.getMessageDao().insert(mMessage);
     publishProgress(PROGRESS_INSERT_MESSAGE);
 
-    mConversation = ChatUtils.ConversationUtil.setLastMessage(mMessage);
+    mConversation = ConversationUtil.setLastMessage(mMessage);
     publishProgress(PROGRESS_UPDATE_CONVERSATION);
 
     if (!foreground) {
       // 收到的消息，对应的聊天页面不在前台，则更新对话未读数
-      mConversation = ChatUtils.ConversationUtil.updateUnreadCount(mMessage.getChatId());
+      mConversation = ConversationUtil.updateUnreadCount(mMessage.getChatId());
       publishProgress(PROGRESS_UPDATE_CONVERSATION);
 
-      mUnreadConversationCount = ChatUtils.ConversationUtil.getUnreadConversationCount();
+      mUnreadConversationCount = ConversationUtil.getUnreadConversationCount();
       publishProgress(PROGRESS_UNREAD_CONVERSATION_COUNT);
     }
 
@@ -123,19 +127,7 @@ class NewMessageWorker extends AsyncTask<Void, Integer, Void> {
       });
     }
 
-    //U.request("chat_ack", new OnResponse2<Response>() {
-    //  @Override
-    //  public void onResponseError(Throwable e) {
-    //
-    //  }
-    //
-    //  @Override
-    //  public void onResponse(Response response) {
-    //
-    //  }
-    //}, Response.class, new String[]{mEmMessage.getMsgId()});
-
-    return null;
+    publishProgress(PROGRESS_MESSAGE_ACK);
   }
 
   @Override
@@ -157,6 +149,19 @@ class NewMessageWorker extends AsyncTask<Void, Integer, Void> {
         U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_RECEIVE_MSG, mInfoMessage));
         break;
       case PROGRESS_MESSAGE_DOWNLOADED:
+        break;
+      case PROGRESS_MESSAGE_ACK:
+        U.request("chat_ack", new OnResponse2<Response>() {
+          @Override
+          public void onResponseError(Throwable e) {
+
+          }
+
+          @Override
+          public void onResponse(Response response) {
+
+          }
+        }, Response.class, new String[]{mEmMessage.getMsgId()});
         break;
     }
   }

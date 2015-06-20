@@ -20,7 +20,7 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
 import com.utree.eightysix.app.TopTitle;
-import com.utree.eightysix.app.event.QRCodeScanEvent;
+import com.utree.eightysix.qrcode.QRCodeScanEvent;
 import com.utree.eightysix.drawable.RoundRectDrawable;
 import com.utree.eightysix.qrcode.QRCodeScanFragment;
 import com.utree.eightysix.utils.QRCodeGenerator;
@@ -64,6 +64,8 @@ public class MyQRCodeActivity extends BaseActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.top_bar_return));
 
     final String id = getIntent().getStringExtra("id");
 

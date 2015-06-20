@@ -2,13 +2,28 @@ package com.utree.eightysix.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.os.AsyncTask;
+
+import java.util.Random;
 
 /**
  * @author simon
  */
 public class ColorUtil {
   private static final String TAG = "ColorUtil";
+
+  private static final int[] COLOR_SCHEME = {
+      0xffffa200,
+      0xff66cccc,
+      0xff30a1f1,
+      0xfff26d5f,
+      0xffe6507b,
+      0xff5bb4da,
+      0xff35b87f,
+      0xffbdbe4d,
+      0xffb17fea
+  };
+
+  private static Random sRandom = new Random();
 
   public static int strToColor(String color) {
     try {
@@ -43,5 +58,9 @@ public class ColorUtil {
     public Bitmap getBitmap() {
       return mBitmap;
     }
+  }
+
+  public static int getRandomColor() {
+    return COLOR_SCHEME[sRandom.nextInt(COLOR_SCHEME.length)];
   }
 }

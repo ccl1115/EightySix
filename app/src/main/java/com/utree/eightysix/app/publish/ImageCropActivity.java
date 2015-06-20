@@ -6,9 +6,11 @@ import android.graphics.Bitmap;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.edmodo.cropper.CropImageView;
+import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseActivity;
@@ -17,11 +19,7 @@ import com.utree.eightysix.app.TopTitle;
 import com.utree.eightysix.utils.IOUtils;
 import com.utree.eightysix.utils.ImageUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 
 /**
  * @author simon
@@ -50,10 +48,19 @@ public class ImageCropActivity extends BaseActivity {
     context.startActivityForResult(intent, requestCode);
   }
 
+  public static void startForResult(Fragment framgnet, int requestCode, Uri uri, boolean fixedRatio) {
+    Intent intent = new Intent(framgnet.getActivity(), ImageCropActivity.class);
+
+    intent.putExtra("fixedRatio", fixedRatio);
+    intent.setDataAndType(uri, "image/*");
+
+    framgnet.startActivityForResult(intent, requestCode);
+  }
+
 
   @OnClick(R.id.rb_okay)
   public void onRbOkayClicked() {
-    File cropped = IOUtils.createTmpFile("crop_image");
+    File cropped = IOUtils.createTmpFile("crop_image_" + System.currentTimeMillis());
 
     OutputStream stream = null;
     try {
@@ -132,6 +139,7 @@ public class ImageCropActivity extends BaseActivity {
   }
 
   @Override
+  @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();
   }

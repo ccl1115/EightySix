@@ -35,12 +35,11 @@ public class C {
   public static final String API_VALICODE_CREATE_FACTORY = "/factory/valiCode.do";
 
 
-  public static final String API_FEED_ADD = "/feed/add.do";
+  public static final String API_FEED_ADD = "/commit/post/create";
   public static final String API_FEED_DELETE = "/feed/delete.do";
   public static final String API_FEED_LIST = "/feed/list.do";
   public static final String API_FEED_HOT_LIST = "/feed/listHot.do";
   public static final String API_FEED_FRIENDS_LIST = "/feed/listFriends.do";
-  public static final String API_FEED_PRAISE = "/feed/praise.do";
   public static final String API_FEED_PRAISE_CANCEL = "/feed/cancelPraise.do";
   public static final String API_FEED_SUBMIT_ANSWER = "/feed/submitAnswer.do";
   public static final String API_FEED_CHANGE_NAME = "/feed/changeName.do";
@@ -50,7 +49,6 @@ public class C {
   public static final String API_FEED_TAGS_BY_TYPE = "/feed/tagsByType.do";
 
   public static final String API_FEED_BY_REGION = "/feed/listByRegion.do";
-  public static final String API_FEED_TAG_HOT = "/feed/listHotWithTag.do";
   public static final String API_FEED_TAG_FACTORY = "/feed/listWithTag.do";
 
 
@@ -58,10 +56,8 @@ public class C {
   public static final String API_TOPIC_NEW = "/topic/new.do";
   public static final String API_TOPIC_FEATURE = "/topic/feature.do";
 
-  public static final String API_COMMENT_ADD = "/comment/add.do";
   public static final String API_COMMENT_DELETE = "/comment/delete.do";
   public static final String API_COMMENT_LIST = "/comment/list.do";
-  public static final String API_COMMENT_PRAISE = "/comment/praise.do";
   public static final String API_COMMENT_PRAISE_CANCEL = "/comment/cancelPraise.do";
   public static final String API_COMMENT_RECEIVE_STAR = "/comment/receiveStar.do";
   public static final String API_COMMENT_SHARE_CONTENT = "/comment/shareContent.do";
@@ -75,8 +71,7 @@ public class C {
   public static final String API_MY_FRIENDS = "/friend/myFriend.do";
   public static final String API_CONTACT_FRIENDS = "/friend/contactFriends.do";
   public static final String API_SCAN_FRIENDS = "/friend/qrCodeFriends.do";
-  public static final String API_UPLOAD_CONTACTS = "/friend/upContacts.do";
-  public static final String API_ADD_FRIEND = "/friend/addFriend.do";
+  public static final String API_UPLOAD_CONTACTS = "/commit/user/contact/replace";
   public static final String API_UNREG_CONTACTS = "/friend/unRegContact.do";
 
   public static final String API_PROMOTION = "/activity/blueStar.do";
@@ -86,7 +81,7 @@ public class C {
 
   public static final String API_SYNC = "/system/sync.do";
 
-  public static final String COMMIT_UPLOADIMAGE = "/commit/uploadimage";
+  public static final String COMMIT_UPLOADIMAGE = "/commit/image/upload";
 
 
   public static String IMEI = "";

@@ -29,10 +29,37 @@
                 android:background="#44000000"
                 />
 
+
+        <TextView
+                android:id="@+id/tv_post_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="20dp"
+                android:textSize="24sp"
+                android:textColor="@android:color/white"
+                android:text="@string/post_anonymously"
+                />
+
+        <com.rockerhieu.emojicon.EmojiconEditText
+                android:id="@+id/et_post_content"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/transparent"
+                android:padding="48dp"
+                android:inputType="textMultiLine"
+                android:textColor="@android:color/white"
+                android:textSize="23sp"
+                android:gravity="center"
+                android:maxLength="1540"
+                />
+
         <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
+                android:layout_gravity="center_horizontal"
                 android:orientation="horizontal"
                 >
 
@@ -48,39 +75,76 @@
                     android:id="@+id/tv_tag_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"
-                    android:layout_marginEnd="4dp"
                     />
 
         </LinearLayout>
 
-        <TextView
-                android:id="@+id/tv_post_tip"
+        <com.utree.eightysix.widget.RoundedButton
+                android:id="@+id/rb_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:padding="20dp"
-                android:textSize="24sp"
-                android:textColor="@android:color/white"
-                android:text="@string/post_anonymously"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="8dp"
+                app:radius="4dp"
+                app:background="@color/apptheme_primary_transparent_btn"
+                android:text="插入标签"
+                android:textSize="14sp"
                 />
 
-        <EditText
-                android:id="@+id/et_post_content"
-                android:layout_gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/transparent"
-                android:paddingLeft="48dp"
-                android:paddingRight="48dp"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"
-                android:maxLength="77"
-                android:maxLines="7"
-                android:inputType="textMultiLine"
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_gravity="bottom"
+                android:orientation="horizontal"
+                >
+
+            <ImageView
+                    android:id="@+id/iv_temp_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_temp_name"
+                    android:visibility="invisible"
+                    />
+
+            <EditText
+                    android:id="@+id/et_temp_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:hint="填个临时名字"
+                    android:textColor="@android:color/white"
+                    android:maxLength="6"
+                    android:visibility="invisible"
+                    />
+        </LinearLayout>
+
+        <CheckBox
+                android:id="@+id/cb_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_gravity="end|bottom"
+                android:text="匿名发表"
                 android:textColor="@android:color/white"
-                android:textSize="23sp"
-                android:gravity="center"
+                android:checked="true"
+                />
+
+        <com.utree.eightysix.widget.RoundedButton
+                android:id="@+id/rb_page"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="40dp"
+                android:textSize="12sp"
+                android:textColor="@android:color/white"
+                android:visibility="invisible"
+                app:radius="4dp"
+                app:background="@color/translucent_200"
                 />
 
     </FrameLayout>
@@ -91,58 +155,24 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:background="@android:color/white"
-            android:orientation="horizontal"
-            android:gravity="end"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             >
 
-        <com.utree.eightysix.widget.RoundedButton
-                android:id="@+id/tv_tag"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_margin="8dp"
-                android:layout_centerVertical="true"
-                android:text="#"
-                android:textSize="16sp"
-                android:gravity="center"
-                android:minHeight="0dp"
-                android:padding="0dp"
-                app:background="#ff333333"
-                android:textColor="@android:color/white"
-                />
-
         <ImageView
-                android:id="@+id/iv_temp_name"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_margin="4dp"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/tv_tag"
-                android:src="@drawable/ic_temp_name"
-                />
-
-
-        <EditText
-                android:id="@+id/et_temp_name"
+                android:id="@+id/iv_emotion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/iv_temp_name"
-                android:layout_marginRight="8dp"
-                android:paddingBottom="12dp"
-                android:maxLength="6"
-                android:textColor="#ffcccccc"
-                android:hint="填个临时名字"
+                android:src="@drawable/ic_action_emotion"
                 />
-
 
         <ImageView
                 android:id="@+id/iv_camera"
-                android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@+id/iv_shuffle"
+                android:layout_toStartOf="@+id/iv_shuffle"
                 android:layout_centerVertical="true"
                 android:padding="5dp"
                 android:src="@drawable/ic_action_camera"
@@ -150,10 +180,10 @@
 
         <ImageView
                 android:id="@+id/iv_shuffle"
-                android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:padding="5dp"
                 android:src="@drawable/ic_action_shuffle"
@@ -206,6 +236,14 @@
                 android:text="@string/who_will_see_this_secret"
                 />
     </LinearLayout>
+
+    <com.utree.eightysix.app.publish.EmojiViewPager
+            android:id="@+id/fl_emotion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:visibility="gone"
+            />
 
     <FrameLayout
             android:id="@+id/fl_grid_panel"
