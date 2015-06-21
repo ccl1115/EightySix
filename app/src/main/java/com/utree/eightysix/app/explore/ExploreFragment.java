@@ -106,6 +106,11 @@ public class ExploreFragment extends BaseFragment {
     }
   };
 
+  @OnClick({R.id.ll_tags, R.id.fl_daily_picks})
+  public void onLlTagsClicked(View v) {
+    DailyPicksActivity.start(v.getContext(), 0);
+  }
+
   @OnClick(R.id.tv_circles)
   public void onTvCirclesClicked() {
     BaseCirclesActivity.startMyCircles(getActivity());

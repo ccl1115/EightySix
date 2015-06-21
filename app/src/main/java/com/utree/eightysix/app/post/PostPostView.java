@@ -90,7 +90,6 @@ public class PostPostView extends FrameLayout {
     @Override
     public void run() {
       mClicked = false;
-      doPraise();
     }
   };
 
@@ -109,6 +108,7 @@ public class PostPostView extends FrameLayout {
     setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
+        doPraise();
         if (mClicked) {
           mClicked = false;
           mVpContent.setVisibility(mVpContent.getVisibility() == VISIBLE ? INVISIBLE : VISIBLE);
@@ -259,6 +259,7 @@ public class PostPostView extends FrameLayout {
         layout.setOnClickListener(new OnClickListener() {
           @Override
           public void onClick(View v) {
+            doPraise();
             if (mClicked) {
               mClicked = false;
               mVpContent.setVisibility(mVpContent.getVisibility() == VISIBLE ? INVISIBLE : VISIBLE);

@@ -31,7 +31,7 @@ public class FriendsFeedFragment extends AbsFeedFragment {
       getBaseActivity().setTopSubTitle("");
     }
 
-    U.request("feed_list_friends", new OnResponse2<FeedsResponse>() {
+    U.request("feed_list_friend", new OnResponse2<FeedsResponse>() {
       @Override
       public void onResponseError(Throwable e) {
 

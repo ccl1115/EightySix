@@ -140,6 +140,9 @@ public class ProfileFragment extends HolderFragment {
   @InjectView(R.id.tv_add_friend)
   public TextView mTvAddFriend;
 
+  @InjectView(R.id.v_divider)
+  public View mVDivider;
+
   @InjectView(R.id.scroll_view)
   public ScrollView mScrollView;
 
@@ -556,8 +559,10 @@ public class ProfileFragment extends HolderFragment {
 
               if (mProfile.isFriend == 1) {
                 mTvAddFriend.setVisibility(View.GONE);
+                mVDivider.setVisibility(View.GONE);
               } else {
                 mTvAddFriend.setVisibility(View.VISIBLE);
+                mVDivider.setVisibility(View.VISIBLE);
               }
 
               getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_action_overflow));

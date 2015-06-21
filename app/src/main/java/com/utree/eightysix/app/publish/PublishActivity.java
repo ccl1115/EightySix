@@ -852,7 +852,6 @@ public class PublishActivity extends BaseActivity implements
         if (RESTRequester.responseOk(response)) {
           mTags = response.object.tags;
 
-          mEtTempName.setText(response.object.lastTempName);
           mTagsLayout.setTag(mTags);
           mIvTempName.setSelected(false);
         }
@@ -873,7 +872,6 @@ public class PublishActivity extends BaseActivity implements
         if (RESTRequester.responseOk(response)) {
           mTags = response.object.tags;
 
-          mEtTempName.setText(response.object.lastTempName);
           mTagsLayout.setTag(mTags);
           mIvTempName.setSelected(false);
         }
