@@ -115,6 +115,7 @@ public class HomeTabActivity extends BaseActivity {
     if (mCurrentFragment != null) {
       t.hide(mCurrentFragment);
     }
+    String index = "";
     switch (id) {
       case R.id.fl_feed:
         if (mTabRegionFragment == null) {
@@ -129,6 +130,7 @@ public class HomeTabActivity extends BaseActivity {
           mTabRegionFragment.onHiddenChanged(false);
         }
         mCurrentFragment = mTabRegionFragment;
+        index = "home";
         break;
       case R.id.fl_explore:
         if (mExploreFragment == null) {
@@ -139,6 +141,7 @@ public class HomeTabActivity extends BaseActivity {
           mExploreFragment.onHiddenChanged(false);
         }
         mCurrentFragment = mExploreFragment;
+        index = "explore";
         break;
       case R.id.fl_message:
         if (mMsgCenterFragment == null) {
@@ -150,6 +153,7 @@ public class HomeTabActivity extends BaseActivity {
           mMsgCenterFragment.onHiddenChanged(false);
         }
         mCurrentFragment = mMsgCenterFragment;
+        index = "msg";
         break;
       case R.id.fl_more:
         if (mProfileFragment == null) {
@@ -160,8 +164,10 @@ public class HomeTabActivity extends BaseActivity {
           mProfileFragment.onHiddenChanged(false);
         }
         mCurrentFragment = mProfileFragment;
+        index = "me";
         break;
     }
+    U.getAnalyser().trackEvent(this, "home_tab", index);
   }
 
   @Override
