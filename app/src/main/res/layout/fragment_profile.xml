@@ -547,7 +547,7 @@
                 android:layout_weight="1"
                 android:textColor="@color/apptheme_primary_text_light"
                 android:textSize="18sp"
-                android:text="添加好友"
+                android:text="添加朋友"
                 android:gravity="center"
                 android:visibility="gone"
                 />
