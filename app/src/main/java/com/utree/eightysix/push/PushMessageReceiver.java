@@ -6,10 +6,7 @@ import android.content.Context;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import com.tencent.android.tpush.*;
-import com.utree.eightysix.Account;
-import com.utree.eightysix.BuildConfig;
-import com.utree.eightysix.R;
-import com.utree.eightysix.U;
+import com.utree.eightysix.*;
 import com.utree.eightysix.app.msg.NotifyUtil;
 import com.utree.eightysix.app.msg.PullNotificationService;
 import com.utree.eightysix.data.AppIntent;
@@ -82,6 +79,8 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
     if (i == 0) {
       Env.setPushChannelId("100");
       Env.setPushUserId(xgPushRegisterResult.getToken());
+    } else if (BuildConfig.DEBUG) {
+      Log.d(C.TAG.PSH, "Xg register failed return code: " + i);
     }
   }
 

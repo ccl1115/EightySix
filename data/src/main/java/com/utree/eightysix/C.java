@@ -105,5 +105,6 @@ public class C {
 
     public static final String NT = PREFIX + "Notification";
     public static final String CH = PREFIX + "Chat";
+    public static final String PSH = PREFIX + "Push";
   }
 }

@@ -43,7 +43,7 @@
                 android:id="@+id/tv_top_right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
+                android:layout_gravity="end"
                 android:gravity="center"
                 android:textSize="16sp"
                 android:padding="4dp"
@@ -51,15 +51,15 @@
                 />
 
         <TextView
-                style="@style/TextView.PostStyle"
                 android:id="@+id/tv_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:gravity="bottom|right"
+                android:gravity="bottom|end"
                 android:padding="16dp"
                 android:background="#88000000"
                 android:textColor="@android:color/white"
+                android:textSize="23sp"
                 />
 
     </FrameLayout>
