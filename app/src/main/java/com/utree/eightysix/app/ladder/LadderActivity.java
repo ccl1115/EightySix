@@ -30,19 +30,9 @@ public class LadderActivity extends BaseActivity {
   @InjectView(R.id.vp_tab)
   public ViewPager mVpTab;
 
-  private BaseLadderFragment mWeekRankLadderFragment = new BaseLadderFragment() {
-    @Override
-    protected String getApi() {
-      return "ladder_week_rank";
-    }
-  };
+  public BaseLadderFragment mWeekRankLadderFragment = new WeekRankLadderFragment();
 
-  private BaseLadderFragment mAllRankLadderFragment = new BaseLadderFragment() {
-    @Override
-    protected String getApi() {
-      return "ladder_all_rank";
-    }
-  };
+  public BaseLadderFragment mAllRankLadderFragment = new AllRankLadderFragment();
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -93,5 +83,19 @@ public class LadderActivity extends BaseActivity {
   @Subscribe
   public void onLogout(Account.LogoutEvent event) {
     finish();
+  }
+
+  public static class WeekRankLadderFragment extends BaseLadderFragment {
+    @Override
+    protected String getApi() {
+      return "ladder_week_rank";
+    }
+  }
+
+  public static class AllRankLadderFragment extends BaseLadderFragment {
+    @Override
+    protected String getApi() {
+      return "ladder_all_rank";
+    }
   }
 }

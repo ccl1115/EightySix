@@ -33,6 +33,8 @@ public abstract class BaseLadderFragment extends BaseFragment {
   private int mPage = 1;
   private BaseLadderAdapter mAdapter;
 
+  public BaseLadderFragment() {}
+
   @OnItemClick(R.id.alv_ladder)
   public void onAlvLadderItemClicked(int position) {
     Object user = mAdapter.getItem(position);
