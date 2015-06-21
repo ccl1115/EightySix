@@ -90,6 +90,7 @@ public class PostPostView extends FrameLayout {
     @Override
     public void run() {
       mClicked = false;
+      doPraise();
     }
   };
 
@@ -114,7 +115,7 @@ public class PostPostView extends FrameLayout {
           removeCallbacks(mCancel);
         } else {
           mClicked = true;
-          postDelayed(mCancel, 1000);
+          postDelayed(mCancel, 500);
         }
       }
     });
@@ -372,16 +373,19 @@ public class PostPostView extends FrameLayout {
   }
 
   protected void doPraise() {
-    AnimatorSet praiseAnimator = new AnimatorSet();
-    praiseAnimator.setDuration(800);
-    praiseAnimator.playTogether(
-        ObjectAnimator.ofFloat(mTvPraise, "scaleX", 1, 1.2f, 0.8f, 1),
-        ObjectAnimator.ofFloat(mTvPraise, "scaleY", 1, 1.2f, 0.8f, 1)
-    );
-    praiseAnimator.start();
-    mPost.praised = 1;
-    mPost.praise++;
-    U.getBus().post(new PostPostPraiseEvent(mPost, false));
+    if (mPost.praised == 0) {
+      AnimatorSet praiseAnimator = new AnimatorSet();
+      praiseAnimator.setDuration(800);
+      praiseAnimator.playTogether(
+          ObjectAnimator.ofFloat(mTvPraise, "scaleX", 1, 1.2f, 0.8f, 1),
+          ObjectAnimator.ofFloat(mTvPraise, "scaleY", 1, 1.2f, 0.8f, 1)
+      );
+      praiseAnimator.start();
+      mPost.praised = 1;
+      mPost.praise++;
+      setData(mPost);
+      U.getBus().post(new PostPostPraiseEvent(mPost, false));
+    }
   }
 
   @Override
