@@ -461,11 +461,7 @@ public class PublishActivity extends BaseActivity implements
     getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        if (mPostEditText.getText().length() == 0) {
-          showToast(getString(R.string.cannot_post_empty_content));
-        } else {
-          requestPublish();
-        }
+        requestPublish();
       }
     });
 
