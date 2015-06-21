@@ -61,18 +61,20 @@ public class FeedTopicView extends FrameLayout {
     ButterKnife.inject(this, this);
 
     setPadding(0, U.dp2px(3), 0, 0);
+
+    setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        U.getAnalyser().trackEndEvent(getContext(), "feed_topic_view", "feed_topic_view");
+
+        TopicListActivity.start(getContext());
+        TopicActivity.start(getContext(), getTopic());
+      }
+    });
   }
 
   @OnClick(R.id.rb_more)
   public void onRbMoreClicked() {
-    U.getAnalyser().trackEndEvent(getContext(), "feed_topic_view", "feed_topic_view");
-
-    TopicListActivity.start(getContext());
-    TopicActivity.start(getContext(), getTopic());
-  }
-
-  @OnClick(R.id.ll_parent)
-  public void onLlParentClicked() {
     U.getAnalyser().trackEndEvent(getContext(), "feed_topic_view", "feed_topic_view");
 
     TopicListActivity.start(getContext());
