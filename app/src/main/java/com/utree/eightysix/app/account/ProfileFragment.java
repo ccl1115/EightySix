@@ -932,7 +932,7 @@ public class ProfileFragment extends HolderFragment {
     if (mProfile.isFriend == 1) {
       text.setText("屏蔽后将不再接收此朋友的聊天、悄悄话消息");
     } else {
-      text.setText("屏蔽后将不再接收此用户的朋友请求、悄悄话消息");
+      text.setText("屏蔽后将不再接收此用户的朋友请求、聊天、悄悄话消息");
     }
 
     int px = U.dp2px(24);

@@ -131,7 +131,7 @@
                 android:text="匿名发表"
                 android:textColor="@android:color/white"
                 android:checked="true"
-                android:background="@drawable/apptheme_btn_check_holo_dark"
+                android:button="@drawable/apptheme_btn_check_holo_dark"
                 />
 
         <com.utree.eightysix.widget.RoundedButton
