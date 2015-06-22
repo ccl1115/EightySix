@@ -118,6 +118,7 @@
                     android:textColor="@android:color/white"
                     android:maxLength="6"
                     android:visibility="invisible"
+                    android:background="@drawable/apptheme_edit_text_holo_dark"
                     />
         </LinearLayout>
 
@@ -130,6 +131,7 @@
                 android:text="匿名发表"
                 android:textColor="@android:color/white"
                 android:checked="true"
+                android:background="@drawable/apptheme_btn_check_holo_dark"
                 />
 
         <com.utree.eightysix.widget.RoundedButton
