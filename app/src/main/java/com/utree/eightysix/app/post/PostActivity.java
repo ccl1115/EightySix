@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.v4.view.MotionEventCompat;
 import android.text.TextUtils;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
@@ -37,13 +36,19 @@ import com.utree.eightysix.app.account.ProfileFragment;
 import com.utree.eightysix.app.account.event.ProfileFilledEvent;
 import com.utree.eightysix.app.bs.BlueStarFragment;
 import com.utree.eightysix.app.chat.ChatUtils;
-import com.utree.eightysix.app.feed.event.*;
+import com.utree.eightysix.app.feed.event.PostCommentPraiseEvent;
+import com.utree.eightysix.app.feed.event.PostDeleteEvent;
+import com.utree.eightysix.app.feed.event.PostPostPraiseEvent;
+import com.utree.eightysix.app.feed.event.ReloadCommentEvent;
 import com.utree.eightysix.app.msg.ReadMsgStore;
 import com.utree.eightysix.app.publish.EmojiFragment;
 import com.utree.eightysix.app.publish.EmojiViewPager;
 import com.utree.eightysix.data.Comment;
 import com.utree.eightysix.data.Post;
-import com.utree.eightysix.request.*;
+import com.utree.eightysix.request.PostCommentDeleteRequest;
+import com.utree.eightysix.request.PostCommentsRequest;
+import com.utree.eightysix.request.PostDeleteRequest;
+import com.utree.eightysix.request.ReportRequest;
 import com.utree.eightysix.response.CommentDeleteResponse;
 import com.utree.eightysix.response.PostCommentsResponse;
 import com.utree.eightysix.response.PublishCommentResponse;
@@ -192,64 +197,9 @@ public class PostActivity extends BaseActivity
   public void onIvAnonymousClicked() {
     boolean selected = mIvAnonymous.isSelected();
 
-    if (selected) {
-      if (Account.inst().getCancelCommentAnonymousDialog()) {
-        showCancelAnonymousDialog();
-      }
-    }
-
     mIvAnonymous.setSelected(!selected);
     mEtPostContent.setHint(!selected ? "匿名发表评论" : "发表评论");
     Account.inst().setCommentAnonymous(!selected);
-  }
-
-  private void showCancelAnonymousDialog() {
-    final ThemedDialog dialog = new ThemedDialog(this);
-
-    dialog.setTitle("确认取消匿名么？");
-
-    View view = LayoutInflater.from(this).inflate(R.layout.dialog_cancel_comment_anonymouse, null, false);
-
-    ((CheckBox) view.findViewById(R.id.cb_check)).setOnCheckedChangeListener(
-        new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            Account.inst().setCancelCommentAnonymousDialog(!isChecked);
-          }
-        });
-
-    dialog.setContent(view);
-
-    dialog.setPositive(R.string.okay, new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        mIvAnonymous.setSelected(false);
-        Account.inst().setCommentAnonymous(false);
-        mEtPostContent.setHint("发表评论");
-        dialog.dismiss();
-      }
-    });
-
-    dialog.setRbNegative(R.string.cancel, new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        mIvAnonymous.setSelected(true);
-        Account.inst().setCommentAnonymous(true);
-        mEtPostContent.setHint("匿名发表评论");
-        dialog.dismiss();
-      }
-    });
-
-    dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-      @Override
-      public void onCancel(DialogInterface dialog) {
-        mIvAnonymous.setSelected(true);
-        Account.inst().setCommentAnonymous(true);
-        mEtPostContent.setHint("匿名发表评论");
-      }
-    });
-
-    dialog.show();
   }
 
   @OnItemClick(R.id.lv_comments)

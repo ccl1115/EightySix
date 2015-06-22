@@ -18,7 +18,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.*;
@@ -328,12 +327,6 @@ public class PublishActivity extends BaseActivity implements
     mCbAnonymous.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
       @Override
       public void onCheckedChanged(CompoundButton buttonView, boolean checked) {
-        if (!checked) {
-          if (Account.inst().getCancelPostAnonymousDialog()) {
-            showCancelAnonymousDialog();
-          }
-        }
-
         Account.inst().setPostAnonymous(checked);
 
         if (checked) {
@@ -707,45 +700,6 @@ public class PublishActivity extends BaseActivity implements
         mQuitConfirmDialog.show();
       }
     }
-  }
-
-  private void showCancelAnonymousDialog() {
-    final ThemedDialog dialog = new ThemedDialog(this);
-
-    dialog.setTitle("确认取消匿名么？");
-
-    View view = LayoutInflater.from(this).inflate(R.layout.dialog_cancel_post_anonymouse, null, false);
-    dialog.setContent(view);
-    ((CheckBox) view.findViewById(R.id.cb_check)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-      @Override
-      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        Account.inst().setCancelPostAnonymousDialog(!isChecked);
-      }
-    });
-    dialog.setPositive(R.string.okay, new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        dialog.dismiss();
-        mCbAnonymous.setChecked(false);
-      }
-    });
-
-    dialog.setRbNegative(R.string.cancel, new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        dialog.dismiss();
-        mCbAnonymous.setChecked(true);
-      }
-    });
-
-    dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-      @Override
-      public void onCancel(DialogInterface dialog) {
-        mCbAnonymous.setChecked(true);
-      }
-    });
-
-    dialog.show();
   }
 
   private void setBgImage(String p) {

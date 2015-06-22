@@ -442,6 +442,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
               break;
             case 1:
               mHotFeedFragment.mLvFeed.setSelection(0);
+              mHotFeedFragment.refresh();
               break;
             case 2:
               mFriendsFeedFragment.mLvFeed.setSelection(0);
