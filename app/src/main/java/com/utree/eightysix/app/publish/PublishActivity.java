@@ -24,7 +24,6 @@ import android.widget.*;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
-import butterknife.OnTextChanged;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ArgbEvaluator;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -113,9 +112,6 @@ public class PublishActivity extends BaseActivity implements
   @InjectView(R.id.et_temp_name)
   public EditText mEtTempName;
 
-  @InjectView(R.id.iv_temp_name)
-  public ImageView mIvTempName;
-
   @InjectView(R.id.rb_page)
   public RoundedButton mRbPage;
 
@@ -182,18 +178,6 @@ public class PublishActivity extends BaseActivity implements
     }
 
     context.startActivity(intent);
-  }
-
-  @OnClick(R.id.iv_temp_name)
-  public void onIvTempNameClicked(View v) {
-    mIvTempName.setSelected(!v.isSelected());
-  }
-
-  @OnTextChanged(R.id.et_temp_name)
-  public void onEtTempNameTextChanged(CharSequence cs) {
-    if (cs.length() > 0) {
-      mIvTempName.setSelected(true);
-    }
   }
 
   @OnClick(R.id.ll_bottom)
@@ -317,11 +301,9 @@ public class PublishActivity extends BaseActivity implements
     if (Account.inst().getPostAnonymous()) {
       if (mSendType == 0) {
         mEtTempName.setVisibility(View.VISIBLE);
-        mIvTempName.setVisibility(View.VISIBLE);
       }
     } else {
       mEtTempName.setVisibility(View.INVISIBLE);
-      mIvTempName.setVisibility(View.INVISIBLE);
     }
 
     mCbAnonymous.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -332,11 +314,9 @@ public class PublishActivity extends BaseActivity implements
         if (checked) {
           if (mSendType == 0) {
             mEtTempName.setVisibility(View.VISIBLE);
-            mIvTempName.setVisibility(View.VISIBLE);
           }
         } else {
           mEtTempName.setVisibility(View.INVISIBLE);
-          mIvTempName.setVisibility(View.INVISIBLE);
         }
       }
     });
@@ -751,7 +731,7 @@ public class PublishActivity extends BaseActivity implements
       builder.realName(mCbAnonymous.isChecked() ? 0 : 1);
 
       if (mCbAnonymous.isChecked()) {
-        if (!TextUtils.isEmpty(mEtTempName.getText()) && mIvTempName.isSelected()) {
+        if (!TextUtils.isEmpty(mEtTempName.getText())) {
           builder.tempName(mEtTempName.getText().toString());
           builder.sourceType(2);
         }
@@ -807,7 +787,6 @@ public class PublishActivity extends BaseActivity implements
           mTags = response.object.tags;
 
           mTagsLayout.setTag(mTags);
-          mIvTempName.setSelected(false);
         }
         requestTags();
       }
@@ -827,7 +806,6 @@ public class PublishActivity extends BaseActivity implements
           mTags = response.object.tags;
 
           mTagsLayout.setTag(mTags);
-          mIvTempName.setSelected(false);
         }
       }
     }, TagsResponse.class);
