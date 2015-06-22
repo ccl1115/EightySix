@@ -109,14 +109,6 @@ public class PostPostView extends FrameLayout {
       @Override
       public void onClick(View v) {
         doPraise();
-        if (mClicked) {
-          mClicked = false;
-          mVpContent.setVisibility(mVpContent.getVisibility() == VISIBLE ? INVISIBLE : VISIBLE);
-          removeCallbacks(mCancel);
-        } else {
-          mClicked = true;
-          postDelayed(mCancel, 500);
-        }
       }
     });
 
@@ -260,14 +252,6 @@ public class PostPostView extends FrameLayout {
           @Override
           public void onClick(View v) {
             doPraise();
-            if (mClicked) {
-              mClicked = false;
-              mVpContent.setVisibility(mVpContent.getVisibility() == VISIBLE ? INVISIBLE : VISIBLE);
-              removeCallbacks(mCancel);
-            } else {
-              mClicked = true;
-              postDelayed(mCancel, 1000);
-            }
           }
         });
         FrameLayout.LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

@@ -312,12 +312,12 @@ public class ProfileFragment extends HolderFragment {
 
           if (mIsVisitor) {
             if ("男".equals(mProfile.sex)) {
-              mTvPraiseMe.setText(String.format("谁赞过他（%d）", mProfile.praisedCount + 1));
+              mTvPraiseMe.setText(String.format("谁赞过他（%d）", mProfile.praisedCount++));
             } else if ("女".equals(mProfile.sex)) {
-              mTvPraiseMe.setText(String.format("谁赞过她（%d）", mProfile.praisedCount + 1));
+              mTvPraiseMe.setText(String.format("谁赞过她（%d）", mProfile.praisedCount++));
             }
           } else {
-            mTvPraiseMe.setText(String.format("谁赞过我（%d）", mProfile.praisedCount + 1));
+            mTvPraiseMe.setText(String.format("谁赞过我（%d）", mProfile.praisedCount++));
           }
 
           buildPraisedList(response.object.praisedList);

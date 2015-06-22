@@ -6,7 +6,6 @@ package com.utree.eightysix.app.chat;
 
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.chat.content.ImageContent;
-import com.utree.eightysix.app.chat.event.ChatEvent;
 import com.utree.eightysix.app.chat.event.FriendChatEvent;
 import com.utree.eightysix.dao.FriendMessage;
 import com.utree.eightysix.rest.OnResponse2;
@@ -45,7 +44,7 @@ public class FriendSenderImpl implements FriendSender {
           @Override
           public void onResponse(Response response) {
             if (response.code != 0) {
-              U.getChatBus().post(new ChatEvent(ChatEvent.EVENT_MSG_REMOVE, message));
+              U.getChatBus().post(new FriendChatEvent(FriendChatEvent.EVENT_MSG_REMOVE, message));
             } else {
               message.setStatus(MessageConst.STATUS_SUCCESS);
               DaoUtils.getFriendMessageDao().insertOrReplace(message);
