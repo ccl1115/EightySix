@@ -110,10 +110,10 @@ public class TitleTab extends FrameLayout {
     view.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-        mViewPager.setCurrentItem(i, true);
         if (mOnTabItemClickedListener != null) {
           mOnTabItemClickedListener.onTabItemClicked(v, i);
         }
+        mViewPager.setCurrentItem(i, true);
       }
     });
     return view;

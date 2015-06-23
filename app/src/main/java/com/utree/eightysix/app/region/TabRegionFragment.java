@@ -439,6 +439,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
           switch (position) {
             case 0:
               mFeedFragment.mLvFeed.setSelection(0);
+              mFeedFragment.refresh();
               break;
             case 1:
               mHotFeedFragment.mLvFeed.setSelection(0);
@@ -446,6 +447,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
               break;
             case 2:
               mFriendsFeedFragment.mLvFeed.setSelection(0);
+              mFriendsFeedFragment.refresh();
               break;
           }
         }

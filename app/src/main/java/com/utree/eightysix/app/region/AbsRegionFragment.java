@@ -273,7 +273,6 @@ public abstract class AbsRegionFragment extends BaseFragment {
   }
 
   public void refresh() {
-    getBaseActivity().showProgressBar();
     if (isAdded()) {
       if (mMode == MODE_REGION) {
         requestRegionFeeds(mRegionType, mDistance, mAreaType, mAreaId, 1);
