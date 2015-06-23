@@ -36,7 +36,8 @@ public class TopicListActivity extends BaseActivity {
 
   private TopicListAdapter mTopicListAdapter;
 
-  private Paginate.Page mPageInfo;
+  private boolean mHasMore;
+  private int mPage = 1;
 
   public static void start(Context context) {
     Intent intent = new Intent(context, TopicListActivity.class);
@@ -73,12 +74,13 @@ public class TopicListActivity extends BaseActivity {
 
       @Override
       public boolean hasMore() {
-        return mPageInfo != null && mPageInfo.currPage < mPageInfo.countPage;
+        return mHasMore;
       }
 
       @Override
       public boolean onLoadMoreStart() {
-        requestTopicList(mPageInfo == null ? 1 : mPageInfo.currPage + 1);
+        mPage++;
+        requestTopicList(mPage);
         return true;
       }
     });
@@ -117,10 +119,12 @@ public class TopicListActivity extends BaseActivity {
           } else {
             mTopicListAdapter.add(response.object.hotTopic.postTopics.lists);
           }
-          mPageInfo = response.object.hotTopic.postTopics.page;
+
+          mHasMore = response.object.hotTopic.postTopics.lists.size() > 0;
         }
 
         hideProgressBar();
+        mAlvTopic.stopLoadMore();
       }
     }, TopicListResponse.class);
   }

@@ -623,6 +623,7 @@
         <id>feeds_search</id>
         <name>搜索</name>
         <path>/post/search</path>
+        <sign/>
         <token/>
         <params>
             <param>content</param>
@@ -636,6 +637,7 @@
         <id>get_hometown_feeds</id>
         <name>get feeds of hometown</name>
         <path>/feed/listByHometown</path>
+        <sign/>
         <token/>
         <params>
             <param>currPage</param>
@@ -649,6 +651,7 @@
         <id>daily_picks</id>
         <name>每日精选</name>
         <path>/feed/listwithgoodtag</path>
+        <sign/>
         <token/>
         <params>
             <param>tagId</param>
@@ -660,6 +663,7 @@
         <id>feed_snapshot</id>
         <name>得到某个快照的列表</name>
         <path>/feed/listwithsnapshot</path>
+        <sign/>
         <token/>
         <params>
             <param>factoryId</param>
