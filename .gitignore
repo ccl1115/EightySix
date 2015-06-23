@@ -4,6 +4,7 @@ target
 *.iml
 gen-external-apklibs
 *.ec
+classes
 
 data/src/main/java/com/utree/eightysix/dao
 app/src/main/assets/configuration_local
