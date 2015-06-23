@@ -108,6 +108,7 @@ public class TopicListActivity extends BaseActivity {
       @Override
       public void onResponseError(Throwable e) {
         hideProgressBar();
+        mAlvTopic.stopLoadMore();
       }
 
       @Override
