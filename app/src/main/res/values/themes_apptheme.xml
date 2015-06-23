@@ -39,6 +39,9 @@
         <item name="android:spinnerItemStyle">@style/Widget.Spinner.Item.Apptheme</item>
 
         <item name="android:seekBarStyle">@style/Widget.SeekBar.Apptheme</item>
+
+        <item name="listPopupWindowStyle">@style/Widget.AppCompat.ListPopupWindow</item>
+        <item name="dropDownListViewStyle">@style/Widget.AppCompat.ListView.DropDown</item>
     </style>
 
     <style name="AppTheme.Light" parent="AppTheme">

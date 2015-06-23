@@ -22,7 +22,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="16dp"
             app:width="48dp"
-            app:height="48dp"
+            app:eig_height="48dp"
             app:radius="8dp"
             />
 

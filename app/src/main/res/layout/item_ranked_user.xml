@@ -20,7 +20,7 @@
             android:layout_centerVertical="true"
             app:radius="4dp"
             app:width="40dp"
-            app:height="40dp"
+            app:eig_height="40dp"
             />
 
     <TextView

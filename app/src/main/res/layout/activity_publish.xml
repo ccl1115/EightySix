@@ -86,7 +86,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="8dp"
                 app:radius="4dp"
-                app:background="@color/apptheme_primary_transparent_btn"
+                app:bgColor="@color/apptheme_primary_transparent_btn"
                 android:text="插入标签"
                 android:textSize="14sp"
                 />
@@ -146,7 +146,7 @@
                 android:textColor="@android:color/white"
                 android:visibility="invisible"
                 app:radius="4dp"
-                app:background="@color/translucent_200"
+                app:bgColor="@color/translucent_200"
                 />
 
     </FrameLayout>

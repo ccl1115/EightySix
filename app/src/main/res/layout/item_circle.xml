@@ -81,7 +81,7 @@
                 android:textColor="@android:color/white"
                 android:clickable="false"
                 app:radius="1dp"
-                app:background="@color/apptheme_primary_dark_color"
+                app:bgColor="@color/apptheme_primary_dark_color"
                 />
 
         <TextView

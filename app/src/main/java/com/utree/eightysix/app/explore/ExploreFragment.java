@@ -18,7 +18,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -49,6 +53,8 @@ import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.*;
+
+import android.support.v7.widget.ListPopupWindow;
 
 import java.util.ArrayList;
 import java.util.HashMap;

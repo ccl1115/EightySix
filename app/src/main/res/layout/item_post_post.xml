@@ -49,7 +49,7 @@
             android:paddingRight="8dp"
             android:paddingTop="2dp"
             android:paddingBottom="2dp"
-            app:background="@color/translucent_200"
+            app:bgColor="@color/translucent_200"
             app:radius="4dp"
             />
 

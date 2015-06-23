@@ -80,7 +80,7 @@
                                     android:layout_height="68dp"
                                     android:layout_gravity="center"
                                     app:radius="10dp"
-                                    app:background="#88ffffff"
+                                    app:bgColor="#88ffffff"
                                     />
 
                             <com.utree.eightysix.widget.AsyncImageViewWithRoundCorner
@@ -90,7 +90,7 @@
                                     android:layout_gravity="center"
                                     app:radius="10dp"
                                     app:width="64dp"
-                                    app:height="64dp"
+                                    app:eig_height="64dp"
                                     />
 
                         </FrameLayout>
@@ -112,7 +112,7 @@
                                     android:layout_width="105dp"
                                     android:layout_height="25dp"
                                     app:radius="4dp"
-                                    app:background="@color/apptheme_transparent_bg"
+                                    app:bgColor="@color/apptheme_transparent_bg"
                                     />
 
                             <com.utree.eightysix.widget.AsyncImageView
@@ -472,7 +472,7 @@
             android:textSize="12sp"
             android:textColor="#88ffffff"
             android:padding="4dp"
-            app:background="@color/apptheme_transparent_bg"
+            app:bgColor="@color/apptheme_transparent_bg"
             />
 
     <FrameLayout

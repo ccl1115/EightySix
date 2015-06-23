@@ -68,7 +68,7 @@
                     android:layout_gravity="center_vertical"
                     android:visibility="invisible"
                     app:radius="5dp"
-                    app:background="@color/apptheme_secondary_light_color"
+                    app:bgColor="@color/apptheme_secondary_light_color"
                     />
 
         </LinearLayout>

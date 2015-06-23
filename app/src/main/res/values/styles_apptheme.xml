@@ -62,11 +62,11 @@
         <item name="android:paddingLeft">8dp</item>
         <item name="android:paddingRight">8dp</item>
         <item name="radius">2dp</item>
-        <item name="background">@color/apptheme_primary_btn_light</item>
+        <item name="bgColor">@color/apptheme_primary_btn_light</item>
     </style>
 
     <style name="Widget.RoundedButton.Apptheme.Small">
-        <item name="background">@color/apptheme_primary_grey_btn</item>
+        <item name="bgColor">@color/apptheme_primary_grey_btn</item>
         <item name="android:textSize">14sp</item>
         <item name="android:minWidth">110dp</item>
         <item name="android:minHeight">30dp</item>
@@ -81,7 +81,7 @@
         <item name="android:paddingRight">5dp</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="radius">16dp</item>
-        <item name="background">@color/apptheme_secondary_light_color</item>
+        <item name="bgColor">@color/apptheme_secondary_light_color</item>
     </style>
 
     <style name="Widget.PostEditText"/>

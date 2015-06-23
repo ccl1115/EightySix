@@ -43,7 +43,7 @@
                 android:layout_marginRight="3dp"
                 android:text="@string/okay"
                 app:radius="2dp"
-                app:background="@color/apptheme_primary_btn_light"
+                app:bgColor="@color/apptheme_primary_btn_light"
                 />
     </LinearLayout>
 
@@ -71,7 +71,7 @@
                 android:text="@string/done"
                 android:enabled="false"
                 app:radius="2dp"
-                app:background="@color/apptheme_primary_btn_light"
+                app:bgColor="@color/apptheme_primary_btn_light"
                 />
 
     </LinearLayout>

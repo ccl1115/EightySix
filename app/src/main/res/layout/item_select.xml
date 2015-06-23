@@ -26,7 +26,8 @@
                     android:layout_width="72dp"
                     android:layout_height="72dp"
                     app:radius="72dp"
-                    app:background="#44000000"/>
+                    app:bgColor="#44000000"
+                    />
 
             <com.utree.eightysix.widget.RoundedButton
                     android:layout_gravity="center"
@@ -35,7 +36,8 @@
                     android:gravity="center"
                     android:textSize="23sp"
                     app:radius="64dp"
-                    app:background="#ff00b7ec"/>
+                    app:bgColor="#ff00b7ec"
+                    />
 
             <ImageView
                     android:id="@+id/iv_hidden_count"
@@ -72,7 +74,8 @@
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
                     app:radius="4dp"
-                    app:background="@android:color/white"/>
+                    app:bgColor="@android:color/white"
+                    />
 
         </LinearLayout>
 

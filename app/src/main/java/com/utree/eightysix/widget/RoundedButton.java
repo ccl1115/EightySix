@@ -35,7 +35,7 @@ public class RoundedButton extends TextView {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.RoundedButton, defStyle, 0);
 
         mRadius = ta.getDimensionPixelOffset(R.styleable.RoundedButton_radius, 0);
-        mColorStateList = ta.getColorStateList(R.styleable.RoundedButton_background);
+      mColorStateList = ta.getColorStateList(R.styleable.RoundedButton_bgColor);
 
         mBackgroundPaint.setAntiAlias(true);
         mBackgroundPaint.setDither(true);

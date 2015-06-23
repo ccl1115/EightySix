@@ -26,7 +26,7 @@
             android:layout_height="match_parent"
             android:clickable="false"
             app:radius="4dp"
-            app:background="#44000000"
+            app:bgColor="#44000000"
             />
 
     <LinearLayout

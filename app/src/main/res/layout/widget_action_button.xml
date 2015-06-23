@@ -56,6 +56,6 @@
             android:layout_margin="4dp"
             android:visibility="gone"
             app:radius="8dp"
-            app:background="@color/apptheme_secondary_light_color"
+            app:bgColor="@color/apptheme_secondary_light_color"
             />
 </FrameLayout>

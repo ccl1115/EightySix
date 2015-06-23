@@ -28,7 +28,8 @@
                 android:paddingRight="16dp"
                 android:text="@string/rotate"
                 android:textColor="@color/apptheme_primary_text_dark"
-                app:background="@color/apptheme_primary_white_btn"/>
+                app:bgColor="@color/apptheme_primary_white_btn"
+                />
 
         <com.utree.eightysix.widget.RoundedButton
                 android:id="@+id/rb_okay"

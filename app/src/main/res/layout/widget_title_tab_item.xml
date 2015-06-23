@@ -29,7 +29,7 @@
             android:paddingLeft="2dp"
             android:paddingRight="2dp"
             android:minWidth="16dp"
-            app:background="@color/apptheme_primary_light_color"
+            app:bgColor="@color/apptheme_primary_light_color"
             app:radius="2dp"/>
 
 </RelativeLayout>

@@ -10,6 +10,7 @@ import butterknife.ButterKnife;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.disklrucache.DiskLruCache;
+import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.SyncHttpClient;
 import com.squareup.otto.Bus;
 import com.squareup.otto.ThreadEnforcer;
@@ -352,8 +353,8 @@ public class U {
     return (int) (U.getContext().getResources().getDisplayMetrics().density * dp + 0.5f);
   }
 
-  public static <T extends Response> void request(String requestId, OnResponse<T> response, Class<T> clz, Object... params) {
-    U.getRESTRequester().request(requestId, response, clz, params);
+  public static <T extends Response> RequestHandle request(String requestId, OnResponse<T> response, Class<T> clz, Object... params) {
+    return U.getRESTRequester().request(requestId, response, clz, params);
   }
 
   public static String timestamp(long timestamp) {

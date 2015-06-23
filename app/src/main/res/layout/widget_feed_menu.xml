@@ -40,7 +40,8 @@
                 android:paddingLeft="2dp"
                 android:paddingRight="2dp"
                 app:radius="2dp"
-                app:background="@color/apptheme_secondary_light_color"/>
+                app:bgColor="@color/apptheme_secondary_light_color"
+                />
 
     </RelativeLayout>
 
@@ -106,7 +107,8 @@
                 android:paddingLeft="2dp"
                 android:paddingRight="2dp"
                 app:radius="2dp"
-                app:background="@color/apptheme_secondary_light_color"/>
+                app:bgColor="@color/apptheme_secondary_light_color"
+                />
 
     </RelativeLayout>
 
@@ -211,7 +213,8 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 app:radius="5dp"
-                app:background="@color/apptheme_secondary_light_color"/>
+                app:bgColor="@color/apptheme_secondary_light_color"
+                />
 
     </RelativeLayout>
 </LinearLayout>

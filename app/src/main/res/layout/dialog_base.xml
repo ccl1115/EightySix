@@ -75,7 +75,7 @@
                 android:textSize="16sp"
                 android:visibility="gone"
                 android:textColor="@color/apptheme_primary_grey_btn_text"
-                app:background="@color/apptheme_primary_grey_btn"
+                app:bgColor="@color/apptheme_primary_grey_btn"
                 />
 
     </LinearLayout>

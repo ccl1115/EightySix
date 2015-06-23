@@ -29,7 +29,7 @@
             android:id="@+id/btn_register"
             android:enabled="false"
             app:radius="2dp"
-            app:background="@color/apptheme_primary_btn_light"
+            app:bgColor="@color/apptheme_primary_btn_light"
             />
 
     <TextView

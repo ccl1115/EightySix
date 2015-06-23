@@ -29,7 +29,7 @@
             android:paddingEnd="8dp"
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
-            app:background="#fff4f4f4"
+            app:bgColor="#fff4f4f4"
             app:radius="6dp"
             tools:ignore="SmallSp"
             />

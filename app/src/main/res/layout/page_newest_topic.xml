@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:radius="4dp"
-            app:background="#44000000"
+            app:bgColor="#44000000"
             />
 
     <com.utree.eightysix.widget.RoundedButton

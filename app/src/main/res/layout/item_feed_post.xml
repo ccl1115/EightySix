@@ -28,7 +28,7 @@
                 android:layout_marginEnd="10dp"
                 app:radius="4dp"
                 app:width="30dp"
-                app:height="30dp"
+                app:eig_height="30dp"
                 />
 
         <TextView
@@ -156,7 +156,7 @@
                 android:paddingBottom="2dp"
                 android:visibility="gone"
                 android:clickable="false"
-                app:background="@color/translucent_200"
+                app:bgColor="@color/translucent_200"
                 app:radius="4dp"
                 />
 

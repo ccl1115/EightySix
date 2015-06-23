@@ -18,7 +18,7 @@
 
     <declare-styleable name="RoundedButton">
         <attr name="radius" format="reference|dimension"/>
-        <attr name="background" format="reference|color"/>
+        <attr name="bgColor" format="reference|color"/>
     </declare-styleable>
 
     <declare-styleable name="RandomSceneTextView">
@@ -63,6 +63,6 @@
     <declare-styleable name="AsyncImageViewWithRoundCorner">
         <attr name="radius"/>
         <attr name="width" format="dimension|reference"/>
-        <attr name="height" format="dimension|reference"/>
+        <attr name="eig_height" format="dimension|reference"/>
     </declare-styleable>
 </resources>

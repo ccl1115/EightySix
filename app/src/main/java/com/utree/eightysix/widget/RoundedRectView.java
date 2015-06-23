@@ -3,7 +3,6 @@ package com.utree.eightysix.widget;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
-import android.graphics.drawable.ColorDrawable;
 import android.util.AttributeSet;
 import android.view.View;
 import com.utree.eightysix.R;
@@ -27,7 +26,7 @@ public class RoundedRectView extends View {
     TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.RoundedButton, defStyleAttr, 0);
 
     int radius = ta.getDimensionPixelOffset(R.styleable.RoundedButton_radius, 0);
-    ColorStateList colors = ta.getColorStateList(R.styleable.RoundedButton_background);
+    ColorStateList colors = ta.getColorStateList(R.styleable.RoundedButton_bgColor);
 
     setBackgroundDrawable(new RoundRectDrawable(radius, colors));
   }

@@ -20,7 +20,7 @@
             android:layout_margin="16dp"
             android:layout_centerVertical="true"
             app:width="48dp"
-            app:height="48dp"
+            app:eig_height="48dp"
             app:radius="4dp"
             />
 

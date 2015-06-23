@@ -108,7 +108,6 @@ public class NotifyUtils {
         public void onResponse(FriendChatResponse response) {
           if (RESTRequester.responseOk(response)) {
             FConversationUtil.createIfNotExist(response.object, viewId, "friend");
-
             notifyPassedFriend(response.object.chatId, name, manager);
           }
         }

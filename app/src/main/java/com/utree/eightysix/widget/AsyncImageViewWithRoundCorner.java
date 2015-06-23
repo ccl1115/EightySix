@@ -78,7 +78,7 @@ public class AsyncImageViewWithRoundCorner extends AsyncImageView {
     mRadius = (int) ta.getDimension(R.styleable.AsyncImageViewWithRoundCorner_radius, U.dp2px(14));
 
     mImageWidth = (int) ta.getDimension(R.styleable.AsyncImageViewWithRoundCorner_width, -1);
-    mImageHeight = (int) ta.getDimension(R.styleable.AsyncImageViewWithRoundCorner_height, -1);
+    mImageHeight = (int) ta.getDimension(R.styleable.AsyncImageViewWithRoundCorner_eig_height, -1);
   }
 
   @Override

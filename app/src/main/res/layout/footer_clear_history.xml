@@ -17,6 +17,6 @@
             android:textColor="@android:color/black"
             android:gravity="center"
             app:radius="2dp"
-            app:background="#fff3f5f2"
+            app:bgColor="#fff3f5f2"
             />
 </FrameLayout>

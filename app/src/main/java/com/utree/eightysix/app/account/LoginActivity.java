@@ -16,6 +16,7 @@ import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
+import com.loopj.android.http.RequestHandle;
 import com.squareup.otto.Subscribe;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.C;
@@ -69,6 +70,8 @@ public class LoginActivity extends BaseActivity {
   private int mPhoneNumberLength = U.getConfigInt("account.phone.length");
 
   private boolean mRequesting = false;
+
+  private RequestHandle mLoginRequestHandle;
 
   public static void start(Context context, String phoneNumber) {
     Intent intent = new Intent(context, LoginActivity.class);
@@ -235,12 +238,12 @@ public class LoginActivity extends BaseActivity {
     };
 
     if (mEtCaptcha.getText().length() > 0) {
-      U.request("login", onResponse, UserResponse.class,
+      mLoginRequestHandle = U.request("login", onResponse, UserResponse.class,
           mEtPhoneNumber.getText().toString(),
           mEtPwd.getText().toString(),
           mEtCaptcha.getText().toString());
     } else {
-      U.request("login", onResponse, UserResponse.class,
+      mLoginRequestHandle = U.request("login", onResponse, UserResponse.class,
           mEtPhoneNumber.getText().toString(),
           mEtPwd.getText().toString(),
           null);
@@ -278,5 +281,15 @@ public class LoginActivity extends BaseActivity {
           }
         }
     );
+  }
+
+  @Override
+  public void onBackPressed() {
+    if (mLoginRequestHandle != null && !mLoginRequestHandle.isFinished()) {
+      hideProgressBar();
+      mLoginRequestHandle.cancel(true);
+    } else {
+      super.onBackPressed();
+    }
   }
 }

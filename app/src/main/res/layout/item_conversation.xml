@@ -90,7 +90,7 @@
                 android:paddingBottom="5dp"
                 android:textColor="@android:color/white"
                 app:radius="20dp"
-                app:background="@color/apptheme_primary_light_color"
+                app:bgColor="@color/apptheme_primary_light_color"
                 />
 
         <FrameLayout

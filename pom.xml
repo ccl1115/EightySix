@@ -120,8 +120,22 @@
             <dependency>
                 <groupId>android.support</groupId>
                 <artifactId>compatibility-v4</artifactId>
-                <version>20.0.0</version>
+                <version>22.2.0</version>
                 <type>jar</type>
+            </dependency>
+
+            <dependency>
+                <groupId>android.support</groupId>
+                <artifactId>compatibility-v7-appcompat</artifactId>
+                <version>22.2.0</version>
+                <type>jar</type>
+            </dependency>
+
+            <dependency>
+                <groupId>android.support</groupId>
+                <artifactId>compatibility-v7-appcompat</artifactId>
+                <version>22.2.0</version>
+                <type>apklib</type>
             </dependency>
 
             <dependency>

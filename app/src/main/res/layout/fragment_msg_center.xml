@@ -180,7 +180,7 @@
                     android:layout_height="8dp"
                     android:layout_gravity="center_vertical"
                     android:visibility="invisible"
-                    app:background="@color/apptheme_secondary_light_color"
+                    app:bgColor="@color/apptheme_secondary_light_color"
                     app:radius="16dp"
                     />
         </LinearLayout>

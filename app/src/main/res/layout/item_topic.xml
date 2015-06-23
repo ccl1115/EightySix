@@ -192,6 +192,6 @@
             android:paddingTop="2dp"
             android:paddingRight="4dp"
             android:paddingBottom="2dp"
-            app:background="@color/apptheme_primary_transparent_btn"
+            app:bgColor="@color/apptheme_primary_transparent_btn"
             />
 </FrameLayout>

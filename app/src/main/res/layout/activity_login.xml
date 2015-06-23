@@ -67,12 +67,12 @@
             android:id="@+id/btn_login"
             android:enabled="false"
             app:radius="2dp"
-            app:background="@color/apptheme_primary_btn_light"
+            app:bgColor="@color/apptheme_primary_btn_light"
             />
 
     <com.utree.eightysix.widget.RoundedButton
             app:radius="2dp"
-            app:background="@color/apptheme_primary_btn_light"
+            app:bgColor="@color/apptheme_primary_btn_light"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/fixture"

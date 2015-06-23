@@ -51,7 +51,7 @@
                 android:layout_marginBottom="64dp"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
-                app:background="#ffe6e6e6"
+                app:bgColor="#ffe6e6e6"
                 android:text="查看全部标签"
                 android:textColor="#ff313233"
                 />

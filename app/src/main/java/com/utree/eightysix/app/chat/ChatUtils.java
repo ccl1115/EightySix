@@ -342,33 +342,6 @@ public class ChatUtils {
     context.showProgressBar();
   }
 
-  public static void startStrangerChat(final BaseActivity context, final int viewId) {
-    String chatId = FConversationUtil.getChatIdByViewId(viewId);
-
-    if (chatId != null) {
-      FChatActivity.start(context, chatId);
-      return;
-    }
-
-    U.request("get_friend_chat_info", new OnResponse2<FriendChatResponse>() {
-      @Override
-      public void onResponseError(Throwable e) {
-
-      }
-
-      @Override
-      public void onResponse(FriendChatResponse response) {
-        if (RESTRequester.responseOk(response)) {
-          FConversationUtil.createIfNotExist(response.object, viewId, "stranger");
-          FChatActivity.start(context, response.object.chatId);
-        }
-        context.hideProgressBar();
-      }
-    }, FriendChatResponse.class, "stranger", viewId);
-
-    context.showProgressBar();
-  }
-
   public static void startAssistantChat(final BaseActivity context) {
     String chatId = FConversationUtil.getAssistantChatId();
 

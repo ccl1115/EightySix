@@ -36,6 +36,18 @@
         </dependency>
 
         <dependency>
+            <groupId>android.support</groupId>
+            <artifactId>compatibility-v7-appcompat</artifactId>
+            <type>jar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>android.support</groupId>
+            <artifactId>compatibility-v7-appcompat</artifactId>
+            <type>apklib</type>
+        </dependency>
+
+        <dependency>
             <groupId>mta-sdk</groupId>
             <artifactId>mta-sdk</artifactId>
         </dependency>

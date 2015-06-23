@@ -59,7 +59,7 @@
                 android:layout_gravity="center_vertical"
                 app:radius="4dp"
                 app:width="30dp"
-                app:height="30dp"
+                app:eig_height="30dp"
                 />
 
         <TextView

@@ -65,7 +65,7 @@
                 android:paddingTop="2dp"
                 android:paddingRight="4dp"
                 android:paddingBottom="2dp"
-                app:background="@color/apptheme_primary_light_color"
+                app:bgColor="@color/apptheme_primary_light_color"
                 app:radius="2dp"
                 />
 
@@ -208,7 +208,7 @@
                 android:paddingTop="2dp"
                 android:paddingRight="4dp"
                 android:paddingBottom="2dp"
-                app:background="@color/apptheme_primary_light_color"
+                app:bgColor="@color/apptheme_primary_light_color"
                 app:radius="2dp"
                 />
 

@@ -85,7 +85,7 @@
 
             <com.utree.eightysix.widget.RoundedButton
                     app:radius="2dp"
-                    app:background="#fff7f7f7"
+                    app:bgColor="#fff7f7f7"
                     android:id="@+id/rb_reget_captcha"
                     android:layout_width="64dp"
                     android:layout_height="30dp"

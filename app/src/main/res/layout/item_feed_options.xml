@@ -151,7 +151,7 @@
                 android:textColor="@color/apptheme_primary_light_color"
                 android:visibility="gone"
                 android:text="下一步"
-                app:background="@color/apptheme_primary_white_btn"
+                app:bgColor="@color/apptheme_primary_white_btn"
                 />
     </LinearLayout>
 
