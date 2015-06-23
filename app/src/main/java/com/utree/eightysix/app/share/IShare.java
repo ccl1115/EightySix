@@ -8,6 +8,7 @@ import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.data.Circle;
 import com.utree.eightysix.data.Post;
 import com.utree.eightysix.request.ShareContentRequest;
+import com.utree.eightysix.response.ShareCallbackResponse;
 import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
@@ -89,19 +90,21 @@ public abstract class IShare {
         }
       }, Response.class);
 
-      U.request("share_callback", new OnResponse2<Response>() {
+      U.request("share_callback", new OnResponse2<ShareCallbackResponse>() {
         @Override
         public void onResponseError(Throwable e) {
 
         }
 
         @Override
-        public void onResponse(Response response) {
+        public void onResponse(ShareCallbackResponse response) {
           if (RESTRequester.responseOk(response)) {
-            U.showToast("分享成功，经验+3");
+            if (response.object.experience > 0) {
+              U.showToast("分享成功，经验+" + response.object.experience);
+            }
           }
         }
-      }, Response.class, null, null);
+      }, ShareCallbackResponse.class, null, null);
 
       if (BuildConfig.DEBUG) {
         U.showToast("onComplete");
@@ -129,19 +132,21 @@ public abstract class IShare {
       @Override
       public void onComplete(Object o) {
         if (BuildConfig.DEBUG) U.showToast("onComplete");
-        U.request("share_callback", new OnResponse2<Response>() {
+        U.request("share_callback", new OnResponse2<ShareCallbackResponse>() {
           @Override
           public void onResponseError(Throwable e) {
 
           }
 
           @Override
-          public void onResponse(Response response) {
+          public void onResponse(ShareCallbackResponse response) {
             if (RESTRequester.responseOk(response)) {
-              U.showToast("分享成功，经验+3");
+              if (response.object.experience > 0) {
+                U.showToast("分享成功，经验+" + response.object.experience);
+              }
             }
           }
-        }, Response.class, null, null);
+        }, ShareCallbackResponse.class, null, null);
       }
 
       @Override
