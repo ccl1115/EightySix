@@ -52,8 +52,8 @@ cache.chat.image.size = 104857600
 storage.host = oss-cn-beijing.aliyuncs.com
 
 # storage bucket name to store user unloaded images
-storage.image.bucket.name = utree-images
-storage.image.bucket.name.release = utree-image-release
+storage.image.bucket.name = image.lanmeiquan.com
+storage.image.bucket.name.release = image.lanmeiquan.com
 
 # deprecated
 storage.portrait.bucket.name = utree-portraits

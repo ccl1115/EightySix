@@ -252,7 +252,7 @@ public class ExploreFragment extends BaseFragment {
     getBaseActivity().getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
           if (mListPopupWindow == null) {
             mListPopupWindow = new ListPopupWindowCompat(v.getContext());
             String[] items = {
@@ -285,7 +285,9 @@ public class ExploreFragment extends BaseFragment {
                 new String[]{"text", "image"},
                 new int[]{R.id.tv, R.id.iv}));
             mListPopupWindow.setWidth(U.dp2px(190));
-            mListPopupWindow.setDropDownGravity(Gravity.RIGHT);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+              mListPopupWindow.setDropDownGravity(Gravity.END);
+            }
             mListPopupWindow.setAnchorView(getTopBar());
             mListPopupWindow.setModal(true);
 
