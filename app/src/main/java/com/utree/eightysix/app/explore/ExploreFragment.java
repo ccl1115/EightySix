@@ -6,6 +6,7 @@ package com.utree.eightysix.app.explore;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
@@ -52,10 +53,12 @@ import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.utils.ColorUtil;
 import com.utree.eightysix.utils.Env;
-import com.utree.eightysix.widget.*;
-
-import android.support.v7.widget.ListPopupWindow;
-
+import com.utree.eightysix.widget.AsyncImageViewWithRoundCorner;
+import com.utree.eightysix.widget.IndicatorView;
+import com.utree.eightysix.widget.ListPopupWindowCompat;
+import com.utree.eightysix.widget.RoundedButton;
+import com.utree.eightysix.widget.TagView;
+import com.utree.eightysix.widget.ThemedDialog;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,32 +70,32 @@ public class ExploreFragment extends BaseFragment {
 
   private static final long REFRESH_INTERNAL = 60000 * 30;
 
-  @InjectView(R.id.fl_daily_picks)
+  @InjectView (R.id.fl_daily_picks)
   public FrameLayout mFlDailyPicksHead;
 
-  @InjectView(R.id.fl_topic)
+  @InjectView (R.id.fl_topic)
   public FrameLayout mFlTopicsHead;
 
-  @InjectView(R.id.in_topics)
+  @InjectView (R.id.in_topics)
   public IndicatorView mInTopics;
 
-  @InjectView(R.id.vp_topics)
+  @InjectView (R.id.vp_topics)
   public ViewPager mVpTopics;
 
-  @InjectView(R.id.ll_tags)
+  @InjectView (R.id.ll_tags)
   public LinearLayout mLlTags;
 
-  @InjectView(R.id.ll_ladder)
+  @InjectView (R.id.ll_ladder)
   public LinearLayout mLlLadder;
 
-  @InjectView(R.id.tv_ladder_new)
+  @InjectView (R.id.tv_ladder_new)
   public TextView mTvLadderNew;
 
   private Handler mHandler = new Handler();
 
   private long mLastRefreshTimestamp;
 
-  private ListPopupWindow mListPopupWindow;
+  private ListPopupWindowCompat mListPopupWindow;
 
   private QRCodeScanFragment mQRCodeScanFragment;
 
@@ -112,33 +115,33 @@ public class ExploreFragment extends BaseFragment {
     }
   };
 
-  @OnClick({R.id.ll_tags, R.id.fl_daily_picks})
+  @OnClick ({R.id.ll_tags, R.id.fl_daily_picks})
   public void onLlTagsClicked(View v) {
     DailyPicksActivity.start(v.getContext(), 0);
   }
 
-  @OnClick(R.id.tv_circles)
+  @OnClick (R.id.tv_circles)
   public void onTvCirclesClicked() {
     BaseCirclesActivity.startMyCircles(getActivity());
   }
 
-  @OnClick(R.id.tv_hometown)
+  @OnClick (R.id.tv_hometown)
   public void onTvHometownClicked() {
     FragmentHolder.start(getActivity(), R.style.AppTheme_Light, HometownTabFragment.class, null);
   }
 
-  @OnClick(R.id.tv_ladder)
+  @OnClick (R.id.tv_ladder)
   public void onTvLadderClicked() {
     mTvLadderNew.setVisibility(View.GONE);
     startActivity(new Intent(getActivity(), LadderActivity.class));
   }
 
-  @OnClick(R.id.tv_snapshot)
+  @OnClick (R.id.tv_snapshot)
   public void onTvSnapshotClicked() {
     BaseCirclesActivity.startSnapshot(getActivity());
   }
 
-  @OnClick(R.id.tv_blue_star)
+  @OnClick (R.id.tv_blue_star)
   public void onTvBlueStarClicked() {
     BaseWebActivity.start(getBaseActivity(), "蓝星商城",
         String.format("%s/activity/blueStar.do?userid=%s&token=%s",
@@ -147,7 +150,7 @@ public class ExploreFragment extends BaseFragment {
             Account.inst().getToken()));
   }
 
-  @OnClick(R.id.tv_search)
+  @OnClick (R.id.tv_search)
   public void onTvSearchClicked() {
     startActivity(new Intent(getActivity(), FeedsSearchActivity.class));
   }
@@ -249,112 +252,116 @@ public class ExploreFragment extends BaseFragment {
     getBaseActivity().getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        if (mListPopupWindow == null) {
-          mListPopupWindow = new ListPopupWindow(v.getContext());
-          String[] items = {
-              "添加朋友",
-              "扫一扫",
-              "邀请朋友，赚蓝星",
-              "分享蓝莓"
-          };
-          int[] drawables = {
-              R.drawable.popup_add_friend,
-              R.drawable.popup_scan,
-              R.drawable.popup_blue_star,
-              R.drawable.popup_share
-          };
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+          if (mListPopupWindow == null) {
+            mListPopupWindow = new ListPopupWindowCompat(v.getContext());
+            String[] items = {
+                "添加朋友",
+                "扫一扫",
+                "邀请朋友，赚蓝星",
+                "分享蓝莓"
+            };
+            int[] drawables = {
+                R.drawable.popup_add_friend,
+                R.drawable.popup_scan,
+                R.drawable.popup_blue_star,
+                R.drawable.popup_share
+            };
 
-          List<Map<String, Object>> data = new ArrayList<Map<String, Object>>(items.length);
+            List<Map<String, Object>> data = new ArrayList<Map<String, Object>>(items.length);
 
-          for (int i = 0; i < items.length; i++) {
-            String str = items[i];
-            int drawable = drawables[i];
-            Map<String, Object> item = new HashMap<String, Object>();
-            item.put("text", str);
-            item.put("image", drawable);
-            data.add(item);
-          }
-
-          mListPopupWindow.setAdapter(new SimpleAdapter(v.getContext(),
-              data,
-              R.layout.item_explore_popup,
-              new String[]{"text", "image"},
-              new int[]{R.id.tv, R.id.iv}));
-          mListPopupWindow.setWidth(U.dp2px(190));
-          mListPopupWindow.setDropDownGravity(Gravity.RIGHT);
-          mListPopupWindow.setAnchorView(getTopBar());
-          mListPopupWindow.setModal(true);
-
-          mListPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-              switch (position) {
-                case 0:
-                  getActivity().startActivity(new Intent(getActivity(), AddFriendActivity.class));
-                  break;
-                case 1:
-                  if (mQRCodeScanFragment == null) {
-                    mQRCodeScanFragment = new QRCodeScanFragment();
-                    getFragmentManager().beginTransaction()
-                        .add(android.R.id.content, mQRCodeScanFragment)
-                        .commit();
-                  } else if (mQRCodeScanFragment.isDetached()) {
-                    getFragmentManager().beginTransaction()
-                        .attach(mQRCodeScanFragment)
-                        .commit();
-                  }
-                  break;
-                case 2:
-                  getBaseActivity().showProgressBar(true);
-
-                  U.request("get_invite_code", new OnResponse2<GetInviteCodeResponse>() {
-                    @Override
-                    public void onResponseError(Throwable e) {
-                      getBaseActivity().hideProgressBar();
-                    }
-
-                    @Override
-                    public void onResponse(GetInviteCodeResponse response) {
-                      getBaseActivity().hideProgressBar();
-                      final ThemedDialog dialog = new ThemedDialog(getBaseActivity());
-                      dialog.setTitle("你的专属邀请码");
-
-                      TextView textView = new TextView(getBaseActivity());
-                      SpannableStringBuilder builder = new SpannableStringBuilder();
-                      builder.append(response.object.msg).append("\n\n").append("你的专属邀请码是：\n");
-                      SpannableString color = new SpannableString(response.object.inviteCode);
-                      color.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.apptheme_primary_light_color)), 0, color.length(), 0);
-                      builder.append(color);
-                      builder.append("\n\n").append("你已经邀请了").append(String.valueOf(response.object.newCount)).append("个人\n");
-
-                      textView.setText(builder);
-                      textView.setGravity(Gravity.CENTER);
-                      textView.setEms(12);
-                      textView.setPadding(U.dp2px(16), U.dp2px(8), U.dp2px(16), U.dp2px(8));
-                      textView.setTextSize(16);
-                      dialog.setContent(textView);
-                      dialog.setPositive("知道啦", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                          dialog.dismiss();
-                        }
-                      });
-
-                      dialog.show();
-                    }
-                  }, GetInviteCodeResponse.class, null, null);
-                  break;
-                case 3:
-                  U.getShareManager().shareAppDialog(getBaseActivity(), Account.inst().getCurrentCircle()).show();
-                  break;
-              }
-
-              mListPopupWindow.dismiss();
+            for (int i = 0; i < items.length; i++) {
+              String str = items[i];
+              int drawable = drawables[i];
+              Map<String, Object> item = new HashMap<String, Object>();
+              item.put("text", str);
+              item.put("image", drawable);
+              data.add(item);
             }
-          });
+
+            mListPopupWindow.setAdapter(new SimpleAdapter(v.getContext(),
+                data,
+                R.layout.item_explore_popup,
+                new String[]{"text", "image"},
+                new int[]{R.id.tv, R.id.iv}));
+            mListPopupWindow.setWidth(U.dp2px(190));
+            mListPopupWindow.setDropDownGravity(Gravity.RIGHT);
+            mListPopupWindow.setAnchorView(getTopBar());
+            mListPopupWindow.setModal(true);
+
+            mListPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+              @Override
+              public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                  case 0:
+                    getActivity().startActivity(new Intent(getActivity(), AddFriendActivity.class));
+                    break;
+                  case 1:
+                    if (mQRCodeScanFragment == null) {
+                      mQRCodeScanFragment = new QRCodeScanFragment();
+                      getFragmentManager().beginTransaction()
+                          .add(android.R.id.content, mQRCodeScanFragment)
+                          .commit();
+                    } else if (mQRCodeScanFragment.isDetached()) {
+                      getFragmentManager().beginTransaction()
+                          .attach(mQRCodeScanFragment)
+                          .commit();
+                    }
+                    break;
+                  case 2:
+                    getBaseActivity().showProgressBar(true);
+
+                    U.request("get_invite_code", new OnResponse2<GetInviteCodeResponse>() {
+                      @Override
+                      public void onResponseError(Throwable e) {
+                        getBaseActivity().hideProgressBar();
+                      }
+
+                      @Override
+                      public void onResponse(GetInviteCodeResponse response) {
+                        getBaseActivity().hideProgressBar();
+                        final ThemedDialog dialog = new ThemedDialog(getBaseActivity());
+                        dialog.setTitle("你的专属邀请码");
+
+                        TextView textView = new TextView(getBaseActivity());
+                        SpannableStringBuilder builder = new SpannableStringBuilder();
+                        builder.append(response.object.msg).append("\n\n").append("你的专属邀请码是：\n");
+                        SpannableString color = new SpannableString(response.object.inviteCode);
+                        color.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.apptheme_primary_light_color)), 0, color.length(), 0);
+                        builder.append(color);
+                        builder.append("\n\n").append("你已经邀请了").append(String.valueOf(response.object.newCount)).append("个人\n");
+
+                        textView.setText(builder);
+                        textView.setGravity(Gravity.CENTER);
+                        textView.setEms(12);
+                        textView.setPadding(U.dp2px(16), U.dp2px(8), U.dp2px(16), U.dp2px(8));
+                        textView.setTextSize(16);
+                        dialog.setContent(textView);
+                        dialog.setPositive("知道啦", new View.OnClickListener() {
+                          @Override
+                          public void onClick(View view) {
+                            dialog.dismiss();
+                          }
+                        });
+
+                        dialog.show();
+                      }
+                    }, GetInviteCodeResponse.class, null, null);
+                    break;
+                  case 3:
+                    U.getShareManager().shareAppDialog(getBaseActivity(), Account.inst().getCurrentCircle()).show();
+                    break;
+                }
+
+                mListPopupWindow.dismiss();
+              }
+            });
+          }
+          mListPopupWindow.show();
+        } else {
+          startActivity(new Intent(getActivity(), AddFriendActivity.class));
         }
 
-        mListPopupWindow.show();
       }
     });
     getBaseActivity().getTopBar().getAbLeft().hide();
@@ -493,28 +500,28 @@ public class ExploreFragment extends BaseFragment {
 
   public static class ViewHolder {
 
-    @InjectView(R.id.tv_title)
+    @InjectView (R.id.tv_title)
     public TextView mTvTitle;
 
-    @InjectView(R.id.tv_text)
+    @InjectView (R.id.tv_text)
     public TextView mTvText;
 
-    @InjectView(R.id.tv_tag_1)
+    @InjectView (R.id.tv_tag_1)
     public TagView mTvTag1;
 
-    @InjectView(R.id.tv_tag_2)
+    @InjectView (R.id.tv_tag_2)
     public TagView mTvTag2;
 
-    @InjectView(R.id.tv_count)
+    @InjectView (R.id.tv_count)
     public TextView mTvCount;
 
-    @InjectView(R.id.aiv_bg)
+    @InjectView (R.id.aiv_bg)
     public AsyncImageViewWithRoundCorner mAivBg;
 
-    @InjectView(R.id.rb_bg)
+    @InjectView (R.id.rb_bg)
     public RoundedButton mRbBg;
 
-    @InjectView(R.id.rb_mask)
+    @InjectView (R.id.rb_mask)
     public RoundedButton mRbMask;
 
     private Topic mTopic;
