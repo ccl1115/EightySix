@@ -114,6 +114,7 @@ public final class HandlerWrapper<T extends Response> extends BaseJsonHttpRespon
         }
       }
 
+      // #FIXME remove this because there're two ips.
       if (e instanceof UnknownHostException) {
         U.getRESTRequester().setHost("http://" + U.getConfig("api.ip"));
       }
@@ -158,14 +159,10 @@ public final class HandlerWrapper<T extends Response> extends BaseJsonHttpRespon
         U.getReporter().reportRequestStatusCode(mRequestData, statusCode);
       }
     }
-    try {
-      mOnResponse.onResponse(null);
-    } catch (Throwable t) {
-      if (mOnResponse instanceof OnResponse2) {
-        try {
-          ((OnResponse2) mOnResponse).onResponseError(t);
-        } catch (Throwable ignored) {}
-      }
+    if (mOnResponse instanceof OnResponse2) {
+      try {
+        ((OnResponse2) mOnResponse).onResponseError(e);
+      } catch (Throwable ignored) {}
     }
   }
 

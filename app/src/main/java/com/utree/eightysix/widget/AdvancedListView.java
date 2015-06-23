@@ -2,6 +2,7 @@ package com.utree.eightysix.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import com.squareup.otto.Subscribe;

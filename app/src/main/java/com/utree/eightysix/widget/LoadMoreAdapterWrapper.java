@@ -65,10 +65,15 @@ class LoadMoreAdapterWrapper extends BaseAdapter {
         convertView.setVisibility(View.VISIBLE);
         convertView.findViewById(R.id.pb_loading).setVisibility(View.GONE);
         ((TextView) convertView.findViewById(R.id.tv_loading)).setText("点击加载更多");
-        convertView.setOnClickListener(new View.OnClickListener() {
+        final View finalConvertView = convertView;
+        finalConvertView.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
             if (!mIsLoading) {
+              finalConvertView.setVisibility(View.VISIBLE);
+              finalConvertView.findViewById(R.id.pb_loading).setVisibility(View.VISIBLE);
+              ((TextView) finalConvertView.findViewById(R.id.tv_loading)).setText("正在加载更多");
+              finalConvertView.setOnClickListener(null);
               mIsLoading = mCallback.onLoadMoreStart();
             }
           }
