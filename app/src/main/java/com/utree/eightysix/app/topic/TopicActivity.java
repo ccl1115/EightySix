@@ -205,6 +205,7 @@ public class TopicActivity extends BaseActivity {
       public void onResponse(TopicFeedResponse response) {
         if (RESTRequester.responseOk(response)) {
           if (page == 1) {
+            mTopic = response.object.topic;
             mTopicFeedAdapter.getNewPosts().clear();
             mTopicFeedAdapter.setTopic(response.object.topic);
             mTopicFeedAdapter.showNewEmptyView(response.object.posts.lists.size() == 0);
@@ -243,6 +244,7 @@ public class TopicActivity extends BaseActivity {
       public void onResponse(TopicFeedResponse response) {
         if (RESTRequester.responseOk(response)) {
           if (page == 1) {
+            mTopic = response.object.topic;
             mTopicFeedAdapter.getFeaturePosts().clear();
             mTopicFeedAdapter.setTopic(response.object.topic);
             mTopicFeedAdapter.showFeatureEmptyView(response.object.posts.lists.size() == 0);

@@ -280,21 +280,21 @@ public class PublishActivity extends BaseActivity implements
 
     mSendType = getIntent().getIntExtra("sendType", 0);
 
-    final String hint = getIntent().getStringExtra("hint");
-    if (hint != null) {
-      mPostEditText.setHint(hint);
-    }
-
     mPublishLayout = new PublishLayout(this);
     setContentView(mPublishLayout);
+
+    final String hint = getIntent().getStringExtra("hint");
+    if (hint != null) {
+      mTvPostTip.setText(hint);
+    } else {
+      mTvPostTip.setText(getHintText());
+    }
 
     List<Tag> tags = getIntent().getParcelableArrayListExtra("tags");
     if (tags != null) {
       setSelectedTags(tags);
       mPublishLayout.switchToPanel(PublishLayout.PANEL_TAGS);
     }
-
-    mTvPostTip.setText(getHintText());
 
     mCbAnonymous.setChecked(Account.inst().getPostAnonymous());
 
