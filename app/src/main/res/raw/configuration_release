@@ -4,8 +4,4 @@
 
 # These properties will override properties defined in the origin configuration.properties when build a release version
 
-api.host = http://lanmei.gz.1251114078.clb.myqcloud.com
-
-api.host.second = http://119.29.43.68
-
 qq.app_id = 1101750747
