@@ -97,7 +97,9 @@ public abstract class IShare {
 
         @Override
         public void onResponse(Response response) {
-
+          if (RESTRequester.responseOk(response)) {
+            U.showToast("分享成功，经验+3");
+          }
         }
       }, Response.class, null, null);
 
@@ -136,7 +138,7 @@ public abstract class IShare {
           @Override
           public void onResponse(Response response) {
             if (RESTRequester.responseOk(response)) {
-              U.showToast("经验+2");
+              U.showToast("分享成功，经验+3");
             }
           }
         }, Response.class, null, null);
