@@ -70,8 +70,6 @@ public class HomeTabActivity extends BaseActivity {
 
   private boolean mShouldExit;
 
-  private boolean mDestroyed;
-
   private int mNewCommentCount;
   private int mMyPostCommentCount;
   private int mUnreadConversationCount;
@@ -243,7 +241,6 @@ public class HomeTabActivity extends BaseActivity {
     sIsRunning = false;
     Env.setFirstRun(FIRST_RUN_KEY, false);
     U.getChatBus().unregister(this);
-    mDestroyed = true;
 
     super.onDestroy();
   }

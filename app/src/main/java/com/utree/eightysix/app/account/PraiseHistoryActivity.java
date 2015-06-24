@@ -123,6 +123,7 @@ public class PraiseHistoryActivity extends BaseActivity {
     U.request("praised_users", new OnResponse2<PraisedUsersResponse>() {
       @Override
       public void onResponseError(Throwable e) {
+        mAlvPraisedUsers.stopLoadMore();
         hideProgressBar();
       }
 
@@ -131,14 +132,22 @@ public class PraiseHistoryActivity extends BaseActivity {
         if (RESTRequester.responseOk(response)) {
           if (response.object == null || response.object.size() == 0) {
             mHasMore = false;
-            mRstvEmpty.setVisibility(View.VISIBLE);
-            mAlvPraisedUsers.setAdapter(null);
+            if (mPage == 1) {
+              mRstvEmpty.setVisibility(View.VISIBLE);
+              mAlvPraisedUsers.setAdapter(null);
+            }
           } else {
-            mRstvEmpty.setVisibility(View.GONE);
-            mAdapter = new PraiseHistoryAdapter(response.object);
-            mAlvPraisedUsers.setAdapter(mAdapter);
+            mHasMore = true;
+            if (mPage == 1) {
+              mAdapter = new PraiseHistoryAdapter(response.object);
+              mAlvPraisedUsers.setAdapter(mAdapter);
+              mRstvEmpty.setVisibility(View.GONE);
+            } else {
+              mAdapter.add(response.object);
+            }
           }
         }
+        mAlvPraisedUsers.stopLoadMore();
         hideProgressBar();
       }
     }, PraisedUsersResponse.class, mPage, PAGE_SIZE, mViewId);
@@ -161,6 +170,11 @@ public class PraiseHistoryActivity extends BaseActivity {
 
     public PraiseHistoryAdapter(List<PraisedUser> users) {
       mPraisedUserList = users;
+    }
+
+    public void add(List<PraisedUser> users) {
+      mPraisedUserList.addAll(users);
+      notifyDataSetChanged();
     }
 
     @Override
