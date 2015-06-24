@@ -168,9 +168,10 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
     } else if (m.type == TYPE_PUSH_TEXT) {
       NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
       NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-      builder.setContentTitle(m.title);
-      builder.setContentText(m.content);
       builder.setAutoCancel(true)
+          .setTicker(m.title)
+          .setContentTitle(m.title)
+          .setContentText(m.content)
           .setDefaults(Account.inst().getSilentMode() ?
               Notification.DEFAULT_LIGHTS : Notification.DEFAULT_ALL)
           .setLargeIcon(sLargeIcon)
@@ -179,7 +180,7 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
       builder.setContentIntent(PendingIntent.getActivity(context, 0, PushTextHandleActivity.getIntent(context, m),
           PendingIntent.FLAG_UPDATE_CURRENT));
 
-      manager.notify(m.cmd, 0x10, builder.build());
+      manager.notify(m.cmd, 0x3000, builder.build());
     } else {
       PullNotificationService.start(context, m.type, m.pushFlag);
     }
