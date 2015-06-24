@@ -232,7 +232,7 @@
             <dependency>
                 <groupId>xg_sdk</groupId>
                 <artifactId>xg_sdk</artifactId>
-                <version>2.37</version>
+                <version>2.35</version>
             </dependency>
 
             <dependency>
