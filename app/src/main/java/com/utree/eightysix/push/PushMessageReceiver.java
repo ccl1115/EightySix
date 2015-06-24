@@ -1,8 +1,11 @@
 package com.utree.eightysix.push;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import com.tencent.android.tpush.*;
@@ -71,8 +74,16 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
 
   public static final int TYPE_CMD = 1000;
 
+  public static final int TYPE_PUSH_TEXT = 1002;
+
   public CmdHandler mCmdHandler = new CmdHandler();
   private NotifyUtil mNotifyUtil;
+
+  private static Bitmap sLargeIcon;
+
+  static {
+    sLargeIcon = BitmapFactory.decodeResource(U.getContext().getResources(), R.drawable.ic_launcher);
+  }
 
   @Override
   public void onRegisterResult(Context context, int i, XGPushRegisterResult xgPushRegisterResult) {
@@ -154,6 +165,21 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
         mNotifyUtil = new NotifyUtil(context);
       }
       manager.notify(0x2000, mNotifyUtil.buildReport());
+    } else if (m.type == TYPE_PUSH_TEXT) {
+      NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+      NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+      builder.setContentTitle(m.title);
+      builder.setContentText(m.content);
+      builder.setAutoCancel(true)
+          .setDefaults(Account.inst().getSilentMode() ?
+              Notification.DEFAULT_LIGHTS : Notification.DEFAULT_ALL)
+          .setLargeIcon(sLargeIcon)
+          .setSmallIcon(R.drawable.ic_launcher);
+
+      builder.setContentIntent(PendingIntent.getActivity(context, 0, PushTextHandleActivity.getIntent(context, m),
+          PendingIntent.FLAG_UPDATE_CURRENT));
+
+      manager.notify(m.cmd, 0x10, builder.build());
     } else {
       PullNotificationService.start(context, m.type, m.pushFlag);
     }
@@ -161,18 +187,6 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
 
   @Override
   public void onNotifactionClickedResult(Context context, XGPushClickedResult xgPushClickedResult) {
-    if (xgPushClickedResult.getActionType() == XGPushClickedResult.NOTIFACTION_CLICKED_TYPE) {
-      try {
-        AppIntent m = U.getGson().fromJson(xgPushClickedResult.getCustomContent(), AppIntent.class);
-        if (m.type == TYPE_CMD) {
-          mCmdHandler.handle(context, m.cmd);
-        }
-      } catch (Exception e) {
-        if (BuildConfig.DEBUG) {
-          e.printStackTrace();
-        }
-      }
-    }
   }
 
   @Override

@@ -230,6 +230,10 @@
                 android:name=".app.ladder.LadderActivity"
                 android:screenOrientation="portrait"/>
 
+        <activity
+                android:name=".push.PushTextHandleActivity"
+                android:screenOrientation="portrait"/>
+
         <service android:enabled="true" android:name=".contact.ContactsSyncService"/>
         <service android:enabled="true" android:name=".app.msg.FetchNotificationService"/>
         <service android:enabled="true" android:name=".app.SyncService"/>

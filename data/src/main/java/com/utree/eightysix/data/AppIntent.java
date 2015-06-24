@@ -5,15 +5,16 @@
 package com.utree.eightysix.data;
 
 import com.google.gson.annotations.SerializedName;
+import java.io.Serializable;
 
 /**
-* Created by Administrator on 2015/1/30 0030.
 */
-public class AppIntent {
+public class AppIntent implements Serializable {
 
   /**
    * 1000 push
    * 1001 ad
+   * 1002 push text
    */
   @SerializedName("type")
   public int type;
@@ -26,4 +27,10 @@ public class AppIntent {
    */
   @SerializedName("cmd")
   public String cmd;
+
+  @SerializedName ("title")
+  public String title;
+
+  @SerializedName ("content")
+  public String content;
 }
