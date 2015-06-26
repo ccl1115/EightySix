@@ -28,6 +28,7 @@ public class RESTRequester implements IRESTRequester {
     mAsyncHttpClient = new AsyncHttpClient();
     mAsyncHttpClient.setTimeout(U.getConfigInt("api.timeout"));
     mAsyncHttpClient.setMaxRetriesAndTimeout(U.getConfigInt("api.retry"), U.getConfigInt("api.retry.timeout"));
+    mAsyncHttpClient.setUserAgent("EightySix/" + C.VERSION + " Android/" + Build.VERSION.SDK_INT);
 
     mRequestSchema = new RequestSchema();
     mSecondHost = secondHost;
@@ -42,8 +43,10 @@ public class RESTRequester implements IRESTRequester {
     mAsyncHttpClient = client;
     mAsyncHttpClient.setTimeout(U.getConfigInt("api.timeout"));
     mAsyncHttpClient.setMaxRetriesAndTimeout(U.getConfigInt("api.retry"), U.getConfigInt("api.retry.timeout"));
+    mAsyncHttpClient.setUserAgent("EightySix/" + C.VERSION + " Android/" + Build.VERSION.SDK_INT);
 
     mRequestSchema = new RequestSchema();
+    mSecondHost = secondHost;
     mRequestSchema.load(U.getContext(), secondHost, R.raw.request_schema_second);
     mRequestSchema.load(U.getContext(), host, R.raw.request_schema_new);
     compact();

@@ -188,7 +188,8 @@ public final class PushMessageReceiver extends XGPushBaseReceiver {
 
   @Override
   public void onNotifactionClickedResult(Context context, XGPushClickedResult xgPushClickedResult) {
-    if (xgPushClickedResult.getActionType() == XGPushClickedResult.NOTIFACTION_CLICKED_TYPE) {
+    if (xgPushClickedResult.getActionType() == XGPushClickedResult.NOTIFACTION_CLICKED_TYPE ||
+        xgPushClickedResult.getActionType() == XGPushClickedResult.NOTIFACTION_OPEN_TYPE) {
       try {
         AppIntent m = U.getGson().fromJson(xgPushClickedResult.getCustomContent(), AppIntent.class);
         if (m.type == TYPE_CMD) {
