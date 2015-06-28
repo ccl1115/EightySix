@@ -99,6 +99,8 @@ public class FeedSignView extends LinearLayout {
       public void onResponse(FeedSignResultResponse response) {
         if (RESTRequester.responseOk(response)) {
           mFeedSign.signed = 1;
+          mFeedSign.signConsecutiveTimes = response.object.consecutiveTimes;
+          mFeedSign.rank = response.object.rank;
           mTvText.setText(String.format("你已连续打卡%d天，今天你是全蓝莓第%d个打卡的",
               response.object.consecutiveTimes, response.object.rank));
           mTvSign.setBackgroundResource(R.drawable.border_small_red_dotted);

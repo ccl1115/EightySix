@@ -89,7 +89,7 @@ public class TextUtils {
 
     SpannableStringBuilder builder = new SpannableStringBuilder(text);
 
-    while(matcher.find()) {
+    if(matcher.find()) {
       final int start = matcher.start();
       final int end = matcher.end();
 

@@ -80,7 +80,7 @@ public class SignCalendarFragment extends BaseFragment {
 
   private int mFactoryId;
 
-  private int mPage = 1;
+  private int mPage = -1;
 
   @OnClick(R.id.fl_parent)
   public void onFlParentClicked() {
@@ -230,7 +230,9 @@ public class SignCalendarFragment extends BaseFragment {
             index++;
           }
 
-          mPage = 1;
+          if (mPage == -1) {
+            mPage = 1;
+          }
 
           if (mSignDates.object.size() > 10) {
             mIvLeft.setImageResource(R.drawable.ic_arrow_left);
