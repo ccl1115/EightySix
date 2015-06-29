@@ -42,6 +42,7 @@ import com.utree.eightysix.app.account.ProfileFragment;
 import com.utree.eightysix.app.account.event.PortraitUpdatedEvent;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.AbsFeedsFragment;
+import com.utree.eightysix.app.feed.FollowFeedsFragment;
 import com.utree.eightysix.app.feed.SelectAreaFragment;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
@@ -63,49 +64,50 @@ import java.util.List;
  */
 public class TabRegionFragment extends BaseFragment implements AbsFeedsFragment.OnScrollListener {
 
-  @InjectView(R.id.vp_tab)
+  @InjectView (R.id.vp_tab)
   public ViewPager mVpTab;
 
-  @InjectView(R.id.fl_follow_circles)
+  @InjectView (R.id.fl_follow_circles)
   public FrameLayout mFlFollowCircles;
 
-  @InjectView(R.id.ll_follow_circles)
+  @InjectView (R.id.ll_follow_circles)
   public LinearLayout mLlFollowCircles;
 
-  @InjectView(R.id.ll_set_current)
+  @InjectView (R.id.ll_set_current)
   public LinearLayout mLlSetCurrent;
 
-  @InjectView(R.id.ll_current)
+  @InjectView (R.id.ll_current)
   public LinearLayout mLlCurrent;
 
-  @InjectView(R.id.tv_current)
+  @InjectView (R.id.tv_current)
   public TextView mTvCurrent;
 
-  @InjectView(R.id.fl_distance_selector)
+  @InjectView (R.id.fl_distance_selector)
   public FrameLayout mLlDistanceSelector;
 
-  @InjectView(R.id.ll_add_follow)
+  @InjectView (R.id.ll_add_follow)
   public LinearLayout mLlAddFollow;
 
-  @InjectView(R.id.sb_distance)
+  @InjectView (R.id.sb_distance)
   public SeekBar mSbDistance;
 
-  @InjectView(R.id.tv_distance)
+  @InjectView (R.id.tv_distance)
   public TextView mTvDistance;
 
-  @InjectView(R.id.tv_area_name)
+  @InjectView (R.id.tv_area_name)
   public TextView mTvAreaName;
 
-  @InjectView(R.id.rb_region)
+  @InjectView (R.id.rb_region)
   public RadioButton mRbRegion;
 
-  @InjectView(R.id.rb_area)
+  @InjectView (R.id.rb_area)
   public RadioButton mRbArea;
 
-  @InjectView(R.id.iv_select_area)
+  @InjectView (R.id.iv_select_area)
   public ImageView mIvSelectArea;
 
   private RegionFeedsFragment mRegionFeedsFragment;
+  private FollowFeedsFragment mFollowFeedsFragment;
 
   private SelectAreaFragment mSelectAreaFragment;
 
@@ -126,11 +128,13 @@ public class TabRegionFragment extends BaseFragment implements AbsFeedsFragment.
 
   public TabRegionFragment() {
     mRegionFeedsFragment = new RegionFeedsFragment();
+    mFollowFeedsFragment = new FollowFeedsFragment();
 
     mRegionFeedsFragment.setOnScrollListener(this);
+    mFollowFeedsFragment.setOnScrollListener(this);
   }
 
-  @OnClick(R.id.ib_send)
+  @OnClick (R.id.ib_send)
   public void onIbSendClicked() {
     if (mVpTab.getCurrentItem() == 0) {
       // #TODO publish to region PublishActivity.start(getActivity());
@@ -138,27 +142,27 @@ public class TabRegionFragment extends BaseFragment implements AbsFeedsFragment.
 
   }
 
-  @OnClick(R.id.fl_follow_circles)
+  @OnClick (R.id.fl_follow_circles)
   public void onFlFollowCirclesClicked() {
     mFlFollowCircles.setVisibility(View.GONE);
   }
 
-  @OnClick(R.id.tv_set_current)
+  @OnClick (R.id.tv_set_current)
   public void onTvSetCurrent() {
     BaseCirclesActivity.startSelect(getActivity(), true);
   }
 
-  @OnClick(R.id.tv_add_follow)
+  @OnClick (R.id.tv_add_follow)
   public void onTvAddFollow() {
     BaseCirclesActivity.startMyCircles(getActivity());
   }
 
-  @OnClick(R.id.fl_distance_selector)
+  @OnClick (R.id.fl_distance_selector)
   public void onLlDistanceSelector() {
     mLlDistanceSelector.setVisibility(View.GONE);
   }
 
-  @OnCheckedChanged(R.id.rb_area)
+  @OnCheckedChanged (R.id.rb_area)
   public void onRbArea(boolean checked) {
     if (checked) {
       mTvDistance.setText(mTvAreaName.getText());
@@ -167,7 +171,7 @@ public class TabRegionFragment extends BaseFragment implements AbsFeedsFragment.
     }
   }
 
-  @OnCheckedChanged(R.id.rb_region)
+  @OnCheckedChanged (R.id.rb_region)
   public void onRbRegion(boolean checked) {
     if (checked) {
       mTvDistance.setText(String.format("%.2fkm", mSbDistance.getProgress() / 1000f + 1));
@@ -212,6 +216,8 @@ public class TabRegionFragment extends BaseFragment implements AbsFeedsFragment.
         switch (position) {
           case 0:
             return mRegionFeedsFragment;
+          case 1:
+            return mFollowFeedsFragment;
         }
         return null;
 
@@ -219,7 +225,7 @@ public class TabRegionFragment extends BaseFragment implements AbsFeedsFragment.
 
       @Override
       public int getCount() {
-        return 1;
+        return 2;
       }
     });
 
@@ -274,6 +280,7 @@ public class TabRegionFragment extends BaseFragment implements AbsFeedsFragment.
       setTopBarTitle();
     }
     mRegionFeedsFragment.onHiddenChanged(hidden);
+    mFollowFeedsFragment.onHiddenChanged(hidden);
   }
 
   @Subscribe
@@ -334,6 +341,7 @@ public class TabRegionFragment extends BaseFragment implements AbsFeedsFragment.
 
   private void clearActive() {
     if (mRegionFeedsFragment != null) mRegionFeedsFragment.setActive(false);
+    if (mFollowFeedsFragment != null) mFollowFeedsFragment.setActive(false);
   }
 
   private void showUnlockDialog() {
@@ -393,8 +401,8 @@ public class TabRegionFragment extends BaseFragment implements AbsFeedsFragment.
       public String getTitle(int position) {
         if (position == 0) {
           return "附近";
-          //} else if (position == 1) {
-          //  return "在职";
+        } else if (position == 1) {
+          return "在职";
           //} else if (position == 2) {
           //  return "朋友";
         }
@@ -408,12 +416,14 @@ public class TabRegionFragment extends BaseFragment implements AbsFeedsFragment.
           case 0:
             mRegionFeedsFragment.setActive(true);
             break;
+          case 1:
+            mFollowFeedsFragment.setActive(true);
         }
       }
 
       @Override
       public int getCount() {
-        return 1;
+        return 2;
       }
     });
   }

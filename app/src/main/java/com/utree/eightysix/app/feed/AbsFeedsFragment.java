@@ -36,7 +36,6 @@ import com.utree.eightysix.widget.RoundedButton;
  * @author simon
  */
 public abstract class AbsFeedsFragment extends BaseFragment {
-
   @InjectView (R.id.lv_feed)
   public AdvancedListView mLvFeed;
 
