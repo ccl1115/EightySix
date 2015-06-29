@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.ImageView;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
@@ -35,6 +37,7 @@ import com.utree.eightysix.view.SwipeRefreshLayout;
 import com.utree.eightysix.widget.AdvancedListView;
 import com.utree.eightysix.widget.LoadMoreCallback;
 import com.utree.eightysix.widget.RandomSceneTextView;
+import com.utree.eightysix.widget.RoundedButton;
 
 /**
  * @author simon
@@ -53,6 +56,18 @@ public abstract class AbsRegionFragment extends BaseFragment {
   @InjectView (R.id.tv_empty_text)
   public RandomSceneTextView mRstvEmpty;
 
+  @InjectView (R.id.tv_sub_info)
+  public TextView mTvSubInfo;
+
+  @InjectView (R.id.iv_icon)
+  public ImageView mIvIcon;
+
+  @InjectView (R.id.tv_title)
+  public TextView mTvTitle;
+
+  @InjectView (R.id.rb_count)
+  public RoundedButton mRbCount;
+
   protected FeedRegionAdapter mFeedAdapter;
 
   protected Circle mCircle;
@@ -70,15 +85,9 @@ public abstract class AbsRegionFragment extends BaseFragment {
   protected int mMode = MODE_REGION;
 
   protected boolean mPostPraiseRequesting;
-  private String mSubInfo;
   private int mLastFirstVisibleItem;
   private OnScrollListener mOnScrollListener;
   private boolean mHidden;
-
-  /**
-   * 是否设置了在职
-   */
-  private boolean mCircleSelected;
 
   protected abstract int getType();
 
@@ -359,8 +368,6 @@ public abstract class AbsRegionFragment extends BaseFragment {
       mMode = MODE_REGION;
 
       mPageInfo = response.object.posts.page;
-      mSubInfo = response.object.subInfo;
-      mCircleSelected = response.object.selectFactory == 1;
 
       updateTitleBar();
 
@@ -403,8 +410,6 @@ public abstract class AbsRegionFragment extends BaseFragment {
       mMode = MODE_FEED;
 
       mPageInfo = response.object.posts.page;
-      mSubInfo = response.object.subInfo;
-      mCircleSelected = response.object.selectFactory == 1;
 
       updateTitleBar();
 
@@ -441,7 +446,6 @@ public abstract class AbsRegionFragment extends BaseFragment {
         mLvFeed.setAdapter(mFeedAdapter);
 
         mRegionType = response.object.regionType;
-        mCircleSelected = response.object.selectFactory == 1;
         mAreaType = response.object.areaType;
         mAreaId = response.object.areaId;
         mAreaName = response.object.cityName;
@@ -529,8 +533,8 @@ public abstract class AbsRegionFragment extends BaseFragment {
 
   public interface OnScrollListener {
 
-    public void onShowTopBar();
+    void onShowTopBar();
 
-    public void onHideTopBar();
+    void onHideTopBar();
   }
 }

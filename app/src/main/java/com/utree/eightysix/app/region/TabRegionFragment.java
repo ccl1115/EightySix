@@ -1,6 +1,11 @@
 package com.utree.eightysix.app.region;
 
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -15,12 +20,16 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
-import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -28,47 +37,34 @@ import com.squareup.picasso.Target;
 import com.squareup.picasso.Transformation;
 import com.utree.eightysix.R;
 import com.utree.eightysix.U;
-import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.account.ProfileFragment;
-import com.utree.eightysix.app.account.event.CurrentCircleNameUpdatedEvent;
 import com.utree.eightysix.app.account.event.PortraitUpdatedEvent;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
-import com.utree.eightysix.app.circle.event.CircleFollowsChangedEvent;
+import com.utree.eightysix.app.feed.AbsFeedsFragment;
 import com.utree.eightysix.app.feed.SelectAreaFragment;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
 import com.utree.eightysix.app.feed.event.UploadClickedEvent;
-import com.utree.eightysix.app.msg.event.NewAllPostCountEvent;
-import com.utree.eightysix.app.msg.event.NewFriendsPostCountEvent;
-import com.utree.eightysix.app.msg.event.NewHotPostCountEvent;
-import com.utree.eightysix.app.publish.PublishActivity;
-import com.utree.eightysix.app.publish.event.PostPublishedEvent;
 import com.utree.eightysix.app.region.event.CircleResponseEvent;
 import com.utree.eightysix.app.region.event.RegionResponseEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.data.FollowCircle;
-import com.utree.eightysix.event.CurrentCircleResponseEvent;
 import com.utree.eightysix.response.FollowCircleListResponse;
 import com.utree.eightysix.response.ProfileResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.widget.ThemedDialog;
-import com.utree.eightysix.widget.TitleTab;
 import com.utree.eightysix.widget.TopBar;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author simon
  */
-public class TabRegionFragment extends BaseFragment implements AbsRegionFragment.OnScrollListener {
+public class TabRegionFragment extends BaseFragment implements AbsFeedsFragment.OnScrollListener {
 
   @InjectView(R.id.vp_tab)
   public ViewPager mVpTab;
-
-  @InjectView(R.id.tt_tab)
-  public TitleTab mTtTab;
 
   @InjectView(R.id.fl_follow_circles)
   public FrameLayout mFlFollowCircles;
@@ -109,9 +105,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
   @InjectView(R.id.iv_select_area)
   public ImageView mIvSelectArea;
 
-  private FeedRegionFragment mFeedFragment;
-  private HotFeedRegionFragment mHotFeedFragment;
-  private FriendsFeedRegionFragment mFriendsFeedFragment;
+  private RegionFeedsFragment mRegionFeedsFragment;
 
   private SelectAreaFragment mSelectAreaFragment;
 
@@ -131,23 +125,17 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
   private String mAvatar;
 
   public TabRegionFragment() {
-    mFeedFragment = new FeedRegionFragment();
-    mHotFeedFragment = new HotFeedRegionFragment();
-    mFriendsFeedFragment = new FriendsFeedRegionFragment();
+    mRegionFeedsFragment = new RegionFeedsFragment();
 
-    mFeedFragment.setOnScrollListener(this);
-    mHotFeedFragment.setOnScrollListener(this);
-    mFriendsFeedFragment.setOnScrollListener(this);
+    mRegionFeedsFragment.setOnScrollListener(this);
   }
 
   @OnClick(R.id.ib_send)
   public void onIbSendClicked() {
-    if (!canPublish()) {
-      showNoPermDialog();
-    } else {
-      PublishActivity.start(getActivity(), mFeedFragment.getCircle().id, null);
-
+    if (mVpTab.getCurrentItem() == 0) {
+      // #TODO publish to region PublishActivity.start(getActivity());
     }
+
   }
 
   @OnClick(R.id.fl_follow_circles)
@@ -170,50 +158,6 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
     mLlDistanceSelector.setVisibility(View.GONE);
   }
 
-  @OnClick(R.id.rb_select)
-  public void onRbSelect() {
-    mLlDistanceSelector.setVisibility(View.GONE);
-    if (mRbRegion.isChecked()) {
-      int progress = mSbDistance.getProgress();
-      mFeedFragment.mDistance = progress + 1000;
-      mHotFeedFragment.mDistance = progress + 1000;
-      mFriendsFeedFragment.mDistance = progress + 1000;
-
-      setRegionType(4);
-      mLastRegion = 4;
-    } else if (mRbArea.isChecked()) {
-      setRegionType(5);
-      mLastRegion = 5;
-    }
-  }
-
-  @OnClick(R.id.iv_select_area)
-  public void onIvSelectArea() {
-    if (mSelectAreaFragment == null) {
-      mSelectAreaFragment = new SelectAreaFragment();
-      mSelectAreaFragment.setCallback(new SelectAreaFragment.Callback() {
-        @Override
-        public void onAreaSelected(int areaType, int areaId, String areaName) {
-          mTvAreaName.setText(areaName);
-          mTvDistance.setText(areaName);
-          mFeedFragment.mAreaId = areaId;
-          mFeedFragment.mAreaType = areaType;
-          mHotFeedFragment.mAreaId = areaId;
-          mHotFeedFragment.mAreaType = areaType;
-          mFriendsFeedFragment.mAreaId = areaId;
-          mFriendsFeedFragment.mAreaType = areaType;
-        }
-      });
-      getFragmentManager().beginTransaction()
-          .add(R.id.fl_parent, mSelectAreaFragment)
-          .commit();
-    } else if (mSelectAreaFragment.isDetached()) {
-      getFragmentManager().beginTransaction()
-          .attach(mSelectAreaFragment)
-          .commit();
-    }
-  }
-
   @OnCheckedChanged(R.id.rb_area)
   public void onRbArea(boolean checked) {
     if (checked) {
@@ -232,108 +176,6 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
     }
   }
 
-  public final void hideTtTab() {
-    if (mTtTabHidden) return;
-    if (mHideTtTabAnimator.isRunning()) {
-      return;
-    }
-    if (mShowTtTabAnimator.isRunning()) {
-      mShowTtTabAnimator.cancel();
-    }
-    mHideTtTabAnimator.start();
-  }
-
-  public final void showTtTab() {
-    if (!mTtTabHidden) return;
-    if (mShowTtTabAnimator.isRunning()) {
-      return;
-    }
-    if (mHideTtTabAnimator.isRunning()) {
-      mHideTtTabAnimator.cancel();
-    }
-    mShowTtTabAnimator.start();
-  }
-
-  private void initAnimator() {
-    mHideTtTabAnimator = ObjectAnimator.ofFloat(mTtTab, "translationY", 0,
-        -getResources().getDimensionPixelSize(R.dimen.activity_top_bar_height));
-    mHideTtTabAnimator.setDuration(150);
-    mHideTtTabAnimator.addListener(new Animator.AnimatorListener() {
-      @Override
-      public void onAnimationStart(Animator animation) {
-
-      }
-
-      @Override
-      public void onAnimationEnd(Animator animation) {
-        mTtTabHidden = true;
-      }
-
-      @Override
-      public void onAnimationCancel(Animator animation) {
-
-      }
-
-      @Override
-      public void onAnimationRepeat(Animator animation) {
-
-      }
-    });
-
-    mShowTtTabAnimator = ObjectAnimator.ofFloat(mTtTab, "translationY",
-        -getResources().getDimensionPixelSize(R.dimen.activity_top_bar_height), 0f);
-    mShowTtTabAnimator.setDuration(150);
-    mShowTtTabAnimator.addListener(new Animator.AnimatorListener() {
-      @Override
-      public void onAnimationStart(Animator animation) {
-
-      }
-
-      @Override
-      public void onAnimationEnd(Animator animation) {
-        mTtTabHidden = false;
-      }
-
-      @Override
-      public void onAnimationCancel(Animator animation) {
-
-      }
-
-      @Override
-      public void onAnimationRepeat(Animator animation) {
-
-      }
-    });
-  }
-
-  private void showNoPermDialog() {
-    if (mNoPermDialog == null) {
-      mNoPermDialog = new ThemedDialog(getActivity());
-      View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_publish_locked, null);
-      NoPermViewHolder noPermViewHolder = new NoPermViewHolder(view);
-      String tip = getString(R.string.no_perm_tip);
-      int index = tip.indexOf("解锁条件");
-      ForegroundColorSpan span = new ForegroundColorSpan(
-          getResources().getColor(R.color.apptheme_primary_light_color));
-      SpannableString spannableString = new SpannableString(tip);
-      spannableString.setSpan(span, index, index + 4, 0);
-      noPermViewHolder.mTvNoPermTip.setText(spannableString);
-      mNoPermDialog.setContent(view);
-      mNoPermDialog.setPositive(R.string.invite_people, new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          mNoPermDialog.dismiss();
-          U.getShareManager().shareAppDialog(getBaseActivity(), mFeedFragment.getCircle());
-        }
-      });
-      mNoPermDialog.setTitle(getString(R.string.no_perm_to_publish));
-    }
-
-    if (!mNoPermDialog.isShowing()) {
-      mNoPermDialog.show();
-    }
-  }
-
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     return inflater.inflate(R.layout.fragment_tab, container, false);
@@ -342,8 +184,6 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
   @Override
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
-
-    initAnimator();
 
     mSbDistance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
       @Override
@@ -371,11 +211,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
       public Fragment getItem(int position) {
         switch (position) {
           case 0:
-            return mFeedFragment;
-          case 1:
-            return mHotFeedFragment;
-          case 2:
-            return mFriendsFeedFragment;
+            return mRegionFeedsFragment;
         }
         return null;
 
@@ -383,26 +219,13 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
 
       @Override
       public int getCount() {
-        return 3;
-      }
-
-      @Override
-      public CharSequence getPageTitle(int position) {
-        switch (position) {
-          case 0:
-            return "全部";
-          case 1:
-            return "热门";
-          case 2:
-            return "与我相关";
-        }
-        return "";
+        return 1;
       }
     });
 
-    mTtTab.setViewPager(mVpTab);
+    mVpTab.setCurrentItem(getArguments().getInt("tabIndex"));
 
-    mTtTab.setOnPageChangedListener(new ViewPager.OnPageChangeListener() {
+    mVpTab.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
       @Override
       public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -410,30 +233,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
 
       @Override
       public void onPageSelected(int position) {
-        U.getAnalyser().trackEvent(getActivity(), "topic_detail_tab", position);
-
-        switch (position) {
-          case 0:
-            if (mTtTab.hasBudget(position)) {
-              mFeedFragment.setActive(false);
-            }
-            mFeedFragment.setActive(true);
-            break;
-          case 1:
-            if (mTtTab.hasBudget(position)) {
-              mHotFeedFragment.setActive(false);
-            }
-            mHotFeedFragment.setActive(true);
-            break;
-          case 2:
-            if (mTtTab.hasBudget(position)) {
-              mFriendsFeedFragment.setActive(false);
-            }
-            mFriendsFeedFragment.setActive(true);
-            break;
-        }
-
-        U.getAnalyser().trackEvent(U.getContext(), "feed_tab_switch", String.valueOf(position));
+        getTopBar().setTitleTabSelected(position);
       }
 
       @Override
@@ -442,35 +242,12 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
       }
     });
 
-    mTtTab.setOnTabItemClicked(new TitleTab.OnTabItemClickedListener() {
-      @Override
-      public void onTabItemClicked(View view, int position) {
-        if (mVpTab.getCurrentItem() == position) {
-          switch (position) {
-            case 0:
-              mFeedFragment.mLvFeed.setSelection(0);
-              mFeedFragment.refresh();
-              break;
-            case 1:
-              mHotFeedFragment.mLvFeed.setSelection(0);
-              mHotFeedFragment.refresh();
-              break;
-            case 2:
-              mFriendsFeedFragment.mLvFeed.setSelection(0);
-              mFriendsFeedFragment.refresh();
-              break;
-          }
-        }
-      }
-    });
-
-    mVpTab.setCurrentItem(getArguments().getInt("tabIndex"));
-
     getBaseActivity().getHandler().postDelayed(new Runnable() {
       @Override
       public void run() {
         if (getArguments().getInt("tabIndex") == 0) {
-          mFeedFragment.setActive(true);
+          getTopBar().setTitleTabSelected(0);
+          mRegionFeedsFragment.setActive(true);
         }
       }
     }, 500);
@@ -496,9 +273,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
     if (!hidden) {
       setTopBarTitle();
     }
-    mFeedFragment.onHiddenChanged(hidden);
-    mFriendsFeedFragment.onHiddenChanged(hidden);
-    mHotFeedFragment.onHiddenChanged(hidden);
+    mRegionFeedsFragment.onHiddenChanged(hidden);
   }
 
   @Subscribe
@@ -525,39 +300,6 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
   }
 
   @Subscribe
-  public void onNewAllPostCountEvent(NewAllPostCountEvent event) {
-    FeedRegionAdapter feedAdapter = mFeedFragment.getFeedAdapter();
-    if (feedAdapter != null && feedAdapter.getFeeds().circle != null
-        && event.getCircleId() == feedAdapter.getFeeds().circle.id) {
-      mTtTab.setTabBudget(0, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
-    } else {
-      mTtTab.setTabBudget(0, "", true);
-    }
-  }
-
-  @Subscribe
-  public void onNewHotPostCountEvent(NewHotPostCountEvent event) {
-    FeedRegionAdapter feedAdapter = mFeedFragment.getFeedAdapter();
-    if (feedAdapter != null && feedAdapter.getFeeds().circle != null
-        && event.getCircleId() == feedAdapter.getFeeds().circle.id) {
-      mTtTab.setTabBudget(1, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
-    } else {
-      mTtTab.setTabBudget(1, "", true);
-    }
-  }
-
-  @Subscribe
-  public void onNewFriendsPostCountEvent(NewFriendsPostCountEvent event) {
-    FeedRegionAdapter feedAdapter = mFeedFragment.getFeedAdapter();
-    if (feedAdapter != null && feedAdapter.getFeeds().circle != null
-        && event.getCircleId() == feedAdapter.getFeeds().circle.id) {
-      mTtTab.setTabBudget(2, String.valueOf(Math.min(99, event.getCount())), event.getCount() == 0);
-    } else {
-      mTtTab.setTabBudget(2, "", true);
-    }
-  }
-
-  @Subscribe
   public void onRegionResponseEvent(RegionResponseEvent event) {
     if (event.getRegion() == 3) {
       mRbRegion.setChecked(true);
@@ -574,7 +316,6 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
 
   @Subscribe
   public void onCircleResponseEvent(CircleResponseEvent event) {
-    clearSelectedCircle();
     if (event.getCircle() != null) {
       for (View view : mFollowCircleViews) {
         if (view.getTag() != null) {
@@ -587,138 +328,12 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
     }
   }
 
-  @Subscribe
-  public void onCurrentCircleResponseEvent(CurrentCircleResponseEvent event) {
-    if (event.getCircle() != null && event.getCircle().id != 0) {
-      clearSelectedCircle();
-      mLlSetCurrent.setVisibility(View.GONE);
-      mLlCurrent.setVisibility(View.VISIBLE);
-      mTvCurrent.setText(event.getCircle().shortName);
-      mTvCurrent.setSelected(true);
-      mTvCurrent.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          if (!v.isSelected()) {
-            clearFollowCircleViews();
-            v.setSelected(true);
-            setRegionType(0);
-            mFlFollowCircles.setVisibility(View.GONE);
-            getTopBar().setTitleTabSelected(1);
-            getTopBar().setTitleTabText(1, "在职");
-            getTopBar().setSubTitle("");
-          }
-        }
-      });
-    }
-  }
-
-  @Subscribe
-  public void onCurrentCircleNameUpdatedEvent(CurrentCircleNameUpdatedEvent event) {
-    setRegionType(0);
-  }
-
-  public boolean canPublish() {
-    return mFeedFragment != null && mFeedFragment.canPublish();
-  }
-
-  public void setRegionType(int regionType) {
-    clearActive();
-
-    mFeedFragment.requestRegion(regionType);
-    mHotFeedFragment.requestRegion(regionType);
-    mFriendsFeedFragment.requestRegion(regionType);
-
-    if (regionType > 0 && mTtTab != null) {
-      mTtTab.setTabBudget(0, "", true);
-      mTtTab.setTabBudget(1, "", true);
-      mTtTab.setTabBudget(2, "", true);
-    } else {
-      mLastCircleId = -1;
-    }
-
-    if (mVpTab == null) return;
-
-    mVpTab.setCurrentItem(0);
-
-    switch (mVpTab.getCurrentItem()) {
-      case 0:
-        mFeedFragment.setActive(true);
-        break;
-      case 1:
-        mHotFeedFragment.setActive(true);
-        break;
-      case 2:
-        mFriendsFeedFragment.setActive(true);
-        break;
-    }
-  }
-
-  public void setCircleId(int circleId) {
-    clearActive();
-
-    mLastCircleId = circleId;
-
-    mFeedFragment.requestFeeds(circleId);
-    mHotFeedFragment.requestFeeds(circleId);
-    mFriendsFeedFragment.requestFeeds(circleId);
-
-    mTtTab.setTabBudget(0, "", true);
-    mTtTab.setTabBudget(1, "", true);
-    mTtTab.setTabBudget(2, "", true);
-
-    if (mVpTab == null) return;
-
-    mVpTab.setCurrentItem(0);
-
-    switch (mVpTab.getCurrentItem()) {
-      case 0:
-        mFeedFragment.setActive(true);
-        break;
-      case 1:
-        mHotFeedFragment.setActive(true);
-        break;
-      case 2:
-        mFriendsFeedFragment.setActive(true);
-        break;
-    }
-  }
-
-  public int getRegionType() {
-    return mFeedFragment.getRegionType();
-  }
-
-  public void setTabIndex(int index) {
-    if (mVpTab == null) return;
-
-    mVpTab.setCurrentItem(index);
-  }
-
   public boolean onBackPressed() {
     return false;
   }
 
-  @Subscribe
-  public void onPostPublishedEvent(PostPublishedEvent event) {
-    mVpTab.setCurrentItem(0);
-  }
-
-  @Subscribe
-  public void onCircleFollowsChangedEvent(CircleFollowsChangedEvent event) {
-    requestFollowCircles();
-  }
-
-  private void clearSelectedCircle() {
-    mTvCurrent.setSelected(false);
-
-    for (View v : mFollowCircleViews) {
-      v.setSelected(false);
-    }
-  }
-
   private void clearActive() {
-    if (mFeedFragment != null) mFeedFragment.setActive(false);
-    if (mHotFeedFragment != null) mHotFeedFragment.setActive(false);
-    if (mFriendsFeedFragment != null) mFriendsFeedFragment.setActive(false);
+    if (mRegionFeedsFragment != null) mRegionFeedsFragment.setActive(false);
   }
 
   private void showUnlockDialog() {
@@ -750,12 +365,12 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
   }
 
   private void showInviteDialog() {
-    if (mInviteDialog == null) {
-      mInviteDialog = U.getShareManager().shareAppDialog(getBaseActivity(), mFeedFragment.getCircle());
-    }
-    if (!mInviteDialog.isShowing()) {
-      mInviteDialog.show();
-    }
+    //if (mInviteDialog == null) {
+    //  mInviteDialog = U.getShareManager().shareAppDialog(getBaseActivity(), mFeedFragment.getCircle());
+    //}
+    //if (!mInviteDialog.isShowing()) {
+    //  mInviteDialog.show();
+    //}
   }
 
   private void setTopBarTitle() {
@@ -778,33 +393,27 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
       public String getTitle(int position) {
         if (position == 0) {
           return "附近";
-        } else if (position == 1) {
-          return "在职";
-        } else if (position == 2) {
-          return "朋友";
+          //} else if (position == 1) {
+          //  return "在职";
+          //} else if (position == 2) {
+          //  return "朋友";
         }
         return null;
       }
 
       @Override
       public void onSelected(View view, int position) {
-        mFlFollowCircles.setVisibility(View.GONE);
-        mLlDistanceSelector.setVisibility(View.GONE);
-        if (position == 0) {
-          clearFollowCircleViews();
-          setRegionType(mLastRegion);
-        } else if (position == 1) {
-          if (mLastCircleId != -1) {
-            setCircleId(mLastCircleId);
-          } else {
-            setRegionType(0);
-          }
+        mVpTab.setCurrentItem(position, true);
+        switch (position) {
+          case 0:
+            mRegionFeedsFragment.setActive(true);
+            break;
         }
       }
 
       @Override
       public int getCount() {
-        return 3;
+        return 1;
       }
     });
   }
@@ -875,7 +484,6 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
           if (!v.isSelected()) {
             clearFollowCircleViews();
             v.setSelected(true);
-            setCircleId(circles[0].factoryId);
             getTopBar().setTitleTabText(1, "关注");
             getTopBar().setTitleTabSelected(1);
             getTopBar().setSubTitle("");
@@ -910,7 +518,6 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
           if (!v.isSelected()) {
             clearFollowCircleViews();
             v.setSelected(true);
-            setCircleId(circles[1].factoryId);
             getTopBar().setTitleTabText(1, "关注");
             getTopBar().setTitleTabSelected(1);
             getTopBar().setSubTitle("");
@@ -952,7 +559,6 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
           if (!v.isSelected()) {
             clearFollowCircleViews();
             v.setSelected(true);
-            setCircleId(circles[2].factoryId);
             getTopBar().setTitleTabText(1, "关注");
             getTopBar().setTitleTabSelected(1);
             getTopBar().setSubTitle("");
@@ -1055,22 +661,10 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
 
   @Override
   public void onShowTopBar() {
-    showTtTab();
   }
 
   @Override
   public void onHideTopBar() {
-    hideTtTab();
   }
 
-  @Keep
-  class NoPermViewHolder {
-
-    @InjectView(R.id.tv_no_perm_tip)
-    TextView mTvNoPermTip;
-
-    NoPermViewHolder(View view) {
-      ButterKnife.inject(this, view);
-    }
-  }
 }

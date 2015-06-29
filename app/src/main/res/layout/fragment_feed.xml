@@ -6,7 +6,8 @@
         xmlns:app="http://schemas.android.com/apk/res/com.utree.eightysix"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffd8dbdb">
+        android:background="#ffd8dbdb"
+        >
 
     <com.utree.eightysix.widget.RandomSceneTextView
             android:id="@+id/tv_empty_text"
@@ -14,23 +15,96 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="gone"
-            app:drawable="@drawable/scene_4"
-            app:text="@string/not_found_post"
-            app:subText="@string/not_found_post_tip"/>
-
+            />
 
     <com.utree.eightysix.view.SwipeRefreshLayout
             android:id="@+id/refresh_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            >
 
         <com.utree.eightysix.widget.AdvancedListView
                 android:id="@+id/lv_feed"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:smoothScrollbar="true"
-                android:listSelector="@drawable/transparent"/>
+                android:listSelector="@drawable/transparent"
+                />
     </com.utree.eightysix.view.SwipeRefreshLayout>
 
+
+    <LinearLayout
+            android:id="@+id/ll_sub_title"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginTop="@dimen/activity_top_bar_height"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@color/apptheme_primary_grey_color"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:clickable="true"
+            >
+
+        <ImageView
+                android:id="@+id/iv_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+        <TextView
+                android:id="@+id/tv_sub_info"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:textSize="12sp"
+                android:textColor="@color/apptheme_primary_grey_color_800"
+                />
+
+        <TextView
+                android:id="@+id/tv_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+        <RelativeLayout
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:background="@color/apptheme_light_green"
+                >
+
+            <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:padding="4dp"
+                    android:gravity="center"
+                    android:textColor="@color/apptheme_primary_grey_color_pressed"
+                    />
+
+            <com.utree.eightysix.widget.RoundedButton
+                    android:id="@+id/rb_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/tv_title"
+                    android:layout_toEndOf="@+id/tv_title"
+                    android:layout_centerVertical="true"
+                    android:textSize="12sp"
+                    android:minHeight="0dp"
+                    android:textColor="@android:color/white"
+                    android:visibility="invisible"
+                    android:clickable="false"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    android:minWidth="16dp"
+                    app:bgColor="@color/apptheme_primary_light_color"
+                    app:radius="2dp"
+                    />
+
+        </RelativeLayout>
+    </LinearLayout>
 </FrameLayout>
 

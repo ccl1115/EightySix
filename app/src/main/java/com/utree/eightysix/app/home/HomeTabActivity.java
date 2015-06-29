@@ -397,11 +397,6 @@ public class HomeTabActivity extends BaseActivity {
 
     int regionType = intent.getIntExtra("regionType", -1);
 
-    if (mTabRegionFragment != null) {
-      if (regionType != -1 && regionType != mTabRegionFragment.getRegionType()) {
-        mTabRegionFragment.setRegionType(regionType);
-      }
-    }
   }
 
   @Override
@@ -410,7 +405,6 @@ public class HomeTabActivity extends BaseActivity {
 
   @Override
   protected void onTopBarShown() {
-    mTabRegionFragment.showTtTab();
   }
 
   @Override
