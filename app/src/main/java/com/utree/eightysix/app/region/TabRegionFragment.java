@@ -32,6 +32,7 @@ import com.utree.eightysix.annotations.Keep;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.account.ProfileFragment;
 import com.utree.eightysix.app.account.event.CurrentCircleNameUpdatedEvent;
+import com.utree.eightysix.app.account.event.PortraitUpdatedEvent;
 import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.circle.event.CircleFollowsChangedEvent;
 import com.utree.eightysix.app.feed.SelectAreaFragment;
@@ -127,6 +128,7 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
 
   private int mLastCircleId = -1;
   private int mLastRegion = 4;
+  private String mAvatar;
 
   public TabRegionFragment() {
     mFeedFragment = new FeedRegionFragment();
@@ -479,6 +481,8 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
     setTopBarTitle();
 
     requestFollowCircles();
+
+    requestProfile();
   }
 
   @Override
@@ -763,6 +767,12 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
           }
         });
 
+    if (TextUtils.isEmpty(mAvatar)) {
+      requestProfile();
+    } else {
+      loadPortrait(mAvatar);
+    }
+
     getTopBar().getAbRight().hide();
 
 
@@ -972,8 +982,8 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
     }
   }
 
-  private void loadUserPortrait() {
-    U.request("user_profile", new OnResponse2<ProfileResponse>() {
+  private void requestProfile() {
+    U.request("profile", new OnResponse2<ProfileResponse>() {
       @Override
       public void onResponseError(Throwable e) {
 
@@ -981,52 +991,67 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
 
       @Override
       public void onResponse(ProfileResponse response) {
-        Picasso.with(getActivity()).load(response.object.avatar).resize(64, 64).transform(new Transformation() {
-          @Override
-          public Bitmap transform(Bitmap source) {
-            Bitmap output = Bitmap.createBitmap(source.getWidth(),
-                source.getHeight(), Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(output);
-
-            final int color = 0xff424242;
-            final Paint paint = new Paint();
-            final Rect rect = new Rect(0, 0, source.getWidth(), source.getHeight());
-
-            paint.setAntiAlias(true);
-            canvas.drawARGB(0, 0, 0, 0);
-            paint.setColor(color);
-            // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-            canvas.drawCircle(source.getWidth() / 2, source.getHeight() / 2,
-                source.getWidth() / 2, paint);
-            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-            canvas.drawBitmap(source, rect, rect, paint);
-            //Bitmap _bmp = Bitmap.createScaledBitmap(output, 60, 60, false);
-            //return _bmp;
-            return output;
-          }
-
-          @Override
-          public String key() {
-            return "rounded";
-          }
-        }).into(new Target() {
-          @Override
-          public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-            getTopBar().getAbLeft().setDrawable(new BitmapDrawable(getResources(), bitmap));
-          }
-
-          @Override
-          public void onBitmapFailed(Drawable errorDrawable) {
-
-          }
-
-          @Override
-          public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-          }
-        });
+        mAvatar = response.object.avatar;
+        loadPortrait(mAvatar);
       }
-    }, ProfileResponse.class);
+    }, ProfileResponse.class, (String) null);
+  }
+
+  protected void loadPortrait(String avatar) {
+    Picasso.with(getActivity()).load(avatar).resize(U.dp2px(32), U.dp2px(32)).transform(new Transformation() {
+      @Override
+      public Bitmap transform(Bitmap source) {
+        final int sw = source.getWidth();
+        final int sh = source.getHeight();
+        final Bitmap output = Bitmap.createBitmap(sw,
+            sh, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, sw, sh);
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawCircle(sw / 2, sh / 2, sw / 2, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(source, rect, rect, paint);
+
+        paint.setStrokeWidth(U.dp2px(1));
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(0x88ffffff);
+        paint.setXfermode(null);
+        canvas.drawCircle(sw >> 1, sh >> 1, (sw - U.dp2px(1)) >> 1, paint);
+        source.recycle();
+        return output;
+      }
+
+      @Override
+      public String key() {
+        return "rounded";
+      }
+    }).into(new Target() {
+      @Override
+      public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+        getTopBar().getAbLeft().setDrawable(new BitmapDrawable(getResources(), bitmap));
+      }
+
+      @Override
+      public void onBitmapFailed(Drawable errorDrawable) {
+
+      }
+
+      @Override
+      public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+      }
+    });
+  }
+
+  @Subscribe
+  public void onPortraitUpdatedEvent(PortraitUpdatedEvent event) {
+    loadPortrait(event.getUrl());
   }
 
   @Override

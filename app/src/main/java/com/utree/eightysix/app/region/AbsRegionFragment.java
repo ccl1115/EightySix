@@ -297,9 +297,8 @@ public abstract class AbsRegionFragment extends BaseFragment {
     }
 
     if (mMode == MODE_FEED) {
-      getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_drawer));
       getTopBar().setTitleTabSelected(0);
-      getTopBar().setSubTitle(String.format("%s | %s", mCircle == null ? "" : mCircle.shortName, mSubInfo == null ? "" : mSubInfo));
+      //getTopBar().setSubTitle(String.format("%s | %s", mCircle == null ? "" : mCircle.shortName, mSubInfo == null ? "" : mSubInfo));
       getTopBar().setTitleTabText(0, "关注");
 
       if (mCircle != null && mCircle.snapshot == 1) {
@@ -316,13 +315,12 @@ public abstract class AbsRegionFragment extends BaseFragment {
         getTopBar().getAbRight().hide();
       }
     } else if (mRegionType == 0) {
-      getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_drawer));
       getTopBar().setTitleTabSelected(0);
-      if (mCircleSelected) {
-        getTopBar().setSubTitle(String.format("%s | %s", mCircle == null ? "" : mCircle.shortName, mSubInfo == null ? "" : mSubInfo));
-      } else {
-        getTopBar().setSubTitle("");
-      }
+      //if (mCircleSelected) {
+      //  getTopBar().setSubTitle(String.format("%s | %s", mCircle == null ? "" : mCircle.shortName, mSubInfo == null ? "" : mSubInfo));
+      //} else {
+      //  getTopBar().setSubTitle("");
+      //}
       getTopBar().setTitleTabText(0, "在职");
 
       if (mCircle != null && mCircle.snapshot == 1) {
@@ -340,9 +338,8 @@ public abstract class AbsRegionFragment extends BaseFragment {
       }
     } else if (mRegionType == 4 || mRegionType == 3) {
       getTopBar().setTitleTabText(1, "附近");
-      getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_distance));
       getTopBar().setTitleTabSelected(1);
-      getTopBar().setSubTitle(mSubInfo == null ? "" : mSubInfo);
+      //getTopBar().setSubTitle(mSubInfo == null ? "" : mSubInfo);
       getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_action_factories));
       getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
         @Override
@@ -352,9 +349,8 @@ public abstract class AbsRegionFragment extends BaseFragment {
       });
     } else if (mRegionType == 5) {
       getTopBar().setTitleTabText(1, "地区");
-      getTopBar().getAbLeft().setDrawable(getResources().getDrawable(R.drawable.tb_distance));
       getTopBar().setTitleTabSelected(1);
-      getTopBar().setSubTitle(mSubInfo == null ? "" : mSubInfo);
+      //getTopBar().setSubTitle(mSubInfo == null ? "" : mSubInfo);
       getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_action_factories));
       getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
         @Override
