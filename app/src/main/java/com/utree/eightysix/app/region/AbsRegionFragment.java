@@ -301,19 +301,6 @@ public abstract class AbsRegionFragment extends BaseFragment {
       //getTopBar().setSubTitle(String.format("%s | %s", mCircle == null ? "" : mCircle.shortName, mSubInfo == null ? "" : mSubInfo));
       getTopBar().setTitleTabText(1, "关注");
 
-      if (mCircle != null && mCircle.snapshot == 1) {
-        getTopBar().getAbRight().setText(getString(R.string.snapshot));
-        getTopBar().getAbRight().setOnClickListener(
-            new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                SnapshotActivity.start(getActivity(), mCircle);
-              }
-            }
-        );
-      } else {
-        getTopBar().getAbRight().hide();
-      }
     } else if (mRegionType == 0) {
       getTopBar().setTitleTabSelected(1);
       //if (mCircleSelected) {
@@ -323,41 +310,14 @@ public abstract class AbsRegionFragment extends BaseFragment {
       //}
       getTopBar().setTitleTabText(1, "在职");
 
-      if (mCircle != null && mCircle.snapshot == 1) {
-        getTopBar().getAbRight().setText(getString(R.string.snapshot));
-        getTopBar().getAbRight().setOnClickListener(
-            new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                SnapshotActivity.start(getActivity(), mCircle);
-              }
-            }
-        );
-      } else {
-        getTopBar().getAbRight().hide();
-      }
     } else if (mRegionType == 4 || mRegionType == 3) {
       getTopBar().setTitleTabText(0, "附近");
       getTopBar().setTitleTabSelected(0);
       //getTopBar().setSubTitle(mSubInfo == null ? "" : mSubInfo);
-      getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_action_factories));
-      getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          FactoryRegionActivity.start(getActivity(), mRegionType, mDistance);
-        }
-      });
     } else if (mRegionType == 5) {
       getTopBar().setTitleTabText(0, "地区");
       getTopBar().setTitleTabSelected(0);
       //getTopBar().setSubTitle(mSubInfo == null ? "" : mSubInfo);
-      getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_action_factories));
-      getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          FactoryRegionActivity.start(getActivity(), mRegionType, mAreaName);
-        }
-      });
     }
   }
 

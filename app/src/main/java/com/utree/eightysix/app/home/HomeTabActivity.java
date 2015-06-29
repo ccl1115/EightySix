@@ -7,11 +7,19 @@ package com.utree.eightysix.app.home;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.squareup.otto.Subscribe;
@@ -20,6 +28,7 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseActivity;
 import com.utree.eightysix.app.Layout;
+import com.utree.eightysix.app.account.AddFriendActivity;
 import com.utree.eightysix.app.account.ProfileFragment;
 import com.utree.eightysix.app.chat.ConversationUtil;
 import com.utree.eightysix.app.chat.FConversationUtil;
@@ -29,12 +38,21 @@ import com.utree.eightysix.app.chat.event.FriendChatEvent;
 import com.utree.eightysix.app.explore.ExploreFragment;
 import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.msg.MsgCenterFragment;
+import com.utree.eightysix.app.nearby.NearbyFragment;
 import com.utree.eightysix.app.region.TabRegionFragment;
 import com.utree.eightysix.contact.ContactsSyncService;
 import com.utree.eightysix.event.MyPostCommentCountEvent;
 import com.utree.eightysix.event.NewCommentCountEvent;
+import com.utree.eightysix.qrcode.QRCodeScanFragment;
+import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.utils.Env;
 import com.utree.eightysix.widget.CounterView;
+import com.utree.eightysix.widget.ListPopupWindowCompat;
+import com.utree.eightysix.widget.ThemedDialog;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  */
@@ -55,8 +73,8 @@ public class HomeTabActivity extends BaseActivity {
   @InjectView(R.id.fl_message)
   public FrameLayout mFlMessage;
 
-  @InjectView(R.id.fl_more)
-  public FrameLayout mFlMore;
+  @InjectView (R.id.fl_nearby)
+  public FrameLayout mFlNearBy;
 
   @InjectView(R.id.rb_msg_count)
   public CounterView mRbMsgCount;
@@ -64,7 +82,7 @@ public class HomeTabActivity extends BaseActivity {
   public TabRegionFragment mTabRegionFragment;
   public MsgCenterFragment mMsgCenterFragment;
   public ExploreFragment mExploreFragment;
-  public ProfileFragment mProfileFragment;
+  public NearbyFragment mNearbyFragment;
 
   public Fragment mCurrentFragment;
 
@@ -76,6 +94,9 @@ public class HomeTabActivity extends BaseActivity {
   private int mUnreadFConversationCount;
   private int mRequestCount;
   private int mAssistMessageUnreadCount;
+  private ListPopupWindowCompat mListPopupWindow;
+
+  private QRCodeScanFragment mQRCodeScanFragment;
 
   public static void start(Context context) {
     Intent i = new Intent(context, HomeTabActivity.class);
@@ -103,7 +124,7 @@ public class HomeTabActivity extends BaseActivity {
   }
 
 
-  @OnClick({R.id.fl_feed, R.id.fl_explore, R.id.fl_message, R.id.fl_more})
+  @OnClick ({R.id.fl_feed, R.id.fl_nearby, R.id.fl_explore, R.id.fl_message})
   public void onTabItemClicked(View v) {
     clearSelected();
     v.setSelected(true);
@@ -130,6 +151,17 @@ public class HomeTabActivity extends BaseActivity {
         mCurrentFragment = mTabRegionFragment;
         index = "home";
         break;
+      case R.id.fl_nearby:
+        if (mNearbyFragment == null) {
+          mNearbyFragment = new NearbyFragment();
+          t.add(R.id.fl_content, mNearbyFragment).commitAllowingStateLoss();
+        } else if (mNearbyFragment.isHidden()) {
+          t.show(mNearbyFragment).commitAllowingStateLoss();
+          mNearbyFragment.onHiddenChanged(false);
+        }
+        mCurrentFragment = mExploreFragment;
+        index = "explore";
+        break;
       case R.id.fl_explore:
         if (mExploreFragment == null) {
           mExploreFragment = new ExploreFragment();
@@ -152,17 +184,6 @@ public class HomeTabActivity extends BaseActivity {
         }
         mCurrentFragment = mMsgCenterFragment;
         index = "msg";
-        break;
-      case R.id.fl_more:
-        if (mProfileFragment == null) {
-          mProfileFragment = new ProfileFragment();
-          t.add(R.id.fl_content, mProfileFragment).commitAllowingStateLoss();
-        } else if (mProfileFragment.isHidden()) {
-          t.show(mProfileFragment).commitAllowingStateLoss();
-          mProfileFragment.onHiddenChanged(false);
-        }
-        mCurrentFragment = mProfileFragment;
-        index = "me";
         break;
     }
     U.getAnalyser().trackEvent(this, "home_tab", index);
@@ -220,6 +241,126 @@ public class HomeTabActivity extends BaseActivity {
 
     mRbMsgCount.setCount(mUnreadConversationCount + mUnreadFConversationCount + mAssistMessageUnreadCount +
         mNewCommentCount + mMyPostCommentCount + mRequestCount);
+
+
+    getTopBar().getAbRight().setDrawable(getResources().getDrawable(R.drawable.ic_add));
+    getTopBar().getAbRight().setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+          if (mListPopupWindow == null) {
+            mListPopupWindow = new ListPopupWindowCompat(v.getContext());
+            String[] items = {
+                "添加朋友",
+                "扫一扫",
+                "邀请朋友，赚蓝星",
+                "分享蓝莓"
+            };
+            int[] drawables = {
+                R.drawable.popup_add_friend,
+                R.drawable.popup_scan,
+                R.drawable.popup_blue_star,
+                R.drawable.popup_share
+            };
+
+            List<Map<String, Object>> data = new ArrayList<Map<String, Object>>(items.length);
+
+            for (int i = 0; i < items.length; i++) {
+              String str = items[i];
+              int drawable = drawables[i];
+              Map<String, Object> item = new HashMap<String, Object>();
+              item.put("text", str);
+              item.put("image", drawable);
+              data.add(item);
+            }
+
+            mListPopupWindow.setAdapter(new SimpleAdapter(v.getContext(),
+                data,
+                R.layout.item_explore_popup,
+                new String[]{"text", "image"},
+                new int[]{R.id.tv, R.id.iv}));
+            mListPopupWindow.setWidth(U.dp2px(190));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+              mListPopupWindow.setDropDownGravity(Gravity.END);
+            }
+            mListPopupWindow.setAnchorView(getTopBar());
+            mListPopupWindow.setModal(true);
+
+            mListPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+              @Override
+              public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                  case 0:
+                    startActivity(new Intent(HomeTabActivity.this, AddFriendActivity.class));
+                    break;
+                  case 1:
+                    if (mQRCodeScanFragment == null) {
+                      mQRCodeScanFragment = new QRCodeScanFragment();
+                      getSupportFragmentManager().beginTransaction()
+                          .add(android.R.id.content, mQRCodeScanFragment)
+                          .commit();
+                    } else if (mQRCodeScanFragment.isDetached()) {
+                      getSupportFragmentManager().beginTransaction()
+                          .attach(mQRCodeScanFragment)
+                          .commit();
+                    }
+                    break;
+                  case 2:
+                    showProgressBar(true);
+
+                    U.request("get_invite_code", new OnResponse2<AddFriendActivity.GetInviteCodeResponse>() {
+                      @Override
+                      public void onResponseError(Throwable e) {
+                        hideProgressBar();
+                      }
+
+                      @Override
+                      public void onResponse(AddFriendActivity.GetInviteCodeResponse response) {
+                        hideProgressBar();
+                        final ThemedDialog dialog = new ThemedDialog(HomeTabActivity.this);
+                        dialog.setTitle("你的专属邀请码");
+
+                        TextView textView = new TextView(HomeTabActivity.this);
+                        SpannableStringBuilder builder = new SpannableStringBuilder();
+                        builder.append(response.object.msg).append("\n\n").append("你的专属邀请码是：\n");
+                        SpannableString color = new SpannableString(response.object.inviteCode);
+                        color.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.apptheme_primary_light_color)), 0, color.length(), 0);
+                        builder.append(color);
+                        builder.append("\n\n").append("你已经邀请了").append(String.valueOf(response.object.newCount)).append("个人\n");
+
+                        textView.setText(builder);
+                        textView.setGravity(Gravity.CENTER);
+                        textView.setEms(12);
+                        textView.setPadding(U.dp2px(16), U.dp2px(8), U.dp2px(16), U.dp2px(8));
+                        textView.setTextSize(16);
+                        dialog.setContent(textView);
+                        dialog.setPositive("知道啦", new View.OnClickListener() {
+                          @Override
+                          public void onClick(View view) {
+                            dialog.dismiss();
+                          }
+                        });
+
+                        dialog.show();
+                      }
+                    }, AddFriendActivity.GetInviteCodeResponse.class, null, null);
+                    break;
+                  case 3:
+                    U.getShareManager().shareAppDialog(HomeTabActivity.this, Account.inst().getCurrentCircle()).show();
+                    break;
+                }
+
+                mListPopupWindow.dismiss();
+              }
+            });
+          }
+          mListPopupWindow.show();
+        } else {
+          startActivity(new Intent(HomeTabActivity.this, AddFriendActivity.class));
+        }
+
+      }
+    });
   }
 
   @Override
@@ -330,7 +471,7 @@ public class HomeTabActivity extends BaseActivity {
     mFlExplore.setSelected(false);
     mFlFeed.setSelected(false);
     mFlMessage.setSelected(false);
-    mFlMore.setSelected(false);
+    mFlNearBy.setSelected(false);
   }
 
   public static class MsgCountEvent {

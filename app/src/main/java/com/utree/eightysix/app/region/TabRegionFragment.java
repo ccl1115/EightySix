@@ -773,9 +773,6 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
       loadPortrait(mAvatar);
     }
 
-    getTopBar().getAbRight().hide();
-
-
     getTopBar().setTitleAdapter(new TopBar.TitleAdapter() {
       @Override
       public String getTitle(int position) {
