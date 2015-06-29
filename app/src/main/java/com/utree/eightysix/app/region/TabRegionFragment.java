@@ -603,8 +603,8 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
             v.setSelected(true);
             setRegionType(0);
             mFlFollowCircles.setVisibility(View.GONE);
-            getTopBar().setTitleTabSelected(0);
-            getTopBar().setTitleTabText(0, "在职");
+            getTopBar().setTitleTabSelected(1);
+            getTopBar().setTitleTabText(1, "在职");
             getTopBar().setSubTitle("");
           }
         }
@@ -780,9 +780,11 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
       @Override
       public String getTitle(int position) {
         if (position == 0) {
-          return "在职";
-        } else if (position == 1) {
           return "附近";
+        } else if (position == 1) {
+          return "在职";
+        } else if (position == 2) {
+          return "朋友";
         }
         return null;
       }
@@ -792,20 +794,20 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
         mFlFollowCircles.setVisibility(View.GONE);
         mLlDistanceSelector.setVisibility(View.GONE);
         if (position == 0) {
+          clearFollowCircleViews();
+          setRegionType(mLastRegion);
+        } else if (position == 1) {
           if (mLastCircleId != -1) {
             setCircleId(mLastCircleId);
           } else {
             setRegionType(0);
           }
-        } else if (position == 1) {
-          clearFollowCircleViews();
-          setRegionType(mLastRegion);
         }
       }
 
       @Override
       public int getCount() {
-        return 2;
+        return 3;
       }
     });
   }
@@ -877,8 +879,8 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
             clearFollowCircleViews();
             v.setSelected(true);
             setCircleId(circles[0].factoryId);
-            getTopBar().setTitleTabText(0, "关注");
-            getTopBar().setTitleTabSelected(0);
+            getTopBar().setTitleTabText(1, "关注");
+            getTopBar().setTitleTabSelected(1);
             getTopBar().setSubTitle("");
             mFlFollowCircles.setVisibility(View.GONE);
           }
@@ -912,8 +914,8 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
             clearFollowCircleViews();
             v.setSelected(true);
             setCircleId(circles[1].factoryId);
-            getTopBar().setTitleTabText(0, "关注");
-            getTopBar().setTitleTabSelected(0);
+            getTopBar().setTitleTabText(1, "关注");
+            getTopBar().setTitleTabSelected(1);
             getTopBar().setSubTitle("");
             mFlFollowCircles.setVisibility(View.GONE);
           }
@@ -954,8 +956,8 @@ public class TabRegionFragment extends BaseFragment implements AbsRegionFragment
             clearFollowCircleViews();
             v.setSelected(true);
             setCircleId(circles[2].factoryId);
-            getTopBar().setTitleTabText(0, "关注");
-            getTopBar().setTitleTabSelected(0);
+            getTopBar().setTitleTabText(1, "关注");
+            getTopBar().setTitleTabSelected(1);
             getTopBar().setSubTitle("");
             mFlFollowCircles.setVisibility(View.GONE);
           }

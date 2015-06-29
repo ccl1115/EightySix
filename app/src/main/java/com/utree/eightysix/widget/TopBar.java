@@ -104,6 +104,8 @@ public class TopBar extends RelativeLayout implements View.OnClickListener {
     mAbSearch.setText("搜索");
 
     setTitleClickMode(TITLE_CLICK_MODE_ONE);
+
+    ta.recycle();
   }
 
   public String getTitle() {
