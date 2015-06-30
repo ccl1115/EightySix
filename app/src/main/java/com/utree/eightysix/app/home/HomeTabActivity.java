@@ -159,7 +159,7 @@ public class HomeTabActivity extends BaseActivity {
           t.show(mNearbyFragment).commitAllowingStateLoss();
           mNearbyFragment.onHiddenChanged(false);
         }
-        mCurrentFragment = mExploreFragment;
+        mCurrentFragment = mNearbyFragment;
         index = "explore";
         break;
       case R.id.fl_explore:

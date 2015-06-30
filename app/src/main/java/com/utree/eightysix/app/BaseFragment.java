@@ -2,8 +2,7 @@ package com.utree.eightysix.app;
 
 import android.app.Activity;
 import android.support.v4.app.Fragment;
-import android.util.Log;
-import com.utree.eightysix.BuildConfig;
+import android.support.v4.app.FragmentManager;
 import com.utree.eightysix.M;
 import com.utree.eightysix.widget.TopBar;
 
@@ -51,12 +50,38 @@ public class BaseFragment extends Fragment {
 
   public boolean detachSelf() {
     if (!isDetached()) {
-      getFragmentManager().beginTransaction()
-          .detach(this).commit();
-      return true;
-    } else {
-      return false;
+      final FragmentManager fragmentManager = getFragmentManager();
+      if (fragmentManager != null) {
+        fragmentManager.beginTransaction()
+            .detach(this).commit();
+        return true;
+      }
+
+      FragmentManager childFragmentManager = getChildFragmentManager();
+      if (childFragmentManager != null) {
+        childFragmentManager.beginTransaction()
+            .detach(this).commit();
+        return true;
+      }
     }
+    return false;
+  }
+
+  public boolean hideSelf() {
+    if (!isHidden()) {
+      final FragmentManager m = getFragmentManager();
+      if (m != null) {
+        m.beginTransaction().hide(this).commit();
+        return true;
+      }
+
+      final FragmentManager cm = getChildFragmentManager();
+      if (cm != null) {
+        cm.beginTransaction().hide(this).commit();
+        return true;
+      }
+    }
+    return false;
   }
 
   public boolean onBackPressed() {

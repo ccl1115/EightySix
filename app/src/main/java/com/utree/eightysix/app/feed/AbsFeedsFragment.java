@@ -66,7 +66,7 @@ public abstract class AbsFeedsFragment extends BaseFragment {
 
   protected boolean mPostPraiseRequesting;
   private int mLastFirstVisibleItem;
-  private OnScrollListener mOnScrollListener;
+  private OnScrollCallback mOnScrollCallback;
   private boolean mHidden;
 
   protected int mPage = 1;
@@ -178,9 +178,6 @@ public abstract class AbsFeedsFragment extends BaseFragment {
       }
     });
 
-    mRefresherView.setColorSchemeResources(R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed,
-        R.color.apptheme_primary_light_color, R.color.apptheme_primary_light_color_pressed);
-
     mLvFeed.setOnScrollListener(new AbsListView.OnScrollListener() {
       @Override
       public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -216,21 +213,21 @@ public abstract class AbsFeedsFragment extends BaseFragment {
         if (firstVisibleItem > 2) {
           if (firstVisibleItem > mLastFirstVisibleItem) {
             getBaseActivity().hideTopBar(true);
-            if (mOnScrollListener != null) {
-              mOnScrollListener.onHideTopBar();
+            if (mOnScrollCallback != null) {
+              mOnScrollCallback.hideTopBar();
               hideLlSubTitle();
             }
           } else if (firstVisibleItem < mLastFirstVisibleItem) {
             getBaseActivity().showTopBar(true);
-            if (mOnScrollListener != null) {
-              mOnScrollListener.onShowTopBar();
+            if (mOnScrollCallback != null) {
+              mOnScrollCallback.showTopBar();
               showLlSubTitle();
             }
           }
         } else {
           getBaseActivity().showTopBar(true);
-          if (mOnScrollListener != null) {
-            mOnScrollListener.onShowTopBar();
+          if (mOnScrollCallback != null) {
+            mOnScrollCallback.showTopBar();
           }
         }
         mLastFirstVisibleItem = firstVisibleItem;
@@ -254,8 +251,8 @@ public abstract class AbsFeedsFragment extends BaseFragment {
     }
   }
 
-  public void setOnScrollListener(OnScrollListener listener) {
-    mOnScrollListener = listener;
+  public void setOnScrollCallback(OnScrollCallback listener) {
+    mOnScrollCallback = listener;
   }
 
   protected abstract void updateTitleBar();
@@ -345,10 +342,10 @@ public abstract class AbsFeedsFragment extends BaseFragment {
   }
 
 
-  public interface OnScrollListener {
+  public interface OnScrollCallback {
 
-    void onShowTopBar();
+    void showTopBar();
 
-    void onHideTopBar();
+    void hideTopBar();
   }
 }

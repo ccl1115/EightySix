@@ -14,7 +14,6 @@ import com.utree.eightysix.request.FeedByRegionRequest;
 import com.utree.eightysix.response.FeedsByRegionResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.rest.Response;
 
 /**
  */
@@ -86,12 +85,13 @@ public class RegionFeedsFragment extends AbsFeedsFragment {
   public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    mIvIcon.setImageResource(R.drawable.ic_action_factories);
+    mIvIcon.setImageResource(R.drawable.ic_feeds_region);
     mTvTitle.setText("全部");
   }
 
   @Override
   protected void request() {
+    getBaseActivity().showRefreshIndicator(true);
     U.request("feeds_by_region", new OnResponse2<FeedsByRegionResponse>() {
       @Override
       public void onResponseError(Throwable e) {
@@ -139,7 +139,7 @@ public class RegionFeedsFragment extends AbsFeedsFragment {
         U.getBus().post(new CurrentCircleResponseEvent(mCircle));
 
         M.getRegisterHelper().unregister(mFeedAdapter);
-        mFeedAdapter = new FeedRegionAdapter(response.object, response.extra);
+        mFeedAdapter = new FeedRegionAdapter(response.object, null);
         M.getRegisterHelper().register(mFeedAdapter);
         mLvFeed.setAdapter(mFeedAdapter);
 

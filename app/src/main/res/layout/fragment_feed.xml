@@ -32,6 +32,11 @@
                 />
     </com.utree.eightysix.view.SwipeRefreshLayout>
 
+    <FrameLayout
+            android:id="@+id/fl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
 
     <LinearLayout
             android:id="@+id/ll_sub_title"

@@ -7,10 +7,9 @@
 <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/fl_follow_circles"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
+        android:layout_marginTop="@dimen/activity_top_height"
         >
 
     <LinearLayout

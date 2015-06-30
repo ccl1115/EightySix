@@ -67,7 +67,7 @@
                     android:text="附近"
                     android:textColor="@color/home_tab_text"
                     android:textSize="12sp"
-                    android:drawableTop="@drawable/ic_tab_explore"
+                    android:drawableTop="@drawable/ic_tab_nearby"
                     android:drawablePadding="2dp"
                     />
 

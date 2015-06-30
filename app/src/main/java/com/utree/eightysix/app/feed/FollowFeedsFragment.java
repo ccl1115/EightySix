@@ -8,21 +8,50 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.U;
 import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.region.FeedRegionAdapter;
+import com.utree.eightysix.data.Circle;
+import com.utree.eightysix.data.FollowCircle;
 import com.utree.eightysix.event.CurrentCircleResponseEvent;
 import com.utree.eightysix.request.FeedByRegionRequest;
 import com.utree.eightysix.response.FeedsByRegionResponse;
+import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
 import com.utree.eightysix.rest.Response;
 
 /**
  */
-public class FollowFeedsFragment extends AbsFeedsFragment {
+public class FollowFeedsFragment extends AbsFeedsFragment implements FollowCirclesFragment.Callback {
 
   private static final int TYPE_ALL = 0;
   private static final int TYPE_HOT = 1;
 
+  private static final int CIRCLE_TYPE_CURRENT = 0;
+  private static final int CIRCLE_TYPE_FOLLOW = 1;
+
   private int mType = TYPE_ALL;
+
+  private int mCircleType = CIRCLE_TYPE_CURRENT;
+
+  private FollowCirclesFragment mFollowCirclesFragment;
+
+  private FollowCircle mFollowCircle;
+
+  @Override
+  public void onFollowCircleClicked(FollowCircle circle) {
+    mCircleType = CIRCLE_TYPE_FOLLOW;
+    mPage = 1;
+    mFollowCircle = circle;
+    getTopBar().setTitleTabText(1, "关注");
+    request();
+  }
+
+  @Override
+  public void onCurrentCircleClicked(Circle circle) {
+    mCircleType = CIRCLE_TYPE_CURRENT;
+    mPage = 1;
+    getTopBar().setTitleTabText(1, "在职");
+    request();
+  }
 
   @Override
   protected void updateTitleBar() {
@@ -31,11 +60,49 @@ public class FollowFeedsFragment extends AbsFeedsFragment {
 
   @Override
   protected void request() {
+    getBaseActivity().showRefreshIndicator(true);
 
+    if (mCircleType == CIRCLE_TYPE_CURRENT) {
+      requestCurrent();
+    } else if (mCircleType == CIRCLE_TYPE_FOLLOW) {
+      requestFollow();
+    }
+  }
+
+  private void requestFollow() {
+    String path;
+    if (mType == TYPE_HOT) {
+      path = "feed_list_hot";
+    } else if (mType == TYPE_ALL) {
+      path = "feed_list";
+    } else {
+      return;
+    }
+
+    U.request(path, new OnResponse2<FeedsByRegionResponse>() {
+      @Override
+      public void onResponseError(Throwable e) {
+        if (mPage > 1) {
+          mLvFeed.loadError();
+        }
+        getBaseActivity().hideRefreshIndicator();
+      }
+
+      @Override
+      public void onResponse(FeedsByRegionResponse response) {
+        response(response);
+      }
+    }, FeedsByRegionResponse.class, mFollowCircle.factoryId, mPage);
+  }
+
+  private void requestCurrent() {
     U.request("feeds_by_region", new OnResponse2<FeedsByRegionResponse>() {
       @Override
       public void onResponseError(Throwable e) {
-
+        if (mPage > 1) {
+          mLvFeed.loadError();
+        }
+        getBaseActivity().hideRefreshIndicator();
       }
 
       @Override
@@ -75,9 +142,26 @@ public class FollowFeedsFragment extends AbsFeedsFragment {
   public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    mIvIcon.setImageResource(R.drawable.ic_action_factories);
+    mIvIcon.setImageResource(R.drawable.ic_feeds_follow);
 
     mTvTitle.setText("全部");
+
+    mTvSubInfo.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if (mFollowCirclesFragment == null) {
+          mFollowCirclesFragment = new FollowCirclesFragment();
+          mFollowCirclesFragment.setCallback(FollowFeedsFragment.this);
+          getChildFragmentManager().beginTransaction()
+              .add(R.id.fl, mFollowCirclesFragment)
+              .commit();
+        } else if (mFollowCirclesFragment.isHidden()) {
+          getChildFragmentManager().beginTransaction()
+              .show(mFollowCirclesFragment)
+              .commit();
+        }
+      }
+    });
   }
 
 
@@ -86,7 +170,9 @@ public class FollowFeedsFragment extends AbsFeedsFragment {
       if (mPage == 1) {
         mCircle = response.object.circle;
 
-        U.getBus().post(new CurrentCircleResponseEvent(mCircle));
+        if (mCircleType == CIRCLE_TYPE_CURRENT) {
+          U.getBus().post(new CurrentCircleResponseEvent(mCircle));
+        }
 
         M.getRegisterHelper().unregister(mFeedAdapter);
         mFeedAdapter = new FeedRegionAdapter(response.object, response.extra);
@@ -128,7 +214,9 @@ public class FollowFeedsFragment extends AbsFeedsFragment {
       if (mPage == 1) {
         mCircle = response.object.circle;
 
-        U.getBus().post(new CurrentCircleResponseEvent(mCircle));
+        if (mCircleType == CIRCLE_TYPE_CURRENT) {
+          U.getBus().post(new CurrentCircleResponseEvent(mCircle));
+        }
 
         if (response.object.posts.lists.size() == 0) {
           mRstvEmpty.setVisibility(View.VISIBLE);
