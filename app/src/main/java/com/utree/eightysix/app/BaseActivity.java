@@ -473,6 +473,7 @@ public abstract class BaseActivity extends FragmentActivity implements LogoutLis
   }
 
   public final void showRefreshIndicator(boolean progressing) {
+    showTopBar(true);
     mTopBar.mRefreshIndicator.show(progressing);
   }
 

@@ -6,8 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -19,7 +17,6 @@ import com.utree.eightysix.R;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.feed.SelectAreaFragment;
 import com.utree.eightysix.app.region.event.RegionResponseEvent;
-import com.utree.eightysix.widget.RoundedButton;
 
 /**
  */
@@ -28,20 +25,11 @@ public class RegionSelectFragment extends BaseFragment {
   @InjectView (R.id.tv_distance)
   public TextView mTvDistance;
 
-  @InjectView (R.id.rb_select)
-  public RoundedButton mRbSelect;
-
-  @InjectView (R.id.rg_group)
-  public RadioGroup mRgGroup;
-
   @InjectView (R.id.rb_region)
   public RadioButton mRbRegion;
 
   @InjectView (R.id.rb_area)
   public RadioButton mRbArea;
-
-  @InjectView (R.id.rl_distance)
-  public RelativeLayout mRlDistance;
 
   @InjectView (R.id.sb_distance)
   public SeekBar mSbDistance;
@@ -104,7 +92,7 @@ public class RegionSelectFragment extends BaseFragment {
         }
       });
       getFragmentManager().beginTransaction()
-          .add(R.id.fl_parent, mSelectAreaFragment)
+          .add(R.id.fl, mSelectAreaFragment)
           .commit();
     } else if (mSelectAreaFragment.isDetached()) {
       getFragmentManager().beginTransaction()
@@ -136,9 +124,11 @@ public class RegionSelectFragment extends BaseFragment {
     if (event.getRegion() == 3) {
       mRbRegion.setChecked(true);
       mSbDistance.setProgress(10000);
+      mTvDistance.setText(String.format("%.2fkm", mSbDistance.getProgress() / 1000f + 1));
     } else if (event.getRegion() == 4) {
       mRbRegion.setChecked(true);
       mSbDistance.setProgress(event.getDistance() - 1000);
+      mTvDistance.setText(String.format("%.2fkm", mSbDistance.getProgress() / 1000f + 1));
     } else if (event.getRegion() == 5) {
       mRbArea.setChecked(true);
       mTvDistance.setText(event.getCityName());

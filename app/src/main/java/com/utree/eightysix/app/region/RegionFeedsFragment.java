@@ -1,7 +1,9 @@
 package com.utree.eightysix.app.region;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
@@ -28,6 +30,7 @@ public class RegionFeedsFragment extends AbsFeedsFragment implements RegionSelec
   private int mType = TYPE_ALL;
 
   private RegionSelectFragment mRegionSelectFragment;
+  private PopupMenu mPopupMenu;
 
   public int getRegionType() {
     return mRegionType;
@@ -35,46 +38,6 @@ public class RegionFeedsFragment extends AbsFeedsFragment implements RegionSelec
 
   public void setRegionType(int regionType) {
     mRegionType = regionType;
-  }
-
-  public int getDistance() {
-    return mDistance;
-  }
-
-  public void setDistance(int distance) {
-    mDistance = distance;
-  }
-
-  public int getAreaType() {
-    return mAreaType;
-  }
-
-  public void setAreaType(int areaType) {
-    mAreaType = areaType;
-  }
-
-  public int getAreaId() {
-    return mAreaId;
-  }
-
-  public void setAreaId(int areaId) {
-    mAreaId = areaId;
-  }
-
-  public String getAreaName() {
-    return mAreaName;
-  }
-
-  public void setAreaName(String areaName) {
-    mAreaName = areaName;
-  }
-
-  public int getType() {
-    return mType;
-  }
-
-  public void setType(int type) {
-    mType = type;
   }
 
   @Override
@@ -91,6 +54,8 @@ public class RegionFeedsFragment extends AbsFeedsFragment implements RegionSelec
     if (areaType != -1) {
       mAreaType = areaType;
     }
+
+    mPage = 1;
 
     request();
   }
@@ -110,6 +75,8 @@ public class RegionFeedsFragment extends AbsFeedsFragment implements RegionSelec
     mTvSubInfo.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
+        getBaseActivity().showTopBar(true);
+        showLlSubTitle();
         if (mRegionSelectFragment == null) {
           mRegionSelectFragment = new RegionSelectFragment();
           mRegionSelectFragment.mRegionResponseEvent =
@@ -125,11 +92,56 @@ public class RegionFeedsFragment extends AbsFeedsFragment implements RegionSelec
         }
       }
     });
+
+    mTvTitle.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if (mPopupMenu == null) {
+          mPopupMenu = new PopupMenu(v.getContext(), v);
+          mPopupMenu.inflate(R.menu.feeds_type_menu);
+          mPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+              switch (item.getItemId()) {
+                case R.id.menu_all:
+                  if (mType == TYPE_ALL) {
+                    return false;
+                  } else {
+                    mType = TYPE_ALL;
+                    mPage = 1;
+                    mTvTitle.setText("全部");
+                    request();
+                    return true;
+                  }
+                case R.id.menu_hot:
+                  if (mType == TYPE_HOT) {
+                    return false;
+                  } else {
+                    mType = TYPE_HOT;
+                    mPage = 1;
+                    mTvTitle.setText("热门");
+                    request();
+                    return true;
+                  }
+              }
+              return false;
+            }
+          });
+
+        }
+        if (mRegionSelectFragment != null) {
+          mRegionSelectFragment.hideSelf();
+        }
+        mPopupMenu.show();
+      }
+    });
   }
 
   @Override
   protected void request() {
     getBaseActivity().showRefreshIndicator(true);
+    showLlSubTitle();
+
     U.request("feeds_by_region", new OnResponse2<FeedsByRegionResponse>() {
       @Override
       public void onResponseError(Throwable e) {

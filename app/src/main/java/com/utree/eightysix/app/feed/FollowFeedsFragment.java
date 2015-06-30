@@ -62,6 +62,7 @@ public class FollowFeedsFragment extends AbsFeedsFragment implements FollowCircl
   @Override
   protected void request() {
     getBaseActivity().showRefreshIndicator(true);
+    showLlSubTitle();
 
     if (mCircleType == CIRCLE_TYPE_CURRENT) {
       requestCurrent();
@@ -150,6 +151,8 @@ public class FollowFeedsFragment extends AbsFeedsFragment implements FollowCircl
     mTvSubInfo.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
+        getBaseActivity().showTopBar(true);
+        showLlSubTitle();
         if (mFollowCirclesFragment == null) {
           mFollowCirclesFragment = new FollowCirclesFragment();
           mFollowCirclesFragment.setCallback(FollowFeedsFragment.this);
@@ -199,8 +202,10 @@ public class FollowFeedsFragment extends AbsFeedsFragment implements FollowCircl
             }
           });
         }
+        if (mFollowCirclesFragment != null) {
+          mFollowCirclesFragment.hideSelf();
+        }
         mPopupMenu.show();
-        mFollowCirclesFragment.hideSelf();
       }
     });
   }
@@ -229,7 +234,7 @@ public class FollowFeedsFragment extends AbsFeedsFragment implements FollowCircl
 
         Account.inst().setLastRegionType(response.object.regionType);
 
-        mTvSubInfo.setText(response.object.subInfo);
+        mTvSubInfo.setText(response.object.circle.shortName + " | " + response.object.subInfo);
       } else if (mFeedAdapter != null) {
         mFeedAdapter.add(response.object.posts.lists);
       }
@@ -272,6 +277,7 @@ public class FollowFeedsFragment extends AbsFeedsFragment implements FollowCircl
 
         updateTitleBar();
 
+        mTvSubInfo.setText(response.object.circle.shortName + " | " + response.object.subInfo);
       } else if (mFeedAdapter != null) {
         mFeedAdapter.add(response.object.posts.lists);
       }
