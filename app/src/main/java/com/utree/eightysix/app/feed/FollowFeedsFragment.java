@@ -1,7 +1,9 @@
 package com.utree.eightysix.app.feed;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 import com.utree.eightysix.Account;
 import com.utree.eightysix.M;
 import com.utree.eightysix.R;
@@ -13,10 +15,8 @@ import com.utree.eightysix.data.FollowCircle;
 import com.utree.eightysix.event.CurrentCircleResponseEvent;
 import com.utree.eightysix.request.FeedByRegionRequest;
 import com.utree.eightysix.response.FeedsByRegionResponse;
-import com.utree.eightysix.rest.OnResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.rest.RESTRequester;
-import com.utree.eightysix.rest.Response;
 
 /**
  */
@@ -35,6 +35,7 @@ public class FollowFeedsFragment extends AbsFeedsFragment implements FollowCircl
   private FollowCirclesFragment mFollowCirclesFragment;
 
   private FollowCircle mFollowCircle;
+  private PopupMenu mPopupMenu;
 
   @Override
   public void onFollowCircleClicked(FollowCircle circle) {
@@ -160,6 +161,46 @@ public class FollowFeedsFragment extends AbsFeedsFragment implements FollowCircl
               .show(mFollowCirclesFragment)
               .commit();
         }
+      }
+    });
+
+    mTvTitle.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if (mPopupMenu == null) {
+          mPopupMenu = new PopupMenu(v.getContext(), v);
+          mPopupMenu.inflate(R.menu.feeds_type_menu);
+          mPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+              switch (item.getItemId()) {
+                case R.id.menu_all:
+                  if (mType == TYPE_ALL) {
+                    return false;
+                  } else {
+                    mType = TYPE_ALL;
+                    mPage = 1;
+                    mTvTitle.setText("全部");
+                    request();
+                    return true;
+                  }
+                case R.id.menu_hot:
+                  if (mType == TYPE_HOT) {
+                    return false;
+                  } else {
+                    mType = TYPE_HOT;
+                    mPage = 1;
+                    mTvTitle.setText("热门");
+                    request();
+                    return true;
+                  }
+              }
+              return false;
+            }
+          });
+        }
+        mPopupMenu.show();
+        mFollowCirclesFragment.hideSelf();
       }
     });
   }
