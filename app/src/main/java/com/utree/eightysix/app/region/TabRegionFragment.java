@@ -16,21 +16,13 @@ import android.support.v4.view.ViewPager;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
-import com.nineoldandroids.animation.ObjectAnimator;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -40,24 +32,17 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.BaseFragment;
 import com.utree.eightysix.app.account.ProfileFragment;
 import com.utree.eightysix.app.account.event.PortraitUpdatedEvent;
-import com.utree.eightysix.app.circle.BaseCirclesActivity;
 import com.utree.eightysix.app.feed.AbsFeedsFragment;
 import com.utree.eightysix.app.feed.FollowFeedsFragment;
 import com.utree.eightysix.app.feed.SelectAreaFragment;
 import com.utree.eightysix.app.feed.event.InviteClickedEvent;
 import com.utree.eightysix.app.feed.event.UnlockClickedEvent;
 import com.utree.eightysix.app.feed.event.UploadClickedEvent;
-import com.utree.eightysix.app.region.event.CircleResponseEvent;
-import com.utree.eightysix.app.region.event.RegionResponseEvent;
 import com.utree.eightysix.contact.ContactsSyncService;
-import com.utree.eightysix.data.FollowCircle;
-import com.utree.eightysix.response.FollowCircleListResponse;
 import com.utree.eightysix.response.ProfileResponse;
 import com.utree.eightysix.rest.OnResponse2;
 import com.utree.eightysix.widget.ThemedDialog;
 import com.utree.eightysix.widget.TopBar;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author simon
@@ -67,31 +52,9 @@ public class TabRegionFragment extends BaseFragment implements AbsFeedsFragment.
   @InjectView (R.id.vp_tab)
   public ViewPager mVpTab;
 
-  @InjectView (R.id.fl_distance_selector)
-  public FrameLayout mLlDistanceSelector;
-
-  @InjectView (R.id.sb_distance)
-  public SeekBar mSbDistance;
-
-  @InjectView (R.id.tv_distance)
-  public TextView mTvDistance;
-
-  @InjectView (R.id.tv_area_name)
-  public TextView mTvAreaName;
-
-  @InjectView (R.id.rb_region)
-  public RadioButton mRbRegion;
-
-  @InjectView (R.id.rb_area)
-  public RadioButton mRbArea;
-
-  @InjectView (R.id.iv_select_area)
-  public ImageView mIvSelectArea;
-
   private RegionFeedsFragment mRegionFeedsFragment;
   private FollowFeedsFragment mFollowFeedsFragment;
 
-  private SelectAreaFragment mSelectAreaFragment;
 
   private ThemedDialog mNoPermDialog;
   private ThemedDialog mUnlockDialog;
@@ -116,28 +79,6 @@ public class TabRegionFragment extends BaseFragment implements AbsFeedsFragment.
   }
 
 
-  @OnClick (R.id.fl_distance_selector)
-  public void onLlDistanceSelector() {
-    mLlDistanceSelector.setVisibility(View.GONE);
-  }
-
-  @OnCheckedChanged (R.id.rb_area)
-  public void onRbArea(boolean checked) {
-    if (checked) {
-      mTvDistance.setText(mTvAreaName.getText());
-      mSbDistance.setEnabled(false);
-      mIvSelectArea.setEnabled(true);
-    }
-  }
-
-  @OnCheckedChanged (R.id.rb_region)
-  public void onRbRegion(boolean checked) {
-    if (checked) {
-      mTvDistance.setText(String.format("%.2fkm", mSbDistance.getProgress() / 1000f + 1));
-      mSbDistance.setEnabled(true);
-      mIvSelectArea.setEnabled(false);
-    }
-  }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -147,25 +88,6 @@ public class TabRegionFragment extends BaseFragment implements AbsFeedsFragment.
   @Override
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     ButterKnife.inject(this, view);
-
-    mSbDistance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-      @Override
-      public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        float value = progress / 1000f + 1;
-        mTvDistance.setText(String.format("%.2fkm", value));
-      }
-
-      @Override
-      public void onStartTrackingTouch(SeekBar seekBar) {
-
-      }
-
-      @Override
-      public void onStopTrackingTouch(SeekBar seekBar) {
-
-      }
-    })
-    ;
 
     mVpTab.setOffscreenPageLimit(2);
 
@@ -273,22 +195,6 @@ public class TabRegionFragment extends BaseFragment implements AbsFeedsFragment.
       showInviteDialog();
     }
   }
-
-  @Subscribe
-  public void onRegionResponseEvent(RegionResponseEvent event) {
-    if (event.getRegion() == 3) {
-      mRbRegion.setChecked(true);
-      mSbDistance.setProgress(10000);
-    } else if (event.getRegion() == 4) {
-      mRbRegion.setChecked(true);
-      mSbDistance.setProgress(event.getDistance() - 1000);
-    } else if (event.getRegion() == 5) {
-      mRbArea.setChecked(true);
-      mTvDistance.setText(event.getCityName());
-    }
-    mTvAreaName.setText(event.getCityName());
-  }
-
 
 
   public boolean onBackPressed() {

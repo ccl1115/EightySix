@@ -9,7 +9,6 @@ import com.utree.eightysix.U;
 import com.utree.eightysix.app.feed.AbsFeedsFragment;
 import com.utree.eightysix.app.msg.FetchNotificationService;
 import com.utree.eightysix.app.region.event.RegionResponseEvent;
-import com.utree.eightysix.event.CurrentCircleResponseEvent;
 import com.utree.eightysix.request.FeedByRegionRequest;
 import com.utree.eightysix.response.FeedsByRegionResponse;
 import com.utree.eightysix.rest.OnResponse2;
@@ -17,7 +16,7 @@ import com.utree.eightysix.rest.RESTRequester;
 
 /**
  */
-public class RegionFeedsFragment extends AbsFeedsFragment {
+public class RegionFeedsFragment extends AbsFeedsFragment implements RegionSelectFragment.Callback {
 
   private static final int TYPE_ALL = 0;
   private static final int TYPE_HOT = 1;
@@ -27,6 +26,8 @@ public class RegionFeedsFragment extends AbsFeedsFragment {
   private int mAreaId = -1;
   private String mAreaName;
   private int mType = TYPE_ALL;
+
+  private RegionSelectFragment mRegionSelectFragment;
 
   public int getRegionType() {
     return mRegionType;
@@ -77,6 +78,24 @@ public class RegionFeedsFragment extends AbsFeedsFragment {
   }
 
   @Override
+  public void onRegionChanged(int regionType, int distance, int areaType, int areaId) {
+    mRegionType = regionType;
+    if (distance != -1) {
+      mDistance = distance;
+    }
+
+    if (areaId != -1) {
+      mAreaId = areaId;
+    }
+
+    if (areaType != -1) {
+      mAreaType = areaType;
+    }
+
+    request();
+  }
+
+  @Override
   protected void updateTitleBar() {
 
   }
@@ -87,6 +106,25 @@ public class RegionFeedsFragment extends AbsFeedsFragment {
 
     mIvIcon.setImageResource(R.drawable.ic_feeds_region);
     mTvTitle.setText("全部");
+
+    mTvSubInfo.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if (mRegionSelectFragment == null) {
+          mRegionSelectFragment = new RegionSelectFragment();
+          mRegionSelectFragment.mRegionResponseEvent =
+              new RegionResponseEvent(mRegionType, mDistance, mAreaType, mAreaId, mAreaName);
+          mRegionSelectFragment.setCallback(RegionFeedsFragment.this);
+          getChildFragmentManager().beginTransaction()
+              .add(R.id.fl, mRegionSelectFragment)
+              .commit();
+        } else if (mRegionSelectFragment.isHidden()) {
+          getChildFragmentManager().beginTransaction()
+              .show(mRegionSelectFragment)
+              .commit();
+        }
+      }
+    });
   }
 
   @Override
@@ -95,7 +133,10 @@ public class RegionFeedsFragment extends AbsFeedsFragment {
     U.request("feeds_by_region", new OnResponse2<FeedsByRegionResponse>() {
       @Override
       public void onResponseError(Throwable e) {
-        mLvFeed.loadError();
+        if (mPage > 1) {
+          mLvFeed.loadError();
+        }
+        getBaseActivity().hideRefreshIndicator();
       }
 
       @Override
@@ -111,7 +152,10 @@ public class RegionFeedsFragment extends AbsFeedsFragment {
         new OnResponse2<FeedsByRegionResponse>() {
           @Override
           public void onResponseError(Throwable e) {
-
+            if (mPage > 1) {
+              mLvFeed.loadError();
+            }
+            getBaseActivity().hideRefreshIndicator();
           }
 
           @Override
@@ -134,10 +178,6 @@ public class RegionFeedsFragment extends AbsFeedsFragment {
   private void response(FeedsByRegionResponse response) {
     if (RESTRequester.responseOk(response)) {
       if (mPage == 1) {
-        mCircle = response.object.circle;
-
-        U.getBus().post(new CurrentCircleResponseEvent(mCircle));
-
         M.getRegisterHelper().unregister(mFeedAdapter);
         mFeedAdapter = new FeedRegionAdapter(response.object, null);
         M.getRegisterHelper().register(mFeedAdapter);
@@ -183,10 +223,6 @@ public class RegionFeedsFragment extends AbsFeedsFragment {
   private void responseCache(FeedsByRegionResponse response) {
     if (response != null && response.code == 0 && response.object != null) {
       if (mPage == 1) {
-        mCircle = response.object.circle;
-
-        U.getBus().post(new CurrentCircleResponseEvent(mCircle));
-
         if (response.object.posts.lists.size() == 0) {
           mRstvEmpty.setVisibility(View.VISIBLE);
         } else {

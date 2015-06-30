@@ -24,10 +24,4 @@
             android:background="@drawable/btn_post"
             />
 
-    <include
-            layout="@layout/widget_distance_selector"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/activity_top_bar_height"
-            />
 </FrameLayout>
