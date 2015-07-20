@@ -116,7 +116,6 @@ public final class HandlerWrapper<T extends Response> extends BaseJsonHttpRespon
 
       // #FIXME remove this because there're two ips.
       if (e instanceof UnknownHostException) {
-        U.getRESTRequester().setHost("http://" + U.getConfig("api.ip"));
       }
 
       if (BuildConfig.DEBUG) {
@@ -144,8 +143,6 @@ public final class HandlerWrapper<T extends Response> extends BaseJsonHttpRespon
         }
 
         e.printStackTrace();
-      } else {
-        U.getReporter().reportRequestError(mRequestData, e);
       }
     }
 

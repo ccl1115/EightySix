@@ -1,6 +1,5 @@
 package com.utree.eightysix.report;
 
-import com.tencent.open.TaskGuide;
 import com.utree.eightysix.BuildConfig;
 import com.utree.eightysix.U;
 import com.utree.eightysix.rest.RequestData;
@@ -105,7 +104,6 @@ public class ReporterImpl implements Reporter {
   private Properties fromRequestData(RequestData data) {
     Properties properties = new Properties();
     properties.setProperty("api", data.getApi());
-    properties.setProperty("params", data.getParams().toString());
     return properties;
   }
 }
